@@ -1,0 +1,37 @@
+@import 'tailwindcss';
+
+@theme inline {
+  --color-background: var(--pallas-background);
+  --color-foreground: var(--pallas-foreground);
+  --color-card: var(--pallas-card);
+  --color-card-foreground: var(--pallas-card-foreground);
+  --color-primary: var(--pallas-primary);
+  --color-primary-foreground: var(--pallas-primary-foreground);
+  --color-secondary: var(--pallas-secondary);
+  --color-secondary-foreground: var(--pallas-secondary-foreground);
+  --color-muted: var(--pallas-muted);
+  --color-muted-foreground: var(--pallas-muted-foreground);
+  --color-border: var(--pallas-border);
+  --color-input: var(--pallas-input);
+  --color-ring: var(--pallas-ring);
+  --color-destructive: var(--pallas-destructive);
+  --color-success: var(--pallas-success);
+}
+
+:root {
+  --pallas-background: oklch(0.99 0.004 255);
+  --pallas-foreground: oklch(0.22 0.035 255);
+  --pallas-card: oklch(1 0 0);
+  --pallas-card-foreground: oklch(0.22 0.035 255);
+  --pallas-primary: oklch(0.55 0.21 255);
+  --pallas-primary-foreground: oklch(0.99 0.005 255);
+  --pallas-secondary: oklch(0.95 0.018 255);
+  --pallas-secondary-foreground: oklch(0.3 0.06 255);
+  --pallas-muted: oklch(0.965 0.01 255);
+  --pallas-muted-foreground: oklch(0.53 0.035 255);
+  --pallas-border: oklch(0.9 0.018 255);
+  --pallas-input: oklch(0.86 0.025 255);
+  --pallas-ring: oklch(0.6 0.19 255);
+  --pallas-destructive: oklch(0.58 0.23 27);
+  --pallas-success: oklch(0.52 0.15 155);
+}

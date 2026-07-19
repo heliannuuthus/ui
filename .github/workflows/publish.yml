@@ -1,0 +1,17 @@
+name: Publish Heliannuuthus UI
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    uses: heliannuuthus/hephaestus/.github/workflows/ci-publish-node.yml@main
+    with:
+      workdir: ./
+      registry-url: https://registry.npmjs.org
