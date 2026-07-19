@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/button';
+import { cn } from '../lib/utils';
+import { Button } from './button';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -50,18 +50,19 @@ function PaginationLink({
 }: PaginationLinkProps) {
   return (
     <Button
-      asChild
       variant={isActive ? 'outline' : 'ghost'}
       size={size}
       className={cn(className)}
-    >
-      <a
-        aria-current={isActive ? 'page' : undefined}
-        data-slot="pagination-link"
-        data-active={isActive}
-        {...props}
-      />
-    </Button>
+      nativeButton={false}
+      render={
+        <a
+          aria-current={isActive ? 'page' : undefined}
+          data-slot="pagination-link"
+          data-active={isActive}
+          {...props}
+        />
+      }
+    />
   );
 }
 
@@ -72,10 +73,10 @@ function PaginationPrevious({
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
+      {...props}
       aria-label="Go to previous page"
       size="default"
       className={cn('pl-2!', className)}
-      {...props}
     >
       <ChevronLeftIcon data-icon="inline-start" />
       <span className="hidden sm:block">{text}</span>
@@ -90,10 +91,10 @@ function PaginationNext({
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
+      {...props}
       aria-label="Go to next page"
       size="default"
       className={cn('pr-2!', className)}
-      {...props}
     >
       <span className="hidden sm:block">{text}</span>
       <ChevronRightIcon data-icon="inline-end" />

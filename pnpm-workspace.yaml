@@ -5,3 +5,9 @@ packages:
 allowBuilds:
   '@parcel/watcher': true
   esbuild: true
+
+minimumReleaseAgeExclude:
+  - '@fontsource-variable/raleway@5.3.0'
+
+overrides:
+  'shadcn>zod': 3.25.76

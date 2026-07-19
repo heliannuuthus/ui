@@ -24,20 +24,22 @@ function DatePicker({
 }: DatePickerProps) {
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          disabled={disabled}
-          className={cn(
-            'w-60 justify-start text-left font-normal',
-            !value && 'text-muted-foreground',
-            className
-          )}
-        >
-          <CalendarIcon />
-          {value ? format(value, 'PPP', { locale: zhCN }) : placeholder}
-        </Button>
-      </PopoverTrigger>
+      <PopoverTrigger
+        render={
+          <Button
+            variant="outline"
+            disabled={disabled}
+            className={cn(
+              'w-60 justify-start text-left font-normal',
+              !value && 'text-muted-foreground',
+              className
+            )}
+          >
+            <CalendarIcon />
+            {value ? format(value, 'PPP', { locale: zhCN }) : placeholder}
+          </Button>
+        }
+      />
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar mode="single" selected={value} onSelect={onChange} />
       </PopoverContent>

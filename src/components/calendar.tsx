@@ -1,5 +1,3 @@
-'use client';
-
 import * as React from 'react';
 import {
   DayPicker,
@@ -8,8 +6,8 @@ import {
   type Locale,
 } from 'react-day-picker';
 
-import { cn } from '@/lib/utils';
-import { Button, buttonVariants } from '@/components/button';
+import { cn } from '../lib/utils';
+import { Button, buttonVariants } from './button';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -203,7 +201,6 @@ function CalendarDayButton({
 
   return (
     <Button
-      ref={ref}
       variant="ghost"
       size="icon"
       data-day={day.date.toLocaleDateString(locale?.code)}

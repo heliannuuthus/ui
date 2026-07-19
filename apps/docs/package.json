@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 13001",
-    "build": "tsc --noEmit && vite build"
+    "build": "tsc --noEmit && vite build && cp dist/index.html dist/404.html"
   },
   "dependencies": {
     "@heliannuuthus/ui": "workspace:*",
     "lucide-react": "^0.468.0",
     "react": "^19.2.3",
-    "react-dom": "^19.2.3"
+    "react-dom": "^19.2.3",
+    "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.2.0",
