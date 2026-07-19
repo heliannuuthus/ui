@@ -85,6 +85,7 @@
     "format": "prettier --write \"{src,apps}/**/*.{ts,tsx,css,json,md}\"",
     "format:check": "prettier --check \"{src,apps}/**/*.{ts,tsx,css,json,md}\"",
     "type-check": "tsc --noEmit && pnpm --filter @heliannuuthus/ui-docs exec tsc --noEmit",
+    "prepare": "pnpm build:package",
     "prepack": "pnpm build:package"
   },
   "peerDependencies": {
