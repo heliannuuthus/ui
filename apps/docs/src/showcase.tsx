@@ -49,7 +49,14 @@ const componentGroups = [
   },
   {
     title: '布局',
-    items: ['Aspect Ratio', 'Card', 'Resizable', 'Scroll Area', 'Separator'],
+    items: [
+      'Aspect Ratio',
+      'Card',
+      'Group',
+      'Resizable',
+      'Scroll Area',
+      'Separator',
+    ],
   },
   {
     title: '导航',
@@ -71,13 +78,12 @@ const componentGroups = [
       'Date Picker',
       'Form',
       'Input',
-      'Radio Group',
+      'Radio',
       'Select',
       'Slider',
       'Switch',
       'Textarea',
       'Toggle',
-      'Toggle Group',
     ],
   },
   {
@@ -86,17 +92,14 @@ const componentGroups = [
       'Accordion',
       'Attachment',
       'Avatar',
-      'Bubble',
       'Carousel',
       'Chart',
       'Collapsible',
-      'Data Table',
       'Empty',
       'Hover Card',
       'Item',
       'Marker',
       'Message',
-      'Message Scroller',
       'Table',
       'Tooltip',
     ],
@@ -112,7 +115,6 @@ const componentGroups = [
       'Progress',
       'Sheet',
       'Skeleton',
-      'Sonner',
       'Spinner',
       'Toast',
     ],
@@ -539,6 +541,21 @@ function ComponentPage() {
   if (component === 'input-group' || component === 'input-otp') {
     return <Navigate to="/components/input" replace />;
   }
+  if (component === 'radio-group') {
+    return <Navigate to="/components/radio" replace />;
+  }
+  if (component === 'toggle-group') {
+    return <Navigate to="/components/toggle" replace />;
+  }
+  if (component === 'data-table') {
+    return <Navigate to="/components/table" replace />;
+  }
+  if (component === 'bubble' || component === 'message-scroller') {
+    return <Navigate to="/components/message" replace />;
+  }
+  if (component === 'sonner') {
+    return <Navigate to="/components/toast" replace />;
+  }
   if (component === 'field' || component === 'label') {
     return <Navigate to="/components/form" replace />;
   }
@@ -592,6 +609,16 @@ function ComponentPage() {
         </div>
         {documentation ? (
           <>
+            {documentation.whenToUse.length > 0 && (
+              <section className="usage-section">
+                <h2>何时使用</h2>
+                <ol className="usage-list">
+                  {documentation.whenToUse.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ol>
+              </section>
+            )}
             {documentation.examples.length > 0 && (
               <section className="demo-section">
                 <h2>示例</h2>

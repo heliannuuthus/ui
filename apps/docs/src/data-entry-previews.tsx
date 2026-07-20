@@ -31,27 +31,14 @@ import {
   FormMessage,
   Label,
 } from '@heliannuuthus/ui/form';
+import { Group, GroupAddon } from '@heliannuuthus/ui/group';
 import { Input } from '@heliannuuthus/ui/input';
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-  InputGroupText,
-  InputGroupTextarea,
-} from '@heliannuuthus/ui/input-group';
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from '@heliannuuthus/ui/input-otp';
 import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
 } from '@heliannuuthus/ui/native-select';
-import { RadioGroup, RadioGroupItem } from '@heliannuuthus/ui/radio-group';
+import { Radio, RadioGroup } from '@heliannuuthus/ui/radio';
 import {
   Select,
   SelectContent,
@@ -294,7 +281,7 @@ export function InputStatesDemo() {
   );
 }
 
-export function InputGroupAddressDemo() {
+export function GroupCompositionDemo() {
   const [copied, setCopied] = useState(false);
   const [note, setNote] = useState('本次发布包含导航与数据录入组件。');
 
@@ -302,35 +289,36 @@ export function InputGroupAddressDemo() {
     <div className="data-form-stack data-group-demo">
       <div className="minimal-field">
         <Label htmlFor="project-url">项目地址</Label>
-        <InputGroup>
-          <InputGroupAddon>
+        <Group>
+          <GroupAddon>
             <Globe2 />
-            <InputGroupText>ui.dev/</InputGroupText>
-          </InputGroupAddon>
-          <InputGroupInput id="project-url" defaultValue="docs" />
-          <InputGroupAddon align="inline-end">
-            <InputGroupButton
+            <span>ui.dev/</span>
+          </GroupAddon>
+          <Input id="project-url" defaultValue="docs" />
+          <GroupAddon align="inline-end">
+            <Button
+              type="button"
+              size="xs"
+              variant="ghost"
               aria-label="复制地址"
               onClick={() => setCopied(true)}
             >
               {copied ? <Check /> : <Copy />}
               {copied ? '已复制' : '复制'}
-            </InputGroupButton>
-          </InputGroupAddon>
-        </InputGroup>
+            </Button>
+          </GroupAddon>
+        </Group>
       </div>
       <div className="minimal-field">
         <Label htmlFor="release-note">发布说明</Label>
-        <InputGroup>
-          <InputGroupTextarea
+        <Group>
+          <Textarea
             id="release-note"
             value={note}
             onChange={(event) => setNote(event.target.value)}
           />
-          <InputGroupAddon align="block-end">
-            <InputGroupText>{note.length} / 120</InputGroupText>
-          </InputGroupAddon>
-        </InputGroup>
+          <GroupAddon align="block-end">{note.length} / 120</GroupAddon>
+        </Group>
       </div>
     </div>
   );
@@ -349,45 +337,45 @@ export function InputOtpVerificationDemo() {
       <div className="data-otp-variants">
         <div className="data-otp-variant-row">
           <span>
-            <strong>连接方块</strong>
-            <small>适合分段验证码或序列号</small>
+            <strong>连续方块</strong>
+            <small>适合常规验证码输入</small>
           </span>
-          <InputOTP
+          <Input
+            type="otp"
             maxLength={6}
             value={value}
             onChange={setValue}
-            shape="connected"
-          >
-            <InputOTPGroup>
-              {[0, 1, 2].map((index) => (
-                <InputOTPSlot key={index} index={index} />
-              ))}
-            </InputOTPGroup>
-            <InputOTPSeparator />
-            <InputOTPGroup>
-              {[3, 4, 5].map((index) => (
-                <InputOTPSlot key={index} index={index} />
-              ))}
-            </InputOTPGroup>
-          </InputOTP>
+            variant="connected"
+            aria-label="连续验证码"
+          />
+        </div>
+        <div className="data-otp-variant-row">
+          <span>
+            <strong>分段方块</strong>
+            <small>适合带分组语义的验证码或序列号</small>
+          </span>
+          <Input
+            type="otp"
+            maxLength={6}
+            value={value}
+            onChange={setValue}
+            variant="segmented"
+            aria-label="分段验证码"
+          />
         </div>
         <div className="data-otp-variant-row">
           <span>
             <strong>独立圆圈</strong>
             <small>适合强调每一位输入状态</small>
           </span>
-          <InputOTP
+          <Input
+            type="otp"
             maxLength={6}
             value={value}
             onChange={setValue}
-            shape="circle"
-          >
-            <InputOTPGroup>
-              {[0, 1, 2, 3, 4, 5].map((index) => (
-                <InputOTPSlot key={index} index={index} />
-              ))}
-            </InputOTPGroup>
-          </InputOTP>
+            variant="circle"
+            aria-label="圆形验证码"
+          />
         </div>
       </div>
       <span>
@@ -454,6 +442,7 @@ export function SelectNativeDemo() {
 
 export function RadioPlanDemo() {
   const [plan, setPlan] = useState('team');
+  const [recommended, setRecommended] = useState(false);
   const plans = [
     ['free', '个人版', '1 位成员', '免费'],
     ['team', '团队版', '最多 20 位成员', '¥ 68 / 月'],
@@ -461,27 +450,33 @@ export function RadioPlanDemo() {
   ];
 
   return (
-    <RadioGroup
-      className="data-radio-cards"
-      value={plan}
-      onValueChange={setPlan}
-      aria-label="选择方案"
-    >
-      {plans.map(([value, title, description, price]) => (
-        <label
-          className="data-radio-card"
-          data-selected={plan === value}
-          key={value}
-        >
-          <RadioGroupItem value={value} />
-          <span>
-            <strong>{title}</strong>
-            <small>{description}</small>
-          </span>
-          <b>{price}</b>
-        </label>
-      ))}
-    </RadioGroup>
+    <div className="data-radio-demo">
+      <label className="data-radio-standalone">
+        <Radio checked={recommended} onCheckedChange={setRecommended} />
+        <span>优先推荐当前方案</span>
+      </label>
+      <RadioGroup
+        className="data-radio-cards"
+        value={plan}
+        onValueChange={setPlan}
+        aria-label="选择方案"
+      >
+        {plans.map(([value, title, description, price]) => (
+          <label
+            className="data-radio-card"
+            data-selected={plan === value}
+            key={value}
+          >
+            <Radio value={value} />
+            <span className="data-radio-copy">
+              <strong>{title}</strong>
+              <small>{description}</small>
+            </span>
+            <b>{price}</b>
+          </label>
+        ))}
+      </RadioGroup>
+    </div>
   );
 }
 
@@ -547,6 +542,7 @@ export function SliderBudgetDemo() {
         </span>
       </div>
       <Slider
+        aria-label="月度预算范围"
         value={range}
         onValueChange={(next) =>
           setRange(typeof next === 'number' ? [next] : [...next])

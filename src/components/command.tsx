@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from './dialog';
-import { InputGroup, InputGroupAddon } from './input-group';
+import { Group, GroupAddon } from './group';
 import { SearchIcon, CheckIcon } from 'lucide-react';
 
 function Command({
@@ -67,7 +67,7 @@ function CommandInput({
 }: React.ComponentProps<typeof CommandPrimitive.Input>) {
   return (
     <div data-slot="command-input-wrapper" className="p-1 pb-0">
-      <InputGroup className="h-9 bg-background">
+      <Group className="h-9 bg-background">
         <CommandPrimitive.Input
           data-slot="command-input"
           className={cn(
@@ -76,10 +76,10 @@ function CommandInput({
           )}
           {...props}
         />
-        <InputGroupAddon>
+        <GroupAddon>
           <SearchIcon className="size-4 shrink-0 opacity-50" />
-        </InputGroupAddon>
-      </InputGroup>
+        </GroupAddon>
+      </Group>
     </div>
   );
 }

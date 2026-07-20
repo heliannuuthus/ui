@@ -54,6 +54,14 @@
       "types": "./dist/input.d.ts",
       "import": "./dist/input.js"
     },
+    "./radio": {
+      "types": "./dist/radio.d.ts",
+      "import": "./dist/radio.js"
+    },
+    "./group": {
+      "types": "./dist/group.d.ts",
+      "import": "./dist/group.js"
+    },
     "./label": {
       "types": "./dist/label.d.ts",
       "import": "./dist/label.js"

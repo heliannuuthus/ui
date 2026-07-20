@@ -29,7 +29,7 @@ import {
   FieldProfileDemo,
   FieldLabelPairingDemo,
   FormInviteDemo,
-  InputGroupAddressDemo,
+  GroupCompositionDemo,
   InputOtpVerificationDemo,
   InputStatesDemo,
   RadioPlanDemo,
@@ -54,6 +54,28 @@ import {
   TabsMotionDemo,
   TabsVariantsDemo,
 } from './navigation-previews';
+import {
+  AccordionScenarioDemo,
+  AlertDialogScenarioDemo,
+  AttachmentScenarioDemo,
+  CarouselScenarioDemo,
+  ChartScenarioDemo,
+  CollapsibleScenarioDemo,
+  CommandScenarioDemo,
+  ContextMenuScenarioDemo,
+  DataTableScenarioDemo,
+  DialogScenarioDemo,
+  DirectionScenarioDemo,
+  DrawerScenarioDemo,
+  HoverCardScenarioDemo,
+  ItemScenarioDemo,
+  MarkerScenarioDemo,
+  MessageScenarioDemo,
+  PopoverScenarioDemo,
+  SheetScenarioDemo,
+  ToastScenarioDemo,
+  TooltipScenarioDemo,
+} from './scenario-previews';
 import { minimalComponentPreviews } from './minimal-previews';
 
 export type ApiProperty = {
@@ -1574,14 +1596,194 @@ export const componentDocumentation: Record<string, ComponentDocumentation> = {
   tabs: tabsDocumentation,
 };
 
+const componentUsageGuidance: Record<string, string[]> = {
+  group: [
+    '多个输入、选择或操作需要共享边框、焦点状态和紧凑排列时使用。',
+    '需要在控件前后放置单位、前缀、说明或内联操作时使用。',
+  ],
+  'scroll-area': [
+    '内容需要限制在明确高度或宽度内，同时仍允许用户完整浏览时使用。',
+    '需要统一局部滚动条外观时使用；页面级滚动仍交给浏览器处理。',
+  ],
+  checkbox: [
+    '从一组选项中选择任意多个值，或确认一项需要随表单提交的声明。',
+    '单个二态设置若点击后应立即生效，应优先使用 Switch。',
+  ],
+  combobox: [
+    '候选项较多，用户通常知道关键词并需要通过输入缩小范围时使用。',
+    '候选项较少且固定时优先使用 Select；选项全部可见时可使用 Radio。',
+  ],
+  'date-picker': [
+    '表单、筛选或排期任务需要选择准确日期时使用。',
+    '需要持续查看月份上下文时使用内联日历，紧凑表单中使用弹出选择。',
+  ],
+  form: [
+    '需要收集、校验并提交一组相关信息时使用。',
+    '字段需要统一标签、说明、错误反馈和受控状态时使用。',
+  ],
+  input: [
+    '表单需要输入单行文本、邮箱、密码、搜索词或验证码时使用。',
+    '需要多行长文本时使用 Textarea；固定候选项不要使用自由输入。',
+  ],
+  radio: [
+    '需要从少量、全部可见且互斥的选项中选择一个值时使用。',
+    '选项通常保持在 2–5 个；更多候选项应使用 Select 或 Combobox。',
+  ],
+  select: [
+    '候选项固定但不适合全部平铺，用户需要从列表中选择一个值时使用。',
+    '候选项很多且依赖关键词查找时使用 Combobox，简单场景可使用 NativeSelect。',
+  ],
+  slider: [
+    '用户需要通过位置直观选择近似数值或连续范围时使用。',
+    '金额、数量等要求精确输入时，应同时提供可编辑数值或改用数字输入。',
+  ],
+  switch: [
+    '单个设置需要在切换后立即生效，并明确表达开启与关闭状态时使用。',
+    '需要等待提交后才生效，或属于多选题时使用 Checkbox。',
+  ],
+  textarea: [
+    '需要输入备注、说明、反馈等可换行长文本时使用。',
+    '应提供清晰标签；存在长度约束时同步展示字数和错误反馈。',
+  ],
+  toggle: [
+    '工具栏中的单个模式需要在按下与未按下之间切换时使用。',
+    '切换结果应即时可见；普通动作仍使用 Button。',
+  ],
+  'toggle-group': [
+    '一组紧凑工具需要支持单选或多选按下状态时使用。',
+    '不要用它承担页面导航；内容视图切换应使用 Tabs。',
+  ],
+  accordion: [
+    '多段较长或不规则内容需要渐进展开，以减少页面初始信息量时使用。',
+    '内容彼此独立且同时只需查看一项时使用单开模式。',
+  ],
+  attachment: [
+    '需要展示文件名称、类型、大小以及上传、处理或失败状态时使用。',
+    '附件需要预览、重试、下载或移除等与文件直接相关的操作时使用。',
+  ],
+  avatar: [
+    '需要快速识别用户、团队或组织，并以图片或文字回退展示身份时使用。',
+    '多人参与或在线状态需要紧凑呈现时使用 AvatarGroup。',
+  ],
+  bubble: [
+    '对话界面需要呈现一段具体发言、回复或系统生成内容时使用。',
+    '说话人、时间和状态属于完整会话记录时，应与 Message 组合。',
+  ],
+  carousel: [
+    '3–5 个同层级图片或卡片需要在有限空间内轮播时使用。',
+    '关键内容不要只放在自动轮播中，并始终提供当前位置和方向提示。',
+  ],
+  chart: [
+    '需要比较趋势、比例或类别关系，图形比表格更易理解时使用。',
+    '必须同时提供图例、单位和可访问的数据摘要，精确值仍可配合 Table。',
+  ],
+  collapsible: [
+    '单个辅助区域需要独立展开或收起时使用。',
+    '多个同级区域需要统一管理展开状态时使用 Accordion。',
+  ],
+  'data-table': [
+    '结构化数据需要排序、搜索、筛选或分页等交互时使用。',
+    '只有少量静态行列时使用 Table，避免引入不必要的状态管理。',
+  ],
+  empty: [
+    '列表尚无内容、筛选无结果或首次使用需要解释下一步时使用。',
+    '应说明空状态原因，并在存在明确恢复路径时提供主要操作。',
+  ],
+  'hover-card': [
+    '悬停或聚焦一个已知对象时，需要补充人物、链接或资源预览时使用。',
+    '完成任务所必需的信息不能只存在于 Hover Card 中。',
+  ],
+  item: [
+    '列表需要重复呈现标题、说明、媒体和行级操作时使用。',
+    '同一列表中的 Item 应保持一致的信息顺序和操作位置。',
+  ],
+  marker: [
+    '内容流中需要用短标签、图标或分隔线标记时间、状态或上下文时使用。',
+    'Marker 只补充阅读线索，不应替代标题或可交互控件。',
+  ],
+  message: [
+    '会话需要呈现说话人、内容、时间和发送状态组成的完整消息单元时使用。',
+    '只需要气泡外观时使用 Bubble；长消息流再与 MessageScroller 组合。',
+  ],
+  'message-scroller': [
+    '聊天或日志持续追加内容，需要保持最新消息可见并允许回看历史时使用。',
+    '用户离开底部后应保留阅读位置，并提供明确的回到底部入口。',
+  ],
+  table: [
+    '需要用语义化行列展示少量静态结构化数据并便于横向比较时使用。',
+    '需要排序、筛选、搜索和分页时使用 DataTable。',
+  ],
+  tooltip: [
+    '图标、缩写或被截断内容需要一段简短、非交互说明时使用。',
+    '需要链接、按钮或较长富内容时使用 Popover，并确保键盘可触发。',
+  ],
+  alert: [
+    '页面或区域中需要持续展示重要状态、风险或处理建议时使用。',
+    '短暂操作结果使用 Toast；必须立即决策的重要信息使用 Dialog。',
+  ],
+  'alert-dialog': [
+    '删除、覆盖或离开未保存内容等高风险操作需要用户明确确认时使用。',
+    '确认文案应说明具体后果，并让安全操作默认获得焦点。',
+  ],
+  dialog: [
+    '用户需要在不离开当前页面的情况下完成一个聚焦任务时使用。',
+    '简单补充信息使用 Popover；轻量确认可使用 AlertDialog。',
+  ],
+  drawer: [
+    '移动端或触控场景需要从边缘拉出补充任务，同时保留原页面上下文时使用。',
+    '内容过长或任务过于复杂时应改用独立页面。',
+  ],
+  popover: [
+    '触发器附近需要展示补充信息、表单或少量操作时使用。',
+    '只有简短文字说明时使用 Tooltip；主要任务使用 Dialog。',
+  ],
+  progress: [
+    '任务具有可计算完成比例，需要持续反馈进度时使用。',
+    '无法计算进度的短时等待使用 Spinner，较长任务应同时说明当前阶段。',
+  ],
+  sheet: [
+    '桌面端需要从屏幕边缘打开筛选、详情或辅助导航面板时使用。',
+    '主任务不可被遮挡或面板需要永久存在时，应使用页面内布局。',
+  ],
+  skeleton: [
+    '页面首次加载且内容结构可预期，需要减少布局跳动时使用。',
+    '局部短操作使用 Spinner；骨架形状应尽量匹配最终内容。',
+  ],
+  sonner: [
+    '应用需要统一管理可堆叠、自动消失的全局操作反馈时使用。',
+    '重要失败不能只依赖短暂通知，应在页面内保留错误或升级为 Dialog。',
+  ],
+  spinner: [
+    '局部操作正在进行且无法计算完成比例，等待时间较短时使用。',
+    '应靠近受影响区域并配合文字说明，避免让整个页面无原因地旋转。',
+  ],
+  toast: [
+    '保存、复制或发送等操作完成后，需要不阻断流程地反馈结果时使用。',
+    '反馈应简短并自动消失；需要持续处理的信息使用 Alert。',
+  ],
+  command: [
+    '高频用户需要通过键盘搜索并执行跨页面命令时使用。',
+    '命令名称应可搜索且动词明确，高风险操作仍需二次确认。',
+  ],
+  'context-menu': [
+    '鼠标右键或长按某个对象时，需要提供与该对象直接相关的次要操作。',
+    '关键操作不能只存在于 ContextMenu，应为触控和键盘用户保留替代入口。',
+  ],
+  direction: [
+    '应用或局部组件树需要切换 LTR 与 RTL 书写方向时使用。',
+    '应在稳定边界统一设置方向，并验证图标、动画和键盘方向是否正确镜像。',
+  ],
+};
+
 const remainingComponents = [
+  ['Group', 'group', '在统一布局表面中组合多个表单控件。'],
   ['Scroll Area', 'scroll-area', '为受限区域提供一致的滚动体验。'],
   ['Checkbox', 'checkbox', '控制可独立选择的布尔选项。'],
   ['Combobox', 'combobox', '通过输入搜索并选择候选值。'],
   ['Date Picker', 'date-picker', '通过内联日历或弹出触发器选择单个日期。'],
   ['Form', 'form', '组织字段结构，并连接状态、校验与提交行为。'],
   ['Input', 'input', '接收单行文本或特定格式内容。'],
-  ['Radio Group', 'radio-group', '从互斥选项中选择一个值。'],
+  ['Radio', 'radio', '单独选择一个选项，或通过 RadioGroup 组织互斥选择。'],
   ['Select', 'select', '从弹出列表中选择预定义值。'],
   ['Slider', 'slider', '在连续或离散范围内选择数值。'],
   ['Switch', 'switch', '即时切换设置的开关状态。'],
@@ -1625,9 +1827,8 @@ for (const [name, slug, summary] of remainingComponents) {
     name,
     slug,
     summary,
-    whenToUse: [
+    whenToUse: componentUsageGuidance[slug] ?? [
       `需要${summary.replace(/[。]$/, '')}时。`,
-      '需要覆盖默认、受控、禁用和窄屏状态时。',
     ],
     examples: [],
     api: [
@@ -1809,52 +2010,50 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
       title: '前后缀与块级附加内容',
       description:
         '组合固定前缀、复制动作和文本计数；附加内容始终服务于同一输入任务。',
-      preview: <InputGroupAddressDemo />,
-      code: `<InputGroup>
-  <InputGroupAddon>ui.dev/</InputGroupAddon>
-  <InputGroupInput defaultValue="docs" />
-  <InputGroupAddon align="inline-end">
-    <InputGroupButton>复制</InputGroupButton>
-  </InputGroupAddon>
-</InputGroup>`,
+      preview: <GroupCompositionDemo />,
+      code: `<Group>
+  <GroupAddon>ui.dev/</GroupAddon>
+  <Input defaultValue="docs" />
+  <GroupAddon align="inline-end">
+    <Button variant="ghost" size="xs">复制</Button>
+  </GroupAddon>
+</Group>`,
       wide: true,
       previewHeight: 480,
     },
     {
       title: '验证码形态',
       description:
-        '使用 shape 切换连接方块与独立圆圈，两种形态共享同一份验证码状态。',
+        '设置 variant 即可切换连续方块、分段方块与独立圆圈，三种形态共享同一份验证码状态。',
       preview: <InputOtpVerificationDemo />,
-      code: `<InputOTP
+      code: `<Input
+  type="otp"
   maxLength={6}
   value={value}
   onChange={setValue}
-  shape="connected"
->
-  <InputOTPGroup>
-    <InputOTPSlot index={0} />
-    <InputOTPSlot index={1} />
-    <InputOTPSlot index={2} />
-  </InputOTPGroup>
-  <InputOTPSeparator />
-  <InputOTPGroup>{/* 后三位 */}</InputOTPGroup>
-</InputOTP>
+  variant="connected"
+/>
 
-<InputOTP maxLength={6} shape="circle">
-  <InputOTPGroup>{/* 六个独立圆形槽位 */}</InputOTPGroup>
-</InputOTP>`,
+<Input type="otp" maxLength={6} variant="segmented" />
+
+<Input type="otp" maxLength={6} variant="circle" />`,
       wide: true,
-      previewHeight: 560,
+      previewHeight: 660,
     },
   ],
-  'radio-group': [
+  radio: [
     {
       title: '方案单选卡',
       description: '将互斥选项扩展为整行可点击的卡片，同时保留原生单选语义。',
       preview: <RadioPlanDemo />,
-      code: `<RadioGroup value={plan} onValueChange={setPlan}>
-  <label><RadioGroupItem value="free" />个人版</label>
-  <label><RadioGroupItem value="team" />团队版</label>
+      code: `<Radio
+  checked={recommended}
+  onCheckedChange={setRecommended}
+/>
+
+<RadioGroup value={plan} onValueChange={setPlan}>
+  <label><Radio value="free" />个人版</label>
+  <label><Radio value="team" />团队版</label>
 </RadioGroup>`,
       wide: true,
       previewHeight: 430,
@@ -1905,8 +2104,6 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
   max={100}
   step={2}
 />`,
-      wide: true,
-      previewHeight: 340,
     },
   ],
   switch: [
@@ -1936,6 +2133,323 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
 };
 
 for (const [slug, examples] of Object.entries(dataEntryExamples)) {
+  componentDocumentation[slug]?.examples.push(...examples);
+}
+
+const scenarioExamples: Record<string, ComponentExample[]> = {
+  accordion: [
+    {
+      title: '渐进展开信息',
+      description: '常见问题保持标题可扫描，只在用户需要时展开详细答案。',
+      preview: <AccordionScenarioDemo />,
+      code: `<Accordion defaultValue={['account']}>
+  <AccordionItem value="account">
+    <AccordionTrigger>如何修改工作区名称？</AccordionTrigger>
+    <AccordionContent>在工作区设置中修改。</AccordionContent>
+  </AccordionItem>
+</Accordion>`,
+    },
+  ],
+  attachment: [
+    {
+      title: '文件生命周期',
+      description:
+        '同时展示文件元信息、完成与失败状态，以及和文件直接相关的操作。',
+      preview: <AttachmentScenarioDemo />,
+      code: `<Attachment state="done">
+  <AttachmentMedia><FileText /></AttachmentMedia>
+  <AttachmentContent>
+    <AttachmentTitle>产品需求说明.pdf</AttachmentTitle>
+    <AttachmentDescription>2.4 MB · 上传完成</AttachmentDescription>
+  </AttachmentContent>
+</Attachment>`,
+    },
+  ],
+  carousel: [
+    {
+      title: '同层内容轮播',
+      description:
+        '用明确的前后操作浏览少量同层卡片，并让用户始终知道当前位置。',
+      preview: <CarouselScenarioDemo />,
+      code: `<Carousel opts={{ loop: true }}>
+  <CarouselContent>
+    <CarouselItem>建立结构</CarouselItem>
+    <CarouselItem>完善状态</CarouselItem>
+    <CarouselItem>交付验证</CarouselItem>
+  </CarouselContent>
+  <CarouselPrevious />
+  <CarouselNext />
+</Carousel>`,
+      previewHeight: 310,
+    },
+  ],
+  chart: [
+    {
+      title: '趋势比较',
+      description:
+        '使用一致的单位和图例比较月度趋势，精确数据仍可由 Tooltip 补充。',
+      preview: <ChartScenarioDemo />,
+      code: `<ChartContainer config={{ visits: { label: '访问量', color: 'var(--primary)' } }}>
+  <BarChart data={data} accessibilityLayer>
+    <XAxis dataKey="month" />
+    <ChartTooltip content={<ChartTooltipContent />} />
+    <Bar dataKey="visits" fill="var(--color-visits)" />
+  </BarChart>
+</ChartContainer>`,
+      wide: true,
+      previewHeight: 400,
+    },
+  ],
+  collapsible: [
+    {
+      title: '单区块展开',
+      description: '让低频高级选项保持收起，同时保留清晰的触发器和当前上下文。',
+      preview: <CollapsibleScenarioDemo />,
+      code: `<Collapsible>
+  <CollapsibleTrigger>展开高级筛选</CollapsibleTrigger>
+  <CollapsibleContent>负责人：全部成员</CollapsibleContent>
+</Collapsible>`,
+    },
+  ],
+  table: [
+    {
+      title: '可操作数据表',
+      description:
+        '当结构化数据需要搜索、排序和分页时，在语义 Table 上组合 DataTable。',
+      preview: <DataTableScenarioDemo />,
+      code: `<DataTable
+  columns={columns}
+  data={members}
+  filterColumn="name"
+  filterPlaceholder="搜索成员…"
+/>`,
+      wide: true,
+      previewHeight: 480,
+    },
+  ],
+  'hover-card': [
+    {
+      title: '对象预览',
+      description:
+        '悬停或聚焦成员链接时补充身份与活动信息，不隐藏完成任务所需内容。',
+      preview: <HoverCardScenarioDemo />,
+      code: `<HoverCard>
+  <HoverCardTrigger render={<a href="/members/linxia">@林夏</a>} />
+  <HoverCardContent>产品设计师 · 最近参与 8 个组件评审</HoverCardContent>
+</HoverCard>`,
+    },
+  ],
+  item: [
+    {
+      title: '可扫描列表项',
+      description:
+        '保持媒体、标题、说明和行级操作的位置一致，让重复内容便于比较。',
+      preview: <ItemScenarioDemo />,
+      code: `<ItemGroup>
+  <Item variant="outline">
+    <ItemMedia><FolderOpen /></ItemMedia>
+    <ItemContent>
+      <ItemTitle>设计系统</ItemTitle>
+      <ItemDescription>18 个组件 · 2 分钟前更新</ItemDescription>
+    </ItemContent>
+  </Item>
+</ItemGroup>`,
+      previewHeight: 320,
+    },
+  ],
+  marker: [
+    {
+      title: '内容流标记',
+      description: '用日期分隔和事件标记补充阅读上下文，而不取代标题层级。',
+      preview: <MarkerScenarioDemo />,
+      code: `<Marker variant="separator">
+  <MarkerContent>今天</MarkerContent>
+</Marker>
+<Marker variant="border">
+  <MarkerIcon><CalendarDays /></MarkerIcon>
+  <MarkerContent>14:30 · 组件文档已更新</MarkerContent>
+</Marker>`,
+    },
+  ],
+  message: [
+    {
+      title: '完整会话流',
+      description:
+        'Message 组织身份与时间，Bubble 承载发言，MessageScroller 管理长会话滚动。',
+      preview: <MessageScenarioDemo />,
+      code: `<MessageScrollerProvider>
+  <MessageScroller>
+    <MessageScrollerViewport>
+      <MessageScrollerContent>
+        <Message>
+          <MessageAvatar>HN</MessageAvatar>
+          <MessageContent>
+            <MessageHeader>Heliannuuthus · 14:28</MessageHeader>
+            <Bubble><BubbleContent>消息内容</BubbleContent></Bubble>
+            <MessageFooter>已发送</MessageFooter>
+          </MessageContent>
+        </Message>
+      </MessageScrollerContent>
+    </MessageScrollerViewport>
+  </MessageScroller>
+</MessageScrollerProvider>`,
+      wide: true,
+      previewHeight: 430,
+    },
+  ],
+  tooltip: [
+    {
+      title: '图标说明',
+      description: '为只有图标的操作提供简短说明，并同时支持悬停和键盘聚焦。',
+      preview: <TooltipScenarioDemo />,
+      code: `<TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger render={<Button aria-label="分享" />} />
+    <TooltipContent>分享当前页面</TooltipContent>
+  </Tooltip>
+</TooltipProvider>`,
+    },
+  ],
+  'alert-dialog': [
+    {
+      title: '高风险确认',
+      description: '明确说出删除对象和不可逆后果，并将取消操作保持为安全出口。',
+      preview: <AlertDialogScenarioDemo />,
+      code: `<AlertDialog>
+  <AlertDialogTrigger render={<Button variant="destructive" />}>删除项目</AlertDialogTrigger>
+  <AlertDialogContent>
+    <AlertDialogTitle>确认删除项目？</AlertDialogTitle>
+    <AlertDialogDescription>此操作无法撤销。</AlertDialogDescription>
+    <AlertDialogCancel>取消</AlertDialogCancel>
+    <AlertDialogAction>确认删除</AlertDialogAction>
+  </AlertDialogContent>
+</AlertDialog>`,
+    },
+  ],
+  dialog: [
+    {
+      title: '聚焦编辑任务',
+      description:
+        '在不离开当前页面的情况下完成短表单，并提供明确的保存与取消操作。',
+      preview: <DialogScenarioDemo />,
+      code: `<Dialog>
+  <DialogTrigger render={<Button variant="outline" />}>编辑资料</DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>编辑工作区资料</DialogTitle>
+      <DialogDescription>保存后所有成员都会看到最新内容。</DialogDescription>
+    </DialogHeader>
+    <DialogFooter>取消与保存操作</DialogFooter>
+  </DialogContent>
+</Dialog>`,
+    },
+  ],
+  drawer: [
+    {
+      title: '移动端补充任务',
+      description: '从底部拉出筛选任务，支持触控下滑关闭并保留原页面上下文。',
+      preview: <DrawerScenarioDemo />,
+      code: `<Drawer showSwipeHandle>
+  <DrawerTrigger render={<Button />}>查看移动筛选</DrawerTrigger>
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>筛选项目</DrawerTitle>
+      <DrawerDescription>向下滑动以返回列表。</DrawerDescription>
+    </DrawerHeader>
+  </DrawerContent>
+</Drawer>`,
+    },
+  ],
+  popover: [
+    {
+      title: '就近补充信息',
+      description: '在触发器附近承载比 Tooltip 更丰富的说明和少量后续操作。',
+      preview: <PopoverScenarioDemo />,
+      code: `<Popover>
+  <PopoverTrigger render={<Button variant="outline" />}>查看发布计划</PopoverTrigger>
+  <PopoverContent>
+    <PopoverTitle>下次发布</PopoverTitle>
+    <PopoverDescription>7 月 24 日 10:00</PopoverDescription>
+    <Button size="sm">打开排期</Button>
+  </PopoverContent>
+</Popover>`,
+    },
+  ],
+  sheet: [
+    {
+      title: '桌面侧边面板',
+      description: '从页面边缘打开筛选或详情，在较宽屏幕上保持稳定的任务层级。',
+      preview: <SheetScenarioDemo />,
+      code: `<Sheet>
+  <SheetTrigger render={<Button />}>打开桌面筛选</SheetTrigger>
+  <SheetContent side="right">
+    <SheetHeader>
+      <SheetTitle>筛选组件</SheetTitle>
+      <SheetDescription>选择分类与稳定状态。</SheetDescription>
+    </SheetHeader>
+  </SheetContent>
+</Sheet>`,
+    },
+  ],
+  toast: [
+    {
+      title: '非阻塞操作反馈',
+      description: '保存完成后短暂反馈结果；重要失败仍应在页面内持续展示。',
+      preview: <ToastScenarioDemo />,
+      code: `<Button onClick={() => toast.success('设置已保存')}>
+  保存并提示
+</Button>
+<Toaster />`,
+    },
+  ],
+  command: [
+    {
+      title: '键盘命令检索',
+      description: '让高频用户通过关键词和快捷键快速定位跨页面命令。',
+      preview: <CommandScenarioDemo />,
+      code: `<Command>
+  <CommandInput placeholder="搜索命令…" />
+  <CommandList>
+    <CommandGroup heading="导航">
+      <CommandItem>搜索组件 <CommandShortcut>⌘K</CommandShortcut></CommandItem>
+    </CommandGroup>
+  </CommandList>
+</Command>`,
+      previewHeight: 360,
+    },
+  ],
+  'context-menu': [
+    {
+      title: '对象相关操作',
+      description:
+        '右键对象时只展示和当前对象直接相关的次要操作，并保留其他入口。',
+      preview: <ContextMenuScenarioDemo />,
+      code: `<ContextMenu>
+  <ContextMenuTrigger>在项目卡片上点击右键</ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuItem>打开</ContextMenuItem>
+    <ContextMenuItem>分享</ContextMenuItem>
+    <ContextMenuItem variant="destructive">删除</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>`,
+      previewHeight: 320,
+    },
+  ],
+  direction: [
+    {
+      title: '双向布局边界',
+      description:
+        '在稳定组件树边界切换 LTR 与 RTL，并检查内容、图标和交互方向。',
+      preview: <DirectionScenarioDemo />,
+      code: `<DirectionProvider direction="rtl">
+  <div dir="rtl">العربية</div>
+</DirectionProvider>`,
+      previewHeight: 300,
+    },
+  ],
+};
+
+for (const [slug, examples] of Object.entries(scenarioExamples)) {
   componentDocumentation[slug]?.examples.push(...examples);
 }
 
@@ -2069,8 +2583,8 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
   input: [
     {
       name: 'type',
-      description: '选择文本、邮箱、密码等原生输入类型。',
-      type: 'HTMLInputTypeAttribute',
+      description: '选择原生输入类型，或使用 otp 进入验证码模式。',
+      type: "HTMLInputTypeAttribute | 'otp'",
       defaultValue: "'text'",
     },
     {
@@ -2090,31 +2604,16 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'boolean',
     },
     {
-      name: 'InputGroupAddon.align',
-      description: '将附加内容放到行内或块级首尾。',
-      type: "'inline-start' | 'inline-end' | 'block-start' | 'block-end'",
-    },
-    {
-      name: 'InputGroupButton',
-      description: '承载与当前输入直接关联的紧凑动作。',
-      type: 'component',
-    },
-    {
-      name: 'InputGroupInput',
-      description: '用于单行输入并继承组级焦点状态。',
-      type: 'component',
-    },
-    {
-      name: 'InputGroupTextarea',
-      description: '用于多行输入并支持块级附加内容。',
-      type: 'component',
-    },
-    { name: 'maxLength', description: '设置验证码总位数。', type: 'number' },
-    {
-      name: 'InputOTP.shape',
-      description: '切换连接方块或独立圆形验证码槽位。',
-      type: "'connected' | 'circle'",
+      name: 'variant',
+      description: '设置验证码的连续、分段或独立圆形布局。',
+      type: "'connected' | 'segmented' | 'circle'",
       defaultValue: "'connected'",
+    },
+    {
+      name: 'maxLength',
+      description: '设置验证码总位数；OTP 模式默认为 6。',
+      type: 'number',
+      defaultValue: '6',
     },
     {
       name: 'value / onChange',
@@ -2122,17 +2621,29 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'string / (value: string) => void',
     },
     {
-      name: 'InputOTPSlot.index',
-      description: '将可视槽位映射到验证码字符。',
-      type: 'number',
-    },
-    {
       name: 'pattern',
       description: '限制允许输入的字符类型。',
       type: 'string',
     },
   ],
-  'radio-group': [
+  radio: [
+    {
+      name: 'Radio.checked / defaultChecked',
+      description: '单独使用时管理选中状态。',
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'Radio.onCheckedChange',
+      description: '单独 Radio 被选中时调用。',
+      type: '(checked: boolean) => void',
+    },
+    {
+      name: 'Radio.value',
+      description: '位于 RadioGroup 中时标识当前选项。',
+      type: 'unknown',
+      defaultValue: "'on'",
+    },
     {
       name: 'value / defaultValue',
       description: '管理互斥选择中的当前值。',
@@ -2150,7 +2661,7 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
     },
     {
       name: 'disabled',
-      description: '禁用整个组或单个 RadioGroupItem。',
+      description: '禁用整个 RadioGroup 或单个 Radio。',
       type: 'boolean',
       defaultValue: 'false',
     },
@@ -2271,14 +2782,64 @@ componentDocumentation.input.whenToUse = [
   '需要在同一输入任务中组合说明、附加动作和状态反馈。',
 ];
 componentDocumentation.input.parts = [
-  { name: 'Input', description: '接收单行文本与原生输入类型。' },
   {
-    name: 'InputGroup',
-    description: '组合输入控件、前后缀、按钮和块级附加内容。',
+    name: 'Input',
+    description: '统一接收原生单行输入与固定长度验证码。',
+  },
+];
+
+componentDocumentation.group.summary =
+  '在统一布局表面中组合输入、文本域、按钮与其他表单控件。';
+componentDocumentation.group.whenToUse = [
+  '多个控件共同完成一个输入任务，需要共享边框和状态反馈。',
+  '需要在控件行内或块级首尾放置前缀、后缀、计数与操作。',
+];
+componentDocumentation.group.examples = [
+  {
+    title: '组合表单控件',
+    description:
+      'Group 只负责布局和聚合状态，Input、Textarea 与 Button 保留各自行为。',
+    preview: <GroupCompositionDemo />,
+    code: `<Group>
+  <GroupAddon>ui.dev/</GroupAddon>
+  <Input defaultValue="docs" />
+  <GroupAddon align="inline-end">
+    <Button variant="ghost" size="xs">复制</Button>
+  </GroupAddon>
+</Group>
+
+<Group>
+  <Textarea />
+  <GroupAddon align="block-end">16 / 120</GroupAddon>
+</Group>`,
+    wide: true,
+    previewHeight: 480,
+  },
+];
+componentDocumentation.group.parts = [
+  { name: 'Group', description: '聚合布局、边框、焦点和错误状态。' },
+  {
+    name: 'GroupAddon',
+    description: '在行内或块级首尾放置文本、图标和操作。',
+  },
+];
+componentDocumentation.group.api = [
+  {
+    name: 'orientation',
+    description: '设置控件的主排列方向。',
+    type: "'horizontal' | 'vertical'",
+    defaultValue: "'horizontal'",
   },
   {
-    name: 'InputOTP',
-    description: '接收固定长度验证码，并支持连接方块与独立圆圈。',
+    name: 'GroupAddon.align',
+    description: '将附加内容放到行内或块级首尾。',
+    type: "'inline-start' | 'inline-end' | 'block-start' | 'block-end'",
+    defaultValue: "'inline-start'",
+  },
+  {
+    name: 'children',
+    description: '直接组合 Input、Textarea、Button、Select 等组件。',
+    type: 'React.ReactNode',
   },
 ];
 
@@ -2341,7 +2902,7 @@ if (inputBasicExample) {
 }
 
 componentDocumentation.switch.examples.push({
-  title: '开关状态',
+  title: '基础与状态',
   description: '真实展示开启、关闭和禁用状态，禁用开关不会响应指针操作。',
   preview: (
     <div className="example-row">
@@ -2360,10 +2921,24 @@ componentDocumentation.switch.examples.push({
     </div>
   ),
   code: `import { Switch } from '@heliannuuthus/ui/switch'\n\n<Switch defaultChecked />\n<Switch />\n<Switch disabled />`,
+  wide: true,
+  previewHeight: 280,
 });
 
+const switchExamples = componentDocumentation.switch.examples;
+const switchSettingsIndex = switchExamples.findIndex(
+  (example) => example.title === '设置列表'
+);
+if (switchSettingsIndex >= 0) {
+  const [switchSettingsExample] = switchExamples.splice(switchSettingsIndex, 1);
+  if (switchSettingsExample) {
+    switchSettingsExample.wide = true;
+    switchExamples.push(switchSettingsExample);
+  }
+}
+
 componentDocumentation.checkbox.examples.push({
-  title: '选择状态',
+  title: '基础与状态',
   description:
     '选中时以向外爆开的粒子确认操作，取消选中时仅收回勾选标记；同时展示不确定和禁用状态。',
   preview: (
@@ -2387,7 +2962,128 @@ componentDocumentation.checkbox.examples.push({
     </div>
   ),
   code: `import { Checkbox } from '@heliannuuthus/ui/checkbox'\n\n<Checkbox />\n<Checkbox defaultChecked />\n<Checkbox indeterminate />\n<Checkbox disabled />`,
+  wide: true,
+  previewHeight: 280,
 });
+
+componentDocumentation.toggle.summary =
+  '通过 Toggle 与 ToggleGroup 组织单个或成组的可按下工具状态。';
+componentDocumentation.toggle.whenToUse = [
+  '工具栏中的模式需要在按下与未按下之间即时切换时使用 Toggle。',
+  '多个紧凑工具需要互斥或多选时使用 ToggleGroup；页面视图切换应使用 Tabs。',
+];
+componentDocumentation.toggle.parts = [
+  { name: 'Toggle', description: '切换单个工具的按下状态。' },
+  {
+    name: 'ToggleGroup',
+    description: '统一管理一组单选或多选 Toggle 的值与方向。',
+  },
+  { name: 'ToggleGroupItem', description: '定义组内一个可选择的工具项。' },
+];
+
+componentDocumentation.table.summary =
+  '使用 Table 展示语义化行列，并在需要操作数据集合时组合 DataTable。';
+componentDocumentation.table.whenToUse = [
+  '少量静态数据需要按行列比较时使用 Table。',
+  '数据需要搜索、排序、筛选或分页时使用 DataTable，避免自行重复编排状态。',
+];
+componentDocumentation.table.parts = [
+  {
+    name: 'Table',
+    description:
+      '提供 TableHeader、TableBody、TableRow 与 TableCell 等语义结构。',
+  },
+  {
+    name: 'DataTable',
+    description: '在语义表格上组合列定义、搜索、排序、筛选和分页。',
+  },
+];
+
+componentDocumentation.message.summary =
+  '组合 Message、Bubble 与 MessageScroller 构建完整且可持续滚动的会话流。';
+componentDocumentation.message.whenToUse = [
+  'Message 组织说话人、时间和状态，Bubble 承载一段具体内容。',
+  '消息持续追加并允许回看历史时，用 MessageScroller 管理滚动位置和回到底部。',
+];
+componentDocumentation.message.parts = [
+  { name: 'Message', description: '组织单条消息的身份、内容和状态区域。' },
+  { name: 'Bubble', description: '展示一段发言、回复或系统生成内容。' },
+  {
+    name: 'MessageScroller',
+    description: '管理长消息流的视口、追加内容与回到底部行为。',
+  },
+];
+
+componentDocumentation.toast.summary =
+  '通过 Toaster 与 toast API 在页面边缘短暂反馈非阻塞的操作结果。';
+componentDocumentation.toast.whenToUse = [
+  '保存、复制或发送完成后，需要不打断当前流程地反馈结果时使用。',
+  '重要失败应在页面内持续展示；Sonner 仅作为旧导入路径的兼容别名。',
+];
+componentDocumentation.toast.parts = [
+  { name: 'Toaster', description: '挂载并统一配置全局通知容器。' },
+  { name: 'toast', description: '创建成功、失败、警告或普通通知。' },
+];
+
+const redundantBasicExampleSlugs = new Set([
+  'checkbox',
+  'combobox',
+  'form',
+  'input',
+  'radio',
+  'select',
+  'switch',
+  'textarea',
+]);
+
+for (const slug of redundantBasicExampleSlugs) {
+  const examples = componentDocumentation[slug]?.examples;
+  if (
+    examples &&
+    examples.length > 1 &&
+    (examples[0]?.title === '基础用法' || examples[0]?.title === '基础输入')
+  ) {
+    examples.shift();
+  }
+}
+
+const exampleTitleOrder: Record<string, string[]> = {
+  button: ['按钮类型', '不同尺寸', '带图标的按钮', '状态', '组合按钮'],
+  checkbox: ['基础与状态', '权限组合'],
+  'date-picker': ['定时发布', '内联日历'],
+  'dropdown-menu': ['常用操作', '选择与状态', '子菜单与尺寸'],
+  switch: ['基础与状态', '设置列表'],
+};
+
+for (const [slug, titles] of Object.entries(exampleTitleOrder)) {
+  const examples = componentDocumentation[slug]?.examples;
+  examples?.sort((left, right) => {
+    const leftIndex = titles.indexOf(left.title);
+    const rightIndex = titles.indexOf(right.title);
+    return (
+      (leftIndex < 0 ? Number.MAX_SAFE_INTEGER : leftIndex) -
+      (rightIndex < 0 ? Number.MAX_SAFE_INTEGER : rightIndex)
+    );
+  });
+}
+
+const fullWidthExamples: Record<string, Record<string, number>> = {
+  button: { 组合按钮: 260 },
+  checkbox: { 基础与状态: 280, 权限组合: 380 },
+  'dropdown-menu': { 子菜单与尺寸: 360 },
+  switch: { 基础与状态: 280, 设置列表: 390 },
+  table: { 基础用法: 300, 可操作数据表: 480 },
+};
+
+for (const [slug, examplesByTitle] of Object.entries(fullWidthExamples)) {
+  for (const example of componentDocumentation[slug]?.examples ?? []) {
+    const previewHeight = examplesByTitle[example.title];
+    if (previewHeight) {
+      example.wide = true;
+      example.previewHeight = previewHeight;
+    }
+  }
+}
 
 const spaciousPreviewHeights: Record<string, number> = {
   'aspect-ratio': 560,

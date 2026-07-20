@@ -86,10 +86,20 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
     <Textarea className="minimal-textarea" placeholder="写下补充说明……" />
   ),
   toggle: (
-    <Toggle aria-label="切换粗体">
-      <Bold />
-      粗体
-    </Toggle>
+    <div className="example-row">
+      <Toggle aria-label="切换粗体">
+        <Bold />
+        粗体
+      </Toggle>
+      <ToggleGroup defaultValue={['bold']}>
+        <ToggleGroupItem value="bold" aria-label="粗体">
+          <Bold />
+        </ToggleGroupItem>
+        <ToggleGroupItem value="italic" aria-label="斜体">
+          <Italic />
+        </ToggleGroupItem>
+      </ToggleGroup>
+    </div>
   ),
   'toggle-group': (
     <ToggleGroup defaultValue={['bold']}>

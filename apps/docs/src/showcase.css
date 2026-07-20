@@ -960,6 +960,44 @@ a {
 .demo-section {
   padding-top: 40px;
 }
+.usage-section {
+  padding-top: 34px;
+}
+.usage-section > h2 {
+  margin: 0 0 14px;
+}
+.usage-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: usage;
+}
+.usage-list li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--background) 94%, var(--muted));
+  padding: 14px 16px;
+  color: var(--docs-muted);
+  font-size: 13px;
+  line-height: 1.65;
+  counter-increment: usage;
+}
+.usage-list li::before {
+  content: counter(usage, decimal-leading-zero);
+  color: var(--primary);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
 .component-reference-section {
   padding-top: 50px;
 }
@@ -2735,6 +2773,9 @@ a {
   .example-list {
     grid-template-columns: 1fr;
   }
+  .usage-list {
+    grid-template-columns: 1fr;
+  }
   .example-article > header {
     height: auto;
     overflow: visible;
@@ -2858,7 +2899,7 @@ a {
 .data-field-copy,
 .data-switch-copy,
 .data-check-copy,
-.data-radio-card > span {
+.data-radio-copy {
   display: flex;
   flex-direction: column;
 }
@@ -3103,6 +3144,21 @@ a {
   width: min(680px, 100%);
 }
 
+.data-radio-demo {
+  display: grid;
+  gap: 18px;
+  width: min(650px, 100%);
+}
+
+.data-radio-standalone {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  font-size: 13px;
+  cursor: pointer;
+}
+
 .data-radio-cards {
   width: min(650px, 100%);
 }
@@ -3124,7 +3180,7 @@ a {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
 }
 
-.data-radio-card > span {
+.data-radio-copy {
   flex: 1;
   gap: 3px;
 }
