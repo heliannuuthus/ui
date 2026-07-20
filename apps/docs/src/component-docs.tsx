@@ -2024,7 +2024,7 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
     {
       title: '验证码形态',
       description:
-        '设置 variant 即可切换连续方块、分段方块与独立圆圈，三种形态共享同一份验证码状态。',
+        '设置 variant 即可切换连续方块、分段方块与独立方块，三种形态共享同一份验证码状态。',
       preview: <InputOtpVerificationDemo />,
       code: `<Input
   type="otp"
@@ -2036,7 +2036,7 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
 
 <Input type="otp" maxLength={6} variant="segmented" />
 
-<Input type="otp" maxLength={6} variant="circle" />`,
+<Input type="otp" maxLength={6} variant="separated" />`,
       wide: true,
       previewHeight: 660,
     },
@@ -2605,8 +2605,8 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
     },
     {
       name: 'variant',
-      description: '设置验证码的连续、分段或独立圆形布局。',
-      type: "'connected' | 'segmented' | 'circle'",
+      description: '设置验证码的连续、分段或独立方块布局。',
+      type: "'connected' | 'segmented' | 'separated'",
       defaultValue: "'connected'",
     },
     {

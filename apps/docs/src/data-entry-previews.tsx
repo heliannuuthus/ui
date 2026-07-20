@@ -365,7 +365,7 @@ export function InputOtpVerificationDemo() {
         </div>
         <div className="data-otp-variant-row">
           <span>
-            <strong>独立圆圈</strong>
+            <strong>独立方块</strong>
             <small>适合强调每一位输入状态</small>
           </span>
           <Input
@@ -373,8 +373,8 @@ export function InputOtpVerificationDemo() {
             maxLength={6}
             value={value}
             onChange={setValue}
-            variant="circle"
-            aria-label="圆形验证码"
+            variant="separated"
+            aria-label="独立方块验证码"
           />
         </div>
       </div>

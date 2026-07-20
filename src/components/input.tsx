@@ -9,7 +9,7 @@ import {
   InputOTPSlot,
 } from './input-otp';
 
-type InputOTPVariant = 'connected' | 'segmented' | 'circle';
+type InputOTPVariant = 'connected' | 'segmented' | 'separated' | 'circle';
 
 type NativeInputProps = React.ComponentProps<'input'> & {
   variant?: never;
@@ -45,7 +45,8 @@ function OTPInput({
     : 6;
   const slots = Array.from({ length: slotCount }, (_, index) => index);
   const splitIndex = Math.ceil(slotCount / 2);
-  const shape = variant === 'circle' ? 'circle' : 'connected';
+  const normalizedVariant = variant === 'circle' ? 'separated' : variant;
+  const shape = normalizedVariant === 'separated' ? 'separated' : 'connected';
 
   const renderSlots = (indices: number[]) =>
     indices.map((index) => (
@@ -57,11 +58,11 @@ function OTPInput({
       {...props}
       autoComplete={autoComplete}
       containerClassName={className}
-      data-variant={variant}
+      data-variant={normalizedVariant}
       maxLength={slotCount}
       shape={shape}
     >
-      {variant === 'segmented' && slotCount > 1 ? (
+      {normalizedVariant === 'segmented' && slotCount > 1 ? (
         <>
           <InputOTPGroup>
             {renderSlots(slots.slice(0, splitIndex))}
