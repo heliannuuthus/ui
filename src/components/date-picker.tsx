@@ -8,20 +8,42 @@ import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { cn } from '../lib/utils';
 
 interface DatePickerProps {
+  display?: 'popover' | 'inline';
   value?: Date;
   onChange?: (date: Date | undefined) => void;
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  calendarClassName?: string;
+  calendarProps?: Omit<
+    React.ComponentProps<typeof Calendar>,
+    'mode' | 'selected' | 'onSelect' | 'className'
+  >;
 }
 
 function DatePicker({
+  display = 'popover',
   value,
   onChange,
   placeholder = '选择日期',
   disabled,
   className,
+  calendarClassName,
+  calendarProps,
 }: DatePickerProps) {
+  const calendar = (
+    <Calendar
+      {...calendarProps}
+      mode="single"
+      selected={value}
+      onSelect={onChange}
+      disabled={disabled ? () => true : calendarProps?.disabled}
+      className={cn(display === 'inline' && className, calendarClassName)}
+    />
+  );
+
+  if (display === 'inline') return calendar;
+
   return (
     <Popover>
       <PopoverTrigger
@@ -41,7 +63,7 @@ function DatePicker({
         }
       />
       <PopoverContent className="w-auto p-0" align="start">
-        <Calendar mode="single" selected={value} onSelect={onChange} />
+        {calendar}
       </PopoverContent>
     </Popover>
   );

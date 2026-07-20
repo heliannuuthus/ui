@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { cn } from '../lib/utils';
 
-const TypographyH1 = ({ className, ...props }: React.ComponentProps<'h1'>) => (
+const H1 = ({ className, ...props }: React.ComponentProps<'h1'>) => (
   <h1
     className={cn(
       'scroll-m-20 text-4xl font-extrabold tracking-tight text-balance lg:text-5xl',
@@ -10,7 +10,7 @@ const TypographyH1 = ({ className, ...props }: React.ComponentProps<'h1'>) => (
     {...props}
   />
 );
-const TypographyH2 = ({ className, ...props }: React.ComponentProps<'h2'>) => (
+const H2 = ({ className, ...props }: React.ComponentProps<'h2'>) => (
   <h2
     className={cn(
       'scroll-m-20 border-b border-border pb-2 text-3xl font-semibold tracking-tight first:mt-0',
@@ -19,7 +19,7 @@ const TypographyH2 = ({ className, ...props }: React.ComponentProps<'h2'>) => (
     {...props}
   />
 );
-const TypographyH3 = ({ className, ...props }: React.ComponentProps<'h3'>) => (
+const H3 = ({ className, ...props }: React.ComponentProps<'h3'>) => (
   <h3
     className={cn(
       'scroll-m-20 text-2xl font-semibold tracking-tight',
@@ -28,7 +28,7 @@ const TypographyH3 = ({ className, ...props }: React.ComponentProps<'h3'>) => (
     {...props}
   />
 );
-const TypographyH4 = ({ className, ...props }: React.ComponentProps<'h4'>) => (
+const H4 = ({ className, ...props }: React.ComponentProps<'h4'>) => (
   <h4
     className={cn(
       'scroll-m-20 text-xl font-semibold tracking-tight',
@@ -90,12 +90,12 @@ const TypographyCode = ({
 );
 
 export {
+  H1,
+  H2,
+  H3,
+  H4,
   TypographyBlockquote,
   TypographyCode,
-  TypographyH1,
-  TypographyH2,
-  TypographyH3,
-  TypographyH4,
   TypographyLarge,
   TypographyLead,
   TypographyMuted,

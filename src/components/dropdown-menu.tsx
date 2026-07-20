@@ -4,7 +4,7 @@ import { Menu as MenuPrimitive } from '@base-ui/react/menu';
 import { cn } from '../lib/utils';
 import { ChevronRightIcon, CheckIcon } from 'lucide-react';
 
-function DropdownMenu({ ...props }: MenuPrimitive.Root.Props) {
+function DropdownMenuRoot({ ...props }: MenuPrimitive.Root.Props) {
   return <MenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
 }
 
@@ -251,8 +251,167 @@ function DropdownMenuShortcut({
   );
 }
 
+type DropdownMenuEntry =
+  | {
+      type?: 'item';
+      label: React.ReactNode;
+      icon?: React.ReactNode;
+      shortcut?: React.ReactNode;
+      href?: string;
+      disabled?: boolean;
+      destructive?: boolean;
+      onSelect?: () => void;
+      children?: DropdownMenuEntry[];
+    }
+  | { type: 'label'; label: React.ReactNode }
+  | { type: 'separator' }
+  | {
+      type: 'checkbox';
+      label: React.ReactNode;
+      checked: boolean;
+      disabled?: boolean;
+      onCheckedChange?: (checked: boolean) => void;
+    }
+  | {
+      type: 'radio';
+      value: string;
+      onValueChange?: (value: string) => void;
+      items: Array<{
+        label: React.ReactNode;
+        value: string;
+        disabled?: boolean;
+      }>;
+    };
+
+type DropdownMenuProps = Omit<MenuPrimitive.Root.Props, 'children'> & {
+  trigger: React.ReactElement;
+  items: DropdownMenuEntry[];
+  align?: MenuPrimitive.Positioner.Props['align'];
+  side?: MenuPrimitive.Positioner.Props['side'];
+  size?: 'sm' | 'default' | 'lg';
+  contentClassName?: string;
+};
+
+function renderEntries(items: DropdownMenuEntry[]) {
+  return items.map((item, index) => {
+    if (item.type === 'separator') {
+      return <DropdownMenuSeparator key={index} />;
+    }
+
+    if (item.type === 'label') {
+      return (
+        <div
+          key={index}
+          data-slot="dropdown-menu-label"
+          className="px-3 py-2.5 text-xs text-muted-foreground"
+        >
+          {item.label}
+        </div>
+      );
+    }
+
+    if (item.type === 'checkbox') {
+      return (
+        <DropdownMenuCheckboxItem
+          key={index}
+          checked={item.checked}
+          disabled={item.disabled}
+          onCheckedChange={(checked) =>
+            item.onCheckedChange?.(checked === true)
+          }
+        >
+          {item.label}
+        </DropdownMenuCheckboxItem>
+      );
+    }
+
+    if (item.type === 'radio') {
+      return (
+        <DropdownMenuRadioGroup
+          key={index}
+          value={item.value}
+          onValueChange={(value) => item.onValueChange?.(String(value))}
+        >
+          {item.items.map((option) => (
+            <DropdownMenuRadioItem
+              key={option.value}
+              value={option.value}
+              disabled={option.disabled}
+            >
+              {option.label}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      );
+    }
+
+    if (item.children?.length) {
+      return (
+        <DropdownMenuSub key={index}>
+          <DropdownMenuSubTrigger>
+            {item.icon}
+            {item.label}
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            {renderEntries(item.children)}
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+      );
+    }
+
+    return (
+      <DropdownMenuItem
+        key={index}
+        disabled={item.disabled}
+        variant={item.destructive ? 'destructive' : 'default'}
+        onClick={item.onSelect}
+        render={item.href ? <a href={item.href} /> : undefined}
+      >
+        {item.icon}
+        {item.label}
+        {item.shortcut != null && (
+          <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>
+        )}
+      </DropdownMenuItem>
+    );
+  });
+}
+
+function DropdownMenu({
+  trigger,
+  items,
+  align = 'start',
+  side = 'bottom',
+  size = 'default',
+  contentClassName,
+  ...props
+}: DropdownMenuProps) {
+  return (
+    <DropdownMenuRoot {...props}>
+      <DropdownMenuTrigger render={trigger} />
+      <DropdownMenuContent
+        align={align}
+        side={side}
+        data-size={size}
+        className={cn(
+          size === 'sm' &&
+            'min-w-40 **:data-[slot$=-item]:px-2.5 **:data-[slot$=-item]:py-1.5 **:data-[slot$=-item]:text-xs',
+          size === 'lg' &&
+            'min-w-56 **:data-[slot$=-item]:px-3.5 **:data-[slot$=-item]:py-2.5',
+          contentClassName
+        )}
+      >
+        {renderEntries(items)}
+      </DropdownMenuContent>
+    </DropdownMenuRoot>
+  );
+}
+
 export {
   DropdownMenu,
+  type DropdownMenuEntry,
+  type DropdownMenuProps,
+  DropdownMenuRoot,
   DropdownMenuPortal,
   DropdownMenuTrigger,
   DropdownMenuContent,

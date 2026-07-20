@@ -118,5 +118,19 @@ export {
   FormItem,
   FormLabel,
   FormMessage,
+  Label,
   useFormField,
 };
+
+export {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+} from './field';

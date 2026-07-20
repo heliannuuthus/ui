@@ -2,6 +2,8 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+@source '../components';
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -46,6 +48,151 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer components {
+  .checkbox-particle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.25rem;
+    height: 0.25rem;
+    border-radius: 9999px;
+    background: var(--primary);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--primary) 18%, transparent);
+    opacity: 0;
+  }
+
+  .checkbox-particle:nth-child(even) {
+    width: 0.2rem;
+    height: 0.2rem;
+    background: color-mix(in oklab, var(--primary) 72%, white);
+  }
+
+  .checkbox-particle:nth-child(1) {
+    --particle-x: 0;
+    --particle-y: -1.25rem;
+  }
+
+  .checkbox-particle:nth-child(2) {
+    --particle-x: 0.9rem;
+    --particle-y: -0.9rem;
+  }
+
+  .checkbox-particle:nth-child(3) {
+    --particle-x: 1.25rem;
+    --particle-y: 0;
+  }
+
+  .checkbox-particle:nth-child(4) {
+    --particle-x: 0.9rem;
+    --particle-y: 0.9rem;
+  }
+
+  .checkbox-particle:nth-child(5) {
+    --particle-x: 0;
+    --particle-y: 1.25rem;
+  }
+
+  .checkbox-particle:nth-child(6) {
+    --particle-x: -0.9rem;
+    --particle-y: 0.9rem;
+  }
+
+  .checkbox-particle:nth-child(7) {
+    --particle-x: -1.25rem;
+    --particle-y: 0;
+  }
+
+  .checkbox-particle:nth-child(8) {
+    --particle-x: -0.9rem;
+    --particle-y: -0.9rem;
+  }
+
+  [data-effect='scatter'] .checkbox-particle {
+    animation: checkbox-particle-scatter 520ms cubic-bezier(0.16, 1, 0.3, 1)
+      both;
+  }
+
+  [data-effect='scatter'] .checkbox-particle:nth-child(even) {
+    animation-delay: 35ms;
+  }
+
+  [data-slot='tabs'][data-animation='fade'] .tabs-content-motion,
+  [data-slot='tabs'][data-animation='slide'] .tabs-content-motion {
+    transition-duration: 180ms;
+    transition-property: opacity, transform;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-slot='tabs'][data-animation='fade']
+    .tabs-content-motion:is([data-starting-style], [data-ending-style]),
+  [data-slot='tabs'][data-animation='slide']
+    .tabs-content-motion:is([data-starting-style], [data-ending-style]) {
+    opacity: 0;
+  }
+
+  [data-slot='tabs'][data-animation='slide']
+    .tabs-content-motion[data-activation-direction='left'][data-starting-style],
+  [data-slot='tabs'][data-animation='slide']
+    .tabs-content-motion[data-activation-direction='right'][data-ending-style] {
+    transform: translateX(-0.5rem);
+  }
+
+  [data-slot='tabs'][data-animation='slide']
+    .tabs-content-motion[data-activation-direction='right'][data-starting-style],
+  [data-slot='tabs'][data-animation='slide']
+    .tabs-content-motion[data-activation-direction='left'][data-ending-style] {
+    transform: translateX(0.5rem);
+  }
+
+  [data-slot='tabs'][data-animation='slide']
+    .tabs-content-motion[data-activation-direction='up'][data-starting-style],
+  [data-slot='tabs'][data-animation='slide']
+    .tabs-content-motion[data-activation-direction='down'][data-ending-style] {
+    transform: translateY(-0.5rem);
+  }
+
+  [data-slot='tabs'][data-animation='slide']
+    .tabs-content-motion[data-activation-direction='down'][data-starting-style],
+  [data-slot='tabs'][data-animation='slide']
+    .tabs-content-motion[data-activation-direction='up'][data-ending-style] {
+    transform: translateY(0.5rem);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot='checkbox-particles'] {
+      display: none;
+    }
+
+    [data-slot='tabs'] .tabs-content-motion {
+      transition-duration: 0.01ms;
+    }
+  }
+}
+
+@keyframes checkbox-particle-scatter {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(0, 0) scale(0.35);
+  }
+
+  24% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(0, 0) scale(1.15);
+  }
+
+  64% {
+    opacity: 0.82;
+    transform: translate(-50%, -50%)
+      translate(var(--particle-x), var(--particle-y)) scale(0.85);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%)
+      translate(var(--particle-x), var(--particle-y)) scale(0.35);
+  }
 }
 
 :root {
