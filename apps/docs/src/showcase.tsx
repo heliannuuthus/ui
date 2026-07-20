@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type CSSProperties } from 'react';
 import { Button } from '@heliannuuthus/ui/button';
 import { Input } from '@heliannuuthus/ui/input';
 import {
@@ -9,28 +9,31 @@ import {
 } from '@heliannuuthus/ui/tooltip';
 import {
   ArrowRight,
+  Box,
   Check,
   Code2,
   Copy,
-  ExternalLink,
   Github,
   Menu,
   Moon,
   Package,
-  PanelBottomClose,
-  PanelBottomOpen,
   Search,
   Sparkles,
   Sun,
   X,
+  Zap,
 } from 'lucide-react';
-import { NavLink, useParams } from 'react-router-dom';
+import { Navigate, NavLink, useParams } from 'react-router-dom';
 import {
   componentDocumentation,
   type ComponentExample,
 } from './component-docs';
 
 const repositoryUrl = 'https://github.com/heliannuuthus/ui';
+const docsBasePath = window.location.hostname.endsWith('github.io')
+  ? '/ui'
+  : '';
+const avatarUrl = `${docsBasePath}/heliannuuthus.jpg`;
 const installCommands = {
   pnpm: 'pnpm add @heliannuuthus/ui',
   npm: 'npm install @heliannuuthus/ui',
@@ -42,7 +45,7 @@ type PackageManager = keyof typeof installCommands;
 const componentGroups = [
   {
     title: '通用',
-    items: ['Button', 'Button Group', 'Typography', 'Badge', 'Kbd'],
+    items: ['Button', 'Typography', 'Badge', 'Kbd'],
   },
   {
     title: '布局',
@@ -63,17 +66,11 @@ const componentGroups = [
   {
     title: '数据录入',
     items: [
-      'Calendar',
       'Checkbox',
       'Combobox',
       'Date Picker',
-      'Field',
       'Form',
       'Input',
-      'Input Group',
-      'Input OTP',
-      'Label',
-      'Native Select',
       'Radio Group',
       'Select',
       'Slider',
@@ -128,6 +125,11 @@ const componentGroups = [
 
 const componentCatalog = componentGroups.flatMap((group) => group.items);
 const componentSlug = (name: string) => name.toLowerCase().replace(/ /g, '-');
+const spaciousComponentSlugs = new Set(
+  componentGroups
+    .filter((group) => group.title === '布局' || group.title === '导航')
+    .flatMap((group) => group.items.map(componentSlug))
+);
 
 const demoCode = `import { Button } from '@heliannuuthus/ui/button'
 
@@ -149,8 +151,8 @@ const navItems = [
 function Brand() {
   return (
     <NavLink className="brand" to="/" aria-label="Heliannuuthus UI 首页">
-      <span className="brand-symbol" aria-hidden="true">
-        H
+      <span className="brand-avatar" aria-hidden="true">
+        <img src={avatarUrl} alt="" />
       </span>
       <span>
         <strong>Heliannuuthus</strong>
@@ -528,6 +530,21 @@ function ComponentsOverview() {
 
 function ComponentPage() {
   const { component = 'button' } = useParams();
+  if (component === 'button-group') {
+    return <Navigate to="/components/button" replace />;
+  }
+  if (component === 'calendar') {
+    return <Navigate to="/components/date-picker" replace />;
+  }
+  if (component === 'input-group' || component === 'input-otp') {
+    return <Navigate to="/components/input" replace />;
+  }
+  if (component === 'field' || component === 'label') {
+    return <Navigate to="/components/form" replace />;
+  }
+  if (component === 'native-select') {
+    return <Navigate to="/components/select" replace />;
+  }
   const name =
     componentCatalog.find((item) => componentSlug(item) === component) ??
     'Button';
@@ -547,7 +564,13 @@ function ComponentPage() {
           </div>
         ))}
       </aside>
-      <main className="component-detail">
+      <main
+        className={`component-detail${
+          spaciousComponentSlugs.has(component)
+            ? ' component-detail-spacious'
+            : ''
+        }`}
+      >
         <div className="breadcrumb">
           <NavLink to="/components">组件</NavLink>
           <span>/</span>
@@ -569,19 +592,16 @@ function ComponentPage() {
         </div>
         {documentation ? (
           <>
-            <section className="component-guide-section">
-              <h2>何时使用</h2>
-              <ul>
-                {documentation.whenToUse.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </section>
             {documentation.examples.length > 0 && (
               <section className="demo-section">
-                <h2>使用场景</h2>
-                <p>以下示例均使用组件库中的真实组件渲染。</p>
-                <div className="example-list">
+                <h2>示例</h2>
+                <div
+                  className={`example-list${
+                    documentation.examples.length === 1
+                      ? ' example-list-single'
+                      : ''
+                  }`}
+                >
                   {documentation.examples.map((example) => (
                     <ComponentExampleCard
                       key={example.title}
@@ -594,22 +614,46 @@ function ComponentPage() {
             )}
             <section className="component-reference-section">
               <h2>API</h2>
-              <div className="component-api-table">
-                <div className="component-api-head">
-                  <span>属性</span>
-                  <span>说明</span>
-                  <span>类型</span>
-                  <span>默认值</span>
-                </div>
-                {documentation.api.map((property) => (
-                  <div key={property.name}>
-                    <code>{property.name}</code>
-                    <span>{property.description}</span>
-                    <code>{property.type}</code>
-                    <code>{property.defaultValue ?? '—'}</code>
+              {documentation.parts && documentation.parts.length > 0 && (
+                <div className="component-reference-block">
+                  <h3>组成组件</h3>
+                  <div className="component-parts-table">
+                    <div className="component-parts-head">
+                      <span>组件</span>
+                      <span>用途</span>
+                    </div>
+                    {documentation.parts.map((part) => (
+                      <div key={part.name}>
+                        <code>{part.name}</code>
+                        <span>{part.description}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
+              {documentation.api.length > 0 && (
+                <div className="component-reference-block">
+                  {documentation.parts && documentation.parts.length > 0 && (
+                    <h3>属性</h3>
+                  )}
+                  <div className="component-api-table">
+                    <div className="component-api-head">
+                      <span>属性</span>
+                      <span>说明</span>
+                      <span>类型</span>
+                      <span>默认值</span>
+                    </div>
+                    {documentation.api.map((property) => (
+                      <div key={property.name}>
+                        <code>{property.name}</code>
+                        <span>{property.description}</span>
+                        <code>{property.type}</code>
+                        <code>{property.defaultValue ?? '—'}</code>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </section>
             <div className="guidance-grid">
               <section>
@@ -652,13 +696,26 @@ function ComponentExampleCard({
   };
 
   return (
-    <article className="example-article">
+    <article
+      className={`example-article${example.wide ? ' example-article-wide' : ''}`}
+    >
       <header>
         <h3>{example.title}</h3>
         <p>{example.description}</p>
       </header>
       <div className="demo-card">
-        <div className="demo-preview">{example.preview}</div>
+        <div
+          className="demo-preview"
+          style={
+            example.previewHeight
+              ? ({
+                  '--demo-preview-height': `${example.previewHeight}px`,
+                } as CSSProperties)
+              : undefined
+          }
+        >
+          {example.preview}
+        </div>
         <TooltipProvider delay={300}>
           <footer className="demo-actions">
             <Tooltip>
@@ -701,7 +758,7 @@ function ComponentExampleCard({
                   />
                 }
               >
-                <Code2 />
+                <Box />
               </TooltipTrigger>
               <TooltipContent>在 CodeSandbox 打开</TooltipContent>
             </Tooltip>
@@ -716,7 +773,7 @@ function ComponentExampleCard({
                   />
                 }
               >
-                <ExternalLink />
+                <Zap />
               </TooltipTrigger>
               <TooltipContent>在 StackBlitz 打开</TooltipContent>
             </Tooltip>
@@ -733,7 +790,7 @@ function ComponentExampleCard({
                   />
                 }
               >
-                {expanded ? <PanelBottomClose /> : <PanelBottomOpen />}
+                <Code2 />
               </TooltipTrigger>
               <TooltipContent>
                 {expanded ? '收起代码' : '展开代码'}
@@ -812,11 +869,6 @@ export function Showcase({
       {page === 'design' && <DesignPage />}
       {page === 'components' && <ComponentsOverview />}
       {page === 'component' && <ComponentPage />}
-      <footer className="site-footer">
-        <Brand />
-        <p>为 Heliannuuthus 产品构建稳定、清晰的界面基础。</p>
-        <span>MIT © 2026 Heliannuuthus</span>
-      </footer>
     </div>
   );
 }

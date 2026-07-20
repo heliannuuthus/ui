@@ -4,33 +4,48 @@ import { OTPInput, OTPInputContext } from 'input-otp';
 import { cn } from '../lib/utils';
 import { MinusIcon } from 'lucide-react';
 
+type InputOTPShape = 'connected' | 'circle';
+
+const InputOTPShapeContext = React.createContext<InputOTPShape>('connected');
+
 function InputOTP({
   className,
   containerClassName,
+  shape = 'connected',
   ...props
 }: React.ComponentProps<typeof OTPInput> & {
   containerClassName?: string;
+  shape?: InputOTPShape;
 }) {
   return (
-    <OTPInput
-      data-slot="input-otp"
-      containerClassName={cn(
-        'cn-input-otp flex items-center has-disabled:opacity-50',
-        containerClassName
-      )}
-      spellCheck={false}
-      className={cn('disabled:cursor-not-allowed', className)}
-      {...props}
-    />
+    <InputOTPShapeContext.Provider value={shape}>
+      <OTPInput
+        data-slot="input-otp"
+        data-shape={shape}
+        containerClassName={cn(
+          'cn-input-otp flex items-center gap-3 has-disabled:opacity-50',
+          shape === 'circle' && 'gap-4',
+          containerClassName
+        )}
+        spellCheck={false}
+        className={cn('disabled:cursor-not-allowed', className)}
+        {...props}
+      />
+    </InputOTPShapeContext.Provider>
   );
 }
 
 function InputOTPGroup({ className, ...props }: React.ComponentProps<'div'>) {
+  const shape = React.useContext(InputOTPShapeContext);
+
   return (
     <div
       data-slot="input-otp-group"
+      data-shape={shape}
       className={cn(
-        'flex items-center rounded-3xl has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40',
+        'flex items-center has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40',
+        shape === 'connected' && 'rounded-lg',
+        shape === 'circle' && 'gap-3',
         className
       )}
       {...props}
@@ -46,14 +61,19 @@ function InputOTPSlot({
   index: number;
 }) {
   const inputOTPContext = React.useContext(OTPInputContext);
+  const shape = React.useContext(InputOTPShapeContext);
   const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {};
 
   return (
     <div
       data-slot="input-otp-slot"
       data-active={isActive}
+      data-shape={shape}
       className={cn(
-        'relative flex size-9 items-center justify-center border-y border-r border-input bg-input/50 text-sm transition-all outline-none first:rounded-l-3xl first:border-l last:rounded-r-3xl aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-3 data-[active=true]:ring-ring/30 data-[active=true]:aria-invalid:ring-destructive/20 dark:data-[active=true]:aria-invalid:ring-destructive/40',
+        'relative flex size-10 items-center justify-center bg-background text-sm transition-[color,box-shadow,background-color,border-color] outline-none aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-primary data-[active=true]:ring-3 data-[active=true]:ring-primary/20 data-[active=true]:aria-invalid:ring-destructive/20 dark:data-[active=true]:aria-invalid:ring-destructive/40',
+        shape === 'connected' &&
+          'border-y border-r border-input first:rounded-l-lg first:border-l last:rounded-r-lg',
+        shape === 'circle' && 'rounded-full border border-input',
         className
       )}
       {...props}
@@ -81,4 +101,10 @@ function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator };
+export {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+  type InputOTPShape,
+};

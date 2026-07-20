@@ -4,12 +4,9 @@ import { Menubar as MenubarPrimitive } from '@base-ui/react/menubar';
 
 import { cn } from '../lib/utils';
 import {
-  DropdownMenu,
+  DropdownMenuRoot as DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
@@ -17,10 +14,11 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
+  type DropdownMenuEntry,
 } from './dropdown-menu';
 import { CheckIcon } from 'lucide-react';
 
-function Menubar({ className, ...props }: MenubarPrimitive.Props) {
+function MenubarRoot({ className, ...props }: MenubarPrimitive.Props) {
   return (
     <MenubarPrimitive
       data-slot="menubar"
@@ -32,18 +30,6 @@ function Menubar({ className, ...props }: MenubarPrimitive.Props) {
 
 function MenubarMenu({ ...props }: React.ComponentProps<typeof DropdownMenu>) {
   return <DropdownMenu data-slot="menubar-menu" {...props} />;
-}
-
-function MenubarGroup({
-  ...props
-}: React.ComponentProps<typeof DropdownMenuGroup>) {
-  return <DropdownMenuGroup data-slot="menubar-group" {...props} />;
-}
-
-function MenubarPortal({
-  ...props
-}: React.ComponentProps<typeof DropdownMenuPortal>) {
-  return <DropdownMenuPortal data-slot="menubar-portal" {...props} />;
 }
 
 function MenubarTrigger({
@@ -168,26 +154,6 @@ function MenubarRadioItem({
   );
 }
 
-function MenubarLabel({
-  className,
-  inset,
-  ...props
-}: React.ComponentProps<typeof DropdownMenuLabel> & {
-  inset?: boolean;
-}) {
-  return (
-    <DropdownMenuLabel
-      data-slot="menubar-label"
-      data-inset={inset}
-      className={cn(
-        'px-3.5 py-2.5 text-xs text-muted-foreground data-inset:pl-9.5',
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
 function MenubarSeparator({
   className,
   ...props
@@ -259,21 +225,130 @@ function MenubarSubContent({
   );
 }
 
-export {
-  Menubar,
-  MenubarPortal,
-  MenubarMenu,
-  MenubarTrigger,
-  MenubarContent,
-  MenubarGroup,
-  MenubarSeparator,
-  MenubarLabel,
-  MenubarItem,
-  MenubarShortcut,
-  MenubarCheckboxItem,
-  MenubarRadioGroup,
-  MenubarRadioItem,
-  MenubarSub,
-  MenubarSubTrigger,
-  MenubarSubContent,
+type MenubarMenuConfig = {
+  label: React.ReactNode;
+  items: DropdownMenuEntry[];
+  disabled?: boolean;
 };
+
+type MenubarProps = Omit<MenubarPrimitive.Props, 'children'> & {
+  menus: MenubarMenuConfig[];
+  size?: 'sm' | 'default' | 'lg';
+};
+
+function renderMenubarEntries(items: DropdownMenuEntry[]) {
+  return items.map((item, index) => {
+    if (item.type === 'separator') {
+      return <MenubarSeparator key={index} />;
+    }
+
+    if (item.type === 'label') {
+      return (
+        <div
+          key={index}
+          data-slot="menubar-label"
+          className="px-3.5 py-2.5 text-xs text-muted-foreground"
+        >
+          {item.label}
+        </div>
+      );
+    }
+
+    if (item.type === 'checkbox') {
+      return (
+        <MenubarCheckboxItem
+          key={index}
+          checked={item.checked}
+          disabled={item.disabled}
+          onCheckedChange={(checked) =>
+            item.onCheckedChange?.(checked === true)
+          }
+        >
+          {item.label}
+        </MenubarCheckboxItem>
+      );
+    }
+
+    if (item.type === 'radio') {
+      return (
+        <MenubarRadioGroup
+          key={index}
+          value={item.value}
+          onValueChange={(value) => item.onValueChange?.(String(value))}
+        >
+          {item.items.map((option) => (
+            <MenubarRadioItem
+              key={option.value}
+              value={option.value}
+              disabled={option.disabled}
+            >
+              {option.label}
+            </MenubarRadioItem>
+          ))}
+        </MenubarRadioGroup>
+      );
+    }
+
+    if (item.children?.length) {
+      return (
+        <MenubarSub key={index}>
+          <MenubarSubTrigger>
+            {item.icon}
+            {item.label}
+          </MenubarSubTrigger>
+          <MenubarSubContent>
+            {renderMenubarEntries(item.children)}
+          </MenubarSubContent>
+        </MenubarSub>
+      );
+    }
+
+    return (
+      <MenubarItem
+        key={index}
+        disabled={item.disabled}
+        variant={item.destructive ? 'destructive' : 'default'}
+        onClick={item.onSelect}
+        render={item.href ? <a href={item.href} /> : undefined}
+      >
+        {item.icon}
+        {item.label}
+        {item.shortcut != null && (
+          <MenubarShortcut>{item.shortcut}</MenubarShortcut>
+        )}
+      </MenubarItem>
+    );
+  });
+}
+
+function Menubar({
+  menus,
+  size = 'default',
+  className,
+  ...props
+}: MenubarProps) {
+  return (
+    <MenubarRoot
+      data-size={size}
+      className={cn(size === 'sm' && 'h-8', size === 'lg' && 'h-11', className)}
+      {...props}
+    >
+      {menus.map((menu, index) => (
+        <MenubarMenu key={index}>
+          <MenubarTrigger
+            disabled={menu.disabled}
+            className={cn(
+              size === 'sm' && 'px-2 py-0.5 text-xs',
+              size === 'lg' && 'px-3.5 py-1.5 text-base'
+            )}
+          >
+            {menu.label}
+          </MenubarTrigger>
+          <MenubarContent>{renderMenubarEntries(menu.items)}</MenubarContent>
+        </MenubarMenu>
+      ))}
+    </MenubarRoot>
+  );
+}
+
+export { Menubar, type MenubarMenuConfig, type MenubarProps };
