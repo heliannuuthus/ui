@@ -27,7 +27,11 @@ import {
   Trash2,
   Underline,
 } from 'lucide-react';
-import { BreadcrumbPlaygroundDemo } from './breadcrumb-preview';
+import {
+  BreadcrumbBasicDemo,
+  BreadcrumbCollapsedDemo,
+  BreadcrumbVariantsDemo,
+} from './breadcrumb-preview';
 import { CardAnatomyDemo } from './card-preview';
 import {
   DropdownMenuActionsDemo,
@@ -50,18 +54,26 @@ import {
   SelectMemberSearchDemo,
   SelectWorkspaceDemo,
   SliderBudgetDemo,
+  SliderElasticDemo,
   SwitchSettingsDemo,
   TextAreaCounterDemo,
 } from './data-entry-previews';
 import {
-  AccordionReleaseDemo,
+  AccordionIndicatorDemo,
+  AccordionModesDemo,
   AttachmentReleaseDemo,
   AvatarOwnersDemo,
   BubbleReviewDemo,
+  CarouselAutoplayDemo,
   CarouselHighlightsDemo,
   ChartDeploymentDemo,
   CollapsibleBuildDemo,
+  CollapsiblePolicyDemo,
+  CounterBuildDemo,
+  DataTableGroupedHeaderDemo,
   DataTableReleaseDemo,
+  EmptyCompositionDemo,
+  EmptyDefaultDemo,
   EmptyReleaseDemo,
   HoverCardOwnerDemo,
   ItemActivityDemo,
@@ -69,20 +81,22 @@ import {
   MessageReviewDemo,
   MessageScrollerReleaseDemo,
   TableReleaseDemo,
-  TooltipActionsDemo,
+  TooltipPlacementsDemo,
 } from './data-display-previews';
 import {
   AlertDialogDeleteDemo,
   AlertReleaseDemo,
   DialogReleaseDemo,
+  DrawerContainedDemo,
   DrawerReleaseDemo,
   PopoverOwnersDemo,
   ProgressReleaseDemo,
-  SheetFiltersDemo,
   SkeletonReleaseDemo,
   SonnerPublishDemo,
   SpinnerLoadingDemo,
-  ToastUndoDemo,
+  SpinnerSizesDemo,
+  ToastLocalDemo,
+  ToastSemanticDemo,
 } from './feedback-previews';
 import {
   MenubarCommandsDemo,
@@ -1220,37 +1234,54 @@ const breadcrumbDocumentation: ComponentDocumentation = {
   ],
   examples: [
     {
-      title: '页面头部配置器',
+      title: '页面层级',
       description:
-        '在真实页面层级中动态组合首页图标、样式、尺寸、分隔符和深层路径折叠。',
-      preview: <BreadcrumbPlaygroundDemo />,
-      code: `import { useState } from 'react'
-import { Breadcrumb } from '@heliannuuthus/ui/breadcrumb'
+        '面包屑放在页面标题之前，最后一级只表示当前位置，不再提供链接。',
+      preview: <BreadcrumbBasicDemo />,
+      code: `import { Breadcrumb } from '@heliannuuthus/ui/breadcrumb'
 
 const items = [
   { label: '首页', href: '/' },
-  { label: '产品', href: '/products' },
-  { label: '设计系统', href: '/design' },
-  { label: '组件库', href: '/components' },
-  { label: '导航', menu: navigationItems },
+  { label: '组件', href: '/components' },
+  { label: '导航', href: '/components/navigation-menu' },
   { label: 'Breadcrumb' },
 ]
 
 export function PageBreadcrumb() {
-  const [compact, setCompact] = useState(true)
-
-  return (
-    <Breadcrumb
-      items={items}
-      homeIcon
-      variant="pill"
-      separator="dot"
-      maxItems={compact ? 4 : undefined}
-    />
-  )
+  return <Breadcrumb items={items} homeIcon />
 }`,
       wide: true,
-      previewHeight: 640,
+      previewHeight: 380,
+    },
+    {
+      title: '深层路径折叠',
+      description:
+        '路径过长时只收起中间层级，保留起点、直接父级和当前页面作为定位锚点。',
+      preview: <BreadcrumbCollapsedDemo />,
+      code: `import { Breadcrumb } from '@heliannuuthus/ui/breadcrumb'
+
+<Breadcrumb
+  items={releasePath}
+  homeIcon
+  maxItems={4}
+  itemsBeforeCollapse={1}
+  itemsAfterCollapse={2}
+/>`,
+      wide: true,
+      previewHeight: 300,
+    },
+    {
+      title: '节点菜单与视觉样式',
+      description:
+        '下拉节点用于切换同级位置；分隔符和样式只改变视觉表达，不改变路径语义。',
+      preview: <BreadcrumbVariantsDemo />,
+      code: `import { Breadcrumb } from '@heliannuuthus/ui/breadcrumb'
+
+<Breadcrumb items={itemsWithMenu} />
+<Breadcrumb items={items} variant="underline" separator="slash" />
+<Breadcrumb items={items} variant="pill" separator="dot" size="sm" />`,
+      wide: true,
+      previewHeight: 420,
     },
   ],
   api: [
@@ -2009,13 +2040,14 @@ const remainingComponents = [
   ['Slider', 'slider', '在连续或离散范围内选择数值。'],
   ['Switch', 'switch', '即时切换设置的开关状态。'],
   ['Toggle', 'toggle', '切换一个可按下的工具状态。'],
-  ['Accordion', 'accordion', '沿纵向或横向按需展开一组内容区域。'],
+  ['Accordion', 'accordion', '按需展开一组纵向排列的内容区域。'],
   ['Attachment', 'attachment', '展示附件信息、状态与操作。'],
   ['Avatar', 'avatar', '表示人物、团队或其他实体。'],
   ['Bubble', 'bubble', '展示对话消息与附加信息。'],
   ['Carousel', 'carousel', '在有限空间中轮播同级内容。'],
-  ['Chart', 'chart', '为数据可视化提供主题与交互基础。'],
+  ['Chart', 'chart', '为 Recharts 提供响应式容器、主题变量和统一的信息提示。'],
   ['Collapsible', 'collapsible', '控制单个内容区域展开收起。'],
+  ['Counter', 'counter', '以逐位滚动动画展示变化中的数值。'],
   ['Data Table', 'data-table', '展示并操作结构化数据集合。'],
   ['Empty', 'empty', '解释无数据状态并提供下一步。'],
   ['Hover Card', 'hover-card', '在悬停或聚焦时补充关联信息。'],
@@ -2026,12 +2058,11 @@ const remainingComponents = [
   ['Table', 'table', '使用语义化行列展示数据。'],
   ['Tooltip', 'tooltip', '为控件提供简短补充说明。'],
   ['Alert', 'alert', '持续展示重要的页面内提示。'],
-  ['Alert Dialog', 'alert-dialog', '确认具有重要后果的操作。'],
+  ['Alert Dialog', 'alert-dialog', '打断当前流程并确认具有重要后果的操作。'],
   ['Dialog', 'dialog', '在模态层中完成聚焦任务。'],
-  ['Drawer', 'drawer', '从边缘展示临时任务内容。'],
+  ['Drawer', 'drawer', '从视口或父容器边缘展示自适应临时面板。'],
   ['Popover', 'popover', '在触发器附近展示富交互浮层。'],
   ['Progress', 'progress', '展示任务或流程完成进度。'],
-  ['Sheet', 'sheet', '从屏幕边缘覆盖打开面板。'],
   ['Skeleton', 'skeleton', '在加载前维持内容布局。'],
   ['Sonner', 'sonner', '以非阻塞队列反馈短暂结果。'],
   ['Spinner', 'spinner', '表示无法确定进度的短时加载。'],
@@ -2128,43 +2159,15 @@ if (avatarBasicExample) {
 
 const emptyBasicExample = componentDocumentation.empty.examples[0];
 if (emptyBasicExample) {
-  emptyBasicExample.title = '上下文空状态';
+  emptyBasicExample.title = '默认空状态';
   emptyBasicExample.description =
-    '区分首次使用和筛选无结果，让标题、解释与下一步动作保持一致。';
-  emptyBasicExample.harness = [
-    {
-      name: 'context',
-      label: '场景',
-      defaultValue: 'new',
-      options: [
-        { label: '首次使用', value: 'new' },
-        { label: '筛选无结果', value: 'filtered' },
-      ],
-    },
-  ];
-  emptyBasicExample.preview = (values) => (
-    <EmptyReleaseDemo
-      context={values.context === 'filtered' ? 'filtered' : 'new'}
-    />
-  );
-  emptyBasicExample.code = `import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@heliannuuthus/ui/empty'
+    '不传任何内容也会显示默认图标和“暂无内容”，适合作为安全、稳定的兜底状态。';
+  emptyBasicExample.harness = undefined;
+  emptyBasicExample.preview = <EmptyDefaultDemo />;
+  emptyBasicExample.code = `import { Empty } from '@heliannuuthus/ui/empty'
 
-<Empty>
-  <EmptyHeader>
-    <EmptyMedia variant="icon"><Cloud /></EmptyMedia>
-    <EmptyTitle>还没有生产发布</EmptyTitle>
-    <EmptyDescription>完成预检后安排第一次发布。</EmptyDescription>
-  </EmptyHeader>
-  <EmptyContent><Button>安排发布</Button></EmptyContent>
-</Empty>`;
-  emptyBasicExample.previewHeight = 420;
+<Empty />`;
+  emptyBasicExample.previewHeight = 360;
 }
 
 const tableBasicExample = componentDocumentation.table.examples[0];
@@ -2195,25 +2198,11 @@ if (tableBasicExample) {
 
 const alertBasicExample = componentDocumentation.alert.examples[0];
 if (alertBasicExample) {
-  alertBasicExample.harness = [
-    {
-      name: 'variant',
-      label: '语义',
-      defaultValue: 'default',
-      options: [
-        { label: '默认', value: 'default' },
-        { label: '危险', value: 'destructive' },
-      ],
-    },
-  ];
-  alertBasicExample.title = '发布检查';
+  alertBasicExample.harness = undefined;
+  alertBasicExample.title = '语义状态';
   alertBasicExample.description =
-    '把需要持续留在页面中的检查结果放在相关内容附近，并为异常状态提供下一步。';
-  alertBasicExample.preview = (values) => (
-    <AlertReleaseDemo
-      variant={values.variant === 'destructive' ? 'destructive' : 'default'}
-    />
-  );
+    'Alert 是页面内容的一部分；点击按钮可条件显示信息、成功、警告或错误横幅，而不是打开浮层。';
+  alertBasicExample.preview = <AlertReleaseDemo />;
   alertBasicExample.code = `import {
   Alert,
   AlertAction,
@@ -2221,13 +2210,13 @@ if (alertBasicExample) {
   AlertTitle,
 } from '@heliannuuthus/ui/alert'
 
-<Alert variant="destructive">
+{visible && <Alert variant="warning">
   <TriangleAlert />
-  <AlertTitle>发布被阻止</AlertTitle>
-  <AlertDescription>生产环境缺少必要变量。</AlertDescription>
-  <AlertAction><Button size="sm">前往配置</Button></AlertAction>
-</Alert>`;
-  alertBasicExample.previewHeight = 300;
+  <AlertTitle>回滚镜像即将过期</AlertTitle>
+  <AlertDescription>建议在发布前重新构建。</AlertDescription>
+  <AlertAction><Button onClick={() => setVisible(false)}>关闭</Button></AlertAction>
+</Alert>}`;
+  alertBasicExample.previewHeight = 380;
 }
 
 const dataEntryExamples: Record<string, ComponentExample[]> = {
@@ -2523,6 +2512,27 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
   ],
   slider: [
     {
+      title: '弹性反馈',
+      description:
+        '拖到边界外时轨道与图标产生受约束的拉伸并自然回弹；实际值仍严格限制在 min 与 max 之间。',
+      preview: <SliderElasticDemo />,
+      code: `import { Slider } from '@heliannuuthus/ui/slider'
+import { Volume1, Volume2 } from 'lucide-react'
+
+<Slider
+  aria-label="播放器音量"
+  effect="elastic"
+  startIcon={<Volume1 />}
+  endIcon={<Volume2 />}
+  value={volume}
+  onValueChange={setVolume}
+  min={0}
+  max={100}
+  step={2}
+/>`,
+      previewHeight: 340,
+    },
+    {
       title: '范围选择',
       description: '使用双滑块选择预算区间，并把当前值与范围边界直接展示出来。',
       preview: <SliderBudgetDemo />,
@@ -2628,27 +2638,9 @@ for (const [slug, examples] of Object.entries(dataEntryExamples)) {
 const dataDisplayExamples: Record<string, ComponentExample[]> = {
   accordion: [
     {
-      title: '单项展开',
-      description: '一次只保留一个面板展开，适合需要按顺序阅读的发布检查。',
-      harness: [
-        {
-          name: 'orientation',
-          label: '方向',
-          defaultValue: 'vertical',
-          options: [
-            { label: '纵向', value: 'vertical' },
-            { label: '横向', value: 'horizontal' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <AccordionReleaseDemo
-          mode="single"
-          orientation={
-            values.orientation === 'horizontal' ? 'horizontal' : 'vertical'
-          }
-        />
-      ),
+      title: '展开模式',
+      description: '纵向面板支持单项或多项展开，可按内容关系选择合适模式。',
+      preview: <AccordionModesDemo />,
       code: `import {
   Accordion,
   AccordionContent,
@@ -2661,40 +2653,12 @@ const dataDisplayExamples: Record<string, ComponentExample[]> = {
     <AccordionTrigger>预检结果</AccordionTrigger>
     <AccordionContent>42 项检查均已通过。</AccordionContent>
   </AccordionItem>
-</Accordion>`,
-      previewHeight: 520,
-      wide: true,
-    },
-    {
-      title: '多项展开',
-      description: '允许并行核对多个面板，适合信息之间没有先后依赖的检查清单。',
-      harness: [
-        {
-          name: 'orientation',
-          label: '方向',
-          defaultValue: 'vertical',
-          options: [
-            { label: '纵向', value: 'vertical' },
-            { label: '横向', value: 'horizontal' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <AccordionReleaseDemo
-          mode="multiple"
-          orientation={
-            values.orientation === 'horizontal' ? 'horizontal' : 'vertical'
-          }
-        />
-      ),
-      code: `import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@heliannuuthus/ui/accordion'
+</Accordion>
 
-<Accordion multiple defaultValue={['preflight', 'rollback']}>
+<Accordion
+  multiple
+  defaultValue={['preflight', 'rollback']}
+>
   <AccordionItem value="preflight">
     <AccordionTrigger>预检结果</AccordionTrigger>
     <AccordionContent>42 项检查均已通过。</AccordionContent>
@@ -2704,7 +2668,40 @@ const dataDisplayExamples: Record<string, ComponentExample[]> = {
     <AccordionContent>异常时切回上一版本。</AccordionContent>
   </AccordionItem>
 </Accordion>`,
-      previewHeight: 520,
+      previewHeight: 500,
+      wide: true,
+    },
+    {
+      title: '指示器',
+      description:
+        '统一设置指示器的位置；传入一个节点时随状态旋转，或分别定义折叠态与展开态。',
+      preview: <AccordionIndicatorDemo />,
+      code: `import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@heliannuuthus/ui/accordion'
+import { Minus, Plus } from 'lucide-react'
+
+<Accordion indicatorPosition="start" defaultValue={['deployment']}>
+  <AccordionItem value="deployment">
+    <AccordionTrigger>部署策略</AccordionTrigger>
+    <AccordionContent>先灰度 10%，观察后全量发布。</AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+<Accordion
+  indicator={<Plus />}
+  expandedIndicator={<Minus />}
+  defaultValue={['deployment']}
+>
+  <AccordionItem value="deployment">
+    <AccordionTrigger>部署策略</AccordionTrigger>
+    <AccordionContent>先灰度 10%，观察后全量发布。</AccordionContent>
+  </AccordionItem>
+</Accordion>`,
+      previewHeight: 420,
       wide: true,
     },
   ],
@@ -2787,50 +2784,123 @@ const dataDisplayExamples: Record<string, ComponentExample[]> = {
   ],
   carousel: [
     {
-      title: '版本亮点',
-      description:
-        '在有限空间内浏览同级内容；方向会同步改变滚动轴、键盘导航和控制位置。',
+      title: '默认导航',
+      description: '使用左右箭头浏览同级内容，页码点可放在轮播上方或下方。',
       harness: [
         {
-          name: 'orientation',
-          label: '方向',
-          defaultValue: 'horizontal',
+          name: 'dotPosition',
+          label: '页码点位置',
+          defaultValue: 'bottom',
           options: [
-            { label: '横向', value: 'horizontal' },
-            { label: '纵向', value: 'vertical' },
+            { label: '上方', value: 'top' },
+            { label: '下方', value: 'bottom' },
           ],
         },
       ],
       preview: (values) => (
         <CarouselHighlightsDemo
-          orientation={
-            values.orientation === 'vertical' ? 'vertical' : 'horizontal'
-          }
+          dotPosition={values.dotPosition === 'top' ? 'top' : 'bottom'}
         />
       ),
       code: `import {
   Carousel,
   CarouselContent,
+  CarouselDots,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from '@heliannuuthus/ui/carousel'
 
-<Carousel orientation="horizontal">
+<Carousel>
   <CarouselContent>
     {highlights.map((item) => <CarouselItem key={item.id}>{item.title}</CarouselItem>)}
   </CarouselContent>
   <CarouselPrevious />
   <CarouselNext />
+  <CarouselDots position="bottom" />
 </Carousel>`,
-      previewHeight: 500,
+      previewHeight: 440,
+    },
+    {
+      title: '自定义导航',
+      description:
+        '通过 children 与 render function 替换箭头和页码点，同时保留滚动状态与键盘交互。',
+      harness: [
+        {
+          name: 'dotPosition',
+          label: '页码点位置',
+          defaultValue: 'top',
+          options: [
+            { label: '上方', value: 'top' },
+            { label: '下方', value: 'bottom' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <CarouselHighlightsDemo
+          customControls
+          dotPosition={values.dotPosition === 'bottom' ? 'bottom' : 'top'}
+        />
+      ),
+      code: `import {
+  Carousel,
+  CarouselContent,
+  CarouselDots,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@heliannuuthus/ui/carousel'
+
+<Carousel>
+  <CarouselContent>
+    {highlights.map((item) => <CarouselItem key={item.id}>{item.title}</CarouselItem>)}
+  </CarouselContent>
+  <CarouselPrevious><span aria-hidden>←</span></CarouselPrevious>
+  <CarouselNext><span aria-hidden>→</span></CarouselNext>
+  <CarouselDots position="top">
+    {({ index }) => <span>{index + 1}</span>}
+  </CarouselDots>
+</Carousel>`,
+      previewHeight: 440,
+    },
+    {
+      title: '自动播放与景深动效',
+      description:
+        'depth 变体加入 React Bits 风格的 3D 景深过渡；自动播放默认在悬停时暂停，并通过 loop 无缝回到第一项。',
+      preview: <CarouselAutoplayDemo />,
+      code: `import {
+  Carousel,
+  CarouselContent,
+  CarouselDots,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@heliannuuthus/ui/carousel'
+
+<Carousel
+  autoplay
+  autoplayDelay={3000}
+  loop
+  variant="depth"
+>
+  <CarouselContent>
+    {highlights.map((item) => (
+      <CarouselItem key={item.id}>{item.title}</CarouselItem>
+    ))}
+  </CarouselContent>
+  <CarouselPrevious />
+  <CarouselNext />
+  <CarouselDots />
+</Carousel>`,
+      previewHeight: 480,
+      wide: true,
     },
   ],
   chart: [
     {
-      title: '部署质量',
+      title: 'Recharts 主题适配',
       description:
-        '共享同一份数据，在成功率和耗时指标之间切换，并保留主题化 Tooltip。',
+        '柱形、坐标轴和比例尺由 Recharts 绘制；ChartContainer 负责响应式尺寸、明暗主题色变量，以及统一的 Tooltip 外观。',
       harness: [
         {
           name: 'metric',
@@ -2851,8 +2921,13 @@ const dataDisplayExamples: Record<string, ComponentExample[]> = {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+  type ChartConfig,
 } from '@heliannuuthus/ui/chart'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
+
+const chartConfig = {
+  success: { label: '成功率', color: 'var(--primary)' },
+} satisfies ChartConfig
 
 <ChartContainer config={chartConfig}>
   <BarChart data={data}>
@@ -2867,40 +2942,240 @@ import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
   ],
   collapsible: [
     {
-      title: '构建日志',
+      title: '整行标题触发',
       description:
-        '默认保留任务摘要，用户需要排查时再展开同一上下文中的详细日志。',
+        '适合构建日志、详情摘要和辅助信息；整个 Header 都可点击，展开内容以铺开方式进入。',
       preview: <CollapsibleBuildDemo />,
       code: `import {
   Collapsible,
   CollapsibleContent,
+  CollapsibleFooter,
+  CollapsibleHeader,
+  CollapsibleIndicator,
+} from '@heliannuuthus/ui/collapsible'
+
+<Collapsible>
+  <CollapsibleHeader>
+    <div>
+      <strong>构建 #1842 已完成</strong>
+      <span>1m 48s · commit 7f92c1a</span>
+    </div>
+    <CollapsibleIndicator />
+  </CollapsibleHeader>
+  <CollapsibleContent>
+    {/* build output */}
+    <CollapsibleFooter>日志保留 30 天</CollapsibleFooter>
+  </CollapsibleContent>
+</Collapsible>`,
+      previewHeight: 380,
+    },
+    {
+      title: '独立按钮触发',
+      description:
+        '适合高级设置、筛选条件和渐进式配置；摘要保持可见，由独立 Collapse 按钮控制内容。',
+      preview: <CollapsiblePolicyDemo />,
+      code: `import { Button } from '@heliannuuthus/ui/button'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleFooter,
+  CollapsibleIndicator,
   CollapsibleTrigger,
 } from '@heliannuuthus/ui/collapsible'
 
-<Collapsible open={open} onOpenChange={setOpen}>
-  <CollapsibleTrigger>展开日志</CollapsibleTrigger>
-  <CollapsibleContent>{/* build output */}</CollapsibleContent>
+<Collapsible>
+  <div className="flex items-center gap-3">
+    <div className="flex-1">灰度发布策略</div>
+    <CollapsibleTrigger render={<Button variant="outline" />}>
+      配置
+      <CollapsibleIndicator />
+    </CollapsibleTrigger>
+  </div>
+  <CollapsibleContent>
+    {/* advanced settings */}
+    <CollapsibleFooter>仅影响下一次发布</CollapsibleFooter>
+  </CollapsibleContent>
 </Collapsible>`,
-      previewHeight: 340,
+      previewHeight: 380,
+    },
+  ],
+  counter: [
+    {
+      title: '构建计数',
+      description:
+        '数值变化时只滚动发生变化的位；固定 places 可以避免位数变化导致布局跳动。',
+      preview: <CounterBuildDemo />,
+      code: `import { Counter } from '@heliannuuthus/ui/counter'
+
+<Counter
+  value={count}
+  places={[1000, 100, 10, 1]}
+  fontSize={60}
+  fontWeight={600}
+  suffix={<small>次</small>}
+  valueText={\`\${count} 次构建\`}
+/>`,
+      previewHeight: 400,
     },
   ],
   'data-table': [
     {
-      title: '发布记录',
+      title: '操作列',
       description:
-        '为结构化数据连接筛选、列排序、分页和自定义单元格，空结果继续保留表格上下文。',
+        '操作列也是普通 ColumnDef：通过 cell 取得当前行，再组合主操作、图标按钮或 Dropdown Menu。',
       preview: <DataTableReleaseDemo />,
-      code: `import { DataTable } from '@heliannuuthus/ui/data-table'
+      code: `import type { ColumnDef } from '@tanstack/react-table'
+import {
+  DataTable,
+  DataTableActions,
+  DataTableColumnHeader,
+} from '@heliannuuthus/ui/data-table'
+import { Button } from '@heliannuuthus/ui/button'
+import { DropdownMenu } from '@heliannuuthus/ui/dropdown-menu'
+import { MoreHorizontal } from 'lucide-react'
+
+const columns: ColumnDef<Release>[] = [
+  {
+    accessorKey: 'version',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column}>版本</DataTableColumnHeader>
+    ),
+  },
+  {
+    id: 'actions',
+    header: '操作',
+    meta: { align: 'end' },
+    cell: ({ row }) => (
+      <DataTableActions aria-label={row.original.version + ' 操作'}>
+        <Button variant="ghost">查看</Button>
+        <DropdownMenu
+          align="end"
+          trigger={
+            <Button
+              aria-label={row.original.version + ' 更多操作'}
+              size="icon-sm"
+              variant="ghost"
+            >
+              <MoreHorizontal />
+            </Button>
+          }
+          items={[
+            { label: '下载日志' },
+            { label: '归档记录' },
+            { type: 'separator' },
+            { label: '删除记录', destructive: true },
+          ]}
+        />
+      </DataTableActions>
+    ),
+  },
+]
 
 <DataTable
-  columns={releaseColumns}
+  columns={columns}
   data={releaseRecords}
   filterColumn="version"
-  filterPlaceholder="筛选版本…"
-  emptyMessage="没有匹配的发布记录"
 />`,
       wide: true,
       previewHeight: 580,
+    },
+    {
+      title: '分组表头',
+      description:
+        '在 ColumnDef 中嵌套 columns 即可形成多级表头；DataTable 会计算跨列、层级和空状态宽度。',
+      preview: <DataTableGroupedHeaderDemo />,
+      code: `import type { ColumnDef } from '@tanstack/react-table'
+import { DataTable } from '@heliannuuthus/ui/data-table'
+
+const columns: ColumnDef<Release>[] = [
+  {
+    header: '发布信息',
+    columns: [
+      { accessorKey: 'version', header: '版本' },
+      { accessorKey: 'environment', header: '环境' },
+    ],
+  },
+  {
+    header: '执行情况',
+    columns: [
+      { accessorKey: 'owner', header: '负责人' },
+      { accessorKey: 'status', header: '状态' },
+    ],
+  },
+  {
+    header: '操作',
+    columns: [
+      {
+        id: 'detail',
+        header: '记录',
+        meta: { align: 'end' },
+        cell: ({ row }) => <Button>{row.original.version} 详情</Button>,
+      },
+    ],
+  },
+]
+
+<DataTable columns={columns} data={releaseRecords} />`,
+      wide: true,
+      previewHeight: 560,
+    },
+  ],
+  empty: [
+    {
+      title: 'Props 配置',
+      description:
+        '常见空状态直接配置图标、标题、说明和操作；场景变化时只替换对应 props。',
+      harness: [
+        {
+          name: 'context',
+          label: '场景',
+          defaultValue: 'new',
+          options: [
+            { label: '首次使用', value: 'new' },
+            { label: '筛选无结果', value: 'filtered' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <EmptyReleaseDemo
+          context={values.context === 'filtered' ? 'filtered' : 'new'}
+        />
+      ),
+      code: `import { Empty } from '@heliannuuthus/ui/empty'
+
+<Empty
+  icon={<Cloud />}
+  title="还没有生产发布"
+  description="完成预检后，可以从这里安排第一次生产发布。"
+  actions={<Button>安排发布</Button>}
+/>`,
+      previewHeight: 420,
+    },
+    {
+      title: '自定义组合',
+      description:
+        '只有品牌插画、状态摘要或复杂操作布局才切换到 custom 变体，并组合 Header 与 Content。',
+      preview: <EmptyCompositionDemo />,
+      code: `import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@heliannuuthus/ui/empty'
+
+<Empty variant="custom">
+  <EmptyHeader>
+    <EmptyMedia><ShieldCheck /></EmptyMedia>
+    <EmptyTitle>等待安全审计</EmptyTitle>
+    <EmptyDescription>审计通过前暂无可发布版本。</EmptyDescription>
+  </EmptyHeader>
+  <EmptyContent>
+    {/* 状态摘要和自定义操作 */}
+  </EmptyContent>
+</Empty>`,
+      previewHeight: 440,
     },
   ],
   'hover-card': [
@@ -3089,33 +3364,10 @@ import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
   ],
   tooltip: [
     {
-      title: '图标操作说明',
+      title: '八个方位',
       description:
-        '为只显示图标的操作补充简短名称和快捷键；位置应避开正在操作的内容。',
-      harness: [
-        {
-          name: 'side',
-          label: '位置',
-          defaultValue: 'top',
-          options: [
-            { label: '上', value: 'top' },
-            { label: '下', value: 'bottom' },
-            { label: '左', value: 'left' },
-            { label: '右', value: 'right' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <TooltipActionsDemo
-          side={
-            values.side === 'bottom' ||
-            values.side === 'left' ||
-            values.side === 'right'
-              ? values.side
-              : 'top'
-          }
-        />
-      ),
+        '将常用方位围绕同一参照物完整展示，悬停或聚焦任意按钮即可检查方向和对齐方式。',
+      preview: <TooltipPlacementsDemo />,
       code: `import {
   Tooltip,
   TooltipContent,
@@ -3125,11 +3377,12 @@ import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 
 <TooltipProvider delay={100}>
   <Tooltip>
-    <TooltipTrigger><Button aria-label="复制发布链接"><Link2 /></Button></TooltipTrigger>
-    <TooltipContent side="top">复制发布链接 <Kbd>⌘L</Kbd></TooltipContent>
+    <TooltipTrigger><Button>左上</Button></TooltipTrigger>
+    <TooltipContent side="top" align="start">左上提示</TooltipContent>
   </Tooltip>
 </TooltipProvider>`,
-      previewHeight: 320,
+      previewHeight: 440,
+      wide: true,
     },
   ],
 };
@@ -3143,7 +3396,7 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
     {
       title: '删除预览环境',
       description:
-        '高风险且不可撤销的动作必须在执行前明确对象、影响范围和退出路径。',
+        '仅用于必须由用户确认的警告或危险操作；成功和普通信息应使用 Alert 或 Toast。',
       harness: [
         {
           name: 'size',
@@ -3218,25 +3471,10 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
   ],
   drawer: [
     {
-      title: '发布窗口详情',
+      title: '四个方向',
       description:
-        '用可滑动抽屉承接临时的移动端任务；内容从触发侧进入，并支持手势关闭。',
-      harness: [
-        {
-          name: 'direction',
-          label: '进入方向',
-          defaultValue: 'down',
-          options: [
-            { label: '底部', value: 'down' },
-            { label: '右侧', value: 'right' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <DrawerReleaseDemo
-          direction={values.direction === 'right' ? 'right' : 'down'}
-        />
-      ),
+        '统一从上、右、下、左进入；adaptive 模式在窄屏保留手势，在宽屏收敛为稳定的边缘面板。',
+      preview: <DrawerReleaseDemo />,
       code: `import {
   Drawer,
   DrawerContent,
@@ -3246,8 +3484,8 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
   DrawerTrigger,
 } from '@heliannuuthus/ui/drawer'
 
-<Drawer showSwipeHandle swipeDirection="down">
-  <DrawerTrigger>查看发布窗口</DrawerTrigger>
+<Drawer behavior="adaptive" side="right">
+  <DrawerTrigger>从右侧打开</DrawerTrigger>
   <DrawerContent>
     <DrawerHeader>
       <DrawerTitle>今晚的发布窗口</DrawerTitle>
@@ -3255,7 +3493,27 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
     </DrawerHeader>
   </DrawerContent>
 </Drawer>`,
-      previewHeight: 300,
+      previewHeight: 340,
+    },
+    {
+      title: '绑定父容器',
+      description:
+        '传入 container 后，Portal、视口与面板都限制在指定父容器内，四个方向仍保持一致。',
+      preview: <DrawerContainedDemo />,
+      code: `const containerRef = useRef<HTMLDivElement>(null)
+
+<div ref={containerRef} className="relative overflow-hidden">
+  <Drawer container={containerRef} side="left" behavior="panel">
+    <DrawerTrigger>从左侧打开</DrawerTrigger>
+    <DrawerContent>
+      <DrawerHeader>
+        <DrawerTitle>局部筛选</DrawerTitle>
+      </DrawerHeader>
+    </DrawerContent>
+  </Drawer>
+</div>`,
+      previewHeight: 560,
+      wide: true,
     },
   ],
   popover: [
@@ -3312,50 +3570,11 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
   ProgressValue,
 } from '@heliannuuthus/ui/progress'
 
-<Progress value={68}>
+<Progress effect="sparkle" value={68}>
   <ProgressLabel>生产环境</ProgressLabel>
   <ProgressValue />
 </Progress>`,
       previewHeight: 360,
-    },
-  ],
-  sheet: [
-    {
-      title: '筛选发布记录',
-      description: '从页面边缘展开辅助任务，适合桌面端筛选、设置和详情面板。',
-      harness: [
-        {
-          name: 'side',
-          label: '侧边',
-          defaultValue: 'right',
-          options: [
-            { label: '右侧', value: 'right' },
-            { label: '左侧', value: 'left' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <SheetFiltersDemo side={values.side === 'left' ? 'left' : 'right'} />
-      ),
-      code: `import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@heliannuuthus/ui/sheet'
-
-<Sheet>
-  <SheetTrigger>筛选发布记录</SheetTrigger>
-  <SheetContent side="right">
-    <SheetHeader>
-      <SheetTitle>筛选发布记录</SheetTitle>
-      <SheetDescription>条件会应用到当前列表。</SheetDescription>
-    </SheetHeader>
-  </SheetContent>
-</Sheet>`,
-      previewHeight: 300,
     },
   ],
   skeleton: [
@@ -3373,16 +3592,31 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
             { label: '紧凑', value: 'compact' },
           ],
         },
+        {
+          name: 'effect',
+          label: '加载效果',
+          defaultValue: 'shimmer',
+          options: [
+            { label: '镜面扫光', value: 'shimmer' },
+            { label: '明暗呼吸', value: 'pulse' },
+            { label: '静态', value: 'none' },
+          ],
+        },
       ],
       preview: (values) => (
         <SkeletonReleaseDemo
           density={values.density === 'compact' ? 'compact' : 'comfortable'}
+          effect={
+            values.effect === 'pulse' || values.effect === 'none'
+              ? values.effect
+              : 'shimmer'
+          }
         />
       ),
       code: `import { Skeleton } from '@heliannuuthus/ui/skeleton'
 
 <div className="release-row">
-  <Skeleton className="size-8 rounded-full" />
+  <Skeleton className="size-8 rounded-full" effect="shimmer" />
   <div>
     <Skeleton className="h-3 w-28" />
     <Skeleton className="mt-2 h-2.5 w-40" />
@@ -3412,71 +3646,76 @@ toast.promise(publish(), {
   ],
   spinner: [
     {
-      title: '局部加载状态',
+      title: '图标尺寸',
       description:
-        'Spinner 必须依附于正在等待的操作或内容区域，并配合清楚的状态文案。',
-      harness: [
-        {
-          name: 'size',
-          label: '尺寸',
-          defaultValue: 'default',
-          options: [
-            { label: '小', value: 'sm' },
-            { label: '默认', value: 'default' },
-            { label: '大', value: 'lg' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <SpinnerLoadingDemo
-          size={
-            values.size === 'sm' || values.size === 'lg'
-              ? values.size
-              : 'default'
-          }
-        />
-      ),
+        '大、中、小直接展示原始加载图标，尺寸不会隐含按钮高度或其他容器样式。',
+      preview: <SpinnerSizesDemo />,
       code: `import { Spinner } from '@heliannuuthus/ui/spinner'
 
-<Button disabled>
-  <Spinner aria-label="正在保存" />
-  正在保存
-</Button>`,
+<Spinner aria-label="小号加载" size="sm" />
+<Spinner aria-label="正在加载" />
+<Spinner aria-label="大号加载" size="lg" />`,
       previewHeight: 300,
+    },
+    {
+      title: '局部加载状态',
+      description:
+        '只在正在更新的内容区域放置图标与状态说明，页面其他部分保持可阅读、可操作。',
+      preview: <SpinnerLoadingDemo />,
+      code: `import { Spinner } from '@heliannuuthus/ui/spinner'
+
+<section aria-busy="true" aria-label="正在同步环境状态">
+  <div>
+    <span>预览环境</span>
+    <Spinner aria-label="预览环境同步中" size="sm" />
+  </div>
+</section>`,
+      previewHeight: 420,
+      wide: true,
     },
   ],
   toast: [
     {
-      title: '可撤销反馈',
+      title: '全局语义通知',
       description:
-        '短暂确认低风险操作结果，并在消息消失前提供一次明确的撤销机会。',
-      harness: [
-        {
-          name: 'position',
-          label: '位置',
-          defaultValue: 'top-center',
-          options: [
-            { label: '顶部', value: 'top-center' },
-            { label: '右下', value: 'bottom-right' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <ToastUndoDemo
-          position={
-            values.position === 'bottom-right' ? 'bottom-right' : 'top-center'
-          }
-        />
-      ),
-      code: `import { Toaster, toast } from '@heliannuuthus/ui/toast'
+        '在应用根部放置 Provider，后代组件通过 useToast 调用 success、info、warning 或 error；默认显示在页面顶部。',
+      preview: <ToastSemanticDemo />,
+      code: `import { ToastProvider, useToast } from '@heliannuuthus/ui/toast'
 
-toast('发布草稿已归档', {
-  description: 'v0.12.0 已从待发布列表移除。',
-  action: { label: '撤销', onClick: restoreDraft },
-})
+function PublishAction() {
+  const { toast } = useToast()
 
-<Toaster position="top-center" />`,
-      previewHeight: 300,
+  return (
+    <Button onClick={() => toast.success('发布已完成')}>
+      发布
+    </Button>
+  )
+}
+
+<ToastProvider>
+  <App />
+</ToastProvider>`,
+      previewHeight: 320,
+    },
+    {
+      title: '局部通知',
+      description:
+        '局部 Provider 会创建独立通知通道，并将 Toast 约束在最近的定位容器中，不覆盖整个页面。',
+      preview: <ToastLocalDemo />,
+      code: `import { ToastProvider, useToast } from '@heliannuuthus/ui/toast'
+
+function WorkspaceAction() {
+  const { toast } = useToast()
+  return <Button onClick={() => toast.info('预览已刷新')}>刷新</Button>
+}
+
+<div className="relative overflow-hidden">
+  <ToastProvider scope="local">
+    <WorkspaceAction />
+  </ToastProvider>
+</div>`,
+      previewHeight: 420,
+      wide: true,
     },
   ],
 };
@@ -3504,10 +3743,22 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: 'false',
     },
     {
-      name: 'orientation',
-      description: '设置面板沿纵向堆叠或横向展开。',
-      type: "'vertical' | 'horizontal'",
-      defaultValue: "'vertical'",
+      name: 'indicatorPosition',
+      description: '将展开指示器放在标题起始侧或末端。',
+      type: "'start' | 'end'",
+      defaultValue: "'end'",
+    },
+    {
+      name: 'indicator',
+      description: '自定义折叠态指示器；未设置展开态时会随状态旋转。',
+      type: 'ReactNode',
+      defaultValue: '<ChevronDownIcon />',
+    },
+    {
+      name: 'expandedIndicator',
+      description: '可选的展开态指示器，适合加号/减号等两态图标。',
+      type: 'ReactNode',
+      defaultValue: '—',
     },
     {
       name: 'disabled',
@@ -3607,14 +3858,32 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
   ],
   carousel: [
     {
-      name: 'orientation',
-      description: '设置轮播滚动轴和控制方向。',
-      type: "'horizontal' | 'vertical'",
-      defaultValue: "'horizontal'",
+      name: 'variant',
+      description: '选择标准滑动或带 3D 景深过渡的展示方式。',
+      type: "'default' | 'depth'",
+      defaultValue: "'default'",
+    },
+    {
+      name: 'autoplay / autoplayDelay',
+      description: '开启自动前进并设置每次切换之间的等待时间。',
+      type: 'boolean / number',
+      defaultValue: 'false / 3000',
+    },
+    {
+      name: 'loop',
+      description: '让最后一项与第一项首尾相接并持续循环。',
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'pauseOnHover',
+      description: '自动播放时，指针进入轮播区域即暂停，离开后继续。',
+      type: 'boolean',
+      defaultValue: 'true',
     },
     {
       name: 'opts',
-      description: '传入对齐、循环、每次滚动数量等 Embla 配置。',
+      description: '传入对齐、每次滚动数量等底层 Embla 配置。',
       type: 'CarouselOptions',
     },
     {
@@ -3628,38 +3897,61 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: '(api: CarouselApi) => void',
     },
     {
+      name: 'CarouselPrevious / CarouselNext.children',
+      description: '替换默认方向图标，同时保留滚动行为和禁用状态。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'CarouselDots.position',
+      description: '将页码点放在轮播上方或下方。',
+      type: "'top' | 'bottom'",
+      defaultValue: "'bottom'",
+    },
+    {
+      name: 'CarouselDots.children',
+      description: '按页码索引和选中状态自定义每一个指示点。',
+      type: 'ReactNode | ({ index, isSelected }) => ReactNode',
+    },
+    {
       name: 'useCarousel',
-      description: '在自定义控制器中读取滚动能力与前后切换方法。',
+      description: '读取当前页、总页数和滚动方法以构建完全自定义的控制器。',
       type: 'hook',
     },
   ],
   chart: [
     {
-      name: 'config',
-      description: '映射数据键到主题颜色、标签和图标。',
+      name: 'ChartContainer.config',
+      description:
+        '把 Recharts 的 dataKey 映射为主题颜色、可读标签和可选图标，不定义图表类型或数据。',
       type: 'ChartConfig',
     },
     {
-      name: 'initialDimension',
+      name: 'ChartContainer.children',
+      description:
+        '接收 BarChart、LineChart、PieChart 等 Recharts 图表元素，由 Recharts 执行实际绘制。',
+      type: 'Recharts chart element',
+    },
+    {
+      name: 'ChartContainer.initialDimension',
       description: '为首次测量前提供稳定尺寸，减少布局跳动。',
       type: '{ width: number; height: number }',
       defaultValue: '{ width: 320, height: 200 }',
     },
     {
       name: 'ChartTooltipContent.indicator',
-      description: '设置 Tooltip 数据项的颜色标记样式。',
+      description: '设置统一 Tooltip 中数据系列的颜色标记样式。',
       type: "'dot' | 'line' | 'dashed'",
       defaultValue: "'dot'",
     },
     {
       name: 'hideLabel / hideIndicator',
-      description: '按图表上下文隐藏 Tooltip 标签或标记。',
+      description: '按展示密度隐藏 Tooltip 标签或系列标记。',
       type: 'boolean',
       defaultValue: 'false',
     },
     {
       name: 'ChartLegendContent.verticalAlign',
-      description: '控制图例在图表上方或下方的间距。',
+      description: '根据 Recharts 图例位置设置上方或下方的布局间距。',
       type: "'top' | 'bottom'",
     },
   ],
@@ -3682,15 +3974,100 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     },
     {
       name: 'CollapsibleTrigger.render',
-      description: '复用 Button 或自定义触发元素。',
+      description: '使用独立 Button 或自定义元素控制内容展开。',
       type: 'ReactElement | render function',
+    },
+    {
+      name: 'CollapsibleHeader',
+      description: '将整个标题区域渲染为可点击、可聚焦的展开触发器。',
+      type: 'component',
+    },
+    {
+      name: 'CollapsibleContent',
+      description: '承载可折叠内容，并默认提供卷起、铺开的高度与透明度动效。',
+      type: 'component',
+    },
+    {
+      name: 'CollapsibleIndicator.children',
+      description: '替换默认箭头；图标会跟随展开状态旋转。',
+      type: 'ReactNode',
+      defaultValue: '<ChevronDownIcon />',
+    },
+    {
+      name: 'CollapsibleFooter',
+      description: '在展开内容底部组合说明、状态或操作。',
+      type: 'component',
+    },
+  ],
+  counter: [
+    {
+      name: 'value',
+      description: '设置需要展示并驱动逐位滚动的数值。',
+      type: 'number',
+    },
+    {
+      name: 'places',
+      description:
+        '固定需要展示的数位；使用小数点字符串分隔整数和小数位，省略时根据 value 自动推导。',
+      type: "readonly (number | '.')[]",
+    },
+    {
+      name: 'fontSize / fontWeight / gap',
+      description: '设置数字字号、字重和数位间距。',
+      type: 'number | CSS font weight',
+      defaultValue: '64 / 700 / 4',
+    },
+    {
+      name: 'prefix / suffix',
+      description: '在滚动数值前后组合货币、单位或其他视觉内容。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'valueText',
+      description: '为辅助技术提供包含单位和上下文的完整数值文本。',
+      type: 'string',
+    },
+    {
+      name: 'springOptions',
+      description: '调整各数位滚动时的弹簧参数。',
+      type: 'SpringOptions',
     },
   ],
   'data-table': [
     {
       name: 'columns',
-      description: '定义列标题、访问键、单元格渲染和排序行为。',
+      description: '定义访问键、表头、单元格和嵌套列组。',
       type: 'ColumnDef<TData, TValue>[]',
+    },
+    {
+      name: 'ColumnDef.cell',
+      description: '根据当前 row、cell 和 table 上下文渲染内容或操作。',
+      type: '(context: CellContext) => ReactNode',
+    },
+    {
+      name: 'ColumnDef.columns',
+      description: '嵌套子列并生成多级分组表头。',
+      type: 'ColumnDef<TData>[]',
+    },
+    {
+      name: 'ColumnDef.meta',
+      description: '设置表头与单元格的对齐和扩展类名。',
+      type: "{ align?: 'start' | 'center' | 'end'; headerClassName?; cellClassName? }",
+    },
+    {
+      name: 'DataTableColumnHeader',
+      description: '组合可排序的列标题，并显示排序提示图标。',
+      type: 'component',
+    },
+    {
+      name: 'DataTableActions',
+      description: '在操作列内靠右组合一个或多个按钮、菜单或链接。',
+      type: 'component',
+    },
+    {
+      name: 'DataTableActions.aria-label',
+      description: '使用当前记录标识为每一行的操作组提供唯一名称。',
+      type: 'string',
     },
     {
       name: 'data',
@@ -3717,24 +4094,41 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
   ],
   empty: [
     {
-      name: 'EmptyMedia.variant',
-      description: '选择无背景媒体或带容器的图标媒体。',
-      type: "'default' | 'icon'",
+      name: 'variant',
+      description: '使用默认 props 布局，或切换到完全自定义的组合布局。',
+      type: "'default' | 'custom'",
       defaultValue: "'default'",
     },
     {
-      name: 'EmptyTitle',
-      description: '用一句话说明为什么当前没有内容。',
-      type: 'component',
+      name: 'icon',
+      description: '替换默认 Inbox 图标；传入 null 可明确隐藏图标。',
+      type: 'ReactNode',
+      defaultValue: '<InboxIcon />',
     },
     {
-      name: 'EmptyDescription',
-      description: '补充当前状态的原因或可选路径。',
-      type: 'component',
+      name: 'title',
+      description: '说明当前为什么没有内容；传入 null 可隐藏标题。',
+      type: 'ReactNode',
+      defaultValue: "'暂无内容'",
+    },
+    {
+      name: 'description',
+      description: '补充原因、筛选建议或下一步说明。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'actions',
+      description: '渲染主要按钮、链接或一组相关操作。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'EmptyHeader / EmptyMedia / EmptyTitle / EmptyDescription',
+      description: '在 custom 变体中组合完全自定义的头部内容。',
+      type: 'components',
     },
     {
       name: 'EmptyContent',
-      description: '承载主要动作、链接或其他下一步。',
+      description: '在 custom 变体中承载状态摘要和自定义操作。',
       type: 'component',
     },
   ],
@@ -3923,11 +4317,371 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'Positioner props',
     },
   ],
+  alert: [
+    {
+      name: 'variant',
+      description:
+        '设置提示的语义状态；destructive 作为 error 的兼容别名保留。',
+      type: "'default' | 'info' | 'success' | 'warning' | 'error' | 'destructive'",
+      defaultValue: "'default'",
+    },
+    {
+      name: 'AlertAction',
+      description: '放置查看详情、重试或关闭等与当前提示直接相关的操作。',
+      type: 'component',
+    },
+  ],
+  drawer: [
+    {
+      name: 'side',
+      description: '设置面板进入和停靠的方向。',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+      defaultValue: "'bottom'",
+    },
+    {
+      name: 'behavior',
+      description:
+        'adaptive 在不同宽度下调整手柄与贴边样式；gesture 保留触摸抽屉形态；panel 使用稳定面板形态。',
+      type: "'adaptive' | 'gesture' | 'panel'",
+      defaultValue: "'adaptive'",
+    },
+    {
+      name: 'container',
+      description:
+        '将 Portal、视口和面板绑定到指定父容器；父容器需要建立定位和裁切上下文。',
+      type: 'HTMLElement | RefObject<HTMLElement | null>',
+    },
+    {
+      name: 'snapPoints',
+      description: '为手势模式定义分段展开位置。',
+      type: '(number | string)[]',
+    },
+    {
+      name: 'DrawerContent.showCloseButton',
+      description: '控制右上角的标准关闭操作。',
+      type: 'boolean',
+      defaultValue: 'true',
+    },
+  ],
+  progress: [
+    {
+      name: 'value',
+      description: '设置当前进度；传入 null 表示无法确定完成比例。',
+      type: 'number | null',
+      defaultValue: 'null',
+    },
+    {
+      name: 'effect',
+      description: '在数值变化时为指示条前沿增加一次短暂的推进动效。',
+      type: "'none' | 'sparkle'",
+      defaultValue: "'none'",
+    },
+    {
+      name: 'min / max',
+      description: '设置进度范围，并同步无障碍数值。',
+      type: 'number',
+      defaultValue: '0 / 100',
+    },
+  ],
+  skeleton: [
+    {
+      name: 'effect',
+      description:
+        '选择镜面扫光、明暗呼吸或静态占位；系统要求减少动态效果时，扫光会自动停止。',
+      type: "'shimmer' | 'pulse' | 'none'",
+      defaultValue: "'shimmer'",
+    },
+  ],
 };
 
 for (const [slug, api] of Object.entries(dataDisplayApi)) {
   if (componentDocumentation[slug]) componentDocumentation[slug].api = api;
 }
+
+componentDocumentation.carousel.summary =
+  '横向浏览同级内容，支持标准与景深动效、自动播放、首尾循环，以及可自定义的箭头和页码点。';
+componentDocumentation.carousel.whenToUse = [
+  '同一层级有多张重点内容卡片，但当前区域只适合突出展示一项。',
+  '需要轮播营销亮点、版本更新或媒体内容，并允许用户主动前后浏览。',
+];
+componentDocumentation.carousel.accessibility = [
+  '轮播区域、幻灯片、前后按钮和页码点均保留可识别的语义与键盘操作。',
+  '开启自动播放后，动态内容不会持续触发读屏播报；系统要求减少动态效果时会停止自动播放和景深过渡。',
+];
+componentDocumentation.carousel.pitfalls = [
+  '不要用自动播放承载必须阅读或必须操作的内容，用户仍应能通过箭头和页码点主动导航。',
+  '自动播放默认悬停暂停；若关闭 pauseOnHover，需要提供其他清晰的暂停方式。',
+  '单屏塞入过多文字会让轮播难以扫读，内容较长时改用列表或分页。',
+];
+
+componentDocumentation.counter.summary =
+  '以逐位滚动动画呈现持续变化的数字；组件只负责展示，数值和业务操作由外部状态控制。';
+componentDocumentation.counter.whenToUse = [
+  '需要强调统计指标、余额、计数或实时读数的变化过程。',
+  '需要在固定数位中更新数字，减少整段文本突然替换造成的视觉跳动。',
+];
+componentDocumentation.counter.parts = [
+  {
+    name: 'Counter',
+    description:
+      '根据 value、places 和格式属性渲染可访问的滚动数值，并提供前后缀与样式扩展点。',
+  },
+];
+componentDocumentation.counter.accessibility = [
+  '视觉数字对辅助技术隐藏，并通过 valueText 提供完整、稳定的文本值。',
+  '高频更新默认不主动播报；确实需要播报变化时，再设置 aria-live="polite"。',
+];
+componentDocumentation.counter.pitfalls = [
+  'Counter 不管理加减或请求状态；按钮、定时器和业务数据应由外部组件组合。',
+  '频繁变化时建议固定 places，避免数位数量变化引起布局跳动。',
+  '不要为纯装饰或高频实时数据开启 assertive 播报。',
+];
+
+componentDocumentation.drawer.summary =
+  '统一桌面 Sheet 与移动端 Drawer：从视口或指定父容器的任意边缘打开，并根据 behavior 调整面板与手势呈现。';
+componentDocumentation.drawer.whenToUse = [
+  '需要从当前视口边缘承接筛选、详情、导航或短流程任务。',
+  '需要把临时面板限制在工作台、预览器或卡片等局部父容器中。',
+];
+componentDocumentation.drawer.parts = [
+  {
+    name: 'Drawer',
+    description: '管理方向、自适应行为、父容器、开关状态与手势参数。',
+  },
+  {
+    name: 'DrawerTrigger / DrawerClose',
+    description: '连接打开与关闭操作，并保留焦点返回关系。',
+  },
+  {
+    name: 'DrawerContent',
+    description: '渲染面板、遮罩、视口、滑动手柄和标准关闭按钮。',
+  },
+  {
+    name: 'DrawerHeader / DrawerFooter',
+    description: '组合标题说明、正文与底部操作。',
+  },
+];
+componentDocumentation.drawer.pitfalls = [
+  '使用 container 时，父容器必须设置 position: relative 和 overflow: hidden。',
+  '不要仅根据设备名称选择行为；触摸密集任务使用 gesture，稳定编辑面板使用 panel，不确定时使用 adaptive。',
+];
+
+componentDocumentation.chart.summary =
+  'Chart 是 Recharts 的设计系统适配层，统一响应式尺寸、主题颜色、Tooltip 和 Legend；它本身不绘制具体图表。';
+componentDocumentation.chart.whenToUse = [
+  '已经使用 Recharts 绘制柱状图、折线图、面积图或饼图，需要接入组件库的明暗主题与视觉规范。',
+  '多个图表需要共享 dataKey 对应的颜色、名称、图标，以及一致的 Tooltip 和 Legend。',
+];
+componentDocumentation.chart.parts = [
+  {
+    name: 'ChartContainer',
+    description:
+      '提供 ResponsiveContainer、图表配置上下文和按实例隔离的主题 CSS 变量。',
+  },
+  {
+    name: 'ChartConfig',
+    description: '把 Recharts 的 dataKey 映射到颜色、可读名称和图标。',
+  },
+  {
+    name: 'ChartTooltip / ChartTooltipContent',
+    description: '连接 Recharts Tooltip，并使用组件库样式展示系列名称与数值。',
+  },
+  {
+    name: 'ChartLegend / ChartLegendContent',
+    description: '连接 Recharts Legend，并根据 ChartConfig 渲染统一图例。',
+  },
+];
+componentDocumentation.chart.accessibility = [
+  '为图表所在区域提供标题或文本摘要，不能只依赖悬停 Tooltip 传达关键信息。',
+  '不要只用颜色区分系列；同时提供名称、图例、标记或必要的数据表。',
+];
+componentDocumentation.chart.pitfalls = [
+  '不要把 ChartContainer 当作绘图 API；图表类型、坐标轴、比例尺和数据仍由 Recharts 组件定义。',
+  '不要在 ChartConfig 中处理数据请求、聚合或业务计算，它只描述系列的展示信息。',
+];
+
+componentDocumentation.collapsible.summary =
+  '按需展开一块辅助内容；既可使用独立按钮触发，也可让整个自定义 Header 成为触发区域。';
+componentDocumentation.collapsible.whenToUse = [
+  '默认只展示摘要，用户需要时再查看日志、详情、说明或高级配置。',
+  '页面只需要控制一个内容区域；多个并列区域需要互相协调时使用 Accordion。',
+];
+componentDocumentation.collapsible.parts = [
+  {
+    name: 'Collapsible',
+    description: '管理单个内容区域的受控或非受控展开状态。',
+  },
+  {
+    name: 'CollapsibleTrigger',
+    description: '将独立 Button 或自定义元素连接为展开触发器。',
+  },
+  {
+    name: 'CollapsibleHeader / CollapsibleIndicator',
+    description: '构建整行可点击的自定义标题，并显示随状态变化的指示器。',
+  },
+  {
+    name: 'CollapsibleContent / CollapsibleFooter',
+    description: '组合带默认展开动效的内容区域和可选底部信息。',
+  },
+];
+componentDocumentation.collapsible.accessibility = [
+  'Header 和独立 Trigger 都使用原生按钮语义，并通过 aria-expanded 传达展开状态。',
+  '动效会响应 prefers-reduced-motion；不要移除键盘焦点样式。',
+];
+componentDocumentation.collapsible.pitfalls = [
+  '不要在可点击的 CollapsibleHeader 内嵌套链接或按钮；有额外操作时改用独立 CollapsibleTrigger。',
+  '不要用 Collapsible 组织多个需要单选或多选联动的面板，这类结构应使用 Accordion。',
+];
+
+componentDocumentation['data-table'].summary =
+  'DataTable 把 TanStack Table 的数据模型渲染成组件库表格；列定义同时负责访问数据、组合表头、渲染单元格和声明行操作。';
+componentDocumentation['data-table'].whenToUse = [
+  '需要对一组同构记录进行筛选、排序、分页，或在每行提供上下文操作。',
+  '字段较多，需要通过分组表头表达列之间的层级关系。',
+];
+componentDocumentation['data-table'].parts = [
+  {
+    name: 'DataTable',
+    description: '连接数据、列模型、筛选、排序、表头分组和分页渲染。',
+  },
+  {
+    name: 'ColumnDef',
+    description:
+      '通过 header、cell、columns 和 meta 声明每列的结构与展示方式。',
+  },
+  {
+    name: 'DataTableColumnHeader',
+    description: '为可排序列提供一致的按钮、状态切换和图标。',
+  },
+  {
+    name: 'DataTableActions',
+    description: '在普通 cell 中组合当前记录的按钮、菜单或链接。',
+  },
+];
+componentDocumentation['data-table'].accessibility = [
+  '分组表头使用 colgroup/col scope，并保留正确的 colSpan 与 rowSpan 关系。',
+  '只有图标的行操作必须包含当前记录，例如“v0.12.0 更多操作”，不能让每行都只有“更多”。',
+];
+componentDocumentation['data-table'].pitfalls = [
+  '不要在 DataTable 内硬编码业务操作；通过 ColumnDef.cell 读取 row.original 后组合业务按钮。',
+  '不要为了视觉分区手写两个并列表格；使用嵌套 columns 生成真正关联的数据表头。',
+  '操作较多时保留一个高频动作，其余收进菜单，避免操作列无限变宽。',
+];
+
+componentDocumentation.empty.summary =
+  '为空集合或缺失结果提供稳定占位；默认直接渲染图标与标题，常见内容通过 props 配置，复杂展示再使用 custom 组合。';
+componentDocumentation.empty.whenToUse = [
+  '列表、表格、搜索或首次使用场景当前没有可展示内容。',
+  '需要解释空状态原因，并提供一个清晰、可执行的下一步。',
+];
+componentDocumentation.empty.parts = [
+  {
+    name: 'Empty',
+    description:
+      '默认根据 icon、title、description 和 actions 生成完整空状态。',
+  },
+  {
+    name: 'EmptyHeader / EmptyContent',
+    description: '仅在 custom 变体中控制复杂标题区、状态摘要和操作布局。',
+  },
+  {
+    name: 'EmptyMedia / EmptyTitle / EmptyDescription',
+    description: '为 custom 变体提供与默认布局一致的语义插槽。',
+  },
+];
+componentDocumentation.empty.accessibility = [
+  '默认装饰图标会从无障碍树中隐藏，标题和说明承担状态表达。',
+  '操作文案应说明下一步，例如“清除筛选”或“创建项目”，不要只写“确定”。',
+];
+componentDocumentation.empty.pitfalls = [
+  '不要为普通空状态重复拼装 Header 和 Content，优先使用 props。',
+  '只有需要品牌插画、额外状态摘要或复杂布局时才使用 custom 变体。',
+  '加载中、请求失败和权限不足不是空数据，应分别使用 Skeleton、Alert 或专门的权限反馈。',
+];
+
+componentDocumentation.spinner.summary =
+  '用旋转图标表示无法预估完成时间的短时等待；尺寸只控制图标本身，组件不会附带按钮或布局容器。';
+componentDocumentation.spinner.whenToUse = [
+  '局部内容正在刷新、同步或生成，且预计很快完成。',
+  '需要在紧凑状态行、媒体占位或操作旁边提供轻量等待反馈。',
+];
+componentDocumentation.spinner.api = [
+  {
+    name: 'size',
+    description: '设置加载图标本身的尺寸，不改变周围容器。',
+    type: "'sm' | 'default' | 'lg'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'className',
+    description: '覆盖尺寸、颜色或其他 SVG 样式。',
+    type: 'string',
+  },
+];
+componentDocumentation.spinner.accessibility = [
+  '为独立 Spinner 提供描述当前任务的 aria-label，例如“正在同步环境状态”。',
+  '区域加载时在最近的容器设置 aria-busy="true"，并保持其他区域可操作。',
+];
+componentDocumentation.spinner.pitfalls = [
+  '不要为了展示尺寸把 Spinner 包进 Button；按钮加载态应由真实操作按钮自行组合。',
+  '长时间或可量化任务应使用 Progress，首屏结构加载优先使用 Skeleton。',
+  '不要同时在同一局部区域堆叠多个表达相同状态的 Spinner。',
+];
+
+componentDocumentation.toast.summary =
+  '在页面顶部短暂反馈操作结果；内置 success、info、warning、error 四种语义样式，并可通过 Provider 隔离全局或局部通知通道。';
+componentDocumentation.toast.whenToUse = [
+  '操作已经结束，需要短暂确认结果，但不应打断用户当前任务。',
+  '组件树中的深层操作需要调用统一的页面级通知，或工作区内部需要独立的局部通知。',
+];
+componentDocumentation.toast.parts = [
+  {
+    name: 'ToastProvider',
+    description: '创建通知 Context，并根据 scope 渲染全局或局部 Toaster。',
+  },
+  {
+    name: 'useToast',
+    description: '在 Provider 后代中取得绑定当前通知通道的 toast API。',
+  },
+  {
+    name: 'Toaster',
+    description: '直接配置通知容器的位置、数量、持续时间和局部化方式。',
+  },
+];
+componentDocumentation.toast.api = [
+  {
+    name: 'ToastProvider.scope / Toaster.scope',
+    description: '选择相对视口的全局通知或相对父容器的局部通知。',
+    type: "'global' | 'local'",
+    defaultValue: "'global'",
+  },
+  {
+    name: 'useToast().toast',
+    description: '调用 success、info、warning、error、loading 或 promise。',
+    type: 'Toast API',
+  },
+  {
+    name: 'position',
+    description: '设置通知相对视口或局部容器的出现位置。',
+    type: "'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'",
+    defaultValue: "'top-center'",
+  },
+  {
+    name: 'richColors',
+    description: '启用内置语义色；默认已经开启，可按需关闭。',
+    type: 'boolean',
+    defaultValue: 'true',
+  },
+];
+componentDocumentation.toast.accessibility = [
+  'Toast 使用非阻塞通知区域；消息标题应简短，并在 description 中说明必要上下文。',
+  '局部通知的父容器必须可见且尺寸稳定，避免通知被意外裁切到无法阅读。',
+];
+componentDocumentation.toast.pitfalls = [
+  '不要在同一应用根部挂载多个未指定 id 的全局 Provider，否则同一通知可能重复展示。',
+  'scope="local" 时父容器需要 position: relative 和 overflow: hidden。',
+  '需要用户立即确认的危险操作使用 Alert Dialog，持续存在的页面状态使用 Alert。',
+];
 
 const dataEntryApi: Record<string, ApiProperty[]> = {
   checkbox: [
@@ -4241,9 +4995,22 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
   ],
   slider: [
     {
+      name: 'effect',
+      description:
+        '为拖拽越过范围边界时增加弹性拉伸和回弹；减少动态效果偏好下自动停用。',
+      type: "'none' | 'elastic'",
+      defaultValue: "'none'",
+    },
+    {
+      name: 'startIcon / endIcon',
+      description:
+        '在轨道起止位置组合图标；elastic 模式下对应边缘图标会跟随拉伸反馈。',
+      type: 'ReactNode',
+    },
+    {
       name: 'value / defaultValue',
       description: '设置一个或多个滑块值。',
-      type: 'number[]',
+      type: 'number | number[]',
     },
     {
       name: 'min / max',

@@ -5,22 +5,27 @@ import { cn } from '../lib/utils';
 import { Button } from './button';
 import { XIcon } from 'lucide-react';
 
+/** @deprecated Use Drawer with behavior="panel" instead. */
 function Sheet({ ...props }: SheetPrimitive.Root.Props) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;
 }
 
+/** @deprecated Use DrawerTrigger instead. */
 function SheetTrigger({ ...props }: SheetPrimitive.Trigger.Props) {
   return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
 }
 
+/** @deprecated Use DrawerClose instead. */
 function SheetClose({ ...props }: SheetPrimitive.Close.Props) {
   return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
 }
 
+/** @deprecated Use DrawerPortal instead. */
 function SheetPortal({ ...props }: SheetPrimitive.Portal.Props) {
   return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
 }
 
+/** @deprecated Use DrawerOverlay instead. */
 function SheetOverlay({ className, ...props }: SheetPrimitive.Backdrop.Props) {
   return (
     <SheetPrimitive.Backdrop
@@ -34,6 +39,7 @@ function SheetOverlay({ className, ...props }: SheetPrimitive.Backdrop.Props) {
   );
 }
 
+/** @deprecated Use DrawerContent with behavior="panel" on Drawer instead. */
 function SheetContent({
   className,
   children,
@@ -77,6 +83,7 @@ function SheetContent({
   );
 }
 
+/** @deprecated Use DrawerHeader instead. */
 function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -87,6 +94,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+/** @deprecated Use DrawerFooter instead. */
 function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -97,6 +105,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+/** @deprecated Use DrawerTitle instead. */
 function SheetTitle({ className, ...props }: SheetPrimitive.Title.Props) {
   return (
     <SheetPrimitive.Title
@@ -110,6 +119,7 @@ function SheetTitle({ className, ...props }: SheetPrimitive.Title.Props) {
   );
 }
 
+/** @deprecated Use DrawerDescription instead. */
 function SheetDescription({
   className,
   ...props

@@ -1,13 +1,27 @@
 import { cn } from '../lib/utils';
 
-function Skeleton({ className, ...props }: React.ComponentProps<'div'>) {
+type SkeletonEffect = 'shimmer' | 'pulse' | 'none';
+
+function Skeleton({
+  className,
+  effect = 'shimmer',
+  ...props
+}: React.ComponentProps<'div'> & {
+  effect?: SkeletonEffect;
+}) {
   return (
     <div
       data-slot="skeleton"
-      className={cn('animate-pulse rounded-2xl bg-muted', className)}
+      data-effect={effect}
+      aria-hidden="true"
+      className={cn(
+        'relative overflow-hidden rounded-2xl bg-muted',
+        effect === 'pulse' && 'animate-pulse',
+        className
+      )}
       {...props}
     />
   );
 }
 
-export { Skeleton };
+export { Skeleton, type SkeletonEffect };

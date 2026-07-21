@@ -9,6 +9,7 @@ import {
 import { Breadcrumb } from '@heliannuuthus/ui/breadcrumb';
 import { Button } from '@heliannuuthus/ui/button';
 import { Checkbox } from '@heliannuuthus/ui/checkbox';
+import { Counter } from '@heliannuuthus/ui/counter';
 import {
   Empty,
   EmptyContent,
@@ -63,6 +64,7 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
     </div>
   ),
   checkbox: <Checkbox className="minimal-control">接收产品更新</Checkbox>,
+  counter: <Counter fontSize={52} fontWeight={600} value={7.4} />,
   slider: (
     <div className="minimal-slider">
       <span>音量</span>

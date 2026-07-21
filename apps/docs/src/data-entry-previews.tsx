@@ -58,7 +58,7 @@ import {
 } from '@heliannuuthus/ui/select';
 import { Slider } from '@heliannuuthus/ui/slider';
 import { Switch } from '@heliannuuthus/ui/switch';
-import { Check, Copy, Globe2, Mail } from 'lucide-react';
+import { Check, Copy, Globe2, Mail, Volume1, Volume2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 const members = ['林夏 · 设计', '周一 · 前端', '陈青 · 产品', '宋雨 · 运营'];
@@ -592,6 +592,40 @@ export function SliderBudgetDemo() {
       <div className="data-scale">
         <span>¥ 0</span>
         <span>¥ 100k+</span>
+      </div>
+    </div>
+  );
+}
+
+export function SliderElasticDemo() {
+  const [volume, setVolume] = useState(64);
+
+  return (
+    <div className="data-slider-card data-elastic-slider-card">
+      <div className="data-card-heading">
+        <div>
+          <strong>播放器音量</strong>
+          <p>拖到轨道边界之外，感受受约束的弹性反馈。</p>
+        </div>
+        <span className="data-elastic-slider-value">
+          <strong>{volume}</strong>
+          <small>%</small>
+        </span>
+      </div>
+      <Slider
+        aria-label="播放器音量"
+        effect="elastic"
+        endIcon={<Volume2 />}
+        max={100}
+        min={0}
+        onValueChange={setVolume}
+        startIcon={<Volume1 />}
+        step={2}
+        value={volume}
+      />
+      <div className="data-scale">
+        <span>静音</span>
+        <span>最大</span>
       </div>
     </div>
   );

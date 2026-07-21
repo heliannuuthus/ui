@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   Alert,
   AlertAction,
@@ -57,30 +57,21 @@ import {
   ProgressLabel,
   ProgressValue,
 } from '@heliannuuthus/ui/progress';
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@heliannuuthus/ui/sheet';
 import { Skeleton } from '@heliannuuthus/ui/skeleton';
 import { Toaster as SonnerToaster } from '@heliannuuthus/ui/sonner';
 import { Spinner } from '@heliannuuthus/ui/spinner';
+import { ToastProvider, useToast } from '@heliannuuthus/ui/toast';
 import {
-  Toaster as ToastToaster,
-  toast as uiToast,
-} from '@heliannuuthus/ui/toast';
-import {
-  CalendarClock,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
   CheckCircle2,
+  CircleX,
   CloudUpload,
   Filter,
+  Info,
   Mail,
-  MoreHorizontal,
   Rocket,
   Trash2,
   TriangleAlert,
@@ -88,28 +79,88 @@ import {
 } from 'lucide-react';
 import { toast as sonnerToast } from 'sonner';
 
-export function AlertReleaseDemo({
-  variant = 'default',
-}: {
-  variant?: 'default' | 'destructive';
-}) {
-  const destructive = variant === 'destructive';
+type AlertStatus = 'info' | 'success' | 'warning' | 'error';
+
+const alertScenarios = {
+  info: {
+    label: '信息',
+    title: '发布窗口将在 22:00 开始',
+    description: '值班成员将在开始前 15 分钟收到提醒。',
+    icon: Info,
+  },
+  success: {
+    label: '成功',
+    title: '预检已通过',
+    description: '12 项检查全部通过，可以安排生产环境发布。',
+    icon: CheckCircle2,
+  },
+  warning: {
+    label: '警告',
+    title: '回滚镜像即将过期',
+    description: '镜像将在 2 小时后清理，建议在发布前重新构建。',
+    icon: TriangleAlert,
+  },
+  error: {
+    label: '错误',
+    title: '发布被阻止',
+    description: '生产环境缺少 DATABASE_URL，请补充变量后重试。',
+    icon: CircleX,
+  },
+} satisfies Record<
+  AlertStatus,
+  {
+    label: string;
+    title: string;
+    description: string;
+    icon: typeof Info;
+  }
+>;
+
+export function AlertReleaseDemo() {
+  const [status, setStatus] = useState<AlertStatus | null>('info');
+  const scenario = status ? alertScenarios[status] : null;
+  const Icon = scenario?.icon;
 
   return (
-    <Alert className="feedback-alert" variant={variant}>
-      {destructive ? <TriangleAlert /> : <CheckCircle2 />}
-      <AlertTitle>{destructive ? '发布被阻止' : '预检已通过'}</AlertTitle>
-      <AlertDescription>
-        {destructive
-          ? '生产环境缺少 DATABASE_URL，请补充变量后重试。'
-          : '12 项检查全部通过，可以安排生产环境发布。'}
-      </AlertDescription>
-      <AlertAction>
-        <Button size="sm" variant={destructive ? 'outline' : 'ghost'}>
-          {destructive ? '前往配置' : '查看报告'}
-        </Button>
-      </AlertAction>
-    </Alert>
+    <div className="feedback-alert-demo">
+      <div className="feedback-alert-triggers" aria-label="选择 Alert 状态">
+        {(Object.keys(alertScenarios) as AlertStatus[]).map((value) => {
+          const option = alertScenarios[value];
+          const OptionIcon = option.icon;
+
+          return (
+            <Button
+              aria-pressed={status === value}
+              key={value}
+              onClick={() => setStatus(value)}
+              size="sm"
+              variant={status === value ? 'secondary' : 'outline'}
+            >
+              <OptionIcon />
+              {option.label}
+            </Button>
+          );
+        })}
+      </div>
+      <div className="feedback-alert-stage">
+        {scenario && Icon ? (
+          <Alert className="feedback-alert" key={status} variant={status}>
+            <Icon />
+            <AlertTitle>{scenario.title}</AlertTitle>
+            <AlertDescription>{scenario.description}</AlertDescription>
+            <AlertAction>
+              <Button onClick={() => setStatus(null)} size="sm" variant="ghost">
+                关闭
+              </Button>
+            </AlertAction>
+          </Alert>
+        ) : (
+          <div className="feedback-alert-placeholder">
+            选择一个状态，在页面内显示对应提示。
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -176,35 +227,58 @@ export function DialogReleaseDemo() {
   );
 }
 
-export function DrawerReleaseDemo({
-  direction = 'down',
-}: {
-  direction?: 'down' | 'right';
-}) {
+export function DrawerReleaseDemo() {
+  const placements = [
+    { side: 'left', label: '从左侧', icon: ArrowRight },
+    { side: 'right', label: '从右侧', icon: ArrowLeft },
+    { side: 'top', label: '从上方', icon: ArrowDown },
+    { side: 'bottom', label: '从下方', icon: ArrowUp },
+  ] as const;
+
   return (
-    <Drawer showSwipeHandle swipeDirection={direction}>
-      <DrawerTrigger render={<Button variant="outline" />}>
-        <CalendarClock />
-        查看发布窗口
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>今晚的发布窗口</DrawerTitle>
-          <DrawerDescription>
-            22:00–23:00，当前还有两个服务等待确认。
-          </DrawerDescription>
-        </DrawerHeader>
-        <div className="feedback-drawer-list">
-          <ReleaseRow label="Web Console" meta="已通过 · 21:42" ready />
-          <ReleaseRow label="Auth API" meta="已通过 · 21:46" ready />
-          <ReleaseRow label="Worker" meta="等待负责人确认" />
-        </div>
-        <DrawerFooter>
-          <Button>进入发布中心</Button>
-          <DrawerClose render={<Button variant="outline" />}>关闭</DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+    <div className="feedback-drawer-directions" aria-label="Drawer 打开方向">
+      {placements.map((placement) => {
+        const Icon = placement.icon;
+
+        return (
+          <Drawer
+            behavior="adaptive"
+            key={placement.side}
+            side={placement.side}
+          >
+            <DrawerTrigger render={<Button variant="outline" />}>
+              <Icon />
+              {placement.label}
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerReleaseContent sideLabel={placement.label} />
+            </DrawerContent>
+          </Drawer>
+        );
+      })}
+    </div>
+  );
+}
+
+function DrawerReleaseContent({ sideLabel }: { sideLabel: string }) {
+  return (
+    <>
+      <DrawerHeader>
+        <DrawerTitle>今晚的发布窗口</DrawerTitle>
+        <DrawerDescription>
+          {sideLabel}打开；窄屏保留触摸拖拽，宽屏使用稳定的边缘面板布局。
+        </DrawerDescription>
+      </DrawerHeader>
+      <div className="feedback-drawer-list">
+        <ReleaseRow label="Web Console" meta="已通过 · 21:42" ready />
+        <ReleaseRow label="Auth API" meta="已通过 · 21:46" ready />
+        <ReleaseRow label="Worker" meta="等待负责人确认" />
+      </div>
+      <DrawerFooter>
+        <Button>进入发布中心</Button>
+        <DrawerClose render={<Button variant="outline" />}>关闭</DrawerClose>
+      </DrawerFooter>
+    </>
   );
 }
 
@@ -288,7 +362,7 @@ export function ProgressReleaseDemo() {
           </small>
         </div>
       </div>
-      <Progress value={value}>
+      <Progress effect="sparkle" value={value}>
         <ProgressLabel>生产环境</ProgressLabel>
         <ProgressValue />
       </Progress>
@@ -308,56 +382,85 @@ export function ProgressReleaseDemo() {
   );
 }
 
-export function SheetFiltersDemo({
-  side = 'right',
-}: {
-  side?: 'left' | 'right';
-}) {
+export function DrawerContainedDemo() {
+  const boundaryRef = useRef<HTMLDivElement>(null);
+  const placements = [
+    { side: 'left', label: '左', icon: ArrowRight },
+    { side: 'right', label: '右', icon: ArrowLeft },
+    { side: 'top', label: '上', icon: ArrowDown },
+    { side: 'bottom', label: '下', icon: ArrowUp },
+  ] as const;
+
   return (
-    <Sheet>
-      <SheetTrigger render={<Button variant="outline" />}>
-        <Filter />
-        筛选发布记录
-      </SheetTrigger>
-      <SheetContent side={side}>
-        <SheetHeader>
-          <SheetTitle>筛选发布记录</SheetTitle>
-          <SheetDescription>
-            条件会立即应用到当前发布历史列表。
-          </SheetDescription>
-        </SheetHeader>
-        <div className="feedback-sheet-options">
-          <section>
-            <strong>环境</strong>
-            <Checkbox defaultChecked value="production">
-              生产环境
-            </Checkbox>
-            <Checkbox value="preview">预览环境</Checkbox>
-          </section>
-          <section>
-            <strong>结果</strong>
-            <Checkbox defaultChecked value="success">
-              发布成功
-            </Checkbox>
-            <Checkbox defaultChecked value="failed">
-              发布失败
-            </Checkbox>
-            <Checkbox value="cancelled">已取消</Checkbox>
-          </section>
+    <div className="feedback-drawer-boundary" ref={boundaryRef}>
+      <div className="feedback-drawer-boundary-header">
+        <div>
+          <strong>发布记录</strong>
+          <span>抽屉只覆盖当前父容器</span>
         </div>
-        <SheetFooter>
-          <SheetClose render={<Button />}>查看 18 条记录</SheetClose>
-          <SheetClose render={<Button variant="outline" />}>取消</SheetClose>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        <Filter />
+      </div>
+      <div className="feedback-drawer-boundary-content">
+        <span>v0.12.0</span>
+        <strong>生产环境发布历史</strong>
+        <small>选择一个方向，在当前卡片内打开筛选面板。</small>
+      </div>
+      <div className="feedback-drawer-boundary-actions">
+        {placements.map((placement) => {
+          const Icon = placement.icon;
+
+          return (
+            <Drawer
+              behavior="panel"
+              container={boundaryRef}
+              key={placement.side}
+              side={placement.side}
+            >
+              <DrawerTrigger render={<Button size="sm" variant="outline" />}>
+                <Icon />
+                {placement.label}
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DrawerTitle>筛选发布记录</DrawerTitle>
+                  <DrawerDescription>
+                    面板从父容器{placement.label}侧进入，不覆盖整个页面。
+                  </DrawerDescription>
+                </DrawerHeader>
+                <div className="feedback-sheet-options">
+                  <section>
+                    <strong>环境</strong>
+                    <Checkbox defaultChecked value="production">
+                      生产环境
+                    </Checkbox>
+                    <Checkbox value="preview">预览环境</Checkbox>
+                  </section>
+                  <section>
+                    <strong>结果</strong>
+                    <Checkbox defaultChecked value="success">
+                      发布成功
+                    </Checkbox>
+                    <Checkbox value="failed">发布失败</Checkbox>
+                  </section>
+                </div>
+                <DrawerFooter>
+                  <DrawerClose render={<Button />}>应用筛选</DrawerClose>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
 export function SkeletonReleaseDemo({
   density = 'comfortable',
+  effect = 'shimmer',
 }: {
   density?: 'comfortable' | 'compact';
+  effect?: 'shimmer' | 'pulse' | 'none';
 }) {
   const rows = density === 'compact' ? 4 : 3;
 
@@ -365,20 +468,23 @@ export function SkeletonReleaseDemo({
     <div className="feedback-skeleton-card" data-density={density}>
       <header>
         <div>
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="mt-2 h-3 w-52" />
+          <Skeleton className="h-4 w-32" effect={effect} />
+          <Skeleton className="mt-2 h-3 w-52" effect={effect} />
         </div>
-        <Skeleton className="h-8 w-20 rounded-full" />
+        <Skeleton className="h-8 w-20 rounded-full" effect={effect} />
       </header>
       <div>
         {Array.from({ length: rows }, (_, index) => (
           <div className="feedback-skeleton-row" key={index}>
-            <Skeleton className="size-8 rounded-full" />
+            <Skeleton className="size-8 rounded-full" effect={effect} />
             <span>
-              <Skeleton className="h-3 w-28" />
-              <Skeleton className="mt-2 h-2.5 w-40" />
+              <Skeleton className="h-3 w-28" effect={effect} />
+              <Skeleton className="mt-2 h-2.5 w-40" effect={effect} />
             </span>
-            <Skeleton className="ml-auto h-6 w-14 rounded-full" />
+            <Skeleton
+              className="ml-auto h-6 w-14 rounded-full"
+              effect={effect}
+            />
           </div>
         ))}
       </div>
@@ -411,53 +517,169 @@ export function SonnerPublishDemo() {
   );
 }
 
-export function SpinnerLoadingDemo({
-  size = 'default',
-}: {
-  size?: 'sm' | 'default' | 'lg';
-}) {
-  const spinnerSize =
-    size === 'sm' ? 'size-3.5' : size === 'lg' ? 'size-6' : 'size-4';
+export function SpinnerSizesDemo() {
+  const sizes = [
+    { label: '小', size: 'sm', pixels: '14 px' },
+    { label: '默认', size: 'default', pixels: '16 px' },
+    { label: '大', size: 'lg', pixels: '24 px' },
+  ] as const;
 
   return (
-    <div className="feedback-spinner-demo">
-      <Button disabled size={size === 'lg' ? 'lg' : 'default'}>
-        <Spinner aria-label="正在保存" className={spinnerSize} />
-        正在保存
-      </Button>
-      <div aria-live="polite">
-        <Spinner aria-label="正在同步发布状态" className={spinnerSize} />
-        <span>
-          <strong>同步发布状态</strong>
-          <small>通常只需要几秒钟</small>
-        </span>
-      </div>
+    <div
+      aria-label="Spinner 尺寸"
+      className="feedback-spinner-sizes"
+      role="list"
+    >
+      {sizes.map((item) => (
+        <div key={item.size} role="listitem">
+          <span className="feedback-spinner-icon-stage">
+            <Spinner aria-label={`${item.label}号加载图标`} size={item.size} />
+          </span>
+          <strong>{item.label}</strong>
+          <small>{item.pixels}</small>
+        </div>
+      ))}
     </div>
   );
 }
 
-export function ToastUndoDemo({
-  position = 'top-center',
-}: {
-  position?: 'top-center' | 'bottom-right';
-}) {
-  function archive() {
-    uiToast('发布草稿已归档', {
-      description: 'v0.12.0 已从待发布列表移除。',
-      action: {
-        label: '撤销',
-        onClick: () => uiToast.success('草稿已恢复'),
-      },
-    });
+export function SpinnerLoadingDemo() {
+  return (
+    <div className="feedback-local-loading-demo">
+      <article aria-busy="true">
+        <span className="feedback-local-loading-hero">
+          <Spinner aria-label="正在生成发布预览" size="lg" />
+        </span>
+        <strong>正在生成发布预览</strong>
+        <small>合并构建产物与变更摘要</small>
+      </article>
+      <section aria-busy="true" aria-label="正在同步环境状态">
+        <header>
+          <div>
+            <strong>环境状态</strong>
+            <small>只更新当前区域</small>
+          </div>
+          <span>同步中</span>
+        </header>
+        <div>
+          <CloudUpload aria-hidden />
+          <span>
+            <strong>预览环境</strong>
+            <small>正在上传静态资源</small>
+          </span>
+          <Spinner aria-label="预览环境同步中" size="sm" />
+        </div>
+        <div>
+          <Users aria-hidden />
+          <span>
+            <strong>评审成员</strong>
+            <small>正在刷新访问权限</small>
+          </span>
+          <Spinner aria-label="评审成员同步中" size="sm" />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+const toastScenarios = {
+  success: {
+    label: '成功',
+    title: '发布已完成',
+    description: 'v0.12.0 已部署到生产环境。',
+    icon: CheckCircle2,
+  },
+  info: {
+    label: '信息',
+    title: '发布窗口即将开始',
+    description: '值班成员将在 15 分钟后收到提醒。',
+    icon: Info,
+  },
+  warning: {
+    label: '警告',
+    title: '回滚镜像即将过期',
+    description: '请在继续发布前重新生成镜像。',
+    icon: TriangleAlert,
+  },
+  error: {
+    label: '错误',
+    title: '发布失败',
+    description: '生产环境缺少 DATABASE_URL。',
+    icon: CircleX,
+  },
+} as const;
+
+type ToastStatus = keyof typeof toastScenarios;
+
+function ToastSemanticActions() {
+  const { toast } = useToast();
+
+  function notify(status: ToastStatus) {
+    const scenario = toastScenarios[status];
+    toast[status](scenario.title, { description: scenario.description });
   }
 
   return (
-    <>
-      <Button onClick={archive} variant="outline">
-        <MoreHorizontal />
-        归档并显示撤销
+    <div className="feedback-toast-semantic-actions">
+      {(Object.keys(toastScenarios) as ToastStatus[]).map((status) => {
+        const scenario = toastScenarios[status];
+        const Icon = scenario.icon;
+
+        return (
+          <Button
+            data-status={status}
+            key={status}
+            onClick={() => notify(status)}
+            variant="outline"
+          >
+            <Icon />
+            {scenario.label}
+          </Button>
+        );
+      })}
+    </div>
+  );
+}
+
+export function ToastSemanticDemo() {
+  return (
+    <ToastProvider id="toast-semantic-demo">
+      <ToastSemanticActions />
+    </ToastProvider>
+  );
+}
+
+function ToastLocalActions() {
+  const { toast } = useToast();
+
+  return (
+    <div className="feedback-toast-local-workspace">
+      <div>
+        <span>预览环境</span>
+        <strong>release/ui-refresh</strong>
+        <small>Toast 只会出现在当前容器顶部</small>
+      </div>
+      <Button
+        onClick={() =>
+          toast.info('预览已刷新', {
+            description: '最新构建已加载到当前工作区。',
+          })
+        }
+        size="sm"
+      >
+        <Info />
+        局部通知
       </Button>
-      <ToastToaster position={position} />
-    </>
+    </div>
+  );
+}
+
+export function ToastLocalDemo() {
+  return (
+    <div className="feedback-toast-local-stage">
+      <ToastProvider id="toast-local-demo" scope="local">
+        <ToastLocalActions />
+      </ToastProvider>
+    </div>
   );
 }

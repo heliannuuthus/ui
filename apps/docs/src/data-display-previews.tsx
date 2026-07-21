@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import {
   Accordion,
@@ -36,9 +36,12 @@ import { Button } from '@heliannuuthus/ui/button';
 import {
   Carousel,
   CarouselContent,
+  CarouselDots,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselDotPosition,
+  type CarouselVariant,
 } from '@heliannuuthus/ui/carousel';
 import {
   ChartContainer,
@@ -49,9 +52,24 @@ import {
 import {
   Collapsible,
   CollapsibleContent,
+  CollapsibleFooter,
+  CollapsibleHeader,
+  CollapsibleIndicator,
   CollapsibleTrigger,
 } from '@heliannuuthus/ui/collapsible';
-import { DataTable } from '@heliannuuthus/ui/data-table';
+import { Counter } from '@heliannuuthus/ui/counter';
+import {
+  DataTable,
+  DataTableActions,
+  DataTableColumnHeader,
+} from '@heliannuuthus/ui/data-table';
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuRoot,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@heliannuuthus/ui/dropdown-menu';
 import {
   Empty,
   EmptyContent,
@@ -74,7 +92,6 @@ import {
   ItemMedia,
   ItemTitle,
 } from '@heliannuuthus/ui/item';
-import { Kbd } from '@heliannuuthus/ui/kbd';
 import { Marker, MarkerContent, MarkerIcon } from '@heliannuuthus/ui/marker';
 import {
   Message,
@@ -110,10 +127,8 @@ import {
 } from '@heliannuuthus/ui/tooltip';
 import {
   Archive,
-  ArrowUpDown,
   Check,
   CheckCircle2,
-  ChevronDown,
   CircleDot,
   Cloud,
   Download,
@@ -122,8 +137,8 @@ import {
   FileText,
   GitCommitHorizontal,
   Inbox,
-  Link2,
   MessageCircle,
+  Minus,
   MoreHorizontal,
   PackageCheck,
   Plus,
@@ -137,10 +152,8 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 export function AccordionReleaseDemo({
   mode = 'single',
-  orientation = 'vertical',
 }: {
   mode?: 'single' | 'multiple';
-  orientation?: 'horizontal' | 'vertical';
 }) {
   const multiple = mode === 'multiple';
 
@@ -154,10 +167,9 @@ export function AccordionReleaseDemo({
         <Badge variant="secondary">3 / 3 就绪</Badge>
       </div>
       <Accordion
-        key={`${mode}-${orientation}`}
+        key={mode}
         multiple={multiple}
         defaultValue={multiple ? ['preflight', 'rollback'] : ['preflight']}
-        orientation={orientation}
       >
         <AccordionItem value="preflight">
           <AccordionTrigger>预检结果</AccordionTrigger>
@@ -178,6 +190,129 @@ export function AccordionReleaseDemo({
           </AccordionContent>
         </AccordionItem>
       </Accordion>
+    </div>
+  );
+}
+
+export function CounterBuildDemo() {
+  const [count, setCount] = useState(1284);
+
+  return (
+    <div className="display-counter-card">
+      <div>
+        <span>本周构建</span>
+        <small>CI 完成的有效构建次数</small>
+      </div>
+      <Counter
+        fontSize={60}
+        fontWeight={600}
+        places={[1000, 100, 10, 1]}
+        suffix={<small>次</small>}
+        value={count}
+        valueText={`${count} 次构建`}
+      />
+      <div className="display-counter-actions">
+        <Button onClick={() => setCount((value) => Math.max(0, value - 18))}>
+          <Minus />
+          减少 18
+        </Button>
+        <Button onClick={() => setCount((value) => value + 24)}>
+          <Plus />
+          增加 24
+        </Button>
+        <Button onClick={() => setCount(1284)} variant="ghost">
+          <RotateCcw />
+          重置
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+export function AccordionModesDemo() {
+  return (
+    <div className="accordion-modes-demo">
+      <section className="accordion-mode-example">
+        <div className="accordion-mode-heading">
+          <strong>单项展开</strong>
+          <span>一次只保留一个面板</span>
+        </div>
+        <AccordionReleaseDemo mode="single" />
+      </section>
+      <section className="accordion-mode-example">
+        <div className="accordion-mode-heading">
+          <strong>多项展开</strong>
+          <span>允许同时核对多个面板</span>
+        </div>
+        <AccordionReleaseDemo mode="multiple" />
+      </section>
+    </div>
+  );
+}
+
+function AccordionIndicatorSample({
+  description,
+  expandedIndicator,
+  indicator,
+  indicatorPosition,
+  kind,
+  title,
+}: {
+  description: string;
+  expandedIndicator?: ReactNode;
+  indicator?: ReactNode;
+  indicatorPosition?: 'start' | 'end';
+  kind: 'custom' | 'end' | 'start';
+  title: string;
+}) {
+  return (
+    <section className="accordion-indicator-example" data-example={kind}>
+      <div className="accordion-mode-heading">
+        <strong>{title}</strong>
+        <span>{description}</span>
+      </div>
+      <Accordion
+        defaultValue={['deployment']}
+        expandedIndicator={expandedIndicator}
+        indicator={indicator}
+        indicatorPosition={indicatorPosition}
+      >
+        <AccordionItem value="deployment">
+          <AccordionTrigger>部署策略</AccordionTrigger>
+          <AccordionContent>
+            先灰度 10%，观察十分钟后全量发布。
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="cache">
+          <AccordionTrigger>缓存刷新</AccordionTrigger>
+          <AccordionContent>发布完成后刷新边缘节点缓存。</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </section>
+  );
+}
+
+export function AccordionIndicatorDemo() {
+  return (
+    <div className="accordion-indicator-demo">
+      <AccordionIndicatorSample
+        description="默认位置"
+        kind="end"
+        title="末端箭头"
+      />
+      <AccordionIndicatorSample
+        description="靠近标题"
+        indicatorPosition="start"
+        kind="start"
+        title="起始箭头"
+      />
+      <AccordionIndicatorSample
+        description="展开状态可替换"
+        expandedIndicator={<Minus />}
+        indicator={<Plus />}
+        kind="custom"
+        title="自定义指示器"
+      />
     </div>
   );
 }
@@ -330,15 +465,31 @@ const releaseHighlights = [
 ];
 
 export function CarouselHighlightsDemo({
-  orientation = 'horizontal',
+  autoplay = false,
+  autoplayDelay,
+  dotPosition,
+  customControls = false,
+  loop = false,
+  pauseOnHover,
+  variant,
 }: {
-  orientation?: 'horizontal' | 'vertical';
+  autoplay?: boolean;
+  autoplayDelay?: number;
+  dotPosition?: CarouselDotPosition;
+  customControls?: boolean;
+  loop?: boolean;
+  pauseOnHover?: boolean;
+  variant?: CarouselVariant;
 }) {
   return (
     <Carousel
-      className={`display-carousel is-${orientation}`}
-      orientation={orientation}
-      opts={{ loop: false }}
+      aria-label="版本亮点"
+      autoplay={autoplay}
+      autoplayDelay={autoplayDelay}
+      className={`display-carousel${customControls ? ' has-custom-controls' : ''}${autoplay ? ' display-carousel-autoplay' : ''}`}
+      loop={loop}
+      pauseOnHover={pauseOnHover}
+      variant={variant}
     >
       <CarouselContent>
         {releaseHighlights.map((highlight, index) => {
@@ -359,9 +510,43 @@ export function CarouselHighlightsDemo({
           );
         })}
       </CarouselContent>
-      <CarouselPrevious className="display-carousel-previous" />
-      <CarouselNext className="display-carousel-next" />
+      <CarouselPrevious className="display-carousel-previous">
+        {customControls ? <span aria-hidden>←</span> : undefined}
+      </CarouselPrevious>
+      <CarouselNext className="display-carousel-next">
+        {customControls ? <span aria-hidden>→</span> : undefined}
+      </CarouselNext>
+      <CarouselDots position={dotPosition}>
+        {customControls
+          ? ({ index, isSelected }) => (
+              <span
+                className="display-carousel-number-dot"
+                data-selected={isSelected || undefined}
+              >
+                {index + 1}
+              </span>
+            )
+          : undefined}
+      </CarouselDots>
     </Carousel>
+  );
+}
+
+export function CarouselAutoplayDemo() {
+  return (
+    <div className="display-carousel-autoplay-stage">
+      <div className="display-carousel-autoplay-heading">
+        <span>React Bits 动效变体</span>
+        <strong>自动播放，悬停即暂停</strong>
+        <small>自动播放 · 首尾循环 · 3D 景深</small>
+      </div>
+      <CarouselHighlightsDemo
+        autoplay
+        autoplayDelay={2200}
+        loop
+        variant="depth"
+      />
+    </div>
   );
 }
 
@@ -424,15 +609,9 @@ export function ChartDeploymentDemo({
 }
 
 export function CollapsibleBuildDemo() {
-  const [open, setOpen] = useState(false);
-
   return (
-    <Collapsible
-      className="display-build-log"
-      open={open}
-      onOpenChange={setOpen}
-    >
-      <div className="display-build-summary">
+    <Collapsible className="display-build-log">
+      <CollapsibleHeader className="display-build-summary">
         <div className="display-status-icon is-success">
           <CheckCircle2 />
         </div>
@@ -440,11 +619,9 @@ export function CollapsibleBuildDemo() {
           <strong>构建 #1842 已完成</strong>
           <span>1m 48s · commit 7f92c1a</span>
         </div>
-        <CollapsibleTrigger render={<Button size="sm" variant="ghost" />}>
-          {open ? '收起日志' : '展开日志'}
-          <ChevronDown className={open ? 'is-open' : undefined} />
-        </CollapsibleTrigger>
-      </div>
+        <Badge variant="secondary">成功</Badge>
+        <CollapsibleIndicator />
+      </CollapsibleHeader>
       <CollapsibleContent className="display-build-content">
         <code>
           <span>21:42:08</span> packages/ui build completed
@@ -453,6 +630,52 @@ export function CollapsibleBuildDemo() {
           <br />
           <span>21:43:02</span> 42 browser checks passed
         </code>
+        <CollapsibleFooter className="display-build-footer">
+          <span>日志保留 30 天</span>
+          <Button size="xs" variant="ghost">
+            查看构建产物
+          </Button>
+        </CollapsibleFooter>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
+export function CollapsiblePolicyDemo() {
+  return (
+    <Collapsible className="display-build-log display-policy">
+      <div className="display-build-summary">
+        <div className="display-status-icon">
+          <ShieldCheck />
+        </div>
+        <div>
+          <strong>灰度发布策略</strong>
+          <span>先发布到 10% 的生产实例</span>
+        </div>
+        <CollapsibleTrigger render={<Button size="sm" variant="outline" />}>
+          配置
+          <CollapsibleIndicator className="ml-1" />
+        </CollapsibleTrigger>
+      </div>
+      <CollapsibleContent className="display-policy-content">
+        <div className="display-policy-grid">
+          <div>
+            <span>首批流量</span>
+            <strong>10%</strong>
+          </div>
+          <div>
+            <span>观察窗口</span>
+            <strong>10 分钟</strong>
+          </div>
+          <div>
+            <span>自动回滚</span>
+            <strong>错误率 &gt; 2%</strong>
+          </div>
+        </div>
+        <CollapsibleFooter>
+          <span>仅影响下一次生产发布</span>
+          <Button size="xs">应用策略</Button>
+        </CollapsibleFooter>
       </CollapsibleContent>
     </Collapsible>
   );
@@ -477,21 +700,15 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
   {
     accessorKey: 'version',
     header: ({ column }) => (
-      <Button
-        size="sm"
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        版本
-        <ArrowUpDown />
-      </Button>
+      <DataTableColumnHeader column={column}>版本</DataTableColumnHeader>
     ),
   },
-  { accessorKey: 'environment', header: '环境' },
-  { accessorKey: 'owner', header: '负责人' },
+  { accessorKey: 'environment', header: '环境', enableSorting: false },
+  { accessorKey: 'owner', header: '负责人', enableSorting: false },
   {
     accessorKey: 'status',
     header: '状态',
+    enableSorting: false,
     cell: ({ row }) => {
       const status = row.original.status;
       return (
@@ -500,6 +717,104 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
         </Badge>
       );
     },
+  },
+  {
+    id: 'actions',
+    header: '操作',
+    meta: {
+      align: 'end',
+      headerClassName: 'w-36',
+    },
+    cell: ({ row }) => (
+      <DataTableActions aria-label={`${row.original.version} 操作`}>
+        <Button size="xs" variant="ghost">
+          查看
+        </Button>
+        <DropdownMenuRoot>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                aria-label={`${row.original.version} 更多操作`}
+                size="icon-xs"
+                variant="ghost"
+              />
+            }
+          >
+            <MoreHorizontal />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuItem>
+              <Download />
+              下载日志
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Archive />
+              归档记录
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive">
+              <Trash2 />
+              删除记录
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenuRoot>
+      </DataTableActions>
+    ),
+  },
+];
+
+const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
+  {
+    id: 'release',
+    header: '发布信息',
+    columns: [
+      {
+        accessorKey: 'version',
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column}>版本</DataTableColumnHeader>
+        ),
+      },
+      { accessorKey: 'environment', header: '环境', enableSorting: false },
+    ],
+  },
+  {
+    id: 'execution',
+    header: '执行情况',
+    columns: [
+      { accessorKey: 'owner', header: '负责人', enableSorting: false },
+      {
+        accessorKey: 'status',
+        header: '状态',
+        enableSorting: false,
+        cell: ({ row }) => {
+          const status = row.original.status;
+          return (
+            <Badge variant={status === '回滚' ? 'destructive' : 'secondary'}>
+              {status}
+            </Badge>
+          );
+        },
+      },
+    ],
+  },
+  {
+    id: 'operation',
+    header: '操作',
+    meta: { align: 'end' },
+    columns: [
+      {
+        id: 'detail',
+        header: '记录',
+        meta: { align: 'end' },
+        cell: ({ row }) => (
+          <DataTableActions aria-label={`${row.original.version} 操作`}>
+            <Button size="xs" variant="outline">
+              {row.original.status === '运行中' ? '监控' : '详情'}
+            </Button>
+          </DataTableActions>
+        ),
+      },
+    ],
   },
 ];
 
@@ -517,6 +832,18 @@ export function DataTableReleaseDemo() {
   );
 }
 
+export function DataTableGroupedHeaderDemo() {
+  return (
+    <div className="display-data-table display-data-table-grouped">
+      <DataTable
+        columns={groupedReleaseColumns}
+        data={releaseRecords}
+        emptyMessage="暂无发布记录"
+      />
+    </div>
+  );
+}
+
 export function EmptyReleaseDemo({
   context = 'new',
 }: {
@@ -525,24 +852,48 @@ export function EmptyReleaseDemo({
   const filtered = context === 'filtered';
 
   return (
-    <Empty className="display-empty">
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          {filtered ? <Inbox /> : <Cloud />}
-        </EmptyMedia>
-        <EmptyTitle>
-          {filtered ? '没有匹配的发布记录' : '还没有生产发布'}
-        </EmptyTitle>
-        <EmptyDescription>
-          {filtered
-            ? '试试缩短版本关键词，或清除当前环境筛选。'
-            : '完成预检后，可以从这里安排第一次生产发布。'}
-        </EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
+    <Empty
+      className="display-empty"
+      icon={filtered ? <Inbox /> : <Cloud />}
+      title={filtered ? '没有匹配的发布记录' : '还没有生产发布'}
+      description={
+        filtered
+          ? '试试缩短版本关键词，或清除当前环境筛选。'
+          : '完成预检后，可以从这里安排第一次生产发布。'
+      }
+      actions={
         <Button size="sm" variant={filtered ? 'outline' : 'default'}>
           {filtered ? <RotateCcw /> : <Plus />}
           {filtered ? '清除筛选' : '安排发布'}
+        </Button>
+      }
+    />
+  );
+}
+
+export function EmptyDefaultDemo() {
+  return <Empty className="display-empty" />;
+}
+
+export function EmptyCompositionDemo() {
+  return (
+    <Empty className="display-empty display-empty-custom" variant="custom">
+      <EmptyHeader>
+        <EmptyMedia className="display-empty-custom-media">
+          <ShieldCheck />
+        </EmptyMedia>
+        <EmptyTitle>等待安全审计</EmptyTitle>
+        <EmptyDescription>
+          审计通过前，生产环境不会显示可发布版本。
+        </EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <div className="display-empty-custom-meta">
+          <span>12 项规则</span>
+          <span>预计 4 分钟</span>
+        </div>
+        <Button size="sm" variant="outline">
+          查看审计进度
         </Button>
       </EmptyContent>
     </Empty>
@@ -768,42 +1119,59 @@ export function TableReleaseDemo() {
   );
 }
 
-export function TooltipActionsDemo({
-  side = 'top',
-}: {
-  side?: 'top' | 'bottom' | 'left' | 'right';
-}) {
-  const actions = [
-    { label: '复制发布链接', icon: Link2, shortcut: '⌘L' },
-    { label: '归档发布记录', icon: Archive, shortcut: '⌘E' },
-    { label: '删除草稿', icon: Trash2, shortcut: '⌫' },
-  ];
+const tooltipPlacements = [
+  { label: '左上', placement: 'top-start', side: 'top', align: 'start' },
+  { label: '上方', placement: 'top', side: 'top', align: 'center' },
+  { label: '右上', placement: 'top-end', side: 'top', align: 'end' },
+  { label: '左侧', placement: 'left', side: 'left', align: 'center' },
+  { label: '右侧', placement: 'right', side: 'right', align: 'center' },
+  {
+    label: '左下',
+    placement: 'bottom-start',
+    side: 'bottom',
+    align: 'start',
+  },
+  { label: '下方', placement: 'bottom', side: 'bottom', align: 'center' },
+  {
+    label: '右下',
+    placement: 'bottom-end',
+    side: 'bottom',
+    align: 'end',
+  },
+] as const;
 
+export function TooltipPlacementsDemo() {
   return (
     <TooltipProvider delay={100}>
-      <div className="display-tooltip-actions" aria-label="发布记录操作">
-        {actions.map((action) => {
-          const Icon = action.icon;
-          return (
-            <Tooltip key={action.label}>
+      <div className="display-tooltip-placements" aria-label="Tooltip 八个方位">
+        {tooltipPlacements.map((placement) => (
+          <div
+            className="display-tooltip-placement"
+            data-placement={placement.placement}
+            key={placement.placement}
+          >
+            <Tooltip>
               <TooltipTrigger
                 render={
                   <Button
-                    aria-label={action.label}
-                    size="icon"
+                    aria-label={`在${placement.label}显示 Tooltip`}
+                    size="sm"
                     variant="outline"
                   />
                 }
               >
-                <Icon />
+                {placement.label}
               </TooltipTrigger>
-              <TooltipContent side={side}>
-                {action.label}
-                <Kbd>{action.shortcut}</Kbd>
+              <TooltipContent side={placement.side} align={placement.align}>
+                {placement.label}提示
               </TooltipContent>
             </Tooltip>
-          );
-        })}
+          </div>
+        ))}
+        <div className="display-tooltip-reference" aria-hidden="true">
+          <span>Tooltip</span>
+          <small>悬停外围按钮</small>
+        </div>
       </div>
     </TooltipProvider>
   );
