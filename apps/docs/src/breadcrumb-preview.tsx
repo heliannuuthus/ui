@@ -9,23 +9,26 @@ type PlaygroundOptionProps = {
   checked: boolean;
   description: string;
   label: string;
-  onCheckedChange: (checked: boolean) => void;
+  onChange: (checked: boolean) => void;
 };
 
 function PlaygroundOption({
   checked,
   description,
   label,
-  onCheckedChange,
+  onChange,
 }: PlaygroundOptionProps) {
   return (
-    <label className="breadcrumb-playground-option">
-      <Checkbox checked={checked} onCheckedChange={onCheckedChange} />
+    <Checkbox
+      checked={checked}
+      className="breadcrumb-playground-option"
+      onChange={onChange}
+    >
       <span>
         <strong>{label}</strong>
         <small>{description}</small>
       </span>
-    </label>
+    </Checkbox>
   );
 }
 
@@ -75,31 +78,31 @@ export function BreadcrumbPlaygroundDemo() {
             checked={homeIcon}
             label="首页图标"
             description="为第一级路径增加视觉锚点"
-            onCheckedChange={setHomeIcon}
+            onChange={setHomeIcon}
           />
           <PlaygroundOption
             checked={pill}
             label="胶囊样式"
             description="增强路径项的独立点击区域"
-            onCheckedChange={setPill}
+            onChange={setPill}
           />
           <PlaygroundOption
             checked={large}
             label="大号尺寸"
             description="适合空间充足的页面头部"
-            onCheckedChange={setLarge}
+            onChange={setLarge}
           />
           <PlaygroundOption
             checked={dotSeparator}
             label="圆点分隔"
             description="切换为更轻量的分隔符"
-            onCheckedChange={setDotSeparator}
+            onChange={setDotSeparator}
           />
           <PlaygroundOption
             checked={collapse}
             label="折叠深层路径"
             description="把中间层级收进省略菜单"
-            onCheckedChange={setCollapse}
+            onChange={setCollapse}
           />
         </div>
       </aside>

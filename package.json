@@ -58,6 +58,14 @@
       "types": "./dist/label.d.ts",
       "import": "./dist/label.js"
     },
+    "./masonry": {
+      "types": "./dist/masonry.d.ts",
+      "import": "./dist/masonry.js"
+    },
+    "./radio": {
+      "types": "./dist/radio.d.ts",
+      "import": "./dist/radio.js"
+    },
     "./separator": {
       "types": "./dist/separator.d.ts",
       "import": "./dist/separator.js"

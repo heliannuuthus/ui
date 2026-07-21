@@ -3,7 +3,10 @@ import { Input as InputPrimitive } from '@base-ui/react/input';
 
 import { cn } from '../lib/utils';
 
-function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
+type InputProps = React.ComponentProps<'input'>;
+type TextAreaProps = React.ComponentProps<'textarea'>;
+
+function InputRoot({ className, type, ...props }: InputProps) {
   return (
     <InputPrimitive
       type={type}
@@ -17,4 +20,20 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
   );
 }
 
-export { Input };
+function TextArea({ className, ...props }: TextAreaProps) {
+  return (
+    <textarea
+      data-slot="textarea"
+      className={cn(
+        'flex field-sizing-content min-h-16 w-full resize-none rounded-2xl border border-input bg-background px-3 py-3 text-base transition-[color,box-shadow,background-color,border-color] outline-none placeholder:text-muted-foreground hover:border-primary/35 focus-visible:border-primary focus-visible:ring-3 focus-visible:ring-primary/20 disabled:cursor-not-allowed disabled:bg-muted/50 disabled:opacity-60 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+const Input = Object.assign(InputRoot, { TextArea });
+
+export { Input, TextArea };
+export type { InputProps, TextAreaProps };

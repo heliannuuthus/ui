@@ -1,6 +1,8 @@
 'use client';
 
+import * as React from 'react';
 import { Toggle as TogglePrimitive } from '@base-ui/react/toggle';
+import { ToggleGroup as ToggleGroupPrimitive } from '@base-ui/react/toggle-group';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
@@ -27,19 +29,106 @@ const toggleVariants = cva(
   }
 );
 
-function Toggle({
+type ToggleVariantProps = VariantProps<typeof toggleVariants>;
+
+type ToggleProps<Value extends string = string> = Omit<
+  TogglePrimitive.Props<Value>,
+  'onChange' | 'onPressedChange'
+> &
+  ToggleVariantProps & {
+    onChange?: (
+      pressed: boolean,
+      eventDetails: TogglePrimitive.ChangeEventDetails
+    ) => void;
+  };
+
+type ToggleGroupProps<Value extends string = string> = Omit<
+  ToggleGroupPrimitive.Props<Value>,
+  'onChange' | 'onValueChange'
+> &
+  ToggleVariantProps & {
+    spacing?: number;
+    onChange?: (
+      value: Value[],
+      eventDetails: ToggleGroupPrimitive.ChangeEventDetails
+    ) => void;
+  };
+
+type ToggleGroupContextValue = ToggleVariantProps & {
+  spacing: number;
+};
+
+const ToggleGroupContext = React.createContext<ToggleGroupContextValue | null>(
+  null
+);
+
+function ToggleRoot<Value extends string = string>({
   className,
   variant = 'default',
   size = 'default',
+  onChange,
   ...props
-}: TogglePrimitive.Props & VariantProps<typeof toggleVariants>) {
+}: ToggleProps<Value>) {
+  const group = React.useContext(ToggleGroupContext);
+  const resolvedVariant = group?.variant ?? variant;
+  const resolvedSize = group?.size ?? size;
+
   return (
     <TogglePrimitive
-      data-slot="toggle"
-      className={cn(toggleVariants({ variant, size, className }))}
+      data-slot={group ? 'toggle-group-item' : 'toggle'}
+      data-variant={resolvedVariant}
+      data-size={resolvedSize}
+      data-spacing={group?.spacing}
+      className={cn(
+        group &&
+          'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-3 group-data-[spacing=0]/toggle-group:shadow-none focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pr-2.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:pl-2.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-l-3xl group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-3xl group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-r-3xl group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-3xl group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-l-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-l group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t',
+        toggleVariants({
+          variant: resolvedVariant,
+          size: resolvedSize,
+          className,
+        })
+      )}
+      onPressedChange={onChange}
       {...props}
     />
   );
 }
 
+function ToggleGroup<Value extends string = string>({
+  children,
+  className,
+  onChange,
+  orientation = 'horizontal',
+  size = 'default',
+  spacing = 2,
+  style,
+  variant = 'default',
+  ...props
+}: ToggleGroupProps<Value>) {
+  return (
+    <ToggleGroupPrimitive
+      data-slot="toggle-group"
+      data-variant={variant}
+      data-size={size}
+      data-spacing={spacing}
+      data-orientation={orientation}
+      orientation={orientation}
+      style={{ ...style, '--gap': spacing } as React.CSSProperties}
+      className={cn(
+        'group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] data-[spacing=0]:data-[variant=outline]:rounded-3xl data-vertical:flex-col data-vertical:items-stretch',
+        className
+      )}
+      onValueChange={onChange}
+      {...props}
+    >
+      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>
+        {children}
+      </ToggleGroupContext.Provider>
+    </ToggleGroupPrimitive>
+  );
+}
+
+const Toggle = Object.assign(ToggleRoot, { Group: ToggleGroup });
+
 export { Toggle, toggleVariants };
+export type { ToggleGroupProps, ToggleProps };

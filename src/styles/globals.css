@@ -51,7 +51,7 @@
 }
 
 @layer components {
-  .checkbox-particle {
+  .selection-particle {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -63,58 +63,58 @@
     opacity: 0;
   }
 
-  .checkbox-particle:nth-child(even) {
+  .selection-particle:nth-child(even) {
     width: 0.2rem;
     height: 0.2rem;
     background: color-mix(in oklab, var(--primary) 72%, white);
   }
 
-  .checkbox-particle:nth-child(1) {
+  .selection-particle:nth-child(1) {
     --particle-x: 0;
     --particle-y: -1.25rem;
   }
 
-  .checkbox-particle:nth-child(2) {
+  .selection-particle:nth-child(2) {
     --particle-x: 0.9rem;
     --particle-y: -0.9rem;
   }
 
-  .checkbox-particle:nth-child(3) {
+  .selection-particle:nth-child(3) {
     --particle-x: 1.25rem;
     --particle-y: 0;
   }
 
-  .checkbox-particle:nth-child(4) {
+  .selection-particle:nth-child(4) {
     --particle-x: 0.9rem;
     --particle-y: 0.9rem;
   }
 
-  .checkbox-particle:nth-child(5) {
+  .selection-particle:nth-child(5) {
     --particle-x: 0;
     --particle-y: 1.25rem;
   }
 
-  .checkbox-particle:nth-child(6) {
+  .selection-particle:nth-child(6) {
     --particle-x: -0.9rem;
     --particle-y: 0.9rem;
   }
 
-  .checkbox-particle:nth-child(7) {
+  .selection-particle:nth-child(7) {
     --particle-x: -1.25rem;
     --particle-y: 0;
   }
 
-  .checkbox-particle:nth-child(8) {
+  .selection-particle:nth-child(8) {
     --particle-x: -0.9rem;
     --particle-y: -0.9rem;
   }
 
-  [data-effect='scatter'] .checkbox-particle {
-    animation: checkbox-particle-scatter 520ms cubic-bezier(0.16, 1, 0.3, 1)
+  [data-effect='scatter'] .selection-particle {
+    animation: selection-particle-scatter 520ms cubic-bezier(0.16, 1, 0.3, 1)
       both;
   }
 
-  [data-effect='scatter'] .checkbox-particle:nth-child(even) {
+  [data-effect='scatter'] .selection-particle:nth-child(even) {
     animation-delay: 35ms;
   }
 
@@ -161,7 +161,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    [data-slot='checkbox-particles'] {
+    [data-slot='checkbox-particles'],
+    [data-slot='radio-particles'] {
       display: none;
     }
 
@@ -171,7 +172,106 @@
   }
 }
 
-@keyframes checkbox-particle-scatter {
+@layer utilities {
+  [data-slot='accordion']
+    [data-slot='accordion-trigger'][aria-expanded='true']
+    [data-accordion-state-icon='closed'],
+  [data-slot='accordion']
+    [data-slot='accordion-trigger'][aria-expanded='false']
+    [data-accordion-state-icon='open'] {
+    display: none;
+  }
+
+  [data-slot='accordion'][data-orientation='vertical']
+    [data-accordion-orientation-icon='horizontal'],
+  [data-slot='accordion'][data-orientation='horizontal']
+    [data-accordion-orientation-icon='vertical'] {
+    display: none;
+  }
+
+  [data-slot='accordion'][data-orientation='horizontal'] {
+    height: var(--accordion-horizontal-height, 18rem);
+    min-height: 0;
+    flex-direction: row;
+  }
+
+  [data-slot='accordion'][data-orientation='horizontal']
+    > [data-slot='accordion-item'] {
+    min-width: 3.5rem;
+    display: flex;
+    flex: 0 0 3.5rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 0;
+    transition: flex-grow 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-slot='accordion'][data-orientation='horizontal']
+    > [data-slot='accordion-item']:last-child {
+    border-right: 0;
+  }
+
+  [data-slot='accordion'][data-orientation='horizontal']
+    > [data-slot='accordion-item'][data-open] {
+    min-width: 0;
+    flex-grow: 1;
+  }
+
+  [data-slot='accordion'][data-orientation='horizontal']
+    [data-slot='accordion-header'] {
+    width: 3.5rem;
+    flex: none;
+  }
+
+  [data-slot='accordion'][data-orientation='horizontal']
+    [data-slot='accordion-trigger'] {
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    writing-mode: vertical-rl;
+  }
+
+  [data-slot='accordion'][data-orientation='horizontal']
+    [data-slot='accordion-trigger-icon'] {
+    margin-left: 0;
+  }
+
+  [data-slot='accordion'][data-orientation='horizontal']
+    [data-slot='accordion-content'] {
+    min-width: 0;
+    flex: 1;
+    padding: 0;
+    animation: none;
+    opacity: 1;
+    transition: opacity 160ms ease-out;
+  }
+
+  [data-slot='accordion'][data-orientation='horizontal']
+    [data-slot='accordion-content']:is(
+      [data-starting-style],
+      [data-ending-style]
+    ) {
+    opacity: 0;
+  }
+
+  [data-slot='accordion'][data-orientation='horizontal']
+    [data-slot='accordion-content-inner'] {
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot='accordion'][data-orientation='horizontal']
+      > [data-slot='accordion-item'],
+    [data-slot='accordion'][data-orientation='horizontal']
+      [data-slot='accordion-content'] {
+      transition-duration: 0.01ms;
+    }
+  }
+}
+
+@keyframes selection-particle-scatter {
   0% {
     opacity: 0;
     transform: translate(-50%, -50%) translate(0, 0) scale(0.35);

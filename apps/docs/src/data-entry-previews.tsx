@@ -3,14 +3,6 @@
 import { useState } from 'react';
 import { Button } from '@heliannuuthus/ui/button';
 import { Checkbox } from '@heliannuuthus/ui/checkbox';
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from '@heliannuuthus/ui/combobox';
 import { DatePicker } from '@heliannuuthus/ui/date-picker';
 import {
   Field,
@@ -31,14 +23,14 @@ import {
   FormMessage,
   Label,
 } from '@heliannuuthus/ui/form';
-import { Input } from '@heliannuuthus/ui/input';
+import { Input, TextArea } from '@heliannuuthus/ui/input';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
   InputGroupText,
-  InputGroupTextarea,
+  InputGroupTextArea,
 } from '@heliannuuthus/ui/input-group';
 import {
   InputOTP,
@@ -51,24 +43,47 @@ import {
   NativeSelectOptGroup,
   NativeSelectOption,
 } from '@heliannuuthus/ui/native-select';
-import { RadioGroup, RadioGroupItem } from '@heliannuuthus/ui/radio-group';
+import { Radio } from '@heliannuuthus/ui/radio';
 import {
   Select,
+  SelectCollection,
   SelectContent,
+  SelectEmpty,
   SelectGroup,
   SelectItem,
   SelectLabel,
+  SelectList,
   SelectSeparator,
   SelectTrigger,
-  SelectValue,
 } from '@heliannuuthus/ui/select';
 import { Slider } from '@heliannuuthus/ui/slider';
 import { Switch } from '@heliannuuthus/ui/switch';
-import { Textarea } from '@heliannuuthus/ui/textarea';
 import { Check, Copy, Globe2, Mail } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 const members = ['林夏 · 设计', '周一 · 前端', '陈青 · 产品', '宋雨 · 运营'];
+type WorkspaceItem = {
+  value: string;
+  label: string;
+  disabled?: boolean;
+};
+
+const workspaceGroups: { label: string; items: WorkspaceItem[] }[] = [
+  {
+    label: '我的工作区',
+    items: [
+      { value: 'design', label: '设计系统' },
+      { value: 'website', label: '品牌官网' },
+    ],
+  },
+  {
+    label: '共享空间',
+    items: [
+      { value: 'growth', label: '增长实验' },
+      { value: 'archive', label: '已归档项目', disabled: true },
+    ],
+  },
+];
 
 export function DatePickerInlineDemo() {
   const [date, setDate] = useState<Date | undefined>(new Date(2026, 6, 20));
@@ -107,52 +122,51 @@ export function CheckboxPermissionsDemo() {
         </div>
         <span>{selected.length} 项已开启</span>
       </div>
-      <div className="data-option-stack">
-        {permissions.map(([value, title, description]) => (
-          <label className="data-check-row" key={value}>
-            <Checkbox
-              checked={selected.includes(value)}
-              onCheckedChange={(checked) =>
-                setSelected((current) =>
-                  checked
-                    ? [...current, value]
-                    : current.filter((item) => item !== value)
-                )
-              }
-            />
+      <Checkbox.Group
+        aria-label="成员权限"
+        className="data-option-stack"
+        gap={0}
+        name="permission"
+        onChange={setSelected}
+        options={permissions.map(([value, title, description]) => ({
+          className: 'data-check-row',
+          label: (
             <span className="data-check-copy">
               <strong>{title}</strong>
               <small>{description}</small>
             </span>
-          </label>
-        ))}
-      </div>
+          ),
+          value,
+        }))}
+        orientation="vertical"
+        value={selected}
+      />
     </div>
   );
 }
 
-export function ComboboxMemberDemo() {
+export function SelectMemberSearchDemo() {
   const [value, setValue] = useState<string | null>(members[0]);
 
   return (
     <div className="data-compact-form">
       <div className="data-field-copy">
-        <Label htmlFor="member-combobox">负责人</Label>
+        <Label htmlFor="member-select">负责人</Label>
         <span>输入姓名或团队进行搜索</span>
       </div>
-      <Combobox value={value} onValueChange={setValue} items={members}>
-        <ComboboxInput id="member-combobox" placeholder="搜索成员…" showClear />
-        <ComboboxContent>
-          <ComboboxEmpty>没有找到成员</ComboboxEmpty>
-          <ComboboxList>
-            {members.map((member) => (
-              <ComboboxItem key={member} value={member}>
+      <Select value={value} onChange={setValue} items={members}>
+        <SelectTrigger id="member-select" placeholder="搜索成员…" showClear />
+        <SelectContent>
+          <SelectEmpty>没有找到成员</SelectEmpty>
+          <SelectList>
+            {(member: string) => (
+              <SelectItem key={member} value={member}>
                 {member}
-              </ComboboxItem>
-            ))}
-          </ComboboxList>
-        </ComboboxContent>
-      </Combobox>
+              </SelectItem>
+            )}
+          </SelectList>
+        </SelectContent>
+      </Select>
       <p className="data-result">当前负责人：{value ?? '未分配'}</p>
     </div>
   );
@@ -254,7 +268,7 @@ export function FormInviteDemo() {
               <FormItem>
                 <FormLabel>附言（可选）</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="补充邀请背景…" {...field} />
+                  <TextArea placeholder="补充邀请背景…" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -322,7 +336,7 @@ export function InputGroupAddressDemo() {
       <div className="minimal-field">
         <Label htmlFor="release-note">发布说明</Label>
         <InputGroup>
-          <InputGroupTextarea
+          <InputGroupTextArea
             id="release-note"
             value={note}
             onChange={(event) => setNote(event.target.value)}
@@ -336,7 +350,11 @@ export function InputGroupAddressDemo() {
   );
 }
 
-export function InputOtpVerificationDemo() {
+export function InputOtpVerificationDemo({
+  shape = 'connected',
+}: {
+  shape?: 'connected' | 'circle';
+}) {
   const [value, setValue] = useState('');
 
   return (
@@ -349,44 +367,34 @@ export function InputOtpVerificationDemo() {
       <div className="data-otp-variants">
         <div className="data-otp-variant-row">
           <span>
-            <strong>连接方块</strong>
-            <small>适合分段验证码或序列号</small>
+            <strong>{shape === 'connected' ? '连接方块' : '独立圆圈'}</strong>
+            <small>
+              {shape === 'connected'
+                ? '适合分段验证码或序列号'
+                : '适合强调每一位输入状态'}
+            </small>
           </span>
           <InputOTP
             maxLength={6}
             value={value}
             onChange={setValue}
-            shape="connected"
+            shape={shape}
           >
             <InputOTPGroup>
-              {[0, 1, 2].map((index) => (
-                <InputOTPSlot key={index} index={index} />
-              ))}
+              {(shape === 'connected' ? [0, 1, 2] : [0, 1, 2, 3, 4, 5]).map(
+                (index) => (
+                  <InputOTPSlot key={index} index={index} />
+                )
+              )}
             </InputOTPGroup>
-            <InputOTPSeparator />
-            <InputOTPGroup>
-              {[3, 4, 5].map((index) => (
-                <InputOTPSlot key={index} index={index} />
-              ))}
-            </InputOTPGroup>
-          </InputOTP>
-        </div>
-        <div className="data-otp-variant-row">
-          <span>
-            <strong>独立圆圈</strong>
-            <small>适合强调每一位输入状态</small>
-          </span>
-          <InputOTP
-            maxLength={6}
-            value={value}
-            onChange={setValue}
-            shape="circle"
-          >
-            <InputOTPGroup>
-              {[0, 1, 2, 3, 4, 5].map((index) => (
-                <InputOTPSlot key={index} index={index} />
-              ))}
-            </InputOTPGroup>
+            {shape === 'connected' && <InputOTPSeparator />}
+            {shape === 'connected' && (
+              <InputOTPGroup>
+                {[3, 4, 5].map((index) => (
+                  <InputOTPSlot key={index} index={index} />
+                ))}
+              </InputOTPGroup>
+            )}
           </InputOTP>
         </div>
       </div>
@@ -452,7 +460,29 @@ export function SelectNativeDemo() {
   );
 }
 
-export function RadioPlanDemo() {
+export function RadioDeliveryDemo() {
+  const [delivery, setDelivery] = useState('email');
+
+  return (
+    <Radio.Group
+      aria-label="选择通知方式"
+      minColumnWidth={120}
+      onChange={setDelivery}
+      options={[
+        { label: '邮件通知', value: 'email' },
+        { label: '站内通知', value: 'inbox' },
+        { label: '不通知', value: 'none' },
+      ]}
+      value={delivery}
+    />
+  );
+}
+
+export function RadioPlanDemo({
+  orientation = 'vertical',
+}: {
+  orientation?: 'horizontal' | 'vertical';
+}) {
   const [plan, setPlan] = useState('team');
   const plans = [
     ['free', '个人版', '1 位成员', '免费'],
@@ -461,32 +491,30 @@ export function RadioPlanDemo() {
   ];
 
   return (
-    <RadioGroup
+    <Radio.Group
       className="data-radio-cards"
       value={plan}
-      onValueChange={setPlan}
+      onChange={setPlan}
+      orientation={orientation}
       aria-label="选择方案"
     >
       {plans.map(([value, title, description, price]) => (
-        <label
-          className="data-radio-card"
-          data-selected={plan === value}
-          key={value}
-        >
-          <RadioGroupItem value={value} />
-          <span>
+        <Radio className="data-radio-card" key={value} value={value}>
+          <span className="data-radio-copy">
             <strong>{title}</strong>
             <small>{description}</small>
           </span>
           <b>{price}</b>
-        </label>
+        </Radio>
       ))}
-    </RadioGroup>
+    </Radio.Group>
   );
 }
 
 export function SelectWorkspaceDemo() {
-  const [value, setValue] = useState('design');
+  const [value, setValue] = useState<WorkspaceItem | null>(
+    workspaceGroups[0]?.items[0] ?? null
+  );
 
   return (
     <div className="data-compact-form">
@@ -494,39 +522,45 @@ export function SelectWorkspaceDemo() {
         <Label>移动到工作区</Label>
         <span>列表可以分组、分隔并禁用不可选项</span>
       </div>
-      <Select value={value} onValueChange={(next) => setValue(next ?? '')}>
-        <SelectTrigger className="data-wide-control">
-          <SelectValue placeholder="选择工作区">
-            {value === 'design'
-              ? '设计系统'
-              : value === 'website'
-                ? '品牌官网'
-                : '增长实验'}
-          </SelectValue>
-        </SelectTrigger>
+      <Select
+        value={value}
+        onChange={setValue}
+        items={workspaceGroups}
+        itemToStringLabel={(item) => item.label}
+        itemToStringValue={(item) => item.value}
+        isItemEqualToValue={(item, selected) => item.value === selected.value}
+      >
+        <SelectTrigger className="data-wide-control" placeholder="选择工作区" />
         <SelectContent>
-          <SelectGroup>
-            <SelectLabel>我的工作区</SelectLabel>
-            <SelectItem value="design">设计系统</SelectItem>
-            <SelectItem value="website">品牌官网</SelectItem>
-          </SelectGroup>
-          <SelectSeparator />
-          <SelectGroup>
-            <SelectLabel>共享空间</SelectLabel>
-            <SelectItem value="growth">增长实验</SelectItem>
-            <SelectItem value="archive" disabled>
-              已归档项目
-            </SelectItem>
-          </SelectGroup>
+          <SelectEmpty>没有找到工作区</SelectEmpty>
+          <SelectList>
+            {workspaceGroups.map((group, index) => (
+              <SelectGroup items={group.items} key={group.label}>
+                {index > 0 && <SelectSeparator />}
+                <SelectLabel>{group.label}</SelectLabel>
+                <SelectCollection>
+                  {(item: WorkspaceItem) => (
+                    <SelectItem
+                      key={item.value}
+                      value={item}
+                      disabled={'disabled' in item && item.disabled}
+                    >
+                      {item.label}
+                    </SelectItem>
+                  )}
+                </SelectCollection>
+              </SelectGroup>
+            ))}
+          </SelectList>
         </SelectContent>
       </Select>
       <p className="data-result">
         目标：
-        {value === 'design'
+        {value?.value === 'design'
           ? '设计系统'
-          : value === 'website'
+          : value?.value === 'website'
             ? '品牌官网'
-            : '增长实验'}
+            : (value?.label ?? '未选择')}
       </p>
     </div>
   );
@@ -563,7 +597,11 @@ export function SliderBudgetDemo() {
   );
 }
 
-export function SwitchSettingsDemo() {
+export function SwitchSettingsDemo({
+  size = 'default',
+}: {
+  size?: 'sm' | 'default';
+}) {
   const [settings, setSettings] = useState({ digest: true, product: false });
 
   return (
@@ -583,6 +621,7 @@ export function SwitchSettingsDemo() {
           <Switch
             checked={settings.digest}
             onCheckedChange={(digest) => setSettings({ ...settings, digest })}
+            size={size}
           />
         </label>
         <label className="data-switch-row">
@@ -593,6 +632,7 @@ export function SwitchSettingsDemo() {
           <Switch
             checked={settings.product}
             onCheckedChange={(product) => setSettings({ ...settings, product })}
+            size={size}
           />
         </label>
         <label className="data-switch-row" data-disabled="true">
@@ -600,14 +640,14 @@ export function SwitchSettingsDemo() {
             <strong>安全提醒</strong>
             <small>关键安全事件始终开启</small>
           </span>
-          <Switch checked disabled />
+          <Switch checked disabled size={size} />
         </label>
       </div>
     </div>
   );
 }
 
-export function TextareaCounterDemo() {
+export function TextAreaCounterDemo() {
   const [value, setValue] = useState(
     '补充这次发布的背景、影响范围和回滚方式。'
   );
@@ -621,7 +661,7 @@ export function TextareaCounterDemo() {
           {value.length} / {maxLength}
         </span>
       </div>
-      <Textarea
+      <Input.TextArea
         id="textarea-release"
         value={value}
         maxLength={maxLength}
