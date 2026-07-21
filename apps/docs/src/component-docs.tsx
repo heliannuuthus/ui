@@ -2367,7 +2367,7 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
     {
       title: '验证码形态',
       description:
-        '使用 shape 切换连接方块与独立圆圈，两种形态共享同一份验证码状态。',
+        '使用 shape 切换连接方块与独立方块，两种形态共享同一份验证码状态。',
       harness: [
         {
           name: 'shape',
@@ -2375,13 +2375,13 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
           defaultValue: 'connected',
           options: [
             { label: '连接', value: 'connected' },
-            { label: '圆形', value: 'circle' },
+            { label: '独立', value: 'separated' },
           ],
         },
       ],
       preview: (values) => (
         <InputOtpVerificationDemo
-          shape={values.shape === 'circle' ? 'circle' : 'connected'}
+          shape={values.shape === 'separated' ? 'separated' : 'connected'}
         />
       ),
       code: `<InputOTP
@@ -2399,8 +2399,8 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
   <InputOTPGroup>{/* 后三位 */}</InputOTPGroup>
 </InputOTP>
 
-<InputOTP maxLength={6} shape="circle">
-  <InputOTPGroup>{/* 六个独立圆形槽位 */}</InputOTPGroup>
+<InputOTP maxLength={6} shape="separated">
+  <InputOTPGroup>{/* 六个独立方块槽位 */}</InputOTPGroup>
 </InputOTP>`,
       wide: true,
       previewHeight: 560,
@@ -4093,8 +4093,8 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
     { name: 'maxLength', description: '设置验证码总位数。', type: 'number' },
     {
       name: 'InputOTP.shape',
-      description: '切换连接方块或独立圆形验证码槽位。',
-      type: "'connected' | 'circle'",
+      description: '切换连接方块或独立方块验证码槽位。',
+      type: "'connected' | 'separated'",
       defaultValue: "'connected'",
     },
     {
@@ -4363,7 +4363,7 @@ componentDocumentation.input.parts = [
   },
   {
     name: 'InputOTP',
-    description: '接收固定长度验证码，并支持连接方块与独立圆圈。',
+    description: '接收固定长度验证码，并支持连接方块与独立方块。',
   },
 ];
 

@@ -353,7 +353,7 @@ export function InputGroupAddressDemo() {
 export function InputOtpVerificationDemo({
   shape = 'connected',
 }: {
-  shape?: 'connected' | 'circle';
+  shape?: 'connected' | 'separated';
 }) {
   const [value, setValue] = useState('');
 
@@ -367,7 +367,7 @@ export function InputOtpVerificationDemo({
       <div className="data-otp-variants">
         <div className="data-otp-variant-row">
           <span>
-            <strong>{shape === 'connected' ? '连接方块' : '独立圆圈'}</strong>
+            <strong>{shape === 'connected' ? '连接方块' : '独立方块'}</strong>
             <small>
               {shape === 'connected'
                 ? '适合分段验证码或序列号'
