@@ -4,11 +4,34 @@ import * as React from 'react';
 import { Drawer as DrawerPrimitive } from '@base-ui/react/drawer';
 
 import { cn } from '../lib/utils';
+import { Button } from './button';
+import { XIcon } from 'lucide-react';
+
+type DrawerSide = 'top' | 'right' | 'bottom' | 'left';
+type DrawerBehavior = 'adaptive' | 'gesture' | 'panel';
+
+const sideToSwipeDirection = {
+  top: 'up',
+  right: 'right',
+  bottom: 'down',
+  left: 'left',
+} as const;
+
+const swipeDirectionToSide = {
+  up: 'top',
+  right: 'right',
+  down: 'bottom',
+  left: 'left',
+} as const;
 
 type DrawerContextProps = {
+  behavior: DrawerBehavior;
+  container: DrawerPrimitive.Portal.Props['container'];
   hasSnapPoints: boolean;
   modal: DrawerPrimitive.Root.Props['modal'];
+  scope: 'viewport' | 'container';
   showSwipeHandle: boolean;
+  side: DrawerSide;
   swipeDirection: NonNullable<DrawerPrimitive.Root.Props['swipeDirection']>;
 };
 
@@ -25,27 +48,61 @@ function useDrawer() {
 }
 
 function Drawer({
-  modal = true,
-  showSwipeHandle = false,
+  behavior = 'adaptive',
+  container,
+  modal,
+  showSwipeHandle,
+  side,
   snapPoints,
-  swipeDirection = 'down',
+  swipeDirection,
   ...props
 }: DrawerPrimitive.Root.Props & {
+  behavior?: DrawerBehavior;
+  container?: DrawerPrimitive.Portal.Props['container'];
   showSwipeHandle?: boolean;
+  side?: DrawerSide;
 }) {
+  const resolvedSwipeDirection =
+    sideToSwipeDirection[
+      side ?? swipeDirectionToSide[swipeDirection ?? 'down']
+    ];
+  const resolvedSide = side ?? swipeDirectionToSide[resolvedSwipeDirection];
+  const resolvedModal = modal ?? (container == null ? true : false);
+  const resolvedShowSwipeHandle =
+    showSwipeHandle ?? (behavior === 'adaptive' || behavior === 'gesture');
   const hasSnapPoints = snapPoints != null && snapPoints.length > 0;
+  const scope: DrawerContextProps['scope'] =
+    container == null ? 'viewport' : 'container';
   const contextValue = React.useMemo(
-    () => ({ hasSnapPoints, modal, showSwipeHandle, swipeDirection }),
-    [hasSnapPoints, modal, showSwipeHandle, swipeDirection]
+    () => ({
+      behavior,
+      container,
+      hasSnapPoints,
+      modal: resolvedModal,
+      scope,
+      showSwipeHandle: resolvedShowSwipeHandle,
+      side: resolvedSide,
+      swipeDirection: resolvedSwipeDirection,
+    }),
+    [
+      behavior,
+      container,
+      hasSnapPoints,
+      resolvedModal,
+      resolvedShowSwipeHandle,
+      resolvedSide,
+      resolvedSwipeDirection,
+      scope,
+    ]
   );
 
   return (
     <DrawerContext.Provider value={contextValue}>
       <DrawerPrimitive.Root
         data-slot="drawer"
-        modal={modal}
+        modal={resolvedModal}
         snapPoints={snapPoints}
-        swipeDirection={swipeDirection}
+        swipeDirection={resolvedSwipeDirection}
         {...props}
       />
     </DrawerContext.Provider>
@@ -56,8 +113,16 @@ function DrawerTrigger({ ...props }: DrawerPrimitive.Trigger.Props) {
   return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
 }
 
-function DrawerPortal({ ...props }: DrawerPrimitive.Portal.Props) {
-  return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />;
+function DrawerPortal({ container, ...props }: DrawerPrimitive.Portal.Props) {
+  const context = useDrawer();
+
+  return (
+    <DrawerPrimitive.Portal
+      data-slot="drawer-portal"
+      container={container ?? context.container}
+      {...props}
+    />
+  );
 }
 
 function DrawerClose({ ...props }: DrawerPrimitive.Close.Props) {
@@ -68,11 +133,14 @@ function DrawerOverlay({
   className,
   ...props
 }: DrawerPrimitive.Backdrop.Props) {
+  const { scope } = useDrawer();
+
   return (
     <DrawerPrimitive.Backdrop
       data-slot="drawer-overlay"
+      data-scope={scope}
       className={cn(
-        'fixed inset-0 z-50 min-h-dvh bg-black/30 opacity-[max(var(--drawer-overlay-min-opacity,0),calc(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-snap-points:[--drawer-overlay-min-opacity:0.5] data-starting-style:opacity-0 data-swiping:duration-0 supports-backdrop-filter:backdrop-blur-sm supports-[-webkit-touch-callout:none]:absolute',
+        'inset-0 z-50 bg-black/30 opacity-[max(var(--drawer-overlay-min-opacity,0),calc(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-[scope=container]:absolute data-[scope=viewport]:fixed data-[scope=viewport]:min-h-dvh data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-snap-points:[--drawer-overlay-min-opacity:0.5] data-starting-style:opacity-0 data-swiping:duration-0 supports-backdrop-filter:backdrop-blur-sm supports-[-webkit-touch-callout:none]:data-[scope=viewport]:absolute',
         className
       )}
       {...props}
@@ -89,7 +157,7 @@ function DrawerSwipeHandle({
       data-slot="drawer-swipe-handle"
       aria-hidden="true"
       className={cn(
-        'relative z-10 flex shrink-0 cursor-grab transition-opacity duration-200 group-data-nested-drawer-open/drawer-popup:opacity-0 group-data-nested-drawer-swiping/drawer-popup:opacity-100 group-data-[swipe-axis=x]/drawer-popup:h-full group-data-[swipe-axis=x]/drawer-popup:w-3 group-data-[swipe-axis=x]/drawer-popup:items-center group-data-[swipe-axis=y]/drawer-popup:h-3 group-data-[swipe-axis=y]/drawer-popup:w-full group-data-[swipe-axis=y]/drawer-popup:justify-center group-data-[swipe-direction=down]/drawer-popup:items-end group-data-[swipe-direction=left]/drawer-popup:order-last group-data-[swipe-direction=left]/drawer-popup:justify-start group-data-[swipe-direction=right]/drawer-popup:justify-end group-data-[swipe-direction=up]/drawer-popup:order-last group-data-[swipe-direction=up]/drawer-popup:items-start after:block after:shrink-0 after:rounded-full after:bg-muted group-data-[swipe-axis=x]/drawer-popup:after:h-[100px] group-data-[swipe-axis=x]/drawer-popup:after:w-1.5 group-data-[swipe-axis=y]/drawer-popup:after:h-1.5 group-data-[swipe-axis=y]/drawer-popup:after:w-[100px] active:cursor-grabbing',
+        'relative z-10 flex shrink-0 cursor-grab transition-opacity duration-200 group-data-nested-drawer-open/drawer-popup:opacity-0 group-data-nested-drawer-swiping/drawer-popup:opacity-100 group-data-[behavior=adaptive]/drawer-popup:md:hidden group-data-[swipe-axis=x]/drawer-popup:h-full group-data-[swipe-axis=x]/drawer-popup:w-3 group-data-[swipe-axis=x]/drawer-popup:items-center group-data-[swipe-axis=y]/drawer-popup:h-3 group-data-[swipe-axis=y]/drawer-popup:w-full group-data-[swipe-axis=y]/drawer-popup:justify-center group-data-[swipe-direction=down]/drawer-popup:items-end group-data-[swipe-direction=left]/drawer-popup:order-last group-data-[swipe-direction=left]/drawer-popup:justify-start group-data-[swipe-direction=right]/drawer-popup:justify-end group-data-[swipe-direction=up]/drawer-popup:order-last group-data-[swipe-direction=up]/drawer-popup:items-start after:block after:shrink-0 after:rounded-full after:bg-muted group-data-[swipe-axis=x]/drawer-popup:after:h-[100px] group-data-[swipe-axis=x]/drawer-popup:after:w-1.5 group-data-[swipe-axis=y]/drawer-popup:after:h-1.5 group-data-[swipe-axis=y]/drawer-popup:after:w-[100px] active:cursor-grabbing',
         className
       )}
       {...props}
@@ -100,9 +168,20 @@ function DrawerSwipeHandle({
 function DrawerContent({
   className,
   children,
+  showCloseButton = true,
   ...props
-}: DrawerPrimitive.Popup.Props) {
-  const { hasSnapPoints, modal, showSwipeHandle, swipeDirection } = useDrawer();
+}: DrawerPrimitive.Popup.Props & {
+  showCloseButton?: boolean;
+}) {
+  const {
+    behavior,
+    hasSnapPoints,
+    modal,
+    scope,
+    showSwipeHandle,
+    side,
+    swipeDirection,
+  } = useDrawer();
   const swipeAxis =
     swipeDirection === 'down' || swipeDirection === 'up' ? 'y' : 'x';
 
@@ -114,15 +193,19 @@ function DrawerContent({
       <DrawerPrimitive.Viewport
         data-slot="drawer-viewport"
         data-modal={modal}
-        className="pointer-events-none fixed inset-0 z-50 select-none data-[modal=true]:pointer-events-auto"
+        data-scope={scope}
+        className="pointer-events-none inset-0 z-50 select-none data-[modal=true]:pointer-events-auto data-[scope=container]:absolute data-[scope=viewport]:fixed"
       >
         <DrawerPrimitive.Popup
           data-slot="drawer-popup"
+          data-behavior={behavior}
+          data-scope={scope}
+          data-side={side}
           data-swipe-axis={swipeAxis}
           data-snap-points={hasSnapPoints ? '' : undefined}
           className={cn(
             // Base.
-            'group/drawer-popup pointer-events-auto fixed z-50 m-(--drawer-inset,0px) flex h-(--drawer-content-height) max-h-(--drawer-content-max-height,none) min-h-0 w-(--drawer-content-width,auto) transform-[translate3d(var(--translate-x,0px),var(--translate-y,0px),0)_scale(var(--stack-scale))] flex-col rounded-4xl border border-popover bg-popover text-sm text-popover-foreground shadow-xl transition-[transform,height,opacity,filter] duration-450 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform outline-none select-none [--drawer-bleed-background:transparent] [--drawer-inset:--spacing(2)] [--drawer-stacked-shadow:0_-20px_25px_-5px_rgb(0_0_0/0.1),0_-8px_10px_-6px_rgb(0_0_0/0.1)] [interpolate-size:allow-keywords] data-[swipe-direction=down]:data-nested-drawer-open:shadow-(--drawer-stacked-shadow) dark:border-border',
+            'group/drawer-popup pointer-events-auto z-50 m-(--drawer-inset,0px) flex h-(--drawer-content-height) max-h-(--drawer-content-max-height,none) min-h-0 w-(--drawer-content-width,auto) transform-[translate3d(var(--translate-x,0px),var(--translate-y,0px),0)_scale(var(--stack-scale))] flex-col rounded-4xl border border-popover bg-popover text-sm text-popover-foreground shadow-xl transition-[transform,height,opacity,filter] duration-450 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform outline-none select-none [--drawer-bleed-background:transparent] [--drawer-inset:--spacing(2)] [--drawer-stacked-shadow:0_-20px_25px_-5px_rgb(0_0_0/0.1),0_-8px_10px_-6px_rgb(0_0_0/0.1)] [interpolate-size:allow-keywords] data-[behavior=adaptive]:md:m-0 data-[behavior=adaptive]:md:rounded-none data-[behavior=panel]:m-0 data-[behavior=panel]:rounded-none data-[scope=container]:absolute data-[scope=viewport]:fixed data-[swipe-direction=down]:data-nested-drawer-open:shadow-(--drawer-stacked-shadow) dark:border-border',
             // Nested.
             'data-nested-drawer-open:overflow-hidden data-nested-drawer-open:brightness-95',
             // Bleed.
@@ -158,6 +241,21 @@ function DrawerContent({
           >
             {children}
           </DrawerPrimitive.Content>
+          {showCloseButton && (
+            <DrawerPrimitive.Close
+              data-slot="drawer-close"
+              render={
+                <Button
+                  aria-label="关闭抽屉"
+                  className="absolute top-4 right-4 z-20 bg-secondary"
+                  size="icon-sm"
+                  variant="ghost"
+                />
+              }
+            >
+              <XIcon />
+            </DrawerPrimitive.Close>
+          )}
         </DrawerPrimitive.Popup>
       </DrawerPrimitive.Viewport>
     </DrawerPortal>
@@ -225,4 +323,6 @@ export {
   DrawerFooter,
   DrawerTitle,
   DrawerDescription,
+  type DrawerBehavior,
+  type DrawerSide,
 };

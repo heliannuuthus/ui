@@ -1,18 +1,61 @@
+import * as React from 'react';
 import { Accordion as AccordionPrimitive } from '@base-ui/react/accordion';
 
 import { cn } from '../lib/utils';
-import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { ChevronDownIcon } from 'lucide-react';
 
-function Accordion({ className, ...props }: AccordionPrimitive.Root.Props) {
+type AccordionIndicatorPosition = 'start' | 'end';
+
+type AccordionIndicatorOptions = {
+  indicator?: React.ReactNode;
+  expandedIndicator?: React.ReactNode;
+  indicatorPosition?: AccordionIndicatorPosition;
+};
+
+type AccordionProps = Omit<AccordionPrimitive.Root.Props, 'orientation'> &
+  AccordionIndicatorOptions;
+
+type AccordionIndicatorContextValue = {
+  expandedIndicator: React.ReactNode;
+  hasExpandedIndicator: boolean;
+  indicator: React.ReactNode;
+  indicatorPosition: AccordionIndicatorPosition;
+};
+
+const AccordionIndicatorContext =
+  React.createContext<AccordionIndicatorContextValue>({
+    expandedIndicator: undefined,
+    hasExpandedIndicator: false,
+    indicator: undefined,
+    indicatorPosition: 'end',
+  });
+
+function Accordion({
+  className,
+  indicator,
+  expandedIndicator,
+  indicatorPosition = 'end',
+  ...props
+}: AccordionProps) {
   return (
-    <AccordionPrimitive.Root
-      data-slot="accordion"
-      className={cn(
-        'flex w-full flex-col overflow-hidden rounded-2xl border',
-        className
-      )}
-      {...props}
-    />
+    <AccordionIndicatorContext.Provider
+      value={{
+        indicator,
+        expandedIndicator,
+        hasExpandedIndicator: expandedIndicator !== undefined,
+        indicatorPosition,
+      }}
+    >
+      <AccordionPrimitive.Root
+        data-slot="accordion"
+        className={cn(
+          'flex w-full flex-col overflow-hidden rounded-2xl border',
+          className
+        )}
+        {...props}
+        orientation="vertical"
+      />
+    </AccordionIndicatorContext.Provider>
   );
 }
 
@@ -31,25 +74,52 @@ function AccordionTrigger({
   children,
   ...props
 }: AccordionPrimitive.Trigger.Props) {
+  const {
+    indicator,
+    expandedIndicator,
+    hasExpandedIndicator,
+    indicatorPosition,
+  } = React.useContext(AccordionIndicatorContext);
+  const collapsedIndicator =
+    indicator === undefined ? <ChevronDownIcon /> : indicator;
+  const hasIndicator =
+    collapsedIndicator != null ||
+    (hasExpandedIndicator && expandedIndicator != null);
+
   return (
-    <AccordionPrimitive.Header className="flex">
+    <AccordionPrimitive.Header data-slot="accordion-header" className="flex">
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
+        data-indicator-position={indicatorPosition}
         className={cn(
-          'group/accordion-trigger relative flex flex-1 items-start justify-between gap-6 border border-transparent p-4 text-left text-sm font-medium transition-all outline-none hover:underline aria-disabled:pointer-events-none aria-disabled:opacity-50 **:data-[slot=accordion-trigger-icon]:ml-auto **:data-[slot=accordion-trigger-icon]:size-4 **:data-[slot=accordion-trigger-icon]:text-muted-foreground',
+          'relative flex flex-1 items-start justify-start gap-4 border border-transparent p-4 text-left text-sm font-medium transition-all outline-none hover:underline aria-disabled:pointer-events-none aria-disabled:opacity-50',
           className
         )}
         {...props}
       >
         {children}
-        <ChevronDownIcon
-          data-slot="accordion-trigger-icon"
-          className="pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden"
-        />
-        <ChevronUpIcon
-          data-slot="accordion-trigger-icon"
-          className="pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline"
-        />
+        {hasIndicator && (
+          <span
+            aria-hidden="true"
+            data-has-expanded-indicator={
+              hasExpandedIndicator ? 'true' : undefined
+            }
+            data-slot="accordion-indicator"
+            className={cn(
+              'pointer-events-none inline-flex size-4 shrink-0 items-center justify-center text-muted-foreground transition-transform duration-200 [&_svg]:size-4',
+              indicatorPosition === 'start' ? 'order-first' : 'ml-auto'
+            )}
+          >
+            <span data-slot="accordion-indicator-collapsed">
+              {collapsedIndicator}
+            </span>
+            {hasExpandedIndicator && (
+              <span data-slot="accordion-indicator-expanded">
+                {expandedIndicator}
+              </span>
+            )}
+          </span>
+        )}
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );
@@ -67,6 +137,7 @@ function AccordionContent({
       {...props}
     >
       <div
+        data-slot="accordion-content-inner"
         className={cn(
           'h-(--accordion-panel-height) pt-0 pb-4 data-ending-style:h-0 data-starting-style:h-0 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4',
           className
@@ -78,4 +149,11 @@ function AccordionContent({
   );
 }
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  type AccordionIndicatorPosition,
+  type AccordionProps,
+};

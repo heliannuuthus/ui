@@ -1,5 +1,4 @@
 import { useState, type CSSProperties, type ReactNode } from 'react';
-import { Button } from '@heliannuuthus/ui/button';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -322,61 +321,42 @@ export function TabsDashboardDemo() {
   );
 }
 
-export function TabsVariantsDemo() {
+type TabsListVariant = 'default' | 'line' | 'outline' | 'soft';
+
+export function TabsVariantsDemo({
+  variant = 'default',
+}: {
+  variant?: TabsListVariant;
+}) {
+  const centered = variant === 'line' || variant === 'soft';
+
   return (
     <div className="tabs-variants-demo">
-      {(
-        [
-          ['default', '胶囊', false],
-          ['line', '线型 · 居中', true],
-          ['outline', '描边', false],
-          ['soft', '柔和 · 居中', true],
-        ] as const
-      ).map(([variant, label, centered]) => (
-        <div className="tabs-style-sample" key={variant}>
-          <span>{label}</span>
-          <Tabs defaultValue="preview" animation="none">
-            <TabsList variant={variant} centered={centered}>
-              <TabsTrigger value="preview">预览</TabsTrigger>
-              <TabsTrigger value="code">代码</TabsTrigger>
-              <TabsTrigger value="tests" disabled={variant === 'outline'}>
-                测试
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="preview">实时预览当前组件。</TabsContent>
-            <TabsContent value="code">查看组件实现代码。</TabsContent>
-            <TabsContent value="tests">所有交互测试均已通过。</TabsContent>
-          </Tabs>
-        </div>
-      ))}
+      <div className="tabs-style-sample">
+        <Tabs defaultValue="preview" animation="none">
+          <TabsList variant={variant} centered={centered}>
+            <TabsTrigger value="preview">预览</TabsTrigger>
+            <TabsTrigger value="code">代码</TabsTrigger>
+            <TabsTrigger value="tests" disabled={variant === 'outline'}>
+              测试
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="preview">实时预览当前组件。</TabsContent>
+          <TabsContent value="code">查看组件实现代码。</TabsContent>
+          <TabsContent value="tests">所有交互测试均已通过。</TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }
 
-export function TabsMotionDemo() {
-  const [animation, setAnimation] = useState<TabsAnimation>('slide');
-
+export function TabsMotionDemo({
+  animation = 'slide',
+}: {
+  animation?: TabsAnimation;
+}) {
   return (
     <div className="tabs-motion-demo">
-      <header>
-        <div>
-          <span>MOTION</span>
-          <strong>内容切换方式</strong>
-        </div>
-        <div className="tabs-motion-options" aria-label="选择切换动效">
-          {(['fade', 'slide', 'none'] as const).map((value) => (
-            <Button
-              key={value}
-              size="sm"
-              variant={animation === value ? 'default' : 'ghost'}
-              aria-pressed={animation === value}
-              onClick={() => setAnimation(value)}
-            >
-              {value === 'fade' ? '淡入' : value === 'slide' ? '滑动' : '关闭'}
-            </Button>
-          ))}
-        </div>
-      </header>
       <Tabs defaultValue="design" animation={animation}>
         <TabsList variant="soft" centered>
           <TabsTrigger value="design">

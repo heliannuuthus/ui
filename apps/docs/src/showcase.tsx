@@ -1,6 +1,23 @@
 import { useMemo, useState, type CSSProperties } from 'react';
 import { Button } from '@heliannuuthus/ui/button';
+import { Card } from '@heliannuuthus/ui/card';
 import { Input } from '@heliannuuthus/ui/input';
+import { Masonry, MasonryItem } from '@heliannuuthus/ui/masonry';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarSeparator,
+} from '@heliannuuthus/ui/sidebar';
+import { Toggle } from '@heliannuuthus/ui/toggle';
 import {
   Tooltip,
   TooltipContent,
@@ -28,6 +45,8 @@ import {
   componentDocumentation,
   type ComponentExample,
 } from './component-docs';
+import { ComponentHarness } from './component-harness';
+import { SyntaxCode } from './syntax-code';
 
 const repositoryUrl = 'https://github.com/heliannuuthus/ui';
 const docsBasePath = window.location.hostname.endsWith('github.io')
@@ -49,7 +68,15 @@ const componentGroups = [
   },
   {
     title: '布局',
-    items: ['Aspect Ratio', 'Card', 'Resizable', 'Scroll Area', 'Separator'],
+    items: [
+      'Aspect Ratio',
+      'Card',
+      'Resizable',
+      'Scroll Area',
+      'Masonry',
+      'Stack',
+      'Separator',
+    ],
   },
   {
     title: '导航',
@@ -67,17 +94,14 @@ const componentGroups = [
     title: '数据录入',
     items: [
       'Checkbox',
-      'Combobox',
       'Date Picker',
       'Form',
       'Input',
-      'Radio Group',
+      'Radio',
       'Select',
       'Slider',
       'Switch',
-      'Textarea',
       'Toggle',
-      'Toggle Group',
     ],
   },
   {
@@ -90,6 +114,7 @@ const componentGroups = [
       'Carousel',
       'Chart',
       'Collapsible',
+      'Counter',
       'Data Table',
       'Empty',
       'Hover Card',
@@ -110,7 +135,6 @@ const componentGroups = [
       'Drawer',
       'Popover',
       'Progress',
-      'Sheet',
       'Skeleton',
       'Sonner',
       'Spinner',
@@ -358,7 +382,12 @@ function HomePage() {
             查看全部组件 <ArrowRight size={16} />
           </NavLink>
         </div>
-        <div className="teaser-grid">
+        <Masonry
+          className="teaser-grid"
+          columns={3}
+          gap={14}
+          minColumnWidth={240}
+        >
           {componentGroups.slice(0, 6).map((group) => (
             <NavLink
               key={group.title}
@@ -372,7 +401,7 @@ function HomePage() {
               <ArrowRight />
             </NavLink>
           ))}
-        </div>
+        </Masonry>
       </section>
     </main>
   );
@@ -387,13 +416,16 @@ function GettingStartedPage() {
       <PackageManagerInstall />
       <h2>引入样式</h2>
       <p>在应用入口加载一次全局主题样式。</p>
-      <CodeBlock code="import '@heliannuuthus/ui/styles.css'" />
+      <CodeBlock
+        code="import '@heliannuuthus/ui/styles.css'"
+        fileName="app.tsx"
+      />
       <h2>使用组件</h2>
       <p>
         每个组件都通过明确的子路径导入，便于
         tree-shaking，也让依赖边界一目了然。
       </p>
-      <CodeBlock code={demoCode} />
+      <CodeBlock code={demoCode} fileName="button-example.tsx" />
       <div className="next-card">
         <div>
           <span>下一步</span>
@@ -428,7 +460,12 @@ function PackageManagerInstall() {
         ))}
       </div>
       <div id="package-install-command" role="tabpanel">
-        <CodeBlock code={installCommands[packageManager]} />
+        <CodeBlock
+          code={installCommands[packageManager]}
+          fileName="terminal"
+          language="bash"
+          showLineNumbers={false}
+        />
       </div>
     </div>
   );
@@ -513,18 +550,69 @@ function ComponentsOverview() {
               <h2>{group.title}</h2>
               <span>{group.items.length}</span>
             </header>
-            <div>
+            <Masonry
+              className="component-group-grid"
+              columns={4}
+              gap={12}
+              minColumnWidth={180}
+            >
               {group.items.map((item) => (
                 <NavLink key={item} to={`/components/${componentSlug(item)}`}>
                   <strong>{item}</strong>
                   <p>{componentDocumentation[componentSlug(item)]?.summary}</p>
                 </NavLink>
               ))}
-            </div>
+            </Masonry>
           </section>
         ))}
       </div>
     </div>
+  );
+}
+
+function ComponentNavigation({ component }: { component: string }) {
+  return (
+    <Sidebar
+      aria-label="组件导航"
+      className="component-docs-sidebar"
+      collapsible="none"
+    >
+      <SidebarHeader className="component-docs-sidebar-header">
+        <NavLink to="/components">
+          <span>组件</span>
+          <small>{componentCatalog.length}</small>
+        </NavLink>
+      </SidebarHeader>
+      <SidebarSeparator />
+      <SidebarContent className="component-docs-sidebar-content">
+        {componentGroups.map((group) => (
+          <SidebarGroup key={group.title}>
+            <SidebarGroupLabel className="component-docs-sidebar-label">
+              <span>{group.title}</span>
+              <small>{group.items.length}</small>
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {group.items.map((item) => {
+                  const slug = componentSlug(item);
+                  return (
+                    <SidebarMenuItem key={item}>
+                      <SidebarMenuButton
+                        isActive={slug === component}
+                        render={<NavLink to={`/components/${slug}`} />}
+                        size="sm"
+                      >
+                        <span>{item}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
+      </SidebarContent>
+    </Sidebar>
   );
 }
 
@@ -550,21 +638,16 @@ function ComponentPage() {
     'Button';
   const documentation = componentDocumentation[component];
   return (
-    <div className="component-detail-layout">
-      <aside className="component-sidebar">
-        <strong>组件</strong>
-        {componentGroups.map((group) => (
-          <div key={group.title}>
-            <span>{group.title}</span>
-            {group.items.map((item) => (
-              <NavLink key={item} to={`/components/${componentSlug(item)}`}>
-                {item}
-              </NavLink>
-            ))}
-          </div>
-        ))}
-      </aside>
-      <main
+    <SidebarProvider
+      className="component-detail-layout"
+      style={
+        {
+          '--sidebar-width': 'clamp(240px, 16vw, 288px)',
+        } as CSSProperties
+      }
+    >
+      <ComponentNavigation component={component} />
+      <SidebarInset
         className={`component-detail${
           spaciousComponentSlugs.has(component)
             ? ' component-detail-spacious'
@@ -595,21 +678,10 @@ function ComponentPage() {
             {documentation.examples.length > 0 && (
               <section className="demo-section">
                 <h2>示例</h2>
-                <div
-                  className={`example-list${
-                    documentation.examples.length === 1
-                      ? ' example-list-single'
-                      : ''
-                  }`}
-                >
-                  {documentation.examples.map((example) => (
-                    <ComponentExampleCard
-                      key={example.title}
-                      component={component}
-                      example={example}
-                    />
-                  ))}
-                </div>
+                <ComponentExampleList
+                  component={component}
+                  examples={documentation.examples}
+                />
               </section>
             )}
             <section className="component-reference-section">
@@ -675,8 +747,35 @@ function ComponentPage() {
             </div>
           </>
         ) : null}
-      </main>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}
+
+function ComponentExampleList({
+  component,
+  examples,
+}: {
+  component: string;
+  examples: ComponentExample[];
+}) {
+  return (
+    <Masonry
+      className="example-list"
+      columns={2}
+      gap={[20, 32]}
+      minColumnWidth={300}
+    >
+      {examples.map((example) => (
+        <MasonryItem
+          className={`example-item${example.wide ? ' example-item-wide' : ''}`}
+          key={example.title}
+          span={example.wide ? 'full' : 'auto'}
+        >
+          <ComponentExampleCard component={component} example={example} />
+        </MasonryItem>
+      ))}
+    </Masonry>
   );
 }
 
@@ -696,136 +795,175 @@ function ComponentExampleCard({
   };
 
   return (
-    <article
-      className={`example-article${example.wide ? ' example-article-wide' : ''}`}
-    >
-      <header>
-        <h3>{example.title}</h3>
-        <p>{example.description}</p>
-      </header>
-      <div className="demo-card">
-        <div
-          className="demo-preview"
-          style={
-            example.previewHeight
-              ? ({
-                  '--demo-preview-height': `${example.previewHeight}px`,
-                } as CSSProperties)
-              : undefined
-          }
-        >
-          {example.preview}
+    <Card
+      className={`example-card${example.wide ? ' example-card-wide' : ''}`}
+      classNames={{
+        header: 'example-card-header',
+        title: 'example-card-title',
+        description: 'example-card-description',
+        content: 'example-card-body',
+        footer: 'example-card-footer block p-0',
+      }}
+      description={<p>{example.description}</p>}
+      footer={
+        <div className="example-card-footer-content">
+          <div className="demo-actions">
+            <TooltipProvider delay={300}>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <button
+                      type="button"
+                      onClick={copy}
+                      aria-label={copied ? '代码已复制' : '复制代码'}
+                    />
+                  }
+                >
+                  {copied ? <Check /> : <Copy />}
+                </TooltipTrigger>
+                <TooltipContent>
+                  {copied ? '已复制' : '复制代码'}
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <a
+                      href={`${repositoryUrl}/blob/main/src/components/${component}.tsx`}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="在 GitHub 查看源码"
+                    />
+                  }
+                >
+                  <Github />
+                </TooltipTrigger>
+                <TooltipContent>在 GitHub 查看源码</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <a
+                      href="https://codesandbox.io/p/github/heliannuuthus/ui/main"
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="在 CodeSandbox 打开"
+                    />
+                  }
+                >
+                  <Box />
+                </TooltipTrigger>
+                <TooltipContent>在 CodeSandbox 打开</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <a
+                      href="https://stackblitz.com/github/heliannuuthus/ui"
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="在 StackBlitz 打开"
+                    />
+                  }
+                >
+                  <Zap />
+                </TooltipTrigger>
+                <TooltipContent>在 StackBlitz 打开</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Toggle
+                      className="demo-expand-toggle size-8 min-w-8 p-0"
+                      aria-label={expanded ? '收起代码' : '展开代码'}
+                      pressed={expanded}
+                      onChange={setExpanded}
+                    />
+                  }
+                >
+                  <Code2 />
+                </TooltipTrigger>
+                <TooltipContent>
+                  {expanded ? '收起代码' : '展开代码'}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          {expanded && (
+            <SyntaxCode
+              className="demo-code"
+              code={example.code}
+              fileName={`${component}-example.tsx`}
+            />
+          )}
         </div>
-        <TooltipProvider delay={300}>
-          <footer className="demo-actions">
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <button
-                    type="button"
-                    onClick={copy}
-                    aria-label={copied ? '代码已复制' : '复制代码'}
-                  />
-                }
-              >
-                {copied ? <Check /> : <Copy />}
-              </TooltipTrigger>
-              <TooltipContent>{copied ? '已复制' : '复制代码'}</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <a
-                    href={`${repositoryUrl}/blob/main/src/components/${component}.tsx`}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="在 GitHub 查看源码"
-                  />
-                }
-              >
-                <Github />
-              </TooltipTrigger>
-              <TooltipContent>在 GitHub 查看源码</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <a
-                    href="https://codesandbox.io/p/github/heliannuuthus/ui/main"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="在 CodeSandbox 打开"
-                  />
-                }
-              >
-                <Box />
-              </TooltipTrigger>
-              <TooltipContent>在 CodeSandbox 打开</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <a
-                    href="https://stackblitz.com/github/heliannuuthus/ui"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="在 StackBlitz 打开"
-                  />
-                }
-              >
-                <Zap />
-              </TooltipTrigger>
-              <TooltipContent>在 StackBlitz 打开</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <button
-                    className="demo-expand-button"
-                    type="button"
-                    aria-expanded={expanded}
-                    aria-pressed={expanded}
-                    aria-label={expanded ? '收起代码' : '展开代码'}
-                    onClick={() => setExpanded((value) => !value)}
-                  />
-                }
-              >
-                <Code2 />
-              </TooltipTrigger>
-              <TooltipContent>
-                {expanded ? '收起代码' : '展开代码'}
-              </TooltipContent>
-            </Tooltip>
-          </footer>
-        </TooltipProvider>
-        {expanded && (
-          <pre className="demo-code">
-            <code>{example.code}</code>
-          </pre>
+      }
+      role="article"
+      title={<h3>{example.title}</h3>}
+    >
+      <div
+        className={`demo-preview${
+          example.harness ? ' demo-preview-harness' : ''
+        }`}
+        style={
+          example.previewHeight
+            ? ({
+                '--demo-preview-height': `${example.previewHeight}px`,
+              } as CSSProperties)
+            : undefined
+        }
+      >
+        {example.harness ? (
+          <ComponentHarness controls={example.harness}>
+            {(values) =>
+              typeof example.preview === 'function'
+                ? example.preview(values)
+                : example.preview
+            }
+          </ComponentHarness>
+        ) : typeof example.preview === 'function' ? (
+          example.preview({})
+        ) : (
+          example.preview
         )}
       </div>
-    </article>
+    </Card>
   );
 }
 
-function CodeBlock({ code }: { code: string }) {
+function CodeBlock({
+  code,
+  fileName = 'example.tsx',
+  language = 'tsx',
+  showLineNumbers = true,
+}: {
+  code: string;
+  fileName?: string;
+  language?: 'bash' | 'tsx';
+  showLineNumbers?: boolean;
+}) {
   const [copied, setCopied] = useState(false);
   return (
-    <div className="code-block">
-      <pre>
-        <code>{code}</code>
-      </pre>
-      <button
-        type="button"
-        onClick={async () => {
-          await navigator.clipboard.writeText(code);
-          setCopied(true);
-          window.setTimeout(() => setCopied(false), 1200);
-        }}
-      >
-        {copied ? <Check /> : <Copy />}
-      </button>
-    </div>
+    <SyntaxCode
+      action={
+        <button
+          aria-label={copied ? '代码已复制' : '复制代码'}
+          type="button"
+          onClick={async () => {
+            await navigator.clipboard.writeText(code);
+            setCopied(true);
+            window.setTimeout(() => setCopied(false), 1200);
+          }}
+        >
+          {copied ? <Check /> : <Copy />}
+        </button>
+      }
+      className="code-block"
+      code={code}
+      fileName={fileName}
+      language={language}
+      showLineNumbers={showLineNumbers}
+    />
   );
 }
 

@@ -11,7 +11,7 @@ type CardClassNames = {
   footer?: string;
 };
 
-type CardProps = React.ComponentProps<'div'> & {
+type CardProps = Omit<React.ComponentProps<'div'>, 'title'> & {
   size?: 'default' | 'sm';
   title?: React.ReactNode;
   description?: React.ReactNode;

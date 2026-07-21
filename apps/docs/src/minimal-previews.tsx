@@ -9,6 +9,7 @@ import {
 import { Breadcrumb } from '@heliannuuthus/ui/breadcrumb';
 import { Button } from '@heliannuuthus/ui/button';
 import { Checkbox } from '@heliannuuthus/ui/checkbox';
+import { Counter } from '@heliannuuthus/ui/counter';
 import {
   Empty,
   EmptyContent,
@@ -37,10 +38,8 @@ import {
   TableHeader,
   TableRow,
 } from '@heliannuuthus/ui/table';
-import { Textarea } from '@heliannuuthus/ui/textarea';
 import { Toggle } from '@heliannuuthus/ui/toggle';
-import { ToggleGroup, ToggleGroupItem } from '@heliannuuthus/ui/toggle-group';
-import { Bold, Italic, Plus } from 'lucide-react';
+import { Bold, Plus } from 'lucide-react';
 import { AspectRatioCoverDemo } from './aspect-ratio-preview';
 import { CardAnatomyDemo } from './card-preview';
 import { ResizableWorkspaceDemo } from './resizable-preview';
@@ -64,12 +63,8 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
       <Input id="preview-email" type="email" placeholder="name@example.com" />
     </div>
   ),
-  checkbox: (
-    <label className="minimal-control">
-      <Checkbox />
-      接收产品更新
-    </label>
-  ),
+  checkbox: <Checkbox className="minimal-control">接收产品更新</Checkbox>,
+  counter: <Counter fontSize={52} fontWeight={600} value={7.4} />,
   slider: (
     <div className="minimal-slider">
       <span>音量</span>
@@ -82,24 +77,11 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
       启用通知
     </label>
   ),
-  textarea: (
-    <Textarea className="minimal-textarea" placeholder="写下补充说明……" />
-  ),
   toggle: (
     <Toggle aria-label="切换粗体">
       <Bold />
       粗体
     </Toggle>
-  ),
-  'toggle-group': (
-    <ToggleGroup defaultValue={['bold']}>
-      <ToggleGroupItem value="bold" aria-label="粗体">
-        <Bold />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="italic" aria-label="斜体">
-        <Italic />
-      </ToggleGroupItem>
-    </ToggleGroup>
   ),
   alert: (
     <Alert className="minimal-alert">

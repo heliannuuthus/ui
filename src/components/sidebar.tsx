@@ -6,15 +6,15 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { useIsMobile } from '../hooks/use-mobile';
 import { cn } from '../lib/utils';
 import { Button } from './button';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from './drawer';
 import { Input } from './input';
 import { Separator } from './separator';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from './sheet';
 import { Skeleton } from './skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip';
 import { PanelLeftIcon } from 'lucide-react';
@@ -175,27 +175,33 @@ function Sidebar({
 
   if (isMobile) {
     return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-        <SheetContent
+      <Drawer
+        behavior="gesture"
+        open={openMobile}
+        onOpenChange={setOpenMobile}
+        side={side}
+        {...props}
+      >
+        <DrawerContent
           dir={dir}
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground"
+          showCloseButton={false}
           style={
             {
               '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
             } as React.CSSProperties
           }
-          side={side}
         >
-          <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
-          </SheetHeader>
+          <DrawerHeader className="sr-only">
+            <DrawerTitle>Sidebar</DrawerTitle>
+            <DrawerDescription>Displays the mobile sidebar.</DrawerDescription>
+          </DrawerHeader>
           <div className="flex h-full w-full flex-col">{children}</div>
-        </SheetContent>
-      </Sheet>
+        </DrawerContent>
+      </Drawer>
     );
   }
 

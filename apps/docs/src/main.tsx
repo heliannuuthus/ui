@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import 'lxgw-wenkai-screen-webfont/lxgwwenkaigbscreen.css';
+import 'lxgw-wenkai-webfont/lxgwwenkaimono-regular.css';
 import '@fontsource-variable/raleway';
 import '@heliannuuthus/ui/styles.css';
 import './showcase.css';

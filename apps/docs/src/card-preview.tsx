@@ -4,12 +4,12 @@ import { Input } from '@heliannuuthus/ui/input';
 import { Label } from '@heliannuuthus/ui/form';
 import { MoreHorizontal } from 'lucide-react';
 
-export function CardAnatomyDemo() {
+export function CardAnatomyDemo({ size = 'sm' }: { size?: 'default' | 'sm' }) {
   return (
     <div className="card-composition-demo">
       <Card
         className="card-showcase"
-        size="sm"
+        size={size}
         title="工作区资料"
         description="修改成员看到的工作区名称。"
         action={

@@ -4,6 +4,7 @@ import * as React from 'react';
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from 'embla-carousel-react';
+import { useReducedMotion } from 'motion/react';
 
 import { cn } from '../lib/utils';
 import { Button } from './button';
@@ -13,12 +14,23 @@ type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
 type CarouselOptions = UseCarouselParameters[0];
 type CarouselPlugin = UseCarouselParameters[1];
+type CarouselDotPosition = 'top' | 'bottom';
+type CarouselVariant = 'default' | 'depth';
+
+type CarouselDotRenderProps = {
+  index: number;
+  isSelected: boolean;
+};
 
 type CarouselProps = {
+  autoplay?: boolean;
+  autoplayDelay?: number;
+  loop?: boolean;
   opts?: CarouselOptions;
+  pauseOnHover?: boolean;
   plugins?: CarouselPlugin;
-  orientation?: 'horizontal' | 'vertical';
   setApi?: (api: CarouselApi) => void;
+  variant?: CarouselVariant;
 };
 
 type CarouselContextProps = {
@@ -26,8 +38,13 @@ type CarouselContextProps = {
   api: ReturnType<typeof useEmblaCarousel>[1];
   scrollPrev: () => void;
   scrollNext: () => void;
+  scrollTo: (index: number) => void;
   canScrollPrev: boolean;
   canScrollNext: boolean;
+  selectedIndex: number;
+  scrollSnaps: number[];
+  autoplay: boolean;
+  variant: CarouselVariant;
 } & CarouselProps;
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null);
@@ -43,29 +60,65 @@ function useCarousel() {
 }
 
 function Carousel({
-  orientation = 'horizontal',
+  autoplay = false,
+  autoplayDelay = 3000,
+  loop,
   opts,
+  pauseOnHover = true,
   setApi,
   plugins,
+  variant = 'default',
+  'aria-label': ariaLabel = 'Carousel',
   className,
   children,
+  onMouseEnter,
+  onMouseLeave,
   ...props
 }: React.ComponentProps<'div'> & CarouselProps) {
+  const resolvedLoop = loop ?? opts?.loop ?? false;
   const [carouselRef, api] = useEmblaCarousel(
     {
       ...opts,
-      axis: orientation === 'horizontal' ? 'x' : 'y',
+      axis: 'x',
+      loop: resolvedLoop,
     },
     plugins
   );
+  const reduceMotion = useReducedMotion();
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
   const [canScrollNext, setCanScrollNext] = React.useState(false);
+  const [isHovered, setIsHovered] = React.useState(false);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
+  const isAutoplayPaused =
+    autoplay && (reduceMotion || (pauseOnHover && isHovered));
+  const resolvedAutoplayDelay =
+    Number.isFinite(autoplayDelay) && autoplayDelay > 0 ? autoplayDelay : 3000;
 
   const onSelect = React.useCallback((api: CarouselApi) => {
     if (!api) return;
     setCanScrollPrev(api.canScrollPrev());
     setCanScrollNext(api.canScrollNext());
+    const nextSelectedIndex = api.selectedScrollSnap();
+    setSelectedIndex(nextSelectedIndex);
+    api.slideNodes().forEach((slide, index) => {
+      slide.dataset.carouselPosition =
+        index === nextSelectedIndex
+          ? 'active'
+          : index < nextSelectedIndex
+            ? 'before'
+            : 'after';
+    });
   }, []);
+
+  const onInit = React.useCallback(
+    (api: CarouselApi) => {
+      if (!api) return;
+      setScrollSnaps(api.scrollSnapList());
+      onSelect(api);
+    },
+    [onSelect]
+  );
 
   const scrollPrev = React.useCallback(() => {
     api?.scrollPrev();
@@ -74,6 +127,13 @@ function Carousel({
   const scrollNext = React.useCallback(() => {
     api?.scrollNext();
   }, [api]);
+
+  const scrollTo = React.useCallback(
+    (index: number) => {
+      api?.scrollTo(index);
+    },
+    [api]
+  );
 
   const handleKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -95,14 +155,41 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return;
-    onSelect(api);
-    api.on('reInit', onSelect);
+    onInit(api);
+    api.on('reInit', onInit);
     api.on('select', onSelect);
 
     return () => {
-      api?.off('select', onSelect);
+      api.off('reInit', onInit);
+      api.off('select', onSelect);
     };
-  }, [api, onSelect]);
+  }, [api, onInit, onSelect]);
+
+  React.useEffect(() => {
+    if (
+      !api ||
+      !autoplay ||
+      isAutoplayPaused ||
+      scrollSnaps.length <= 1 ||
+      (!resolvedLoop && !api.canScrollNext())
+    ) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      api.scrollNext();
+    }, resolvedAutoplayDelay);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    api,
+    autoplay,
+    isAutoplayPaused,
+    resolvedAutoplayDelay,
+    resolvedLoop,
+    scrollSnaps.length,
+    selectedIndex,
+  ]);
 
   return (
     <CarouselContext.Provider
@@ -110,20 +197,41 @@ function Carousel({
         carouselRef,
         api: api,
         opts,
-        orientation:
-          orientation || (opts?.axis === 'y' ? 'vertical' : 'horizontal'),
         scrollPrev,
         scrollNext,
+        scrollTo,
         canScrollPrev,
         canScrollNext,
+        selectedIndex,
+        scrollSnaps,
+        autoplay,
+        autoplayDelay: resolvedAutoplayDelay,
+        loop: resolvedLoop,
+        pauseOnHover,
+        variant,
       }}
     >
       <div
+        aria-label={ariaLabel}
         onKeyDownCapture={handleKeyDown}
+        onMouseEnter={(event) => {
+          onMouseEnter?.(event);
+          if (pauseOnHover) setIsHovered(true);
+        }}
+        onMouseLeave={(event) => {
+          onMouseLeave?.(event);
+          setIsHovered(false);
+        }}
         className={cn('relative', className)}
         role="region"
         aria-roledescription="carousel"
+        data-autoplay={autoplay || undefined}
+        data-autoplay-state={
+          autoplay ? (isAutoplayPaused ? 'paused' : 'playing') : 'idle'
+        }
+        data-orientation="horizontal"
         data-slot="carousel"
+        data-variant={variant}
         {...props}
       >
         {children}
@@ -133,28 +241,25 @@ function Carousel({
 }
 
 function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
-  const { carouselRef, orientation } = useCarousel();
+  const { autoplay, carouselRef, variant } = useCarousel();
 
   return (
     <div
+      aria-live={autoplay ? 'off' : 'polite'}
       ref={carouselRef}
-      className="overflow-hidden"
+      className={cn(
+        'overflow-hidden',
+        variant === 'depth' && '[perspective:1000px]'
+      )}
       data-slot="carousel-content"
     >
-      <div
-        className={cn(
-          'flex',
-          orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col',
-          className
-        )}
-        {...props}
-      />
+      <div className={cn('-ml-4 flex', className)} {...props} />
     </div>
   );
 }
 
 function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
-  const { orientation } = useCarousel();
+  const { variant } = useCarousel();
 
   return (
     <div
@@ -162,8 +267,9 @@ function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
       aria-roledescription="slide"
       data-slot="carousel-item"
       className={cn(
-        'min-w-0 shrink-0 grow-0 basis-full',
-        orientation === 'horizontal' ? 'pl-4' : 'pt-4',
+        'min-w-0 shrink-0 grow-0 basis-full pl-4',
+        variant === 'depth' &&
+          'opacity-55 transition-[transform,opacity] duration-500 ease-out [transform:rotateY(-8deg)_scale(.94)] [transform-style:preserve-3d] data-[carousel-position=active]:z-10 data-[carousel-position=active]:opacity-100 data-[carousel-position=active]:[transform:rotateY(0deg)_scale(1)] data-[carousel-position=before]:[transform:rotateY(8deg)_scale(.94)] motion-reduce:transform-none motion-reduce:transition-none',
         className
       )}
       {...props}
@@ -175,28 +281,32 @@ function CarouselPrevious({
   className,
   variant = 'outline',
   size = 'icon-sm',
+  children,
+  disabled,
+  onClick,
+  'aria-label': ariaLabel = 'Previous slide',
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { orientation, scrollPrev, canScrollPrev } = useCarousel();
+  const { scrollPrev, canScrollPrev } = useCarousel();
 
   return (
     <Button
+      aria-label={ariaLabel}
       data-slot="carousel-previous"
       variant={variant}
       size={size}
       className={cn(
-        'absolute touch-manipulation rounded-full',
-        orientation === 'horizontal'
-          ? 'inset-y-0 -left-12 my-auto'
-          : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
+        'absolute inset-y-0 -left-12 my-auto touch-manipulation rounded-full',
         className
       )}
-      disabled={!canScrollPrev}
-      onClick={scrollPrev}
+      disabled={disabled || !canScrollPrev}
+      onClick={(event) => {
+        onClick?.(event);
+        if (!event.defaultPrevented) scrollPrev();
+      }}
       {...props}
     >
-      <ChevronLeftIcon />
-      <span className="sr-only">Previous slide</span>
+      {children ?? <ChevronLeftIcon aria-hidden />}
     </Button>
   );
 }
@@ -205,36 +315,110 @@ function CarouselNext({
   className,
   variant = 'outline',
   size = 'icon-sm',
+  children,
+  disabled,
+  onClick,
+  'aria-label': ariaLabel = 'Next slide',
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { orientation, scrollNext, canScrollNext } = useCarousel();
+  const { scrollNext, canScrollNext } = useCarousel();
 
   return (
     <Button
+      aria-label={ariaLabel}
       data-slot="carousel-next"
       variant={variant}
       size={size}
       className={cn(
-        'absolute touch-manipulation rounded-full',
-        orientation === 'horizontal'
-          ? 'inset-y-0 -right-12 my-auto'
-          : '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
+        'absolute inset-y-0 -right-12 my-auto touch-manipulation rounded-full',
         className
       )}
-      disabled={!canScrollNext}
-      onClick={scrollNext}
+      disabled={disabled || !canScrollNext}
+      onClick={(event) => {
+        onClick?.(event);
+        if (!event.defaultPrevented) scrollNext();
+      }}
       {...props}
     >
-      <ChevronRightIcon />
-      <span className="sr-only">Next slide</span>
+      {children ?? <ChevronRightIcon aria-hidden />}
     </Button>
+  );
+}
+
+type CarouselDotsProps = Omit<React.ComponentProps<'div'>, 'children'> & {
+  children?:
+    React.ReactNode | ((props: CarouselDotRenderProps) => React.ReactNode);
+  position?: CarouselDotPosition;
+};
+
+function CarouselDots({
+  className,
+  children,
+  position,
+  ...props
+}: CarouselDotsProps) {
+  const { scrollSnaps, selectedIndex, scrollTo } = useCarousel();
+  const resolvedPosition = position ?? 'bottom';
+  const customDot = typeof children === 'function';
+
+  if (scrollSnaps.length <= 1) return null;
+
+  return (
+    <div
+      aria-label="Choose slide"
+      className={cn(
+        'absolute z-10 flex items-center justify-center gap-1.5',
+        resolvedPosition === 'top' &&
+          'bottom-full left-1/2 mb-3 -translate-x-1/2',
+        resolvedPosition === 'bottom' &&
+          'top-full left-1/2 mt-3 -translate-x-1/2',
+        className
+      )}
+      data-position={resolvedPosition}
+      data-slot="carousel-dots"
+      role="group"
+      {...props}
+    >
+      {scrollSnaps.map((scrollSnap, index) => {
+        const isSelected = selectedIndex === index;
+
+        return (
+          <button
+            aria-label={`Go to slide ${index + 1}`}
+            aria-pressed={isSelected}
+            className="group/dot grid size-5 touch-manipulation place-items-center rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/30"
+            data-selected={isSelected || undefined}
+            data-slot="carousel-dot"
+            key={scrollSnap}
+            onClick={() => scrollTo(index)}
+            type="button"
+          >
+            {customDot ? (
+              children({ index, isSelected })
+            ) : children ? (
+              children
+            ) : (
+              <span className="size-1.5 rounded-full bg-muted-foreground/45 transition-all group-data-[selected]/dot:size-2 group-data-[selected]/dot:bg-primary" />
+            )}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
 export {
   type CarouselApi,
+  type CarouselDotPosition,
+  type CarouselDotRenderProps,
+  type CarouselDotsProps,
+  type CarouselOptions,
+  type CarouselPlugin,
+  type CarouselProps,
+  type CarouselVariant,
   Carousel,
   CarouselContent,
+  CarouselDots,
   CarouselItem,
   CarouselPrevious,
   CarouselNext,

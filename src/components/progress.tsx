@@ -4,22 +4,32 @@ import { Progress as ProgressPrimitive } from '@base-ui/react/progress';
 
 import { cn } from '../lib/utils';
 
+type ProgressEffect = 'none' | 'sparkle';
+
 function Progress({
   className,
   children,
+  effect = 'none',
   value,
   ...props
-}: ProgressPrimitive.Root.Props) {
+}: ProgressPrimitive.Root.Props & {
+  effect?: ProgressEffect;
+}) {
   return (
     <ProgressPrimitive.Root
       value={value}
       data-slot="progress"
+      data-effect={effect}
       className={cn('flex flex-wrap gap-3', className)}
       {...props}
     >
       {children}
       <ProgressTrack>
-        <ProgressIndicator />
+        <ProgressIndicator>
+          {effect === 'sparkle' && value !== null ? (
+            <ProgressMagic key={value} />
+          ) : null}
+        </ProgressIndicator>
       </ProgressTrack>
     </ProgressPrimitive.Root>
   );
@@ -29,7 +39,7 @@ function ProgressTrack({ className, ...props }: ProgressPrimitive.Track.Props) {
   return (
     <ProgressPrimitive.Track
       className={cn(
-        'relative flex h-3 w-full items-center overflow-x-hidden rounded-full bg-muted',
+        'relative flex h-3 w-full items-center overflow-hidden rounded-full bg-muted',
         className
       )}
       data-slot="progress-track"
@@ -45,9 +55,22 @@ function ProgressIndicator({
   return (
     <ProgressPrimitive.Indicator
       data-slot="progress-indicator"
-      className={cn('h-full bg-primary transition-all', className)}
+      className={cn(
+        'relative h-full bg-primary transition-[width] duration-500 ease-out',
+        className
+      )}
       {...props}
     />
+  );
+}
+
+function ProgressMagic() {
+  return (
+    <span aria-hidden="true" data-slot="progress-magic">
+      <span data-slot="progress-magic-particle" />
+      <span data-slot="progress-magic-particle" />
+      <span data-slot="progress-magic-particle" />
+    </span>
   );
 }
 
@@ -80,4 +103,5 @@ export {
   ProgressIndicator,
   ProgressLabel,
   ProgressValue,
+  type ProgressEffect,
 };
