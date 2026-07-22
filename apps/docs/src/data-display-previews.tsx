@@ -40,8 +40,8 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-  type CarouselDotPosition,
   type CarouselVariant,
+  useCarousel,
 } from '@heliannuuthus/ui/carousel';
 import {
   ChartContainer,
@@ -109,6 +109,7 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
 } from '@heliannuuthus/ui/message-scroller';
+import { Stack } from '@heliannuuthus/ui/stack';
 import {
   Table,
   TableBody,
@@ -119,6 +120,7 @@ import {
   TableHeader,
   TableRow,
 } from '@heliannuuthus/ui/table';
+import { TypographySmall } from '@heliannuuthus/ui/typography';
 import {
   Tooltip,
   TooltipContent,
@@ -467,16 +469,14 @@ const releaseHighlights = [
 export function CarouselHighlightsDemo({
   autoplay = false,
   autoplayDelay,
-  dotPosition,
-  customControls = false,
+  dotPosition = 'bottom',
   loop = false,
   pauseOnHover,
   variant,
 }: {
   autoplay?: boolean;
   autoplayDelay?: number;
-  dotPosition?: CarouselDotPosition;
-  customControls?: boolean;
+  dotPosition?: 'top' | 'bottom';
   loop?: boolean;
   pauseOnHover?: boolean;
   variant?: CarouselVariant;
@@ -486,10 +486,88 @@ export function CarouselHighlightsDemo({
       aria-label="版本亮点"
       autoplay={autoplay}
       autoplayDelay={autoplayDelay}
-      className={`display-carousel${customControls ? ' has-custom-controls' : ''}${autoplay ? ' display-carousel-autoplay' : ''}`}
+      className={`display-carousel${autoplay ? ' display-carousel-autoplay' : ''}`}
       loop={loop}
       pauseOnHover={pauseOnHover}
       variant={variant}
+    >
+      {dotPosition === 'top' ? <CarouselDots /> : null}
+      <CarouselContent>
+        {releaseHighlights.map((highlight, index) => {
+          const Icon = highlight.icon;
+          return (
+            <CarouselItem key={highlight.title}>
+              <article className="display-highlight">
+                <div className="display-highlight-icon">
+                  <Icon />
+                </div>
+                <span>
+                  {highlight.kicker} · 0{index + 1}
+                </span>
+                <strong>{highlight.title}</strong>
+                <p>{highlight.description}</p>
+              </article>
+            </CarouselItem>
+          );
+        })}
+      </CarouselContent>
+      <CarouselPrevious className="display-carousel-previous" />
+      <CarouselNext className="display-carousel-next" />
+      {dotPosition === 'bottom' ? <CarouselDots /> : null}
+    </Carousel>
+  );
+}
+
+function CarouselPagination() {
+  const {
+    canScrollNext,
+    canScrollPrev,
+    currentPage,
+    pageCount,
+    scrollNext,
+    scrollPrev,
+  } = useCarousel();
+
+  return (
+    <Stack
+      align="center"
+      aria-label="轮播分页"
+      className="my-3"
+      gap="sm"
+      justify="center"
+      orientation="horizontal"
+      role="group"
+    >
+      <Button
+        aria-label="上一页"
+        disabled={!canScrollPrev}
+        onClick={scrollPrev}
+        size="sm"
+        variant="outline"
+      >
+        上一页
+      </Button>
+      <TypographySmall aria-live="polite" className="min-w-14 text-center">
+        {currentPage} / {Math.max(pageCount, 1)}
+      </TypographySmall>
+      <Button
+        aria-label="下一页"
+        disabled={!canScrollNext}
+        onClick={scrollNext}
+        size="sm"
+        variant="outline"
+      >
+        下一页
+      </Button>
+    </Stack>
+  );
+}
+
+export function CarouselCustomPaginationDemo() {
+  return (
+    <Carousel
+      aria-label="带自定义翻页器的版本亮点"
+      className="display-carousel"
     >
       <CarouselContent>
         {releaseHighlights.map((highlight, index) => {
@@ -510,24 +588,7 @@ export function CarouselHighlightsDemo({
           );
         })}
       </CarouselContent>
-      <CarouselPrevious className="display-carousel-previous">
-        {customControls ? <span aria-hidden>←</span> : undefined}
-      </CarouselPrevious>
-      <CarouselNext className="display-carousel-next">
-        {customControls ? <span aria-hidden>→</span> : undefined}
-      </CarouselNext>
-      <CarouselDots position={dotPosition}>
-        {customControls
-          ? ({ index, isSelected }) => (
-              <span
-                className="display-carousel-number-dot"
-                data-selected={isSelected || undefined}
-              >
-                {index + 1}
-              </span>
-            )
-          : undefined}
-      </CarouselDots>
+      <CarouselPagination />
     </Carousel>
   );
 }
@@ -536,16 +597,11 @@ export function CarouselAutoplayDemo() {
   return (
     <div className="display-carousel-autoplay-stage">
       <div className="display-carousel-autoplay-heading">
-        <span>React Bits 动效变体</span>
+        <span>默认景深动效</span>
         <strong>自动播放，悬停即暂停</strong>
         <small>自动播放 · 首尾循环 · 3D 景深</small>
       </div>
-      <CarouselHighlightsDemo
-        autoplay
-        autoplayDelay={2200}
-        loop
-        variant="depth"
-      />
+      <CarouselHighlightsDemo autoplay autoplayDelay={2200} loop />
     </div>
   );
 }

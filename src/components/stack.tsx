@@ -21,7 +21,7 @@ type StackProps = Omit<React.ComponentProps<'div'>, 'children'> & {
 
 type StackCompactProps = Omit<
   StackProps,
-  'align' | 'block' | 'gap' | 'separator' | 'wrap'
+  'align' | 'gap' | 'separator' | 'wrap'
 >;
 
 const presetGaps = {
@@ -108,12 +108,13 @@ function StackRoot({
 
 const compactOrientations: Record<StackOrientation, string> = {
   horizontal:
-    '*:data-slot:rounded-r-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-4xl! [&>[data-slot]~[data-slot]]:-ml-px [&>[data-slot]~[data-slot]]:rounded-l-none [&>[data-slot]~[data-slot]]:border-l-0',
+    '*:data-slot:rounded-r-none [&>[data-slot]:first-child]:rounded-l-4xl! [&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-4xl! [&>[data-slot]~[data-slot]]:-ml-px [&>[data-slot]~[data-slot]]:rounded-l-none',
   vertical:
-    'flex-col *:data-slot:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-4xl! [&>[data-slot]~[data-slot]]:-mt-px [&>[data-slot]~[data-slot]]:rounded-t-none [&>[data-slot]~[data-slot]]:border-t-0',
+    'flex-col *:data-slot:rounded-b-none [&>[data-slot]:first-child]:rounded-t-4xl! [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-4xl! [&>[data-slot]~[data-slot]]:-mt-px [&>[data-slot]~[data-slot]]:rounded-t-none',
 };
 
 function StackCompact({
+  block = false,
   children,
   className,
   orientation = 'horizontal',
@@ -125,10 +126,12 @@ function StackCompact({
       align="stretch"
       data-slot="stack-compact"
       role={role}
+      block={block}
       gap={0}
       orientation={orientation}
       className={cn(
-        'w-fit *:focus-visible:relative *:focus-visible:z-10',
+        block ? 'w-full' : 'w-fit',
+        '*:focus-visible:relative *:focus-visible:z-10 [&>[data-slot]:has(:focus-visible)]:relative [&>[data-slot]:has(:focus-visible)]:z-10 [&>[data-slot=input]:focus-visible]:ring-0 [&>[data-slot=input-group]:has(:focus-visible)]:ring-0 [&>[data-slot=select-trigger]:has(:focus-visible)]:ring-0',
         compactOrientations[orientation],
         className
       )}

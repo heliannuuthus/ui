@@ -14,7 +14,6 @@ type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
 type CarouselOptions = UseCarouselParameters[0];
 type CarouselPlugin = UseCarouselParameters[1];
-type CarouselDotPosition = 'top' | 'bottom';
 type CarouselVariant = 'default' | 'depth';
 
 type CarouselDotRenderProps = {
@@ -29,8 +28,16 @@ type CarouselProps = {
   opts?: CarouselOptions;
   pauseOnHover?: boolean;
   plugins?: CarouselPlugin;
+  /** @deprecated Prefer the Carousel ref for imperative control. */
   setApi?: (api: CarouselApi) => void;
   variant?: CarouselVariant;
+};
+
+type CarouselRef = {
+  api: CarouselApi;
+  scrollNext: () => void;
+  scrollPrev: () => void;
+  scrollTo: (index: number) => void;
 };
 
 type CarouselContextProps = {
@@ -41,6 +48,8 @@ type CarouselContextProps = {
   scrollTo: (index: number) => void;
   canScrollPrev: boolean;
   canScrollNext: boolean;
+  currentPage: number;
+  pageCount: number;
   selectedIndex: number;
   scrollSnaps: number[];
   autoplay: boolean;
@@ -59,22 +68,28 @@ function useCarousel() {
   return context;
 }
 
-function Carousel({
-  autoplay = false,
-  autoplayDelay = 3000,
-  loop,
-  opts,
-  pauseOnHover = true,
-  setApi,
-  plugins,
-  variant = 'default',
-  'aria-label': ariaLabel = 'Carousel',
-  className,
-  children,
-  onMouseEnter,
-  onMouseLeave,
-  ...props
-}: React.ComponentProps<'div'> & CarouselProps) {
+const Carousel = React.forwardRef<
+  CarouselRef,
+  React.ComponentProps<'div'> & CarouselProps
+>(function Carousel(
+  {
+    autoplay = false,
+    autoplayDelay = 3000,
+    loop,
+    opts,
+    pauseOnHover = true,
+    setApi,
+    plugins,
+    variant = 'depth',
+    'aria-label': ariaLabel = 'Carousel',
+    className,
+    children,
+    onMouseEnter,
+    onMouseLeave,
+    ...props
+  },
+  ref
+) {
   const resolvedLoop = loop ?? opts?.loop ?? false;
   const [carouselRef, api] = useEmblaCarousel(
     {
@@ -133,6 +148,12 @@ function Carousel({
       api?.scrollTo(index);
     },
     [api]
+  );
+
+  React.useImperativeHandle(
+    ref,
+    () => ({ api, scrollNext, scrollPrev, scrollTo }),
+    [api, scrollNext, scrollPrev, scrollTo]
   );
 
   const handleKeyDown = React.useCallback(
@@ -202,6 +223,8 @@ function Carousel({
         scrollTo,
         canScrollPrev,
         canScrollNext,
+        currentPage: selectedIndex + 1,
+        pageCount: scrollSnaps.length,
         selectedIndex,
         scrollSnaps,
         autoplay,
@@ -238,7 +261,7 @@ function Carousel({
       </div>
     </CarouselContext.Provider>
   );
-}
+});
 
 function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
   const { autoplay, carouselRef, variant } = useCarousel();
@@ -348,17 +371,10 @@ function CarouselNext({
 type CarouselDotsProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   children?:
     React.ReactNode | ((props: CarouselDotRenderProps) => React.ReactNode);
-  position?: CarouselDotPosition;
 };
 
-function CarouselDots({
-  className,
-  children,
-  position,
-  ...props
-}: CarouselDotsProps) {
+function CarouselDots({ className, children, ...props }: CarouselDotsProps) {
   const { scrollSnaps, selectedIndex, scrollTo } = useCarousel();
-  const resolvedPosition = position ?? 'bottom';
   const customDot = typeof children === 'function';
 
   if (scrollSnaps.length <= 1) return null;
@@ -367,14 +383,9 @@ function CarouselDots({
     <div
       aria-label="Choose slide"
       className={cn(
-        'absolute z-10 flex items-center justify-center gap-1.5',
-        resolvedPosition === 'top' &&
-          'bottom-full left-1/2 mb-3 -translate-x-1/2',
-        resolvedPosition === 'bottom' &&
-          'top-full left-1/2 mt-3 -translate-x-1/2',
+        'my-3 flex min-h-5 items-center justify-center gap-1.5',
         className
       )}
-      data-position={resolvedPosition}
       data-slot="carousel-dots"
       role="group"
       {...props}
@@ -409,12 +420,12 @@ function CarouselDots({
 
 export {
   type CarouselApi,
-  type CarouselDotPosition,
   type CarouselDotRenderProps,
   type CarouselDotsProps,
   type CarouselOptions,
   type CarouselPlugin,
   type CarouselProps,
+  type CarouselRef,
   type CarouselVariant,
   Carousel,
   CarouselContent,

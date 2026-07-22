@@ -862,8 +862,19 @@ function ComponentPage() {
                       <span>默认值</span>
                     </div>
                     {documentation.api.map((property) => (
-                      <div key={property.name}>
-                        <code>{property.name}</code>
+                      <div
+                        key={`${property.component ?? documentation.name}:${property.name}`}
+                      >
+                        {property.component ? (
+                          <Stack gap={2}>
+                            <TypographySmall className="font-mono text-muted-foreground">
+                              {property.component}
+                            </TypographySmall>
+                            <code>{property.name}</code>
+                          </Stack>
+                        ) : (
+                          <code>{property.name}</code>
+                        )}
                         <span>{property.description}</span>
                         <code>{property.type}</code>
                         <code>{property.defaultValue ?? '—'}</code>

@@ -33,6 +33,7 @@ import {
   BreadcrumbVariantsDemo,
 } from './breadcrumb-preview';
 import { CardAnatomyDemo } from './card-preview';
+import { StackCompactVariantsDemo } from './stack-preview';
 import {
   DropdownMenuActionsDemo,
   DropdownMenuSelectionDemo,
@@ -65,6 +66,7 @@ import {
   AvatarOwnersDemo,
   BubbleReviewDemo,
   CarouselAutoplayDemo,
+  CarouselCustomPaginationDemo,
   CarouselHighlightsDemo,
   ChartDeploymentDemo,
   CollapsibleBuildDemo,
@@ -120,6 +122,7 @@ import type {
 } from './component-harness';
 
 export type ApiProperty = {
+  component?: string;
   name: string;
   description: string;
   type: string;
@@ -845,19 +848,9 @@ const stackDocumentation: ComponentDocumentation = {
   ],
   examples: [
     {
-      title: '常规间距与紧凑组合',
-      description:
-        '常规 Stack 管理间距和对齐；Compact 将相邻控件拼接成连续的操作组。',
+      title: '方向、间距与对齐',
+      description: '使用同一组内容比较方向、间距与交叉轴对齐方式。',
       harness: [
-        {
-          name: 'mode',
-          label: '模式',
-          defaultValue: 'regular',
-          options: [
-            { label: '常规', value: 'regular' },
-            { label: '紧凑组', value: 'compact' },
-          ],
-        },
         {
           name: 'orientation',
           label: '方向',
@@ -892,20 +885,6 @@ const stackDocumentation: ComponentDocumentation = {
         const orientation =
           values.orientation === 'vertical' ? 'vertical' : 'horizontal';
 
-        if (values.mode === 'compact') {
-          return (
-            <Stack.Compact
-              aria-label="文档操作"
-              className="stack-compact-demo"
-              orientation={orientation}
-            >
-              <Button variant="outline">预览</Button>
-              <Button variant="outline">代码</Button>
-              <Button variant="outline">发布</Button>
-            </Stack.Compact>
-          );
-        }
-
         return (
           <Stack
             align={(values.align ?? 'center') as StackAlign}
@@ -929,14 +908,51 @@ const stackDocumentation: ComponentDocumentation = {
   <Filter />
   <Sort />
   <Availability />
-</Stack>
-
-<Stack.Compact orientation="horizontal" aria-label="文档操作">
-  <Button variant="outline">预览</Button>
-  <Button variant="outline">代码</Button>
-  <Button variant="outline">发布</Button>
-</Stack.Compact>`,
+</Stack>`,
       previewHeight: 420,
+    },
+    {
+      title: '跨控件紧凑组合',
+      description:
+        'Compact 不只组合按钮，也可以拼接 Input、Select、InputGroup 与操作控件。',
+      preview: <StackCompactVariantsDemo />,
+      code: `import { useState } from 'react'
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from '@heliannuuthus/ui/input-group'
+import { Slider } from '@heliannuuthus/ui/slider'
+import { Stack } from '@heliannuuthus/ui/stack'
+
+export function SliderCompactExample() {
+  const [quality, setQuality] = useState(68)
+
+  return (
+    <Stack block gap="sm">
+      <Stack.Compact block aria-label="压缩质量">
+        <InputGroup className="px-4">
+          <Slider
+            aria-label="压缩质量滑块"
+            value={quality}
+            onValueChange={setQuality}
+            min={0}
+            max={100}
+          />
+        </InputGroup>
+        <InputGroup className="w-24">
+          <InputGroupInput
+            aria-label="压缩质量数值"
+            type="number"
+            value={quality}
+            onChange={(event) => setQuality(Number(event.target.value))}
+          />
+          <InputGroupAddon align="inline-end">
+            <InputGroupText>%</InputGroupText>
+          </InputGroupAddon>
+        </InputGroup>
+      </Stack.Compact>
+      <span aria-live="polite">当前压缩质量：{quality}%</span>
+    </Stack>
+  )
+}`,
+      previewHeight: 760,
     },
   ],
   parts: [
@@ -992,10 +1008,18 @@ const stackDocumentation: ComponentDocumentation = {
       type: 'ReactNode',
     },
     {
-      name: 'Stack.Compact.orientation',
+      component: 'Stack.Compact',
+      name: 'orientation',
       description: '设置紧凑组的拼接方向；紧凑组不允许换行。',
       type: "'horizontal' | 'vertical'",
       defaultValue: "'horizontal'",
+    },
+    {
+      component: 'Stack.Compact',
+      name: 'block',
+      description: '让紧凑组填满父容器，适合包含 Input 的组合。',
+      type: 'boolean',
+      defaultValue: 'false',
     },
   ],
   accessibility: [
@@ -1626,7 +1650,8 @@ export function ViewMenubar() {
       type: 'MenubarMenuConfig[]',
     },
     {
-      name: 'menus[].items',
+      component: 'menus[]',
+      name: 'items',
       description: '承载普通命令、标题、分隔线、勾选项、单选组及二级菜单。',
       type: 'DropdownMenuEntry[]',
     },
@@ -2814,8 +2839,9 @@ import { Minus, Plus } from 'lucide-react'
   ],
   carousel: [
     {
-      title: '默认导航',
-      description: '使用左右箭头浏览同级内容，页码点可放在轮播上方或下方。',
+      title: '默认景深与点位插槽',
+      description:
+        '景深过渡是默认体验；将 CarouselDots 写在 CarouselContent 前后，即可声明上方或下方点位。',
       harness: [
         {
           name: 'dotPosition',
@@ -2847,56 +2873,54 @@ import { Minus, Plus } from 'lucide-react'
   </CarouselContent>
   <CarouselPrevious />
   <CarouselNext />
-  <CarouselDots position="bottom" />
+  <CarouselDots />
 </Carousel>`,
       previewHeight: 440,
     },
     {
-      title: '自定义导航',
+      title: '自定义翻页器',
       description:
-        '通过 children 与 render function 替换箭头和页码点，同时保留滚动状态与键盘交互。',
-      harness: [
-        {
-          name: 'dotPosition',
-          label: '页码点位置',
-          defaultValue: 'top',
-          options: [
-            { label: '上方', value: 'top' },
-            { label: '下方', value: 'bottom' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <CarouselHighlightsDemo
-          customControls
-          dotPosition={values.dotPosition === 'bottom' ? 'bottom' : 'top'}
-        />
-      ),
-      code: `import {
+        '在 Carousel 内部使用 useCarousel 订阅页码状态，并组合 Button 构建完整的自定义翻页器。',
+      preview: <CarouselCustomPaginationDemo />,
+      code: `import { Button } from '@heliannuuthus/ui/button'
+import {
   Carousel,
   CarouselContent,
-  CarouselDots,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  useCarousel,
 } from '@heliannuuthus/ui/carousel'
+
+function CarouselPagination() {
+  const {
+    canScrollNext,
+    canScrollPrev,
+    currentPage,
+    pageCount,
+    scrollNext,
+    scrollPrev,
+  } = useCarousel()
+
+  return (
+    <div role="group" aria-label="轮播分页">
+      <Button disabled={!canScrollPrev} onClick={scrollPrev}>上一页</Button>
+      <span aria-live="polite">{currentPage} / {pageCount}</span>
+      <Button disabled={!canScrollNext} onClick={scrollNext}>下一页</Button>
+    </div>
+  )
+}
 
 <Carousel>
   <CarouselContent>
     {highlights.map((item) => <CarouselItem key={item.id}>{item.title}</CarouselItem>)}
   </CarouselContent>
-  <CarouselPrevious><span aria-hidden>←</span></CarouselPrevious>
-  <CarouselNext><span aria-hidden>→</span></CarouselNext>
-  <CarouselDots position="top">
-    {({ index }) => <span>{index + 1}</span>}
-  </CarouselDots>
+  <CarouselPagination />
 </Carousel>`,
       previewHeight: 440,
     },
     {
-      title: '自动播放与景深动效',
+      title: '自动播放',
       description:
-        'depth 变体加入 React Bits 风格的 3D 景深过渡；自动播放默认在悬停时暂停，并通过 loop 无缝回到第一项。',
+        '自动播放默认在悬停时暂停，并通过 loop 无缝回到第一项；景深过渡无需额外配置。',
       preview: <CarouselAutoplayDemo />,
       code: `import {
   Carousel,
@@ -2911,7 +2935,6 @@ import { Minus, Plus } from 'lucide-react'
   autoplay
   autoplayDelay={3000}
   loop
-  variant="depth"
 >
   <CarouselContent>
     {highlights.map((item) => (
@@ -3823,13 +3846,15 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: "'horizontal'",
     },
     {
-      name: 'AttachmentMedia.variant',
+      component: 'AttachmentMedia',
+      name: 'variant',
       description: '选择图标或图片媒体样式。',
       type: "'icon' | 'image'",
       defaultValue: "'icon'",
     },
     {
-      name: 'AttachmentTrigger.render',
+      component: 'AttachmentTrigger',
+      name: 'render',
       description: '将整个附件渲染为链接或按钮触发区域。',
       type: 'ReactElement | render function',
     },
@@ -3842,7 +3867,8 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: "'default'",
     },
     {
-      name: 'AvatarImage.src / alt',
+      component: 'AvatarImage',
+      name: 'src / alt',
       description: '提供头像资源和替代文本。',
       type: 'string',
     },
@@ -3876,12 +3902,14 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: "'start'",
     },
     {
-      name: 'BubbleContent.render',
+      component: 'BubbleContent',
+      name: 'render',
       description: '将内容渲染为可交互按钮、链接或自定义元素。',
       type: 'ReactElement | render function',
     },
     {
-      name: 'BubbleReactions.side / align',
+      component: 'BubbleReactions',
+      name: 'side / align',
       description: '定位气泡边缘的回应或状态。',
       type: "'top' | 'bottom' / 'start' | 'end'",
     },
@@ -3889,9 +3917,9 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
   carousel: [
     {
       name: 'variant',
-      description: '选择标准滑动或带 3D 景深过渡的展示方式。',
+      description: '选择默认景深过渡或不带 3D 变换的标准滑动。',
       type: "'default' | 'depth'",
-      defaultValue: "'default'",
+      defaultValue: "'depth'",
     },
     {
       name: 'autoplay / autoplayDelay',
@@ -3922,65 +3950,74 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'CarouselPlugin',
     },
     {
-      name: 'setApi',
-      description: '取得轮播实例以读取当前页或执行命令。',
-      type: '(api: CarouselApi) => void',
+      name: 'ref',
+      description: '从 Carousel 外部命令式地滚动到上一页、下一页或指定页。',
+      type: 'React.Ref<CarouselRef>',
     },
     {
-      name: 'CarouselPrevious / CarouselNext.children',
+      component: 'CarouselPrevious / CarouselNext',
+      name: 'children',
       description: '替换默认方向图标，同时保留滚动行为和禁用状态。',
       type: 'ReactNode',
     },
     {
-      name: 'CarouselDots.position',
-      description: '将页码点放在轮播上方或下方。',
-      type: "'top' | 'bottom'",
-      defaultValue: "'bottom'",
+      name: 'CarouselDots',
+      description:
+        '页码点插槽；放在 CarouselContent 前面显示于上方，放在后面显示于下方。',
+      type: 'component slot',
     },
     {
-      name: 'CarouselDots.children',
+      component: 'CarouselDots',
+      name: 'children',
       description: '按页码索引和选中状态自定义每一个指示点。',
       type: 'ReactNode | ({ index, isSelected }) => ReactNode',
     },
     {
       name: 'useCarousel',
-      description: '读取当前页、总页数和滚动方法以构建完全自定义的控制器。',
-      type: 'hook',
+      description:
+        '在 Carousel 子组件中订阅当前页、总页数、可滚动状态和滚动方法，用于构建响应式自定义控制器。',
+      type: '() => Carousel state and actions',
     },
   ],
   chart: [
     {
-      name: 'ChartContainer.config',
+      component: 'ChartContainer',
+      name: 'config',
       description:
         '把 Recharts 的 dataKey 映射为主题颜色、可读标签和可选图标，不定义图表类型或数据。',
       type: 'ChartConfig',
     },
     {
-      name: 'ChartContainer.children',
+      component: 'ChartContainer',
+      name: 'children',
       description:
         '接收 BarChart、LineChart、PieChart 等 Recharts 图表元素，由 Recharts 执行实际绘制。',
       type: 'Recharts chart element',
     },
     {
-      name: 'ChartContainer.initialDimension',
+      component: 'ChartContainer',
+      name: 'initialDimension',
       description: '为首次测量前提供稳定尺寸，减少布局跳动。',
       type: '{ width: number; height: number }',
       defaultValue: '{ width: 320, height: 200 }',
     },
     {
-      name: 'ChartTooltipContent.indicator',
+      component: 'ChartTooltipContent',
+      name: 'indicator',
       description: '设置统一 Tooltip 中数据系列的颜色标记样式。',
       type: "'dot' | 'line' | 'dashed'",
       defaultValue: "'dot'",
     },
     {
+      component: 'ChartTooltipContent',
       name: 'hideLabel / hideIndicator',
       description: '按展示密度隐藏 Tooltip 标签或系列标记。',
       type: 'boolean',
       defaultValue: 'false',
     },
     {
-      name: 'ChartLegendContent.verticalAlign',
+      component: 'ChartLegendContent',
+      name: 'verticalAlign',
       description: '根据 Recharts 图例位置设置上方或下方的布局间距。',
       type: "'top' | 'bottom'",
     },
@@ -4003,7 +4040,8 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: 'false',
     },
     {
-      name: 'CollapsibleTrigger.render',
+      component: 'CollapsibleTrigger',
+      name: 'render',
       description: '使用独立 Button 或自定义元素控制内容展开。',
       type: 'ReactElement | render function',
     },
@@ -4018,7 +4056,8 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'component',
     },
     {
-      name: 'CollapsibleIndicator.children',
+      component: 'CollapsibleIndicator',
+      name: 'children',
       description: '替换默认箭头；图标会跟随展开状态旋转。',
       type: 'ReactNode',
       defaultValue: '<ChevronDownIcon />',
@@ -4070,17 +4109,20 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'ColumnDef<TData, TValue>[]',
     },
     {
-      name: 'ColumnDef.cell',
+      component: 'ColumnDef',
+      name: 'cell',
       description: '根据当前 row、cell 和 table 上下文渲染内容或操作。',
       type: '(context: CellContext) => ReactNode',
     },
     {
-      name: 'ColumnDef.columns',
+      component: 'ColumnDef',
+      name: 'columns',
       description: '嵌套子列并生成多级分组表头。',
       type: 'ColumnDef<TData>[]',
     },
     {
-      name: 'ColumnDef.meta',
+      component: 'ColumnDef',
+      name: 'meta',
       description: '设置表头与单元格的对齐和扩展类名。',
       type: "{ align?: 'start' | 'center' | 'end'; headerClassName?; cellClassName? }",
     },
@@ -4095,7 +4137,8 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'component',
     },
     {
-      name: 'DataTableActions.aria-label',
+      component: 'DataTableActions',
+      name: 'aria-label',
       description: '使用当前记录标识为每一行的操作组提供唯一名称。',
       type: 'string',
     },
@@ -4174,7 +4217,8 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: '(open: boolean, eventDetails) => void',
     },
     {
-      name: 'HoverCardContent.side',
+      component: 'HoverCardContent',
+      name: 'side',
       description: '设置内容相对触发器的首选方向。',
       type: "'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end'",
       defaultValue: "'bottom'",
@@ -4204,7 +4248,8 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'ReactElement | render function',
     },
     {
-      name: 'ItemMedia.variant',
+      component: 'ItemMedia',
+      name: 'variant',
       description: '选择普通内容、图标或图片媒体。',
       type: "'default' | 'icon' | 'image'",
       defaultValue: "'default'",
@@ -4275,12 +4320,14 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: "'end'",
     },
     {
-      name: 'MessageScrollerItem.messageId / scrollAnchor',
+      component: 'MessageScrollerItem',
+      name: 'messageId / scrollAnchor',
       description: '标识消息并声明稳定滚动锚点。',
       type: 'string / boolean',
     },
     {
-      name: 'MessageScrollerButton.direction',
+      component: 'MessageScrollerButton',
+      name: 'direction',
       description: '显示滚动到开头或末尾的浮动操作。',
       type: "'start' | 'end'",
       defaultValue: "'end'",
@@ -4320,7 +4367,8 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
   ],
   tooltip: [
     {
-      name: 'TooltipProvider.delay',
+      component: 'TooltipProvider',
+      name: 'delay',
       description: '设置同一 Provider 下 Tooltip 的打开延迟。',
       type: 'number',
       defaultValue: '0',
@@ -4336,7 +4384,8 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: '(open: boolean, eventDetails) => void',
     },
     {
-      name: 'TooltipContent.side',
+      component: 'TooltipContent',
+      name: 'side',
       description: '设置内容相对触发器的首选方向。',
       type: "'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end'",
       defaultValue: "'top'",
@@ -4387,7 +4436,8 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: '(number | string)[]',
     },
     {
-      name: 'DrawerContent.showCloseButton',
+      component: 'DrawerContent',
+      name: 'showCloseButton',
       description: '控制右上角的标准关闭操作。',
       type: 'boolean',
       defaultValue: 'true',
@@ -4429,7 +4479,7 @@ for (const [slug, api] of Object.entries(dataDisplayApi)) {
 }
 
 componentDocumentation.carousel.summary =
-  '横向浏览同级内容，支持标准与景深动效、自动播放、首尾循环，以及可自定义的箭头和页码点。';
+  '横向浏览同级内容，默认提供景深动效，并支持点位插槽、自动播放、首尾循环和自定义翻页器。';
 componentDocumentation.carousel.whenToUse = [
   '同一层级有多张重点内容卡片，但当前区域只适合突出展示一项。',
   '需要轮播营销亮点、版本更新或媒体内容，并允许用户主动前后浏览。',
@@ -4680,13 +4730,15 @@ componentDocumentation.toast.parts = [
 ];
 componentDocumentation.toast.api = [
   {
-    name: 'ToastProvider.scope / Toaster.scope',
+    component: 'ToastProvider / Toaster',
+    name: 'scope',
     description: '选择相对视口的全局通知或相对父容器的局部通知。',
     type: "'global' | 'local'",
     defaultValue: "'global'",
   },
   {
-    name: 'useToast().toast',
+    component: 'useToast()',
+    name: 'toast',
     description: '调用 success、info、warning、error、loading 或 promise。',
     type: 'Toast API',
   },
@@ -4738,12 +4790,14 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       defaultValue: 'false',
     },
     {
-      name: 'Checkbox.Group.value / defaultValue',
+      component: 'Checkbox.Group',
+      name: 'value / defaultValue',
       description: '管理已选中的多个值。',
       type: 'string[]',
     },
     {
-      name: 'Checkbox.Group.options',
+      component: 'Checkbox.Group',
+      name: 'options',
       description: '从标签与值配置生成一组 Checkbox。',
       type: 'CheckboxOption[]',
     },
@@ -4800,13 +4854,15 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'component',
     },
     {
-      name: 'Field.orientation',
+      component: 'Field',
+      name: 'orientation',
       description: '设置标签、内容与控件的排列方向。',
       type: "'vertical' | 'horizontal' | 'responsive'",
       defaultValue: "'vertical'",
     },
     {
-      name: 'Field.data-invalid',
+      component: 'Field',
+      name: 'data-invalid',
       description: '将错误语义和颜色传递给整个字段。',
       type: 'boolean',
     },
@@ -4855,7 +4911,8 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'boolean',
     },
     {
-      name: 'InputGroupAddon.align',
+      component: 'InputGroupAddon',
+      name: 'align',
       description: '将附加内容放到行内或块级首尾。',
       type: "'inline-start' | 'inline-end' | 'block-start' | 'block-end'",
     },
@@ -4876,7 +4933,8 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
     },
     { name: 'maxLength', description: '设置验证码总位数。', type: 'number' },
     {
-      name: 'InputOTP.shape',
+      component: 'InputOTP',
+      name: 'shape',
       description: '切换连接方块或独立方块验证码槽位。',
       type: "'connected' | 'separated'",
       defaultValue: "'connected'",
@@ -4887,7 +4945,8 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'string / (value: string) => void',
     },
     {
-      name: 'InputOTPSlot.index',
+      component: 'InputOTPSlot',
+      name: 'index',
       description: '将可视槽位映射到验证码字符。',
       type: 'number',
     },
@@ -4897,39 +4956,40 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'string',
     },
     {
-      name: 'TextArea / Input.TextArea',
-      description: '接收可换行的多行文本，并支持平铺或复合组件入口。',
-      type: 'component',
-    },
-    {
-      name: 'TextArea.rows',
+      component: 'TextArea',
+      name: 'rows',
       description: '设置初始可见文本行数。',
       type: 'number',
     },
     {
-      name: 'TextArea.maxLength',
+      component: 'TextArea',
+      name: 'maxLength',
       description: '限制多行文本可输入的字符数量。',
       type: 'number',
     },
   ],
   radio: [
     {
-      name: 'Radio.value',
+      component: 'Radio',
+      name: 'value',
       description: '标识 Radio 在所属分组中的值。',
       type: 'string | number',
     },
     {
-      name: 'Radio.Group.value / defaultValue',
+      component: 'Radio.Group',
+      name: 'value / defaultValue',
       description: '管理互斥选择中的当前值。',
       type: 'string',
     },
     {
-      name: 'Radio.Group.onChange',
+      component: 'Radio.Group',
+      name: 'onChange',
       description: '当前单选值变化时调用。',
       type: '(value: string) => void',
     },
     {
-      name: 'Radio.Group.options',
+      component: 'Radio.Group',
+      name: 'options',
       description: '从标签与值配置生成一组 Radio。',
       type: 'RadioOption[]',
     },
@@ -4996,7 +5056,8 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       defaultValue: 'false',
     },
     {
-      name: 'SelectTrigger.showClear / showTrigger',
+      component: 'SelectTrigger',
+      name: 'showClear / showTrigger',
       description: '控制选择输入框尾部的清除与展开动作。',
       type: 'boolean',
     },
@@ -5006,7 +5067,8 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'component',
     },
     {
-      name: 'NativeSelect.size',
+      component: 'NativeSelect',
+      name: 'size',
       description: '设置原生选择控件的默认或紧凑高度。',
       type: "'default' | 'sm'",
       defaultValue: "'default'",
@@ -5108,29 +5170,34 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       defaultValue: "'default'",
     },
     {
-      name: 'Toggle.Group.value / defaultValue',
+      component: 'Toggle.Group',
+      name: 'value / defaultValue',
       description: '管理组内当前按下的 Toggle 值。',
       type: 'string[]',
     },
     {
-      name: 'Toggle.Group.onChange',
+      component: 'Toggle.Group',
+      name: 'onChange',
       description: '组内按下值变化时调用。',
       type: '(value: string[]) => void',
     },
     {
-      name: 'Toggle.Group.multiple',
+      component: 'Toggle.Group',
+      name: 'multiple',
       description: '允许同时按下多个 Toggle。',
       type: 'boolean',
       defaultValue: 'false',
     },
     {
-      name: 'Toggle.Group.orientation',
+      component: 'Toggle.Group',
+      name: 'orientation',
       description: '设置方向并匹配方向键导航。',
       type: "'horizontal' | 'vertical'",
       defaultValue: "'horizontal'",
     },
     {
-      name: 'Toggle.Group.spacing',
+      component: 'Toggle.Group',
+      name: 'spacing',
       description: '设置组内间距；0 会形成连续的紧凑控件。',
       type: 'number',
       defaultValue: '2',

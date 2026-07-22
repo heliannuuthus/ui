@@ -3758,15 +3758,6 @@ a {
   right: 0;
 }
 
-.display-carousel.has-custom-controls .display-carousel-previous,
-.display-carousel.has-custom-controls .display-carousel-next {
-  border-color: color-mix(in oklab, var(--primary) 24%, var(--border));
-  background: color-mix(in oklab, var(--primary) 8%, var(--background));
-  color: var(--primary);
-  font-family: var(--font-mono);
-  font-size: 16px;
-}
-
 .display-carousel-autoplay-stage {
   display: grid;
   width: min(600px, 100%);
@@ -3829,30 +3820,6 @@ a {
 
 .display-carousel-autoplay[data-autoplay-state='paused'] .display-highlight {
   border-color: color-mix(in oklab, var(--primary) 34%, var(--border));
-}
-
-.display-carousel-number-dot {
-  display: grid;
-  width: 20px;
-  height: 20px;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--background);
-  color: var(--muted-foreground);
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 700;
-  transition:
-    border-color 160ms ease,
-    background 160ms ease,
-    color 160ms ease;
-}
-
-.display-carousel-number-dot[data-selected='true'] {
-  border-color: var(--primary);
-  background: var(--primary);
-  color: var(--primary-foreground);
 }
 
 .display-highlight {
