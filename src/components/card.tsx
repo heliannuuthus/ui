@@ -11,8 +11,13 @@ type CardClassNames = {
   footer?: string;
 };
 
+type CardRadius = 'default' | 'sm' | 'none';
+type CardVariant = 'elevated' | 'outline' | 'ghost';
+
 type CardProps = Omit<React.ComponentProps<'div'>, 'title'> & {
+  radius?: CardRadius;
   size?: 'default' | 'sm';
+  variant?: CardVariant;
   title?: React.ReactNode;
   description?: React.ReactNode;
   action?: React.ReactNode;
@@ -22,7 +27,9 @@ type CardProps = Omit<React.ComponentProps<'div'>, 'title'> & {
 
 function Card({
   className,
+  radius = 'default',
   size = 'default',
+  variant = 'elevated',
   title,
   description,
   action,
@@ -36,9 +43,11 @@ function Card({
   return (
     <div
       data-slot="card"
+      data-radius={radius}
       data-size={size}
+      data-variant={variant}
       className={cn(
-        'group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-4xl bg-card py-(--card-spacing) text-sm text-card-foreground shadow-md ring-1 ring-foreground/5 [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(4)] dark:ring-foreground/10 *:[img:first-child]:rounded-t-4xl *:[img:last-child]:rounded-b-4xl',
+        'group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-4xl bg-card py-(--card-spacing) text-sm text-card-foreground [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 data-[radius=none]:rounded-none data-[radius=sm]:rounded-lg data-[size=sm]:[--card-spacing:--spacing(4)] data-[variant=elevated]:shadow-md data-[variant=elevated]:ring-1 data-[variant=elevated]:ring-foreground/5 data-[variant=outline]:border data-[variant=outline]:border-border data-[variant=ghost]:bg-transparent dark:data-[variant=elevated]:ring-foreground/10',
         className
       )}
       {...props}
@@ -48,6 +57,7 @@ function Card({
           data-slot="card-header"
           className={cn(
             'group/card-header @container/card-header grid auto-rows-min items-start gap-1.5 rounded-t-4xl border-b px-(--card-spacing) pb-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto]',
+            'group-data-[radius=none]/card:rounded-t-none group-data-[radius=sm]/card:rounded-t-lg',
             classNames?.header
           )}
         >
@@ -97,6 +107,7 @@ function Card({
           data-slot="card-footer"
           className={cn(
             'flex items-center rounded-b-4xl border-t px-(--card-spacing) pt-(--card-spacing)',
+            'group-data-[radius=none]/card:rounded-b-none group-data-[radius=sm]/card:rounded-b-lg',
             classNames?.footer
           )}
         >
@@ -107,4 +118,10 @@ function Card({
   );
 }
 
-export { Card, type CardClassNames, type CardProps };
+export {
+  Card,
+  type CardClassNames,
+  type CardProps,
+  type CardRadius,
+  type CardVariant,
+};

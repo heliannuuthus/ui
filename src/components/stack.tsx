@@ -4,12 +4,16 @@ import { cn } from '../lib/utils';
 
 type StackGap = 'sm' | 'md' | 'lg' | number | readonly [number, number];
 type StackAlign = 'start' | 'center' | 'end' | 'baseline' | 'stretch';
+type StackJustify =
+  'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
 type StackOrientation = 'horizontal' | 'vertical';
 
 type StackProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   align?: StackAlign;
+  block?: boolean;
   children?: React.ReactNode;
   gap?: StackGap;
+  justify?: StackJustify;
   orientation?: StackOrientation;
   separator?: React.ReactNode;
   wrap?: boolean;
@@ -17,7 +21,7 @@ type StackProps = Omit<React.ComponentProps<'div'>, 'children'> & {
 
 type StackCompactProps = Omit<
   StackProps,
-  'align' | 'gap' | 'separator' | 'wrap'
+  'align' | 'block' | 'gap' | 'separator' | 'wrap'
 >;
 
 const presetGaps = {
@@ -34,6 +38,15 @@ const alignments: Record<StackAlign, string> = {
   stretch: 'items-stretch',
 };
 
+const justifications: Record<StackJustify, string> = {
+  start: 'justify-start',
+  center: 'justify-center',
+  end: 'justify-end',
+  between: 'justify-between',
+  around: 'justify-around',
+  evenly: 'justify-evenly',
+};
+
 function resolveGap(gap: StackGap) {
   if (typeof gap === 'string') {
     const value = presetGaps[gap];
@@ -45,9 +58,11 @@ function resolveGap(gap: StackGap) {
 
 function StackRoot({
   align = 'stretch',
+  block = false,
   children,
   className,
   gap = 'md',
+  justify = 'start',
   orientation = 'vertical',
   separator,
   style,
@@ -64,9 +79,11 @@ function StackRoot({
       data-wrap={wrap || undefined}
       className={cn(
         'inline-flex max-w-full',
+        block && 'w-full',
         orientation === 'vertical' && 'flex-col',
         orientation === 'horizontal' && wrap && 'flex-wrap',
         alignments[align],
+        justifications[justify],
         className
       )}
       style={{ columnGap, rowGap, ...style }}
@@ -129,6 +146,7 @@ export type {
   StackAlign,
   StackCompactProps,
   StackGap,
+  StackJustify,
   StackOrientation,
   StackProps,
 };

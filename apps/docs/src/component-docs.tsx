@@ -325,6 +325,12 @@ export function ButtonStates() {
       defaultValue: "'default'",
     },
     {
+      name: 'block',
+      description: '让按钮填满父容器的可用宽度。',
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
       name: 'disabled',
       description: '阻止鼠标和键盘触发操作。',
       type: 'boolean',
@@ -919,7 +925,7 @@ const stackDocumentation: ComponentDocumentation = {
       },
       code: `import { Stack } from '@heliannuuthus/ui/stack'
 
-<Stack orientation="horizontal" gap="md" align="center" wrap>
+<Stack block orientation="horizontal" gap="md" align="center" justify="between" wrap>
   <Filter />
   <Sort />
   <Availability />
@@ -961,6 +967,18 @@ const stackDocumentation: ComponentDocumentation = {
       description: '设置交叉轴对齐方式。',
       type: "'start' | 'center' | 'end' | 'baseline' | 'stretch'",
       defaultValue: "'stretch'",
+    },
+    {
+      name: 'justify',
+      description: '设置主轴内容分布方式。',
+      type: "'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'",
+      defaultValue: "'start'",
+    },
+    {
+      name: 'block',
+      description: '让 Stack 填满父容器的可用宽度。',
+      type: 'boolean',
+      defaultValue: 'false',
     },
     {
       name: 'wrap',
@@ -1112,6 +1130,18 @@ export function WorkspaceCard() {
       description: '控制 Card 的整体内边距密度。',
       type: "'default' | 'sm'",
       defaultValue: "'default'",
+    },
+    {
+      name: 'radius',
+      description: '控制 Card 外轮廓的圆角密度。',
+      type: "'default' | 'sm' | 'none'",
+      defaultValue: "'default'",
+    },
+    {
+      name: 'variant',
+      description: '控制 Card 的层级表达，可选择阴影、描边或透明容器。',
+      type: "'elevated' | 'outline' | 'ghost'",
+      defaultValue: "'elevated'",
     },
     {
       name: 'title',

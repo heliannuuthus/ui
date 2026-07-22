@@ -102,9 +102,6 @@ importers:
       '@eslint/js':
         specifier: ^9.39.2
         version: 9.39.5
-      '@fontsource-variable/raleway':
-        specifier: 5.3.0
-        version: 5.3.0
       '@tailwindcss/cli':
         specifier: ^4.1.0
         version: 4.3.3
@@ -736,9 +733,6 @@ packages:
 
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
-
-  '@fontsource-variable/raleway@5.3.0':
-    resolution: {integrity: sha512-aSV2k+V6Zz+od0dHpBOzkVxEzmgEdiXcxDfant39jLOx+T89dielQRrZylukwK3Fp+FY255gPqz67ruOfs1rqA==}
 
   '@hono/node-server@1.19.14':
     resolution: {integrity: sha512-GwtvgtXxnWsucXvbQXkRgqksiH2Qed37H9xHZocE5sA3N8O8O8/8FA3uclQXxXVzc9XBZuEOMK7+r02FmSpHtw==}
@@ -4560,8 +4554,6 @@ snapshots:
       react-dom: 19.2.7(react@19.2.7)
 
   '@floating-ui/utils@0.2.12': {}
-
-  '@fontsource-variable/raleway@5.3.0': {}
 
   '@hono/node-server@1.19.14(hono@4.12.30)':
     dependencies:

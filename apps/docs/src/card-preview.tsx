@@ -2,6 +2,7 @@ import { Card } from '@heliannuuthus/ui/card';
 import { Button } from '@heliannuuthus/ui/button';
 import { Input } from '@heliannuuthus/ui/input';
 import { Label } from '@heliannuuthus/ui/form';
+import { TypographyLarge, TypographySmall } from '@heliannuuthus/ui/typography';
 import { MoreHorizontal } from 'lucide-react';
 
 export function CardAnatomyDemo({ size = 'sm' }: { size?: 'default' | 'sm' }) {
@@ -30,7 +31,8 @@ export function CardAnatomyDemo({ size = 'sm' }: { size?: 'default' | 'sm' }) {
         }
         classNames={{
           content: 'card-showcase-content',
-          footer: 'card-showcase-footer',
+          footer:
+            'card-showcase-footer -mb-(--card-spacing) mt-auto pb-(--card-spacing)',
         }}
       >
         <Label htmlFor="card-workspace-name">工作区名称</Label>
@@ -38,25 +40,36 @@ export function CardAnatomyDemo({ size = 'sm' }: { size?: 'default' | 'sm' }) {
       </Card>
 
       <aside className="card-composition-map" aria-label="Card 属性结构">
-        <span>PROPS</span>
-        <strong>Card</strong>
-        <ul>
-          <li>
-            <code>title / description / action</code>
-            <span>头部信息</span>
-            <div>
-              <code>ReactNode</code>
-            </div>
-          </li>
-          <li>
-            <code>children</code>
-            <span>主体内容</span>
-          </li>
-          <li>
-            <code>footer</code>
-            <span>整卡操作</span>
-          </li>
-        </ul>
+        <Card
+          className="card-composition-map-card"
+          radius="sm"
+          size="sm"
+          variant="outline"
+        >
+          <TypographySmall className="card-composition-map-kicker">
+            PROPS
+          </TypographySmall>
+          <TypographyLarge className="card-composition-map-title">
+            Card
+          </TypographyLarge>
+          <ul>
+            <li>
+              <code>title / description / action</code>
+              <span>头部信息</span>
+              <div>
+                <code>ReactNode</code>
+              </div>
+            </li>
+            <li>
+              <code>children</code>
+              <span>主体内容</span>
+            </li>
+            <li>
+              <code>footer</code>
+              <span>整卡操作</span>
+            </li>
+          </ul>
+        </Card>
       </aside>
     </div>
   );

@@ -1,8 +1,19 @@
 import { useMemo, useState, type CSSProperties } from 'react';
+import { Badge } from '@heliannuuthus/ui/badge';
 import { Button } from '@heliannuuthus/ui/button';
 import { Card } from '@heliannuuthus/ui/card';
 import { Input } from '@heliannuuthus/ui/input';
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from '@heliannuuthus/ui/item';
+import { Label } from '@heliannuuthus/ui/label';
 import { Masonry, MasonryItem } from '@heliannuuthus/ui/masonry';
+import { Separator } from '@heliannuuthus/ui/separator';
 import {
   Sidebar,
   SidebarContent,
@@ -18,6 +29,13 @@ import {
   SidebarSeparator,
 } from '@heliannuuthus/ui/sidebar';
 import { Toggle } from '@heliannuuthus/ui/toggle';
+import { Stack } from '@heliannuuthus/ui/stack';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@heliannuuthus/ui/tabs';
 import {
   Tooltip,
   TooltipContent,
@@ -25,15 +43,29 @@ import {
   TooltipTrigger,
 } from '@heliannuuthus/ui/tooltip';
 import {
+  H1,
+  H2,
+  H3,
+  TypographyLarge,
+  TypographyLead,
+  TypographyCode,
+  TypographyMuted,
+  TypographySmall,
+} from '@heliannuuthus/ui/typography';
+import {
   ArrowRight,
+  Blocks,
   Box,
   Check,
   Code2,
   Copy,
   Github,
+  LayoutGrid,
   Menu,
   Moon,
   Package,
+  PackagePlus,
+  Palette,
   Search,
   Sparkles,
   Sun,
@@ -191,15 +223,16 @@ function SiteHeader({ dark, onTheme }: { dark: boolean; onTheme: () => void }) {
   return (
     <header className="site-header">
       <Brand />
-      <button
+      <Button
         className="mobile-menu"
-        type="button"
+        size="icon"
+        variant="ghost"
         aria-label={open ? '关闭导航' : '打开导航'}
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
         {open ? <X /> : <Menu />}
-      </button>
+      </Button>
       <nav
         className={open ? 'site-nav is-open' : 'site-nav'}
         aria-label="主导航"
@@ -211,121 +244,143 @@ function SiteHeader({ dark, onTheme }: { dark: boolean; onTheme: () => void }) {
         ))}
       </nav>
       <div className="header-actions">
-        <button className="search-trigger" type="button">
+        <Button className="search-trigger" variant="outline">
           <Search size={16} />
           <span>搜索组件</span>
           <kbd>⌘ K</kbd>
-        </button>
-        <a
+        </Button>
+        <Button
           className="icon-button"
-          href={repositoryUrl}
+          nativeButton={false}
+          render={<a href={repositoryUrl} />}
+          size="icon"
+          variant="ghost"
           aria-label="在 GitHub 查看源码"
         >
           <Github />
-        </a>
-        <button
+        </Button>
+        <Button
           className="icon-button"
-          type="button"
+          size="icon"
+          variant="ghost"
           onClick={onTheme}
           aria-label="切换主题"
         >
           {dark ? <Sun /> : <Moon />}
-        </button>
+        </Button>
       </div>
     </header>
   );
 }
 
 function HomePage() {
-  const [packageManager, setPackageManager] = useState<PackageManager>('pnpm');
-  const [copied, setCopied] = useState(false);
-  const installCommand = installCommands[packageManager];
-  const copyInstall = async () => {
-    await navigator.clipboard.writeText(installCommand);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1600);
+  const [copiedManager, setCopiedManager] = useState<PackageManager | null>(
+    null
+  );
+  const copyInstall = async (manager: PackageManager) => {
+    await navigator.clipboard.writeText(installCommands[manager]);
+    setCopiedManager(manager);
+    window.setTimeout(() => setCopiedManager(null), 1600);
   };
 
   return (
     <main>
       <section className="home-hero">
-        <div className="hero-orbit hero-orbit-one" />
-        <div className="hero-orbit hero-orbit-two" />
-        <div className="hero-content">
-          <div className="release-pill">
-            <Sparkles size={14} /> v0.1 已发布 <ArrowRight size={14} />
-          </div>
-          <h1>
-            为 Heliannuuthus 产品而生的
-            <span>React 组件基础设施</span>
-          </h1>
-          <p>
-            一套清晰、可组合、可掌控的 UI 基础层。以开放代码为起点， 用成熟的
-            API 和一致的设计语言连接每一个产品。
-          </p>
-          <div className="hero-actions">
-            <NavLink className="primary-action" to="/docs/getting-started">
-              开始使用 <ArrowRight size={17} />
-            </NavLink>
-            <NavLink className="secondary-action" to="/components">
+        <Stack block className="hero-content" gap={32}>
+          <Stack block gap="lg">
+            <Badge variant="outline">
+              <Sparkles data-icon="inline-start" />
+              {componentCatalog.length} 个可组合组件
+            </Badge>
+            <H1>构建清晰、一致的产品界面</H1>
+            <TypographyLead className="hero-copy">
+              Heliannuuthus UI 提供稳定的 React 组件、明确的 API
+              与可访问交互，让产品团队把注意力留给真正的业务问题。
+            </TypographyLead>
+          </Stack>
+
+          <Stack align="center" gap="md" orientation="horizontal" wrap>
+            <Button
+              nativeButton={false}
+              render={<NavLink to="/docs/getting-started" />}
+              size="lg"
+            >
+              开始使用 <ArrowRight data-icon="inline-end" />
+            </Button>
+            <Button
+              nativeButton={false}
+              render={<NavLink to="/components" />}
+              size="lg"
+              variant="outline"
+            >
               浏览组件
-            </NavLink>
-          </div>
-          <div className="hero-install">
-            <div className="package-manager-switch" aria-label="选择包管理器">
+            </Button>
+          </Stack>
+
+          <Tabs animation="none" className="hero-install" defaultValue="pnpm">
+            <TabsList aria-label="选择包管理器" variant="line">
               {(Object.keys(installCommands) as PackageManager[]).map(
                 (manager) => (
-                  <button
-                    className={packageManager === manager ? 'active' : ''}
+                  <TabsTrigger
                     key={manager}
-                    type="button"
-                    onClick={() => {
-                      setPackageManager(manager);
-                      setCopied(false);
-                    }}
+                    value={manager}
+                    onClick={() => setCopiedManager(null)}
                   >
                     {manager}
-                  </button>
+                  </TabsTrigger>
                 )
               )}
-            </div>
-            <button
-              className="install-command"
-              type="button"
-              onClick={copyInstall}
+            </TabsList>
+            {(Object.keys(installCommands) as PackageManager[]).map(
+              (manager) => (
+                <TabsContent key={manager} value={manager}>
+                  <Button
+                    block
+                    onClick={() => copyInstall(manager)}
+                    variant="outline"
+                  >
+                    <TypographyCode>{installCommands[manager]}</TypographyCode>
+                    {copiedManager === manager ? (
+                      <Check data-icon="inline-end" />
+                    ) : (
+                      <Copy data-icon="inline-end" />
+                    )}
+                  </Button>
+                </TabsContent>
+              )
+            )}
+          </Tabs>
+        </Stack>
+
+        <Card
+          className="hero-showcase"
+          radius="sm"
+          title="组件组合预览"
+          description="使用公共组件完成真实界面，而不是绘制静态示意图。"
+          action={<Badge variant="secondary">Live</Badge>}
+        >
+          <Stack block gap={24}>
+            <Stack align="center" gap="sm" orientation="horizontal" wrap>
+              <Badge variant="outline">Accessible</Badge>
+              <Badge variant="outline">Type-safe</Badge>
+              <Badge variant="outline">Composable</Badge>
+            </Stack>
+            <Stack block gap="sm">
+              <Label htmlFor="home-workspace-name">工作区名称</Label>
+              <Input defaultValue="Heliannuuthus UI" id="home-workspace-name" />
+            </Stack>
+            <Stack
+              align="center"
+              block
+              gap="sm"
+              justify="end"
+              orientation="horizontal"
             >
-              <span className="prompt">$</span>
-              <code>{installCommand}</code>
-              <span>{copied ? <Check /> : <Copy />}</span>
-            </button>
-          </div>
-        </div>
-        <div className="hero-showcase" aria-label="组件能力预览">
-          <div className="showcase-window">
-            <div className="window-bar">
-              <span />
-              <span />
-              <span />
-              <small>component-preview.tsx</small>
-            </div>
-            <div className="showcase-canvas">
-              <div className="floating-chip chip-one">Accessible</div>
-              <div className="floating-chip chip-two">Type-safe</div>
-              <div className="preview-card">
-                <div className="preview-avatar">H</div>
-                <div>
-                  <strong>建立你的界面</strong>
-                  <p>组合组件，而不是重复造轮子。</p>
-                </div>
-                <div className="preview-input">name@example.com</div>
-                <div className="preview-buttons">
-                  <Button>继续</Button>
-                  <Button variant="outline">取消</Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+              <Button variant="outline">取消</Button>
+              <Button>保存修改</Button>
+            </Stack>
+          </Stack>
+        </Card>
       </section>
 
       <section className="feature-strip" aria-label="项目特性">
@@ -348,60 +403,95 @@ function HomePage() {
       </section>
 
       <section className="home-section philosophy-section">
-        <div className="section-heading">
-          <span>01 / DESIGN</span>
-          <h2>设计应该让产品更像一个整体</h2>
-          <p>不以风格覆盖业务，而以稳定、清晰的规则降低每一次决策的成本。</p>
-          <NavLink to="/design">
-            了解设计理念 <ArrowRight size={16} />
-          </NavLink>
-        </div>
-        <div className="principle-grid">
-          {[
-            ['清晰', '信息层级先于装饰，让状态、操作与反馈始终可理解。'],
-            ['一致', '相同的问题提供相同的解法，跨产品也保持熟悉感。'],
-            ['可组合', '小而稳定的能力可以自由组合，业务语义留在业务中。'],
-            ['可生长', 'API 为真实场景保留扩展点，并尊重长期兼容性。'],
-          ].map(([title, copy], index) => (
-            <article key={title}>
-              <span>0{index + 1}</span>
-              <h3>{title}</h3>
-              <p>{copy}</p>
-            </article>
-          ))}
-        </div>
+        <Stack block gap={48}>
+          <Stack block className="section-heading" gap="lg">
+            <TypographySmall className="section-label">
+              DESIGN SYSTEM
+            </TypographySmall>
+            <H2>让每一个产品共享同一套界面语言</H2>
+            <TypographyLead>
+              公共组件负责稳定的行为和表达，业务项目专注自己的流程与语义。
+            </TypographyLead>
+            <Button
+              nativeButton={false}
+              render={<NavLink to="/design" />}
+              variant="link"
+            >
+              了解设计理念 <ArrowRight data-icon="inline-end" />
+            </Button>
+          </Stack>
+          <Masonry
+            className="principle-grid"
+            columns={4}
+            gap={14}
+            minColumnWidth={220}
+          >
+            {[
+              ['清晰', '信息层级先于装饰，让状态、操作与反馈始终可理解。'],
+              ['一致', '相同的问题提供相同的解法，跨产品也保持熟悉感。'],
+              ['可组合', '小而稳定的能力可以自由组合，业务语义留在业务中。'],
+              ['可生长', 'API 为真实场景保留扩展点，并尊重长期兼容性。'],
+            ].map(([title, copy]) => (
+              <Card key={title} radius="sm" size="sm">
+                <Stack block gap="md">
+                  <H3>{title}</H3>
+                  <TypographyMuted>{copy}</TypographyMuted>
+                </Stack>
+              </Card>
+            ))}
+          </Masonry>
+        </Stack>
       </section>
 
       <section className="home-section component-teaser">
-        <div className="section-heading horizontal">
-          <div>
-            <span>02 / COMPONENTS</span>
-            <h2>从基础控件到完整交互</h2>
-          </div>
-          <NavLink to="/components">
-            查看全部组件 <ArrowRight size={16} />
-          </NavLink>
-        </div>
-        <Masonry
-          className="teaser-grid"
-          columns={3}
-          gap={14}
-          minColumnWidth={240}
-        >
-          {componentGroups.slice(0, 6).map((group) => (
-            <NavLink
-              key={group.title}
-              to={`/components/${componentSlug(group.items[0])}`}
+        <Stack block gap={48}>
+          <Stack
+            align="end"
+            block
+            className="section-heading-horizontal"
+            gap="lg"
+            justify="between"
+            orientation="horizontal"
+          >
+            <Stack gap="lg">
+              <TypographySmall className="section-label">
+                COMPONENTS
+              </TypographySmall>
+              <H2>从基础控件到完整交互</H2>
+            </Stack>
+            <Button
+              nativeButton={false}
+              render={<NavLink to="/components" />}
+              variant="link"
             >
-              <Package />
-              <div>
-                <strong>{group.title}</strong>
-                <span>{group.items.length} 个组件</span>
-              </div>
-              <ArrowRight />
-            </NavLink>
-          ))}
-        </Masonry>
+              查看全部组件 <ArrowRight data-icon="inline-end" />
+            </Button>
+          </Stack>
+          <Masonry columns={3} gap={14} minColumnWidth={240}>
+            {componentGroups.slice(0, 6).map((group) => (
+              <Item
+                key={group.title}
+                render={
+                  <NavLink
+                    to={`/components/${componentSlug(group.items[0])}`}
+                  />
+                }
+                variant="outline"
+              >
+                <ItemMedia variant="icon">
+                  <Package />
+                </ItemMedia>
+                <ItemContent>
+                  <ItemTitle>{group.title}</ItemTitle>
+                  <ItemDescription>{group.items.length} 个组件</ItemDescription>
+                </ItemContent>
+                <ItemActions>
+                  <ArrowRight />
+                </ItemActions>
+              </Item>
+            ))}
+          </Masonry>
+        </Stack>
       </section>
     </main>
   );
@@ -409,106 +499,162 @@ function HomePage() {
 
 function GettingStartedPage() {
   return (
-    <DocLayout title="快速开始" kicker="GUIDE">
-      <p className="lead">用几分钟把 Heliannuuthus UI 接入你的 React 项目。</p>
-      <h2>安装</h2>
-      <p>选择项目正在使用的包管理器安装。推荐使用 pnpm。</p>
-      <PackageManagerInstall />
-      <h2>引入样式</h2>
-      <p>在应用入口加载一次全局主题样式。</p>
-      <CodeBlock
-        code="import '@heliannuuthus/ui/styles.css'"
-        fileName="app.tsx"
-      />
-      <h2>使用组件</h2>
-      <p>
-        每个组件都通过明确的子路径导入，便于
-        tree-shaking，也让依赖边界一目了然。
-      </p>
-      <CodeBlock code={demoCode} fileName="button-example.tsx" />
-      <div className="next-card">
-        <div>
-          <span>下一步</span>
-          <strong>浏览完整组件目录</strong>
-        </div>
-        <NavLink to="/components">
+    <DocLayout
+      title="快速开始"
+      kicker="接入指南"
+      description="用几分钟把 Heliannuuthus UI 接入你的 React 项目。"
+      toc={[
+        {
+          label: '安装',
+          href: '#installation',
+          icon: <PackagePlus data-icon="inline-start" strokeWidth={2.5} />,
+        },
+        {
+          label: '引入样式',
+          href: '#styles',
+          icon: <Palette data-icon="inline-start" strokeWidth={2.5} />,
+        },
+        {
+          label: '使用组件',
+          href: '#usage',
+          icon: <Blocks data-icon="inline-start" strokeWidth={2.5} />,
+        },
+        {
+          label: '下一步',
+          href: '#next-step',
+          icon: <LayoutGrid data-icon="inline-start" strokeWidth={2.5} />,
+        },
+      ]}
+    >
+      <DocSection
+        description="选择项目正在使用的包管理器安装。推荐使用 pnpm。"
+        icon={<PackagePlus strokeWidth={2.5} />}
+        id="installation"
+        step="01"
+        title="安装"
+      >
+        <PackageManagerInstall />
+      </DocSection>
+      <DocSection
+        description="在应用入口加载一次全局主题样式。"
+        icon={<Palette strokeWidth={2.5} />}
+        id="styles"
+        step="02"
+        title="引入样式"
+      >
+        <CodeBlock
+          code="import '@heliannuuthus/ui/styles.css'"
+          fileName="app.tsx"
+        />
+      </DocSection>
+      <DocSection
+        description="每个组件都通过明确的子路径导入，便于 tree-shaking，也让依赖边界一目了然。"
+        icon={<Blocks strokeWidth={2.5} />}
+        id="usage"
+        step="03"
+        title="使用组件"
+      >
+        <CodeBlock code={demoCode} fileName="button-example.tsx" />
+      </DocSection>
+      <Item
+        className="next-card"
+        id="next-step"
+        render={<NavLink to="/components" />}
+        variant="outline"
+      >
+        <ItemMedia variant="icon">
+          <LayoutGrid strokeWidth={2.5} />
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle>
+            <Stack align="center" gap="sm" orientation="horizontal">
+              <Badge variant="secondary">04</Badge>
+              <TypographyLarge className="font-bold">
+                浏览完整组件目录
+              </TypographyLarge>
+            </Stack>
+          </ItemTitle>
+          <ItemDescription>
+            继续查看组件示例、API 与具体使用建议。
+          </ItemDescription>
+        </ItemContent>
+        <ItemActions>
           <ArrowRight />
-        </NavLink>
-      </div>
+        </ItemActions>
+      </Item>
     </DocLayout>
   );
 }
 
 function PackageManagerInstall() {
-  const [packageManager, setPackageManager] = useState<PackageManager>('pnpm');
-
   return (
-    <div className="package-install">
-      <div className="package-tabs" role="tablist" aria-label="包管理器">
+    <Tabs animation="none" defaultValue="pnpm">
+      <TabsList aria-label="包管理器" variant="line">
         {(Object.keys(installCommands) as PackageManager[]).map((manager) => (
-          <button
-            aria-controls="package-install-command"
-            aria-selected={packageManager === manager}
-            className={packageManager === manager ? 'active' : ''}
-            key={manager}
-            role="tab"
-            type="button"
-            onClick={() => setPackageManager(manager)}
-          >
+          <TabsTrigger key={manager} value={manager}>
             {manager}
-          </button>
+          </TabsTrigger>
         ))}
-      </div>
-      <div id="package-install-command" role="tabpanel">
-        <CodeBlock
-          code={installCommands[packageManager]}
-          fileName="terminal"
-          language="bash"
-          showLineNumbers={false}
-        />
-      </div>
-    </div>
+      </TabsList>
+      {(Object.keys(installCommands) as PackageManager[]).map((manager) => (
+        <TabsContent key={manager} value={manager}>
+          <CodeBlock
+            code={installCommands[manager]}
+            fileName="terminal"
+            language="bash"
+            showLineNumbers={false}
+          />
+        </TabsContent>
+      ))}
+    </Tabs>
   );
 }
 
 function DesignPage() {
+  const principles = [
+    [
+      '01',
+      '清晰胜过表现',
+      '视觉的首要职责是解释结构。颜色、间距和动效都应服务于理解，而不是争夺注意力。',
+    ],
+    [
+      '02',
+      '约定创造效率',
+      '一致的命名、状态和反馈让团队少做无谓选择，把注意力留给真正的产品问题。',
+    ],
+    [
+      '03',
+      '组合保持边界',
+      '公共组件提供可靠能力，业务层负责语义与流程。两者清楚分工，系统才能自由生长。',
+    ],
+    [
+      '04',
+      '细节建立信任',
+      '键盘操作、窄屏布局、加载与错误状态并非补充，它们共同决定一个组件是否值得依赖。',
+    ],
+  ] as const;
+
   return (
-    <DocLayout title="设计理念" kicker="FOUNDATION">
-      <p className="lead">
-        组件不是终点。我们建立的是一套让产品持续保持清晰、一致和可维护的共同语言。
-      </p>
-      <div className="design-values">
-        {[
-          [
-            '01',
-            '清晰胜过表现',
-            '视觉的首要职责是解释结构。颜色、间距和动效都应服务于理解，而不是争夺注意力。',
-          ],
-          [
-            '02',
-            '约定创造效率',
-            '一致的命名、状态和反馈让团队少做无谓选择，把注意力留给真正的产品问题。',
-          ],
-          [
-            '03',
-            '组合保持边界',
-            '公共组件提供可靠能力，业务层负责语义与流程。两者清楚分工，系统才能自由生长。',
-          ],
-          [
-            '04',
-            '细节建立信任',
-            '键盘操作、窄屏布局、加载与错误状态并非补充，它们共同决定一个组件是否值得依赖。',
-          ],
-        ].map(([number, title, copy]) => (
-          <article key={number}>
-            <span>{number}</span>
-            <div>
-              <h2>{title}</h2>
-              <p>{copy}</p>
-            </div>
+    <DocLayout
+      title="设计理念"
+      kicker="FOUNDATION"
+      description="组件不是终点。我们建立的是一套让产品持续保持清晰、一致和可维护的共同语言。"
+      toc={principles.map(([number, title]) => ({
+        label: title,
+        href: `#principle-${number}`,
+      }))}
+    >
+      <Stack block className="design-values" gap={0} separator={<Separator />}>
+        {principles.map(([number, title, copy]) => (
+          <article id={`principle-${number}`} key={number}>
+            <TypographySmall>{number}</TypographySmall>
+            <Stack block gap="sm">
+              <H3>{title}</H3>
+              <TypographyMuted>{copy}</TypographyMuted>
+            </Stack>
           </article>
         ))}
-      </div>
+      </Stack>
     </DocLayout>
   );
 }
@@ -894,6 +1040,8 @@ function ComponentExampleCard({
               className="demo-code"
               code={example.code}
               fileName={`${component}-example.tsx`}
+              radius="none"
+              variant="ghost"
             />
           )}
         </div>
@@ -946,9 +1094,10 @@ function CodeBlock({
   return (
     <SyntaxCode
       action={
-        <button
+        <Button
           aria-label={copied ? '代码已复制' : '复制代码'}
-          type="button"
+          size="icon-sm"
+          variant="ghost"
           onClick={async () => {
             await navigator.clipboard.writeText(code);
             setCopied(true);
@@ -956,9 +1105,8 @@ function CodeBlock({
           }}
         >
           {copied ? <Check /> : <Copy />}
-        </button>
+        </Button>
       }
-      className="code-block"
       code={code}
       fileName={fileName}
       language={language}
@@ -967,27 +1115,105 @@ function CodeBlock({
   );
 }
 
+function DocSection({
+  children,
+  description,
+  icon,
+  id,
+  step,
+  title,
+}: {
+  children: React.ReactNode;
+  description: string;
+  icon: React.ReactNode;
+  id: string;
+  step: string;
+  title: string;
+}) {
+  return (
+    <section className="doc-section" id={id}>
+      <Stack block gap="lg">
+        <Item className="p-0" size="sm">
+          <ItemMedia variant="icon">{icon}</ItemMedia>
+          <ItemContent>
+            <ItemTitle>
+              <Stack align="center" gap="sm" orientation="horizontal">
+                <Badge variant="secondary">{step}</Badge>
+                <H2 className="border-0 pb-0 text-2xl font-bold">{title}</H2>
+              </Stack>
+            </ItemTitle>
+            <ItemDescription>{description}</ItemDescription>
+          </ItemContent>
+        </Item>
+        {children}
+      </Stack>
+    </section>
+  );
+}
+
 function DocLayout({
   title,
   kicker,
+  description,
+  toc,
   children,
 }: {
   title: string;
   kicker: string;
+  description: string;
+  toc: ReadonlyArray<{
+    label: string;
+    href: `#${string}`;
+    icon?: React.ReactNode;
+  }>;
   children: React.ReactNode;
 }) {
   return (
     <main className="doc-page">
-      <div className="doc-content">
-        <span className="doc-kicker">{kicker}</span>
-        <h1>{title}</h1>
-        {children}
-      </div>
-      <aside className="doc-toc">
-        <span>本页目录</span>
-        <a href="#">概览</a>
-        <a href="#">核心内容</a>
-        <a href="#">下一步</a>
+      <Stack block className="doc-content" gap={48}>
+        <Stack block className="doc-intro" gap="sm">
+          <Badge className="doc-kicker" variant="outline">
+            {kicker}
+          </Badge>
+          <H1 id="page-title">{title}</H1>
+          <TypographyLead className="text-lg leading-8">
+            {description}
+          </TypographyLead>
+        </Stack>
+        <Stack
+          block
+          className="doc-sections"
+          gap={32}
+          separator={<Separator />}
+        >
+          {children}
+        </Stack>
+      </Stack>
+      <aside aria-label="本页目录" className="doc-toc">
+        <Stack align="stretch" gap="lg" orientation="horizontal">
+          <Separator orientation="vertical" />
+          <Stack gap="sm">
+            <TypographySmall>本页目录</TypographySmall>
+            <Stack gap={2}>
+              {toc.map((item, index) => (
+                <Button
+                  className="doc-toc-link"
+                  key={item.href}
+                  nativeButton={false}
+                  render={<a href={item.href} />}
+                  size="sm"
+                  variant="ghost"
+                >
+                  {item.icon}
+                  {item.label}
+                  <Badge variant="ghost">
+                    {String(index + 1).padStart(2, '0')}
+                  </Badge>
+                </Button>
+              ))}
+            </Stack>
+          </Stack>
+        </Stack>
       </aside>
     </main>
   );

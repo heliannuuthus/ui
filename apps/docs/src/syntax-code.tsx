@@ -1,10 +1,12 @@
 import type { ReactNode } from 'react';
+import { Card, type CardProps } from '@heliannuuthus/ui/card';
+import { Stack } from '@heliannuuthus/ui/stack';
+import { TypographySmall } from '@heliannuuthus/ui/typography';
 import {
   Highlight,
   type Language,
   type PrismTheme,
 } from 'prism-react-renderer';
-import { FileCode2 } from 'lucide-react';
 
 const docsSyntaxTheme: PrismTheme = {
   plain: {
@@ -61,7 +63,9 @@ type SyntaxCodeProps = {
   code: string;
   fileName?: string;
   language?: Language;
+  radius?: CardProps['radius'];
   showLineNumbers?: boolean;
+  variant?: CardProps['variant'];
 };
 
 export function SyntaxCode({
@@ -70,30 +74,54 @@ export function SyntaxCode({
   code,
   fileName = 'example.tsx',
   language = 'tsx',
+  radius = 'sm',
   showLineNumbers = true,
+  variant = 'outline',
 }: SyntaxCodeProps) {
   const normalizedCode = code.replace(/^\n/, '').trimEnd();
   const lineCount = normalizedCode.split('\n').length;
 
   return (
-    <div
+    <Card
       className={`syntax-code${className ? ` ${className}` : ''}`}
+      classNames={{
+        header: 'syntax-code-toolbar',
+        title: 'syntax-code-title',
+        action: 'syntax-code-action',
+        content: 'syntax-code-body',
+      }}
       data-language={language}
+      data-line-count={lineCount}
+      radius={radius}
+      size="sm"
+      variant={variant}
+      title={
+        <Stack
+          align="center"
+          block
+          gap="lg"
+          justify="between"
+          orientation="horizontal"
+        >
+          <Stack align="center" gap="sm" orientation="horizontal">
+            <TypographySmall className="font-heading font-bold">
+              {fileName}
+            </TypographySmall>
+          </Stack>
+          <Stack
+            align="center"
+            className="syntax-code-meta"
+            gap="sm"
+            orientation="horizontal"
+            separator={<i />}
+          >
+            <span>{language.toUpperCase()}</span>
+            <span>{lineCount} 行</span>
+          </Stack>
+        </Stack>
+      }
+      action={action}
     >
-      <div className="syntax-code-toolbar">
-        <div className="syntax-code-file">
-          <span aria-hidden="true">
-            <FileCode2 />
-          </span>
-          <strong>{fileName}</strong>
-        </div>
-        <div className="syntax-code-meta" aria-hidden="true">
-          <span>{language.toUpperCase()}</span>
-          <i />
-          <span>{lineCount} 行</span>
-        </div>
-        {action ? <div className="syntax-code-action">{action}</div> : null}
-      </div>
       <Highlight
         code={normalizedCode}
         language={language}
@@ -127,6 +155,6 @@ export function SyntaxCode({
           </pre>
         )}
       </Highlight>
-    </div>
+    </Card>
   );
 }
