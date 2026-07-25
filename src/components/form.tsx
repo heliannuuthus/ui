@@ -112,25 +112,11 @@ function FormMessage({
 
 export {
   Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Label,
-  useFormField,
+  FormControl as Control,
+  FormDescription as Description,
+  FormField as Field,
+  FormItem as Item,
+  FormLabel as Label,
+  FormMessage as Message,
+  useFormField as useField,
 };
-
-export {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSeparator,
-  FieldSet,
-  FieldTitle,
-} from './field';

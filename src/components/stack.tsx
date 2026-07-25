@@ -2,14 +2,18 @@ import * as React from 'react';
 
 import { cn } from '../lib/utils';
 
-type StackGap = 'sm' | 'md' | 'lg' | number | readonly [number, number];
+type StackGap = number | readonly [number, number];
 type StackAlign = 'start' | 'center' | 'end' | 'baseline' | 'stretch';
+type StackJustify =
+  'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
 type StackOrientation = 'horizontal' | 'vertical';
 
 type StackProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   align?: StackAlign;
+  block?: boolean;
   children?: React.ReactNode;
   gap?: StackGap;
+  justify?: StackJustify;
   orientation?: StackOrientation;
   separator?: React.ReactNode;
   wrap?: boolean;
@@ -20,12 +24,6 @@ type StackCompactProps = Omit<
   'align' | 'gap' | 'separator' | 'wrap'
 >;
 
-const presetGaps = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-} as const;
-
 const alignments: Record<StackAlign, string> = {
   start: 'items-start',
   center: 'items-center',
@@ -34,20 +32,27 @@ const alignments: Record<StackAlign, string> = {
   stretch: 'items-stretch',
 };
 
+const justifications: Record<StackJustify, string> = {
+  start: 'justify-start',
+  center: 'justify-center',
+  end: 'justify-end',
+  between: 'justify-between',
+  around: 'justify-around',
+  evenly: 'justify-evenly',
+};
+
 function resolveGap(gap: StackGap) {
-  if (typeof gap === 'string') {
-    const value = presetGaps[gap];
-    return [value, value] as const;
-  }
   if (typeof gap === 'number') return [gap, gap] as const;
   return gap;
 }
 
 function StackRoot({
   align = 'stretch',
+  block = false,
   children,
   className,
-  gap = 'md',
+  gap = 12,
+  justify = 'start',
   orientation = 'vertical',
   separator,
   style,
@@ -64,9 +69,11 @@ function StackRoot({
       data-wrap={wrap || undefined}
       className={cn(
         'inline-flex max-w-full',
+        block && 'w-full',
         orientation === 'vertical' && 'flex-col',
         orientation === 'horizontal' && wrap && 'flex-wrap',
         alignments[align],
+        justifications[justify],
         className
       )}
       style={{ columnGap, rowGap, ...style }}
@@ -91,12 +98,13 @@ function StackRoot({
 
 const compactOrientations: Record<StackOrientation, string> = {
   horizontal:
-    '*:data-slot:rounded-r-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-4xl! [&>[data-slot]~[data-slot]]:-ml-px [&>[data-slot]~[data-slot]]:rounded-l-none [&>[data-slot]~[data-slot]]:border-l-0',
+    '*:data-slot:rounded-r-none [&>[data-slot]:first-child]:rounded-l-4xl! [&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-4xl! [&>[data-slot]~[data-slot]]:-ml-px [&>[data-slot]~[data-slot]]:rounded-l-none',
   vertical:
-    'flex-col *:data-slot:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-4xl! [&>[data-slot]~[data-slot]]:-mt-px [&>[data-slot]~[data-slot]]:rounded-t-none [&>[data-slot]~[data-slot]]:border-t-0',
+    'flex-col *:data-slot:rounded-b-none [&>[data-slot]:first-child]:rounded-t-4xl! [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-4xl! [&>[data-slot]~[data-slot]]:-mt-px [&>[data-slot]~[data-slot]]:rounded-t-none',
 };
 
 function StackCompact({
+  block = false,
   children,
   className,
   orientation = 'horizontal',
@@ -108,10 +116,12 @@ function StackCompact({
       align="stretch"
       data-slot="stack-compact"
       role={role}
+      block={block}
       gap={0}
       orientation={orientation}
       className={cn(
-        'w-fit *:focus-visible:relative *:focus-visible:z-10',
+        block ? 'w-full' : 'w-fit',
+        '*:focus-visible:relative *:focus-visible:z-10 [&>[data-slot]:has(:focus-visible)]:relative [&>[data-slot]:has(:focus-visible)]:z-10 [&>[data-slot=input]:focus-visible]:ring-0 [&>[data-slot=input-group]:has(:focus-visible)]:ring-0 [&>[data-slot=select-trigger]:has(:focus-visible)]:ring-0',
         compactOrientations[orientation],
         className
       )}
@@ -122,13 +132,12 @@ function StackCompact({
   );
 }
 
-const Stack = Object.assign(StackRoot, { Compact: StackCompact });
-
-export { Stack };
+export { StackRoot as Stack, StackCompact as Compact };
 export type {
   StackAlign,
   StackCompactProps,
   StackGap,
+  StackJustify,
   StackOrientation,
   StackProps,
 };

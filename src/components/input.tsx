@@ -33,7 +33,5 @@ function TextArea({ className, ...props }: TextAreaProps) {
   );
 }
 
-const Input = Object.assign(InputRoot, { TextArea });
-
-export { Input, TextArea };
+export { InputRoot as Input, TextArea };
 export type { InputProps, TextAreaProps };

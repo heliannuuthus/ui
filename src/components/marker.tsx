@@ -19,17 +19,57 @@ const markerVariants = cva(
   }
 );
 
+type MarkerClassNames = {
+  content?: string;
+  icon?: string;
+};
+
+type MarkerProps = Omit<useRender.ComponentProps<'div'>, 'children'> &
+  VariantProps<typeof markerVariants> & {
+    classNames?: MarkerClassNames;
+    content: React.ReactNode;
+    icon?: React.ReactNode;
+  };
+
 function Marker({
   className,
-  variant = 'default',
+  classNames,
+  content,
+  icon,
   render,
+  variant = 'default',
   ...props
-}: useRender.ComponentProps<'div'> & VariantProps<typeof markerVariants>) {
+}: MarkerProps) {
   return useRender({
     defaultTagName: 'div',
     props: mergeProps<'div'>(
       {
-        className: cn(markerVariants({ variant, className })),
+        children: (
+          <>
+            {icon != null ? (
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "size-4 shrink-0 [&_svg:not([class*='size-'])]:size-4",
+                  classNames?.icon
+                )}
+                data-slot="marker-icon"
+              >
+                {icon}
+              </span>
+            ) : null}
+            <span
+              className={cn(
+                'min-w-0 wrap-break-word group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
+                classNames?.content
+              )}
+              data-slot="marker-content"
+            >
+              {content}
+            </span>
+          </>
+        ),
+        className: cn(markerVariants({ className, variant })),
       },
       props
     ),
@@ -41,31 +81,4 @@ function Marker({
   });
 }
 
-function MarkerIcon({ className, ...props }: React.ComponentProps<'span'>) {
-  return (
-    <span
-      data-slot="marker-icon"
-      aria-hidden="true"
-      className={cn(
-        "size-4 shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-function MarkerContent({ className, ...props }: React.ComponentProps<'span'>) {
-  return (
-    <span
-      data-slot="marker-content"
-      className={cn(
-        'min-w-0 wrap-break-word group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-export { Marker, MarkerIcon, MarkerContent, markerVariants };
+export { Marker, markerVariants, type MarkerClassNames, type MarkerProps };

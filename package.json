@@ -58,6 +58,10 @@
       "types": "./dist/label.d.ts",
       "import": "./dist/label.js"
     },
+    "./layout": {
+      "types": "./dist/layout.d.ts",
+      "import": "./dist/layout.js"
+    },
     "./masonry": {
       "types": "./dist/masonry.d.ts",
       "import": "./dist/masonry.js"
@@ -109,7 +113,6 @@
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
-    "@shadcn/react": "^0.2.1",
     "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -131,7 +134,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
-    "@fontsource-variable/raleway": "5.3.0",
     "@tailwindcss/cli": "^4.1.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.2.9",

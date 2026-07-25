@@ -10,10 +10,14 @@ function Progress({
   className,
   children,
   effect = 'none',
+  label,
+  showValue = false,
   value,
   ...props
 }: ProgressPrimitive.Root.Props & {
   effect?: ProgressEffect;
+  label?: React.ReactNode;
+  showValue?: boolean | ((value: number | null) => React.ReactNode);
 }) {
   return (
     <ProgressPrimitive.Root
@@ -23,6 +27,18 @@ function Progress({
       className={cn('flex flex-wrap gap-3', className)}
       {...props}
     >
+      {label != null ? <ProgressLabel>{label}</ProgressLabel> : null}
+      {showValue ? (
+        <ProgressValue>
+          {(_formattedValue, currentValue) =>
+            typeof showValue === 'function'
+              ? showValue(currentValue)
+              : currentValue == null
+                ? '—'
+                : `${currentValue}%`
+          }
+        </ProgressValue>
+      ) : null}
       {children}
       <ProgressTrack>
         <ProgressIndicator>
@@ -97,11 +113,4 @@ function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
   );
 }
 
-export {
-  Progress,
-  ProgressTrack,
-  ProgressIndicator,
-  ProgressLabel,
-  ProgressValue,
-  type ProgressEffect,
-};
+export { Progress, type ProgressEffect };

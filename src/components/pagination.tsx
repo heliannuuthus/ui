@@ -1,134 +1,165 @@
 import * as React from 'react';
-import type { VariantProps } from 'class-variance-authority';
-
-import { cn } from '../lib/utils';
-import { buttonVariants } from './button';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   MoreHorizontalIcon,
 } from 'lucide-react';
 
-function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
+import { cn } from '../lib/utils';
+import { buttonVariants } from './button';
+
+type PaginationProps = Omit<React.ComponentProps<'nav'>, 'onChange'> & {
+  current: number;
+  getItemHref?: (page: number) => string;
+  nextText?: React.ReactNode;
+  onChange?: (page: number) => void;
+  pageCount: number;
+  previousText?: React.ReactNode;
+  siblingCount?: number;
+};
+
+function getVisiblePages(
+  current: number,
+  pageCount: number,
+  siblingCount: number
+) {
+  if (pageCount <= siblingCount * 2 + 5) {
+    return Array.from({ length: pageCount }, (_, index) => index + 1);
+  }
+
+  const pages: Array<number | 'ellipsis-start' | 'ellipsis-end'> = [1];
+  const start = Math.max(2, current - siblingCount);
+  const end = Math.min(pageCount - 1, current + siblingCount);
+
+  if (start > 2) pages.push('ellipsis-start');
+  for (let page = start; page <= end; page += 1) pages.push(page);
+  if (end < pageCount - 1) pages.push('ellipsis-end');
+  pages.push(pageCount);
+  return pages;
+}
+
+function Pagination({
+  className,
+  current,
+  getItemHref,
+  nextText = '下一页',
+  onChange,
+  pageCount,
+  previousText = '上一页',
+  siblingCount = 1,
+  ...props
+}: PaginationProps) {
+  const normalizedPageCount = Math.max(1, Math.trunc(pageCount));
+  const normalizedCurrent = Math.min(
+    normalizedPageCount,
+    Math.max(1, Math.trunc(current))
+  );
+  const pages = getVisiblePages(
+    normalizedCurrent,
+    normalizedPageCount,
+    Math.max(0, Math.trunc(siblingCount))
+  );
+
+  const renderControl = (
+    page: number,
+    label: React.ReactNode,
+    options?: { active?: boolean; disabled?: boolean; ariaLabel?: string }
+  ) => {
+    const commonProps = {
+      'aria-current': options?.active ? ('page' as const) : undefined,
+      'aria-disabled': options?.disabled || undefined,
+      'aria-label': options?.ariaLabel,
+      className: cn(
+        buttonVariants({
+          variant: options?.active ? 'outline' : 'ghost',
+          size: typeof label === 'number' ? 'icon' : 'default',
+        }),
+        options?.disabled && 'pointer-events-none opacity-50'
+      ),
+      'data-active': options?.active || undefined,
+      'data-slot': 'pagination-link',
+    };
+
+    if (getItemHref != null) {
+      return (
+        <a
+          {...commonProps}
+          href={getItemHref(page)}
+          onClick={(event) => {
+            if (options?.disabled) event.preventDefault();
+            else onChange?.(page);
+          }}
+        >
+          {label}
+        </a>
+      );
+    }
+
+    return (
+      <button
+        {...commonProps}
+        disabled={options?.disabled}
+        onClick={() => onChange?.(page)}
+        type="button"
+      >
+        {label}
+      </button>
+    );
+  };
+
   return (
     <nav
-      role="navigation"
-      aria-label="pagination"
+      aria-label="分页"
       data-slot="pagination"
       className={cn('mx-auto flex w-full justify-center', className)}
       {...props}
-    />
-  );
-}
-
-function PaginationContent({
-  className,
-  ...props
-}: React.ComponentProps<'ul'>) {
-  return (
-    <ul
-      data-slot="pagination-content"
-      className={cn('flex items-center gap-1', className)}
-      {...props}
-    />
-  );
-}
-
-function PaginationItem({ ...props }: React.ComponentProps<'li'>) {
-  return <li data-slot="pagination-item" {...props} />;
-}
-
-type PaginationLinkProps = {
-  isActive?: boolean;
-} & Pick<VariantProps<typeof buttonVariants>, 'size'> &
-  React.ComponentProps<'a'>;
-
-function PaginationLink({
-  className,
-  isActive,
-  size = 'icon',
-  ...props
-}: PaginationLinkProps) {
-  return (
-    <a
-      aria-current={isActive ? 'page' : undefined}
-      data-slot="pagination-link"
-      data-active={isActive}
-      className={cn(
-        buttonVariants({
-          variant: isActive ? 'outline' : 'ghost',
-          size,
-        }),
-        props['aria-disabled'] && 'pointer-events-none opacity-50',
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-function PaginationPrevious({
-  className,
-  text = 'Previous',
-  ...props
-}: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
-  return (
-    <PaginationLink
-      {...props}
-      aria-label="Go to previous page"
-      size="default"
-      className={cn('pl-2!', className)}
     >
-      <ChevronLeftIcon data-icon="inline-start" />
-      <span className="hidden sm:block">{text}</span>
-    </PaginationLink>
+      <ul data-slot="pagination-content" className="flex items-center gap-1">
+        <li data-slot="pagination-item">
+          {renderControl(
+            normalizedCurrent - 1,
+            <>
+              <ChevronLeftIcon data-icon="inline-start" />
+              <span className="hidden sm:block">{previousText}</span>
+            </>,
+            {
+              disabled: normalizedCurrent === 1,
+              ariaLabel: '前往上一页',
+            }
+          )}
+        </li>
+        {pages.map((page) => (
+          <li data-slot="pagination-item" key={page}>
+            {typeof page === 'number' ? (
+              renderControl(page, page, { active: page === normalizedCurrent })
+            ) : (
+              <span
+                aria-hidden
+                data-slot="pagination-ellipsis"
+                className="flex size-9 items-center justify-center [&_svg:not([class*='size-'])]:size-4"
+              >
+                <MoreHorizontalIcon />
+                <span className="sr-only">更多页面</span>
+              </span>
+            )}
+          </li>
+        ))}
+        <li data-slot="pagination-item">
+          {renderControl(
+            normalizedCurrent + 1,
+            <>
+              <span className="hidden sm:block">{nextText}</span>
+              <ChevronRightIcon data-icon="inline-end" />
+            </>,
+            {
+              disabled: normalizedCurrent === normalizedPageCount,
+              ariaLabel: '前往下一页',
+            }
+          )}
+        </li>
+      </ul>
+    </nav>
   );
 }
 
-function PaginationNext({
-  className,
-  text = 'Next',
-  ...props
-}: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
-  return (
-    <PaginationLink
-      {...props}
-      aria-label="Go to next page"
-      size="default"
-      className={cn('pr-2!', className)}
-    >
-      <span className="hidden sm:block">{text}</span>
-      <ChevronRightIcon data-icon="inline-end" />
-    </PaginationLink>
-  );
-}
-
-function PaginationEllipsis({
-  className,
-  ...props
-}: React.ComponentProps<'span'>) {
-  return (
-    <span
-      aria-hidden
-      data-slot="pagination-ellipsis"
-      className={cn(
-        "flex size-9 items-center justify-center [&_svg:not([class*='size-'])]:size-4",
-        className
-      )}
-      {...props}
-    >
-      <MoreHorizontalIcon />
-      <span className="sr-only">More pages</span>
-    </span>
-  );
-}
-
-export {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-};
+export { Pagination, type PaginationProps };

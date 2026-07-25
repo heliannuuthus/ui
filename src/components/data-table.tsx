@@ -16,12 +16,12 @@ import { Button } from './button';
 import { Input } from './input';
 import { cn } from '../lib/utils';
 import {
+  Body as TableBody,
+  Cell as TableCell,
+  Head as TableHead,
+  Header as TableHeader,
+  Row as TableRow,
   Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
 } from './table';
 
 export interface DataTableColumnMeta {
@@ -252,4 +252,8 @@ function DataTable<TData, TValue>({
   );
 }
 
-export { DataTable, DataTableActions, DataTableColumnHeader };
+export {
+  DataTable,
+  DataTableActions as Actions,
+  DataTableColumnHeader as ColumnHeader,
+};

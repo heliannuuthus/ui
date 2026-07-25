@@ -37,7 +37,6 @@ type CheckboxGroupProps = Omit<
   CheckboxGroupPrimitive.Props,
   'children' | 'onChange' | 'onValueChange'
 > & {
-  children?: React.ReactNode;
   columns?: number;
   gap?: MasonryGap;
   minColumnWidth?: MasonryLength;
@@ -46,7 +45,7 @@ type CheckboxGroupProps = Omit<
     value: string[],
     eventDetails: CheckboxGroupPrimitive.ChangeEventDetails
   ) => void;
-  options?: readonly CheckboxOption[];
+  options: readonly CheckboxOption[];
   orientation?: 'horizontal' | 'vertical';
 };
 
@@ -126,7 +125,6 @@ function CheckboxRoot({
 }
 
 function CheckboxGroup({
-  children,
   className,
   columns = 3,
   gap = 12,
@@ -153,7 +151,7 @@ function CheckboxGroup({
         {...props}
       >
         <CheckboxGroupNameContext.Provider value={name}>
-          {options?.map((option) => (
+          {options.map((option) => (
             <CheckboxRoot
               className={option.className}
               disabled={option.disabled}
@@ -162,16 +160,14 @@ function CheckboxGroup({
             >
               {option.label}
             </CheckboxRoot>
-          )) ?? children}
+          ))}
         </CheckboxGroupNameContext.Provider>
       </CheckboxGroupPrimitive>
     </Masonry>
   );
 }
 
-const Checkbox = Object.assign(CheckboxRoot, { Group: CheckboxGroup });
-
-export { Checkbox };
+export { CheckboxRoot as Checkbox, CheckboxGroup as Group };
 export type {
   CheckboxClassNames,
   CheckboxGroupProps,

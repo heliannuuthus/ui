@@ -8,100 +8,91 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/utils';
 
 const toggleVariants = cva(
-  "group/toggle inline-flex items-center justify-center gap-1 rounded-3xl text-sm font-medium whitespace-nowrap transition-colors outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:hover:bg-primary/85 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/toggle inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-3xl px-3 text-sm font-medium whitespace-nowrap transition-colors outline-none has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5 hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:hover:bg-primary/85 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
         default: 'bg-transparent',
         outline: 'border border-input bg-transparent hover:bg-muted',
       },
-      size: {
-        default:
-          'h-9 min-w-9 px-3 has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5',
-        sm: 'h-8 min-w-8 px-3 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',
-        lg: 'h-10 min-w-10 px-4 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3',
-      },
     },
     defaultVariants: {
       variant: 'default',
-      size: 'default',
     },
   }
 );
 
 type ToggleVariantProps = VariantProps<typeof toggleVariants>;
 
-type ToggleProps<Value extends string = string> = Omit<
-  TogglePrimitive.Props<Value>,
-  'onChange' | 'onPressedChange'
+type ToggleProps = Omit<
+  TogglePrimitive.Props<string>,
+  | 'defaultPressed'
+  | 'defaultValue'
+  | 'onChange'
+  | 'onPressedChange'
+  | 'pressed'
+  | 'value'
 > &
   ToggleVariantProps & {
+    value?: boolean;
+    defaultValue?: boolean;
     onChange?: (
-      pressed: boolean,
+      value: boolean,
       eventDetails: TogglePrimitive.ChangeEventDetails
     ) => void;
   };
 
+type ToggleGroupOption<Value extends string = string> = Omit<
+  TogglePrimitive.Props<Value>,
+  | 'children'
+  | 'defaultPressed'
+  | 'onChange'
+  | 'onPressedChange'
+  | 'pressed'
+  | 'value'
+> & {
+  label: React.ReactNode;
+  value: Value;
+};
+
 type ToggleGroupProps<Value extends string = string> = Omit<
   ToggleGroupPrimitive.Props<Value>,
-  'onChange' | 'onValueChange'
+  'children' | 'onChange' | 'onValueChange'
 > &
   ToggleVariantProps & {
-    spacing?: number;
+    items: readonly ToggleGroupOption<Value>[];
     onChange?: (
       value: Value[],
       eventDetails: ToggleGroupPrimitive.ChangeEventDetails
     ) => void;
   };
 
-type ToggleGroupContextValue = ToggleVariantProps & {
-  spacing: number;
-};
-
-const ToggleGroupContext = React.createContext<ToggleGroupContextValue | null>(
-  null
-);
-
-function ToggleRoot<Value extends string = string>({
+function ToggleRoot({
   className,
+  defaultValue,
   variant = 'default',
-  size = 'default',
   onChange,
+  value,
   ...props
-}: ToggleProps<Value>) {
-  const group = React.useContext(ToggleGroupContext);
-  const resolvedVariant = group?.variant ?? variant;
-  const resolvedSize = group?.size ?? size;
-
+}: ToggleProps) {
   return (
     <TogglePrimitive
-      data-slot={group ? 'toggle-group-item' : 'toggle'}
-      data-variant={resolvedVariant}
-      data-size={resolvedSize}
-      data-spacing={group?.spacing}
-      className={cn(
-        group &&
-          'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-3 group-data-[spacing=0]/toggle-group:shadow-none focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pr-2.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:pl-2.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-l-3xl group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-3xl group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-r-3xl group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-3xl group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-l-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-l group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t',
-        toggleVariants({
-          variant: resolvedVariant,
-          size: resolvedSize,
-          className,
-        })
-      )}
+      data-slot="toggle"
+      data-variant={variant}
+      className={cn(toggleVariants({ variant, className }))}
+      defaultPressed={defaultValue}
       onPressedChange={onChange}
+      pressed={value}
       {...props}
     />
   );
 }
 
 function ToggleGroup<Value extends string = string>({
-  children,
   className,
+  items,
   onChange,
   orientation = 'horizontal',
-  size = 'default',
-  spacing = 2,
-  style,
   variant = 'default',
   ...props
 }: ToggleGroupProps<Value>) {
@@ -109,26 +100,36 @@ function ToggleGroup<Value extends string = string>({
     <ToggleGroupPrimitive
       data-slot="toggle-group"
       data-variant={variant}
-      data-size={size}
-      data-spacing={spacing}
       data-orientation={orientation}
       orientation={orientation}
-      style={{ ...style, '--gap': spacing } as React.CSSProperties}
       className={cn(
-        'group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] data-[spacing=0]:data-[variant=outline]:rounded-3xl data-vertical:flex-col data-vertical:items-stretch',
+        'group/toggle-group flex w-fit flex-row items-center gap-2 data-vertical:flex-col data-vertical:items-stretch',
         className
       )}
       onValueChange={onChange}
       {...props}
     >
-      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>
-        {children}
-      </ToggleGroupContext.Provider>
+      {items.map(({ className: itemClassName, label, value, ...itemProps }) => (
+        <TogglePrimitive
+          data-slot="toggle-group-item"
+          data-variant={variant}
+          className={cn(
+            'shrink-0',
+            toggleVariants({
+              variant,
+              className: itemClassName,
+            })
+          )}
+          key={value}
+          value={value}
+          {...itemProps}
+        >
+          {label}
+        </TogglePrimitive>
+      ))}
     </ToggleGroupPrimitive>
   );
 }
 
-const Toggle = Object.assign(ToggleRoot, { Group: ToggleGroup });
-
-export { Toggle, toggleVariants };
-export type { ToggleGroupProps, ToggleProps };
+export { ToggleRoot as Toggle, ToggleGroup as Group, toggleVariants };
+export type { ToggleGroupOption, ToggleGroupProps, ToggleProps };

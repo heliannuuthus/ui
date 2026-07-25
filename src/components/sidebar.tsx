@@ -6,17 +6,11 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { useIsMobile } from '../hooks/use-mobile';
 import { cn } from '../lib/utils';
 import { Button } from './button';
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-} from './drawer';
+import { Drawer } from './drawer';
 import { Input } from './input';
 import { Separator } from './separator';
 import { Skeleton } from './skeleton';
-import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip';
+import { Tooltip, type TooltipProps } from './tooltip';
 import { PanelLeftIcon } from 'lucide-react';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
@@ -177,30 +171,25 @@ function Sidebar({
     return (
       <Drawer
         behavior="gesture"
+        contentClassName="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground"
+        contentProps={{
+          dir,
+          'data-sidebar': 'sidebar',
+          'data-slot': 'sidebar',
+          'data-mobile': 'true',
+          style: {
+            '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
+          } as React.CSSProperties,
+        }}
+        description="Displays the mobile sidebar."
         open={openMobile}
         onOpenChange={setOpenMobile}
+        showCloseButton={false}
         side={side}
+        title="Sidebar"
         {...props}
       >
-        <DrawerContent
-          dir={dir}
-          data-sidebar="sidebar"
-          data-slot="sidebar"
-          data-mobile="true"
-          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground"
-          showCloseButton={false}
-          style={
-            {
-              '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
-            } as React.CSSProperties
-          }
-        >
-          <DrawerHeader className="sr-only">
-            <DrawerTitle>Sidebar</DrawerTitle>
-            <DrawerDescription>Displays the mobile sidebar.</DrawerDescription>
-          </DrawerHeader>
-          <div className="flex h-full w-full flex-col">{children}</div>
-        </DrawerContent>
+        <div className="flex h-full w-full flex-col">{children}</div>
       </Drawer>
     );
   }
@@ -510,7 +499,7 @@ function SidebarMenuButton({
 }: useRender.ComponentProps<'button'> &
   React.ComponentProps<'button'> & {
     isActive?: boolean;
-    tooltip?: string | React.ComponentProps<typeof TooltipContent>;
+    tooltip?: string | Omit<TooltipProps, 'trigger'>;
   } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const { isMobile, state } = useSidebar();
   const comp = useRender({
@@ -521,7 +510,7 @@ function SidebarMenuButton({
       },
       props
     ),
-    render: !tooltip ? render : <TooltipTrigger render={render} />,
+    render,
     state: {
       slot: 'sidebar-menu-button',
       sidebar: 'menu-button',
@@ -534,22 +523,20 @@ function SidebarMenuButton({
     return comp;
   }
 
-  if (typeof tooltip === 'string') {
-    tooltip = {
-      children: tooltip,
-    };
-  }
+  const tooltipProps =
+    typeof tooltip === 'string' ? { content: tooltip } : tooltip;
 
   return (
-    <Tooltip>
-      {comp}
-      <TooltipContent
-        side="right"
-        align="center"
-        hidden={state !== 'collapsed' || isMobile}
-        {...tooltip}
-      />
-    </Tooltip>
+    <Tooltip
+      side="right"
+      align="center"
+      {...tooltipProps}
+      contentProps={{
+        hidden: state !== 'collapsed' || isMobile,
+        ...tooltipProps.contentProps,
+      }}
+      trigger={comp}
+    />
   );
 }
 
@@ -700,27 +687,27 @@ function SidebarMenuSubButton({
 
 export {
   Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupAction,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarInput,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuBadge,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSkeleton,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
-  SidebarProvider,
-  SidebarRail,
-  SidebarSeparator,
-  SidebarTrigger,
+  SidebarContent as Content,
+  SidebarFooter as Footer,
+  SidebarGroup as Group,
+  SidebarGroupAction as GroupAction,
+  SidebarGroupContent as GroupContent,
+  SidebarGroupLabel as GroupLabel,
+  SidebarHeader as Header,
+  SidebarInput as Input,
+  SidebarInset as Inset,
+  SidebarMenu as Menu,
+  SidebarMenuAction as MenuAction,
+  SidebarMenuBadge as MenuBadge,
+  SidebarMenuButton as MenuButton,
+  SidebarMenuItem as MenuItem,
+  SidebarMenuSkeleton as MenuSkeleton,
+  SidebarMenuSub as MenuSub,
+  SidebarMenuSubButton as MenuSubButton,
+  SidebarMenuSubItem as MenuSubItem,
+  SidebarProvider as Provider,
+  SidebarRail as Rail,
+  SidebarSeparator as Separator,
+  SidebarTrigger as Trigger,
   useSidebar,
 };

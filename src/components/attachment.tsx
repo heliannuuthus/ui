@@ -4,7 +4,6 @@ import { useRender } from '@base-ui/react/use-render';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
-import { Button } from './button';
 
 const attachmentVariants = cva(
   'group/attachment relative flex w-fit max-w-full min-w-0 shrink-0 flex-wrap rounded-3xl border bg-card text-card-foreground transition-colors focus-within:ring-1 focus-within:ring-ring/30 has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 data-[state=idle]:border-dashed',
@@ -24,16 +23,30 @@ const attachmentVariants = cva(
   }
 );
 
+type AttachmentProps = Omit<React.ComponentProps<'div'>, 'children' | 'title'> &
+  VariantProps<typeof attachmentVariants> & {
+    actions?: React.ReactNode;
+    description?: React.ReactNode;
+    media?: React.ReactNode;
+    mediaVariant?: 'icon' | 'image';
+    state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
+    title: React.ReactNode;
+    trigger?: useRender.ComponentProps<'button'>['render'];
+  };
+
 function Attachment({
+  actions,
   className,
+  description,
+  media,
+  mediaVariant = 'icon',
+  title,
+  trigger,
   state = 'done',
   size = 'default',
   orientation = 'horizontal',
   ...props
-}: React.ComponentProps<'div'> &
-  VariantProps<typeof attachmentVariants> & {
-    state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
-  }) {
+}: AttachmentProps) {
   return (
     <div
       data-slot="attachment"
@@ -42,7 +55,21 @@ function Attachment({
       data-orientation={orientation}
       className={cn(attachmentVariants({ size, orientation }), className)}
       {...props}
-    />
+    >
+      {media != null ? (
+        <AttachmentMedia variant={mediaVariant}>{media}</AttachmentMedia>
+      ) : null}
+      <AttachmentContent>
+        <AttachmentTitle>{title}</AttachmentTitle>
+        {description != null ? (
+          <AttachmentDescription>{description}</AttachmentDescription>
+        ) : null}
+      </AttachmentContent>
+      {actions != null ? (
+        <AttachmentActions>{actions}</AttachmentActions>
+      ) : null}
+      {trigger != null ? <AttachmentTrigger render={trigger} /> : null}
+    </div>
   );
 }
 
@@ -142,23 +169,6 @@ function AttachmentActions({
   );
 }
 
-function AttachmentAction({
-  className,
-  variant,
-  size = 'icon-xs',
-  ...props
-}: React.ComponentProps<typeof Button>) {
-  return (
-    <Button
-      data-slot="attachment-action"
-      variant={variant ?? 'ghost'}
-      size={size}
-      className={cn(className)}
-      {...props}
-    />
-  );
-}
-
 function AttachmentTrigger({
   className,
   render,
@@ -181,7 +191,11 @@ function AttachmentTrigger({
   });
 }
 
-function AttachmentGroup({ className, ...props }: React.ComponentProps<'div'>) {
+type AttachmentGroupProps = Omit<React.ComponentProps<'div'>, 'children'> & {
+  items: readonly (AttachmentProps & { key?: React.Key })[];
+};
+
+function AttachmentGroup({ className, items, ...props }: AttachmentGroupProps) {
   return (
     <div
       data-slot="attachment-group"
@@ -190,18 +204,20 @@ function AttachmentGroup({ className, ...props }: React.ComponentProps<'div'>) {
         className
       )}
       {...props}
-    />
+    >
+      {items.map((item, index) => (
+        <Attachment
+          {...item}
+          key={item.key ?? `${String(item.title)}-${index}`}
+        />
+      ))}
+    </div>
   );
 }
 
 export {
   Attachment,
-  AttachmentGroup,
-  AttachmentMedia,
-  AttachmentContent,
-  AttachmentTitle,
-  AttachmentDescription,
-  AttachmentActions,
-  AttachmentAction,
-  AttachmentTrigger,
+  AttachmentGroup as Group,
+  type AttachmentGroupProps,
+  type AttachmentProps,
 };

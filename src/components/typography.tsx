@@ -4,7 +4,7 @@ import { cn } from '../lib/utils';
 const H1 = ({ className, ...props }: React.ComponentProps<'h1'>) => (
   <h1
     className={cn(
-      'scroll-m-20 text-4xl font-extrabold tracking-tight text-balance lg:text-5xl',
+      'scroll-m-20 font-heading text-4xl font-extrabold tracking-tight text-balance lg:text-5xl',
       className
     )}
     {...props}
@@ -13,7 +13,7 @@ const H1 = ({ className, ...props }: React.ComponentProps<'h1'>) => (
 const H2 = ({ className, ...props }: React.ComponentProps<'h2'>) => (
   <h2
     className={cn(
-      'scroll-m-20 border-b border-border pb-2 text-3xl font-semibold tracking-tight first:mt-0',
+      'scroll-m-20 border-b border-border pb-2 font-heading text-3xl font-semibold tracking-tight first:mt-0',
       className
     )}
     {...props}
@@ -22,7 +22,7 @@ const H2 = ({ className, ...props }: React.ComponentProps<'h2'>) => (
 const H3 = ({ className, ...props }: React.ComponentProps<'h3'>) => (
   <h3
     className={cn(
-      'scroll-m-20 text-2xl font-semibold tracking-tight',
+      'scroll-m-20 font-heading text-2xl font-semibold tracking-tight',
       className
     )}
     {...props}
@@ -31,7 +31,7 @@ const H3 = ({ className, ...props }: React.ComponentProps<'h3'>) => (
 const H4 = ({ className, ...props }: React.ComponentProps<'h4'>) => (
   <h4
     className={cn(
-      'scroll-m-20 text-xl font-semibold tracking-tight',
+      'scroll-m-20 font-heading text-xl font-semibold tracking-tight',
       className
     )}
     {...props}
@@ -50,7 +50,10 @@ const TypographyLarge = ({
   className,
   ...props
 }: React.ComponentProps<'div'>) => (
-  <div className={cn('text-lg font-semibold', className)} {...props} />
+  <div
+    className={cn('font-heading text-lg font-semibold', className)}
+    {...props}
+  />
 );
 const TypographySmall = ({
   className,
@@ -94,11 +97,11 @@ export {
   H2,
   H3,
   H4,
-  TypographyBlockquote,
-  TypographyCode,
-  TypographyLarge,
-  TypographyLead,
-  TypographyMuted,
-  TypographyP,
-  TypographySmall,
+  TypographyBlockquote as Blockquote,
+  TypographyCode as Code,
+  TypographyLarge as Large,
+  TypographyLead as Lead,
+  TypographyMuted as Muted,
+  TypographyP as P,
+  TypographySmall as Small,
 };

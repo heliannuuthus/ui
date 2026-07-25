@@ -11,7 +11,9 @@ import {
 
 import { cn } from '../lib/utils';
 
-const MAX_ELASTIC_OVERFLOW = 48;
+const MAX_ELASTIC_OVERFLOW = 20;
+const ACTIVE_SHELL_SCALE = 1.045;
+const IDLE_SHELL_OPACITY = 0.88;
 
 type SliderEffect = 'none' | 'elastic';
 type ElasticEdge = 'none' | 'start' | 'end';
@@ -20,7 +22,9 @@ type SliderProps<Value extends number | readonly number[]> =
   SliderPrimitive.Root.Props<Value> & {
     effect?: SliderEffect;
     endIcon?: React.ReactNode;
+    endLabel?: React.ReactNode;
     startIcon?: React.ReactNode;
+    startLabel?: React.ReactNode;
   };
 
 const elasticTransition = {
@@ -34,12 +38,14 @@ function Slider<Value extends number | readonly number[]>({
   className,
   defaultValue,
   disabled,
-  effect = 'none',
+  effect = 'elastic',
   endIcon,
+  endLabel,
   max = 100,
   min = 0,
   orientation = 'horizontal',
   startIcon,
+  startLabel,
   value,
   ...props
 }: SliderProps<Value>) {
@@ -53,46 +59,89 @@ function Slider<Value extends number | readonly number[]>({
           ? [defaultValue]
           : [min, max];
   const controlRef = React.useRef<HTMLDivElement>(null);
+  const shellRef = React.useRef<HTMLDivElement>(null);
+  const interactionActiveRef = React.useRef(false);
+  const pointerActiveRef = React.useRef(false);
   const reduceMotion = useReducedMotion();
-  const [elasticEdge, setElasticEdge] = React.useState<ElasticEdge>('none');
-  const trackMainScale = useMotionValue(1);
-  const trackCrossScale = useMotionValue(1);
+  const shellScale = useMotionValue(1);
+  const shellOpacity = useMotionValue(
+    effect === 'elastic' && !disabled ? IDLE_SHELL_OPACITY : 1
+  );
   const startIconOffset = useMotionValue(0);
   const endIconOffset = useMotionValue(0);
   const startIconScale = useMotionValue(1);
   const endIconScale = useMotionValue(1);
   const elasticEnabled = effect === 'elastic' && !reduceMotion && !disabled;
 
+  const setInteractionActive = React.useCallback(
+    (active: boolean, immediate = false) => {
+      interactionActiveRef.current = active;
+      const nextScale = active ? ACTIVE_SHELL_SCALE : 1;
+      const nextOpacity = active ? 1 : IDLE_SHELL_OPACITY;
+
+      if (immediate) {
+        shellScale.jump(nextScale);
+        shellOpacity.jump(nextOpacity);
+      } else {
+        animate(shellScale, nextScale, elasticTransition);
+        animate(shellOpacity, nextOpacity, {
+          duration: 0.16,
+          ease: 'easeOut',
+        });
+      }
+    },
+    [shellOpacity, shellScale]
+  );
+
   const resetElastic = React.useCallback(
     (immediate = false) => {
-      const reset = (motionValue: typeof trackMainScale, nextValue: number) => {
+      const reset = (
+        motionValue: typeof startIconOffset,
+        nextValue: number
+      ) => {
         if (immediate) motionValue.jump(nextValue);
         else animate(motionValue, nextValue, elasticTransition);
       };
 
-      reset(trackMainScale, 1);
-      reset(trackCrossScale, 1);
       reset(startIconOffset, 0);
       reset(endIconOffset, 0);
       reset(startIconScale, 1);
       reset(endIconScale, 1);
     },
-    [
-      endIconOffset,
-      endIconScale,
-      startIconOffset,
-      startIconScale,
-      trackCrossScale,
-      trackMainScale,
-    ]
+    [endIconOffset, endIconScale, startIconOffset, startIconScale]
   );
 
   React.useEffect(() => {
     if (!elasticEnabled) {
-      setElasticEdge('none');
+      interactionActiveRef.current = false;
+      pointerActiveRef.current = false;
+      shellScale.jump(1);
+      shellOpacity.jump(1);
       resetElastic(true);
+    } else if (!interactionActiveRef.current) {
+      shellScale.jump(1);
+      shellOpacity.jump(IDLE_SHELL_OPACITY);
     }
-  }, [elasticEnabled, resetElastic]);
+  }, [elasticEnabled, resetElastic, shellOpacity, shellScale]);
+
+  function handlePointerEnter() {
+    if (!elasticEnabled) return;
+    setInteractionActive(true);
+  }
+
+  function handlePointerLeave() {
+    if (!elasticEnabled || pointerActiveRef.current) return;
+
+    const focusWithin = shellRef.current?.matches(':focus-within') ?? false;
+    setInteractionActive(focusWithin);
+  }
+
+  function handlePointerDown() {
+    if (!elasticEnabled) return;
+
+    pointerActiveRef.current = true;
+    setInteractionActive(true);
+  }
 
   function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
     const control = controlRef.current;
@@ -104,11 +153,8 @@ function Slider<Value extends number | readonly number[]>({
     const pointer = vertical ? event.clientY : event.clientX;
     const start = vertical ? rect.top : rect.left;
     const end = vertical ? rect.bottom : rect.right;
-    const extent = vertical ? rect.height : rect.width;
     const nextEdge: ElasticEdge =
       pointer < start ? 'start' : pointer > end ? 'end' : 'none';
-
-    setElasticEdge((current) => (current === nextEdge ? current : nextEdge));
 
     if (nextEdge === 'none') {
       resetElastic(true);
@@ -117,48 +163,51 @@ function Slider<Value extends number | readonly number[]>({
 
     const rawOverflow = nextEdge === 'start' ? start - pointer : pointer - end;
     const overflow = decay(rawOverflow, MAX_ELASTIC_OVERFLOW);
-    const iconScale = 1 + (overflow / MAX_ELASTIC_OVERFLOW) * 0.28;
+    const iconScale = 1 + (overflow / MAX_ELASTIC_OVERFLOW) * 0.025;
+    const iconOffset = (overflow / MAX_ELASTIC_OVERFLOW) * 4;
+    const shellRatio = shellScale.get();
 
-    trackMainScale.jump(1 + overflow / Math.max(extent, 1));
-    trackCrossScale.jump(1 - (overflow / MAX_ELASTIC_OVERFLOW) * 0.18);
-    startIconOffset.jump(nextEdge === 'start' ? -overflow : 0);
-    endIconOffset.jump(nextEdge === 'end' ? overflow : 0);
+    startIconOffset.jump(nextEdge === 'start' ? -iconOffset / shellRatio : 0);
+    endIconOffset.jump(nextEdge === 'end' ? iconOffset / shellRatio : 0);
     startIconScale.jump(nextEdge === 'start' ? iconScale : 1);
     endIconScale.jump(nextEdge === 'end' ? iconScale : 1);
   }
 
   function handlePointerEnd() {
     if (!elasticEnabled) return;
+
+    pointerActiveRef.current = false;
+    const interactionActive =
+      (shellRef.current?.matches(':hover') ?? false) ||
+      (shellRef.current?.matches(':focus-within') ?? false);
+    setInteractionActive(interactionActive);
     resetElastic();
   }
 
-  const trackTransformOrigin =
-    elasticEdge === 'start'
-      ? orientation === 'vertical'
-        ? 'center bottom'
-        : 'right center'
-      : elasticEdge === 'end'
-        ? orientation === 'vertical'
-          ? 'center top'
-          : 'left center'
-        : 'center';
-  const trackMotionStyle =
-    orientation === 'vertical'
-      ? {
-          scaleX: trackCrossScale,
-          scaleY: trackMainScale,
-          transformOrigin: trackTransformOrigin,
-        }
-      : {
-          scaleX: trackMainScale,
-          scaleY: trackCrossScale,
-          transformOrigin: trackTransformOrigin,
-        };
+  function handleFocus() {
+    if (!elasticEnabled) return;
+    setInteractionActive(true);
+  }
+
+  function handleBlur(event: React.FocusEvent<HTMLDivElement>) {
+    if (
+      !elasticEnabled ||
+      pointerActiveRef.current ||
+      event.currentTarget.contains(event.relatedTarget)
+    ) {
+      return;
+    }
+
+    const hovered = event.currentTarget.matches(':hover');
+    setInteractionActive(hovered);
+  }
 
   return (
     <SliderPrimitive.Root
       className={cn(
         'group/slider data-horizontal:w-full data-vertical:h-full',
+        effect === 'elastic' &&
+          (orientation === 'vertical' ? 'px-2 py-4' : 'px-4 py-2'),
         className
       )}
       data-effect={effect}
@@ -172,18 +221,28 @@ function Slider<Value extends number | readonly number[]>({
       value={value}
       {...props}
     >
-      <div
+      <motion.div
+        ref={shellRef}
         data-slot="slider-shell"
         className={cn(
-          'flex items-center justify-center gap-3',
-          orientation === 'vertical' ? 'h-full flex-col' : 'w-full'
+          'flex origin-center items-center justify-center gap-3 will-change-transform',
+          orientation === 'vertical' ? 'h-full flex-col' : 'w-full',
+          effect === 'elastic' && 'px-3 py-2'
         )}
+        onBlurCapture={handleBlur}
+        onFocusCapture={handleFocus}
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
+        style={{ opacity: shellOpacity, scale: shellScale }}
       >
-        {startIcon != null && (
+        {(startIcon != null || startLabel != null) && (
           <motion.span
             data-slot="slider-start-icon"
             aria-hidden="true"
-            className="flex shrink-0 text-muted-foreground opacity-70 transition-opacity group-hover/slider:opacity-100 [&_svg]:size-4"
+            className={cn(
+              'flex shrink-0 items-center gap-1.5 whitespace-nowrap text-xs font-medium text-muted-foreground opacity-80 transition-opacity group-hover/slider:opacity-100 group-focus-within/slider:opacity-100 [&_svg]:size-[18px]',
+              orientation === 'vertical' && 'flex-col'
+            )}
             style={
               orientation === 'vertical'
                 ? { y: startIconOffset, scale: startIconScale }
@@ -191,6 +250,7 @@ function Slider<Value extends number | readonly number[]>({
             }
           >
             {startIcon}
+            {startLabel != null && <span>{startLabel}</span>}
           </motion.span>
         )}
         <SliderPrimitive.Control
@@ -198,14 +258,14 @@ function Slider<Value extends number | readonly number[]>({
           className="relative flex min-w-0 flex-1 touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col"
           onLostPointerCapture={handlePointerEnd}
           onPointerCancel={handlePointerEnd}
+          onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerEnd}
         >
-          <motion.div
+          <div
             data-slot="slider-track-motion"
-            className="flex min-h-0 min-w-0 grow data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full"
+            className="flex min-h-0 min-w-0 grow data-[orientation=horizontal]:w-full data-[orientation=horizontal]:px-1.5 data-[orientation=vertical]:h-full data-[orientation=vertical]:py-1.5"
             data-orientation={orientation}
-            style={trackMotionStyle}
           >
             <SliderPrimitive.Track
               data-slot="slider-track"
@@ -216,7 +276,7 @@ function Slider<Value extends number | readonly number[]>({
                 className="bg-primary select-none data-horizontal:h-full data-vertical:w-full"
               />
             </SliderPrimitive.Track>
-          </motion.div>
+          </div>
           {Array.from({ length: _values.length }, (_, index) => (
             <SliderPrimitive.Thumb
               data-slot="slider-thumb"
@@ -225,11 +285,14 @@ function Slider<Value extends number | readonly number[]>({
             />
           ))}
         </SliderPrimitive.Control>
-        {endIcon != null && (
+        {(endIcon != null || endLabel != null) && (
           <motion.span
             data-slot="slider-end-icon"
             aria-hidden="true"
-            className="flex shrink-0 text-muted-foreground opacity-70 transition-opacity group-hover/slider:opacity-100 [&_svg]:size-5"
+            className={cn(
+              'flex shrink-0 items-center gap-1.5 whitespace-nowrap text-xs font-medium text-muted-foreground opacity-80 transition-opacity group-hover/slider:opacity-100 group-focus-within/slider:opacity-100 [&_svg]:size-[18px]',
+              orientation === 'vertical' && 'flex-col'
+            )}
             style={
               orientation === 'vertical'
                 ? { y: endIconOffset, scale: endIconScale }
@@ -237,9 +300,10 @@ function Slider<Value extends number | readonly number[]>({
             }
           >
             {endIcon}
+            {endLabel != null && <span>{endLabel}</span>}
           </motion.span>
         )}
-      </div>
+      </motion.div>
     </SliderPrimitive.Root>
   );
 }

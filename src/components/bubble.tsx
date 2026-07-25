@@ -16,7 +16,7 @@ function BubbleGroup({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 const bubbleVariants = cva(
-  'group/bubble relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1 group-data-[align=end]/message:self-end data-[align=end]:self-end data-[variant=ghost]:max-w-full',
+  'group/bubble relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1 data-[align=end]:self-end data-[variant=ghost]:max-w-full',
   {
     variants: {
       variant: {
@@ -26,6 +26,8 @@ const bubbleVariants = cva(
           '*:data-[slot=bubble-content]:bg-secondary *:data-[slot=bubble-content]:text-secondary-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)]',
         muted:
           '*:data-[slot=bubble-content]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--muted),var(--foreground)_5%)]',
+        elevated:
+          '*:data-[slot=bubble-content]:border-border/80 *:data-[slot=bubble-content]:bg-card *:data-[slot=bubble-content]:text-card-foreground *:data-[slot=bubble-content]:shadow-[0_8px_24px_-12px_color-mix(in_oklch,var(--foreground),transparent_72%)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted/60',
         tinted:
           '*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
         outline:
@@ -42,15 +44,30 @@ const bubbleVariants = cva(
   }
 );
 
-function Bubble({
-  variant = 'default',
-  align = 'start',
-  className,
-  ...props
-}: React.ComponentProps<'div'> &
+type BubbleReactionsProps = React.ComponentProps<'div'> & {
+  align?: 'start' | 'end';
+  side?: 'top' | 'bottom';
+};
+
+type BubbleProps = Omit<React.ComponentProps<'div'>, 'children'> &
   VariantProps<typeof bubbleVariants> & {
     align?: 'start' | 'end';
-  }) {
+    content: React.ReactNode;
+    contentProps?: useRender.ComponentProps<'div'>;
+    reactions?: React.ReactNode;
+    reactionsProps?: BubbleReactionsProps;
+  };
+
+function Bubble({
+  align = 'start',
+  className,
+  content,
+  contentProps,
+  reactions,
+  reactionsProps,
+  variant = 'default',
+  ...props
+}: BubbleProps) {
   return (
     <div
       data-slot="bubble"
@@ -58,7 +75,12 @@ function Bubble({
       data-align={align}
       className={cn(bubbleVariants({ variant }), className)}
       {...props}
-    />
+    >
+      <BubbleContent {...contentProps}>{content}</BubbleContent>
+      {reactions != null ? (
+        <BubbleReactions {...reactionsProps}>{reactions}</BubbleReactions>
+      ) : null}
+    </div>
   );
 }
 
@@ -110,10 +132,7 @@ function BubbleReactions({
   align = 'end',
   className,
   ...props
-}: React.ComponentProps<'div'> & {
-  align?: 'start' | 'end';
-  side?: 'top' | 'bottom';
-}) {
+}: BubbleReactionsProps) {
   return (
     <div
       data-slot="bubble-reactions"
@@ -125,4 +144,9 @@ function BubbleReactions({
   );
 }
 
-export { BubbleGroup, Bubble, BubbleContent, BubbleReactions };
+export {
+  Bubble,
+  BubbleGroup as Group,
+  type BubbleProps,
+  type BubbleReactionsProps,
+};

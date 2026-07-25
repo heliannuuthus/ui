@@ -202,7 +202,7 @@ function useToast() {
 
 export {
   Toaster,
-  ToastProvider,
+  ToastProvider as Provider,
   sonnerToast as toast,
   useToast,
   type ToasterProps,

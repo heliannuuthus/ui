@@ -106,11 +106,11 @@ function TableCaption({
 
 export {
   Table,
-  TableHeader,
-  TableBody,
-  TableFooter,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableCaption,
+  TableBody as Body,
+  TableCaption as Caption,
+  TableCell as Cell,
+  TableFooter as Footer,
+  TableHead as Head,
+  TableHeader as Header,
+  TableRow as Row,
 };

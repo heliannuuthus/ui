@@ -26,58 +26,55 @@ const alertVariants = cva(
   }
 );
 
+type AlertProps = Omit<React.ComponentProps<'div'>, 'title'> &
+  VariantProps<typeof alertVariants> & {
+    action?: React.ReactNode;
+    description?: React.ReactNode;
+    icon?: React.ReactNode;
+    title?: React.ReactNode;
+  };
+
 function Alert({
+  action,
+  children,
   className,
+  description,
+  icon,
+  title,
   variant,
   ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof alertVariants>) {
+}: AlertProps) {
   return (
     <div
       data-slot="alert"
       role="alert"
       className={cn(alertVariants({ variant }), className)}
       {...props}
-    />
+    >
+      {icon}
+      {title != null ? (
+        <div
+          data-slot="alert-title"
+          className="font-medium group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground"
+        >
+          {title}
+        </div>
+      ) : null}
+      {description != null || children != null ? (
+        <div
+          data-slot="alert-description"
+          className="text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4"
+        >
+          {description ?? children}
+        </div>
+      ) : null}
+      {action != null ? (
+        <div data-slot="alert-action" className="absolute top-2.5 right-3">
+          {action}
+        </div>
+      ) : null}
+    </div>
   );
 }
 
-function AlertTitle({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      data-slot="alert-title"
-      className={cn(
-        'font-medium group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground',
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-function AlertDescription({
-  className,
-  ...props
-}: React.ComponentProps<'div'>) {
-  return (
-    <div
-      data-slot="alert-description"
-      className={cn(
-        'text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4',
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-function AlertAction({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      data-slot="alert-action"
-      className={cn('absolute top-2.5 right-3', className)}
-      {...props}
-    />
-  );
-}
-
-export { Alert, AlertTitle, AlertDescription, AlertAction };
+export { Alert, type AlertProps };

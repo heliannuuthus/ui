@@ -30,7 +30,6 @@ type RadioGroupProps<Value = string> = Omit<
   RadioGroupPrimitive.Props<Value>,
   'children' | 'onChange' | 'onValueChange'
 > & {
-  children?: React.ReactNode;
   columns?: number;
   gap?: MasonryGap;
   minColumnWidth?: MasonryLength;
@@ -38,7 +37,7 @@ type RadioGroupProps<Value = string> = Omit<
     value: Value,
     eventDetails: RadioGroupPrimitive.ChangeEventDetails
   ) => void;
-  options?: readonly RadioOption<Value>[];
+  options: readonly RadioOption<Value>[];
   orientation?: 'horizontal' | 'vertical';
 };
 
@@ -121,7 +120,6 @@ function RadioRoot<Value = string>({
 }
 
 function RadioGroup<Value = string>({
-  children,
   className,
   columns = 3,
   gap = 12,
@@ -146,7 +144,7 @@ function RadioGroup<Value = string>({
         onValueChange={onChange}
         {...props}
       >
-        {options?.map((option) => (
+        {options.map((option) => (
           <RadioRoot
             className={option.className}
             disabled={option.disabled}
@@ -155,13 +153,11 @@ function RadioGroup<Value = string>({
           >
             {option.label}
           </RadioRoot>
-        )) ?? children}
+        ))}
       </RadioGroupPrimitive>
     </Masonry>
   );
 }
 
-const Radio = Object.assign(RadioRoot, { Group: RadioGroup });
-
-export { Radio };
+export { RadioRoot as Radio, RadioGroup as Group };
 export type { RadioClassNames, RadioGroupProps, RadioOption, RadioProps };

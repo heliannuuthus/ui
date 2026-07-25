@@ -242,5 +242,5 @@ function MasonryItem({ className, span = 'auto', ...props }: MasonryItemProps) {
   );
 }
 
-export { Masonry, MasonryItem };
+export { Masonry, MasonryItem as Item };
 export type { MasonryGap, MasonryItemProps, MasonryLength, MasonryProps };
