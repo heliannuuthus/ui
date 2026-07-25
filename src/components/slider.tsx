@@ -12,6 +12,7 @@ import {
 import { cn } from '../lib/utils';
 
 const MAX_ELASTIC_OVERFLOW = 48;
+const ACTIVE_TRACK_CROSS_SCALE = 1.5;
 
 type SliderEffect = 'none' | 'elastic';
 type ElasticEdge = 'none' | 'start' | 'end';
@@ -34,7 +35,7 @@ function Slider<Value extends number | readonly number[]>({
   className,
   defaultValue,
   disabled,
-  effect = 'none',
+  effect = 'elastic',
   endIcon,
   max = 100,
   min = 0,
@@ -53,6 +54,9 @@ function Slider<Value extends number | readonly number[]>({
           ? [defaultValue]
           : [min, max];
   const controlRef = React.useRef<HTMLDivElement>(null);
+  const shellRef = React.useRef<HTMLDivElement>(null);
+  const interactionActiveRef = React.useRef(false);
+  const pointerActiveRef = React.useRef(false);
   const reduceMotion = useReducedMotion();
   const [elasticEdge, setElasticEdge] = React.useState<ElasticEdge>('none');
   const trackMainScale = useMotionValue(1);
@@ -63,6 +67,17 @@ function Slider<Value extends number | readonly number[]>({
   const endIconScale = useMotionValue(1);
   const elasticEnabled = effect === 'elastic' && !reduceMotion && !disabled;
 
+  const setInteractionActive = React.useCallback(
+    (active: boolean, immediate = false) => {
+      interactionActiveRef.current = active;
+      const nextScale = active ? ACTIVE_TRACK_CROSS_SCALE : 1;
+
+      if (immediate) trackCrossScale.jump(nextScale);
+      else animate(trackCrossScale, nextScale, elasticTransition);
+    },
+    [trackCrossScale]
+  );
+
   const resetElastic = React.useCallback(
     (immediate = false) => {
       const reset = (motionValue: typeof trackMainScale, nextValue: number) => {
@@ -71,7 +86,10 @@ function Slider<Value extends number | readonly number[]>({
       };
 
       reset(trackMainScale, 1);
-      reset(trackCrossScale, 1);
+      reset(
+        trackCrossScale,
+        interactionActiveRef.current ? ACTIVE_TRACK_CROSS_SCALE : 1
+      );
       reset(startIconOffset, 0);
       reset(endIconOffset, 0);
       reset(startIconScale, 1);
@@ -89,10 +107,31 @@ function Slider<Value extends number | readonly number[]>({
 
   React.useEffect(() => {
     if (!elasticEnabled) {
+      interactionActiveRef.current = false;
+      pointerActiveRef.current = false;
       setElasticEdge('none');
       resetElastic(true);
     }
   }, [elasticEnabled, resetElastic]);
+
+  function handlePointerEnter() {
+    if (!elasticEnabled) return;
+    setInteractionActive(true);
+  }
+
+  function handlePointerLeave() {
+    if (!elasticEnabled || pointerActiveRef.current) return;
+
+    const focusWithin = shellRef.current?.matches(':focus-within') ?? false;
+    setInteractionActive(focusWithin);
+  }
+
+  function handlePointerDown() {
+    if (!elasticEnabled) return;
+
+    pointerActiveRef.current = true;
+    setInteractionActive(true);
+  }
 
   function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
     const control = controlRef.current;
@@ -120,7 +159,9 @@ function Slider<Value extends number | readonly number[]>({
     const iconScale = 1 + (overflow / MAX_ELASTIC_OVERFLOW) * 0.28;
 
     trackMainScale.jump(1 + overflow / Math.max(extent, 1));
-    trackCrossScale.jump(1 - (overflow / MAX_ELASTIC_OVERFLOW) * 0.18);
+    trackCrossScale.jump(
+      ACTIVE_TRACK_CROSS_SCALE * (1 - (overflow / MAX_ELASTIC_OVERFLOW) * 0.18)
+    );
     startIconOffset.jump(nextEdge === 'start' ? -overflow : 0);
     endIconOffset.jump(nextEdge === 'end' ? overflow : 0);
     startIconScale.jump(nextEdge === 'start' ? iconScale : 1);
@@ -129,7 +170,31 @@ function Slider<Value extends number | readonly number[]>({
 
   function handlePointerEnd() {
     if (!elasticEnabled) return;
+
+    pointerActiveRef.current = false;
+    interactionActiveRef.current =
+      (shellRef.current?.matches(':hover') ?? false) ||
+      (shellRef.current?.matches(':focus-within') ?? false);
+    setElasticEdge('none');
     resetElastic();
+  }
+
+  function handleFocus() {
+    if (!elasticEnabled) return;
+    setInteractionActive(true);
+  }
+
+  function handleBlur(event: React.FocusEvent<HTMLDivElement>) {
+    if (
+      !elasticEnabled ||
+      pointerActiveRef.current ||
+      event.currentTarget.contains(event.relatedTarget)
+    ) {
+      return;
+    }
+
+    const hovered = event.currentTarget.matches(':hover');
+    setInteractionActive(hovered);
   }
 
   const trackTransformOrigin =
@@ -173,11 +238,16 @@ function Slider<Value extends number | readonly number[]>({
       {...props}
     >
       <div
+        ref={shellRef}
         data-slot="slider-shell"
         className={cn(
           'flex items-center justify-center gap-3',
           orientation === 'vertical' ? 'h-full flex-col' : 'w-full'
         )}
+        onBlurCapture={handleBlur}
+        onFocusCapture={handleFocus}
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
       >
         {startIcon != null && (
           <motion.span
@@ -198,12 +268,13 @@ function Slider<Value extends number | readonly number[]>({
           className="relative flex min-w-0 flex-1 touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col"
           onLostPointerCapture={handlePointerEnd}
           onPointerCancel={handlePointerEnd}
+          onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerEnd}
         >
           <motion.div
             data-slot="slider-track-motion"
-            className="flex min-h-0 min-w-0 grow data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full"
+            className="flex min-h-0 min-w-0 grow will-change-transform data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full"
             data-orientation={orientation}
             style={trackMotionStyle}
           >

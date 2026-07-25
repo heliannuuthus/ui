@@ -54,6 +54,120 @@
 }
 
 @layer components {
+  [data-slot='scroll-area']:has(
+    > [data-slot='scroll-area-viewport']:focus-visible
+  ) {
+    outline: 1px solid color-mix(in oklab, var(--primary) 62%, var(--ring));
+    outline-offset: 0;
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 16%, transparent);
+  }
+
+  [data-slot='scroll-area'][data-fade='vertical']
+    > [data-slot='scroll-area-viewport'] {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      black
+        min(var(--scroll-area-fade-size), var(--scroll-area-overflow-y-start)),
+      black
+        calc(
+          100% -
+            min(
+              var(--scroll-area-fade-size),
+              var(--scroll-area-overflow-y-end, var(--scroll-area-fade-size))
+            )
+        ),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      black
+        min(var(--scroll-area-fade-size), var(--scroll-area-overflow-y-start)),
+      black
+        calc(
+          100% -
+            min(
+              var(--scroll-area-fade-size),
+              var(--scroll-area-overflow-y-end, var(--scroll-area-fade-size))
+            )
+        ),
+      transparent 100%
+    );
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  [data-slot='scroll-area'][data-fade='horizontal']
+    > [data-slot='scroll-area-viewport'] {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      black
+        min(var(--scroll-area-fade-size), var(--scroll-area-overflow-x-start)),
+      black
+        calc(
+          100% -
+            min(
+              var(--scroll-area-fade-size),
+              var(--scroll-area-overflow-x-end, var(--scroll-area-fade-size))
+            )
+        ),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      black
+        min(var(--scroll-area-fade-size), var(--scroll-area-overflow-x-start)),
+      black
+        calc(
+          100% -
+            min(
+              var(--scroll-area-fade-size),
+              var(--scroll-area-overflow-x-end, var(--scroll-area-fade-size))
+            )
+        ),
+      transparent 100%
+    );
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  [data-slot='scroll-area'][data-fade='horizontal']:dir(rtl)
+    > [data-slot='scroll-area-viewport'] {
+    -webkit-mask-image: linear-gradient(
+      to left,
+      transparent 0,
+      black
+        min(var(--scroll-area-fade-size), var(--scroll-area-overflow-x-start)),
+      black
+        calc(
+          100% -
+            min(
+              var(--scroll-area-fade-size),
+              var(--scroll-area-overflow-x-end, var(--scroll-area-fade-size))
+            )
+        ),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to left,
+      transparent 0,
+      black
+        min(var(--scroll-area-fade-size), var(--scroll-area-overflow-x-start)),
+      black
+        calc(
+          100% -
+            min(
+              var(--scroll-area-fade-size),
+              var(--scroll-area-overflow-x-end, var(--scroll-area-fade-size))
+            )
+        ),
+      transparent 100%
+    );
+  }
+
   [data-sonner-toaster].toaster [data-sonner-toast].cn-toast {
     gap: 0.625rem;
     border-radius: calc(var(--radius) * 1.15);
@@ -222,11 +336,23 @@
     transform: rotate(180deg);
   }
 
+  [data-slot='accordion']
+    [data-slot='accordion-trigger'][data-indicator-position='start'][aria-expanded='true']
+    [data-slot='accordion-indicator']:not(
+      [data-has-expanded-indicator='true']
+    ) {
+    transform: rotate(90deg);
+  }
+
+  [data-slot='avatar-group'] > * + * {
+    margin-inline-start: calc(var(--avatar-group-overlap, 8px) * -1);
+  }
+
   [data-slot='collapsible-trigger'][aria-expanded='true']
     [data-slot='collapsible-indicator'],
   [data-slot='collapsible-header'][aria-expanded='true']
     [data-slot='collapsible-indicator'] {
-    transform: rotate(180deg);
+    transform: rotate(var(--collapsible-indicator-rotation, 180deg));
   }
 
   [data-slot='drawer-popup'][data-scope='container'][data-swipe-axis='y'] {

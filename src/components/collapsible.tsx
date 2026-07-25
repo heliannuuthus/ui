@@ -1,15 +1,20 @@
 import * as React from 'react';
 import { Collapsible as CollapsiblePrimitive } from '@base-ui/react/collapsible';
+import type { VariantProps } from 'class-variance-authority';
 import { ChevronDownIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
+import { buttonVariants } from './button';
 
 type CollapsibleProps = CollapsiblePrimitive.Root.Props;
-type CollapsibleTriggerProps = CollapsiblePrimitive.Trigger.Props;
+type CollapsibleTriggerProps = CollapsiblePrimitive.Trigger.Props &
+  VariantProps<typeof buttonVariants>;
 type CollapsibleHeaderProps = CollapsiblePrimitive.Trigger.Props;
 type CollapsibleContentProps = CollapsiblePrimitive.Panel.Props;
 type CollapsibleFooterProps = React.ComponentProps<'div'>;
-type CollapsibleIndicatorProps = React.ComponentProps<'span'>;
+type CollapsibleIndicatorProps = React.ComponentProps<'span'> & {
+  rotation?: 0 | 90 | 180;
+};
 
 function Collapsible({ className, ...props }: CollapsibleProps) {
   return (
@@ -21,10 +26,19 @@ function Collapsible({ className, ...props }: CollapsibleProps) {
   );
 }
 
-function CollapsibleTrigger({ className, ...props }: CollapsibleTriggerProps) {
+function CollapsibleTrigger({
+  className,
+  size = 'default',
+  variant = 'outline',
+  ...props
+}: CollapsibleTriggerProps) {
   return (
     <CollapsiblePrimitive.Trigger
-      className={cn('group/collapsible-trigger', className)}
+      className={cn(
+        buttonVariants({ size, variant }),
+        'group/collapsible-trigger',
+        className
+      )}
       data-slot="collapsible-trigger"
       {...props}
     />
@@ -47,6 +61,8 @@ function CollapsibleHeader({ className, ...props }: CollapsibleHeaderProps) {
 function CollapsibleIndicator({
   className,
   children,
+  rotation = 180,
+  style,
   ...props
 }: CollapsibleIndicatorProps) {
   return (
@@ -57,6 +73,12 @@ function CollapsibleIndicator({
         className
       )}
       data-slot="collapsible-indicator"
+      style={
+        {
+          '--collapsible-indicator-rotation': `${rotation}deg`,
+          ...style,
+        } as React.CSSProperties
+      }
       {...props}
     >
       {children ?? <ChevronDownIcon className="size-4" />}

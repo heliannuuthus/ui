@@ -93,17 +93,16 @@ export function SyntaxCode({
       data-language={language}
       data-line-count={lineCount}
       radius={radius}
-      size="sm"
       variant={variant}
       title={
         <Stack
           align="center"
           block
-          gap="lg"
+          gap={16}
           justify="between"
           orientation="horizontal"
         >
-          <Stack align="center" gap="sm" orientation="horizontal">
+          <Stack align="center" gap={8} orientation="horizontal">
             <TypographySmall className="font-heading font-bold">
               {fileName}
             </TypographySmall>
@@ -111,7 +110,7 @@ export function SyntaxCode({
           <Stack
             align="center"
             className="syntax-code-meta"
-            gap="sm"
+            gap={8}
             orientation="horizontal"
             separator={<i />}
           >

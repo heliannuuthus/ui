@@ -1,4 +1,11 @@
-import { useMemo, useState, type CSSProperties } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react';
 import { Badge } from '@heliannuuthus/ui/badge';
 import { Button } from '@heliannuuthus/ui/button';
 import { Card } from '@heliannuuthus/ui/card';
@@ -107,6 +114,7 @@ const componentGroups = [
       'Scroll Area',
       'Masonry',
       'Stack',
+      'Layout',
       'Separator',
     ],
   },
@@ -118,7 +126,6 @@ const componentGroups = [
       'Menubar',
       'Navigation Menu',
       'Pagination',
-      'Sidebar',
       'Tabs',
     ],
   },
@@ -287,7 +294,7 @@ function HomePage() {
     <main>
       <section className="home-hero">
         <Stack block className="hero-content" gap={32}>
-          <Stack block gap="lg">
+          <Stack block gap={16}>
             <Badge variant="outline">
               <Sparkles data-icon="inline-start" />
               {componentCatalog.length} 个可组合组件
@@ -299,7 +306,7 @@ function HomePage() {
             </TypographyLead>
           </Stack>
 
-          <Stack align="center" gap="md" orientation="horizontal" wrap>
+          <Stack align="center" gap={12} orientation="horizontal" wrap>
             <Button
               nativeButton={false}
               render={<NavLink to="/docs/getting-started" />}
@@ -360,19 +367,19 @@ function HomePage() {
           action={<Badge variant="secondary">Live</Badge>}
         >
           <Stack block gap={24}>
-            <Stack align="center" gap="sm" orientation="horizontal" wrap>
+            <Stack align="center" gap={8} orientation="horizontal" wrap>
               <Badge variant="outline">Accessible</Badge>
               <Badge variant="outline">Type-safe</Badge>
               <Badge variant="outline">Composable</Badge>
             </Stack>
-            <Stack block gap="sm">
+            <Stack block gap={8}>
               <Label htmlFor="home-workspace-name">工作区名称</Label>
               <Input defaultValue="Heliannuuthus UI" id="home-workspace-name" />
             </Stack>
             <Stack
               align="center"
               block
-              gap="sm"
+              gap={8}
               justify="end"
               orientation="horizontal"
             >
@@ -404,7 +411,7 @@ function HomePage() {
 
       <section className="home-section philosophy-section">
         <Stack block gap={48}>
-          <Stack block className="section-heading" gap="lg">
+          <Stack block className="section-heading" gap={16}>
             <TypographySmall className="section-label">
               DESIGN SYSTEM
             </TypographySmall>
@@ -432,8 +439,8 @@ function HomePage() {
               ['可组合', '小而稳定的能力可以自由组合，业务语义留在业务中。'],
               ['可生长', 'API 为真实场景保留扩展点，并尊重长期兼容性。'],
             ].map(([title, copy]) => (
-              <Card key={title} radius="sm" size="sm">
-                <Stack block gap="md">
+              <Card key={title} radius="sm">
+                <Stack block gap={12}>
                   <H3>{title}</H3>
                   <TypographyMuted>{copy}</TypographyMuted>
                 </Stack>
@@ -449,11 +456,11 @@ function HomePage() {
             align="end"
             block
             className="section-heading-horizontal"
-            gap="lg"
+            gap={16}
             justify="between"
             orientation="horizontal"
           >
-            <Stack gap="lg">
+            <Stack gap={16}>
               <TypographySmall className="section-label">
                 COMPONENTS
               </TypographySmall>
@@ -567,7 +574,7 @@ function GettingStartedPage() {
         </ItemMedia>
         <ItemContent>
           <ItemTitle>
-            <Stack align="center" gap="sm" orientation="horizontal">
+            <Stack align="center" gap={8} orientation="horizontal">
               <Badge variant="secondary">04</Badge>
               <TypographyLarge className="font-bold">
                 浏览完整组件目录
@@ -648,7 +655,7 @@ function DesignPage() {
         {principles.map(([number, title, copy]) => (
           <article id={`principle-${number}`} key={number}>
             <TypographySmall>{number}</TypographySmall>
-            <Stack block gap="sm">
+            <Stack block gap={8}>
               <H3>{title}</H3>
               <TypographyMuted>{copy}</TypographyMuted>
             </Stack>
@@ -717,6 +724,42 @@ function ComponentsOverview() {
 }
 
 function ComponentNavigation({ component }: { component: string }) {
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      const content = contentRef.current;
+      const activeItem = content?.querySelector<HTMLElement>(
+        '[data-sidebar="menu-button"][data-active]'
+      );
+
+      if (!content || !activeItem) return;
+
+      const contentRect = content.getBoundingClientRect();
+      const activeRect = activeItem.getBoundingClientRect();
+      const safeInset = content.clientHeight * 0.05;
+      const safeTop = contentRect.top + safeInset;
+      const safeBottom = contentRect.bottom - safeInset;
+      const isInsideSafeViewport =
+        activeRect.top >= safeTop && activeRect.bottom <= safeBottom;
+
+      if (isInsideSafeViewport) return;
+
+      const activeTop = activeRect.top - contentRect.top + content.scrollTop;
+      const centeredScrollTop =
+        activeTop - (content.clientHeight - activeRect.height) / 2;
+      const maxScrollTop = content.scrollHeight - content.clientHeight;
+      const targetScrollTop = Math.min(
+        maxScrollTop,
+        Math.max(0, centeredScrollTop)
+      );
+
+      content.scrollTop = targetScrollTop;
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [component]);
+
   return (
     <Sidebar
       aria-label="组件导航"
@@ -730,7 +773,10 @@ function ComponentNavigation({ component }: { component: string }) {
         </NavLink>
       </SidebarHeader>
       <SidebarSeparator />
-      <SidebarContent className="component-docs-sidebar-content">
+      <SidebarContent
+        className="component-docs-sidebar-content"
+        ref={contentRef}
+      >
         {componentGroups.map((group) => (
           <SidebarGroup key={group.title}>
             <SidebarGroupLabel className="component-docs-sidebar-label">
@@ -764,6 +810,12 @@ function ComponentNavigation({ component }: { component: string }) {
 
 function ComponentPage() {
   const { component = 'button' } = useParams();
+
+  useLayoutEffect(() => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [component]);
+
   if (component === 'button-group') {
     return <Navigate to="/components/button" replace />;
   }
@@ -778,6 +830,9 @@ function ComponentPage() {
   }
   if (component === 'native-select') {
     return <Navigate to="/components/select" replace />;
+  }
+  if (component === 'sidebar') {
+    return <Navigate to="/components/layout" replace />;
   }
   const name =
     componentCatalog.find((item) => componentSlug(item) === component) ??
@@ -830,60 +885,63 @@ function ComponentPage() {
                 />
               </section>
             )}
-            <section className="component-reference-section">
-              <h2>API</h2>
-              {documentation.parts && documentation.parts.length > 0 && (
-                <div className="component-reference-block">
-                  <h3>组成组件</h3>
-                  <div className="component-parts-table">
-                    <div className="component-parts-head">
-                      <span>组件</span>
-                      <span>用途</span>
-                    </div>
-                    {documentation.parts.map((part) => (
-                      <div key={part.name}>
-                        <code>{part.name}</code>
-                        <span>{part.description}</span>
+            {((documentation.parts?.length ?? 0) > 0 ||
+              documentation.api.length > 0) && (
+              <section className="component-reference-section">
+                <h2>API</h2>
+                {documentation.parts && documentation.parts.length > 0 && (
+                  <div className="component-reference-block">
+                    <h3>组成组件</h3>
+                    <div className="component-parts-table">
+                      <div className="component-parts-head">
+                        <span>组件</span>
+                        <span>用途</span>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {documentation.api.length > 0 && (
-                <div className="component-reference-block">
-                  {documentation.parts && documentation.parts.length > 0 && (
-                    <h3>属性</h3>
-                  )}
-                  <div className="component-api-table">
-                    <div className="component-api-head">
-                      <span>属性</span>
-                      <span>说明</span>
-                      <span>类型</span>
-                      <span>默认值</span>
+                      {documentation.parts.map((part) => (
+                        <div key={part.name}>
+                          <code>{part.name}</code>
+                          <span>{part.description}</span>
+                        </div>
+                      ))}
                     </div>
-                    {documentation.api.map((property) => (
-                      <div
-                        key={`${property.component ?? documentation.name}:${property.name}`}
-                      >
-                        {property.component ? (
-                          <Stack gap={2}>
-                            <TypographySmall className="font-mono text-muted-foreground">
-                              {property.component}
-                            </TypographySmall>
+                  </div>
+                )}
+                {documentation.api.length > 0 && (
+                  <div className="component-reference-block">
+                    {documentation.parts && documentation.parts.length > 0 && (
+                      <h3>属性</h3>
+                    )}
+                    <div className="component-api-table">
+                      <div className="component-api-head">
+                        <span>属性</span>
+                        <span>说明</span>
+                        <span>类型</span>
+                        <span>默认值</span>
+                      </div>
+                      {documentation.api.map((property) => (
+                        <div
+                          key={`${property.component ?? documentation.name}:${property.name}`}
+                        >
+                          {property.component ? (
+                            <Stack gap={2}>
+                              <TypographySmall className="font-mono text-muted-foreground">
+                                {property.component}
+                              </TypographySmall>
+                              <code>{property.name}</code>
+                            </Stack>
+                          ) : (
                             <code>{property.name}</code>
-                          </Stack>
-                        ) : (
-                          <code>{property.name}</code>
-                        )}
-                        <span>{property.description}</span>
-                        <code>{property.type}</code>
-                        <code>{property.defaultValue ?? '—'}</code>
-                      </div>
-                    ))}
+                          )}
+                          <span>{property.description}</span>
+                          <code>{property.type}</code>
+                          <code>{property.defaultValue ?? '—'}</code>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-            </section>
+                )}
+              </section>
+            )}
             <div className="guidance-grid">
               <section>
                 <h2>无障碍</h2>
@@ -1062,7 +1120,7 @@ function ComponentExampleCard({
     >
       <div
         className={`demo-preview${
-          example.harness ? ' demo-preview-harness' : ''
+          example.cases || example.caseAxes ? ' demo-preview-harness' : ''
         }`}
         style={
           example.previewHeight
@@ -1072,8 +1130,16 @@ function ComponentExampleCard({
             : undefined
         }
       >
-        {example.harness ? (
-          <ComponentHarness controls={example.harness}>
+        {example.cases ? (
+          <ComponentHarness cases={example.cases}>
+            {(values) =>
+              typeof example.preview === 'function'
+                ? example.preview(values)
+                : example.preview
+            }
+          </ComponentHarness>
+        ) : example.caseAxes ? (
+          <ComponentHarness axes={example.caseAxes}>
             {(values) =>
               typeof example.preview === 'function'
                 ? example.preview(values)
@@ -1143,12 +1209,12 @@ function DocSection({
 }) {
   return (
     <section className="doc-section" id={id}>
-      <Stack block gap="lg">
+      <Stack block gap={16}>
         <Item className="p-0" size="sm">
           <ItemMedia variant="icon">{icon}</ItemMedia>
           <ItemContent>
             <ItemTitle>
-              <Stack align="center" gap="sm" orientation="horizontal">
+              <Stack align="center" gap={8} orientation="horizontal">
                 <Badge variant="secondary">{step}</Badge>
                 <H2 className="border-0 pb-0 text-2xl font-bold">{title}</H2>
               </Stack>
@@ -1182,7 +1248,7 @@ function DocLayout({
   return (
     <main className="doc-page">
       <Stack block className="doc-content" gap={48}>
-        <Stack block className="doc-intro" gap="sm">
+        <Stack block className="doc-intro" gap={8}>
           <Badge className="doc-kicker" variant="outline">
             {kicker}
           </Badge>
@@ -1201,9 +1267,9 @@ function DocLayout({
         </Stack>
       </Stack>
       <aside aria-label="本页目录" className="doc-toc">
-        <Stack align="stretch" gap="lg" orientation="horizontal">
+        <Stack align="stretch" gap={16} orientation="horizontal">
           <Separator orientation="vertical" />
-          <Stack gap="sm">
+          <Stack gap={8}>
             <TypographySmall>本页目录</TypographySmall>
             <Stack gap={2}>
               {toc.map((item, index) => (

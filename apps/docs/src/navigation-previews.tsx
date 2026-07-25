@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -17,23 +17,6 @@ import {
   PaginationPrevious,
 } from '@heliannuuthus/ui/pagination';
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarInset,
-  SidebarInput,
-  SidebarMenu,
-  SidebarMenuBadge,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
-} from '@heliannuuthus/ui/sidebar';
-import {
   Tabs,
   type TabsAnimation,
   TabsContent,
@@ -42,24 +25,16 @@ import {
 } from '@heliannuuthus/ui/tabs';
 import {
   Activity,
-  Bell,
   Blocks,
   BookOpen,
-  Box,
-  ChartNoAxesColumnIncreasing,
   ChevronRight,
   CircleHelp,
   Code2,
-  FolderKanban,
   Gauge,
   GitBranch,
-  Home,
   Layers3,
-  LayoutDashboard,
   Package,
   Palette,
-  Settings,
-  ShieldCheck,
   Sparkles,
   Users,
 } from 'lucide-react';
@@ -384,99 +359,6 @@ export function TabsMotionDemo({
           </TabsContent>
         </div>
       </Tabs>
-    </div>
-  );
-}
-
-const sidebarItems = [
-  { label: '工作台', icon: LayoutDashboard, active: true },
-  { label: '项目', icon: FolderKanban, badge: '8' },
-  { label: '组件', icon: Box, badge: '42' },
-  { label: '分析', icon: ChartNoAxesColumnIncreasing },
-];
-
-export function SidebarWorkspaceDemo() {
-  return (
-    <div className="sidebar-demo-viewport">
-      <SidebarProvider
-        className="sidebar-demo-provider"
-        style={{ '--sidebar-width': '13rem' } as CSSProperties}
-      >
-        <Sidebar
-          variant="inset"
-          collapsible="icon"
-          className="sidebar-demo-panel"
-        >
-          <SidebarHeader>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton size="lg">
-                  <span className="sidebar-demo-logo">H</span>
-                  <span>Heliannuuthus UI</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-            <SidebarInput placeholder="搜索工作区" />
-          </SidebarHeader>
-          <SidebarContent>
-            <SidebarGroup>
-              <SidebarGroupLabel>工作区</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {sidebarItems.map((item) => (
-                    <SidebarMenuItem key={item.label}>
-                      <SidebarMenuButton isActive={item.active}>
-                        <item.icon />
-                        <span>{item.label}</span>
-                      </SidebarMenuButton>
-                      {item.badge && (
-                        <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
-                      )}
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </SidebarContent>
-          <SidebarFooter>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Settings />
-                  <span>设置</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarFooter>
-        </Sidebar>
-        <SidebarInset className="sidebar-demo-inset">
-          <header>
-            <SidebarTrigger />
-            <div>
-              <span>工作台</span>
-              <strong>产品概览</strong>
-            </div>
-            <Bell />
-          </header>
-          <main>
-            <article>
-              <Home />
-              <span>今日访问</span>
-              <strong>12,804</strong>
-            </article>
-            <article>
-              <Package />
-              <span>已发布组件</span>
-              <strong>42</strong>
-            </article>
-            <article>
-              <ShieldCheck />
-              <span>系统状态</span>
-              <strong>稳定</strong>
-            </article>
-          </main>
-        </SidebarInset>
-      </SidebarProvider>
     </div>
   );
 }

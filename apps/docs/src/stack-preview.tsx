@@ -15,13 +15,142 @@ import {
   SelectTrigger,
 } from '@heliannuuthus/ui/select';
 import { Slider } from '@heliannuuthus/ui/slider';
-import { Stack } from '@heliannuuthus/ui/stack';
+import {
+  Stack,
+  type StackAlign,
+  type StackJustify,
+} from '@heliannuuthus/ui/stack';
 import { TypographyMuted, TypographySmall } from '@heliannuuthus/ui/typography';
 import { Search } from 'lucide-react';
 
 const protocols = ['https://', 'http://'];
 const storageUnits = ['GB', 'MB', 'KB'];
 const scopes = ['全部组件', '数据录入', '数据展示'];
+
+const alignmentCases: Array<{
+  align?: StackAlign;
+  description: string;
+  justify?: StackJustify;
+  label: string;
+  title: string;
+}> = [
+  {
+    align: 'start',
+    description: 'align 控制交叉轴，元素沿顶部对齐。',
+    label: 'align="start"',
+    title: '交叉轴起点',
+  },
+  {
+    align: 'center',
+    description: 'align 控制交叉轴，元素按中心线对齐。',
+    label: 'align="center"',
+    title: '交叉轴居中',
+  },
+  {
+    align: 'end',
+    description: 'align 控制交叉轴，元素沿底部对齐。',
+    label: 'align="end"',
+    title: '交叉轴终点',
+  },
+  {
+    justify: 'start',
+    description: 'justify 控制主轴，内容从左侧开始排列。',
+    label: 'justify="start"',
+    title: '主轴起点',
+  },
+  {
+    justify: 'center',
+    description: 'justify 控制主轴，整组内容在中间聚合。',
+    label: 'justify="center"',
+    title: '主轴居中',
+  },
+  {
+    justify: 'between',
+    description: 'justify 控制主轴，把剩余空间放到元素之间。',
+    label: 'justify="between"',
+    title: '两端分布',
+  },
+];
+
+export function StackGapDemo() {
+  const [gap, setGap] = useState(6);
+
+  return (
+    <div className="stack-gap-demo">
+      <div className="stack-gap-heading">
+        <div>
+          <span>NUMBER PROP</span>
+          <strong>
+            <code>gap=&#123;{gap}&#125;</code>
+          </strong>
+          <p>gap 直接接收数值，同时设置水平与垂直间距。</p>
+        </div>
+        <output aria-live="polite">
+          <strong>{gap}</strong>
+          <span>px</span>
+        </output>
+      </div>
+      <div className="stack-gap-slider">
+        <Slider
+          aria-label="Stack 间距"
+          max={12}
+          min={0}
+          onValueChange={setGap}
+          step={3}
+          value={gap}
+        />
+        <div aria-hidden="true">
+          {[0, 3, 6, 9, 12].map((value) => (
+            <span key={value}>{value}</span>
+          ))}
+        </div>
+      </div>
+      <Stack
+        align="center"
+        block
+        className="stack-gap-stage"
+        gap={gap}
+        orientation="horizontal"
+      >
+        <span>筛选</span>
+        <span>排序方式</span>
+        <span>仅看可用</span>
+      </Stack>
+    </div>
+  );
+}
+
+export function StackAlignmentDemo() {
+  return (
+    <div className="stack-alignment-grid">
+      {alignmentCases.map((item) => (
+        <article className="stack-alignment-case" key={item.label}>
+          <div className="stack-alignment-copy">
+            <code>{item.label}</code>
+            <strong>{item.title}</strong>
+            <p>{item.description}</p>
+          </div>
+          <Stack
+            align={item.align ?? 'center'}
+            block
+            className="stack-alignment-stage"
+            gap={6}
+            justify={item.justify ?? 'start'}
+            orientation="horizontal"
+          >
+            <span className="stack-alignment-item stack-alignment-item-short">
+              A
+            </span>
+            <span className="stack-alignment-item stack-alignment-item-tall">
+              B
+            </span>
+            <span className="stack-alignment-item">C</span>
+          </Stack>
+        </article>
+      ))}
+    </div>
+  );
+}
 
 function CompactCase({
   children,
@@ -33,7 +162,7 @@ function CompactCase({
   title: string;
 }) {
   return (
-    <Stack block gap="sm">
+    <Stack block gap={8}>
       <Stack block gap={2}>
         <TypographySmall className="font-bold">{title}</TypographySmall>
         <TypographyMuted>{description}</TypographyMuted>
@@ -81,7 +210,7 @@ export function StackCompactVariantsDemo() {
   }
 
   return (
-    <Stack block className="max-w-xl" gap="lg">
+    <Stack block className="max-w-xl" gap={16}>
       <CompactCase
         description="独立 Select 作为输入协议前缀。"
         title="前置选择控件"
@@ -139,7 +268,7 @@ export function StackCompactVariantsDemo() {
         description="拖动 Slider 或修改数值，两个控件会保持同步。"
         title="Slider 数值联动"
       >
-        <Stack block gap="sm">
+        <Stack block gap={8}>
           <Stack.Compact aria-label="压缩质量" block>
             <InputGroup className="px-4 has-[[data-slot=slider-thumb]:focus-visible]:border-primary">
               <Slider

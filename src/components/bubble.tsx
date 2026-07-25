@@ -26,6 +26,8 @@ const bubbleVariants = cva(
           '*:data-[slot=bubble-content]:bg-secondary *:data-[slot=bubble-content]:text-secondary-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)]',
         muted:
           '*:data-[slot=bubble-content]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--muted),var(--foreground)_5%)]',
+        elevated:
+          '*:data-[slot=bubble-content]:border-border/80 *:data-[slot=bubble-content]:bg-card *:data-[slot=bubble-content]:text-card-foreground *:data-[slot=bubble-content]:shadow-[0_8px_24px_-12px_color-mix(in_oklch,var(--foreground),transparent_72%)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted/60',
         tinted:
           '*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
         outline:

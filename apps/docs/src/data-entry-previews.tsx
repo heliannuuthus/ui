@@ -614,7 +614,6 @@ export function SliderElasticDemo() {
       </div>
       <Slider
         aria-label="播放器音量"
-        effect="elastic"
         endIcon={<Volume2 />}
         max={100}
         min={0}
@@ -631,11 +630,7 @@ export function SliderElasticDemo() {
   );
 }
 
-export function SwitchSettingsDemo({
-  size = 'default',
-}: {
-  size?: 'sm' | 'default';
-}) {
+export function SwitchSettingsDemo() {
   const [settings, setSettings] = useState({ digest: true, product: false });
 
   return (
@@ -655,7 +650,6 @@ export function SwitchSettingsDemo({
           <Switch
             checked={settings.digest}
             onCheckedChange={(digest) => setSettings({ ...settings, digest })}
-            size={size}
           />
         </label>
         <label className="data-switch-row">
@@ -666,7 +660,6 @@ export function SwitchSettingsDemo({
           <Switch
             checked={settings.product}
             onCheckedChange={(product) => setSettings({ ...settings, product })}
-            size={size}
           />
         </label>
         <label className="data-switch-row" data-disabled="true">
@@ -674,7 +667,7 @@ export function SwitchSettingsDemo({
             <strong>安全提醒</strong>
             <small>关键安全事件始终开启</small>
           </span>
-          <Switch checked disabled size={size} />
+          <Switch checked disabled />
         </label>
       </div>
     </div>

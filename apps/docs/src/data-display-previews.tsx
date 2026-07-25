@@ -23,7 +23,6 @@ import {
   AvatarBadge,
   AvatarFallback,
   AvatarGroup,
-  AvatarGroupCount,
 } from '@heliannuuthus/ui/avatar';
 import {
   Bubble,
@@ -39,9 +38,8 @@ import {
   CarouselDots,
   CarouselItem,
   CarouselNext,
+  CarouselPagination,
   CarouselPrevious,
-  type CarouselVariant,
-  useCarousel,
 } from '@heliannuuthus/ui/carousel';
 import {
   ChartContainer,
@@ -100,6 +98,7 @@ import {
   MessageFooter,
   MessageGroup,
   MessageHeader,
+  MessageStatus,
 } from '@heliannuuthus/ui/message';
 import {
   MessageScroller,
@@ -109,7 +108,9 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
 } from '@heliannuuthus/ui/message-scroller';
+import { Slider } from '@heliannuuthus/ui/slider';
 import { Stack } from '@heliannuuthus/ui/stack';
+import { Separator } from '@heliannuuthus/ui/separator';
 import {
   Table,
   TableBody,
@@ -128,9 +129,12 @@ import {
   TooltipTrigger,
 } from '@heliannuuthus/ui/tooltip';
 import {
+  Activity,
   Archive,
+  ArrowUpRight,
   Check,
   CheckCircle2,
+  ChevronRight,
   CircleDot,
   Cloud,
   Download,
@@ -150,7 +154,7 @@ import {
   Sparkles,
   Trash2,
 } from 'lucide-react';
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 export function AccordionReleaseDemo({
   mode = 'single',
@@ -388,7 +392,16 @@ export function AttachmentReleaseDemo({
   );
 }
 
-export function AvatarOwnersDemo() {
+const avatarPeople = [
+  { initials: '林', tone: 'blue' },
+  { initials: '周', tone: 'amber' },
+  { initials: '陈', tone: 'green' },
+  { initials: '许', tone: 'rose' },
+  { initials: '吴', tone: 'violet' },
+  { initials: '宋', tone: 'slate' },
+] as const;
+
+export function AvatarShapeDemo() {
   const sizes = [
     { label: '小', meta: '24 px', value: 'sm' },
     { label: '中', meta: '32 px', value: 'default' },
@@ -396,38 +409,178 @@ export function AvatarOwnersDemo() {
   ] as const;
 
   return (
-    <div className="display-avatar-sizes">
-      {sizes.map((size) => (
-        <div className="display-avatar-size" key={size.value}>
-          <div className="display-avatar-size-label">
-            <strong>{size.label}</strong>
-            <span>{size.meta}</span>
+    <div className="display-avatar-shapes">
+      {(['circle', 'square'] as const).map((shape) => (
+        <section className="display-avatar-shape-card" key={shape}>
+          <div className="display-avatar-case-heading">
+            <strong>{shape === 'circle' ? '圆形' : '圆角方形'}</strong>
+            <code>{`shape="${shape}"`}</code>
           </div>
-          <AvatarGroup aria-label={`${size.label}尺寸的发布负责人`}>
-            <Avatar size={size.value}>
-              <AvatarFallback>林</AvatarFallback>
-              <AvatarBadge>
-                <Check />
-              </AvatarBadge>
-            </Avatar>
-            <AvatarGroupCount>+3</AvatarGroupCount>
-          </AvatarGroup>
-        </div>
+          <div className="display-avatar-size-row">
+            {sizes.map((size, index) => (
+              <div className="display-avatar-size-item" key={size.value}>
+                <Avatar shape={shape} size={size.value}>
+                  <AvatarFallback
+                    className={`display-avatar-tone-${avatarPeople[index]?.tone}`}
+                  >
+                    {avatarPeople[index]?.initials}
+                  </AvatarFallback>
+                </Avatar>
+                <span>
+                  {size.label} · {size.meta}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
       ))}
     </div>
   );
 }
 
-export function BubbleReviewDemo() {
+export function AvatarGroupDemo() {
+  const [max, setMax] = useState(4);
+  const [overlap, setOverlap] = useState(8);
+
+  return (
+    <div className="display-avatar-group-demo">
+      <div className="display-avatar-group-stage">
+        <div>
+          <span>发布协作者</span>
+          <strong>当前展示 {Math.min(max, avatarPeople.length)} 人</strong>
+        </div>
+        <AvatarGroup
+          aria-label={`展示 ${Math.min(max, avatarPeople.length)} 位协作者，其余自动汇总`}
+          max={max}
+          overlap={overlap}
+          size="lg"
+        >
+          {avatarPeople.map((person) => (
+            <Avatar key={person.initials}>
+              <AvatarFallback className={`display-avatar-tone-${person.tone}`}>
+                {person.initials}
+              </AvatarFallback>
+            </Avatar>
+          ))}
+        </AvatarGroup>
+      </div>
+      <div className="display-avatar-group-controls">
+        <label>
+          <span>
+            最多展示
+            <output>{max}</output>
+          </span>
+          <Slider
+            aria-label="最多展示的头像数量"
+            effect="none"
+            max={6}
+            min={1}
+            onValueChange={(value) =>
+              setMax(Array.isArray(value) ? (value[0] ?? 4) : value)
+            }
+            step={1}
+            value={max}
+          />
+        </label>
+        <label>
+          <span>
+            重叠程度
+            <output>{overlap}px</output>
+          </span>
+          <Slider
+            aria-label="头像重叠程度"
+            effect="none"
+            max={12}
+            min={0}
+            onValueChange={(value) =>
+              setOverlap(Array.isArray(value) ? (value[0] ?? 8) : value)
+            }
+            step={2}
+            value={overlap}
+          />
+        </label>
+      </div>
+    </div>
+  );
+}
+
+export function AvatarBadgeDemo() {
+  const cases = [
+    {
+      title: '在线状态',
+      description: '无内容时显示状态圆点',
+      avatar: (
+        <Avatar size="lg">
+          <AvatarFallback className="display-avatar-tone-green">
+            林
+          </AvatarFallback>
+          <AvatarBadge />
+        </Avatar>
+      ),
+      badge: <Badge variant="secondary">在线</Badge>,
+    },
+    {
+      title: '认证状态',
+      description: '图标随头像尺寸缩放',
+      avatar: (
+        <Avatar shape="square" size="lg">
+          <AvatarFallback className="display-avatar-tone-blue">
+            周
+          </AvatarFallback>
+          <AvatarBadge>
+            <Check />
+          </AvatarBadge>
+        </Avatar>
+      ),
+      badge: <Badge variant="outline">已认证</Badge>,
+    },
+    {
+      title: '未读提醒',
+      description: '将 Badge 渲染到头像锚点',
+      avatar: (
+        <Avatar size="lg">
+          <AvatarFallback className="display-avatar-tone-rose">
+            陈
+          </AvatarFallback>
+          <AvatarBadge
+            className="display-avatar-notification"
+            render={<Badge variant="destructive" />}
+          >
+            8
+          </AvatarBadge>
+        </Avatar>
+      ),
+      badge: <Badge variant="destructive">需要处理</Badge>,
+    },
+  ];
+
+  return (
+    <div className="display-avatar-badge-grid">
+      {cases.map((item) => (
+        <article className="display-avatar-badge-card" key={item.title}>
+          <div className="display-avatar-badge-visual">{item.avatar}</div>
+          <div>
+            <span>{item.badge}</span>
+            <strong>{item.title}</strong>
+            <p>{item.description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+export function BubbleVariantsDemo() {
   const replies = [
     { label: '强调', token: 'default', variant: 'default' },
+    { label: '浮起', token: 'elevated', variant: 'elevated' },
     { label: '柔和', token: 'tinted', variant: 'tinted' },
     { label: '描边', token: 'outline', variant: 'outline' },
   ] as const;
 
   return (
     <div className="display-bubble-variants">
-      {replies.map((reply) => (
+      {replies.map((reply, index) => (
         <div className="display-bubble-variant" key={reply.variant}>
           <div className="display-bubble-variant-label">
             <strong>{reply.label}</strong>
@@ -439,9 +592,94 @@ export function BubbleReviewDemo() {
               <BubbleReactions>✓ 2</BubbleReactions>
             </Bubble>
           </BubbleGroup>
+          {index < replies.length - 1 && (
+            <Separator className="display-bubble-separator" />
+          )}
         </div>
       ))}
     </div>
+  );
+}
+
+export function MessageConversationDemo() {
+  return (
+    <MessageGroup
+      aria-label="发布评审对话"
+      className="display-conversation-list"
+      role="list"
+    >
+      <Message align="start" role="listitem">
+        <MessageAvatar>
+          <Avatar>
+            <AvatarFallback className="display-avatar-tone-green">
+              林
+            </AvatarFallback>
+          </Avatar>
+        </MessageAvatar>
+        <MessageContent>
+          <MessageHeader>林默 · 21:42</MessageHeader>
+          <Bubble variant="elevated">
+            <BubbleContent>
+              预检已经通过，迁移脚本和回滚镜像都确认可用。
+            </BubbleContent>
+          </Bubble>
+          <MessageFooter>发布负责人</MessageFooter>
+        </MessageContent>
+      </Message>
+
+      <Message align="start" role="listitem">
+        <MessageContent>
+          <Bubble variant="muted">
+            <BubbleContent>
+              我会先切换 10% 流量，观察五分钟后再继续。
+            </BubbleContent>
+          </Bubble>
+        </MessageContent>
+      </Message>
+
+      <div className="display-conversation-divider" role="presentation">
+        <Separator />
+        <span>今天 21:46</span>
+        <Separator />
+      </div>
+
+      <Message align="end" role="listitem">
+        <MessageContent>
+          <Bubble align="end" variant="tinted">
+            <BubbleContent>收到，我先盯住错误率和延迟。</BubbleContent>
+          </Bubble>
+          <MessageFooter>
+            <MessageStatus status="unread">
+              <CircleDot />
+              未读
+            </MessageStatus>
+          </MessageFooter>
+        </MessageContent>
+      </Message>
+
+      <Message align="end" role="listitem">
+        <MessageAvatar>
+          <Avatar shape="square">
+            <AvatarFallback className="display-avatar-tone-blue">
+              周
+            </AvatarFallback>
+          </Avatar>
+        </MessageAvatar>
+        <MessageContent>
+          <MessageHeader>周一 · 21:48</MessageHeader>
+          <Bubble align="end" variant="default">
+            <BubbleContent>指标稳定，可以继续全量发布。</BubbleContent>
+            <BubbleReactions>👍 3</BubbleReactions>
+          </Bubble>
+          <MessageFooter>
+            <MessageStatus status="read">
+              <Check />
+              已读
+            </MessageStatus>
+          </MessageFooter>
+        </MessageContent>
+      </Message>
+    </MessageGroup>
   );
 }
 
@@ -468,28 +706,22 @@ const releaseHighlights = [
 
 export function CarouselHighlightsDemo({
   autoplay = false,
-  autoplayDelay,
   dotPosition = 'bottom',
   loop = false,
   pauseOnHover,
-  variant,
 }: {
-  autoplay?: boolean;
-  autoplayDelay?: number;
+  autoplay?: boolean | number;
   dotPosition?: 'top' | 'bottom';
   loop?: boolean;
   pauseOnHover?: boolean;
-  variant?: CarouselVariant;
 }) {
   return (
     <Carousel
       aria-label="版本亮点"
       autoplay={autoplay}
-      autoplayDelay={autoplayDelay}
-      className={`display-carousel${autoplay ? ' display-carousel-autoplay' : ''}`}
+      className={`display-carousel${autoplay !== false ? ' display-carousel-autoplay' : ''}`}
       loop={loop}
       pauseOnHover={pauseOnHover}
-      variant={variant}
     >
       {dotPosition === 'top' ? <CarouselDots /> : null}
       <CarouselContent>
@@ -518,51 +750,6 @@ export function CarouselHighlightsDemo({
   );
 }
 
-function CarouselPagination() {
-  const {
-    canScrollNext,
-    canScrollPrev,
-    currentPage,
-    pageCount,
-    scrollNext,
-    scrollPrev,
-  } = useCarousel();
-
-  return (
-    <Stack
-      align="center"
-      aria-label="轮播分页"
-      className="my-3"
-      gap="sm"
-      justify="center"
-      orientation="horizontal"
-      role="group"
-    >
-      <Button
-        aria-label="上一页"
-        disabled={!canScrollPrev}
-        onClick={scrollPrev}
-        size="sm"
-        variant="outline"
-      >
-        上一页
-      </Button>
-      <TypographySmall aria-live="polite" className="min-w-14 text-center">
-        {currentPage} / {Math.max(pageCount, 1)}
-      </TypographySmall>
-      <Button
-        aria-label="下一页"
-        disabled={!canScrollNext}
-        onClick={scrollNext}
-        size="sm"
-        variant="outline"
-      >
-        下一页
-      </Button>
-    </Stack>
-  );
-}
-
 export function CarouselCustomPaginationDemo() {
   return (
     <Carousel
@@ -588,7 +775,51 @@ export function CarouselCustomPaginationDemo() {
           );
         })}
       </CarouselContent>
-      <CarouselPagination />
+      <CarouselPagination>
+        {({
+          canScrollNext,
+          canScrollPrev,
+          currentPage,
+          pageCount,
+          scrollNext,
+          scrollPrev,
+        }) => (
+          <Stack
+            align="center"
+            aria-label="轮播分页"
+            className="my-3"
+            gap={8}
+            justify="center"
+            orientation="horizontal"
+            role="group"
+          >
+            <Button
+              aria-label="上一页"
+              disabled={!canScrollPrev}
+              onClick={scrollPrev}
+              size="sm"
+              variant="outline"
+            >
+              上一页
+            </Button>
+            <TypographySmall
+              aria-live="polite"
+              className="min-w-14 text-center"
+            >
+              {currentPage} / {Math.max(pageCount, 1)}
+            </TypographySmall>
+            <Button
+              aria-label="下一页"
+              disabled={!canScrollNext}
+              onClick={scrollNext}
+              size="sm"
+              variant="outline"
+            >
+              下一页
+            </Button>
+          </Stack>
+        )}
+      </CarouselPagination>
     </Carousel>
   );
 }
@@ -601,72 +832,151 @@ export function CarouselAutoplayDemo() {
         <strong>自动播放，悬停即暂停</strong>
         <small>自动播放 · 首尾循环 · 3D 景深</small>
       </div>
-      <CarouselHighlightsDemo autoplay autoplayDelay={2200} loop />
+      <CarouselHighlightsDemo autoplay={2.2} loop />
     </div>
   );
 }
 
 const deploymentData = [
-  { day: '周一', duration: 8, success: 94 },
-  { day: '周二', duration: 6, success: 97 },
-  { day: '周三', duration: 11, success: 91 },
-  { day: '周四', duration: 5, success: 98 },
-  { day: '周五', duration: 7, success: 96 },
-  { day: '周六', duration: 4, success: 99 },
+  { day: '07.21', success: 92.4 },
+  { day: '07.22', success: 94.8 },
+  { day: '07.23', success: 93.6 },
+  { day: '07.24', success: 96.2 },
+  { day: '07.25', success: 95.7 },
+  { day: '07.26', success: 98.1 },
+  { day: '今天', success: 97.4 },
 ];
 
 const deploymentChartConfig = {
-  success: { label: '成功率', color: 'var(--primary)' },
-  duration: { label: '耗时', color: 'var(--muted-foreground)' },
+  success: { label: '发布成功率', color: 'var(--primary)' },
 } satisfies ChartConfig;
 
-export function ChartDeploymentDemo({
-  metric = 'success',
-}: {
-  metric?: 'success' | 'duration';
-}) {
-  const success = metric === 'success';
-
+export function ChartDeploymentDemo() {
   return (
-    <div className="display-chart-card">
-      <div className="display-panel-heading">
-        <div>
-          <span className="display-eyebrow">最近 6 天</span>
-          <strong>{success ? '生产发布成功率' : '平均部署耗时'}</strong>
+    <section aria-label="发布健康度趋势" className="display-chart-story">
+      <header className="display-chart-story-header">
+        <div className="display-chart-story-title">
+          <span className="display-chart-story-mark" aria-hidden="true">
+            <Activity />
+          </span>
+          <div>
+            <span>RELEASE PULSE · 7 DAYS</span>
+            <strong>发布健康度</strong>
+          </div>
         </div>
-        <b>{success ? '96.8%' : '6.8 min'}</b>
+        <Badge variant="secondary">
+          <span className="display-chart-live-dot" aria-hidden="true" />
+          系统稳定
+        </Badge>
+      </header>
+
+      <div className="display-chart-story-summary">
+        <div className="display-chart-story-primary">
+          <span>生产发布成功率</span>
+          <strong>97.4%</strong>
+          <small>
+            <ArrowUpRight aria-hidden="true" />
+            较上周提升 2.6%
+          </small>
+        </div>
+        <dl>
+          <div>
+            <dt>发布次数</dt>
+            <dd>128</dd>
+          </div>
+          <div>
+            <dt>平均耗时</dt>
+            <dd>6m 48s</dd>
+          </div>
+          <div>
+            <dt>需要回滚</dt>
+            <dd>4</dd>
+          </div>
+        </dl>
       </div>
-      <ChartContainer
-        className="display-chart"
-        config={deploymentChartConfig}
-        initialDimension={{ width: 520, height: 240 }}
-      >
-        <BarChart data={deploymentData} margin={{ left: -18, right: 8 }}>
-          <CartesianGrid vertical={false} />
-          <XAxis dataKey="day" tickLine={false} axisLine={false} />
-          <YAxis
-            domain={success ? [80, 100] : [0, 14]}
-            tickLine={false}
-            axisLine={false}
-          />
-          <ChartTooltip
-            cursor={false}
-            content={<ChartTooltipContent hideLabel={false} />}
-          />
-          <Bar
-            dataKey={metric}
-            fill={`var(--color-${metric})`}
-            radius={[7, 7, 2, 2]}
-          />
-        </BarChart>
-      </ChartContainer>
-    </div>
+
+      <div className="display-chart-story-plot">
+        <div className="display-chart-story-plot-heading">
+          <div>
+            <strong>成功率趋势</strong>
+            <span>目标线 95%</span>
+          </div>
+          <span>近七日</span>
+        </div>
+        <ChartContainer
+          className="display-chart"
+          config={deploymentChartConfig}
+          initialDimension={{ width: 720, height: 280 }}
+        >
+          <AreaChart
+            accessibilityLayer
+            data={deploymentData}
+            margin={{ left: -12, right: 12, top: 12 }}
+          >
+            <defs>
+              <linearGradient
+                id="release-health-gradient"
+                x1="0"
+                x2="0"
+                y1="0"
+                y2="1"
+              >
+                <stop
+                  offset="0%"
+                  stopColor="var(--color-success)"
+                  stopOpacity={0.3}
+                />
+                <stop
+                  offset="88%"
+                  stopColor="var(--color-success)"
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="4 8" vertical={false} />
+            <XAxis
+              axisLine={false}
+              dataKey="day"
+              tickLine={false}
+              tickMargin={12}
+            />
+            <YAxis
+              axisLine={false}
+              domain={[88, 100]}
+              tickFormatter={(value) => `${value}%`}
+              tickLine={false}
+              width={42}
+            />
+            <ChartTooltip
+              content={<ChartTooltipContent indicator="line" />}
+              cursor={false}
+            />
+            <Area
+              dataKey="success"
+              fill="url(#release-health-gradient)"
+              fillOpacity={1}
+              stroke="var(--color-success)"
+              strokeWidth={2.5}
+              type="monotone"
+            />
+          </AreaChart>
+        </ChartContainer>
+      </div>
+
+      <footer className="display-chart-story-footer">
+        <div>
+          <span className="display-chart-story-legend" aria-hidden="true" />
+          发布成功率
+        </div>
+        <span>每 5 分钟刷新 · UTC+8</span>
+      </footer>
+    </section>
   );
 }
 
 export function CollapsibleBuildDemo() {
   return (
-    <Collapsible className="display-build-log">
+    <Collapsible className="display-build-log" defaultOpen>
       <CollapsibleHeader className="display-build-summary">
         <div className="display-status-icon is-success">
           <CheckCircle2 />
@@ -676,7 +986,9 @@ export function CollapsibleBuildDemo() {
           <span>1m 48s · commit 7f92c1a</span>
         </div>
         <Badge variant="secondary">成功</Badge>
-        <CollapsibleIndicator />
+        <CollapsibleIndicator rotation={90}>
+          <ChevronRight />
+        </CollapsibleIndicator>
       </CollapsibleHeader>
       <CollapsibleContent className="display-build-content">
         <code>
@@ -708,7 +1020,7 @@ export function CollapsiblePolicyDemo() {
           <strong>灰度发布策略</strong>
           <span>先发布到 10% 的生产实例</span>
         </div>
-        <CollapsibleTrigger render={<Button size="sm" variant="outline" />}>
+        <CollapsibleTrigger size="sm" variant="outline">
           配置
           <CollapsibleIndicator className="ml-1" />
         </CollapsibleTrigger>
@@ -734,6 +1046,27 @@ export function CollapsiblePolicyDemo() {
         </CollapsibleFooter>
       </CollapsibleContent>
     </Collapsible>
+  );
+}
+
+export function CollapsibleTriggersDemo() {
+  return (
+    <div className="display-collapsible-showcase">
+      <section>
+        <div className="display-collapsible-case-heading">
+          <span>Header 触发</span>
+          <small>自定义标题内容与方向图标</small>
+        </div>
+        <CollapsibleBuildDemo />
+      </section>
+      <section>
+        <div className="display-collapsible-case-heading">
+          <span>Button 触发</span>
+          <small>Header 保持静态，只让按钮控制内容</small>
+        </div>
+        <CollapsiblePolicyDemo />
+      </section>
+    </div>
   );
 }
 
@@ -1052,33 +1385,6 @@ export function MarkerTimelineDemo({
         <strong>流量切换完成</strong>
       </div>
     </div>
-  );
-}
-
-export function MessageReviewDemo({
-  align = 'start',
-}: {
-  align?: 'start' | 'end';
-}) {
-  return (
-    <MessageGroup className="display-message-group">
-      <Message align={align}>
-        <MessageAvatar>
-          <Avatar>
-            <AvatarFallback>林</AvatarFallback>
-          </Avatar>
-        </MessageAvatar>
-        <MessageContent>
-          <MessageHeader>林默 · 发布负责人</MessageHeader>
-          <Bubble variant={align === 'end' ? 'default' : 'muted'}>
-            <BubbleContent>
-              预检通过了，我会在流量切换后观察五分钟错误率。
-            </BubbleContent>
-          </Bubble>
-          <MessageFooter>21:46 · 已读</MessageFooter>
-        </MessageContent>
-      </Message>
-    </MessageGroup>
   );
 }
 

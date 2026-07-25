@@ -8,23 +8,16 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/utils';
 
 const toggleVariants = cva(
-  "group/toggle inline-flex items-center justify-center gap-1 rounded-3xl text-sm font-medium whitespace-nowrap transition-colors outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:hover:bg-primary/85 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/toggle inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-3xl px-3 text-sm font-medium whitespace-nowrap transition-colors outline-none has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5 hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:hover:bg-primary/85 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
         default: 'bg-transparent',
         outline: 'border border-input bg-transparent hover:bg-muted',
       },
-      size: {
-        default:
-          'h-9 min-w-9 px-3 has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5',
-        sm: 'h-8 min-w-8 px-3 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',
-        lg: 'h-10 min-w-10 px-4 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3',
-      },
     },
     defaultVariants: {
       variant: 'default',
-      size: 'default',
     },
   }
 );
@@ -47,44 +40,31 @@ type ToggleGroupProps<Value extends string = string> = Omit<
   'onChange' | 'onValueChange'
 > &
   ToggleVariantProps & {
-    spacing?: number;
     onChange?: (
       value: Value[],
       eventDetails: ToggleGroupPrimitive.ChangeEventDetails
     ) => void;
   };
 
-type ToggleGroupContextValue = ToggleVariantProps & {
-  spacing: number;
-};
-
-const ToggleGroupContext = React.createContext<ToggleGroupContextValue | null>(
-  null
-);
+const ToggleGroupContext = React.createContext<ToggleVariantProps | null>(null);
 
 function ToggleRoot<Value extends string = string>({
   className,
   variant = 'default',
-  size = 'default',
   onChange,
   ...props
 }: ToggleProps<Value>) {
   const group = React.useContext(ToggleGroupContext);
   const resolvedVariant = group?.variant ?? variant;
-  const resolvedSize = group?.size ?? size;
 
   return (
     <TogglePrimitive
       data-slot={group ? 'toggle-group-item' : 'toggle'}
       data-variant={resolvedVariant}
-      data-size={resolvedSize}
-      data-spacing={group?.spacing}
       className={cn(
-        group &&
-          'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-3 group-data-[spacing=0]/toggle-group:shadow-none focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pr-2.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:pl-2.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-l-3xl group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-3xl group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-r-3xl group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-3xl group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-l-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-l group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t',
+        group && 'shrink-0',
         toggleVariants({
           variant: resolvedVariant,
-          size: resolvedSize,
           className,
         })
       )}
@@ -99,9 +79,6 @@ function ToggleGroup<Value extends string = string>({
   className,
   onChange,
   orientation = 'horizontal',
-  size = 'default',
-  spacing = 2,
-  style,
   variant = 'default',
   ...props
 }: ToggleGroupProps<Value>) {
@@ -109,19 +86,16 @@ function ToggleGroup<Value extends string = string>({
     <ToggleGroupPrimitive
       data-slot="toggle-group"
       data-variant={variant}
-      data-size={size}
-      data-spacing={spacing}
       data-orientation={orientation}
       orientation={orientation}
-      style={{ ...style, '--gap': spacing } as React.CSSProperties}
       className={cn(
-        'group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] data-[spacing=0]:data-[variant=outline]:rounded-3xl data-vertical:flex-col data-vertical:items-stretch',
+        'group/toggle-group flex w-fit flex-row items-center gap-2 data-vertical:flex-col data-vertical:items-stretch',
         className
       )}
       onValueChange={onChange}
       {...props}
     >
-      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>
+      <ToggleGroupContext.Provider value={{ variant }}>
         {children}
       </ToggleGroupContext.Provider>
     </ToggleGroupPrimitive>

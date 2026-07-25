@@ -11,6 +11,7 @@
     "@heliannuuthus/ui": "workspace:*",
     "lucide-react": "^0.468.0",
     "lxgw-wenkai-webfont": "1.7.0",
+    "motion": "^12.42.2",
     "prism-react-renderer": "2.4.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",

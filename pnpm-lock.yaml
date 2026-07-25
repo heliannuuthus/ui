@@ -162,6 +162,9 @@ importers:
       lxgw-wenkai-webfont:
         specifier: 1.7.0
         version: 1.7.0
+      motion:
+        specifier: ^12.42.2
+        version: 12.42.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       prism-react-renderer:
         specifier: 2.4.1
         version: 2.4.1(react@19.2.7)

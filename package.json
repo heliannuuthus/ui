@@ -58,6 +58,10 @@
       "types": "./dist/label.d.ts",
       "import": "./dist/label.js"
     },
+    "./layout": {
+      "types": "./dist/layout.d.ts",
+      "import": "./dist/layout.js"
+    },
     "./masonry": {
       "types": "./dist/masonry.d.ts",
       "import": "./dist/masonry.js"

@@ -41,12 +41,12 @@ import {
 import { Toggle } from '@heliannuuthus/ui/toggle';
 import { Bold, Plus } from 'lucide-react';
 import { AspectRatioCoverDemo } from './aspect-ratio-preview';
-import { CardAnatomyDemo } from './card-preview';
+import { CardBasicDemo } from './card-preview';
 import { ResizableWorkspaceDemo } from './resizable-preview';
 
 export const minimalComponentPreviews: Record<string, ReactNode> = {
   'aspect-ratio': <AspectRatioCoverDemo />,
-  card: <CardAnatomyDemo />,
+  card: <CardBasicDemo />,
   resizable: <ResizableWorkspaceDemo />,
   'scroll-area': (
     <ScrollArea className="minimal-scroll">

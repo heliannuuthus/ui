@@ -10,11 +10,9 @@ import { cn } from '../lib/utils';
 import { Button } from './button';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
-type CarouselApi = UseEmblaCarouselType[1];
-type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
-type CarouselOptions = UseCarouselParameters[0];
-type CarouselPlugin = UseCarouselParameters[1];
-type CarouselVariant = 'default' | 'depth';
+type EmblaCarouselApi = UseEmblaCarouselType[1];
+type CarouselAutoplay = boolean | number;
+type CarouselScrollDirection = 'next' | 'prev';
 
 type CarouselDotRenderProps = {
   index: number;
@@ -22,43 +20,66 @@ type CarouselDotRenderProps = {
 };
 
 type CarouselProps = {
-  autoplay?: boolean;
-  autoplayDelay?: number;
+  autoplay?: CarouselAutoplay;
   loop?: boolean;
-  opts?: CarouselOptions;
   pauseOnHover?: boolean;
-  plugins?: CarouselPlugin;
-  /** @deprecated Prefer the Carousel ref for imperative control. */
-  setApi?: (api: CarouselApi) => void;
-  variant?: CarouselVariant;
 };
 
 type CarouselRef = {
-  api: CarouselApi;
+  pause: () => void;
+  play: () => void;
   scrollNext: () => void;
   scrollPrev: () => void;
   scrollTo: (index: number) => void;
 };
 
-type CarouselContextProps = {
-  carouselRef: ReturnType<typeof useEmblaCarousel>[0];
-  api: ReturnType<typeof useEmblaCarousel>[1];
-  scrollPrev: () => void;
-  scrollNext: () => void;
-  scrollTo: (index: number) => void;
-  canScrollPrev: boolean;
+type CarouselControls = CarouselRef & {
   canScrollNext: boolean;
+  canScrollPrev: boolean;
   currentPage: number;
+  isPlaying: boolean;
   pageCount: number;
   selectedIndex: number;
   scrollSnaps: number[];
-  autoplay: boolean;
-  variant: CarouselVariant;
-} & CarouselProps;
+};
 
-const CarouselContext = React.createContext<CarouselContextProps | null>(null);
+type CarouselContextValue = {
+  carouselRef: ReturnType<typeof useEmblaCarousel>[0];
+  autoplayEnabled: boolean;
+  controls: CarouselControls;
+};
 
-function useCarousel() {
+const CarouselContext = React.createContext<CarouselContextValue | null>(null);
+
+function getCarouselPosition({
+  direction,
+  index,
+  loop,
+  selectedIndex,
+  slideCount,
+}: {
+  direction: CarouselScrollDirection;
+  index: number;
+  loop: boolean;
+  selectedIndex: number;
+  slideCount: number;
+}): 'active' | 'after' | 'before' {
+  if (index === selectedIndex) return 'active';
+  if (!loop || slideCount <= 1) {
+    return index < selectedIndex ? 'before' : 'after';
+  }
+
+  const forwardDistance = (index - selectedIndex + slideCount) % slideCount;
+  const backwardDistance = (selectedIndex - index + slideCount) % slideCount;
+
+  if (forwardDistance === backwardDistance) {
+    return direction === 'next' ? 'after' : 'before';
+  }
+
+  return forwardDistance < backwardDistance ? 'after' : 'before';
+}
+
+function useCarouselContext() {
   const context = React.useContext(CarouselContext);
 
   if (!context) {
@@ -68,19 +89,18 @@ function useCarousel() {
   return context;
 }
 
+function useCarousel() {
+  return useCarouselContext().controls;
+}
+
 const Carousel = React.forwardRef<
   CarouselRef,
   React.ComponentProps<'div'> & CarouselProps
 >(function Carousel(
   {
     autoplay = false,
-    autoplayDelay = 3000,
-    loop,
-    opts,
+    loop = false,
     pauseOnHover = true,
-    setApi,
-    plugins,
-    variant = 'depth',
     'aria-label': ariaLabel = 'Carousel',
     className,
     children,
@@ -90,44 +110,82 @@ const Carousel = React.forwardRef<
   },
   ref
 ) {
-  const resolvedLoop = loop ?? opts?.loop ?? false;
-  const [carouselRef, api] = useEmblaCarousel(
-    {
-      ...opts,
-      axis: 'x',
-      loop: resolvedLoop,
-    },
-    plugins
-  );
+  const [carouselRef, api] = useEmblaCarousel({
+    align: 'start',
+    axis: 'x',
+    loop,
+    slidesToScroll: 1,
+  });
   const reduceMotion = useReducedMotion();
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
   const [canScrollNext, setCanScrollNext] = React.useState(false);
   const [isHovered, setIsHovered] = React.useState(false);
+  const [isManuallyPaused, setIsManuallyPaused] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
+  const selectedIndexRef = React.useRef(0);
+  const scrollDirectionRef = React.useRef<CarouselScrollDirection>('next');
+  const autoplayDelay =
+    autoplay === true
+      ? 3000
+      : typeof autoplay === 'number' &&
+          Number.isFinite(autoplay) &&
+          autoplay > 0
+        ? autoplay * 1000
+        : null;
+  const autoplayEnabled = autoplayDelay != null;
   const isAutoplayPaused =
-    autoplay && (reduceMotion || (pauseOnHover && isHovered));
-  const resolvedAutoplayDelay =
-    Number.isFinite(autoplayDelay) && autoplayDelay > 0 ? autoplayDelay : 3000;
+    !autoplayEnabled ||
+    reduceMotion ||
+    isManuallyPaused ||
+    (pauseOnHover && isHovered);
+  const isPlaying = autoplayEnabled && !isAutoplayPaused;
 
-  const onSelect = React.useCallback((api: CarouselApi) => {
-    if (!api) return;
-    setCanScrollPrev(api.canScrollPrev());
-    setCanScrollNext(api.canScrollNext());
-    const nextSelectedIndex = api.selectedScrollSnap();
-    setSelectedIndex(nextSelectedIndex);
-    api.slideNodes().forEach((slide, index) => {
-      slide.dataset.carouselPosition =
-        index === nextSelectedIndex
-          ? 'active'
-          : index < nextSelectedIndex
-            ? 'before'
-            : 'after';
-    });
-  }, []);
+  const onSelect = React.useCallback(
+    (api: EmblaCarouselApi) => {
+      if (!api) return;
+      setCanScrollPrev(api.canScrollPrev());
+      setCanScrollNext(api.canScrollNext());
+      const nextSelectedIndex = api.selectedScrollSnap();
+      const previousSelectedIndex = selectedIndexRef.current;
+      const slideCount = api.slideNodes().length;
+
+      if (nextSelectedIndex !== previousSelectedIndex && slideCount > 1) {
+        if (loop) {
+          const forwardDistance =
+            (nextSelectedIndex - previousSelectedIndex + slideCount) %
+            slideCount;
+          const backwardDistance =
+            (previousSelectedIndex - nextSelectedIndex + slideCount) %
+            slideCount;
+
+          if (forwardDistance !== backwardDistance) {
+            scrollDirectionRef.current =
+              forwardDistance < backwardDistance ? 'next' : 'prev';
+          }
+        } else {
+          scrollDirectionRef.current =
+            nextSelectedIndex > previousSelectedIndex ? 'next' : 'prev';
+        }
+      }
+
+      selectedIndexRef.current = nextSelectedIndex;
+      setSelectedIndex(nextSelectedIndex);
+      api.slideNodes().forEach((slide, index) => {
+        slide.dataset.carouselPosition = getCarouselPosition({
+          direction: scrollDirectionRef.current,
+          index,
+          loop,
+          selectedIndex: nextSelectedIndex,
+          slideCount,
+        });
+      });
+    },
+    [loop]
+  );
 
   const onInit = React.useCallback(
-    (api: CarouselApi) => {
+    (api: EmblaCarouselApi) => {
       if (!api) return;
       setScrollSnaps(api.scrollSnapList());
       onSelect(api);
@@ -136,24 +194,51 @@ const Carousel = React.forwardRef<
   );
 
   const scrollPrev = React.useCallback(() => {
+    scrollDirectionRef.current = 'prev';
     api?.scrollPrev();
   }, [api]);
 
   const scrollNext = React.useCallback(() => {
+    scrollDirectionRef.current = 'next';
     api?.scrollNext();
   }, [api]);
 
   const scrollTo = React.useCallback(
     (index: number) => {
+      const slideCount = scrollSnaps.length;
+
+      if (slideCount > 1 && index !== selectedIndexRef.current) {
+        if (loop) {
+          const forwardDistance =
+            (index - selectedIndexRef.current + slideCount) % slideCount;
+          const backwardDistance =
+            (selectedIndexRef.current - index + slideCount) % slideCount;
+          scrollDirectionRef.current =
+            forwardDistance <= backwardDistance ? 'next' : 'prev';
+        } else {
+          scrollDirectionRef.current =
+            index > selectedIndexRef.current ? 'next' : 'prev';
+        }
+      }
+
       api?.scrollTo(index);
     },
-    [api]
+    [api, loop, scrollSnaps.length]
   );
+
+  const pause = React.useCallback(() => setIsManuallyPaused(true), []);
+  const play = React.useCallback(() => setIsManuallyPaused(false), []);
 
   React.useImperativeHandle(
     ref,
-    () => ({ api, scrollNext, scrollPrev, scrollTo }),
-    [api, scrollNext, scrollPrev, scrollTo]
+    () => ({
+      pause,
+      play,
+      scrollNext,
+      scrollPrev,
+      scrollTo,
+    }),
+    [pause, play, scrollNext, scrollPrev, scrollTo]
   );
 
   const handleKeyDown = React.useCallback(
@@ -170,11 +255,6 @@ const Carousel = React.forwardRef<
   );
 
   React.useEffect(() => {
-    if (!api || !setApi) return;
-    setApi(api);
-  }, [api, setApi]);
-
-  React.useEffect(() => {
     if (!api) return;
     onInit(api);
     api.on('reInit', onInit);
@@ -187,27 +267,31 @@ const Carousel = React.forwardRef<
   }, [api, onInit, onSelect]);
 
   React.useEffect(() => {
+    if (!autoplayEnabled) setIsManuallyPaused(false);
+  }, [autoplayEnabled]);
+
+  React.useEffect(() => {
     if (
       !api ||
-      !autoplay ||
+      autoplayDelay == null ||
       isAutoplayPaused ||
       scrollSnaps.length <= 1 ||
-      (!resolvedLoop && !api.canScrollNext())
+      (!loop && !api.canScrollNext())
     ) {
       return;
     }
 
     const timer = window.setTimeout(() => {
+      scrollDirectionRef.current = 'next';
       api.scrollNext();
-    }, resolvedAutoplayDelay);
+    }, autoplayDelay);
 
     return () => window.clearTimeout(timer);
   }, [
     api,
-    autoplay,
+    autoplayDelay,
     isAutoplayPaused,
-    resolvedAutoplayDelay,
-    resolvedLoop,
+    loop,
     scrollSnaps.length,
     selectedIndex,
   ]);
@@ -216,22 +300,21 @@ const Carousel = React.forwardRef<
     <CarouselContext.Provider
       value={{
         carouselRef,
-        api: api,
-        opts,
-        scrollPrev,
-        scrollNext,
-        scrollTo,
-        canScrollPrev,
-        canScrollNext,
-        currentPage: selectedIndex + 1,
-        pageCount: scrollSnaps.length,
-        selectedIndex,
-        scrollSnaps,
-        autoplay,
-        autoplayDelay: resolvedAutoplayDelay,
-        loop: resolvedLoop,
-        pauseOnHover,
-        variant,
+        autoplayEnabled,
+        controls: {
+          canScrollNext,
+          canScrollPrev,
+          currentPage: selectedIndex + 1,
+          isPlaying,
+          pageCount: scrollSnaps.length,
+          pause,
+          play,
+          scrollNext,
+          scrollPrev,
+          scrollSnaps,
+          scrollTo,
+          selectedIndex,
+        },
       }}
     >
       <div
@@ -248,13 +331,14 @@ const Carousel = React.forwardRef<
         className={cn('relative', className)}
         role="region"
         aria-roledescription="carousel"
-        data-autoplay={autoplay || undefined}
+        data-autoplay={
+          autoplayEnabled ? (autoplay === true ? 'true' : autoplay) : undefined
+        }
         data-autoplay-state={
-          autoplay ? (isAutoplayPaused ? 'paused' : 'playing') : 'idle'
+          autoplayEnabled ? (isPlaying ? 'playing' : 'paused') : 'idle'
         }
         data-orientation="horizontal"
         data-slot="carousel"
-        data-variant={variant}
         {...props}
       >
         {children}
@@ -264,16 +348,13 @@ const Carousel = React.forwardRef<
 });
 
 function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
-  const { autoplay, carouselRef, variant } = useCarousel();
+  const { autoplayEnabled, carouselRef } = useCarouselContext();
 
   return (
     <div
-      aria-live={autoplay ? 'off' : 'polite'}
+      aria-live={autoplayEnabled ? 'off' : 'polite'}
       ref={carouselRef}
-      className={cn(
-        'overflow-hidden',
-        variant === 'depth' && '[perspective:1000px]'
-      )}
+      className="overflow-hidden [perspective:1000px]"
       data-slot="carousel-content"
     >
       <div className={cn('-ml-4 flex', className)} {...props} />
@@ -282,8 +363,6 @@ function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
-  const { variant } = useCarousel();
-
   return (
     <div
       role="group"
@@ -291,8 +370,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="carousel-item"
       className={cn(
         'min-w-0 shrink-0 grow-0 basis-full pl-4',
-        variant === 'depth' &&
-          'opacity-55 transition-[transform,opacity] duration-500 ease-out [transform:rotateY(-8deg)_scale(.94)] [transform-style:preserve-3d] data-[carousel-position=active]:z-10 data-[carousel-position=active]:opacity-100 data-[carousel-position=active]:[transform:rotateY(0deg)_scale(1)] data-[carousel-position=before]:[transform:rotateY(8deg)_scale(.94)] motion-reduce:transform-none motion-reduce:transition-none',
+        'opacity-55 transition-[transform,opacity] duration-500 ease-out [transform:rotateY(-8deg)_scale(.94)] [transform-style:preserve-3d] data-[carousel-position=active]:z-10 data-[carousel-position=active]:opacity-100 data-[carousel-position=active]:[transform:rotateY(0deg)_scale(1)] data-[carousel-position=before]:[transform:rotateY(8deg)_scale(.94)] motion-reduce:transform-none motion-reduce:transition-none',
         className
       )}
       {...props}
@@ -418,19 +496,36 @@ function CarouselDots({ className, children, ...props }: CarouselDotsProps) {
   );
 }
 
+type CarouselPaginationProps = Omit<React.ComponentProps<'div'>, 'children'> & {
+  children?:
+    React.ReactNode | ((controls: CarouselControls) => React.ReactNode);
+};
+
+function CarouselPagination({ children, ...props }: CarouselPaginationProps) {
+  const controls = useCarousel();
+
+  if (children == null) return null;
+
+  return (
+    <div data-slot="carousel-pagination" {...props}>
+      {typeof children === 'function' ? children(controls) : children}
+    </div>
+  );
+}
+
 export {
-  type CarouselApi,
+  type CarouselAutoplay,
+  type CarouselControls,
   type CarouselDotRenderProps,
   type CarouselDotsProps,
-  type CarouselOptions,
-  type CarouselPlugin,
+  type CarouselPaginationProps,
   type CarouselProps,
   type CarouselRef,
-  type CarouselVariant,
   Carousel,
   CarouselContent,
   CarouselDots,
   CarouselItem,
+  CarouselPagination,
   CarouselPrevious,
   CarouselNext,
   useCarousel,

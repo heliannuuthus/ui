@@ -2,6 +2,9 @@ import * as React from 'react';
 
 import { cn } from '../lib/utils';
 
+type MessageStatusValue =
+  'sending' | 'sent' | 'delivered' | 'unread' | 'read' | 'failed';
+
 function MessageGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -82,6 +85,26 @@ function MessageFooter({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+function MessageStatus({
+  className,
+  status = 'sent',
+  ...props
+}: React.ComponentProps<'span'> & {
+  status?: MessageStatusValue;
+}) {
+  return (
+    <span
+      data-slot="message-status"
+      data-status={status}
+      className={cn(
+        'inline-flex min-w-0 items-center gap-1 text-muted-foreground data-[status=failed]:text-destructive data-[status=read]:text-primary [&>svg]:size-3',
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
 export {
   MessageGroup,
   Message,
@@ -89,4 +112,7 @@ export {
   MessageContent,
   MessageFooter,
   MessageHeader,
+  MessageStatus,
 };
+
+export type { MessageStatusValue };

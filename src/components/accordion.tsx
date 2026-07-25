@@ -81,7 +81,18 @@ function AccordionTrigger({
     indicatorPosition,
   } = React.useContext(AccordionIndicatorContext);
   const collapsedIndicator =
-    indicator === undefined ? <ChevronDownIcon /> : indicator;
+    indicator === undefined ? (
+      indicatorPosition === 'start' ? (
+        <span
+          data-slot="accordion-disclosure-triangle"
+          className="size-0 border-y-4 border-l-[6px] border-y-transparent border-l-current"
+        />
+      ) : (
+        <ChevronDownIcon />
+      )
+    ) : (
+      indicator
+    );
   const hasIndicator =
     collapsedIndicator != null ||
     (hasExpandedIndicator && expandedIndicator != null);
@@ -106,7 +117,7 @@ function AccordionTrigger({
             }
             data-slot="accordion-indicator"
             className={cn(
-              'pointer-events-none inline-flex size-4 shrink-0 items-center justify-center text-muted-foreground transition-transform duration-200 [&_svg]:size-4',
+              'pointer-events-none inline-flex size-4 shrink-0 items-center justify-center text-muted-foreground transition-transform duration-200 motion-reduce:transition-none [&_svg]:size-4',
               indicatorPosition === 'start' ? 'order-first' : 'ml-auto'
             )}
           >

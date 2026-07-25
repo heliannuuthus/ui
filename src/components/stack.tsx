@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { cn } from '../lib/utils';
 
-type StackGap = 'sm' | 'md' | 'lg' | number | readonly [number, number];
+type StackGap = number | readonly [number, number];
 type StackAlign = 'start' | 'center' | 'end' | 'baseline' | 'stretch';
 type StackJustify =
   'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
@@ -24,12 +24,6 @@ type StackCompactProps = Omit<
   'align' | 'gap' | 'separator' | 'wrap'
 >;
 
-const presetGaps = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-} as const;
-
 const alignments: Record<StackAlign, string> = {
   start: 'items-start',
   center: 'items-center',
@@ -48,10 +42,6 @@ const justifications: Record<StackJustify, string> = {
 };
 
 function resolveGap(gap: StackGap) {
-  if (typeof gap === 'string') {
-    const value = presetGaps[gap];
-    return [value, value] as const;
-  }
   if (typeof gap === 'number') return [gap, gap] as const;
   return gap;
 }
@@ -61,7 +51,7 @@ function StackRoot({
   block = false,
   children,
   className,
-  gap = 'md',
+  gap = 12,
   justify = 'start',
   orientation = 'vertical',
   separator,
