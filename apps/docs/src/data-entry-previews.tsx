@@ -605,7 +605,7 @@ export function SliderElasticDemo() {
       <div className="data-card-heading">
         <div>
           <strong>播放器音量</strong>
-          <p>拖到轨道边界之外，感受受约束的弹性反馈。</p>
+          <p>悬停、聚焦或触摸时整体缩放，越过边界后继续弹性拉伸。</p>
         </div>
         <span className="data-elastic-slider-value">
           <strong>{volume}</strong>

@@ -2704,7 +2704,7 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
     {
       title: '弹性反馈',
       description:
-        '拖到边界外时轨道与图标产生受约束的拉伸并自然回弹；实际值仍严格限制在 min 与 max 之间。',
+        '悬停、触摸或聚焦时，轨道与两端图标作为整体缩放；拖到边界外后继续产生受约束的拉伸并自然回弹。',
       preview: <SliderElasticDemo />,
       code: `import { Slider } from '@heliannuuthus/ui/slider'
 import { Volume1, Volume2 } from 'lucide-react'
@@ -5160,7 +5160,7 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
     {
       name: 'effect',
       description:
-        '控制内置反馈：悬停、触摸或聚焦时放大轨道，拖拽越界时拉伸并回弹；减少动态效果偏好下自动停用。',
+        '控制内置反馈：悬停、触摸或聚焦时整体缩放 Slider，拖拽越界时再拉伸并回弹；减少动态效果偏好下自动停用。',
       type: "'none' | 'elastic'",
       defaultValue: "'elastic'",
     },

@@ -12,7 +12,8 @@ import {
 import { cn } from '../lib/utils';
 
 const MAX_ELASTIC_OVERFLOW = 48;
-const ACTIVE_TRACK_CROSS_SCALE = 1.5;
+const ACTIVE_SHELL_SCALE = 1.2;
+const IDLE_SHELL_OPACITY = 0.72;
 
 type SliderEffect = 'none' | 'elastic';
 type ElasticEdge = 'none' | 'start' | 'end';
@@ -59,6 +60,10 @@ function Slider<Value extends number | readonly number[]>({
   const pointerActiveRef = React.useRef(false);
   const reduceMotion = useReducedMotion();
   const [elasticEdge, setElasticEdge] = React.useState<ElasticEdge>('none');
+  const shellScale = useMotionValue(1);
+  const shellOpacity = useMotionValue(
+    effect === 'elastic' && !disabled ? IDLE_SHELL_OPACITY : 1
+  );
   const trackMainScale = useMotionValue(1);
   const trackCrossScale = useMotionValue(1);
   const startIconOffset = useMotionValue(0);
@@ -70,12 +75,21 @@ function Slider<Value extends number | readonly number[]>({
   const setInteractionActive = React.useCallback(
     (active: boolean, immediate = false) => {
       interactionActiveRef.current = active;
-      const nextScale = active ? ACTIVE_TRACK_CROSS_SCALE : 1;
+      const nextScale = active ? ACTIVE_SHELL_SCALE : 1;
+      const nextOpacity = active ? 1 : IDLE_SHELL_OPACITY;
 
-      if (immediate) trackCrossScale.jump(nextScale);
-      else animate(trackCrossScale, nextScale, elasticTransition);
+      if (immediate) {
+        shellScale.jump(nextScale);
+        shellOpacity.jump(nextOpacity);
+      } else {
+        animate(shellScale, nextScale, elasticTransition);
+        animate(shellOpacity, nextOpacity, {
+          duration: 0.16,
+          ease: 'easeOut',
+        });
+      }
     },
-    [trackCrossScale]
+    [shellOpacity, shellScale]
   );
 
   const resetElastic = React.useCallback(
@@ -86,10 +100,7 @@ function Slider<Value extends number | readonly number[]>({
       };
 
       reset(trackMainScale, 1);
-      reset(
-        trackCrossScale,
-        interactionActiveRef.current ? ACTIVE_TRACK_CROSS_SCALE : 1
-      );
+      reset(trackCrossScale, 1);
       reset(startIconOffset, 0);
       reset(endIconOffset, 0);
       reset(startIconScale, 1);
@@ -110,9 +121,14 @@ function Slider<Value extends number | readonly number[]>({
       interactionActiveRef.current = false;
       pointerActiveRef.current = false;
       setElasticEdge('none');
+      shellScale.jump(1);
+      shellOpacity.jump(1);
       resetElastic(true);
+    } else if (!interactionActiveRef.current) {
+      shellScale.jump(1);
+      shellOpacity.jump(IDLE_SHELL_OPACITY);
     }
-  }, [elasticEnabled, resetElastic]);
+  }, [elasticEnabled, resetElastic, shellOpacity, shellScale]);
 
   function handlePointerEnter() {
     if (!elasticEnabled) return;
@@ -157,13 +173,12 @@ function Slider<Value extends number | readonly number[]>({
     const rawOverflow = nextEdge === 'start' ? start - pointer : pointer - end;
     const overflow = decay(rawOverflow, MAX_ELASTIC_OVERFLOW);
     const iconScale = 1 + (overflow / MAX_ELASTIC_OVERFLOW) * 0.28;
+    const shellRatio = shellScale.get();
 
     trackMainScale.jump(1 + overflow / Math.max(extent, 1));
-    trackCrossScale.jump(
-      ACTIVE_TRACK_CROSS_SCALE * (1 - (overflow / MAX_ELASTIC_OVERFLOW) * 0.18)
-    );
-    startIconOffset.jump(nextEdge === 'start' ? -overflow : 0);
-    endIconOffset.jump(nextEdge === 'end' ? overflow : 0);
+    trackCrossScale.jump(1 - (overflow / MAX_ELASTIC_OVERFLOW) * 0.18);
+    startIconOffset.jump(nextEdge === 'start' ? -overflow / shellRatio : 0);
+    endIconOffset.jump(nextEdge === 'end' ? overflow / shellRatio : 0);
     startIconScale.jump(nextEdge === 'start' ? iconScale : 1);
     endIconScale.jump(nextEdge === 'end' ? iconScale : 1);
   }
@@ -172,9 +187,10 @@ function Slider<Value extends number | readonly number[]>({
     if (!elasticEnabled) return;
 
     pointerActiveRef.current = false;
-    interactionActiveRef.current =
+    const interactionActive =
       (shellRef.current?.matches(':hover') ?? false) ||
       (shellRef.current?.matches(':focus-within') ?? false);
+    setInteractionActive(interactionActive);
     setElasticEdge('none');
     resetElastic();
   }
@@ -237,17 +253,18 @@ function Slider<Value extends number | readonly number[]>({
       value={value}
       {...props}
     >
-      <div
+      <motion.div
         ref={shellRef}
         data-slot="slider-shell"
         className={cn(
-          'flex items-center justify-center gap-3',
+          'flex origin-center items-center justify-center gap-3 will-change-transform',
           orientation === 'vertical' ? 'h-full flex-col' : 'w-full'
         )}
         onBlurCapture={handleBlur}
         onFocusCapture={handleFocus}
         onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}
+        style={{ opacity: shellOpacity, scale: shellScale }}
       >
         {startIcon != null && (
           <motion.span
@@ -310,7 +327,7 @@ function Slider<Value extends number | readonly number[]>({
             {endIcon}
           </motion.span>
         )}
-      </div>
+      </motion.div>
     </SliderPrimitive.Root>
   );
 }
