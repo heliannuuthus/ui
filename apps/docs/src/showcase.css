@@ -5195,7 +5195,7 @@ a {
   font-size: 11px;
 }
 
-[data-slot='hover-card-content'] > p {
+.display-profile-description {
   margin: 14px 0;
   color: var(--muted-foreground);
   font-size: 12px;

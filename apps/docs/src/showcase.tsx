@@ -156,7 +156,6 @@ const componentGroups = [
       'Counter',
       'Data Table',
       'Empty',
-      'Hover Card',
       'Item',
       'Marker',
       'Message',

@@ -83,7 +83,6 @@ import {
   EmptyCompositionDemo,
   EmptyDefaultDemo,
   EmptyReleaseDemo,
-  HoverCardOwnerDemo,
   ItemActivityDemo,
   MarkerTimelineDemo,
   MessageConversationDemo,
@@ -97,6 +96,7 @@ import {
   DialogReleaseDemo,
   DrawerContainedDemo,
   DrawerReleaseDemo,
+  PopoverOwnerPreviewDemo,
   PopoverOwnersDemo,
   ProgressReleaseDemo,
   SkeletonReleaseDemo,
@@ -2113,7 +2113,6 @@ const remainingComponents = [
   ['Counter', 'counter', '以逐位滚动动画展示变化中的数值。'],
   ['Data Table', 'data-table', '展示并操作结构化数据集合。'],
   ['Empty', 'empty', '解释无数据状态并提供下一步。'],
-  ['Hover Card', 'hover-card', '在悬停或聚焦时补充关联信息。'],
   ['Item', 'item', '构建包含内容和操作的通用列表项。'],
   ['Marker', 'marker', '标记内容中的位置或状态。'],
   ['Message', 'message', '呈现单条会话消息及其状态。'],
@@ -3356,40 +3355,6 @@ const columns: ColumnDef<Release>[] = [
       previewHeight: 440,
     },
   ],
-  'hover-card': [
-    {
-      title: '负责人预览',
-      description:
-        '在不离开当前文字上下文的前提下，通过悬停或键盘聚焦补充实体信息。',
-      caseAxes: [
-        {
-          name: 'side',
-          label: '位置',
-          defaultValue: 'bottom',
-          options: [
-            { label: '下方', value: 'bottom' },
-            { label: '右侧', value: 'right' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <HoverCardOwnerDemo
-          side={values.side === 'right' ? 'right' : 'bottom'}
-        />
-      ),
-      code: `import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@heliannuuthus/ui/hover-card'
-
-<HoverCard>
-  <HoverCardTrigger>@linmo</HoverCardTrigger>
-  <HoverCardContent side="bottom">负责人资料</HoverCardContent>
-</HoverCard>`,
-      previewHeight: 340,
-    },
-  ],
   item: [
     {
       title: '协作动态',
@@ -3736,6 +3701,38 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
   </PopoverContent>
 </Popover>`,
       previewHeight: 300,
+    },
+    {
+      title: '悬停预览负责人',
+      description:
+        '将 trigger 设为 hover 后，鼠标悬停或键盘聚焦都会展示关联信息，适合实体预览。',
+      caseAxes: [
+        {
+          name: 'side',
+          label: '位置',
+          defaultValue: 'bottom',
+          options: [
+            { label: '下方', value: 'bottom' },
+            { label: '右侧', value: 'right' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <PopoverOwnerPreviewDemo
+          side={values.side === 'right' ? 'right' : 'bottom'}
+        />
+      ),
+      code: `import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@heliannuuthus/ui/popover'
+
+<Popover trigger="hover" delay={300} closeDelay={150}>
+  <PopoverTrigger render={<button type="button" />}>@linmo</PopoverTrigger>
+  <PopoverContent side="bottom">负责人资料</PopoverContent>
+</Popover>`,
+      previewHeight: 340,
     },
   ],
   progress: [
@@ -4273,30 +4270,6 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'component',
     },
   ],
-  'hover-card': [
-    {
-      name: 'open / defaultOpen',
-      description: '使用受控或非受控方式管理预览卡片。',
-      type: 'boolean',
-    },
-    {
-      name: 'onOpenChange',
-      description: '卡片因悬停、聚焦或关闭操作变化时调用。',
-      type: '(open: boolean, eventDetails) => void',
-    },
-    {
-      component: 'HoverCardContent',
-      name: 'side',
-      description: '设置内容相对触发器的首选方向。',
-      type: "'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end'",
-      defaultValue: "'bottom'",
-    },
-    {
-      name: 'align / sideOffset / alignOffset',
-      description: '微调浮层对齐方式与触发器间距。',
-      type: 'Positioner props',
-    },
-  ],
   item: [
     {
       name: 'variant',
@@ -4517,6 +4490,42 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: 'true',
     },
   ],
+  popover: [
+    {
+      name: 'trigger',
+      description: '设置主要触发方式；hover 模式同时支持鼠标悬停与键盘聚焦。',
+      type: "'click' | 'hover'",
+      defaultValue: "'click'",
+    },
+    {
+      name: 'delay / closeDelay',
+      description: '设置 hover 模式打开与关闭前的等待时间，单位为毫秒。',
+      type: 'number',
+      defaultValue: '300 / 150',
+    },
+    {
+      name: 'open / defaultOpen',
+      description: '使用受控或非受控方式管理浮层。',
+      type: 'boolean',
+    },
+    {
+      name: 'onOpenChange',
+      description: '浮层因触发、聚焦或关闭操作变化时调用。',
+      type: '(open: boolean, eventDetails) => void',
+    },
+    {
+      component: 'PopoverContent',
+      name: 'side',
+      description: '设置内容相对触发器的首选方向。',
+      type: "'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end'",
+      defaultValue: "'bottom'",
+    },
+    {
+      name: 'align / sideOffset / alignOffset',
+      description: '微调浮层对齐方式与触发器间距。',
+      type: 'Positioner props',
+    },
+  ],
   progress: [
     {
       name: 'value',
@@ -4633,6 +4642,40 @@ componentDocumentation.drawer.parts = [
 componentDocumentation.drawer.pitfalls = [
   '使用 container 时，父容器必须设置 position: relative 和 overflow: hidden。',
   '不要仅根据设备名称选择行为；触摸密集任务使用 gesture，稳定编辑面板使用 panel，不确定时使用 adaptive。',
+];
+
+componentDocumentation.popover.summary =
+  '在触发器附近展示可交互的关联内容；点击和悬停预览共用同一套内容、定位与受控状态 API。';
+componentDocumentation.popover.whenToUse = [
+  '需要通过点击打开包含详情、表单或轻量操作的非模态浮层。',
+  '需要在不离开当前上下文的前提下，通过悬停或键盘聚焦预览人物、资源等实体信息。',
+];
+componentDocumentation.popover.parts = [
+  {
+    name: 'Popover',
+    description:
+      '管理触发方式、延迟、受控或非受控打开状态，并为所有子组件提供上下文。',
+  },
+  {
+    name: 'PopoverTrigger',
+    description: '连接触发元素，并根据 trigger 响应点击、悬停或键盘聚焦。',
+  },
+  {
+    name: 'PopoverContent',
+    description: '在 Portal 中渲染定位后的浮层内容。',
+  },
+  {
+    name: 'PopoverHeader / PopoverTitle / PopoverDescription',
+    description: '组织浮层的标题与辅助说明。',
+  },
+];
+componentDocumentation.popover.accessibility = [
+  'hover 模式也会在触发器获得键盘焦点时打开，不能只依赖鼠标操作。',
+  '交互式内容使用 click 模式；仅提供一句简短说明时优先使用 Tooltip。',
+];
+componentDocumentation.popover.pitfalls = [
+  '不要在 hover 浮层中放置必须完成的操作，触摸设备和键盘用户需要更稳定的点击入口。',
+  '不要同时维护 HoverCard 与 Popover 两套相同内容；实体预览直接使用 trigger="hover"。',
 ];
 
 componentDocumentation.chart.summary =

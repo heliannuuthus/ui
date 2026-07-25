@@ -77,11 +77,6 @@ import {
   EmptyTitle,
 } from '@heliannuuthus/ui/empty';
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@heliannuuthus/ui/hover-card';
-import {
   Item,
   ItemActions,
   ItemContent,
@@ -1286,43 +1281,6 @@ export function EmptyCompositionDemo() {
         </Button>
       </EmptyContent>
     </Empty>
-  );
-}
-
-export function HoverCardOwnerDemo({
-  side = 'bottom',
-}: {
-  side?: 'bottom' | 'right';
-}) {
-  return (
-    <div className="display-hover-stage">
-      发布负责人是{' '}
-      <HoverCard>
-        <HoverCardTrigger
-          render={<button className="display-inline-person" type="button" />}
-        >
-          @linmo
-        </HoverCardTrigger>
-        <HoverCardContent side={side}>
-          <div className="display-profile">
-            <Avatar size="lg">
-              <AvatarFallback>林</AvatarFallback>
-              <AvatarBadge />
-            </Avatar>
-            <div>
-              <strong>林默</strong>
-              <span>平台工程 · 当前在线</span>
-            </div>
-          </div>
-          <p>负责生产发布、监控确认与紧急回滚。</p>
-          <div className="display-profile-meta">
-            <span>本月 18 次发布</span>
-            <span>98% 成功率</span>
-          </div>
-        </HoverCardContent>
-      </HoverCard>
-      ，悬停或聚焦名字查看详情。
-    </div>
   );
 }
 

@@ -19,6 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@heliannuuthus/ui/alert-dialog';
+import { Avatar, AvatarBadge, AvatarFallback } from '@heliannuuthus/ui/avatar';
 import { Badge } from '@heliannuuthus/ui/badge';
 import { Button } from '@heliannuuthus/ui/button';
 import { Checkbox } from '@heliannuuthus/ui/checkbox';
@@ -342,6 +343,45 @@ export function PopoverOwnersDemo({
         </div>
       </PopoverContent>
     </Popover>
+  );
+}
+
+export function PopoverOwnerPreviewDemo({
+  side = 'bottom',
+}: {
+  side?: 'bottom' | 'right';
+}) {
+  return (
+    <div className="display-hover-stage">
+      发布负责人是{' '}
+      <Popover trigger="hover">
+        <PopoverTrigger
+          render={<button className="display-inline-person" type="button" />}
+        >
+          @linmo
+        </PopoverTrigger>
+        <PopoverContent side={side}>
+          <div className="display-profile">
+            <Avatar size="lg">
+              <AvatarFallback>林</AvatarFallback>
+              <AvatarBadge />
+            </Avatar>
+            <div>
+              <strong>林默</strong>
+              <span>平台工程 · 当前在线</span>
+            </div>
+          </div>
+          <p className="display-profile-description">
+            负责生产发布、监控确认与紧急回滚。
+          </p>
+          <div className="display-profile-meta">
+            <span>本月 18 次发布</span>
+            <span>98% 成功率</span>
+          </div>
+        </PopoverContent>
+      </Popover>
+      ，悬停或聚焦名字查看详情。
+    </div>
   );
 }
 
