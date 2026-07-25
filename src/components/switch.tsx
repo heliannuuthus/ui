@@ -2,7 +2,32 @@ import { Switch as SwitchPrimitive } from '@base-ui/react/switch';
 
 import { cn } from '../lib/utils';
 
-function Switch({ className, ...props }: SwitchPrimitive.Root.Props) {
+type SwitchProps = Omit<
+  SwitchPrimitive.Root.Props,
+  'onChange' | 'onCheckedChange'
+> & {
+  onChange?: (
+    checked: boolean,
+    eventDetails: SwitchPrimitive.Root.ChangeEventDetails
+  ) => void;
+  /** @deprecated Use `onChange` instead. */
+  onCheckedChange?: SwitchPrimitive.Root.Props['onCheckedChange'];
+};
+
+function Switch({
+  className,
+  onChange,
+  onCheckedChange,
+  ...props
+}: SwitchProps) {
+  function handleCheckedChange(
+    checked: boolean,
+    eventDetails: SwitchPrimitive.Root.ChangeEventDetails
+  ) {
+    onChange?.(checked, eventDetails);
+    onCheckedChange?.(checked, eventDetails);
+  }
+
   return (
     <SwitchPrimitive.Root
       data-slot="switch"
@@ -10,6 +35,7 @@ function Switch({ className, ...props }: SwitchPrimitive.Root.Props) {
         'peer group/switch relative inline-flex h-5 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-unchecked:border-transparent data-unchecked:bg-input/90 not-data-disabled:hover:data-checked:bg-primary/80 not-data-disabled:hover:data-unchecked:bg-input data-disabled:cursor-not-allowed data-disabled:opacity-50',
         className
       )}
+      onCheckedChange={handleCheckedChange}
       {...props}
     >
       <SwitchPrimitive.Thumb
@@ -21,3 +47,4 @@ function Switch({ className, ...props }: SwitchPrimitive.Root.Props) {
 }
 
 export { Switch };
+export type { SwitchProps };

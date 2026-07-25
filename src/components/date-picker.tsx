@@ -4,7 +4,7 @@ import { zhCN } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import { Button } from './button';
 import { Calendar } from './calendar';
-import { Popover, PopoverContent, PopoverTrigger } from './popover';
+import { Popover } from './popover';
 import { cn } from '../lib/utils';
 
 interface DatePickerProps {
@@ -45,27 +45,25 @@ function DatePicker({
   if (display === 'inline') return calendar;
 
   return (
-    <Popover>
-      <PopoverTrigger
-        render={
-          <Button
-            variant="outline"
-            disabled={disabled}
-            className={cn(
-              'w-60 justify-start text-left font-normal',
-              !value && 'text-muted-foreground',
-              className
-            )}
-          >
-            <CalendarIcon />
-            {value ? format(value, 'PPP', { locale: zhCN }) : placeholder}
-          </Button>
-        }
-      />
-      <PopoverContent className="w-auto p-0" align="start">
-        {calendar}
-      </PopoverContent>
-    </Popover>
+    <Popover
+      align="start"
+      content={calendar}
+      contentClassName="w-auto p-0"
+      trigger={
+        <Button
+          variant="outline"
+          disabled={disabled}
+          className={cn(
+            'w-60 justify-start text-left font-normal',
+            !value && 'text-muted-foreground',
+            className
+          )}
+        >
+          <CalendarIcon />
+          {value ? format(value, 'PPP', { locale: zhCN }) : placeholder}
+        </Button>
+      }
+    />
   );
 }
 

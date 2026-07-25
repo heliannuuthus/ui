@@ -2,66 +2,63 @@
 
 import { useState } from 'react';
 import { Button } from '@heliannuuthus/ui/button';
-import { Checkbox } from '@heliannuuthus/ui/checkbox';
+import { Group as CheckboxGroup } from '@heliannuuthus/ui/checkbox';
 import { DatePicker } from '@heliannuuthus/ui/date-picker';
 import {
+  Content as FieldContent,
+  Description as FieldDescription,
+  Error as FieldError,
   Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-  FieldTitle,
+  Group as FieldGroup,
+  Label as FieldLabel,
+  Legend as FieldLegend,
+  Set as FieldSet,
+  Title as FieldTitle,
+} from '@heliannuuthus/ui/field';
+import {
+  Control as FormControl,
+  Description as FormDescription,
+  Field as FormField,
   Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  Label,
+  Item as FormItem,
+  Label as FormLabel,
+  Message as FormMessage,
 } from '@heliannuuthus/ui/form';
 import { Input, TextArea } from '@heliannuuthus/ui/input';
+import { Label } from '@heliannuuthus/ui/label';
 import {
+  Addon as InputGroupAddon,
+  Button as InputGroupButton,
+  Input as InputGroupInput,
   InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-  InputGroupText,
-  InputGroupTextArea,
+  Text as InputGroupText,
+  TextArea as InputGroupTextArea,
 } from '@heliannuuthus/ui/input-group';
 import {
+  Group as InputOTPGroup,
   InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
+  Separator as InputOTPSeparator,
+  Slot as InputOTPSlot,
 } from '@heliannuuthus/ui/input-otp';
-import {
-  NativeSelect,
-  NativeSelectOptGroup,
-  NativeSelectOption,
-} from '@heliannuuthus/ui/native-select';
-import { Radio } from '@heliannuuthus/ui/radio';
-import {
-  Select,
-  SelectCollection,
-  SelectContent,
-  SelectEmpty,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectList,
-  SelectSeparator,
-  SelectTrigger,
-} from '@heliannuuthus/ui/select';
+import { NativeSelect } from '@heliannuuthus/ui/native-select';
+import { Group as RadioGroup } from '@heliannuuthus/ui/radio';
+import { Select } from '@heliannuuthus/ui/select';
 import { Slider } from '@heliannuuthus/ui/slider';
 import { Switch } from '@heliannuuthus/ui/switch';
-import { Check, Copy, Globe2, Mail, Volume1, Volume2 } from 'lucide-react';
+import { Toggle } from '@heliannuuthus/ui/toggle';
+import {
+  Bold,
+  Check,
+  Copy,
+  Globe2,
+  Mail,
+  Volume1,
+  Volume2,
+} from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 const members = ['林夏 · 设计', '周一 · 前端', '陈青 · 产品', '宋雨 · 运营'];
+const mixerChannels = ['人声', '环境', '提示'] as const;
 type WorkspaceItem = {
   value: string;
   label: string;
@@ -122,7 +119,7 @@ export function CheckboxPermissionsDemo() {
         </div>
         <span>{selected.length} 项已开启</span>
       </div>
-      <Checkbox.Group
+      <CheckboxGroup
         aria-label="成员权限"
         className="data-option-stack"
         gap={0}
@@ -154,19 +151,15 @@ export function SelectMemberSearchDemo() {
         <Label htmlFor="member-select">负责人</Label>
         <span>输入姓名或团队进行搜索</span>
       </div>
-      <Select value={value} onChange={setValue} items={members}>
-        <SelectTrigger id="member-select" placeholder="搜索成员…" showClear />
-        <SelectContent>
-          <SelectEmpty>没有找到成员</SelectEmpty>
-          <SelectList>
-            {(member: string) => (
-              <SelectItem key={member} value={member}>
-                {member}
-              </SelectItem>
-            )}
-          </SelectList>
-        </SelectContent>
-      </Select>
+      <Select
+        emptyText="没有找到成员"
+        onChange={setValue}
+        options={members.map((member) => ({ label: member, value: member }))}
+        placeholder="搜索成员…"
+        showClear
+        triggerProps={{ id: 'member-select' }}
+        value={value}
+      />
       <p className="data-result">当前负责人：{value ?? '未分配'}</p>
     </div>
   );
@@ -432,29 +425,46 @@ export function SelectNativeDemo() {
     <div className="data-inline-controls">
       <div className="minimal-field">
         <Label htmlFor="native-region">数据区域</Label>
-        <NativeSelect id="native-region" defaultValue="cn-east">
-          <NativeSelectOptGroup label="中国大陆">
-            <NativeSelectOption value="cn-east">华东</NativeSelectOption>
-            <NativeSelectOption value="cn-north">华北</NativeSelectOption>
-          </NativeSelectOptGroup>
-          <NativeSelectOptGroup label="亚太地区">
-            <NativeSelectOption value="sg">新加坡</NativeSelectOption>
-            <NativeSelectOption value="jp">东京</NativeSelectOption>
-          </NativeSelectOptGroup>
-        </NativeSelect>
+        <NativeSelect
+          id="native-region"
+          defaultValue="cn-east"
+          options={[
+            {
+              label: '中国大陆',
+              options: [
+                { label: '华东', value: 'cn-east' },
+                { label: '华北', value: 'cn-north' },
+              ],
+            },
+            {
+              label: '亚太地区',
+              options: [
+                { label: '新加坡', value: 'sg' },
+                { label: '东京', value: 'jp' },
+              ],
+            },
+          ]}
+        />
       </div>
       <div className="minimal-field">
         <Label htmlFor="native-size">紧凑尺寸</Label>
-        <NativeSelect id="native-size" size="sm" defaultValue="compact">
-          <NativeSelectOption value="compact">紧凑</NativeSelectOption>
-          <NativeSelectOption value="comfortable">舒适</NativeSelectOption>
-        </NativeSelect>
+        <NativeSelect
+          id="native-size"
+          size="sm"
+          defaultValue="compact"
+          options={[
+            { label: '紧凑', value: 'compact' },
+            { label: '舒适', value: 'comfortable' },
+          ]}
+        />
       </div>
       <div className="minimal-field">
         <Label htmlFor="native-disabled">不可更改</Label>
-        <NativeSelect id="native-disabled" disabled>
-          <NativeSelectOption>由管理员设置</NativeSelectOption>
-        </NativeSelect>
+        <NativeSelect
+          id="native-disabled"
+          disabled
+          options={[{ label: '由管理员设置', value: 'managed' }]}
+        />
       </div>
     </div>
   );
@@ -464,7 +474,7 @@ export function RadioDeliveryDemo() {
   const [delivery, setDelivery] = useState('email');
 
   return (
-    <Radio.Group
+    <RadioGroup
       aria-label="选择通知方式"
       minColumnWidth={120}
       onChange={setDelivery}
@@ -491,23 +501,26 @@ export function RadioPlanDemo({
   ];
 
   return (
-    <Radio.Group
+    <RadioGroup
       className="data-radio-cards"
       value={plan}
       onChange={setPlan}
       orientation={orientation}
       aria-label="选择方案"
-    >
-      {plans.map(([value, title, description, price]) => (
-        <Radio className="data-radio-card" key={value} value={value}>
-          <span className="data-radio-copy">
-            <strong>{title}</strong>
-            <small>{description}</small>
-          </span>
-          <b>{price}</b>
-        </Radio>
-      ))}
-    </Radio.Group>
+      options={plans.map(([value, title, description, price]) => ({
+        className: 'data-radio-card',
+        value,
+        label: (
+          <>
+            <span className="data-radio-copy">
+              <strong>{title}</strong>
+              <small>{description}</small>
+            </span>
+            <b>{price}</b>
+          </>
+        ),
+      }))}
+    />
   );
 }
 
@@ -525,35 +538,20 @@ export function SelectWorkspaceDemo() {
       <Select
         value={value}
         onChange={setValue}
-        items={workspaceGroups}
+        options={workspaceGroups.map((group) => ({
+          label: group.label,
+          options: group.items.map((item) => ({
+            disabled: 'disabled' in item && item.disabled,
+            label: item.label,
+            value: item,
+          })),
+        }))}
         itemToStringLabel={(item) => item.label}
         itemToStringValue={(item) => item.value}
         isItemEqualToValue={(item, selected) => item.value === selected.value}
-      >
-        <SelectTrigger className="data-wide-control" placeholder="选择工作区" />
-        <SelectContent>
-          <SelectEmpty>没有找到工作区</SelectEmpty>
-          <SelectList>
-            {workspaceGroups.map((group, index) => (
-              <SelectGroup items={group.items} key={group.label}>
-                {index > 0 && <SelectSeparator />}
-                <SelectLabel>{group.label}</SelectLabel>
-                <SelectCollection>
-                  {(item: WorkspaceItem) => (
-                    <SelectItem
-                      key={item.value}
-                      value={item}
-                      disabled={'disabled' in item && item.disabled}
-                    >
-                      {item.label}
-                    </SelectItem>
-                  )}
-                </SelectCollection>
-              </SelectGroup>
-            ))}
-          </SelectList>
-        </SelectContent>
-      </Select>
+        placeholder="选择工作区"
+        triggerClassName="data-wide-control"
+      />
       <p className="data-result">
         目标：
         {value?.value === 'design'
@@ -605,7 +603,7 @@ export function SliderElasticDemo() {
       <div className="data-card-heading">
         <div>
           <strong>播放器音量</strong>
-          <p>悬停、聚焦或触摸时整体缩放，越过边界后继续弹性拉伸。</p>
+          <p>悬停、聚焦或触摸时轻微放大，越过边界后柔和回弹。</p>
         </div>
         <span className="data-elastic-slider-value">
           <strong>{volume}</strong>
@@ -615,16 +613,53 @@ export function SliderElasticDemo() {
       <Slider
         aria-label="播放器音量"
         endIcon={<Volume2 />}
+        endLabel="最大"
         max={100}
         min={0}
         onValueChange={setVolume}
         startIcon={<Volume1 />}
+        startLabel="静音"
         step={2}
         value={volume}
       />
-      <div className="data-scale">
-        <span>静音</span>
-        <span>最大</span>
+    </div>
+  );
+}
+
+export function SliderVerticalDemo() {
+  const [levels, setLevels] = useState([76, 52, 34]);
+
+  function updateLevel(index: number, value: number) {
+    setLevels((current) =>
+      current.map((level, levelIndex) => (levelIndex === index ? value : level))
+    );
+  }
+
+  return (
+    <div className="data-slider-card data-vertical-slider-card">
+      <div className="data-card-heading">
+        <div>
+          <strong>混音电平</strong>
+          <p>垂直方向适合调音台、参数面板等纵向控制场景。</p>
+        </div>
+      </div>
+      <div className="data-vertical-slider-mixer">
+        {mixerChannels.map((channel, index) => (
+          <div className="data-vertical-slider-channel" key={channel}>
+            <output aria-live="polite">{levels[index]}%</output>
+            <Slider
+              aria-label={`${channel}电平`}
+              className="data-vertical-slider"
+              max={100}
+              min={0}
+              onValueChange={(value) => updateLevel(index, value)}
+              orientation="vertical"
+              step={2}
+              value={levels[index]}
+            />
+            <span>{channel}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -649,7 +684,7 @@ export function SwitchSettingsDemo() {
           </span>
           <Switch
             checked={settings.digest}
-            onCheckedChange={(digest) => setSettings({ ...settings, digest })}
+            onChange={(digest) => setSettings({ ...settings, digest })}
           />
         </label>
         <label className="data-switch-row">
@@ -659,7 +694,7 @@ export function SwitchSettingsDemo() {
           </span>
           <Switch
             checked={settings.product}
-            onCheckedChange={(product) => setSettings({ ...settings, product })}
+            onChange={(product) => setSettings({ ...settings, product })}
           />
         </label>
         <label className="data-switch-row" data-disabled="true">
@@ -669,6 +704,33 @@ export function SwitchSettingsDemo() {
           </span>
           <Switch checked disabled />
         </label>
+      </div>
+    </div>
+  );
+}
+
+export function ToggleControlledDemo() {
+  const [value, setValue] = useState(true);
+
+  return (
+    <div className="data-toggle-controlled-card">
+      <div className="data-toggle-preview" data-pressed={value}>
+        <span>排版预览</span>
+        <p>清晰的层级让内容更容易阅读。</p>
+      </div>
+      <div className="data-toggle-control-row">
+        <Toggle
+          aria-label="切换粗体"
+          onChange={setValue}
+          value={value}
+          variant="outline"
+        >
+          <Bold />
+          粗体
+        </Toggle>
+        <output aria-live="polite">
+          value: <strong>{String(value)}</strong>
+        </output>
       </div>
     </div>
   );
@@ -688,7 +750,7 @@ export function TextAreaCounterDemo() {
           {value.length} / {maxLength}
         </span>
       </div>
-      <Input.TextArea
+      <TextArea
         id="textarea-release"
         value={value}
         maxLength={maxLength}

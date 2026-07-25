@@ -226,13 +226,13 @@ function FieldError({
 
 export {
   Field,
-  FieldLabel,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLegend,
-  FieldSeparator,
-  FieldSet,
-  FieldContent,
-  FieldTitle,
+  FieldContent as Content,
+  FieldDescription as Description,
+  FieldError as Error,
+  FieldGroup as Group,
+  FieldLabel as Label,
+  FieldLegend as Legend,
+  FieldSeparator as Separator,
+  FieldSet as Set,
+  FieldTitle as Title,
 };

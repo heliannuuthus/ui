@@ -4,13 +4,31 @@ import { cva } from 'class-variance-authority';
 import { cn } from '../lib/utils';
 import { ChevronDownIcon } from 'lucide-react';
 
+type NavigationMenuItemConfig = {
+  active?: boolean;
+  content?:
+    | React.ReactNode
+    | ((slots: { Link: typeof NavigationMenuLink }) => React.ReactNode);
+  disabled?: boolean;
+  href?: string;
+  label: React.ReactNode;
+  value?: string;
+};
+
+type NavigationMenuProps = Omit<
+  NavigationMenuPrimitive.Root.Props,
+  'children'
+> &
+  Pick<NavigationMenuPrimitive.Positioner.Props, 'align'> & {
+    items: readonly NavigationMenuItemConfig[];
+  };
+
 function NavigationMenu({
   align = 'start',
   className,
-  children,
+  items,
   ...props
-}: NavigationMenuPrimitive.Root.Props &
-  Pick<NavigationMenuPrimitive.Positioner.Props, 'align'>) {
+}: NavigationMenuProps) {
   return (
     <NavigationMenuPrimitive.Root
       data-slot="navigation-menu"
@@ -20,7 +38,32 @@ function NavigationMenu({
       )}
       {...props}
     >
-      {children}
+      <NavigationMenuList>
+        {items.map((item, index) => (
+          <NavigationMenuItem key={item.value ?? index} value={item.value}>
+            {item.content != null ? (
+              <>
+                <NavigationMenuTrigger disabled={item.disabled}>
+                  {item.label}
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  {typeof item.content === 'function'
+                    ? item.content({ Link: NavigationMenuLink })
+                    : item.content}
+                </NavigationMenuContent>
+              </>
+            ) : (
+              <NavigationMenuLink
+                active={item.active}
+                aria-disabled={item.disabled || undefined}
+                href={item.href}
+              >
+                {item.label}
+              </NavigationMenuLink>
+            )}
+          </NavigationMenuItem>
+        ))}
+      </NavigationMenuList>
       <NavigationMenuPositioner align={align} />
     </NavigationMenuPrimitive.Root>
   );
@@ -140,32 +183,9 @@ function NavigationMenuLink({
   );
 }
 
-function NavigationMenuIndicator({
-  className,
-  ...props
-}: React.ComponentPropsWithRef<typeof NavigationMenuPrimitive.Icon>) {
-  return (
-    <NavigationMenuPrimitive.Icon
-      data-slot="navigation-menu-indicator"
-      className={cn(
-        'top-full z-1 flex h-1.5 items-end justify-center overflow-hidden data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:animate-in data-[state=visible]:fade-in',
-        className
-      )}
-      {...props}
-    >
-      <div className="relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm bg-border shadow-md" />
-    </NavigationMenuPrimitive.Icon>
-  );
-}
-
 export {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-  NavigationMenuPositioner,
+  type NavigationMenuItemConfig,
+  type NavigationMenuProps,
 };

@@ -2,30 +2,29 @@ import { useState, type ReactNode } from 'react';
 import { Button } from '@heliannuuthus/ui/button';
 import { Input } from '@heliannuuthus/ui/input';
 import {
+  Addon as InputGroupAddon,
+  Input as InputGroupInput,
   InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-  InputGroupText,
+  Text as InputGroupText,
 } from '@heliannuuthus/ui/input-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectList,
-  SelectTrigger,
-} from '@heliannuuthus/ui/select';
+import { Select } from '@heliannuuthus/ui/select';
 import { Slider } from '@heliannuuthus/ui/slider';
 import {
+  Compact,
   Stack,
   type StackAlign,
   type StackJustify,
 } from '@heliannuuthus/ui/stack';
-import { TypographyMuted, TypographySmall } from '@heliannuuthus/ui/typography';
+import {
+  Muted as TypographyMuted,
+  Small as TypographySmall,
+} from '@heliannuuthus/ui/typography';
 import { Search } from 'lucide-react';
 
 const protocols = ['https://', 'http://'];
 const storageUnits = ['GB', 'MB', 'KB'];
 const scopes = ['全部组件', '数据录入', '数据展示'];
+const gapBlocks = Array.from({ length: 24 }, (_, index) => index + 1);
 
 const alignmentCases: Array<{
   align?: StackAlign;
@@ -110,11 +109,15 @@ export function StackGapDemo() {
         block
         className="stack-gap-stage"
         gap={gap}
+        justify="center"
         orientation="horizontal"
+        wrap
       >
-        <span>筛选</span>
-        <span>排序方式</span>
-        <span>仅看可用</span>
+        {gapBlocks.map((item) => (
+          <span aria-hidden="true" key={item}>
+            {String(item).padStart(2, '0')}
+          </span>
+        ))}
       </Stack>
     </div>
   );
@@ -184,18 +187,12 @@ function StringSelect({
   items: string[];
 }) {
   return (
-    <Select defaultValue={defaultValue} items={items}>
-      <SelectTrigger aria-label={ariaLabel} className={className} />
-      <SelectContent>
-        <SelectList>
-          {(item: string) => (
-            <SelectItem key={item} value={item}>
-              {item}
-            </SelectItem>
-          )}
-        </SelectList>
-      </SelectContent>
-    </Select>
+    <Select
+      defaultValue={defaultValue}
+      options={items.map((item) => ({ label: item, value: item }))}
+      triggerClassName={className}
+      triggerProps={{ 'aria-label': ariaLabel }}
+    />
   );
 }
 
@@ -215,7 +212,7 @@ export function StackCompactVariantsDemo() {
         description="独立 Select 作为输入协议前缀。"
         title="前置选择控件"
       >
-        <Stack.Compact aria-label="项目地址" block>
+        <Compact aria-label="项目地址" block>
           <StringSelect
             ariaLabel="协议"
             className="w-28 shrink-0"
@@ -223,14 +220,14 @@ export function StackCompactVariantsDemo() {
             items={protocols}
           />
           <Input aria-label="项目域名" defaultValue="ui.heliannuuthus.com" />
-        </Stack.Compact>
+        </Compact>
       </CompactCase>
 
       <CompactCase
         description="Select 作为数值输入的单位后缀。"
         title="后置选择控件"
       >
-        <Stack.Compact aria-label="存储配额" block>
+        <Compact aria-label="存储配额" block>
           <Input aria-label="存储配额数值" defaultValue="100" type="number" />
           <StringSelect
             ariaLabel="存储单位"
@@ -238,14 +235,14 @@ export function StackCompactVariantsDemo() {
             defaultValue={storageUnits[0]}
             items={storageUnits}
           />
-        </Stack.Compact>
+        </Compact>
       </CompactCase>
 
       <CompactCase
         description="Select、带内部前缀的 InputGroup 与操作按钮共同拼接。"
         title="混合控件组合"
       >
-        <Stack.Compact aria-label="组件搜索" block>
+        <Compact aria-label="组件搜索" block>
           <StringSelect
             ariaLabel="组件范围"
             className="w-32 shrink-0"
@@ -261,7 +258,7 @@ export function StackCompactVariantsDemo() {
           <Button className="shrink-0" variant="outline">
             查询
           </Button>
-        </Stack.Compact>
+        </Compact>
       </CompactCase>
 
       <CompactCase
@@ -269,7 +266,7 @@ export function StackCompactVariantsDemo() {
         title="Slider 数值联动"
       >
         <Stack block gap={8}>
-          <Stack.Compact aria-label="压缩质量" block>
+          <Compact aria-label="压缩质量" block>
             <InputGroup className="px-4 has-[[data-slot=slider-thumb]:focus-visible]:border-primary">
               <Slider
                 aria-label="压缩质量滑块"
@@ -294,7 +291,7 @@ export function StackCompactVariantsDemo() {
                 <InputGroupText>%</InputGroupText>
               </InputGroupAddon>
             </InputGroup>
-          </Stack.Compact>
+          </Compact>
           <TypographyMuted aria-live="polite">
             当前压缩质量：{quality}%
           </TypographyMuted>

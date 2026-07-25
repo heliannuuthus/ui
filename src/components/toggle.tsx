@@ -24,59 +24,73 @@ const toggleVariants = cva(
 
 type ToggleVariantProps = VariantProps<typeof toggleVariants>;
 
-type ToggleProps<Value extends string = string> = Omit<
-  TogglePrimitive.Props<Value>,
-  'onChange' | 'onPressedChange'
+type ToggleProps = Omit<
+  TogglePrimitive.Props<string>,
+  | 'defaultPressed'
+  | 'defaultValue'
+  | 'onChange'
+  | 'onPressedChange'
+  | 'pressed'
+  | 'value'
 > &
   ToggleVariantProps & {
+    value?: boolean;
+    defaultValue?: boolean;
     onChange?: (
-      pressed: boolean,
+      value: boolean,
       eventDetails: TogglePrimitive.ChangeEventDetails
     ) => void;
   };
 
+type ToggleGroupOption<Value extends string = string> = Omit<
+  TogglePrimitive.Props<Value>,
+  | 'children'
+  | 'defaultPressed'
+  | 'onChange'
+  | 'onPressedChange'
+  | 'pressed'
+  | 'value'
+> & {
+  label: React.ReactNode;
+  value: Value;
+};
+
 type ToggleGroupProps<Value extends string = string> = Omit<
   ToggleGroupPrimitive.Props<Value>,
-  'onChange' | 'onValueChange'
+  'children' | 'onChange' | 'onValueChange'
 > &
   ToggleVariantProps & {
+    items: readonly ToggleGroupOption<Value>[];
     onChange?: (
       value: Value[],
       eventDetails: ToggleGroupPrimitive.ChangeEventDetails
     ) => void;
   };
 
-const ToggleGroupContext = React.createContext<ToggleVariantProps | null>(null);
-
-function ToggleRoot<Value extends string = string>({
+function ToggleRoot({
   className,
+  defaultValue,
   variant = 'default',
   onChange,
+  value,
   ...props
-}: ToggleProps<Value>) {
-  const group = React.useContext(ToggleGroupContext);
-  const resolvedVariant = group?.variant ?? variant;
-
+}: ToggleProps) {
   return (
     <TogglePrimitive
-      data-slot={group ? 'toggle-group-item' : 'toggle'}
-      data-variant={resolvedVariant}
-      className={cn(
-        group && 'shrink-0',
-        toggleVariants({
-          variant: resolvedVariant,
-          className,
-        })
-      )}
+      data-slot="toggle"
+      data-variant={variant}
+      className={cn(toggleVariants({ variant, className }))}
+      defaultPressed={defaultValue}
       onPressedChange={onChange}
+      pressed={value}
       {...props}
     />
   );
 }
 
 function ToggleGroup<Value extends string = string>({
-  children,
   className,
+  items,
   onChange,
   orientation = 'horizontal',
   variant = 'default',
@@ -95,14 +109,27 @@ function ToggleGroup<Value extends string = string>({
       onValueChange={onChange}
       {...props}
     >
-      <ToggleGroupContext.Provider value={{ variant }}>
-        {children}
-      </ToggleGroupContext.Provider>
+      {items.map(({ className: itemClassName, label, value, ...itemProps }) => (
+        <TogglePrimitive
+          data-slot="toggle-group-item"
+          data-variant={variant}
+          className={cn(
+            'shrink-0',
+            toggleVariants({
+              variant,
+              className: itemClassName,
+            })
+          )}
+          key={value}
+          value={value}
+          {...itemProps}
+        >
+          {label}
+        </TogglePrimitive>
+      ))}
     </ToggleGroupPrimitive>
   );
 }
 
-const Toggle = Object.assign(ToggleRoot, { Group: ToggleGroup });
-
-export { Toggle, toggleVariants };
-export type { ToggleGroupProps, ToggleProps };
+export { ToggleRoot as Toggle, ToggleGroup as Group, toggleVariants };
+export type { ToggleGroupOption, ToggleGroupProps, ToggleProps };

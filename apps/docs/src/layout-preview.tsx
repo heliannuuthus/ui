@@ -1,9 +1,9 @@
 import {
+  Content as LayoutContent,
+  Footer as LayoutFooter,
+  Header as LayoutHeader,
   Layout,
-  LayoutContent,
-  LayoutFooter,
-  LayoutHeader,
-  LayoutSidebar,
+  Sidebar as LayoutSidebar,
 } from '@heliannuuthus/ui/layout';
 import {
   Bell,

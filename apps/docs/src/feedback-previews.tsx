@@ -1,67 +1,22 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import {
-  Alert,
-  AlertAction,
-  AlertDescription,
-  AlertTitle,
-} from '@heliannuuthus/ui/alert';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@heliannuuthus/ui/alert-dialog';
-import { Avatar, AvatarBadge, AvatarFallback } from '@heliannuuthus/ui/avatar';
+import { Alert } from '@heliannuuthus/ui/alert';
+import { AlertDialog } from '@heliannuuthus/ui/alert-dialog';
+import { Avatar } from '@heliannuuthus/ui/avatar';
 import { Badge } from '@heliannuuthus/ui/badge';
 import { Button } from '@heliannuuthus/ui/button';
 import { Checkbox } from '@heliannuuthus/ui/checkbox';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@heliannuuthus/ui/dialog';
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@heliannuuthus/ui/drawer';
-import { Label } from '@heliannuuthus/ui/form';
+import { Dialog } from '@heliannuuthus/ui/dialog';
+import { Drawer } from '@heliannuuthus/ui/drawer';
+import { Label } from '@heliannuuthus/ui/label';
 import { Input } from '@heliannuuthus/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverDescription,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverTrigger,
-} from '@heliannuuthus/ui/popover';
-import {
-  Progress,
-  ProgressLabel,
-  ProgressValue,
-} from '@heliannuuthus/ui/progress';
+import { Popover } from '@heliannuuthus/ui/popover';
+import { Progress } from '@heliannuuthus/ui/progress';
 import { Skeleton } from '@heliannuuthus/ui/skeleton';
 import { Toaster as SonnerToaster } from '@heliannuuthus/ui/sonner';
 import { Spinner } from '@heliannuuthus/ui/spinner';
-import { ToastProvider, useToast } from '@heliannuuthus/ui/toast';
+import { Provider as ToastProvider, useToast } from '@heliannuuthus/ui/toast';
 import {
   ArrowDown,
   ArrowLeft,
@@ -145,16 +100,19 @@ export function AlertReleaseDemo() {
       </div>
       <div className="feedback-alert-stage">
         {scenario && Icon ? (
-          <Alert className="feedback-alert" key={status} variant={status}>
-            <Icon />
-            <AlertTitle>{scenario.title}</AlertTitle>
-            <AlertDescription>{scenario.description}</AlertDescription>
-            <AlertAction>
+          <Alert
+            action={
               <Button onClick={() => setStatus(null)} size="sm" variant="ghost">
                 关闭
               </Button>
-            </AlertAction>
-          </Alert>
+            }
+            className="feedback-alert"
+            description={scenario.description}
+            icon={<Icon />}
+            key={status}
+            title={scenario.title}
+            variant={status}
+          />
         ) : (
           <div className="feedback-alert-placeholder">
             选择一个状态，在页面内显示对应提示。
@@ -171,59 +129,48 @@ export function AlertDialogDeleteDemo({
   size?: 'default' | 'sm';
 }) {
   return (
-    <AlertDialog>
-      <AlertDialogTrigger render={<Button variant="destructive" />}>
-        <Trash2 />
-        删除预览环境
-      </AlertDialogTrigger>
-      <AlertDialogContent size={size}>
-        <AlertDialogHeader>
-          <AlertDialogMedia>
-            <Trash2 />
-          </AlertDialogMedia>
-          <AlertDialogTitle>删除 preview-142？</AlertDialogTitle>
-          <AlertDialogDescription>
-            运行日志和临时域名会一并移除，此操作无法撤销。
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>保留环境</AlertDialogCancel>
-          <AlertDialogAction variant="destructive">确认删除</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <AlertDialog
+      cancelText="保留环境"
+      confirmText="确认删除"
+      confirmVariant="destructive"
+      description="运行日志和临时域名会一并移除，此操作无法撤销。"
+      media={<Trash2 />}
+      size={size}
+      title="删除 preview-142？"
+      trigger={
+        <Button variant="destructive">
+          <Trash2 />
+          删除预览环境
+        </Button>
+      }
+    />
   );
 }
 
 export function DialogReleaseDemo() {
   return (
-    <Dialog>
-      <DialogTrigger render={<Button />}>
-        <Rocket />
-        安排发布
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>安排生产环境发布</DialogTitle>
-          <DialogDescription>
-            选择发布时间，并为值班成员补充本次发布说明。
-          </DialogDescription>
-        </DialogHeader>
-        <div className="feedback-form-grid">
-          <div>
-            <Label htmlFor="release-version">版本</Label>
-            <Input id="release-version" defaultValue="v0.12.0" />
-          </div>
-          <div>
-            <Label htmlFor="release-time">发布时间</Label>
-            <Input id="release-time" type="datetime-local" />
-          </div>
+    <Dialog
+      cancelText="取消"
+      confirmText="确认安排"
+      description="选择发布时间，并为值班成员补充本次发布说明。"
+      title="安排生产环境发布"
+      trigger={
+        <Button>
+          <Rocket />
+          安排发布
+        </Button>
+      }
+    >
+      <div className="feedback-form-grid">
+        <div>
+          <Label htmlFor="release-version">版本</Label>
+          <Input id="release-version" defaultValue="v0.12.0" />
         </div>
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>取消</DialogClose>
-          <DialogClose render={<Button />}>确认安排</DialogClose>
-        </DialogFooter>
-      </DialogContent>
+        <div>
+          <Label htmlFor="release-time">发布时间</Label>
+          <Input id="release-time" type="datetime-local" />
+        </div>
+      </div>
     </Dialog>
   );
 }
@@ -244,16 +191,20 @@ export function DrawerReleaseDemo() {
         return (
           <Drawer
             behavior="adaptive"
+            closeText="关闭"
+            description={`${placement.label}打开；窄屏保留触摸拖拽，宽屏使用稳定的边缘面板布局。`}
+            footer={<Button>进入发布中心</Button>}
             key={placement.side}
             side={placement.side}
+            title="今晚的发布窗口"
+            trigger={
+              <Button variant="outline">
+                <Icon />
+                {placement.label}
+              </Button>
+            }
           >
-            <DrawerTrigger render={<Button variant="outline" />}>
-              <Icon />
-              {placement.label}
-            </DrawerTrigger>
-            <DrawerContent>
-              <DrawerReleaseContent sideLabel={placement.label} />
-            </DrawerContent>
+            <DrawerReleaseContent />
           </Drawer>
         );
       })}
@@ -261,25 +212,13 @@ export function DrawerReleaseDemo() {
   );
 }
 
-function DrawerReleaseContent({ sideLabel }: { sideLabel: string }) {
+function DrawerReleaseContent() {
   return (
-    <>
-      <DrawerHeader>
-        <DrawerTitle>今晚的发布窗口</DrawerTitle>
-        <DrawerDescription>
-          {sideLabel}打开；窄屏保留触摸拖拽，宽屏使用稳定的边缘面板布局。
-        </DrawerDescription>
-      </DrawerHeader>
-      <div className="feedback-drawer-list">
-        <ReleaseRow label="Web Console" meta="已通过 · 21:42" ready />
-        <ReleaseRow label="Auth API" meta="已通过 · 21:46" ready />
-        <ReleaseRow label="Worker" meta="等待负责人确认" />
-      </div>
-      <DrawerFooter>
-        <Button>进入发布中心</Button>
-        <DrawerClose render={<Button variant="outline" />}>关闭</DrawerClose>
-      </DrawerFooter>
-    </>
+    <div className="feedback-drawer-list">
+      <ReleaseRow label="Web Console" meta="已通过 · 21:42" ready />
+      <ReleaseRow label="Auth API" meta="已通过 · 21:46" ready />
+      <ReleaseRow label="Worker" meta="等待负责人确认" />
+    </div>
   );
 }
 
@@ -312,17 +251,16 @@ export function PopoverOwnersDemo({
   side?: 'bottom' | 'right';
 }) {
   return (
-    <Popover>
-      <PopoverTrigger render={<Button variant="outline" />}>
-        <Users />3 位负责人
-      </PopoverTrigger>
-      <PopoverContent side={side}>
-        <PopoverHeader>
-          <PopoverTitle>发布负责人</PopoverTitle>
-          <PopoverDescription>
-            发布开始和回滚时会通知以下成员。
-          </PopoverDescription>
-        </PopoverHeader>
+    <Popover
+      description="发布开始和回滚时会通知以下成员。"
+      side={side}
+      title="发布负责人"
+      trigger={
+        <Button variant="outline">
+          <Users />3 位负责人
+        </Button>
+      }
+      content={
         <div className="feedback-owner-list">
           {[
             ['林夏', '发布协调'],
@@ -341,8 +279,8 @@ export function PopoverOwnersDemo({
             </div>
           ))}
         </div>
-      </PopoverContent>
-    </Popover>
+      }
+    />
   );
 }
 
@@ -354,32 +292,33 @@ export function PopoverOwnerPreviewDemo({
   return (
     <div className="display-hover-stage">
       发布负责人是{' '}
-      <Popover trigger="hover">
-        <PopoverTrigger
-          render={<button className="display-inline-person" type="button" />}
-        >
-          @linmo
-        </PopoverTrigger>
-        <PopoverContent side={side}>
-          <div className="display-profile">
-            <Avatar size="lg">
-              <AvatarFallback>林</AvatarFallback>
-              <AvatarBadge />
-            </Avatar>
-            <div>
-              <strong>林默</strong>
-              <span>平台工程 · 当前在线</span>
+      <Popover
+        triggerMode="hover"
+        side={side}
+        trigger={
+          <button className="display-inline-person" type="button">
+            @linmo
+          </button>
+        }
+        content={
+          <>
+            <div className="display-profile">
+              <Avatar alt="林默" badge={<span />} fallback="林" size="lg" />
+              <div>
+                <strong>林默</strong>
+                <span>平台工程 · 当前在线</span>
+              </div>
             </div>
-          </div>
-          <p className="display-profile-description">
-            负责生产发布、监控确认与紧急回滚。
-          </p>
-          <div className="display-profile-meta">
-            <span>本月 18 次发布</span>
-            <span>98% 成功率</span>
-          </div>
-        </PopoverContent>
-      </Popover>
+            <p className="display-profile-description">
+              负责生产发布、监控确认与紧急回滚。
+            </p>
+            <div className="display-profile-meta">
+              <span>本月 18 次发布</span>
+              <span>98% 成功率</span>
+            </div>
+          </>
+        }
+      />
       ，悬停或聚焦名字查看详情。
     </div>
   );
@@ -402,10 +341,7 @@ export function ProgressReleaseDemo() {
           </small>
         </div>
       </div>
-      <Progress effect="sparkle" value={value}>
-        <ProgressLabel>生产环境</ProgressLabel>
-        <ProgressValue />
-      </Progress>
+      <Progress effect="sparkle" label="生产环境" showValue value={value} />
       <div className="feedback-progress-actions">
         <Button
           disabled={complete}
@@ -452,41 +388,36 @@ export function DrawerContainedDemo() {
           return (
             <Drawer
               behavior="panel"
+              closeText="应用筛选"
+              closeVariant="default"
               container={boundaryRef}
+              description={`面板从父容器${placement.label}侧进入，不覆盖整个页面。`}
               key={placement.side}
               side={placement.side}
+              title="筛选发布记录"
+              trigger={
+                <Button size="sm" variant="outline">
+                  <Icon />
+                  {placement.label}
+                </Button>
+              }
             >
-              <DrawerTrigger render={<Button size="sm" variant="outline" />}>
-                <Icon />
-                {placement.label}
-              </DrawerTrigger>
-              <DrawerContent>
-                <DrawerHeader>
-                  <DrawerTitle>筛选发布记录</DrawerTitle>
-                  <DrawerDescription>
-                    面板从父容器{placement.label}侧进入，不覆盖整个页面。
-                  </DrawerDescription>
-                </DrawerHeader>
-                <div className="feedback-sheet-options">
-                  <section>
-                    <strong>环境</strong>
-                    <Checkbox defaultChecked value="production">
-                      生产环境
-                    </Checkbox>
-                    <Checkbox value="preview">预览环境</Checkbox>
-                  </section>
-                  <section>
-                    <strong>结果</strong>
-                    <Checkbox defaultChecked value="success">
-                      发布成功
-                    </Checkbox>
-                    <Checkbox value="failed">发布失败</Checkbox>
-                  </section>
-                </div>
-                <DrawerFooter>
-                  <DrawerClose render={<Button />}>应用筛选</DrawerClose>
-                </DrawerFooter>
-              </DrawerContent>
+              <div className="feedback-sheet-options">
+                <section>
+                  <strong>环境</strong>
+                  <Checkbox defaultChecked value="production">
+                    生产环境
+                  </Checkbox>
+                  <Checkbox value="preview">预览环境</Checkbox>
+                </section>
+                <section>
+                  <strong>结果</strong>
+                  <Checkbox defaultChecked value="success">
+                    发布成功
+                  </Checkbox>
+                  <Checkbox value="failed">发布失败</Checkbox>
+                </section>
+              </div>
             </Drawer>
           );
         })}

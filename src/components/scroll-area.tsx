@@ -136,7 +136,7 @@ function ScrollBar({
 
 export {
   ScrollArea,
-  ScrollBar,
+  ScrollBar as Bar,
   type ScrollAreaFadeEdges,
   type ScrollAreaOrientation,
   type ScrollAreaProps,

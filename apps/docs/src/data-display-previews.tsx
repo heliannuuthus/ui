@@ -2,127 +2,46 @@
 
 import { useState, type ReactNode } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@heliannuuthus/ui/accordion';
-import {
-  Attachment,
-  AttachmentAction,
-  AttachmentActions,
-  AttachmentContent,
-  AttachmentDescription,
-  AttachmentGroup,
-  AttachmentMedia,
-  AttachmentTitle,
-} from '@heliannuuthus/ui/attachment';
-import {
-  Avatar,
-  AvatarBadge,
-  AvatarFallback,
-  AvatarGroup,
-} from '@heliannuuthus/ui/avatar';
-import {
-  Bubble,
-  BubbleContent,
-  BubbleGroup,
-  BubbleReactions,
-} from '@heliannuuthus/ui/bubble';
+import { Accordion } from '@heliannuuthus/ui/accordion';
+import { Group as AttachmentGroup } from '@heliannuuthus/ui/attachment';
+import { Avatar, Group as AvatarGroup } from '@heliannuuthus/ui/avatar';
 import { Badge } from '@heliannuuthus/ui/badge';
 import { Button } from '@heliannuuthus/ui/button';
+import { Carousel } from '@heliannuuthus/ui/carousel';
 import {
-  Carousel,
-  CarouselContent,
-  CarouselDots,
-  CarouselItem,
-  CarouselNext,
-  CarouselPagination,
-  CarouselPrevious,
-} from '@heliannuuthus/ui/carousel';
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
+  Chart as ChartContainer,
+  Tooltip as ChartTooltip,
+  TooltipContent as ChartTooltipContent,
   type ChartConfig,
 } from '@heliannuuthus/ui/chart';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleFooter,
-  CollapsibleHeader,
-  CollapsibleIndicator,
-  CollapsibleTrigger,
-} from '@heliannuuthus/ui/collapsible';
+import { Collapsible } from '@heliannuuthus/ui/collapsible';
 import { Counter } from '@heliannuuthus/ui/counter';
 import {
+  Actions as DataTableActions,
+  ColumnHeader as DataTableColumnHeader,
   DataTable,
-  DataTableActions,
-  DataTableColumnHeader,
 } from '@heliannuuthus/ui/data-table';
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuRoot,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@heliannuuthus/ui/dropdown-menu';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@heliannuuthus/ui/empty';
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemGroup,
-  ItemMedia,
-  ItemTitle,
-} from '@heliannuuthus/ui/item';
-import { Marker, MarkerContent, MarkerIcon } from '@heliannuuthus/ui/marker';
-import {
-  Message,
-  MessageAvatar,
-  MessageContent,
-  MessageFooter,
-  MessageGroup,
-  MessageHeader,
-  MessageStatus,
-} from '@heliannuuthus/ui/message';
-import {
-  MessageScroller,
-  MessageScrollerButton,
-  MessageScrollerContent,
-  MessageScrollerItem,
-  MessageScrollerProvider,
-  MessageScrollerViewport,
-} from '@heliannuuthus/ui/message-scroller';
+import { DropdownMenu } from '@heliannuuthus/ui/dropdown-menu';
+import { Empty } from '@heliannuuthus/ui/empty';
+import { Group as ItemGroup } from '@heliannuuthus/ui/item';
+import { Marker } from '@heliannuuthus/ui/marker';
+import { Bubble, Group as BubbleGroup } from '@heliannuuthus/ui/bubble';
+import { ScrollArea } from '@heliannuuthus/ui/scroll-area';
 import { Slider } from '@heliannuuthus/ui/slider';
 import { Stack } from '@heliannuuthus/ui/stack';
 import { Separator } from '@heliannuuthus/ui/separator';
 import {
+  Body as TableBody,
+  Caption as TableCaption,
+  Cell as TableCell,
+  Footer as TableFooter,
+  Head as TableHead,
+  Header as TableHeader,
+  Row as TableRow,
   Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
 } from '@heliannuuthus/ui/table';
-import { TypographySmall } from '@heliannuuthus/ui/typography';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@heliannuuthus/ui/tooltip';
+import { Small as TypographySmall } from '@heliannuuthus/ui/typography';
+import { Tooltip } from '@heliannuuthus/ui/tooltip';
 import {
   Activity,
   Archive,
@@ -171,26 +90,24 @@ export function AccordionReleaseDemo({
         key={mode}
         multiple={multiple}
         defaultValue={multiple ? ['preflight', 'rollback'] : ['preflight']}
-      >
-        <AccordionItem value="preflight">
-          <AccordionTrigger>预检结果</AccordionTrigger>
-          <AccordionContent>
-            构建、类型检查和 42 项端到端用例均已通过。
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="owners">
-          <AccordionTrigger>值班负责人</AccordionTrigger>
-          <AccordionContent>
-            林默负责发布，周一负责回滚与告警确认。
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="rollback">
-          <AccordionTrigger>回滚方案</AccordionTrigger>
-          <AccordionContent>
-            保留上一版本镜像，异常时可在 90 秒内切回 v0.11.4。
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+        items={[
+          {
+            value: 'preflight',
+            title: '预检结果',
+            content: '构建、类型检查和 42 项端到端用例均已通过。',
+          },
+          {
+            value: 'owners',
+            title: '值班负责人',
+            content: '林默负责发布，周一负责回滚与告警确认。',
+          },
+          {
+            value: 'rollback',
+            title: '回滚方案',
+            content: '保留上一版本镜像，异常时可在 90 秒内切回 v0.11.4。',
+          },
+        ]}
+      />
     </div>
   );
 }
@@ -277,18 +194,19 @@ function AccordionIndicatorSample({
         expandedIndicator={expandedIndicator}
         indicator={indicator}
         indicatorPosition={indicatorPosition}
-      >
-        <AccordionItem value="deployment">
-          <AccordionTrigger>部署策略</AccordionTrigger>
-          <AccordionContent>
-            先灰度 10%，观察十分钟后全量发布。
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="cache">
-          <AccordionTrigger>缓存刷新</AccordionTrigger>
-          <AccordionContent>发布完成后刷新边缘节点缓存。</AccordionContent>
-        </AccordionItem>
-      </Accordion>
+        items={[
+          {
+            value: 'deployment',
+            title: '部署策略',
+            content: '先灰度 10%，观察十分钟后全量发布。',
+          },
+          {
+            value: 'cache',
+            title: '缓存刷新',
+            content: '发布完成后刷新边缘节点缓存。',
+          },
+        ]}
+      />
     </section>
   );
 }
@@ -356,33 +274,28 @@ export function AttachmentReleaseDemo({
       <div className="display-section-label">
         {orientation === 'vertical' ? '纵向缩略卡' : '横向文件行'}
       </div>
-      <AttachmentGroup>
-        {releaseFiles.map((file) => {
+      <AttachmentGroup
+        items={releaseFiles.map((file) => {
           const Icon = file.icon;
-          return (
-            <Attachment
-              key={file.name}
-              orientation={orientation}
-              state={file.state}
-            >
-              <AttachmentMedia>
-                <Icon />
-              </AttachmentMedia>
-              <AttachmentContent>
-                <AttachmentTitle>{file.name}</AttachmentTitle>
-                <AttachmentDescription>
-                  {file.description}
-                </AttachmentDescription>
-              </AttachmentContent>
-              <AttachmentActions>
-                <AttachmentAction aria-label={`下载 ${file.name}`}>
-                  {file.state === 'error' ? <RotateCcw /> : <Download />}
-                </AttachmentAction>
-              </AttachmentActions>
-            </Attachment>
-          );
+          return {
+            key: file.name,
+            title: file.name,
+            description: file.description,
+            media: <Icon />,
+            orientation,
+            state: file.state,
+            actions: (
+              <Button
+                aria-label={`下载 ${file.name}`}
+                size="icon-xs"
+                variant="ghost"
+              >
+                {file.state === 'error' ? <RotateCcw /> : <Download />}
+              </Button>
+            ),
+          };
         })}
-      </AttachmentGroup>
+      />
     </div>
   );
 }
@@ -414,13 +327,15 @@ export function AvatarShapeDemo() {
           <div className="display-avatar-size-row">
             {sizes.map((size, index) => (
               <div className="display-avatar-size-item" key={size.value}>
-                <Avatar shape={shape} size={size.value}>
-                  <AvatarFallback
-                    className={`display-avatar-tone-${avatarPeople[index]?.tone}`}
-                  >
-                    {avatarPeople[index]?.initials}
-                  </AvatarFallback>
-                </Avatar>
+                <Avatar
+                  alt={avatarPeople[index]?.initials ?? ''}
+                  fallback={avatarPeople[index]?.initials}
+                  fallbackProps={{
+                    className: `display-avatar-tone-${avatarPeople[index]?.tone}`,
+                  }}
+                  shape={shape}
+                  size={size.value}
+                />
                 <span>
                   {size.label} · {size.meta}
                 </span>
@@ -446,18 +361,17 @@ export function AvatarGroupDemo() {
         </div>
         <AvatarGroup
           aria-label={`展示 ${Math.min(max, avatarPeople.length)} 位协作者，其余自动汇总`}
+          items={avatarPeople.map((person) => ({
+            alt: person.initials,
+            fallback: person.initials,
+            fallbackProps: {
+              className: `display-avatar-tone-${person.tone}`,
+            },
+          }))}
           max={max}
           overlap={overlap}
           size="lg"
-        >
-          {avatarPeople.map((person) => (
-            <Avatar key={person.initials}>
-              <AvatarFallback className={`display-avatar-tone-${person.tone}`}>
-                {person.initials}
-              </AvatarFallback>
-            </Avatar>
-          ))}
-        </AvatarGroup>
+        />
       </div>
       <div className="display-avatar-group-controls">
         <label>
@@ -505,12 +419,13 @@ export function AvatarBadgeDemo() {
       title: '在线状态',
       description: '无内容时显示状态圆点',
       avatar: (
-        <Avatar size="lg">
-          <AvatarFallback className="display-avatar-tone-green">
-            林
-          </AvatarFallback>
-          <AvatarBadge />
-        </Avatar>
+        <Avatar
+          alt="林"
+          badge={<span />}
+          fallback="林"
+          fallbackProps={{ className: 'display-avatar-tone-green' }}
+          size="lg"
+        />
       ),
       badge: <Badge variant="secondary">在线</Badge>,
     },
@@ -518,14 +433,14 @@ export function AvatarBadgeDemo() {
       title: '认证状态',
       description: '图标随头像尺寸缩放',
       avatar: (
-        <Avatar shape="square" size="lg">
-          <AvatarFallback className="display-avatar-tone-blue">
-            周
-          </AvatarFallback>
-          <AvatarBadge>
-            <Check />
-          </AvatarBadge>
-        </Avatar>
+        <Avatar
+          alt="周"
+          badge={<Check />}
+          fallback="周"
+          fallbackProps={{ className: 'display-avatar-tone-blue' }}
+          shape="square"
+          size="lg"
+        />
       ),
       badge: <Badge variant="outline">已认证</Badge>,
     },
@@ -533,17 +448,13 @@ export function AvatarBadgeDemo() {
       title: '未读提醒',
       description: '将 Badge 渲染到头像锚点',
       avatar: (
-        <Avatar size="lg">
-          <AvatarFallback className="display-avatar-tone-rose">
-            陈
-          </AvatarFallback>
-          <AvatarBadge
-            className="display-avatar-notification"
-            render={<Badge variant="destructive" />}
-          >
-            8
-          </AvatarBadge>
-        </Avatar>
+        <Avatar
+          alt="陈"
+          badge={<Badge variant="destructive">8</Badge>}
+          fallback="陈"
+          fallbackProps={{ className: 'display-avatar-tone-rose' }}
+          size="lg"
+        />
       ),
       badge: <Badge variant="destructive">需要处理</Badge>,
     },
@@ -582,10 +493,12 @@ export function BubbleVariantsDemo() {
             <span>{reply.token}</span>
           </div>
           <BubbleGroup>
-            <Bubble align="end" variant={reply.variant}>
-              <BubbleContent>已经补充完成，可以重新评审。</BubbleContent>
-              <BubbleReactions>✓ 2</BubbleReactions>
-            </Bubble>
+            <Bubble
+              align="end"
+              content="已经补充完成，可以重新评审。"
+              reactions="✓ 2"
+              variant={reply.variant}
+            />
           </BubbleGroup>
           {index < replies.length - 1 && (
             <Separator className="display-bubble-separator" />
@@ -596,85 +509,123 @@ export function BubbleVariantsDemo() {
   );
 }
 
-export function MessageConversationDemo() {
+const conversationMessages: ReadonlyArray<{
+  time: string;
+  author: string;
+  avatar: string;
+  content: string;
+  align?: 'start' | 'end';
+  status?: string;
+}> = [
+  {
+    time: '21:40',
+    author: '系统',
+    avatar: '系',
+    content: '预检任务已开始。',
+  },
+  {
+    time: '21:41',
+    author: '许澄',
+    avatar: '许',
+    content: '迁移脚本已在预览环境验证。',
+  },
+  {
+    time: '21:42',
+    author: '系统',
+    avatar: '系',
+    content: '构建 #1842 已通过。',
+  },
+  {
+    time: '21:44',
+    author: '周一',
+    avatar: '周',
+    content: '回滚镜像已确认可用。',
+  },
+  {
+    time: '21:46',
+    author: '林默',
+    avatar: '林',
+    content: '开始切换 10% 生产流量。',
+    align: 'end',
+  },
+  {
+    time: '21:47',
+    author: '系统',
+    avatar: '系',
+    content: '错误率维持在 0.04%。',
+  },
+  {
+    time: '21:48',
+    author: '林默',
+    avatar: '林',
+    content: '全量切换完成。',
+    align: 'end',
+    status: '已读',
+  },
+];
+
+export function BubbleConversationDemo() {
   return (
-    <MessageGroup
-      aria-label="发布评审对话"
-      className="display-conversation-list"
-      role="list"
-    >
-      <Message align="start" role="listitem">
-        <MessageAvatar>
-          <Avatar>
-            <AvatarFallback className="display-avatar-tone-green">
-              林
-            </AvatarFallback>
-          </Avatar>
-        </MessageAvatar>
-        <MessageContent>
-          <MessageHeader>林默 · 21:42</MessageHeader>
-          <Bubble variant="elevated">
-            <BubbleContent>
-              预检已经通过，迁移脚本和回滚镜像都确认可用。
-            </BubbleContent>
-          </Bubble>
-          <MessageFooter>发布负责人</MessageFooter>
-        </MessageContent>
-      </Message>
-
-      <Message align="start" role="listitem">
-        <MessageContent>
-          <Bubble variant="muted">
-            <BubbleContent>
-              我会先切换 10% 流量，观察五分钟后再继续。
-            </BubbleContent>
-          </Bubble>
-        </MessageContent>
-      </Message>
-
-      <div className="display-conversation-divider" role="presentation">
-        <Separator />
-        <span>今天 21:46</span>
-        <Separator />
+    <div className="display-scroller-shell">
+      <div className="display-scroller-header">
+        <div>
+          <strong>发布协作记录</strong>
+          <span>7 条消息 · Bubble + Avatar</span>
+        </div>
+        <Badge variant="secondary">已完成</Badge>
       </div>
-
-      <Message align="end" role="listitem">
-        <MessageContent>
-          <Bubble align="end" variant="tinted">
-            <BubbleContent>收到，我先盯住错误率和延迟。</BubbleContent>
-          </Bubble>
-          <MessageFooter>
-            <MessageStatus status="unread">
-              <CircleDot />
-              未读
-            </MessageStatus>
-          </MessageFooter>
-        </MessageContent>
-      </Message>
-
-      <Message align="end" role="listitem">
-        <MessageAvatar>
-          <Avatar shape="square">
-            <AvatarFallback className="display-avatar-tone-blue">
-              周
-            </AvatarFallback>
-          </Avatar>
-        </MessageAvatar>
-        <MessageContent>
-          <MessageHeader>周一 · 21:48</MessageHeader>
-          <Bubble align="end" variant="default">
-            <BubbleContent>指标稳定，可以继续全量发布。</BubbleContent>
-            <BubbleReactions>👍 3</BubbleReactions>
-          </Bubble>
-          <MessageFooter>
-            <MessageStatus status="read">
-              <Check />
-              已读
-            </MessageStatus>
-          </MessageFooter>
-        </MessageContent>
-      </Message>
-    </MessageGroup>
+      <ScrollArea
+        className="display-conversation-scroll"
+        fadeEdges
+        fadeSize={28}
+        overflowEdgeThreshold={2}
+        viewportProps={{
+          'aria-label': '发布协作消息',
+          role: 'list',
+          tabIndex: 0,
+        }}
+      >
+        <div className="display-conversation-scroll-list">
+          {conversationMessages.map((message) => (
+            <div
+              className="display-conversation-message"
+              data-align={message.align ?? 'start'}
+              key={`${message.time}-${message.author}`}
+              role="listitem"
+            >
+              <Avatar
+                alt={message.author}
+                className="display-conversation-avatar"
+                fallback={message.avatar}
+                fallbackProps={{
+                  className:
+                    message.align === 'end'
+                      ? 'display-avatar-tone-blue'
+                      : 'display-avatar-tone-green',
+                }}
+                shape={message.align === 'end' ? 'square' : 'circle'}
+              />
+              <div className="display-conversation-content">
+                <span className="display-conversation-meta">
+                  {message.author} · {message.time}
+                </span>
+                <Bubble
+                  align={message.align ?? 'start'}
+                  content={message.content}
+                  variant={message.align === 'end' ? 'tinted' : 'elevated'}
+                />
+                {message.status && (
+                  <span className="display-conversation-status">
+                    <Check />
+                    {message.status}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
+    </div>
   );
 }
 
@@ -715,33 +666,27 @@ export function CarouselHighlightsDemo({
       aria-label="版本亮点"
       autoplay={autoplay}
       className={`display-carousel${autoplay !== false ? ' display-carousel-autoplay' : ''}`}
+      items={releaseHighlights.map((highlight, index) => {
+        const Icon = highlight.icon;
+        return (
+          <article className="display-highlight" key={highlight.title}>
+            <div className="display-highlight-icon">
+              <Icon />
+            </div>
+            <span>
+              {highlight.kicker} · 0{index + 1}
+            </span>
+            <strong>{highlight.title}</strong>
+            <p>{highlight.description}</p>
+          </article>
+        );
+      })}
       loop={loop}
+      nextButtonProps={{ className: 'display-carousel-next' }}
       pauseOnHover={pauseOnHover}
-    >
-      {dotPosition === 'top' ? <CarouselDots /> : null}
-      <CarouselContent>
-        {releaseHighlights.map((highlight, index) => {
-          const Icon = highlight.icon;
-          return (
-            <CarouselItem key={highlight.title}>
-              <article className="display-highlight">
-                <div className="display-highlight-icon">
-                  <Icon />
-                </div>
-                <span>
-                  {highlight.kicker} · 0{index + 1}
-                </span>
-                <strong>{highlight.title}</strong>
-                <p>{highlight.description}</p>
-              </article>
-            </CarouselItem>
-          );
-        })}
-      </CarouselContent>
-      <CarouselPrevious className="display-carousel-previous" />
-      <CarouselNext className="display-carousel-next" />
-      {dotPosition === 'bottom' ? <CarouselDots /> : null}
-    </Carousel>
+      paginationPosition={dotPosition === 'top' ? 'before' : 'after'}
+      previousButtonProps={{ className: 'display-carousel-previous' }}
+    />
   );
 }
 
@@ -750,72 +695,63 @@ export function CarouselCustomPaginationDemo() {
     <Carousel
       aria-label="带自定义翻页器的版本亮点"
       className="display-carousel"
-    >
-      <CarouselContent>
-        {releaseHighlights.map((highlight, index) => {
-          const Icon = highlight.icon;
-          return (
-            <CarouselItem key={highlight.title}>
-              <article className="display-highlight">
-                <div className="display-highlight-icon">
-                  <Icon />
-                </div>
-                <span>
-                  {highlight.kicker} · 0{index + 1}
-                </span>
-                <strong>{highlight.title}</strong>
-                <p>{highlight.description}</p>
-              </article>
-            </CarouselItem>
-          );
-        })}
-      </CarouselContent>
-      <CarouselPagination>
-        {({
-          canScrollNext,
-          canScrollPrev,
-          currentPage,
-          pageCount,
-          scrollNext,
-          scrollPrev,
-        }) => (
-          <Stack
-            align="center"
-            aria-label="轮播分页"
-            className="my-3"
-            gap={8}
-            justify="center"
-            orientation="horizontal"
-            role="group"
+      controls={false}
+      items={releaseHighlights.map((highlight, index) => {
+        const Icon = highlight.icon;
+        return (
+          <article className="display-highlight" key={highlight.title}>
+            <div className="display-highlight-icon">
+              <Icon />
+            </div>
+            <span>
+              {highlight.kicker} · 0{index + 1}
+            </span>
+            <strong>{highlight.title}</strong>
+            <p>{highlight.description}</p>
+          </article>
+        );
+      })}
+      pagination={({
+        canScrollNext,
+        canScrollPrev,
+        currentPage,
+        pageCount,
+        scrollNext,
+        scrollPrev,
+      }) => (
+        <Stack
+          align="center"
+          aria-label="轮播分页"
+          className="my-3"
+          gap={8}
+          justify="center"
+          orientation="horizontal"
+          role="group"
+        >
+          <Button
+            aria-label="上一页"
+            disabled={!canScrollPrev}
+            onClick={scrollPrev}
+            size="sm"
+            variant="outline"
           >
-            <Button
-              aria-label="上一页"
-              disabled={!canScrollPrev}
-              onClick={scrollPrev}
-              size="sm"
-              variant="outline"
-            >
-              上一页
-            </Button>
-            <TypographySmall
-              aria-live="polite"
-              className="min-w-14 text-center"
-            >
-              {currentPage} / {Math.max(pageCount, 1)}
-            </TypographySmall>
-            <Button
-              aria-label="下一页"
-              disabled={!canScrollNext}
-              onClick={scrollNext}
-              size="sm"
-              variant="outline"
-            >
-              下一页
-            </Button>
-          </Stack>
-        )}
-      </CarouselPagination>
-    </Carousel>
+            上一页
+          </Button>
+          <TypographySmall aria-live="polite" className="min-w-14 text-center">
+            {currentPage} / {Math.max(pageCount, 1)}
+          </TypographySmall>
+          <Button
+            aria-label="下一页"
+            disabled={!canScrollNext}
+            onClick={scrollNext}
+            size="sm"
+            variant="outline"
+          >
+            下一页
+          </Button>
+        </Stack>
+      )}
+    />
   );
 }
 
@@ -971,21 +907,24 @@ export function ChartDeploymentDemo() {
 
 export function CollapsibleBuildDemo() {
   return (
-    <Collapsible className="display-build-log" defaultOpen>
-      <CollapsibleHeader className="display-build-summary">
-        <div className="display-status-icon is-success">
-          <CheckCircle2 />
-        </div>
-        <div>
-          <strong>构建 #1842 已完成</strong>
-          <span>1m 48s · commit 7f92c1a</span>
-        </div>
-        <Badge variant="secondary">成功</Badge>
-        <CollapsibleIndicator rotation={90}>
-          <ChevronRight />
-        </CollapsibleIndicator>
-      </CollapsibleHeader>
-      <CollapsibleContent className="display-build-content">
+    <Collapsible
+      className="display-build-log"
+      defaultOpen
+      header={
+        <>
+          <div className="display-status-icon is-success">
+            <CheckCircle2 />
+          </div>
+          <div>
+            <strong>构建 #1842 已完成</strong>
+            <span>1m 48s · commit 7f92c1a</span>
+          </div>
+          <Badge variant="secondary">成功</Badge>
+        </>
+      }
+      headerClassName="display-build-summary"
+      icon={<ChevronRight />}
+      content={
         <code>
           <span>21:42:08</span> packages/ui build completed
           <br />
@@ -993,34 +932,44 @@ export function CollapsibleBuildDemo() {
           <br />
           <span>21:43:02</span> 42 browser checks passed
         </code>
-        <CollapsibleFooter className="display-build-footer">
+      }
+      contentClassName="display-build-content"
+      footer={
+        <>
           <span>日志保留 30 天</span>
           <Button size="xs" variant="ghost">
             查看构建产物
           </Button>
-        </CollapsibleFooter>
-      </CollapsibleContent>
-    </Collapsible>
+        </>
+      }
+    />
   );
 }
 
 export function CollapsiblePolicyDemo() {
   return (
-    <Collapsible className="display-build-log display-policy">
-      <div className="display-build-summary">
-        <div className="display-status-icon">
-          <ShieldCheck />
-        </div>
-        <div>
-          <strong>灰度发布策略</strong>
-          <span>先发布到 10% 的生产实例</span>
-        </div>
-        <CollapsibleTrigger size="sm" variant="outline">
+    <Collapsible
+      className="display-build-log display-policy"
+      trigger={
+        <>
           配置
-          <CollapsibleIndicator className="ml-1" />
-        </CollapsibleTrigger>
-      </div>
-      <CollapsibleContent className="display-policy-content">
+          <ChevronRight className="ml-1" />
+        </>
+      }
+      triggerProps={{ size: 'sm', variant: 'outline' }}
+      headerClassName="display-build-summary"
+      header={
+        <div className="display-build-summary">
+          <div className="display-status-icon">
+            <ShieldCheck />
+          </div>
+          <div>
+            <strong>灰度发布策略</strong>
+            <span>先发布到 10% 的生产实例</span>
+          </div>
+        </div>
+      }
+      content={
         <div className="display-policy-grid">
           <div>
             <span>首批流量</span>
@@ -1035,12 +984,15 @@ export function CollapsiblePolicyDemo() {
             <strong>错误率 &gt; 2%</strong>
           </div>
         </div>
-        <CollapsibleFooter>
+      }
+      contentClassName="display-policy-content"
+      footer={
+        <>
           <span>仅影响下一次生产发布</span>
           <Button size="xs">应用策略</Button>
-        </CollapsibleFooter>
-      </CollapsibleContent>
-    </Collapsible>
+        </>
+      }
+    />
   );
 }
 
@@ -1114,34 +1066,25 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
         <Button size="xs" variant="ghost">
           查看
         </Button>
-        <DropdownMenuRoot>
-          <DropdownMenuTrigger
-            render={
-              <Button
-                aria-label={`${row.original.version} 更多操作`}
-                size="icon-xs"
-                variant="ghost"
-              />
-            }
-          >
-            <MoreHorizontal />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-44">
-            <DropdownMenuItem>
-              <Download />
-              下载日志
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Archive />
-              归档记录
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">
-              <Trash2 />
-              删除记录
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenuRoot>
+        <DropdownMenu
+          align="end"
+          contentClassName="w-44"
+          trigger={
+            <Button
+              aria-label={`${row.original.version} 更多操作`}
+              size="icon-xs"
+              variant="ghost"
+            >
+              <MoreHorizontal />
+            </Button>
+          }
+          items={[
+            { label: '下载日志', icon: <Download /> },
+            { label: '归档记录', icon: <Archive /> },
+            { type: 'separator' },
+            { label: '删除记录', icon: <Trash2 />, destructive: true },
+          ]}
+        />
       </DataTableActions>
     ),
   },
@@ -1261,26 +1204,23 @@ export function EmptyDefaultDemo() {
 
 export function EmptyCompositionDemo() {
   return (
-    <Empty className="display-empty display-empty-custom" variant="custom">
-      <EmptyHeader>
-        <EmptyMedia className="display-empty-custom-media">
-          <ShieldCheck />
-        </EmptyMedia>
-        <EmptyTitle>等待安全审计</EmptyTitle>
-        <EmptyDescription>
-          审计通过前，生产环境不会显示可发布版本。
-        </EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
-        <div className="display-empty-custom-meta">
-          <span>12 项规则</span>
-          <span>预计 4 分钟</span>
-        </div>
-        <Button size="sm" variant="outline">
-          查看审计进度
-        </Button>
-      </EmptyContent>
-    </Empty>
+    <Empty
+      actions={
+        <>
+          <div className="display-empty-custom-meta">
+            <span>12 项规则</span>
+            <span>预计 4 分钟</span>
+          </div>
+          <Button size="sm" variant="outline">
+            查看审计进度
+          </Button>
+        </>
+      }
+      className="display-empty display-empty-custom"
+      description="审计通过前，生产环境不会显示可发布版本。"
+      icon={<ShieldCheck />}
+      title="等待安全审计"
+    />
   );
 }
 
@@ -1290,34 +1230,33 @@ export function ItemActivityDemo({
   variant?: 'default' | 'outline' | 'muted';
 }) {
   return (
-    <ItemGroup className="display-activity-list">
-      <Item variant={variant}>
-        <ItemMedia variant="icon">
-          <GitCommitHorizontal />
-        </ItemMedia>
-        <ItemContent>
-          <ItemTitle>许澄提交了发布说明</ItemTitle>
-          <ItemDescription>补充数据库迁移影响与回滚入口。</ItemDescription>
-        </ItemContent>
-        <ItemActions>
-          <Badge variant="outline">2 分钟前</Badge>
-        </ItemActions>
-      </Item>
-      <Item variant={variant}>
-        <ItemMedia variant="icon">
-          <MessageCircle />
-        </ItemMedia>
-        <ItemContent>
-          <ItemTitle>林默回复了检查项</ItemTitle>
-          <ItemDescription>确认索引变更不会锁定生产表。</ItemDescription>
-        </ItemContent>
-        <ItemActions>
-          <Button aria-label="更多操作" size="icon-sm" variant="ghost">
-            <MoreHorizontal />
-          </Button>
-        </ItemActions>
-      </Item>
-    </ItemGroup>
+    <ItemGroup
+      className="display-activity-list"
+      items={[
+        {
+          actions: <Badge variant="outline">2 分钟前</Badge>,
+          description: '补充数据库迁移影响与回滚入口。',
+          key: 'release-notes',
+          media: <GitCommitHorizontal />,
+          mediaVariant: 'icon',
+          title: '许澄提交了发布说明',
+          variant,
+        },
+        {
+          actions: (
+            <Button aria-label="更多操作" size="icon-sm" variant="ghost">
+              <MoreHorizontal />
+            </Button>
+          ),
+          description: '确认索引变更不会锁定生产表。',
+          key: 'review-reply',
+          media: <MessageCircle />,
+          mediaVariant: 'icon',
+          title: '林默回复了检查项',
+          variant,
+        },
+      ]}
+    />
   );
 }
 
@@ -1332,62 +1271,15 @@ export function MarkerTimelineDemo({
         <span>21:42</span>
         <strong>构建通过</strong>
       </div>
-      <Marker variant={variant}>
-        <MarkerIcon>
-          <CircleDot />
-        </MarkerIcon>
-        <MarkerContent>生产发布开始 · 21:46</MarkerContent>
-      </Marker>
+      <Marker
+        content="生产发布开始 · 21:46"
+        icon={<CircleDot />}
+        variant={variant}
+      />
       <div className="display-timeline-event">
         <span>21:48</span>
         <strong>流量切换完成</strong>
       </div>
-    </div>
-  );
-}
-
-const scrollerMessages = [
-  ['21:40', '系统', '预检任务已开始。'],
-  ['21:41', '许澄', '迁移脚本已在预览环境验证。'],
-  ['21:42', '系统', '构建 #1842 已通过。'],
-  ['21:44', '周一', '回滚镜像已确认可用。'],
-  ['21:46', '林默', '开始切换 10% 生产流量。'],
-  ['21:47', '系统', '错误率维持在 0.04%。'],
-  ['21:48', '林默', '全量切换完成。'],
-];
-
-export function MessageScrollerReleaseDemo() {
-  return (
-    <div className="display-scroller-shell">
-      <div className="display-scroller-header">
-        <div>
-          <strong>发布协作记录</strong>
-          <span>7 条消息 · 实时同步</span>
-        </div>
-        <Badge variant="secondary">已完成</Badge>
-      </div>
-      <MessageScrollerProvider defaultScrollPosition="start">
-        <MessageScroller>
-          <MessageScrollerViewport aria-label="发布协作消息">
-            <MessageScrollerContent className="display-scroller-content">
-              {scrollerMessages.map(([time, author, content], index) => (
-                <MessageScrollerItem
-                  key={`${time}-${author}`}
-                  messageId={`release-message-${index}`}
-                  scrollAnchor={index === scrollerMessages.length - 1}
-                >
-                  <span>{time}</span>
-                  <div>
-                    <strong>{author}</strong>
-                    <p>{content}</p>
-                  </div>
-                </MessageScrollerItem>
-              ))}
-            </MessageScrollerContent>
-          </MessageScrollerViewport>
-          <MessageScrollerButton />
-        </MessageScroller>
-      </MessageScrollerProvider>
     </div>
   );
 }
@@ -1462,37 +1354,34 @@ const tooltipPlacements = [
 
 export function TooltipPlacementsDemo() {
   return (
-    <TooltipProvider delay={100}>
-      <div className="display-tooltip-placements" aria-label="Tooltip 八个方位">
-        {tooltipPlacements.map((placement) => (
-          <div
-            className="display-tooltip-placement"
-            data-placement={placement.placement}
-            key={placement.placement}
-          >
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <Button
-                    aria-label={`在${placement.label}显示 Tooltip`}
-                    size="sm"
-                    variant="outline"
-                  />
-                }
+    <div className="display-tooltip-placements" aria-label="Tooltip 八个方位">
+      {tooltipPlacements.map((placement) => (
+        <div
+          className="display-tooltip-placement"
+          data-placement={placement.placement}
+          key={placement.placement}
+        >
+          <Tooltip
+            align={placement.align}
+            content={`${placement.label}提示`}
+            delay={100}
+            side={placement.side}
+            trigger={
+              <Button
+                aria-label={`在${placement.label}显示 Tooltip`}
+                size="sm"
+                variant="outline"
               >
                 {placement.label}
-              </TooltipTrigger>
-              <TooltipContent side={placement.side} align={placement.align}>
-                {placement.label}提示
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        ))}
-        <div className="display-tooltip-reference" aria-hidden="true">
-          <span>Tooltip</span>
-          <small>悬停外围按钮</small>
+              </Button>
+            }
+          />
         </div>
+      ))}
+      <div className="display-tooltip-reference" aria-hidden="true">
+        <span>Tooltip</span>
+        <small>悬停外围按钮</small>
       </div>
-    </TooltipProvider>
+    </div>
   );
 }

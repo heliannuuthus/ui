@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Card, type CardProps } from '@heliannuuthus/ui/card';
 import { Stack } from '@heliannuuthus/ui/stack';
-import { TypographySmall } from '@heliannuuthus/ui/typography';
+import { Small as TypographySmall } from '@heliannuuthus/ui/typography';
 import {
   Highlight,
   type Language,

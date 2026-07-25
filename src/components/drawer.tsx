@@ -47,7 +47,7 @@ function useDrawer() {
   return context;
 }
 
-function Drawer({
+function DrawerRoot({
   behavior = 'adaptive',
   container,
   modal,
@@ -311,18 +311,64 @@ function DrawerDescription({
   );
 }
 
-export {
-  Drawer,
-  DrawerPortal,
-  DrawerOverlay,
-  DrawerSwipeHandle,
-  DrawerTrigger,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerFooter,
-  DrawerTitle,
-  DrawerDescription,
-  type DrawerBehavior,
-  type DrawerSide,
+type DrawerProps = Omit<React.ComponentProps<typeof DrawerRoot>, 'children'> & {
+  children?: React.ReactNode;
+  closeText?: React.ReactNode;
+  closeVariant?: React.ComponentProps<typeof Button>['variant'];
+  contentClassName?: string;
+  contentProps?: Omit<DrawerPrimitive.Popup.Props, 'children' | 'className'> &
+    React.HTMLAttributes<HTMLDivElement> &
+    Partial<Record<`data-${string}`, string>>;
+  description?: React.ReactNode;
+  footer?: React.ReactNode;
+  showCloseButton?: boolean;
+  title?: React.ReactNode;
+  trigger?: DrawerPrimitive.Trigger.Props['render'];
 };
+
+function Drawer({
+  children,
+  closeText,
+  closeVariant = 'outline',
+  contentClassName,
+  contentProps,
+  description,
+  footer,
+  showCloseButton,
+  title,
+  trigger,
+  ...props
+}: DrawerProps) {
+  return (
+    <DrawerRoot {...props}>
+      {trigger != null ? <DrawerTrigger render={trigger} /> : null}
+      <DrawerContent
+        {...contentProps}
+        className={contentClassName}
+        showCloseButton={showCloseButton}
+      >
+        {title != null || description != null ? (
+          <DrawerHeader>
+            {title != null ? <DrawerTitle>{title}</DrawerTitle> : null}
+            {description != null ? (
+              <DrawerDescription>{description}</DrawerDescription>
+            ) : null}
+          </DrawerHeader>
+        ) : null}
+        {children}
+        {footer != null || closeText != null ? (
+          <DrawerFooter>
+            {footer}
+            {closeText != null ? (
+              <DrawerClose render={<Button variant={closeVariant} />}>
+                {closeText}
+              </DrawerClose>
+            ) : null}
+          </DrawerFooter>
+        ) : null}
+      </DrawerContent>
+    </DrawerRoot>
+  );
+}
+
+export { Drawer, type DrawerBehavior, type DrawerProps, type DrawerSide };

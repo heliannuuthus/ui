@@ -5,15 +5,17 @@ import { Combobox as SelectPrimitive } from '@base-ui/react';
 import { CheckIcon, ChevronDownIcon, XIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
-import { Button } from './button';
 import {
+  Addon as InputGroupAddon,
+  Button as InputGroupButton,
+  Input as InputGroupInput,
   InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
 } from './input-group';
 
-type SelectProps<Value, Multiple extends boolean | undefined = false> = Omit<
+type SelectRootProps<
+  Value,
+  Multiple extends boolean | undefined = false,
+> = Omit<
   SelectPrimitive.Root.Props<Value, Multiple>,
   'defaultInputValue' | 'inputValue' | 'onInputValueChange' | 'onValueChange'
 > & {
@@ -30,13 +32,13 @@ type SelectProps<Value, Multiple extends boolean | undefined = false> = Omit<
   onSearch?: SelectPrimitive.Root.Props<Value, Multiple>['onInputValueChange'];
 };
 
-function Select<Value, Multiple extends boolean | undefined = false>({
+function SelectRoot<Value, Multiple extends boolean | undefined = false>({
   defaultSearchValue,
   searchValue,
   onChange,
   onSearch,
   ...props
-}: SelectProps<Value, Multiple>) {
+}: SelectRootProps<Value, Multiple>) {
   const handleSearchChange: SelectPrimitive.Root.Props<
     Value,
     Multiple
@@ -60,10 +62,6 @@ function Select<Value, Multiple extends boolean | undefined = false>({
       {...props}
     />
   );
-}
-
-function SelectValue({ ...props }: SelectPrimitive.Value.Props) {
-  return <SelectPrimitive.Value data-slot="select-value" {...props} />;
 }
 
 function SelectTriggerButton({
@@ -269,87 +267,100 @@ function SelectSeparator({
   );
 }
 
-function SelectChips({
-  className,
-  ...props
-}: React.ComponentPropsWithRef<typeof SelectPrimitive.Chips> &
-  SelectPrimitive.Chips.Props) {
-  return (
-    <SelectPrimitive.Chips
-      data-slot="select-chips"
-      className={cn(
-        'flex min-h-9 flex-wrap items-center gap-1.5 rounded-3xl border border-input bg-background bg-clip-padding px-3 py-1.5 text-sm transition-[color,box-shadow,background-color,border-color] hover:border-primary/35 focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/20 has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 has-data-[slot=select-chip]:px-1.5 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40',
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-function SelectChip({
-  className,
-  children,
-  showRemove = true,
-  ...props
-}: SelectPrimitive.Chip.Props & {
-  showRemove?: boolean;
-}) {
-  return (
-    <SelectPrimitive.Chip
-      data-slot="select-chip"
-      className={cn(
-        'flex h-[calc(--spacing(5.5))] w-fit items-center justify-center gap-1 rounded-3xl bg-input px-2 text-xs font-medium whitespace-nowrap text-foreground has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=select-chip-remove]:pr-0 dark:bg-input/60',
-        className
-      )}
-      {...props}
-    >
-      {children}
-      {showRemove && (
-        <SelectPrimitive.ChipRemove
-          render={<Button variant="ghost" size="icon-xs" />}
-          className="-ml-1 opacity-50 hover:opacity-100"
-          data-slot="select-chip-remove"
-        >
-          <XIcon className="pointer-events-none" />
-        </SelectPrimitive.ChipRemove>
-      )}
-    </SelectPrimitive.Chip>
-  );
-}
-
-function SelectChipsInput({
-  className,
-  ...props
-}: SelectPrimitive.Input.Props) {
-  return (
-    <SelectPrimitive.Input
-      data-slot="select-chip-input"
-      className={cn('min-w-16 flex-1 outline-none', className)}
-      {...props}
-    />
-  );
-}
-
 function useSelectAnchor() {
   return React.useRef<HTMLDivElement | null>(null);
 }
 
-export {
-  Select,
-  SelectChip,
-  SelectChips,
-  SelectChipsInput,
-  SelectClear,
-  SelectCollection,
-  SelectContent,
-  SelectEmpty,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectList,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-  useSelectAnchor,
+type SelectOption<Value> = {
+  disabled?: boolean;
+  label: React.ReactNode;
+  value: Value;
 };
-export type { SelectProps };
+
+type SelectOptionGroup<Value> = {
+  label: React.ReactNode;
+  options: readonly SelectOption<Value>[];
+};
+
+type SelectProps<Value, Multiple extends boolean | undefined = false> = Omit<
+  SelectRootProps<Value, Multiple>,
+  'children' | 'items'
+> & {
+  emptyText?: React.ReactNode;
+  options: readonly (SelectOption<Value> | SelectOptionGroup<Value>)[];
+  placeholder?: string;
+  showClear?: boolean;
+  triggerClassName?: string;
+  triggerProps?: Omit<
+    React.ComponentProps<typeof SelectTrigger>,
+    'children' | 'className' | 'placeholder' | 'showClear'
+  >;
+};
+
+function Select<Value, Multiple extends boolean | undefined = false>({
+  emptyText = '没有找到选项',
+  options,
+  placeholder,
+  showClear,
+  triggerClassName,
+  triggerProps,
+  ...props
+}: SelectProps<Value, Multiple>) {
+  const flatOptions = options.flatMap((option) =>
+    'options' in option ? option.options : [option]
+  );
+
+  return (
+    <SelectRoot {...props} items={flatOptions.map((option) => option.value)}>
+      <SelectTrigger
+        {...triggerProps}
+        className={triggerClassName}
+        placeholder={placeholder}
+        showClear={showClear}
+      />
+      <SelectContent>
+        <SelectEmpty>{emptyText}</SelectEmpty>
+        <SelectList>
+          {options.map((option, index) =>
+            'options' in option ? (
+              <SelectGroup
+                items={option.options.map((item) => item.value)}
+                key={index}
+              >
+                {index > 0 ? <SelectSeparator /> : null}
+                <SelectLabel>{option.label}</SelectLabel>
+                <SelectCollection>
+                  {(value: Value) => {
+                    const item = option.options.find(
+                      (candidate) => candidate.value === value
+                    );
+                    return item ? (
+                      <SelectItem
+                        disabled={item.disabled}
+                        key={String(item.value)}
+                        value={item.value}
+                      >
+                        {item.label}
+                      </SelectItem>
+                    ) : null;
+                  }}
+                </SelectCollection>
+              </SelectGroup>
+            ) : (
+              <SelectItem
+                disabled={option.disabled}
+                key={String(option.value)}
+                value={option.value}
+              >
+                {option.label}
+              </SelectItem>
+            )
+          )}
+        </SelectList>
+      </SelectContent>
+    </SelectRoot>
+  );
+}
+
+export { Select, useSelectAnchor };
+export type { SelectOption, SelectOptionGroup, SelectProps };

@@ -19,10 +19,24 @@ type CarouselDotRenderProps = {
   isSelected: boolean;
 };
 
-type CarouselProps = {
+type CarouselProps<Item = React.ReactNode> = Omit<
+  React.ComponentProps<'div'>,
+  'children'
+> & {
   autoplay?: CarouselAutoplay;
+  contentClassName?: string;
+  controls?: boolean;
+  itemClassName?: string;
+  items: readonly Item[];
   loop?: boolean;
+  nextButtonProps?: React.ComponentProps<typeof Button>;
   pauseOnHover?: boolean;
+  pagination?:
+    false | 'dots' | ((controls: CarouselControls) => React.ReactNode);
+  paginationPosition?: 'before' | 'after';
+  previousButtonProps?: React.ComponentProps<typeof Button>;
+  renderDot?: (props: CarouselDotRenderProps) => React.ReactNode;
+  renderItem?: (item: Item, index: number) => React.ReactNode;
 };
 
 type CarouselRef = {
@@ -93,17 +107,23 @@ function useCarousel() {
   return useCarouselContext().controls;
 }
 
-const Carousel = React.forwardRef<
-  CarouselRef,
-  React.ComponentProps<'div'> & CarouselProps
->(function Carousel(
+const Carousel = React.forwardRef<CarouselRef, CarouselProps>(function Carousel(
   {
     autoplay = false,
+    contentClassName,
+    controls = true,
+    itemClassName,
+    items,
     loop = false,
+    nextButtonProps,
     pauseOnHover = true,
+    pagination = 'dots',
+    paginationPosition = 'after',
+    previousButtonProps,
+    renderDot,
+    renderItem,
     'aria-label': ariaLabel = 'Carousel',
     className,
-    children,
     onMouseEnter,
     onMouseLeave,
     ...props
@@ -140,6 +160,12 @@ const Carousel = React.forwardRef<
     isManuallyPaused ||
     (pauseOnHover && isHovered);
   const isPlaying = autoplayEnabled && !isAutoplayPaused;
+  const paginationNode =
+    pagination === 'dots' ? (
+      <CarouselDots>{renderDot}</CarouselDots>
+    ) : typeof pagination === 'function' ? (
+      <CarouselPagination>{pagination}</CarouselPagination>
+    ) : null;
 
   const onSelect = React.useCallback(
     (api: EmblaCarouselApi) => {
@@ -341,7 +367,21 @@ const Carousel = React.forwardRef<
         data-slot="carousel"
         {...props}
       >
-        {children}
+        {paginationPosition === 'before' ? paginationNode : null}
+        <CarouselContent className={contentClassName}>
+          {items.map((item, index) => (
+            <CarouselItem className={itemClassName} key={index}>
+              {renderItem ? renderItem(item, index) : item}
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        {controls ? (
+          <>
+            <CarouselPrevious {...previousButtonProps} />
+            <CarouselNext {...nextButtonProps} />
+          </>
+        ) : null}
+        {paginationPosition === 'after' ? paginationNode : null}
       </div>
     </CarouselContext.Provider>
   );
@@ -517,16 +557,8 @@ export {
   type CarouselAutoplay,
   type CarouselControls,
   type CarouselDotRenderProps,
-  type CarouselDotsProps,
-  type CarouselPaginationProps,
   type CarouselProps,
   type CarouselRef,
   Carousel,
-  CarouselContent,
-  CarouselDots,
-  CarouselItem,
-  CarouselPagination,
-  CarouselPrevious,
-  CarouselNext,
   useCarousel,
 };

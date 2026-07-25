@@ -3,56 +3,45 @@ import { InboxIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
 
-type EmptyVariant = 'default' | 'custom';
-
-interface EmptyProps extends Omit<React.ComponentProps<'div'>, 'title'> {
+interface EmptyProps extends Omit<
+  React.ComponentProps<'div'>,
+  'children' | 'title'
+> {
   actions?: React.ReactNode;
   description?: React.ReactNode;
   icon?: React.ReactNode;
   title?: React.ReactNode;
-  variant?: EmptyVariant;
 }
 
 function Empty({
   actions,
-  children,
   className,
   description,
   icon = <InboxIcon aria-hidden="true" />,
   title = '暂无内容',
-  variant = 'default',
   ...props
 }: EmptyProps) {
-  const isCustom = variant === 'custom' || children != null;
-
   return (
     <div
       data-slot="empty"
-      data-variant={isCustom ? 'custom' : 'default'}
       className={cn(
         'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-2xl border-dashed p-12 text-center text-balance',
         className
       )}
       {...props}
     >
-      {isCustom ? (
-        children
-      ) : (
-        <>
-          <EmptyHeader>
-            {icon != null ? (
-              <EmptyMedia aria-hidden="true" variant="icon">
-                {icon}
-              </EmptyMedia>
-            ) : null}
-            {title != null ? <EmptyTitle>{title}</EmptyTitle> : null}
-            {description != null ? (
-              <EmptyDescription>{description}</EmptyDescription>
-            ) : null}
-          </EmptyHeader>
-          {actions != null ? <EmptyContent>{actions}</EmptyContent> : null}
-        </>
-      )}
+      <EmptyHeader>
+        {icon != null ? (
+          <EmptyMedia aria-hidden="true" variant="icon">
+            {icon}
+          </EmptyMedia>
+        ) : null}
+        {title != null ? <EmptyTitle>{title}</EmptyTitle> : null}
+        {description != null ? (
+          <EmptyDescription>{description}</EmptyDescription>
+        ) : null}
+      </EmptyHeader>
+      {actions != null ? <EmptyContent>{actions}</EmptyContent> : null}
     </div>
   );
 }
@@ -136,13 +125,4 @@ function EmptyContent({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-export {
-  Empty,
-  type EmptyProps,
-  type EmptyVariant,
-  EmptyHeader,
-  EmptyTitle,
-  EmptyDescription,
-  EmptyContent,
-  EmptyMedia,
-};
+export { Empty, type EmptyProps };

@@ -15,15 +15,29 @@ type AvatarGroupContextValue = {
 
 const AvatarGroupContext = React.createContext<AvatarGroupContextValue>({});
 
-function Avatar({
-  className,
-  shape: shapeProp,
-  size: sizeProp,
-  ...props
-}: AvatarPrimitive.Root.Props & {
+type AvatarProps = Omit<AvatarPrimitive.Root.Props, 'children'> & {
+  alt: string;
+  badge?: React.ReactNode;
+  fallback?: React.ReactNode;
+  fallbackProps?: Omit<AvatarPrimitive.Fallback.Props, 'children'>;
+  imageProps?: Omit<AvatarPrimitive.Image.Props, 'alt' | 'src'>;
   shape?: AvatarShape;
   size?: AvatarSize;
-}) {
+  src?: string;
+};
+
+function Avatar({
+  alt,
+  badge,
+  className,
+  fallback,
+  fallbackProps,
+  imageProps,
+  shape: shapeProp,
+  size: sizeProp,
+  src,
+  ...props
+}: AvatarProps) {
   const group = React.useContext(AvatarGroupContext);
   const shape = shapeProp ?? group.shape ?? 'circle';
   const size = sizeProp ?? group.size ?? 'default';
@@ -38,7 +52,13 @@ function Avatar({
         className
       )}
       {...props}
-    />
+    >
+      {src != null ? <AvatarImage {...imageProps} alt={alt} src={src} /> : null}
+      <AvatarFallback {...fallbackProps}>
+        {fallback ?? alt.slice(0, 1).toUpperCase()}
+      </AvatarFallback>
+      {badge != null ? <AvatarBadge>{badge}</AvatarBadge> : null}
+    </AvatarPrimitive.Root>
   );
 }
 
@@ -104,8 +124,12 @@ function AvatarBadge({
   });
 }
 
+type AvatarGroupItem = AvatarProps & {
+  key?: React.Key;
+};
+
 type AvatarGroupProps = Omit<React.ComponentProps<'div'>, 'children'> & {
-  children?: React.ReactNode;
+  items: readonly AvatarGroupItem[];
   max?: number;
   overlap?: number;
   renderCount?: (count: number) => React.ReactNode;
@@ -114,8 +138,8 @@ type AvatarGroupProps = Omit<React.ComponentProps<'div'>, 'children'> & {
 };
 
 function AvatarGroup({
-  children,
   className,
+  items,
   max,
   overlap = 8,
   renderCount,
@@ -124,7 +148,6 @@ function AvatarGroup({
   style,
   ...props
 }: AvatarGroupProps) {
-  const items = React.Children.toArray(children);
   const limit = max == null ? items.length : Math.max(1, Math.trunc(max) || 1);
   const visibleItems = items.slice(0, limit);
   const overflowCount = Math.max(0, items.length - visibleItems.length);
@@ -157,7 +180,12 @@ function AvatarGroup({
         }
         {...props}
       >
-        {visibleItems}
+        {visibleItems.map((item, index) => (
+          <Avatar
+            {...item}
+            key={item.key ?? item.src ?? `${item.alt}-${index}`}
+          />
+        ))}
         {count}
       </div>
     </AvatarGroupContext.Provider>
@@ -185,13 +213,12 @@ function AvatarGroupCount({
   );
 }
 
-export {
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-  AvatarGroup,
-  AvatarGroupCount,
-  AvatarBadge,
-};
+export { Avatar, AvatarGroup as Group };
 
-export type { AvatarGroupProps, AvatarShape, AvatarSize };
+export type {
+  AvatarGroupItem,
+  AvatarGroupProps,
+  AvatarProps,
+  AvatarShape,
+  AvatarSize,
+};

@@ -1,7 +1,7 @@
 import { Card } from '@heliannuuthus/ui/card';
 import { Button } from '@heliannuuthus/ui/button';
 import { Input } from '@heliannuuthus/ui/input';
-import { Label } from '@heliannuuthus/ui/form';
+import { Label } from '@heliannuuthus/ui/label';
 import { MoreHorizontal } from 'lucide-react';
 
 export function CardBasicDemo() {

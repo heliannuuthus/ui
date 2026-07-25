@@ -7,14 +7,14 @@ import { Kbd } from '@heliannuuthus/ui/kbd';
 import { Separator } from '@heliannuuthus/ui/separator';
 import { Stack } from '@heliannuuthus/ui/stack';
 import { Switch } from '@heliannuuthus/ui/switch';
-import { Toggle } from '@heliannuuthus/ui/toggle';
+import { Group as ToggleGroup } from '@heliannuuthus/ui/toggle';
 import {
+  Blockquote as TypographyBlockquote,
+  Code as TypographyCode,
   H2,
-  TypographyBlockquote,
-  TypographyCode,
-  TypographyLead,
-  TypographyMuted,
-  TypographyP,
+  Lead as TypographyLead,
+  Muted as TypographyMuted,
+  P as TypographyP,
 } from '@heliannuuthus/ui/typography';
 import {
   ArrowRight,
@@ -61,8 +61,10 @@ import {
   SelectWorkspaceDemo,
   SliderBudgetDemo,
   SliderElasticDemo,
+  SliderVerticalDemo,
   SwitchSettingsDemo,
   TextAreaCounterDemo,
+  ToggleControlledDemo,
 } from './data-entry-previews';
 import {
   AccordionIndicatorDemo,
@@ -71,6 +73,7 @@ import {
   AvatarBadgeDemo,
   AvatarGroupDemo,
   AvatarShapeDemo,
+  BubbleConversationDemo,
   BubbleVariantsDemo,
   CarouselAutoplayDemo,
   CarouselCustomPaginationDemo,
@@ -85,8 +88,6 @@ import {
   EmptyReleaseDemo,
   ItemActivityDemo,
   MarkerTimelineDemo,
-  MessageConversationDemo,
-  MessageScrollerReleaseDemo,
   TableReleaseDemo,
   TooltipPlacementsDemo,
 } from './data-display-previews';
@@ -636,65 +637,85 @@ const separatorDocumentation: ComponentDocumentation = {
   ],
   examples: [
     {
-      title: '方向与内容分组',
-      description: '在章节边界和行内元信息之间切换，观察方向如何匹配内容关系。',
-      caseAxes: [
-        {
-          name: 'orientation',
-          label: '方向',
-          defaultValue: 'horizontal',
-          options: [
-            { label: '水平', value: 'horizontal' },
-            { label: '垂直', value: 'vertical' },
-          ],
-        },
-      ],
-      preview: (values) =>
-        values.orientation === 'vertical' ? (
-          <div className="separator-vertical-demo">
-            <div className="separator-vertical-item">
-              <span>状态</span>
-              <strong>设计中</strong>
-            </div>
-            <Separator orientation="vertical" />
-            <div className="separator-vertical-item">
-              <span>负责人</span>
-              <strong>Heliannuuthus</strong>
-            </div>
-            <Separator orientation="vertical" />
-            <div className="separator-vertical-item">
-              <span>更新时间</span>
-              <strong>刚刚</strong>
-            </div>
-          </div>
-        ) : (
-          <div className="separator-horizontal-demo">
-            <section>
-              <span>项目空间</span>
-              <strong>Heliannuuthus UI</strong>
-              <p>一套用于构建清晰、稳定界面的基础组件。</p>
-            </section>
-            <Separator />
-            <section>
-              <span>最近更新</span>
-              <strong>组件文档与交互示例</strong>
-              <p>今天 14:30 · 由 Heliannuuthus 更新</p>
-            </section>
-          </div>
-        ),
+      title: '水平分隔',
+      description: '水平线分隔上下排列的章节、列表分组或信息层级。',
+      preview: (
+        <div className="separator-horizontal-demo">
+          <section>
+            <span>项目空间</span>
+            <strong>Heliannuuthus UI</strong>
+            <p>一套用于构建清晰、稳定界面的基础组件。</p>
+          </section>
+          <Separator />
+          <section>
+            <span>最近更新</span>
+            <strong>组件文档与交互示例</strong>
+            <p>今天 14:30 · 由 Heliannuuthus 更新</p>
+          </section>
+        </div>
+      ),
       code: `import { Separator } from '@heliannuuthus/ui/separator'
 
 <section>上方内容</section>
 <Separator />
-<section>下方内容</section>
+<section>下方内容</section>`,
+      previewHeight: 360,
+    },
+    {
+      title: '垂直分隔',
+      description: '垂直线分隔同一行内并列的操作、状态或元信息。',
+      preview: (
+        <div className="separator-vertical-demo">
+          <div className="separator-vertical-item">
+            <span>状态</span>
+            <strong>设计中</strong>
+          </div>
+          <Separator orientation="vertical" />
+          <div className="separator-vertical-item">
+            <span>负责人</span>
+            <strong>Heliannuuthus</strong>
+          </div>
+          <Separator orientation="vertical" />
+          <div className="separator-vertical-item">
+            <span>更新时间</span>
+            <strong>刚刚</strong>
+          </div>
+        </div>
+      ),
+      code: `import { Separator } from '@heliannuuthus/ui/separator'
 
 <div className="flex items-stretch gap-4">
   <div>状态</div>
   <Separator orientation="vertical" />
   <div>负责人</div>
 </div>`,
-      wide: true,
-      previewHeight: 420,
+      previewHeight: 360,
+    },
+    {
+      title: '自定义分隔线',
+      description: '通过 className 或 style 自定义粗细、颜色、虚线和渐变效果。',
+      preview: (
+        <div className="separator-custom-demo">
+          <section>
+            <span>强调色</span>
+            <Separator className="separator-custom-primary" />
+          </section>
+          <section>
+            <span>虚线</span>
+            <Separator className="separator-custom-dashed" />
+          </section>
+          <section>
+            <span>渐隐</span>
+            <Separator className="separator-custom-gradient" />
+          </section>
+        </div>
+      ),
+      code: `import { Separator } from '@heliannuuthus/ui/separator'
+
+<Separator className="h-0.5 bg-primary" />
+<Separator className="h-0 border-t border-dashed bg-transparent" />
+<Separator className="h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />`,
+      previewHeight: 360,
     },
   ],
   api: [
@@ -708,6 +729,11 @@ const separatorDocumentation: ComponentDocumentation = {
       name: 'className',
       description: '扩展分隔线的尺寸、颜色和间距。',
       type: 'string',
+    },
+    {
+      name: 'style / render',
+      description: '通过行内样式或自定义渲染元素完成更深度的视觉扩展。',
+      type: 'CSSProperties | ReactElement | render function',
     },
   ],
   accessibility: [
@@ -752,7 +778,7 @@ const masonryDocumentation: ComponentDocumentation = {
       description: '定义最大列数、最小列宽与行列间距。',
     },
     {
-      name: 'MasonryItem',
+      name: 'Item',
       description: '承载单个内容项，并可通过 span="full" 独占整行。',
     },
   ],
@@ -784,7 +810,7 @@ const masonryDocumentation: ComponentDocumentation = {
     },
     {
       name: 'span',
-      description: 'MasonryItem 是否按普通单元或跨越整行排列。',
+      description: 'Item 是否按普通单元或跨越整行排列。',
       type: "'auto' | 'full'",
       defaultValue: "'auto'",
     },
@@ -806,7 +832,7 @@ const stackDocumentation: ComponentDocumentation = {
   whenToUse: [
     '一组控件或标签需要保持稳定间距，但不需要共享选择状态。',
     '相同内容需要在水平、垂直或窄屏换行布局之间切换。',
-    '相邻控件需要折叠边框与圆角时，使用 Stack.Compact 形成连续轮廓。',
+    '相邻控件需要折叠边框与圆角时，使用独立导出的 Compact 形成连续轮廓。',
   ],
   examples: [
     {
@@ -816,13 +842,12 @@ const stackDocumentation: ComponentDocumentation = {
       preview: <StackGapDemo />,
       code: `import { Stack } from '@heliannuuthus/ui/stack'
 
-<Stack block orientation="horizontal" gap={6}>
-  <Filter />
-  <Sort />
-  <Availability />
+<Stack block orientation="horizontal" gap={6} justify="center" wrap>
+  {Array.from({ length: 24 }, (_, index) => (
+    <Block key={index}>{index + 1}</Block>
+  ))}
 </Stack>`,
       previewHeight: 460,
-      wide: true,
     },
     {
       title: '交叉轴与主轴对齐',
@@ -853,14 +878,14 @@ const stackDocumentation: ComponentDocumentation = {
       code: `import { useState } from 'react'
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from '@heliannuuthus/ui/input-group'
 import { Slider } from '@heliannuuthus/ui/slider'
-import { Stack } from '@heliannuuthus/ui/stack'
+import { Compact, Stack } from '@heliannuuthus/ui/stack'
 
 export function SliderCompactExample() {
   const [quality, setQuality] = useState(68)
 
   return (
     <Stack block gap={8}>
-      <Stack.Compact block aria-label="压缩质量">
+      <Compact block aria-label="压缩质量">
         <InputGroup className="px-4">
           <Slider
             aria-label="压缩质量滑块"
@@ -881,7 +906,7 @@ export function SliderCompactExample() {
             <InputGroupText>%</InputGroupText>
           </InputGroupAddon>
         </InputGroup>
-      </Stack.Compact>
+      </Compact>
       <span aria-live="polite">当前压缩质量：{quality}%</span>
     </Stack>
   )
@@ -895,7 +920,7 @@ export function SliderCompactExample() {
       description: '按方向、间距与对齐规则排列一组相关内容。',
     },
     {
-      name: 'Stack.Compact',
+      name: 'Compact',
       description: '折叠相邻控件的间距、边框和圆角，形成连续操作组。',
     },
   ],
@@ -942,14 +967,14 @@ export function SliderCompactExample() {
       type: 'ReactNode',
     },
     {
-      component: 'Stack.Compact',
+      component: 'Compact',
       name: 'orientation',
       description: '设置紧凑组的拼接方向；紧凑组不允许换行。',
       type: "'horizontal' | 'vertical'",
       defaultValue: "'horizontal'",
     },
     {
-      component: 'Stack.Compact',
+      component: 'Compact',
       name: 'block',
       description: '让紧凑组填满父容器，适合包含 Input 的组合。',
       type: 'boolean',
@@ -958,12 +983,12 @@ export function SliderCompactExample() {
   ],
   accessibility: [
     'Stack 只提供视觉布局，不改变子元素原有语义和焦点顺序。',
-    'Stack.Compact 默认提供 group 角色；同一区域存在多个操作组时应补充 aria-label。',
-    '需要表达选择关系时仍应使用 Radio.Group、Toggle.Group 等带状态语义的组件。',
+    'Compact 默认提供 group 角色；同一区域存在多个操作组时应补充 aria-label。',
+    '需要表达选择关系时仍应使用 Radio 或 Toggle 模块独立导出的 Group。',
   ],
   pitfalls: [
     '不要用 Stack 代替表单分组、单选组或工具栏等语义结构。',
-    '不要让 Stack.Compact 换行；空间不足时应切换为垂直方向。',
+    '不要让 Compact 换行；空间不足时应切换为垂直方向。',
     '不要通过空白字符或子元素外边距模拟组件间距。',
   ],
 };
@@ -2029,25 +2054,25 @@ const layoutDocumentation: ComponentDocumentation = {
       description: '组合纵向区域；直接包含 Sidebar 时自动切换为横向排列。',
     },
     {
-      name: 'LayoutHeader',
+      name: 'Header',
       description: '页面或局部布局顶部的固定区域。',
     },
     {
-      name: 'LayoutContent',
+      name: 'Content',
       description: '承载主要内容并占据布局中的剩余空间。',
     },
     {
-      name: 'LayoutFooter',
+      name: 'Footer',
       description: '页面或局部布局底部的固定区域。',
     },
     {
-      name: 'LayoutSidebar',
+      name: 'Sidebar',
       description: '放置导航、目录或详情的侧边区域。',
     },
   ],
   api: [
     {
-      component: 'LayoutSidebar',
+      component: 'Sidebar',
       name: 'width',
       description:
         '设置侧边区域宽度；数字按像素处理，也可以传入任意 CSS 长度。',
@@ -2068,7 +2093,7 @@ const layoutDocumentation: ComponentDocumentation = {
   ],
   pitfalls: [
     '不要把所有区域平铺在同一个 Layout；跨整页的 Header 和 Footer 应包住中间的嵌套 Layout。',
-    'LayoutSidebar 只负责结构和宽度；需要折叠、抽屉或菜单状态时组合专用组件。',
+    'Sidebar 只负责结构和宽度；需要折叠、抽屉或菜单状态时组合专用组件。',
   ],
 };
 
@@ -2106,7 +2131,7 @@ const remainingComponents = [
   ['Accordion', 'accordion', '按需展开一组纵向排列的内容区域。'],
   ['Attachment', 'attachment', '展示附件信息、状态与操作。'],
   ['Avatar', 'avatar', '表示人物、团队或其他实体。'],
-  ['Bubble', 'bubble', '展示对话消息与附加信息。'],
+  ['Bubble', 'bubble', '展示对话内容，并与头像、滚动区域自由组合。'],
   ['Carousel', 'carousel', '在有限空间中轮播同级内容。'],
   ['Chart', 'chart', '为 Recharts 提供响应式容器、主题变量和统一的信息提示。'],
   ['Collapsible', 'collapsible', '控制单个内容区域展开收起。'],
@@ -2115,8 +2140,6 @@ const remainingComponents = [
   ['Empty', 'empty', '解释无数据状态并提供下一步。'],
   ['Item', 'item', '构建包含内容和操作的通用列表项。'],
   ['Marker', 'marker', '标记内容中的位置或状态。'],
-  ['Message', 'message', '呈现单条会话消息及其状态。'],
-  ['Message Scroller', 'message-scroller', '管理消息流滚动和最新内容跟随。'],
   ['Table', 'table', '使用语义化行列展示数据。'],
   ['Tooltip', 'tooltip', '为控件提供简短补充说明。'],
   ['Alert', 'alert', '持续展示重要的页面内提示。'],
@@ -2234,7 +2257,7 @@ if (scrollAreaDocumentation) {
       description: '组合根容器、可聚焦视口、所需方向的滚动条与双轴交汇角。',
     },
     {
-      name: 'ScrollBar',
+      name: 'Bar',
       description:
         '可单独复用的滚动条部件，支持纵向、横向及自动或常驻可见策略。',
     },
@@ -2267,7 +2290,7 @@ if (scrollAreaDocumentation) {
     {
       name: 'viewportProps',
       description: '向真实滚动视口传递 ref、事件、ARIA、className 与 style。',
-      type: 'ScrollArea.Viewport.Props',
+      type: 'ScrollAreaViewportProps',
     },
     {
       name: 'overflowEdgeThreshold',
@@ -2418,11 +2441,11 @@ const dataEntryExamples: Record<string, ComponentExample[]> = {
   checkbox: [
     {
       title: '权限组合',
-      description: '使用 Checkbox.Group 管理多个权限值，并即时反馈已选数量。',
+      description: '使用独立导出的 Group 管理多个权限值，并即时反馈已选数量。',
       preview: <CheckboxPermissionsDemo />,
-      code: `import { Checkbox } from '@heliannuuthus/ui/checkbox'
+      code: `import { Group } from '@heliannuuthus/ui/checkbox'
 
-<Checkbox.Group
+<Group
   name="permission"
   value={selected}
   onChange={setSelected}
@@ -2463,12 +2486,12 @@ const dataEntryExamples: Record<string, ComponentExample[]> = {
       title: '字段结构与状态',
       description: '同时展示标签、说明、错误信息，以及适合设置项的水平字段。',
       preview: <FieldProfileDemo />,
-      code: `import { Field, FieldError, FieldLabel } from '@heliannuuthus/ui/form'
+      code: `import { Error, Field, Label } from '@heliannuuthus/ui/field'
 
 <Field data-invalid="true">
-  <FieldLabel htmlFor="handle">个人标识</FieldLabel>
+  <Label htmlFor="handle">个人标识</Label>
   <Input id="handle" aria-invalid />
-      <FieldError>只能使用小写字母、数字和连字符。</FieldError>
+  <Error>只能使用小写字母、数字和连字符。</Error>
 </Field>`,
       previewHeight: 500,
     },
@@ -2477,17 +2500,17 @@ const dataEntryExamples: Record<string, ComponentExample[]> = {
       description:
         'Label 通过 htmlFor 关联真实控件；必填标记和可选提示作为 Field 的辅助信息。',
       preview: <FieldLabelPairingDemo />,
-      code: `import { Field, FieldDescription, FieldLabel } from '@heliannuuthus/ui/form'
+      code: `import { Description, Field, Label } from '@heliannuuthus/ui/field'
 
 <Field>
-  <FieldLabel htmlFor="team-name">团队名称 *</FieldLabel>
+  <Label htmlFor="team-name">团队名称 *</Label>
   <Input id="team-name" required />
 </Field>
 
 <Field>
-  <FieldLabel htmlFor="role">职位</FieldLabel>
+  <Label htmlFor="role">职位</Label>
   <Input id="role" />
-  <FieldDescription>可选</FieldDescription>
+  <Description>可选</Description>
 </Field>`,
       previewHeight: 340,
     },
@@ -2495,22 +2518,22 @@ const dataEntryExamples: Record<string, ComponentExample[]> = {
       title: '带校验的邀请表单',
       description: '连接 react-hook-form，展示必填校验、错误关联和提交结果。',
       preview: <FormInviteDemo />,
-      code: `import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@heliannuuthus/ui/form'
+      code: `import { Control, Field, Form, Item, Label, Message } from '@heliannuuthus/ui/form'
 
 const form = useForm({ defaultValues: { email: '', note: '' } })
 
 <Form {...form}>
   <form onSubmit={form.handleSubmit(onSubmit)}>
-    <FormField
+    <Field
       control={form.control}
       name="email"
       rules={{ required: '请输入邮箱地址。' }}
       render={({ field }) => (
-        <FormItem>
-          <FormLabel>邮箱地址</FormLabel>
-          <FormControl><Input {...field} /></FormControl>
-          <FormMessage />
-        </FormItem>
+        <Item>
+          <Label>邮箱地址</Label>
+          <Control><Input {...field} /></Control>
+          <Message />
+        </Item>
       )}
     />
   </form>
@@ -2588,15 +2611,13 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
       title: '带字数反馈的说明',
       description: '为长文本提供清楚的标签、字符上限、当前计数和提交条件。',
       preview: <TextAreaCounterDemo />,
-      code: `import { Input, TextArea } from '@heliannuuthus/ui/input'
+      code: `import { TextArea } from '@heliannuuthus/ui/input'
 
-<Input.TextArea
+<TextArea
   value={value}
   maxLength={120}
   onChange={(event) => setValue(event.target.value)}
-/>
-
-<TextArea placeholder="也可以使用平铺导出" />`,
+/>`,
       previewHeight: 380,
     },
   ],
@@ -2604,11 +2625,11 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
     {
       title: '选项配置',
       description:
-        '常规文本选项优先使用 options，由 Radio.Group 统一生成标签与值。',
+        '常规文本选项优先使用 options，由独立导出的 Group 统一生成标签与值。',
       preview: <RadioDeliveryDemo />,
-      code: `import { Radio } from '@heliannuuthus/ui/radio'
+      code: `import { Group } from '@heliannuuthus/ui/radio'
 
-<Radio.Group
+<Group
   value={delivery}
   onChange={setDelivery}
   options={[
@@ -2640,18 +2661,19 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
           }
         />
       ),
-      code: `import { Radio } from '@heliannuuthus/ui/radio'
+      code: `import { Group } from '@heliannuuthus/ui/radio'
 
-<Radio.Group
+<Group
   value={plan}
   onChange={setPlan}
   orientation="horizontal"
   columns={3}
   minColumnWidth={180}
->
-  <Radio value="free">个人版</Radio>
-  <Radio value="team">团队版</Radio>
-</Radio.Group>`,
+  options={[
+    { label: '个人版', value: 'free' },
+    { label: '团队版', value: 'team' },
+  ]}
+/>`,
       previewHeight: 430,
     },
   ],
@@ -2703,7 +2725,7 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
     {
       title: '弹性反馈',
       description:
-        '悬停、触摸或聚焦时，轨道与两端图标作为整体缩放；拖到边界外后继续产生受约束的拉伸并自然回弹。',
+        '透明安全区为轻微缩放与越界回弹预留空间，两端图标和文字始终保持一致反馈。',
       preview: <SliderElasticDemo />,
       code: `import { Slider } from '@heliannuuthus/ui/slider'
 import { Volume1, Volume2 } from 'lucide-react'
@@ -2712,6 +2734,8 @@ import { Volume1, Volume2 } from 'lucide-react'
   aria-label="播放器音量"
   startIcon={<Volume1 />}
   endIcon={<Volume2 />}
+  startLabel="静音"
+  endLabel="最大"
   value={volume}
   onValueChange={setVolume}
   min={0}
@@ -2733,6 +2757,23 @@ import { Volume1, Volume2 } from 'lucide-react'
 />`,
       previewHeight: 340,
     },
+    {
+      title: '垂直方向',
+      description:
+        '为容器提供明确高度后，通过 orientation="vertical" 构建纵向参数控制。',
+      preview: <SliderVerticalDemo />,
+      code: `<Slider
+  aria-label="人声电平"
+  className="h-56"
+  orientation="vertical"
+  value={level}
+  onValueChange={setLevel}
+  min={0}
+  max={100}
+  step={2}
+/>`,
+      previewHeight: 480,
+    },
   ],
   switch: [
     {
@@ -2740,16 +2781,36 @@ import { Volume1, Volume2 } from 'lucide-react'
       description:
         'Switch 使用统一的舒展尺寸；开关立即更新设置，不可关闭的系统项通过禁用状态解释约束。',
       preview: <SwitchSettingsDemo />,
-      code: `<Switch checked={enabled} onCheckedChange={setEnabled} />
+      code: `<Switch checked={enabled} onChange={setEnabled} />
 <Switch checked disabled />`,
       previewHeight: 390,
     },
   ],
   toggle: [
     {
+      title: '受控状态',
+      description:
+        '通过 value 读取当前开关状态，并在 onChange 中由业务状态决定下一次渲染。',
+      preview: <ToggleControlledDemo />,
+      code: `import { useState } from 'react'
+import { Toggle } from '@heliannuuthus/ui/toggle'
+
+export function ControlledToggle() {
+  const [value, setValue] = useState(true)
+
+  return (
+    <Toggle value={value} onChange={setValue} aria-label="切换粗体">
+      <Bold />
+      粗体
+    </Toggle>
+  )
+}`,
+      previewHeight: 320,
+    },
+    {
       title: '格式工具组',
       description:
-        'Toggle 与 Toggle.Group 使用统一的舒展尺寸和分离间距；通过 Group 管理一组可同时开启的工具状态。',
+        'Toggle 与独立导出的 Group 使用统一尺寸；通过 items 管理可同时开启的工具状态。',
       caseAxes: [
         {
           name: 'variant',
@@ -2762,35 +2823,35 @@ import { Volume1, Volume2 } from 'lucide-react'
         },
       ],
       preview: (values) => (
-        <Toggle.Group
+        <ToggleGroup
           aria-label="文本格式"
           defaultValue={['bold']}
+          items={[
+            { value: 'bold', label: <Bold />, 'aria-label': '粗体' },
+            { value: 'italic', label: <Italic />, 'aria-label': '斜体' },
+            {
+              value: 'underline',
+              label: <Underline />,
+              'aria-label': '下划线',
+            },
+          ]}
           multiple
           variant={values.variant === 'default' ? 'default' : 'outline'}
-        >
-          <Toggle value="bold" aria-label="粗体">
-            <Bold />
-          </Toggle>
-          <Toggle value="italic" aria-label="斜体">
-            <Italic />
-          </Toggle>
-          <Toggle value="underline" aria-label="下划线">
-            <Underline />
-          </Toggle>
-        </Toggle.Group>
+        />
       ),
-      code: `import { Toggle } from '@heliannuuthus/ui/toggle'
+      code: `import { Group } from '@heliannuuthus/ui/toggle'
 
-<Toggle.Group
+<Group
   value={formats}
   onChange={setFormats}
   multiple
   variant="outline"
->
-  <Toggle value="bold" aria-label="粗体"><Bold /></Toggle>
-  <Toggle value="italic" aria-label="斜体"><Italic /></Toggle>
-  <Toggle value="underline" aria-label="下划线"><Underline /></Toggle>
-</Toggle.Group>`,
+  items={[
+    { value: 'bold', label: <Bold />, 'aria-label': '粗体' },
+    { value: 'italic', label: <Italic />, 'aria-label': '斜体' },
+    { value: 'underline', label: <Underline />, 'aria-label': '下划线' },
+  ]}
+/>`,
       previewHeight: 300,
     },
   ],
@@ -2914,75 +2975,6 @@ import { Minus, Plus } from 'lucide-react'
   </AttachmentContent>
 </Attachment>`,
       previewHeight: 360,
-    },
-  ],
-  bubble: [
-    {
-      title: '气泡样式',
-      description:
-        '使用 Separator 分隔强调、浮起、柔和和描边样式；elevated 适合需要从页面背景中轻微抬升的接收消息。',
-      preview: <BubbleVariantsDemo />,
-      code: `import {
-  Bubble,
-  BubbleContent,
-  BubbleGroup,
-  BubbleReactions,
-} from '@heliannuuthus/ui/bubble'
-import { Separator } from '@heliannuuthus/ui/separator'
-
-<BubbleGroup>
-  <Bubble align="end" variant="default">
-    <BubbleContent>已经补充完成，可以重新评审。</BubbleContent>
-    <BubbleReactions>✓ 2</BubbleReactions>
-  </Bubble>
-  <Separator />
-  <Bubble align="end" variant="elevated">
-    <BubbleContent>已经补充完成，可以重新评审。</BubbleContent>
-  </Bubble>
-</BubbleGroup>`,
-      previewHeight: 580,
-    },
-    {
-      title: '双向消息列表',
-      description:
-        'Bubble 与 Message 组合成列表：左右使用不同外观，头像可以按消息省略，并在发送侧显示未读或已读状态。',
-      preview: <MessageConversationDemo />,
-      code: `import {
-  Message,
-  MessageAvatar,
-  MessageContent,
-  MessageFooter,
-  MessageGroup,
-  MessageStatus,
-} from '@heliannuuthus/ui/message'
-import {
-  Bubble,
-  BubbleContent,
-} from '@heliannuuthus/ui/bubble'
-import { Separator } from '@heliannuuthus/ui/separator'
-
-<MessageGroup role="list">
-  <Message align="start" role="listitem">
-    <MessageAvatar>{/* avatar */}</MessageAvatar>
-    <MessageContent>
-      <Bubble variant="elevated">
-        <BubbleContent>预检已经通过。</BubbleContent>
-      </Bubble>
-    </MessageContent>
-  </Message>
-  <Separator />
-  <Message align="end" role="listitem">
-    <MessageContent>
-      <Bubble align="end" variant="default">
-        <BubbleContent>可以继续发布。</BubbleContent>
-      </Bubble>
-      <MessageFooter>
-        <MessageStatus status="read">已读</MessageStatus>
-      </MessageFooter>
-    </MessageContent>
-  </Message>
-</MessageGroup>`,
-      previewHeight: 720,
     },
   ],
   carousel: [
@@ -3203,9 +3195,9 @@ import { ChevronRight } from 'lucide-react'
       preview: <DataTableReleaseDemo />,
       code: `import type { ColumnDef } from '@tanstack/react-table'
 import {
+  Actions,
+  ColumnHeader,
   DataTable,
-  DataTableActions,
-  DataTableColumnHeader,
 } from '@heliannuuthus/ui/data-table'
 import { Button } from '@heliannuuthus/ui/button'
 import { DropdownMenu } from '@heliannuuthus/ui/dropdown-menu'
@@ -3215,7 +3207,7 @@ const columns: ColumnDef<Release>[] = [
   {
     accessorKey: 'version',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column}>版本</DataTableColumnHeader>
+      <ColumnHeader column={column}>版本</ColumnHeader>
     ),
   },
   {
@@ -3223,7 +3215,7 @@ const columns: ColumnDef<Release>[] = [
     header: '操作',
     meta: { align: 'end' },
     cell: ({ row }) => (
-      <DataTableActions aria-label={row.original.version + ' 操作'}>
+      <Actions aria-label={row.original.version + ' 操作'}>
         <Button variant="ghost">查看</Button>
         <DropdownMenu
           align="end"
@@ -3243,7 +3235,7 @@ const columns: ColumnDef<Release>[] = [
             { label: '删除记录', destructive: true },
           ]}
         />
-      </DataTableActions>
+      </Actions>
     ),
   },
 ]
@@ -3329,29 +3321,18 @@ const columns: ColumnDef<Release>[] = [
       previewHeight: 420,
     },
     {
-      title: '自定义组合',
+      title: '扩展操作',
       description:
-        '只有品牌插画、状态摘要或复杂操作布局才切换到 custom 变体，并组合 Header 与 Content。',
+        'actions 可以承载状态摘要和操作按钮，不需要暴露内部布局组件。',
       preview: <EmptyCompositionDemo />,
-      code: `import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from '@heliannuuthus/ui/empty'
+      code: `import { Empty } from '@heliannuuthus/ui/empty'
 
-<Empty variant="custom">
-  <EmptyHeader>
-    <EmptyMedia><ShieldCheck /></EmptyMedia>
-    <EmptyTitle>等待安全审计</EmptyTitle>
-    <EmptyDescription>审计通过前暂无可发布版本。</EmptyDescription>
-  </EmptyHeader>
-  <EmptyContent>
-    {/* 状态摘要和自定义操作 */}
-  </EmptyContent>
-</Empty>`,
+<Empty
+  icon={<ShieldCheck />}
+  title="等待安全审计"
+  description="审计通过前暂无可发布版本。"
+  actions={<AuditSummary />}
+/>`,
       previewHeight: 440,
     },
   ],
@@ -3359,7 +3340,7 @@ const columns: ColumnDef<Release>[] = [
     {
       title: '协作动态',
       description:
-        '用稳定的媒体、内容和操作插槽组织不同长度的列表项，同时切换整体强调程度。',
+        '通过 media、title、description 和 actions props 组织不同长度的列表项。',
       caseAxes: [
         {
           name: 'variant',
@@ -3381,23 +3362,16 @@ const columns: ColumnDef<Release>[] = [
           }
         />
       ),
-      code: `import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from '@heliannuuthus/ui/item'
+      code: `import { Item } from '@heliannuuthus/ui/item'
 
-<Item variant="outline">
-  <ItemMedia variant="icon"><MessageCircle /></ItemMedia>
-  <ItemContent>
-    <ItemTitle>林默回复了检查项</ItemTitle>
-    <ItemDescription>确认索引变更不会锁表。</ItemDescription>
-  </ItemContent>
-  <ItemActions>{/* actions */}</ItemActions>
-</Item>`,
+<Item
+  variant="outline"
+  media={<MessageCircle />}
+  mediaVariant="icon"
+  title="林默回复了检查项"
+  description="确认索引变更不会锁表。"
+  actions={<Button>查看</Button>}
+/>`,
       previewHeight: 430,
     },
   ],
@@ -3426,85 +3400,73 @@ const columns: ColumnDef<Release>[] = [
           }
         />
       ),
-      code: `import { Marker, MarkerContent, MarkerIcon } from '@heliannuuthus/ui/marker'
+      code: `import { Marker } from '@heliannuuthus/ui/marker'
 
-<Marker variant="separator">
-  <MarkerIcon><CircleDot /></MarkerIcon>
-  <MarkerContent>生产发布开始 · 21:46</MarkerContent>
-</Marker>`,
+<Marker
+  variant="separator"
+  icon={<CircleDot />}
+  content="生产发布开始 · 21:46"
+/>`,
       previewHeight: 380,
     },
   ],
-  message: [
+  bubble: [
     {
-      title: '双向会话列表',
-      description:
-        '用列表同时展示接收方与发送方消息、连续消息的头像省略，以及未读和已读回执。',
-      preview: <MessageConversationDemo />,
+      title: '气泡样式',
+      description: '使用 Separator 分隔强调、浮起、柔和和描边样式。',
+      preview: <BubbleVariantsDemo />,
       code: `import {
-  Message,
-  MessageAvatar,
-  MessageContent,
-  MessageFooter,
-  MessageGroup,
-  MessageHeader,
-  MessageStatus,
-} from '@heliannuuthus/ui/message'
+  Bubble,
+  BubbleContent,
+  BubbleGroup,
+  BubbleReactions,
+} from '@heliannuuthus/ui/bubble'
+import { Separator } from '@heliannuuthus/ui/separator'
 
-<MessageGroup role="list">
-  <Message align="start" role="listitem">
-    <MessageAvatar>{/* avatar */}</MessageAvatar>
-    <MessageContent>
-      <MessageHeader>林默 · 21:42</MessageHeader>
-      <Bubble variant="elevated">
-        <BubbleContent>预检通过了。</BubbleContent>
-      </Bubble>
-    </MessageContent>
-  </Message>
-  <Message align="end" role="listitem">
-    <MessageContent>
-      <Bubble align="end">
-        <BubbleContent>可以继续发布。</BubbleContent>
-      </Bubble>
-      <MessageFooter>
-        <MessageStatus status="read">已读</MessageStatus>
-      </MessageFooter>
-    </MessageContent>
-  </Message>
-</MessageGroup>`,
-      previewHeight: 720,
+<BubbleGroup>
+  <Bubble align="end" variant="default">
+    <BubbleContent>已经补充完成，可以重新评审。</BubbleContent>
+    <BubbleReactions>✓ 2</BubbleReactions>
+  </Bubble>
+  <Separator />
+  <Bubble align="end" variant="elevated">
+    <BubbleContent>已经补充完成，可以重新评审。</BubbleContent>
+  </Bubble>
+</BubbleGroup>`,
+      previewHeight: 580,
     },
-  ],
-  'message-scroller': [
     {
-      title: '发布消息流',
+      title: '头像与可滚动会话',
       description:
-        '在固定高度中保持消息锚点、滚动位置和“回到最新”操作，适合持续追加的会话。',
-      preview: <MessageScrollerReleaseDemo />,
+        '不引入额外 Message 抽象，直接组合 Bubble、Avatar 与 ScrollArea 构建双向会话。',
+      preview: <BubbleConversationDemo />,
       code: `import {
-  MessageScroller,
-  MessageScrollerButton,
-  MessageScrollerContent,
-  MessageScrollerItem,
-  MessageScrollerProvider,
-  MessageScrollerViewport,
-} from '@heliannuuthus/ui/message-scroller'
+  Bubble,
+  BubbleContent,
+} from '@heliannuuthus/ui/bubble'
+import { Avatar, AvatarFallback } from '@heliannuuthus/ui/avatar'
+import { ScrollArea } from '@heliannuuthus/ui/scroll-area'
 
-<MessageScrollerProvider defaultScrollPosition="end">
-  <MessageScroller>
-    <MessageScrollerViewport>
-      <MessageScrollerContent>
-        {messages.map((message) => (
-          <MessageScrollerItem messageId={message.id} scrollAnchor>
-            {message.content}
-          </MessageScrollerItem>
-        ))}
-      </MessageScrollerContent>
-    </MessageScrollerViewport>
-    <MessageScrollerButton />
-  </MessageScroller>
-</MessageScrollerProvider>`,
-      previewHeight: 520,
+<ScrollArea
+  className="h-80"
+  fadeEdges
+  viewportProps={{ role: 'list', 'aria-label': '协作消息' }}
+>
+  {messages.map((message) => (
+    <div className="flex gap-2" role="listitem">
+      <Avatar>
+        <AvatarFallback>{message.avatar}</AvatarFallback>
+      </Avatar>
+      <div className="flex min-w-0 flex-1 flex-col gap-2">
+        <span>{message.author} · {message.time}</span>
+        <Bubble variant="elevated">
+          <BubbleContent>{message.content}</BubbleContent>
+        </Bubble>
+      </div>
+    </div>
+  ))}
+</ScrollArea>`,
+      previewHeight: 560,
     },
   ],
   tooltip: [
@@ -4048,32 +4010,6 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'component',
     },
   ],
-  bubble: [
-    {
-      name: 'variant',
-      description: '设置消息气泡的强调与语义外观。',
-      type: "'default' | 'secondary' | 'muted' | 'elevated' | 'tinted' | 'outline' | 'ghost' | 'destructive'",
-      defaultValue: "'default'",
-    },
-    {
-      name: 'align',
-      description: '将气泡对齐到消息流起始侧或末尾侧。',
-      type: "'start' | 'end'",
-      defaultValue: "'start'",
-    },
-    {
-      component: 'BubbleContent',
-      name: 'render',
-      description: '将内容渲染为可交互按钮、链接或自定义元素。',
-      type: 'ReactElement | render function',
-    },
-    {
-      component: 'BubbleReactions',
-      name: 'side / align',
-      description: '定位气泡边缘的回应或状态。',
-      type: "'top' | 'bottom' / 'start' | 'end'",
-    },
-  ],
   carousel: [
     {
       name: 'autoplay',
@@ -4192,17 +4128,17 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: "{ align?: 'start' | 'center' | 'end'; headerClassName?; cellClassName? }",
     },
     {
-      name: 'DataTableColumnHeader',
+      name: 'ColumnHeader',
       description: '组合可排序的列标题，并显示排序提示图标。',
       type: 'component',
     },
     {
-      name: 'DataTableActions',
+      name: 'Actions',
       description: '在操作列内靠右组合一个或多个按钮、菜单或链接。',
       type: 'component',
     },
     {
-      component: 'DataTableActions',
+      component: 'Actions',
       name: 'aria-label',
       description: '使用当前记录标识为每一行的操作组提供唯一名称。',
       type: 'string',
@@ -4289,16 +4225,20 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'ReactElement | render function',
     },
     {
-      component: 'ItemMedia',
-      name: 'variant',
-      description: '选择普通内容、图标或图片媒体。',
-      type: "'default' | 'icon' | 'image'",
+      name: 'media / mediaVariant',
+      description: '设置媒体内容，并选择普通、图标或图片外观。',
+      type: "ReactNode / 'default' | 'icon' | 'image'",
       defaultValue: "'default'",
     },
     {
-      name: 'ItemHeader / ItemFooter',
+      name: 'title / description / content / actions',
+      description: '通过 props 配置列表项的语义内容和尾部操作。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'header / footer',
       description: '添加横跨整行的前置或后置内容。',
-      type: 'component',
+      type: 'ReactNode',
     },
   ],
   marker: [
@@ -4314,95 +4254,62 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'ReactElement | render function',
     },
     {
-      name: 'MarkerIcon',
-      description: '承载装饰性状态图标并自动隐藏可访问语义。',
-      type: 'component',
+      name: 'icon',
+      description: '设置装饰性状态图标并自动隐藏可访问语义。',
+      type: 'ReactNode',
     },
     {
-      name: 'MarkerContent',
-      description: '承载可换行的标记文字或链接。',
-      type: 'component',
+      name: 'content',
+      description: '设置可换行的标记文字或链接。',
+      type: 'ReactNode',
     },
   ],
-  message: [
+  bubble: [
     {
+      component: 'Bubble',
+      name: 'variant',
+      description: '设置消息气泡的强调与语义外观。',
+      type: "'default' | 'secondary' | 'muted' | 'elevated' | 'tinted' | 'outline' | 'ghost' | 'destructive'",
+      defaultValue: "'default'",
+    },
+    {
+      component: 'Bubble',
       name: 'align',
-      description: '控制头像与内容的起始侧或末尾侧排列。',
+      description: '将气泡对齐到消息流起始侧或末尾侧。',
       type: "'start' | 'end'",
       defaultValue: "'start'",
     },
     {
-      name: 'MessageAvatar',
-      description: '承载头像、机器人图标或发送者标识。',
-      type: 'component',
+      component: 'BubbleContent',
+      name: 'render',
+      description: '将内容渲染为可交互按钮、链接或自定义元素。',
+      type: 'ReactElement | render function',
     },
     {
-      name: 'MessageHeader / MessageFooter',
-      description: '展示发送者、时间和送达状态等消息元数据。',
-      type: 'component',
-    },
-    {
-      name: 'MessageStatus',
-      description: '在消息页脚中表达发送、送达、未读、已读或失败状态。',
-      type: "'sending' | 'sent' | 'delivered' | 'unread' | 'read' | 'failed'",
-      defaultValue: "'sent'",
-    },
-    {
-      name: 'MessageContent',
-      description: '组合一个或多个 Bubble、附件和消息操作。',
-      type: 'component',
-    },
-  ],
-  'message-scroller': [
-    {
-      name: 'autoScroll',
-      description: '追加消息时在用户位于末尾时持续跟随。',
-      type: 'boolean',
-      defaultValue: 'false',
-    },
-    {
-      name: 'defaultScrollPosition',
-      description: '设置首次渲染时的起点、末尾或最后锚点。',
-      type: "'start' | 'end' | 'last-anchor'",
-      defaultValue: "'end'",
-    },
-    {
-      component: 'MessageScrollerItem',
-      name: 'messageId / scrollAnchor',
-      description: '标识消息并声明稳定滚动锚点。',
-      type: 'string / boolean',
-    },
-    {
-      component: 'MessageScrollerButton',
-      name: 'direction',
-      description: '显示滚动到开头或末尾的浮动操作。',
-      type: "'start' | 'end'",
-      defaultValue: "'end'",
-    },
-    {
-      name: 'useMessageScroller',
-      description: '以编程方式滚动到开头、末尾或指定消息。',
-      type: 'hook',
+      component: 'BubbleReactions',
+      name: 'side / align',
+      description: '定位气泡边缘的回应或状态。',
+      type: "'top' | 'bottom' / 'start' | 'end'",
     },
   ],
   table: [
     {
-      name: 'TableCaption',
+      name: 'Caption',
       description: '提供整张表格的语义标题或补充说明。',
       type: 'component',
     },
     {
-      name: 'TableHeader / TableHead',
+      name: 'Header / Head',
       description: '定义列标题和表头语义。',
       type: 'component',
     },
     {
-      name: 'TableBody / TableRow / TableCell',
+      name: 'Body / Row / Cell',
       description: '组织数据行与单元格，并支持选中状态。',
       type: 'component',
     },
     {
-      name: 'TableFooter',
+      name: 'Footer',
       description: '展示汇总、总计或表尾说明。',
       type: 'component',
     },
@@ -4744,11 +4651,11 @@ componentDocumentation['data-table'].parts = [
       '通过 header、cell、columns 和 meta 声明每列的结构与展示方式。',
   },
   {
-    name: 'DataTableColumnHeader',
+    name: 'ColumnHeader',
     description: '为可排序列提供一致的按钮、状态切换和图标。',
   },
   {
-    name: 'DataTableActions',
+    name: 'Actions',
     description: '在普通 cell 中组合当前记录的按钮、菜单或链接。',
   },
 ];
@@ -4763,7 +4670,7 @@ componentDocumentation['data-table'].pitfalls = [
 ];
 
 componentDocumentation.empty.summary =
-  '为空集合或缺失结果提供稳定占位；默认直接渲染图标与标题，常见内容通过 props 配置，复杂展示再使用 custom 组合。';
+  '为空集合或缺失结果提供稳定占位，并通过 props 配置图标、标题、说明和操作。';
 componentDocumentation.empty.whenToUse = [
   '列表、表格、搜索或首次使用场景当前没有可展示内容。',
   '需要解释空状态原因，并提供一个清晰、可执行的下一步。',
@@ -4771,16 +4678,7 @@ componentDocumentation.empty.whenToUse = [
 componentDocumentation.empty.parts = [
   {
     name: 'Empty',
-    description:
-      '默认根据 icon、title、description 和 actions 生成完整空状态。',
-  },
-  {
-    name: 'EmptyHeader / EmptyContent',
-    description: '仅在 custom 变体中控制复杂标题区、状态摘要和操作布局。',
-  },
-  {
-    name: 'EmptyMedia / EmptyTitle / EmptyDescription',
-    description: '为 custom 变体提供与默认布局一致的语义插槽。',
+    description: '根据 icon、title、description 和 actions 生成完整空状态。',
   },
 ];
 componentDocumentation.empty.accessibility = [
@@ -4788,8 +4686,8 @@ componentDocumentation.empty.accessibility = [
   '操作文案应说明下一步，例如“清除筛选”或“创建项目”，不要只写“确定”。',
 ];
 componentDocumentation.empty.pitfalls = [
-  '不要为普通空状态重复拼装 Header 和 Content，优先使用 props。',
-  '只有需要品牌插画、额外状态摘要或复杂布局时才使用 custom 变体。',
+  '不要为普通空状态重复拼装内部结构，优先使用语义 props。',
+  '操作较复杂时先封装为一个业务节点，再传给 actions。',
   '加载中、请求失败和权限不足不是空数据，应分别使用 Skeleton、Alert 或专门的权限反馈。',
 ];
 
@@ -4958,12 +4856,12 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
   ],
   form: [
     {
-      name: 'Form / FormField',
+      name: 'Form / Field',
       description: '提供 react-hook-form 上下文，并连接字段名称、规则和状态。',
       type: 'FormProvider / Controller',
     },
     {
-      name: 'FormControl / FormMessage',
+      name: 'Control / Message',
       description: '向控件注入可访问属性，并展示当前字段的校验错误。',
       type: 'component',
     },
@@ -4981,17 +4879,17 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'boolean',
     },
     {
-      name: 'FieldDescription',
+      name: 'Description',
       description: '补充输入格式、用途或影响。',
       type: 'component',
     },
     {
-      name: 'FieldError',
+      name: 'Error',
       description: '展示单条或聚合的校验错误。',
       type: 'component',
     },
     {
-      name: 'FieldLabel / Label',
+      name: 'Label',
       description: '通过 htmlFor 将标签文本与任意表单控件建立可访问关联。',
       type: 'component',
     },
@@ -5025,23 +4923,23 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'boolean',
     },
     {
-      component: 'InputGroupAddon',
+      component: 'Addon',
       name: 'align',
       description: '将附加内容放到行内或块级首尾。',
       type: "'inline-start' | 'inline-end' | 'block-start' | 'block-end'",
     },
     {
-      name: 'InputGroupButton',
+      name: 'Button',
       description: '承载与当前输入直接关联的紧凑动作。',
       type: 'component',
     },
     {
-      name: 'InputGroupInput',
+      name: 'Input',
       description: '用于单行输入并继承组级焦点状态。',
       type: 'component',
     },
     {
-      name: 'InputGroupTextArea',
+      name: 'TextArea',
       description: '用于多行输入并支持块级附加内容。',
       type: 'component',
     },
@@ -5059,7 +4957,7 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'string / (value: string) => void',
     },
     {
-      component: 'InputOTPSlot',
+      component: 'Slot',
       name: 'index',
       description: '将可视槽位映射到验证码字符。',
       type: 'number',
@@ -5203,14 +5101,14 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
     {
       name: 'effect',
       description:
-        '控制内置反馈：悬停、触摸或聚焦时整体缩放 Slider，拖拽越界时再拉伸并回弹；减少动态效果偏好下自动停用。',
+        '控制内置反馈：悬停、触摸或聚焦时轻微缩放整体，拖拽越界时仅边缘内容在透明安全区内偏移并回弹，不改变轨道长度；减少动态效果偏好下自动停用。',
       type: "'none' | 'elastic'",
       defaultValue: "'elastic'",
     },
     {
-      name: 'startIcon / endIcon',
+      name: 'startIcon / endIcon / startLabel / endLabel',
       description:
-        '在轨道起止位置组合图标；elastic 模式下对应边缘图标会跟随拉伸反馈。',
+        '在轨道起止位置组合等尺寸图标与文字；elastic 模式下对应边缘内容会整体跟随越界反馈。',
       type: 'ReactNode',
     },
     {
@@ -5244,9 +5142,9 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'boolean',
     },
     {
-      name: 'onCheckedChange',
-      description: '开关状态变化时立即调用。',
-      type: '(checked: boolean) => void',
+      name: 'onChange',
+      description: '开关状态变化时立即调用，并提供底层交互事件详情。',
+      type: '(checked: boolean, eventDetails) => void',
     },
     {
       name: 'disabled',
@@ -5262,14 +5160,14 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
   ],
   toggle: [
     {
-      name: 'pressed / defaultPressed',
-      description: '管理单个 Toggle 的受控或非受控按下状态。',
+      name: 'value / defaultValue',
+      description: '管理单个 Toggle 的受控或非受控布尔状态。',
       type: 'boolean',
     },
     {
       name: 'onChange',
-      description: '单个 Toggle 的按下状态变化时调用。',
-      type: '(pressed: boolean) => void',
+      description: '单个 Toggle 的布尔值变化时调用。',
+      type: '(value: boolean) => void',
     },
     {
       name: 'variant',
@@ -5282,6 +5180,12 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       name: 'value / defaultValue',
       description: '管理组内当前按下的 Toggle 值。',
       type: 'string[]',
+    },
+    {
+      component: 'Toggle.Group',
+      name: 'items',
+      description: '通过 props 声明组项的 value、label、禁用状态与可访问名称。',
+      type: 'ToggleGroupOption[]',
     },
     {
       component: 'Toggle.Group',
@@ -5319,7 +5223,7 @@ componentDocumentation.input.whenToUse = [
 componentDocumentation.input.parts = [
   { name: 'Input', description: '接收单行文本与原生输入类型。' },
   {
-    name: 'TextArea / Input.TextArea',
+    name: 'TextArea',
     description: '接收多行文本，并与 Input 共享状态与样式约定。',
   },
   {
@@ -5340,7 +5244,7 @@ componentDocumentation.form.whenToUse = [
 ];
 componentDocumentation.form.parts = [
   {
-    name: 'Form / FormField',
+    name: 'Form / Field',
     description: '提供表单上下文，并连接字段状态、规则和提交行为。',
   },
   {
@@ -5348,15 +5252,15 @@ componentDocumentation.form.parts = [
     description: '组织一个表单字段的布局、状态和语义关系。',
   },
   {
-    name: 'FieldLabel / Label',
+    name: 'Label',
     description: '为输入控件提供可点击、可访问的文本标签。',
   },
   {
-    name: 'FieldDescription',
+    name: 'Description',
     description: '补充输入格式、用途或影响。',
   },
   {
-    name: 'FieldError',
+    name: 'Error',
     description: '展示与当前字段相关的校验错误。',
   },
 ];
@@ -5402,7 +5306,8 @@ componentDocumentation.toggle.parts = [
   { name: 'Toggle', description: '表达单个可按下、可释放的工具状态。' },
   {
     name: 'Toggle.Group',
-    description: '管理一组 Toggle 的值、选择模式、排列方向和键盘导航。',
+    description:
+      '通过 items props 渲染选项，并管理选择值、排列方向和键盘导航。',
   },
 ];
 
@@ -5416,21 +5321,856 @@ componentDocumentation.select.whenToUse = [
 componentDocumentation.select.parts = [
   {
     name: 'Select',
-    description: '统一管理选择值、搜索关键词、弹层状态和候选项过滤。',
-  },
-  {
-    name: 'SelectTrigger / SelectContent / SelectList',
-    description: '组成可输入的选择控件及其候选弹层。',
-  },
-  {
-    name: 'SelectGroup / SelectCollection / SelectItem',
-    description: '渲染平铺或分组的过滤结果。',
+    description:
+      '通过 options、value、onChange 与搜索相关 props 管理完整选择交互。',
   },
   {
     name: 'NativeSelect',
     description: '使用浏览器原生选择交互完成轻量单选。',
   },
 ];
+
+function replaceExampleCodes(slug: string, codes: readonly string[]) {
+  codes.forEach((code, index) => {
+    const example = componentDocumentation[slug]?.examples[index];
+    if (example) example.code = code;
+  });
+}
+
+replaceExampleCodes('navigation-menu', [
+  `import { NavigationMenu } from '@heliannuuthus/ui/navigation-menu'
+
+<NavigationMenu
+  items={[
+    {
+      label: '产品',
+      content: ({ Link }) => (
+        <div>
+          <Link href="/components">组件库</Link>
+          <Link href="/tokens">设计令牌</Link>
+        </div>
+      ),
+    },
+    { label: '组件', href: '/components', active: true },
+  ]}
+/>`,
+  `import { NavigationMenu } from '@heliannuuthus/ui/navigation-menu'
+
+<NavigationMenu
+  align="end"
+  items={[
+    { label: '产品', content: ({ Link }) => <Link href="/components">组件库</Link> },
+    { label: '组件', href: '/components' },
+  ]}
+/>`,
+]);
+
+replaceExampleCodes('pagination', [
+  `import { Pagination } from '@heliannuuthus/ui/pagination'
+
+<Pagination current={page} pageCount={5} onChange={setPage} />`,
+  `import { Pagination } from '@heliannuuthus/ui/pagination'
+
+<Pagination
+  current={24}
+  pageCount={80}
+  getItemHref={(page) => \`#page-\${page}\`}
+/>`,
+]);
+
+replaceExampleCodes('tabs', [
+  `import { Tabs } from '@heliannuuthus/ui/tabs'
+
+<Tabs
+  defaultValue="overview"
+  items={[
+    { value: 'overview', label: '概览', content: <Overview /> },
+    { value: 'activity', label: '动态', content: <Activity /> },
+    { value: 'members', label: '成员', content: <Members /> },
+  ]}
+/>`,
+  `import { Tabs } from '@heliannuuthus/ui/tabs'
+
+<Tabs
+  defaultValue="preview"
+  variant="line"
+  centered
+  items={[
+    { value: 'preview', label: '预览', content: '实时预览当前组件。' },
+    { value: 'code', label: '代码', content: '查看组件实现代码。' },
+  ]}
+/>`,
+  `import { Tabs } from '@heliannuuthus/ui/tabs'
+
+<Tabs
+  animation="slide"
+  defaultValue="design"
+  items={[
+    { value: 'design', label: '设计', content: <Design /> },
+    { value: 'code', label: '开发', content: <Development /> },
+  ]}
+/>`,
+]);
+
+replaceExampleCodes('avatar', [
+  `import { Avatar } from '@heliannuuthus/ui/avatar'
+
+<Avatar alt="林默" fallback="林" shape="circle" size="lg" />
+<Avatar alt="周一" fallback="周" shape="square" size="lg" />`,
+  `import { Group } from '@heliannuuthus/ui/avatar'
+
+<Group
+  max={4}
+  overlap={8}
+  size="lg"
+  items={members.map((member) => ({
+    alt: member.name,
+    fallback: member.initials,
+    src: member.avatar,
+  }))}
+/>`,
+  `import { Avatar } from '@heliannuuthus/ui/avatar'
+import { Badge } from '@heliannuuthus/ui/badge'
+
+<Avatar
+  alt="陈青"
+  fallback="陈"
+  size="lg"
+  badge={<Badge variant="destructive">8</Badge>}
+/>`,
+]);
+
+replaceExampleCodes('alert', [
+  `import { Alert } from '@heliannuuthus/ui/alert'
+
+<Alert
+  variant="warning"
+  icon={<TriangleAlert />}
+  title="回滚镜像即将过期"
+  description="建议在发布前重新构建。"
+  action={<Button onClick={close}>关闭</Button>}
+/>`,
+]);
+
+replaceExampleCodes('select', [
+  `import { Select } from '@heliannuuthus/ui/select'
+
+<Select
+  value={value}
+  onChange={setValue}
+  placeholder="搜索成员…"
+  showClear
+  emptyText="没有找到成员"
+  options={members.map((member) => ({ label: member, value: member }))}
+/>`,
+  `import { Select } from '@heliannuuthus/ui/select'
+
+<Select
+  value={value}
+  onChange={setValue}
+  placeholder="选择工作区"
+  options={groups.map((group) => ({
+    label: group.label,
+    options: group.items.map((item) => ({
+      label: item.label,
+      value: item,
+      disabled: item.disabled,
+    })),
+  }))}
+/>`,
+  `import { NativeSelect } from '@heliannuuthus/ui/native-select'
+
+<NativeSelect
+  defaultValue="cn-east"
+  options={[
+    {
+      label: '中国大陆',
+      options: [
+        { label: '华东', value: 'cn-east' },
+        { label: '华北', value: 'cn-north' },
+      ],
+    },
+  ]}
+/>`,
+]);
+
+replaceExampleCodes('accordion', [
+  `import { Accordion } from '@heliannuuthus/ui/accordion'
+
+<Accordion
+  defaultValue={['preflight']}
+  items={[
+    { value: 'preflight', title: '预检结果', content: '42 项检查均已通过。' },
+    { value: 'rollback', title: '回滚方案', content: '异常时切回上一版本。' },
+  ]}
+/>`,
+  `import { Accordion } from '@heliannuuthus/ui/accordion'
+
+<Accordion
+  indicatorPosition="start"
+  indicator={<Plus />}
+  expandedIndicator={<Minus />}
+  items={[
+    { value: 'deployment', title: '部署策略', content: '先灰度 10%，观察后全量发布。' },
+  ]}
+/>`,
+]);
+
+replaceExampleCodes('attachment', [
+  `import { Attachment } from '@heliannuuthus/ui/attachment'
+
+<Attachment
+  title="web-console.tgz"
+  description="8.4 MB · 正在校验"
+  media={<FileArchive />}
+  state="processing"
+/>`,
+  `import { Group } from '@heliannuuthus/ui/attachment'
+
+<Group
+  items={files.map((file) => ({
+    title: file.name,
+    description: file.size,
+    media: <FileArchive />,
+    orientation: 'vertical',
+  }))}
+/>`,
+]);
+
+replaceExampleCodes('carousel', [
+  `import { Carousel } from '@heliannuuthus/ui/carousel'
+
+<Carousel
+  items={highlights.map((item) => <Highlight key={item.id} {...item} />)}
+  pagination="dots"
+  loop
+/>`,
+  `import { Carousel } from '@heliannuuthus/ui/carousel'
+
+<Carousel
+  controls={false}
+  items={highlights.map((item) => <Highlight key={item.id} {...item} />)}
+  pagination={({ currentPage, pageCount, scrollPrev, scrollNext }) => (
+    <CustomPagination
+      current={currentPage}
+      total={pageCount}
+      onPrevious={scrollPrev}
+      onNext={scrollNext}
+    />
+  )}
+/>`,
+  `import { Carousel } from '@heliannuuthus/ui/carousel'
+
+<Carousel
+  autoplay={3}
+  loop
+  items={highlights.map((item) => <Highlight key={item.id} {...item} />)}
+/>`,
+]);
+
+replaceExampleCodes('collapsible', [
+  `import { Collapsible } from '@heliannuuthus/ui/collapsible'
+
+<Collapsible
+  defaultOpen
+  header={<BuildSummary />}
+  icon={<ChevronRight />}
+  content={<BuildOutput />}
+  footer={<BuildActions />}
+/>
+
+<Collapsible
+  trigger="配置"
+  triggerProps={{ variant: 'outline' }}
+  header={<PolicySummary />}
+  content={<PolicySettings />}
+/>`,
+]);
+
+replaceExampleCodes('empty', [
+  `import { Empty } from '@heliannuuthus/ui/empty'
+
+<Empty
+  icon={<Cloud />}
+  title="还没有生产发布"
+  description="完成预检后，可以安排第一次生产发布。"
+  actions={<Button>安排发布</Button>}
+/>`,
+  `import { Empty } from '@heliannuuthus/ui/empty'
+
+<Empty
+  icon={<ShieldCheck />}
+  title="等待安全审计"
+  description="审计通过前暂无可发布版本。"
+  actions={<AuditSummary />}
+/>`,
+]);
+
+replaceExampleCodes('bubble', [
+  `import { Bubble, Group } from '@heliannuuthus/ui/bubble'
+
+<Group>
+  <Bubble
+    align="end"
+    variant="default"
+    content="已经补充完成，可以重新评审。"
+    reactions="✓ 2"
+  />
+  <Bubble align="start" variant="elevated" content="收到，我现在检查。" />
+</Group>`,
+  `import { Avatar } from '@heliannuuthus/ui/avatar'
+import { Bubble } from '@heliannuuthus/ui/bubble'
+import { ScrollArea } from '@heliannuuthus/ui/scroll-area'
+
+<ScrollArea>
+  {messages.map((message) => (
+    <div key={message.id}>
+      <Avatar alt={message.author} fallback={message.avatar} />
+      <Bubble align={message.align} content={message.content} />
+    </div>
+  ))}
+</ScrollArea>`,
+]);
+
+replaceExampleCodes('tooltip', [
+  `import { Tooltip } from '@heliannuuthus/ui/tooltip'
+
+<Tooltip
+  delay={100}
+  side="top"
+  align="start"
+  content="左上提示"
+  trigger={<Button>左上</Button>}
+/>`,
+]);
+
+replaceExampleCodes('alert-dialog', [
+  `import { AlertDialog } from '@heliannuuthus/ui/alert-dialog'
+
+<AlertDialog
+  trigger={<Button variant="destructive">删除预览环境</Button>}
+  title="删除 preview-142？"
+  description="此操作无法撤销。"
+  cancelText="保留环境"
+  confirmText="确认删除"
+  confirmVariant="destructive"
+/>`,
+]);
+
+replaceExampleCodes('dialog', [
+  `import { Dialog } from '@heliannuuthus/ui/dialog'
+
+<Dialog
+  trigger={<Button>安排发布</Button>}
+  title="安排生产环境发布"
+  description="选择版本和发布时间。"
+  cancelText="取消"
+  confirmText="确认安排"
+>
+  <ReleaseForm />
+</Dialog>`,
+]);
+
+replaceExampleCodes('drawer', [
+  `import { Drawer } from '@heliannuuthus/ui/drawer'
+
+<Drawer
+  behavior="adaptive"
+  side="right"
+  trigger={<Button>从右侧打开</Button>}
+  title="今晚的发布窗口"
+  description="22:00–23:00"
+  closeText="关闭"
+>
+  <ReleaseList />
+</Drawer>`,
+  `import { Drawer } from '@heliannuuthus/ui/drawer'
+
+<Drawer
+  behavior="panel"
+  container={containerRef}
+  side="left"
+  trigger={<Button>从左侧打开</Button>}
+  title="局部筛选"
+>
+  <Filters />
+</Drawer>`,
+]);
+
+replaceExampleCodes('popover', [
+  `import { Popover } from '@heliannuuthus/ui/popover'
+
+<Popover
+  trigger={<Button>3 位负责人</Button>}
+  title="发布负责人"
+  description="发布和回滚时会通知这些成员。"
+  content={<OwnerList />}
+/>`,
+  `import { Popover } from '@heliannuuthus/ui/popover'
+
+<Popover
+  triggerMode="hover"
+  trigger={<button type="button">@linmo</button>}
+  content={<OwnerProfile />}
+/>`,
+]);
+
+replaceExampleCodes('progress', [
+  `import { Progress } from '@heliannuuthus/ui/progress'
+
+<Progress effect="sparkle" value={68} label="生产环境" showValue />`,
+]);
+
+replaceExampleCodes('layout', [
+  `import {
+  Layout,
+  Header,
+  Content,
+  Footer,
+} from '@heliannuuthus/ui/layout'
+
+<Layout>
+  <Header>项目导航</Header>
+  <Content>页面内容</Content>
+  <Footer>页脚信息</Footer>
+</Layout>`,
+  `import {
+  Layout,
+  Sidebar,
+  Content,
+} from '@heliannuuthus/ui/layout'
+
+<Layout>
+  <Sidebar width={240}>项目导航</Sidebar>
+  <Content>工作区内容</Content>
+</Layout>`,
+  `import {
+  Layout,
+  Sidebar,
+  Content,
+} from '@heliannuuthus/ui/layout'
+
+<Layout>
+  <Content>工作区内容</Content>
+  <Sidebar width={280}>详情面板</Sidebar>
+</Layout>`,
+]);
+
+replaceExampleCodes('masonry', [
+  `import { Masonry, Item } from '@heliannuuthus/ui/masonry'
+
+<Masonry columns="auto" minColumnWidth={220} maxColumns={6} gap={16}>
+  {cards.map((card) => <Item key={card.id}>{card.content}</Item>)}
+</Masonry>`,
+]);
+
+replaceExampleCodes('table', [
+  `import {
+  Table,
+  Header,
+  Body,
+  Footer,
+  Row,
+  Head,
+  Cell,
+  Caption,
+} from '@heliannuuthus/ui/table'
+
+<Table>
+  <Caption>今晚发布窗口中的服务。</Caption>
+  <Header><Row><Head>服务</Head><Head>状态</Head></Row></Header>
+  <Body><Row><Cell>Web Console</Cell><Cell>已通过</Cell></Row></Body>
+  <Footer><Row><Cell colSpan={2}>共 1 项</Cell></Row></Footer>
+</Table>`,
+]);
+
+replaceExampleCodes('item', [
+  `import { Item } from '@heliannuuthus/ui/item'
+
+<Item
+  media={<GitCommit />}
+  mediaVariant="icon"
+  title="许澄提交了发布说明"
+  description="补充数据库迁移影响与回滚入口。"
+  actions={<Button>查看</Button>}
+/>`,
+]);
+
+replaceExampleCodes('marker', [
+  `import { Marker } from '@heliannuuthus/ui/marker'
+
+<Marker
+  variant="separator"
+  icon={<CircleDot />}
+  content="生产发布开始 · 21:46"
+/>`,
+]);
+
+replaceExampleCodes('chart', [
+  `import {
+  Chart,
+  Tooltip,
+  TooltipContent,
+} from '@heliannuuthus/ui/chart'
+
+<Chart config={config}>
+  <AreaChart data={data}>
+    <Tooltip content={<TooltipContent indicator="line" />} />
+    <Area dataKey="success" />
+  </AreaChart>
+</Chart>`,
+]);
+
+replaceExampleCodes('field', [
+  `import {
+  Field,
+  Label,
+  Description,
+  Error,
+} from '@heliannuuthus/ui/field'
+
+<Field data-invalid>
+  <Label htmlFor="handle">个人标识</Label>
+  <Input id="handle" aria-invalid />
+  <Description>用于生成公开资料地址。</Description>
+  <Error>只能使用小写字母、数字和连字符。</Error>
+</Field>`,
+  `import {
+  Field,
+  Content,
+  Title,
+  Description,
+} from '@heliannuuthus/ui/field'
+
+<Field orientation="horizontal">
+  <Content>
+    <Title>公开邮箱</Title>
+    <Description>允许其他成员联系你。</Description>
+  </Content>
+  <Switch />
+</Field>`,
+]);
+
+replaceExampleCodes('input-group', [
+  `import {
+  InputGroup,
+  Addon,
+  Input,
+  Text,
+} from '@heliannuuthus/ui/input-group'
+
+<InputGroup>
+  <Addon><Text>https://</Text></Addon>
+  <Input placeholder="example.com" />
+</InputGroup>`,
+  `import {
+  InputGroup,
+  Addon,
+  TextArea,
+  Button,
+} from '@heliannuuthus/ui/input-group'
+
+<InputGroup>
+  <TextArea placeholder="补充发布说明" />
+  <Addon align="block-end"><Button>提交</Button></Addon>
+</InputGroup>`,
+]);
+
+replaceExampleCodes('input-otp', [
+  `import {
+  InputOTP,
+  Group,
+  Slot,
+  Separator,
+} from '@heliannuuthus/ui/input-otp'
+
+<InputOTP maxLength={6}>
+  <Group>
+    <Slot index={0} />
+    <Slot index={1} />
+    <Slot index={2} />
+  </Group>
+  <Separator />
+  <Group>
+    <Slot index={3} />
+    <Slot index={4} />
+    <Slot index={5} />
+  </Group>
+</InputOTP>`,
+]);
+
+replaceExampleCodes('checkbox', [
+  componentDocumentation.checkbox.examples[0]?.code ?? '',
+  `import { Group } from '@heliannuuthus/ui/checkbox'
+
+<Group
+  defaultValue={['read']}
+  onChange={setPermissions}
+  options={[
+    { label: '读取', value: 'read' },
+    { label: '编辑', value: 'write' },
+    { label: '管理', value: 'admin' },
+  ]}
+/>`,
+]);
+
+replaceExampleCodes('radio', [
+  componentDocumentation.radio.examples[0]?.code ?? '',
+  `import { Group } from '@heliannuuthus/ui/radio'
+
+<Group
+  value={delivery}
+  onChange={setDelivery}
+  options={[
+    { label: '邮件通知', value: 'email' },
+    { label: '站内通知', value: 'inbox' },
+  ]}
+/>`,
+  `import { Group } from '@heliannuuthus/ui/radio'
+
+<Group
+  value={plan}
+  onChange={setPlan}
+  orientation="vertical"
+  options={plans.map((plan) => ({
+    className: 'plan-card',
+    label: <PlanSummary {...plan} />,
+    value: plan.value,
+  }))}
+/>`,
+]);
+
+replaceExampleCodes('toggle', [
+  componentDocumentation.toggle.examples[0]?.code ?? '',
+  `import { Group } from '@heliannuuthus/ui/toggle'
+
+<Group
+  defaultValue={['bold']}
+  items={[
+    { value: 'bold', label: <Bold />, 'aria-label': '粗体' },
+    { value: 'italic', label: <Italic />, 'aria-label': '斜体' },
+  ]}
+/>`,
+]);
+
+const propsOnlySlugs = [
+  'accordion',
+  'alert',
+  'alert-dialog',
+  'carousel',
+  'collapsible',
+  'command',
+  'context-menu',
+  'dialog',
+  'drawer',
+  'dropdown-menu',
+  'empty',
+  'menubar',
+  'native-select',
+  'navigation-menu',
+  'pagination',
+  'popover',
+  'progress',
+  'select',
+  'sheet',
+  'tabs',
+  'tooltip',
+] as const;
+
+for (const slug of propsOnlySlugs) {
+  const documentation = componentDocumentation[slug];
+  if (!documentation) continue;
+  documentation.parts = [
+    {
+      name: documentation.name,
+      description: '通过主组件 props 配置内容、状态、行为和扩展点。',
+    },
+  ];
+  documentation.api = documentation.api
+    .filter(
+      (property) =>
+        property.component == null || property.component === documentation.name
+    )
+    .map((property) => ({ ...property, component: undefined }));
+}
+
+componentDocumentation.avatar.parts = [
+  {
+    name: 'Avatar',
+    description: '通过图片、回退内容和 badge props 展示头像。',
+  },
+  { name: 'Group', description: '通过 items、max 与 overlap 展示头像集合。' },
+];
+componentDocumentation.attachment.parts = [
+  {
+    name: 'Attachment',
+    description: '通过标题、说明、媒体和操作 props 展示单个附件。',
+  },
+  { name: 'Group', description: '通过 items props 展示附件集合。' },
+];
+componentDocumentation.attachment.api = [
+  {
+    name: 'title / description',
+    description: '设置附件名称和辅助说明。',
+    type: 'ReactNode',
+  },
+  {
+    name: 'media / mediaVariant',
+    description: '设置附件媒体，并选择图标或图片外观。',
+    type: "ReactNode / 'icon' | 'image'",
+    defaultValue: "'icon'",
+  },
+  {
+    name: 'actions / trigger',
+    description: '设置附件操作，以及覆盖整个附件的链接或按钮触发区域。',
+    type: 'ReactNode / render',
+  },
+  {
+    name: 'orientation / size / state',
+    description: '设置排列方向、尺寸和上传处理状态。',
+    type: "'horizontal' | 'vertical' / 'xs' | 'sm' | 'default' / 'idle' | 'uploading' | 'processing' | 'error' | 'done'",
+  },
+  {
+    component: 'Group',
+    name: 'items',
+    description: '通过配置数组渲染一组 Attachment。',
+    type: 'AttachmentProps[]',
+  },
+];
+componentDocumentation.bubble.parts = [
+  {
+    name: 'Bubble',
+    description: '通过 content、reactions、align 与 variant 配置气泡。',
+  },
+  { name: 'Group', description: '排列一组消息气泡。' },
+];
+componentDocumentation.bubble.api = [
+  {
+    name: 'content / contentProps',
+    description: '设置气泡内容，并扩展内部内容节点或渲染元素。',
+    type: 'ReactNode / ComponentProps',
+  },
+  {
+    name: 'reactions / reactionsProps',
+    description: '设置回应或已读状态，并控制其边缘位置。',
+    type: 'ReactNode / BubbleReactionsProps',
+  },
+  {
+    name: 'variant / align',
+    description: '设置气泡外观及在消息流中的左右对齐。',
+    type: "'default' | 'secondary' | 'muted' | 'elevated' | 'tinted' | 'outline' | 'ghost' | 'destructive' / 'start' | 'end'",
+  },
+];
+componentDocumentation.avatar.api = [
+  {
+    name: 'src / alt / fallback',
+    description: '设置头像资源、替代文本和加载失败时的回退内容。',
+    type: 'string / string / ReactNode',
+  },
+  {
+    name: 'shape / size',
+    description: '设置圆形或圆角方形头像及尺寸。',
+    type: "'circle' | 'square' / 'sm' | 'default' | 'lg'",
+  },
+  {
+    name: 'badge',
+    description: '在头像右下角展示在线、认证等状态节点。',
+    type: 'ReactNode',
+  },
+  {
+    component: 'Group',
+    name: 'items / max / overlap',
+    description: '配置头像集合、最大展示数量和重叠距离。',
+    type: 'AvatarGroupItem[] / number / number',
+  },
+  {
+    component: 'Group',
+    name: 'renderCount',
+    description: '自定义剩余数量的呈现方式。',
+    type: '(count: number) => ReactNode',
+  },
+];
+componentDocumentation.checkbox.parts = [
+  { name: 'Checkbox', description: '表达单个布尔选择。' },
+  { name: 'Group', description: '通过 options props 管理多个选择值。' },
+];
+componentDocumentation.radio.parts = [
+  { name: 'Radio', description: '表达单个互斥选项。' },
+  { name: 'Group', description: '通过 options props 管理互斥选择。' },
+];
+componentDocumentation.toggle.summary =
+  '使用 Toggle 切换单个工具状态，并通过独立导出的 Group 管理工具组选项。';
+componentDocumentation.toggle.parts = [
+  { name: 'Toggle', description: '表达单个可按下、可释放的工具状态。' },
+  { name: 'Group', description: '通过 items props 管理单选或多选工具组。' },
+];
+componentDocumentation.checkbox.summary =
+  '使用 Checkbox 标记单个可提交选择，并通过独立导出的 Group 管理多选值。';
+componentDocumentation.radio.summary =
+  '使用 Radio 表达单个选项，并通过独立导出的 Group 组织互斥选择。';
+componentDocumentation.input.parts = componentDocumentation.input.parts?.map(
+  (part) =>
+    part.name === 'TextArea / Input.TextArea'
+      ? { ...part, name: 'TextArea' }
+      : part
+);
+
+for (const slug of ['checkbox', 'radio', 'toggle'] as const) {
+  const prefix = `${componentDocumentation[slug].name}.Group`;
+  componentDocumentation[slug].api = componentDocumentation[slug].api.map(
+    (property) => ({
+      ...property,
+      component: property.component === prefix ? 'Group' : property.component,
+      description: property.description.split(prefix).join('Group'),
+    })
+  );
+}
+
+componentDocumentation.item.parts = [
+  {
+    name: 'Item',
+    description:
+      '通过 media、title、description、content、actions、header 与 footer props 配置列表项。',
+  },
+  {
+    name: 'Group',
+    description: '通过 items props 渲染一组 Item，并可插入统一分隔内容。',
+  },
+];
+componentDocumentation.marker.parts = [
+  {
+    name: 'Marker',
+    description: '通过 icon、content 与 variant props 配置内容标记。',
+  },
+];
+componentDocumentation.empty.api = componentDocumentation.empty.api.filter(
+  (property) =>
+    property.name !== 'variant' && !property.name.startsWith('Empty')
+);
+componentDocumentation.alert.api = componentDocumentation.alert.api.filter(
+  (property) => !property.name.startsWith('Alert')
+);
+componentDocumentation.select.whenToUse = [
+  '候选项固定时使用 Select；列表较长时直接输入关键词过滤。',
+  '通过 options 提供平铺或分组候选项，通过受控或非受控 props 管理选择。',
+  '选项简单并希望沿用操作系统交互时使用 NativeSelect。',
+];
+componentDocumentation.select.api = componentDocumentation.select.api
+  .filter(
+    (property) =>
+      !property.name.startsWith('Select') &&
+      !property.name.startsWith('NativeSelectOptGroup')
+  )
+  .map((property) => ({
+    ...property,
+    name: property.name === 'items' ? 'options' : property.name,
+    component:
+      property.component === 'SelectTrigger'
+        ? undefined
+        : property.component === 'NativeSelect'
+          ? 'NativeSelect'
+          : property.component,
+  }));
 
 const inputBasicExample = componentDocumentation.input.examples[0];
 if (inputBasicExample) {
@@ -5446,11 +6186,12 @@ if (inputBasicExample) {
 
 const toggleBasicExample = componentDocumentation.toggle.examples[0];
 if (toggleBasicExample) {
+  toggleBasicExample.title = '非受控状态';
   toggleBasicExample.description =
-    '使用 pressed 或 defaultPressed 管理单个工具状态，状态变化统一通过 onChange 通知。';
+    '使用 defaultValue 提供初始状态，后续状态由 Toggle 自身管理。';
   toggleBasicExample.code = `import { Toggle } from '@heliannuuthus/ui/toggle'
 
-<Toggle defaultPressed onChange={setPressed} aria-label="切换粗体">
+<Toggle defaultValue aria-label="切换粗体">
   <Bold />
   粗体
 </Toggle>`;
@@ -5506,7 +6247,6 @@ const spaciousPreviewHeights: Record<string, number> = {
   masonry: 520,
   resizable: 620,
   'scroll-area': 480,
-  separator: 360,
 };
 
 for (const [slug, minimumHeight] of Object.entries(spaciousPreviewHeights)) {

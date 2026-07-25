@@ -10,54 +10,37 @@ import { Badge } from '@heliannuuthus/ui/badge';
 import { Button } from '@heliannuuthus/ui/button';
 import { Card } from '@heliannuuthus/ui/card';
 import { Input } from '@heliannuuthus/ui/input';
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from '@heliannuuthus/ui/item';
+import { Item } from '@heliannuuthus/ui/item';
 import { Label } from '@heliannuuthus/ui/label';
-import { Masonry, MasonryItem } from '@heliannuuthus/ui/masonry';
+import { Item as MasonryItem, Masonry } from '@heliannuuthus/ui/masonry';
 import { Separator } from '@heliannuuthus/ui/separator';
 import {
+  Content as SidebarContent,
+  Group as SidebarGroup,
+  GroupContent as SidebarGroupContent,
+  GroupLabel as SidebarGroupLabel,
+  Header as SidebarHeader,
+  Inset as SidebarInset,
+  Menu as SidebarMenu,
+  MenuButton as SidebarMenuButton,
+  MenuItem as SidebarMenuItem,
+  Provider as SidebarProvider,
+  Separator as SidebarSeparator,
   Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarSeparator,
 } from '@heliannuuthus/ui/sidebar';
 import { Toggle } from '@heliannuuthus/ui/toggle';
 import { Stack } from '@heliannuuthus/ui/stack';
+import { Tabs } from '@heliannuuthus/ui/tabs';
+import { Tooltip } from '@heliannuuthus/ui/tooltip';
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@heliannuuthus/ui/tabs';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@heliannuuthus/ui/tooltip';
-import {
+  Code as TypographyCode,
   H1,
   H2,
   H3,
-  TypographyLarge,
-  TypographyLead,
-  TypographyCode,
-  TypographyMuted,
-  TypographySmall,
+  Large as TypographyLarge,
+  Lead as TypographyLead,
+  Muted as TypographyMuted,
+  Small as TypographySmall,
 } from '@heliannuuthus/ui/typography';
 import {
   ArrowRight,
@@ -158,8 +141,6 @@ const componentGroups = [
       'Empty',
       'Item',
       'Marker',
-      'Message',
-      'Message Scroller',
       'Table',
       'Tooltip',
     ],
@@ -323,23 +304,16 @@ function HomePage() {
             </Button>
           </Stack>
 
-          <Tabs animation="none" className="hero-install" defaultValue="pnpm">
-            <TabsList aria-label="选择包管理器" variant="line">
-              {(Object.keys(installCommands) as PackageManager[]).map(
-                (manager) => (
-                  <TabsTrigger
-                    key={manager}
-                    value={manager}
-                    onClick={() => setCopiedManager(null)}
-                  >
-                    {manager}
-                  </TabsTrigger>
-                )
-              )}
-            </TabsList>
-            {(Object.keys(installCommands) as PackageManager[]).map(
-              (manager) => (
-                <TabsContent key={manager} value={manager}>
+          <Tabs
+            animation="none"
+            className="hero-install"
+            defaultValue="pnpm"
+            variant="line"
+            items={(Object.keys(installCommands) as PackageManager[]).map(
+              (manager) => ({
+                value: manager,
+                label: manager,
+                content: (
                   <Button
                     block
                     onClick={() => copyInstall(manager)}
@@ -352,10 +326,10 @@ function HomePage() {
                       <Copy data-icon="inline-end" />
                     )}
                   </Button>
-                </TabsContent>
-              )
+                ),
+              })
             )}
-          </Tabs>
+          />
         </Stack>
 
         <Card
@@ -476,25 +450,19 @@ function HomePage() {
           <Masonry columns={3} gap={14} minColumnWidth={240}>
             {componentGroups.slice(0, 6).map((group) => (
               <Item
+                actions={<ArrowRight />}
+                description={`${group.items.length} 个组件`}
                 key={group.title}
+                media={<Package />}
+                mediaVariant="icon"
                 render={
                   <NavLink
                     to={`/components/${componentSlug(group.items[0])}`}
                   />
                 }
+                title={group.title}
                 variant="outline"
-              >
-                <ItemMedia variant="icon">
-                  <Package />
-                </ItemMedia>
-                <ItemContent>
-                  <ItemTitle>{group.title}</ItemTitle>
-                  <ItemDescription>{group.items.length} 个组件</ItemDescription>
-                </ItemContent>
-                <ItemActions>
-                  <ArrowRight />
-                </ItemActions>
-              </Item>
+              />
             ))}
           </Masonry>
         </Stack>
@@ -563,56 +531,48 @@ function GettingStartedPage() {
         <CodeBlock code={demoCode} fileName="button-example.tsx" />
       </DocSection>
       <Item
+        actions={<ArrowRight />}
         className="next-card"
+        description="继续查看组件示例、API 与具体使用建议。"
         id="next-step"
+        media={<LayoutGrid strokeWidth={2.5} />}
+        mediaVariant="icon"
         render={<NavLink to="/components" />}
+        title={
+          <Stack align="center" gap={8} orientation="horizontal">
+            <Badge variant="secondary">04</Badge>
+            <TypographyLarge className="font-bold">
+              浏览完整组件目录
+            </TypographyLarge>
+          </Stack>
+        }
         variant="outline"
-      >
-        <ItemMedia variant="icon">
-          <LayoutGrid strokeWidth={2.5} />
-        </ItemMedia>
-        <ItemContent>
-          <ItemTitle>
-            <Stack align="center" gap={8} orientation="horizontal">
-              <Badge variant="secondary">04</Badge>
-              <TypographyLarge className="font-bold">
-                浏览完整组件目录
-              </TypographyLarge>
-            </Stack>
-          </ItemTitle>
-          <ItemDescription>
-            继续查看组件示例、API 与具体使用建议。
-          </ItemDescription>
-        </ItemContent>
-        <ItemActions>
-          <ArrowRight />
-        </ItemActions>
-      </Item>
+      />
     </DocLayout>
   );
 }
 
 function PackageManagerInstall() {
   return (
-    <Tabs animation="none" defaultValue="pnpm">
-      <TabsList aria-label="包管理器" variant="line">
-        {(Object.keys(installCommands) as PackageManager[]).map((manager) => (
-          <TabsTrigger key={manager} value={manager}>
-            {manager}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-      {(Object.keys(installCommands) as PackageManager[]).map((manager) => (
-        <TabsContent key={manager} value={manager}>
-          <CodeBlock
-            code={installCommands[manager]}
-            fileName="terminal"
-            language="bash"
-            showLineNumbers={false}
-          />
-        </TabsContent>
-      ))}
-    </Tabs>
+    <Tabs
+      animation="none"
+      defaultValue="pnpm"
+      variant="line"
+      items={(Object.keys(installCommands) as PackageManager[]).map(
+        (manager) => ({
+          value: manager,
+          label: manager,
+          content: (
+            <CodeBlock
+              code={installCommands[manager]}
+              fileName="terminal"
+              language="bash"
+              showLineNumbers={false}
+            />
+          ),
+        })
+      )}
+    />
   );
 }
 
@@ -1022,86 +982,75 @@ function ComponentExampleCard({
       footer={
         <div className="example-card-footer-content">
           <div className="demo-actions">
-            <TooltipProvider delay={300}>
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <button
-                      type="button"
-                      onClick={copy}
-                      aria-label={copied ? '代码已复制' : '复制代码'}
-                    />
-                  }
+            <Tooltip
+              content={copied ? '已复制' : '复制代码'}
+              delay={300}
+              trigger={
+                <button
+                  type="button"
+                  onClick={copy}
+                  aria-label={copied ? '代码已复制' : '复制代码'}
                 >
                   {copied ? <Check /> : <Copy />}
-                </TooltipTrigger>
-                <TooltipContent>
-                  {copied ? '已复制' : '复制代码'}
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <a
-                      href={`${repositoryUrl}/blob/main/src/components/${component}.tsx`}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label="在 GitHub 查看源码"
-                    />
-                  }
+                </button>
+              }
+            />
+            <Tooltip
+              content="在 GitHub 查看源码"
+              delay={300}
+              trigger={
+                <a
+                  href={`${repositoryUrl}/blob/main/src/components/${component}.tsx`}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="在 GitHub 查看源码"
                 >
                   <Github />
-                </TooltipTrigger>
-                <TooltipContent>在 GitHub 查看源码</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <a
-                      href="https://codesandbox.io/p/github/heliannuuthus/ui/main"
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label="在 CodeSandbox 打开"
-                    />
-                  }
+                </a>
+              }
+            />
+            <Tooltip
+              content="在 CodeSandbox 打开"
+              delay={300}
+              trigger={
+                <a
+                  href="https://codesandbox.io/p/github/heliannuuthus/ui/main"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="在 CodeSandbox 打开"
                 >
                   <Box />
-                </TooltipTrigger>
-                <TooltipContent>在 CodeSandbox 打开</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <a
-                      href="https://stackblitz.com/github/heliannuuthus/ui"
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label="在 StackBlitz 打开"
-                    />
-                  }
+                </a>
+              }
+            />
+            <Tooltip
+              content="在 StackBlitz 打开"
+              delay={300}
+              trigger={
+                <a
+                  href="https://stackblitz.com/github/heliannuuthus/ui"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="在 StackBlitz 打开"
                 >
                   <Zap />
-                </TooltipTrigger>
-                <TooltipContent>在 StackBlitz 打开</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <Toggle
-                      className="demo-expand-toggle size-8 min-w-8 p-0"
-                      aria-label={expanded ? '收起代码' : '展开代码'}
-                      pressed={expanded}
-                      onChange={setExpanded}
-                    />
-                  }
+                </a>
+              }
+            />
+            <Tooltip
+              content={expanded ? '收起代码' : '展开代码'}
+              delay={300}
+              trigger={
+                <Toggle
+                  className="demo-expand-toggle size-8 min-w-8 p-0"
+                  aria-label={expanded ? '收起代码' : '展开代码'}
+                  value={expanded}
+                  onChange={setExpanded}
                 >
                   <Code2 />
-                </TooltipTrigger>
-                <TooltipContent>
-                  {expanded ? '收起代码' : '展开代码'}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+                </Toggle>
+              }
+            />
           </div>
           {expanded && (
             <SyntaxCode
@@ -1209,18 +1158,19 @@ function DocSection({
   return (
     <section className="doc-section" id={id}>
       <Stack block gap={16}>
-        <Item className="p-0" size="sm">
-          <ItemMedia variant="icon">{icon}</ItemMedia>
-          <ItemContent>
-            <ItemTitle>
-              <Stack align="center" gap={8} orientation="horizontal">
-                <Badge variant="secondary">{step}</Badge>
-                <H2 className="border-0 pb-0 text-2xl font-bold">{title}</H2>
-              </Stack>
-            </ItemTitle>
-            <ItemDescription>{description}</ItemDescription>
-          </ItemContent>
-        </Item>
+        <Item
+          className="p-0"
+          description={description}
+          media={icon}
+          mediaVariant="icon"
+          size="sm"
+          title={
+            <Stack align="center" gap={8} orientation="horizontal">
+              <Badge variant="secondary">{step}</Badge>
+              <H2 className="border-0 pb-0 text-2xl font-bold">{title}</H2>
+            </Stack>
+          }
+        />
         {children}
       </Stack>
     </section>

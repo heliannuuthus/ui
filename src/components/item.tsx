@@ -6,34 +6,6 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/utils';
 import { Separator } from './separator';
 
-function ItemGroup({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      role="list"
-      data-slot="item-group"
-      className={cn(
-        'group/item-group flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2',
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-function ItemSeparator({
-  className,
-  ...props
-}: React.ComponentProps<typeof Separator>) {
-  return (
-    <Separator
-      data-slot="item-separator"
-      orientation="horizontal"
-      className={cn('my-2', className)}
-      {...props}
-    />
-  );
-}
-
 const itemVariants = cva(
   'group/item flex w-full flex-wrap items-center rounded-2xl border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-muted',
   {
@@ -56,30 +28,6 @@ const itemVariants = cva(
   }
 );
 
-function Item({
-  className,
-  variant = 'default',
-  size = 'default',
-  render,
-  ...props
-}: useRender.ComponentProps<'div'> & VariantProps<typeof itemVariants>) {
-  return useRender({
-    defaultTagName: 'div',
-    props: mergeProps<'div'>(
-      {
-        className: cn(itemVariants({ variant, size, className })),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: 'item',
-      variant,
-      size,
-    },
-  });
-}
-
 const itemMediaVariants = cva(
   'flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start [&_svg]:pointer-events-none',
   {
@@ -97,105 +45,200 @@ const itemMediaVariants = cva(
   }
 );
 
-function ItemMedia({
+type ItemClassNames = {
+  actions?: string;
+  content?: string;
+  description?: string;
+  footer?: string;
+  header?: string;
+  media?: string;
+  title?: string;
+};
+
+type ItemProps = Omit<useRender.ComponentProps<'div'>, 'children' | 'title'> &
+  VariantProps<typeof itemVariants> & {
+    actions?: React.ReactNode;
+    classNames?: ItemClassNames;
+    content?: React.ReactNode;
+    description?: React.ReactNode;
+    footer?: React.ReactNode;
+    header?: React.ReactNode;
+    media?: React.ReactNode;
+    mediaVariant?: VariantProps<typeof itemMediaVariants>['variant'];
+    title?: React.ReactNode;
+  };
+
+type ItemGroupEntry = ItemProps & {
+  key?: React.Key;
+};
+
+type ItemGroupProps = Omit<React.ComponentProps<'div'>, 'children'> & {
+  items: readonly ItemGroupEntry[];
+  renderItem?: (item: ItemGroupEntry, index: number) => React.ReactNode;
+  separator?: boolean | React.ReactNode;
+};
+
+function Item({
+  actions,
   className,
+  classNames,
+  content,
+  description,
+  footer,
+  header,
+  media,
+  mediaVariant = 'default',
+  render,
+  size = 'default',
+  title,
   variant = 'default',
   ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof itemMediaVariants>) {
-  return (
-    <div
-      data-slot="item-media"
-      data-variant={variant}
-      className={cn(itemMediaVariants({ variant, className }))}
-      {...props}
-    />
-  );
+}: ItemProps) {
+  const hasContent = title != null || description != null || content != null;
+
+  return useRender({
+    defaultTagName: 'div',
+    props: mergeProps<'div'>(
+      {
+        children: (
+          <>
+            {header != null ? (
+              <div
+                className={cn(
+                  'flex basis-full items-center justify-between gap-2',
+                  classNames?.header
+                )}
+                data-slot="item-header"
+              >
+                {header}
+              </div>
+            ) : null}
+            {media != null ? (
+              <div
+                className={cn(
+                  itemMediaVariants({
+                    className: classNames?.media,
+                    variant: mediaVariant,
+                  })
+                )}
+                data-slot="item-media"
+                data-variant={mediaVariant}
+              >
+                {media}
+              </div>
+            ) : null}
+            {hasContent ? (
+              <div
+                className={cn(
+                  'flex flex-1 flex-col gap-1 group-data-[size=xs]/item:gap-0.5 [&+[data-slot=item-content]]:flex-none',
+                  classNames?.content
+                )}
+                data-slot="item-content"
+              >
+                {title != null ? (
+                  <div
+                    className={cn(
+                      'line-clamp-1 flex w-fit items-center gap-2 text-sm leading-snug font-medium underline-offset-4',
+                      classNames?.title
+                    )}
+                    data-slot="item-title"
+                  >
+                    {title}
+                  </div>
+                ) : null}
+                {description != null ? (
+                  <p
+                    className={cn(
+                      'line-clamp-2 text-left text-sm font-normal text-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
+                      classNames?.description
+                    )}
+                    data-slot="item-description"
+                  >
+                    {description}
+                  </p>
+                ) : null}
+                {content}
+              </div>
+            ) : null}
+            {actions != null ? (
+              <div
+                className={cn('flex items-center gap-2', classNames?.actions)}
+                data-slot="item-actions"
+              >
+                {actions}
+              </div>
+            ) : null}
+            {footer != null ? (
+              <div
+                className={cn(
+                  'flex basis-full items-center justify-between gap-2',
+                  classNames?.footer
+                )}
+                data-slot="item-footer"
+              >
+                {footer}
+              </div>
+            ) : null}
+          </>
+        ),
+        className: cn(itemVariants({ className, size, variant })),
+      },
+      props
+    ),
+    render,
+    state: {
+      slot: 'item',
+      size,
+      variant,
+    },
+  });
 }
 
-function ItemContent({ className, ...props }: React.ComponentProps<'div'>) {
+function Group({
+  className,
+  items,
+  renderItem,
+  separator = false,
+  ...props
+}: ItemGroupProps) {
   return (
     <div
-      data-slot="item-content"
       className={cn(
-        'flex flex-1 flex-col gap-1 group-data-[size=xs]/item:gap-0.5 [&+[data-slot=item-content]]:flex-none',
+        'group/item-group flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2',
         className
       )}
+      data-slot="item-group"
+      role="list"
       {...props}
-    />
-  );
-}
-
-function ItemTitle({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      data-slot="item-title"
-      className={cn(
-        'line-clamp-1 flex w-fit items-center gap-2 text-sm leading-snug font-medium underline-offset-4',
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-function ItemDescription({ className, ...props }: React.ComponentProps<'p'>) {
-  return (
-    <p
-      data-slot="item-description"
-      className={cn(
-        'line-clamp-2 text-left text-sm font-normal text-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-function ItemActions({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      data-slot="item-actions"
-      className={cn('flex items-center gap-2', className)}
-      {...props}
-    />
-  );
-}
-
-function ItemHeader({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      data-slot="item-header"
-      className={cn(
-        'flex basis-full items-center justify-between gap-2',
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-function ItemFooter({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      data-slot="item-footer"
-      className={cn(
-        'flex basis-full items-center justify-between gap-2',
-        className
-      )}
-      {...props}
-    />
+    >
+      {items.map((item, index) => {
+        const { key, ...itemProps } = item;
+        return (
+          <React.Fragment key={key ?? index}>
+            {index > 0 && separator ? (
+              separator === true ? (
+                <Separator
+                  className="my-2"
+                  data-slot="item-separator"
+                  orientation="horizontal"
+                />
+              ) : (
+                separator
+              )
+            ) : null}
+            {renderItem ? renderItem(item, index) : <Item {...itemProps} />}
+          </React.Fragment>
+        );
+      })}
+    </div>
   );
 }
 
 export {
+  Group,
   Item,
-  ItemMedia,
-  ItemContent,
-  ItemActions,
-  ItemGroup,
-  ItemSeparator,
-  ItemTitle,
-  ItemDescription,
-  ItemHeader,
-  ItemFooter,
+  type ItemClassNames,
+  type ItemGroupEntry,
+  type ItemGroupProps,
+  type ItemProps,
 };

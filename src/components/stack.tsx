@@ -132,9 +132,7 @@ function StackCompact({
   );
 }
 
-const Stack = Object.assign(StackRoot, { Compact: StackCompact });
-
-export { Stack };
+export { StackRoot as Stack, StackCompact as Compact };
 export type {
   StackAlign,
   StackCompactProps,

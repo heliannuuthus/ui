@@ -102,8 +102,8 @@ function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
 
 export {
   InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-  InputOTPSeparator,
+  InputOTPGroup as Group,
+  InputOTPSeparator as Separator,
+  InputOTPSlot as Slot,
   type InputOTPShape,
 };

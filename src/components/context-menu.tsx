@@ -4,16 +4,11 @@ import * as React from 'react';
 import { ContextMenu as ContextMenuPrimitive } from '@base-ui/react/context-menu';
 
 import { cn } from '../lib/utils';
+import type { DropdownMenuEntry } from './dropdown-menu';
 import { ChevronRightIcon, CheckIcon } from 'lucide-react';
 
-function ContextMenu({ ...props }: ContextMenuPrimitive.Root.Props) {
+function ContextMenuRoot({ ...props }: ContextMenuPrimitive.Root.Props) {
   return <ContextMenuPrimitive.Root data-slot="context-menu" {...props} />;
-}
-
-function ContextMenuPortal({ ...props }: ContextMenuPrimitive.Portal.Props) {
-  return (
-    <ContextMenuPrimitive.Portal data-slot="context-menu-portal" {...props} />
-  );
 }
 
 function ContextMenuTrigger({
@@ -60,12 +55,6 @@ function ContextMenuContent({
         />
       </ContextMenuPrimitive.Positioner>
     </ContextMenuPrimitive.Portal>
-  );
-}
-
-function ContextMenuGroup({ ...props }: ContextMenuPrimitive.Group.Props) {
-  return (
-    <ContextMenuPrimitive.Group data-slot="context-menu-group" {...props} />
   );
 }
 
@@ -253,20 +242,98 @@ function ContextMenuShortcut({
   );
 }
 
-export {
-  ContextMenu,
-  ContextMenuTrigger,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuCheckboxItem,
-  ContextMenuRadioItem,
-  ContextMenuLabel,
-  ContextMenuSeparator,
-  ContextMenuShortcut,
-  ContextMenuGroup,
-  ContextMenuPortal,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
-  ContextMenuRadioGroup,
+type ContextMenuProps = Omit<ContextMenuPrimitive.Root.Props, 'children'> & {
+  contentClassName?: string;
+  items: readonly DropdownMenuEntry[];
+  trigger: ContextMenuPrimitive.Trigger.Props['render'];
 };
+
+function renderContextMenuEntries(items: readonly DropdownMenuEntry[]) {
+  return items.map((item, index) => {
+    if (item.type === 'separator') {
+      return <ContextMenuSeparator key={index} />;
+    }
+    if (item.type === 'label') {
+      return <ContextMenuLabel key={index}>{item.label}</ContextMenuLabel>;
+    }
+    if (item.type === 'checkbox') {
+      return (
+        <ContextMenuCheckboxItem
+          checked={item.checked}
+          disabled={item.disabled}
+          key={index}
+          onCheckedChange={(checked) =>
+            item.onCheckedChange?.(checked === true)
+          }
+        >
+          {item.label}
+        </ContextMenuCheckboxItem>
+      );
+    }
+    if (item.type === 'radio') {
+      return (
+        <ContextMenuRadioGroup
+          key={index}
+          onValueChange={(value) => item.onValueChange?.(String(value))}
+          value={item.value}
+        >
+          {item.items.map((option) => (
+            <ContextMenuRadioItem
+              disabled={option.disabled}
+              key={option.value}
+              value={option.value}
+            >
+              {option.label}
+            </ContextMenuRadioItem>
+          ))}
+        </ContextMenuRadioGroup>
+      );
+    }
+    if (item.children?.length) {
+      return (
+        <ContextMenuSub key={index}>
+          <ContextMenuSubTrigger>
+            {item.icon}
+            {item.label}
+          </ContextMenuSubTrigger>
+          <ContextMenuSubContent>
+            {renderContextMenuEntries(item.children)}
+          </ContextMenuSubContent>
+        </ContextMenuSub>
+      );
+    }
+    return (
+      <ContextMenuItem
+        disabled={item.disabled}
+        key={index}
+        onClick={item.onSelect}
+        render={item.href ? <a href={item.href} /> : undefined}
+        variant={item.destructive ? 'destructive' : 'default'}
+      >
+        {item.icon}
+        {item.label}
+        {item.shortcut != null ? (
+          <ContextMenuShortcut>{item.shortcut}</ContextMenuShortcut>
+        ) : null}
+      </ContextMenuItem>
+    );
+  });
+}
+
+function ContextMenu({
+  contentClassName,
+  items,
+  trigger,
+  ...props
+}: ContextMenuProps) {
+  return (
+    <ContextMenuRoot {...props}>
+      <ContextMenuTrigger render={trigger} />
+      <ContextMenuContent className={contentClassName}>
+        {renderContextMenuEntries(items)}
+      </ContextMenuContent>
+    </ContextMenuRoot>
+  );
+}
+
+export { ContextMenu, type ContextMenuProps };

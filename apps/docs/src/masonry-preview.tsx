@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Masonry, MasonryItem } from '@heliannuuthus/ui/masonry';
+import { Item as MasonryItem, Masonry } from '@heliannuuthus/ui/masonry';
 import { Slider } from '@heliannuuthus/ui/slider';
 
 const masonryItems = [

@@ -1,42 +1,27 @@
 import type { ReactNode } from 'react';
-import { Alert, AlertDescription, AlertTitle } from '@heliannuuthus/ui/alert';
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarGroup,
-  AvatarGroupCount,
-} from '@heliannuuthus/ui/avatar';
+import { Alert } from '@heliannuuthus/ui/alert';
+import { Group as AvatarGroup } from '@heliannuuthus/ui/avatar';
 import { Breadcrumb } from '@heliannuuthus/ui/breadcrumb';
 import { Button } from '@heliannuuthus/ui/button';
 import { Checkbox } from '@heliannuuthus/ui/checkbox';
 import { Counter } from '@heliannuuthus/ui/counter';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from '@heliannuuthus/ui/empty';
+import { Empty } from '@heliannuuthus/ui/empty';
 import { Input } from '@heliannuuthus/ui/input';
-import { Label } from '@heliannuuthus/ui/form';
+import { Label } from '@heliannuuthus/ui/label';
 import { Menubar } from '@heliannuuthus/ui/menubar';
-import {
-  Progress,
-  ProgressLabel,
-  ProgressValue,
-} from '@heliannuuthus/ui/progress';
+import { Progress } from '@heliannuuthus/ui/progress';
 import { ScrollArea } from '@heliannuuthus/ui/scroll-area';
 import { Skeleton } from '@heliannuuthus/ui/skeleton';
 import { Slider } from '@heliannuuthus/ui/slider';
 import { Spinner } from '@heliannuuthus/ui/spinner';
 import { Switch } from '@heliannuuthus/ui/switch';
 import {
+  Body as TableBody,
+  Cell as TableCell,
+  Head as TableHead,
+  Header as TableHeader,
+  Row as TableRow,
   Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
 } from '@heliannuuthus/ui/table';
 import { Toggle } from '@heliannuuthus/ui/toggle';
 import { Bold, Plus } from 'lucide-react';
@@ -78,22 +63,25 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
     </label>
   ),
   toggle: (
-    <Toggle aria-label="切换粗体">
+    <Toggle aria-label="切换粗体" defaultValue>
       <Bold />
       粗体
     </Toggle>
   ),
   alert: (
-    <Alert className="minimal-alert">
-      <AlertTitle>配置已保存</AlertTitle>
-      <AlertDescription>新的主题设置已经应用到当前工作区。</AlertDescription>
-    </Alert>
+    <Alert
+      className="minimal-alert"
+      description="新的主题设置已经应用到当前工作区。"
+      title="配置已保存"
+    />
   ),
   progress: (
-    <Progress className="minimal-progress" value={68}>
-      <ProgressLabel>文档覆盖率</ProgressLabel>
-      <ProgressValue />
-    </Progress>
+    <Progress
+      className="minimal-progress"
+      label="文档覆盖率"
+      showValue
+      value={68}
+    />
   ),
   skeleton: (
     <div className="minimal-skeleton">
@@ -111,29 +99,26 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
     </div>
   ),
   empty: (
-    <Empty className="minimal-empty">
-      <EmptyHeader>
-        <EmptyTitle>还没有项目</EmptyTitle>
-        <EmptyDescription>创建第一个项目开始使用组件库。</EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
+    <Empty
+      actions={
         <Button size="sm">
           <Plus />
           新建项目
         </Button>
-      </EmptyContent>
-    </Empty>
+      }
+      className="minimal-empty"
+      description="创建第一个项目开始使用组件库。"
+      title="还没有项目"
+    />
   ),
   avatar: (
-    <AvatarGroup>
-      <Avatar>
-        <AvatarFallback>HN</AvatarFallback>
-      </Avatar>
-      <Avatar>
-        <AvatarFallback>UI</AvatarFallback>
-      </Avatar>
-      <AvatarGroupCount>+3</AvatarGroupCount>
-    </AvatarGroup>
+    <AvatarGroup
+      items={['HN', 'UI', '林', '周', '陈'].map((fallback) => ({
+        alt: fallback,
+        fallback,
+      }))}
+      max={2}
+    />
   ),
   breadcrumb: (
     <Breadcrumb

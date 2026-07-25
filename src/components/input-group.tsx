@@ -144,9 +144,9 @@ function InputGroupTextArea({
 
 export {
   InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupText,
-  InputGroupInput,
-  InputGroupTextArea,
+  InputGroupAddon as Addon,
+  InputGroupButton as Button,
+  InputGroupInput as Input,
+  InputGroupText as Text,
+  InputGroupTextArea as TextArea,
 };

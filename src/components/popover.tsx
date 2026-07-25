@@ -7,19 +7,19 @@ import { cn } from '../lib/utils';
 
 type PopoverTriggerMode = 'click' | 'hover';
 
-type ClickPopoverProps = PopoverPrimitive.Root.Props & {
+type ClickPopoverRootProps = PopoverPrimitive.Root.Props & {
   trigger?: 'click';
   delay?: number;
   closeDelay?: number;
 };
 
-type HoverPopoverProps = PreviewCardPrimitive.Root.Props & {
+type HoverPopoverRootProps = PreviewCardPrimitive.Root.Props & {
   trigger: 'hover';
   delay?: number;
   closeDelay?: number;
 };
 
-type PopoverProps = ClickPopoverProps | HoverPopoverProps;
+type PopoverRootProps = ClickPopoverRootProps | HoverPopoverRootProps;
 
 type PopoverTriggerContextValue = {
   trigger: PopoverTriggerMode;
@@ -30,12 +30,12 @@ type PopoverTriggerContextValue = {
 const PopoverTriggerContext =
   React.createContext<PopoverTriggerContextValue | null>(null);
 
-function Popover({
+function PopoverRoot({
   trigger = 'click',
   delay = 300,
   closeDelay = 150,
   ...props
-}: PopoverProps) {
+}: PopoverRootProps) {
   const context = { trigger, delay, closeDelay };
 
   if (trigger === 'hover') {
@@ -220,19 +220,72 @@ function PopoverDescription({
   );
 }
 
-export {
-  Popover,
-  PopoverContent,
-  PopoverDescription,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverTrigger,
-};
-export type {
-  ClickPopoverProps,
-  HoverPopoverProps,
-  PopoverContentProps,
-  PopoverProps,
-  PopoverTriggerMode,
-  PopoverTriggerProps,
-};
+type PopoverProps = (
+  | (Omit<ClickPopoverRootProps, 'children' | 'trigger'> & {
+      triggerMode?: 'click';
+    })
+  | (Omit<HoverPopoverRootProps, 'children' | 'trigger'> & {
+      triggerMode: 'hover';
+    })
+) &
+  Pick<
+    PopoverPrimitive.Positioner.Props,
+    'align' | 'alignOffset' | 'side' | 'sideOffset'
+  > & {
+    content: React.ReactNode;
+    contentClassName?: string;
+    description?: React.ReactNode;
+    title?: React.ReactNode;
+    trigger: PopoverTriggerProps extends { render?: infer Render }
+      ? Render
+      : never;
+  };
+
+function Popover({
+  align,
+  alignOffset,
+  closeDelay,
+  content,
+  contentClassName,
+  delay,
+  description,
+  side,
+  sideOffset,
+  title,
+  trigger,
+  triggerMode = 'click',
+  ...props
+}: PopoverProps) {
+  const rootProps = {
+    closeDelay,
+    delay,
+    trigger: triggerMode,
+    ...props,
+  } as PopoverRootProps;
+
+  return (
+    <PopoverRoot {...rootProps}>
+      <PopoverTrigger render={trigger} />
+      <PopoverContent
+        align={align}
+        alignOffset={alignOffset}
+        className={contentClassName}
+        side={side}
+        sideOffset={sideOffset}
+      >
+        {title != null || description != null ? (
+          <PopoverHeader>
+            {title != null ? <PopoverTitle>{title}</PopoverTitle> : null}
+            {description != null ? (
+              <PopoverDescription>{description}</PopoverDescription>
+            ) : null}
+          </PopoverHeader>
+        ) : null}
+        {content}
+      </PopoverContent>
+    </PopoverRoot>
+  );
+}
+
+export { Popover };
+export type { PopoverProps, PopoverTriggerMode };

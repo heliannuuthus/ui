@@ -122,7 +122,13 @@ const Layout = Object.assign(LayoutRoot, {
   Sidebar: LayoutSidebar,
 });
 
-export { Layout, LayoutContent, LayoutFooter, LayoutHeader, LayoutSidebar };
+export {
+  Layout,
+  LayoutContent as Content,
+  LayoutFooter as Footer,
+  LayoutHeader as Header,
+  LayoutSidebar as Sidebar,
+};
 export type {
   LayoutContentProps,
   LayoutFooterProps,
