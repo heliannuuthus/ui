@@ -9,6 +9,8 @@ import {
 import { Badge } from '@heliannuuthus/ui/badge';
 import { Button } from '@heliannuuthus/ui/button';
 import { Card } from '@heliannuuthus/ui/card';
+import { Command } from '@heliannuuthus/ui/command';
+import { Empty } from '@heliannuuthus/ui/empty';
 import { Input } from '@heliannuuthus/ui/input';
 import { Item } from '@heliannuuthus/ui/item';
 import { Label } from '@heliannuuthus/ui/label';
@@ -57,12 +59,13 @@ import {
   PackagePlus,
   Palette,
   Search,
+  SearchX,
   Sparkles,
   Sun,
   X,
   Zap,
 } from 'lucide-react';
-import { Navigate, NavLink, useParams } from 'react-router-dom';
+import { Navigate, NavLink, useNavigate, useParams } from 'react-router-dom';
 import {
   componentDocumentation,
   type ComponentExample,
@@ -205,7 +208,15 @@ function Brand() {
   );
 }
 
-function SiteHeader({ dark, onTheme }: { dark: boolean; onTheme: () => void }) {
+function SiteHeader({
+  dark,
+  onSearch,
+  onTheme,
+}: {
+  dark: boolean;
+  onSearch: () => void;
+  onTheme: () => void;
+}) {
   const [open, setOpen] = useState(false);
   return (
     <header className="site-header">
@@ -231,10 +242,19 @@ function SiteHeader({ dark, onTheme }: { dark: boolean; onTheme: () => void }) {
         ))}
       </nav>
       <div className="header-actions">
-        <Button className="search-trigger" variant="outline">
+        <Button className="search-trigger" variant="outline" onClick={onSearch}>
           <Search size={16} />
           <span>搜索组件</span>
           <kbd>⌘ K</kbd>
+        </Button>
+        <Button
+          className="mobile-search-trigger"
+          size="icon"
+          variant="ghost"
+          aria-label="搜索组件"
+          onClick={onSearch}
+        >
+          <Search />
         </Button>
         <Button
           className="icon-button"
@@ -632,9 +652,12 @@ function ComponentsOverview() {
       componentGroups
         .map((group) => ({
           ...group,
-          items: group.items.filter((item) =>
-            item.toLowerCase().includes(query.toLowerCase())
-          ),
+          items: group.items.filter((item) => {
+            const slug = componentSlug(item);
+            const searchText =
+              `${item} ${group.title} ${componentDocumentation[slug]?.summary ?? ''}`.toLowerCase();
+            return searchText.includes(query.trim().toLowerCase());
+          }),
         }))
         .filter((group) => group.items.length),
     [query]
@@ -655,30 +678,132 @@ function ComponentsOverview() {
           />
         </label>
       </header>
-      <div className="component-groups">
-        {groups.map((group) => (
-          <section key={group.title}>
-            <header>
-              <h2>{group.title}</h2>
-              <span>{group.items.length}</span>
-            </header>
-            <Masonry
-              className="component-group-grid"
-              columns={4}
-              gap={12}
-              minColumnWidth={180}
-            >
-              {group.items.map((item) => (
-                <NavLink key={item} to={`/components/${componentSlug(item)}`}>
-                  <strong>{item}</strong>
-                  <p>{componentDocumentation[componentSlug(item)]?.summary}</p>
-                </NavLink>
-              ))}
-            </Masonry>
-          </section>
-        ))}
-      </div>
+      {groups.length > 0 ? (
+        <div className="component-groups">
+          {groups.map((group) => (
+            <section key={group.title}>
+              <header>
+                <h2>{group.title}</h2>
+                <span>{group.items.length}</span>
+              </header>
+              <Masonry
+                className="component-group-grid"
+                columns={4}
+                gap={12}
+                minColumnWidth={180}
+              >
+                {group.items.map((item) => (
+                  <NavLink key={item} to={`/components/${componentSlug(item)}`}>
+                    <strong>{item}</strong>
+                    <p>
+                      {componentDocumentation[componentSlug(item)]?.summary}
+                    </p>
+                  </NavLink>
+                ))}
+              </Masonry>
+            </section>
+          ))}
+        </div>
+      ) : (
+        <Empty
+          actions={
+            <Button variant="outline" onClick={() => setQuery('')}>
+              清除搜索
+            </Button>
+          }
+          className="component-search-empty"
+          description="换一个组件名称试试，或清除搜索查看完整目录。"
+          icon={<SearchX />}
+          title={`没有找到“${query}”`}
+        />
+      )}
     </div>
+  );
+}
+
+function ComponentSearchDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const navigate = useNavigate();
+
+  const selectComponent = (slug: string) => {
+    onOpenChange(false);
+    navigate(`/components/${slug}`);
+  };
+
+  return (
+    <Command
+      className="component-command"
+      dialog={{
+        contentClassName: 'component-command-dialog',
+        description: '搜索并打开 Heliannuuthus UI 组件文档',
+        footer: (
+          <div className="component-command-footer">
+            <span>
+              <kbd>↑</kbd>
+              <kbd>↓</kbd>
+              选择
+            </span>
+            <span>
+              <kbd>↵</kbd>
+              打开
+            </span>
+            <span>
+              <kbd>esc</kbd>
+              关闭
+            </span>
+          </div>
+        ),
+        open,
+        showCloseButton: false,
+        title: '搜索组件',
+        onOpenChange,
+      }}
+      emptyText={
+        <>
+          <span className="component-command-empty-icon">
+            <SearchX aria-hidden="true" />
+          </span>
+          <strong>没有匹配的组件</strong>
+          <span>试试 Button、表单、导航或反馈。</span>
+        </>
+      }
+      groups={componentGroups.map((group) => ({
+        heading: `${group.title} · ${group.items.length}`,
+        options: group.items.map((item) => {
+          const slug = componentSlug(item);
+          const summary = componentDocumentation[slug]?.summary ?? '';
+          return {
+            icon: (
+              <span className="component-command-icon">
+                <Box aria-hidden="true" />
+              </span>
+            ),
+            keywords: [group.title, summary],
+            label: (
+              <span className="component-command-copy">
+                <strong>{item}</strong>
+                <span>{summary}</span>
+              </span>
+            ),
+            onSelect: () => selectComponent(slug),
+            shortcut: (
+              <ArrowRight
+                aria-hidden="true"
+                className="component-command-arrow"
+              />
+            ),
+            value: item,
+          };
+        }),
+      }))}
+      inputProps={{ autoFocus: true }}
+      placeholder="搜索组件名称或用途…"
+    />
   );
 }
 
@@ -835,6 +960,27 @@ function ComponentPage() {
         </div>
         {documentation ? (
           <>
+            {documentation.relatedComponents &&
+              documentation.relatedComponents.length > 0 && (
+                <nav
+                  className="component-related"
+                  aria-label={`${documentation.name} 相关组件`}
+                >
+                  <span>相关组件</span>
+                  {documentation.relatedComponents.map((related) => (
+                    <NavLink
+                      key={related.slug}
+                      to={`/components/${related.slug}`}
+                    >
+                      <span>
+                        <strong>{related.name}</strong>
+                        <small>{related.description}</small>
+                      </span>
+                      <ArrowRight aria-hidden="true" />
+                    </NavLink>
+                  ))}
+                </nav>
+              )}
             {documentation.examples.length > 0 && (
               <section className="demo-section">
                 <h2>示例</h2>
@@ -1251,9 +1397,28 @@ export function Showcase({
   page: 'home' | 'getting-started' | 'design' | 'components' | 'component';
 }) {
   const [dark, setDark] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  useEffect(() => {
+    const openSearch = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', openSearch);
+    return () => window.removeEventListener('keydown', openSearch);
+  }, []);
+
   return (
     <div className={dark ? 'site dark' : 'site'}>
-      <SiteHeader dark={dark} onTheme={() => setDark((value) => !value)} />
+      <SiteHeader
+        dark={dark}
+        onSearch={() => setSearchOpen(true)}
+        onTheme={() => setDark((value) => !value)}
+      />
+      <ComponentSearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
       {page === 'home' && <HomePage />}
       {page === 'getting-started' && <GettingStartedPage />}
       {page === 'design' && <DesignPage />}

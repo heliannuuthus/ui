@@ -4,7 +4,10 @@ import { Group as AvatarGroup } from '@heliannuuthus/ui/avatar';
 import { Breadcrumb } from '@heliannuuthus/ui/breadcrumb';
 import { Button } from '@heliannuuthus/ui/button';
 import { Checkbox } from '@heliannuuthus/ui/checkbox';
+import { Command } from '@heliannuuthus/ui/command';
+import { ContextMenu } from '@heliannuuthus/ui/context-menu';
 import { Counter } from '@heliannuuthus/ui/counter';
+import { DirectionProvider } from '@heliannuuthus/ui/direction';
 import { Empty } from '@heliannuuthus/ui/empty';
 import { Input } from '@heliannuuthus/ui/input';
 import { Label } from '@heliannuuthus/ui/label';
@@ -24,7 +27,15 @@ import {
   Table,
 } from '@heliannuuthus/ui/table';
 import { Toggle } from '@heliannuuthus/ui/toggle';
-import { Bold, Plus } from 'lucide-react';
+import {
+  ArrowLeft,
+  Bold,
+  Copy,
+  FilePlus2,
+  Plus,
+  Settings2,
+  Trash2,
+} from 'lucide-react';
 import { AspectRatioCoverDemo } from './aspect-ratio-preview';
 import { CardBasicDemo } from './card-preview';
 import { ResizableWorkspaceDemo } from './resizable-preview';
@@ -150,6 +161,61 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
         },
       ]}
     />
+  ),
+  command: (
+    <Command
+      className="minimal-command"
+      groups={[
+        {
+          heading: '常用命令',
+          options: [
+            {
+              icon: <FilePlus2 />,
+              label: '新建文件',
+              shortcut: '⌘N',
+              value: 'new-file',
+            },
+            {
+              icon: <Settings2 />,
+              label: '打开设置',
+              shortcut: '⌘,',
+              value: 'settings',
+            },
+          ],
+        },
+      ]}
+      placeholder="搜索命令…"
+    />
+  ),
+  'context-menu': (
+    <ContextMenu
+      items={[
+        { icon: <Copy />, label: '复制链接', shortcut: '⌘C' },
+        { icon: <Settings2 />, label: '项目设置' },
+        { type: 'separator' },
+        { destructive: true, icon: <Trash2 />, label: '删除项目' },
+      ]}
+      trigger={
+        <button className="minimal-context-menu-trigger" type="button">
+          <span>组件文档</span>
+          <small>在这里单击右键</small>
+        </button>
+      }
+    />
+  ),
+  direction: (
+    <DirectionProvider direction="rtl">
+      <div className="minimal-direction" dir="rtl">
+        <div>
+          <strong>واجهة عربية</strong>
+          <span>组件布局会跟随阅读方向排列</span>
+        </div>
+        <Button variant="outline">
+          下一步
+          <ArrowLeft />
+        </Button>
+      </div>
+    </DirectionProvider>
   ),
   table: (
     <Table className="minimal-table">

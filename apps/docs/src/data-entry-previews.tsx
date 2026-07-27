@@ -40,7 +40,6 @@ import {
   Separator as InputOTPSeparator,
   Slot as InputOTPSlot,
 } from '@heliannuuthus/ui/input-otp';
-import { NativeSelect } from '@heliannuuthus/ui/native-select';
 import { Group as RadioGroup } from '@heliannuuthus/ui/radio';
 import { Select } from '@heliannuuthus/ui/select';
 import { Slider } from '@heliannuuthus/ui/slider';
@@ -415,56 +414,6 @@ export function FieldLabelPairingDemo() {
           <span>可选</span>
         </div>
         <Input id="label-optional" placeholder="例如：产品设计师" />
-      </div>
-    </div>
-  );
-}
-
-export function SelectNativeDemo() {
-  return (
-    <div className="data-inline-controls">
-      <div className="minimal-field">
-        <Label htmlFor="native-region">数据区域</Label>
-        <NativeSelect
-          id="native-region"
-          defaultValue="cn-east"
-          options={[
-            {
-              label: '中国大陆',
-              options: [
-                { label: '华东', value: 'cn-east' },
-                { label: '华北', value: 'cn-north' },
-              ],
-            },
-            {
-              label: '亚太地区',
-              options: [
-                { label: '新加坡', value: 'sg' },
-                { label: '东京', value: 'jp' },
-              ],
-            },
-          ]}
-        />
-      </div>
-      <div className="minimal-field">
-        <Label htmlFor="native-size">紧凑尺寸</Label>
-        <NativeSelect
-          id="native-size"
-          size="sm"
-          defaultValue="compact"
-          options={[
-            { label: '紧凑', value: 'compact' },
-            { label: '舒适', value: 'comfortable' },
-          ]}
-        />
-      </div>
-      <div className="minimal-field">
-        <Label htmlFor="native-disabled">不可更改</Label>
-        <NativeSelect
-          id="native-disabled"
-          disabled
-          options={[{ label: '由管理员设置', value: 'managed' }]}
-        />
       </div>
     </div>
   );

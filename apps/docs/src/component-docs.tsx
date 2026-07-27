@@ -56,7 +56,6 @@ import {
   InputStatesDemo,
   RadioDeliveryDemo,
   RadioPlanDemo,
-  SelectNativeDemo,
   SelectMemberSearchDemo,
   SelectWorkspaceDemo,
   SliderBudgetDemo,
@@ -79,16 +78,25 @@ import {
   CarouselCustomPaginationDemo,
   CarouselHighlightsDemo,
   ChartDeploymentDemo,
-  CollapsibleTriggersDemo,
+  CollapsibleBasicDemo,
+  CollapsibleHeaderIconDemo,
+  CollapsibleTriggerModesDemo,
   CounterBuildDemo,
+  DataTableExpandableDemo,
   DataTableGroupedHeaderDemo,
   DataTableReleaseDemo,
+  DataTableVirtualScrollDemo,
   EmptyCompositionDemo,
   EmptyDefaultDemo,
   EmptyReleaseDemo,
   ItemActivityDemo,
   MarkerTimelineDemo,
+  TableCellDemo,
+  TableExpandableDemo,
+  TableFixedDemo,
+  TablePaginationDemo,
   TableReleaseDemo,
+  TableVirtualScrollDemo,
   TooltipPlacementsDemo,
 } from './data-display-previews';
 import {
@@ -147,9 +155,15 @@ export type ComponentPart = {
   description: string;
 };
 
+export type RelatedComponent = {
+  name: string;
+  slug: string;
+  description: string;
+};
+
 export type ComponentExample = {
   title: string;
-  description: string;
+  description: ReactNode;
   preview: ReactNode | ((values: ComponentHarnessValues) => ReactNode);
   code: string;
   caseAxes?: ComponentHarnessCaseAxis[];
@@ -165,6 +179,7 @@ export type ComponentDocumentation = {
   whenToUse: string[];
   examples: ComponentExample[];
   parts?: ComponentPart[];
+  relatedComponents?: RelatedComponent[];
   api: ApiProperty[];
   accessibility: string[];
   pitfalls: string[];
@@ -2390,9 +2405,10 @@ if (emptyBasicExample) {
 
 const tableBasicExample = componentDocumentation.table.examples[0];
 if (tableBasicExample) {
-  tableBasicExample.title = '发布窗口';
+  tableBasicExample.title = '基础用法';
   tableBasicExample.description =
-    '用语义化表头、表体、表尾和标题展示无需复杂状态管理的数据。';
+    '使用 Header、Body、Footer 和 Caption 组织一张语义完整的基础表格。';
+  tableBasicExample.caseAxes = undefined;
   tableBasicExample.preview = <TableReleaseDemo />;
   tableBasicExample.code = `import {
   Table,
@@ -2404,6 +2420,7 @@ if (tableBasicExample) {
   TableHeader,
   TableRow,
 } from '@heliannuuthus/ui/table'
+import { Button } from '@heliannuuthus/ui/button'
 
 <Table>
   <TableCaption>今晚 22:00 发布窗口中的服务。</TableCaption>
@@ -2706,19 +2723,6 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
   </SelectContent>
 </Select>`,
       previewHeight: 380,
-    },
-    {
-      title: '原生选择',
-      description:
-        '选项简单且优先使用系统交互时，使用 NativeSelect；同样支持分组、尺寸和禁用状态。',
-      preview: <SelectNativeDemo />,
-      code: `<NativeSelect defaultValue="cn-east">
-  <NativeSelectOptGroup label="中国大陆">
-    <NativeSelectOption value="cn-east">华东</NativeSelectOption>
-    <NativeSelectOption value="cn-north">华北</NativeSelectOption>
-  </NativeSelectOptGroup>
-</NativeSelect>`,
-      previewHeight: 340,
     },
   ],
   slider: [
@@ -3126,46 +3130,63 @@ const chartConfig = {
   ],
   collapsible: [
     {
-      title: 'Header 与按钮触发',
+      title: '基础用法',
       description:
-        'Header 本身可以作为触发器并接收任意内容；需要保留 Header 内其他操作时，改用独立按钮触发。Indicator 可以替换图标并设置展开旋转角度。',
-      preview: <CollapsibleTriggersDemo />,
-      code: `import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleHeader,
-  CollapsibleIndicator,
-  CollapsibleTrigger,
-} from '@heliannuuthus/ui/collapsible'
+        '传入 header 和 content 即可创建一个可展开区域；省略 trigger 时，整个 Header 负责切换状态。',
+      preview: <CollapsibleBasicDemo />,
+      code: `import { Collapsible } from '@heliannuuthus/ui/collapsible'
+
+<Collapsible
+  defaultOpen
+  header={<strong>本次发布包含 6 项变更</strong>}
+  content={<p>优化筛选器响应速度，并修复轮播首尾切换动效。</p>}
+/>`,
+      previewHeight: 300,
+    },
+    {
+      title: '不同触发方式',
+      description:
+        '默认由整个 Header 触发；传入 trigger 后，Header 保持静态，只由独立按钮控制展开。',
+      preview: <CollapsibleTriggerModesDemo />,
+      code: `import { Collapsible } from '@heliannuuthus/ui/collapsible'
 import { ChevronRight } from 'lucide-react'
 
-{/* 整块 Header 触发 */}
-<Collapsible defaultOpen>
-  <CollapsibleHeader className="justify-between">
-    <div>
-      <strong>构建 #1842 已完成</strong>
-      <span>1m 48s · commit 7f92c1a</span>
-    </div>
-    <CollapsibleIndicator rotation={90}>
-      <ChevronRight />
-    </CollapsibleIndicator>
-  </CollapsibleHeader>
-  <CollapsibleContent>{/* build output */}</CollapsibleContent>
-</Collapsible>
+{/* 整个 Header 触发 */}
+<Collapsible
+  header={<BuildSummary />}
+  content={<BuildOutput />}
+/>
 
-{/* Header 静态，独立按钮触发 */}
-<Collapsible>
-  <div className="flex items-center gap-3">
-    <div className="flex-1">灰度发布策略</div>
-    <CollapsibleTrigger size="sm" variant="outline">
-      配置
-      <CollapsibleIndicator />
-    </CollapsibleTrigger>
-  </div>
-  <CollapsibleContent>{/* advanced settings */}</CollapsibleContent>
-</Collapsible>`,
-      previewHeight: 560,
-      wide: true,
+{/* 独立按钮触发 */}
+<Collapsible
+  header={<PolicySummary />}
+  trigger="配置"
+  triggerIcon={<ChevronRight />}
+  triggerProps={{ size: 'sm', variant: 'outline' }}
+  content={<PolicySettings />}
+/>`,
+      previewHeight: 620,
+    },
+    {
+      title: 'Header 与图标',
+      description:
+        'header 可以组合任意摘要内容；icon 用于替换 Header 指示图标，triggerIcon 用于独立按钮，传 null 时可隐藏图标。',
+      preview: <CollapsibleHeaderIconDemo />,
+      code: `import { Collapsible } from '@heliannuuthus/ui/collapsible'
+import { ChevronRight } from 'lucide-react'
+
+<Collapsible
+  header={<BuildSummary />}
+  content={<BuildOutput />}
+  icon={<ChevronRight />}
+/>
+
+<Collapsible
+  header={<PlainSummary />}
+  content={<Details />}
+  icon={null}
+/>`,
+      previewHeight: 500,
     },
   ],
   counter: [
@@ -3189,15 +3210,15 @@ import { ChevronRight } from 'lucide-react'
   ],
   'data-table': [
     {
-      title: '操作列',
+      title: '基础用法',
       description:
-        '操作列也是普通 ColumnDef：通过 cell 取得当前行，再组合主操作、图标按钮或 Dropdown Menu。',
+        '默认组合筛选、排序、固定列、操作列、Caption、Footer 和 Pagination；业务只需要提供 data 与 ColumnDef。',
       preview: <DataTableReleaseDemo />,
-      code: `import type { ColumnDef } from '@tanstack/react-table'
-import {
+      code: `import {
   Actions,
   ColumnHeader,
   DataTable,
+  type ColumnDef,
 } from '@heliannuuthus/ui/data-table'
 import { Button } from '@heliannuuthus/ui/button'
 import { DropdownMenu } from '@heliannuuthus/ui/dropdown-menu'
@@ -3213,15 +3234,18 @@ const columns: ColumnDef<Release>[] = [
   {
     id: 'actions',
     header: '操作',
-    meta: { align: 'end' },
-    cell: ({ row }) => (
-      <Actions aria-label={row.original.version + ' 操作'}>
+    meta: {
+      align: 'center',
+      fixed: 'end',
+    },
+    render: (_, row) => (
+      <Actions aria-label={row.version + ' 操作'}>
         <Button variant="ghost">查看</Button>
         <DropdownMenu
           align="end"
           trigger={
             <Button
-              aria-label={row.original.version + ' 更多操作'}
+              aria-label={row.version + ' 更多操作'}
               size="icon-sm"
               variant="ghost"
             >
@@ -3241,20 +3265,47 @@ const columns: ColumnDef<Release>[] = [
 ]
 
 <DataTable
+  caption="最近五次生产与预览环境发布。"
   columns={columns}
   data={releaseRecords}
   filterColumn="version"
+  footer={(rows) => \`当前页 \${rows.length} 条发布记录\`}
+  getRowKey={(row) => row.version}
+  pagination={{ pageSize: 3 }}
+  tableProps={{ className: 'min-w-[820px] table-fixed' }}
 />`,
       wide: true,
       previewHeight: 580,
+    },
+    {
+      title: '行展开',
+      description:
+        'expandable 会自动补齐展开列、键盘按钮和跨列详情行；固定在起始侧的业务列会自动避开展开按钮。',
+      preview: <DataTableExpandableDemo />,
+      code: `import { DataTable } from '@heliannuuthus/ui/data-table'
+
+<DataTable
+  columns={columns}
+  data={releaseRecords}
+  expandable={{
+    defaultExpandedRowKeys: ['v0.12.0'],
+    render: (row) => <ReleaseDetail release={row} />,
+  }}
+  getRowKey={(row) => row.version}
+  pagination={false}
+/>`,
+      wide: true,
+      previewHeight: 560,
     },
     {
       title: '分组表头',
       description:
         '在 ColumnDef 中嵌套 columns 即可形成多级表头；DataTable 会计算跨列、层级和空状态宽度。',
       preview: <DataTableGroupedHeaderDemo />,
-      code: `import type { ColumnDef } from '@tanstack/react-table'
-import { DataTable } from '@heliannuuthus/ui/data-table'
+      code: `import {
+  DataTable,
+  type ColumnDef,
+} from '@heliannuuthus/ui/data-table'
 
 const columns: ColumnDef<Release>[] = [
   {
@@ -3277,8 +3328,8 @@ const columns: ColumnDef<Release>[] = [
       {
         id: 'detail',
         header: '记录',
-        meta: { align: 'end' },
-        cell: ({ row }) => <Button>{row.original.version} 详情</Button>,
+        meta: { align: 'center' },
+        render: (_, row) => <Button>{row.version} 详情</Button>,
       },
     ],
   },
@@ -3287,6 +3338,29 @@ const columns: ColumnDef<Release>[] = [
 <DataTable columns={columns} data={releaseRecords} />`,
       wide: true,
       previewHeight: 560,
+    },
+    {
+      title: '虚拟滚动',
+      description:
+        'virtual 直接使用基础 Table 的虚拟表体；固定列、横向滚动和自定义 render 会继续生效。',
+      preview: <DataTableVirtualScrollDemo />,
+      code: `import { DataTable } from '@heliannuuthus/ui/data-table'
+
+<DataTable
+  columns={columns}
+  data={records}
+  getRowKey={(row) => row.id}
+  pagination={false}
+  tableProps={{ className: 'min-w-[900px] table-fixed' }}
+  virtual={{
+    containerHeight: 320,
+    getItemKey: (row) => row.id,
+    overscan: 8,
+    rowHeight: 48,
+  }}
+/>`,
+      wide: true,
+      previewHeight: 600,
     },
   ],
   empty: [
@@ -3467,6 +3541,248 @@ import { ScrollArea } from '@heliannuuthus/ui/scroll-area'
   ))}
 </ScrollArea>`,
       previewHeight: 560,
+    },
+  ],
+  table: [
+    {
+      title: '固定列与横向滚动',
+      description: (
+        <>
+          对应的 <code>Head</code> 与 <code>Cell</code> 同时设置{' '}
+          <code>fixed=&quot;start&quot;</code> 固定起始列，或设置{' '}
+          <code>fixed=&quot;end&quot;</code> 固定末尾列；再给 <code>Table</code>{' '}
+          设置 <code>className=&quot;min-w-[960px]&quot;</code>{' '}
+          等大于容器的最小宽度，中间列即可横向滚动。
+        </>
+      ),
+      preview: <TableFixedDemo />,
+      code: `import {
+  Table,
+  Header,
+  Body,
+  Row,
+  Head,
+  Cell,
+} from '@heliannuuthus/ui/table'
+import { Button } from '@heliannuuthus/ui/button'
+
+<Table className="min-w-[960px] table-fixed">
+  <Header>
+    <Row>
+      <Head fixed="start" className="w-40">服务</Head>
+      <Head className="w-28">版本</Head>
+      <Head className="w-28">区域</Head>
+      <Head className="w-32">最近部署</Head>
+      <Head fixed="end" align="center" className="w-24">操作</Head>
+    </Row>
+  </Header>
+  <Body>
+    <Row>
+      <Cell fixed="start">Web Console</Cell>
+      <Cell>v0.12.0</Cell>
+      <Cell fixed="end" align="center">
+        <Button
+          aria-label="监控 Web Console"
+          size="xs"
+          variant="ghost"
+        >
+          监控
+        </Button>
+      </Cell>
+    </Row>
+  </Body>
+</Table>`,
+      previewHeight: 500,
+      wide: true,
+    },
+    {
+      title: '单行虚拟滚动与固定列',
+      description: (
+        <>
+          <code>VirtualBody</code> 只渲染可视区域附近的单行数据；对应的{' '}
+          <code>Head</code> 与 <code>Cell</code> 设置{' '}
+          <code>fixed=&quot;start&quot;</code> 或{' '}
+          <code>fixed=&quot;end&quot;</code>
+          ，即可同时使用纵向虚拟滚动、横向滚动和首末固定列。
+        </>
+      ),
+      preview: <TableVirtualScrollDemo />,
+      code: `import {
+  Table,
+  Header,
+  Row,
+  Head,
+  Cell,
+  VirtualBody,
+} from '@heliannuuthus/ui/table'
+import { Button } from '@heliannuuthus/ui/button'
+
+<Table
+  aria-rowcount={rows.length + 1}
+  className="min-w-[820px] table-fixed"
+  containerClassName="max-h-80"
+>
+  <Header>
+    <Row>
+      <Head fixed="start">事件</Head>
+      <Head>服务</Head>
+      <Head fixed="end" align="center">操作</Head>
+    </Row>
+  </Header>
+  <VirtualBody
+    colSpan={3}
+    items={rows}
+    getItemKey={(row) => row.id}
+    rowHeight={48}
+    overscan={8}
+  >
+    {(row) => (
+      <Row>
+        <Cell fixed="start">{row.id}</Cell>
+        <Cell>{row.service}</Cell>
+        <Cell fixed="end" align="center">
+          <Button
+            aria-label={\`查看 \${row.id}\`}
+            size="xs"
+            variant="ghost"
+          >
+            查看
+          </Button>
+        </Cell>
+      </Row>
+    )}
+  </VirtualBody>
+</Table>`,
+      previewHeight: 540,
+      wide: true,
+    },
+    {
+      title: '与 Pagination 组合',
+      description:
+        'Table 只负责当前页的语义结构，Pagination 管理页码；本地数组或服务端数据都使用同一受控组合。',
+      preview: <TablePaginationDemo />,
+      code: `import { useState } from 'react'
+import {
+  Table,
+  Header,
+  Body,
+  Row,
+  Head,
+  Cell,
+} from '@heliannuuthus/ui/table'
+import { Button } from '@heliannuuthus/ui/button'
+import { Pagination } from '@heliannuuthus/ui/pagination'
+
+const [page, setPage] = useState(1)
+const visibleRows = rows.slice((page - 1) * 10, page * 10)
+
+<>
+  <Table>
+    {/* render visibleRows，并在末列提供查看、审批等操作 Button */}
+  </Table>
+  <Pagination
+    current={page}
+    pageCount={Math.ceil(rows.length / 10)}
+    onChange={setPage}
+  />
+</>`,
+      previewHeight: 500,
+      wide: true,
+    },
+    {
+      title: '行展开',
+      description:
+        'ExpandButton 提供键盘可用的展开状态与图标，ExpandedRow 使用真实表格行承载跨列详情。',
+      preview: <TableExpandableDemo />,
+      code: `import { Fragment, useState } from 'react'
+import {
+  Table,
+  Body,
+  Row,
+  Cell,
+  ExpandButton,
+  ExpandedRow,
+} from '@heliannuuthus/ui/table'
+
+const [expandedId, setExpandedId] = useState<string | null>(null)
+
+<Table>
+  <Body>
+    {rows.map((row) => {
+      const expanded = row.id === expandedId
+      return (
+        <Fragment key={row.id}>
+          <Row>
+            <Cell>
+              <ExpandButton
+                aria-label={\`\${expanded ? '收起' : '展开'} \${row.id}\`}
+                expanded={expanded}
+                onExpandedChange={(next) =>
+                  setExpandedId(next ? row.id : null)
+                }
+              />
+            </Cell>
+            <Cell>{row.name}</Cell>
+          </Row>
+          {expanded && (
+            <ExpandedRow colSpan={2}>{row.detail}</ExpandedRow>
+          )}
+        </Fragment>
+      )
+    })}
+  </Body>
+</Table>`,
+      previewHeight: 520,
+      wide: true,
+    },
+    {
+      title: '列对齐、超长省略与自定义 Cell',
+      description:
+        'align 统一控制起始、居中和末端对齐；Head 与 Cell 的 ellipsis 在溢出时提供全文 Tooltip，自定义组件直接作为 Cell 子节点。',
+      preview: <TableCellDemo />,
+      code: `import {
+  Table,
+  Header,
+  Body,
+  Row,
+  Head,
+  Cell,
+} from '@heliannuuthus/ui/table'
+import { Button } from '@heliannuuthus/ui/button'
+import { ArrowUpRight } from 'lucide-react'
+
+function ActionCell() {
+  return (
+    <Button
+      aria-label="配置 Realtime Gateway"
+      size="xs"
+      variant="ghost"
+    >
+      配置 <ArrowUpRight data-icon="inline-end" />
+    </Button>
+  )
+}
+
+<Table className="table-fixed">
+  <Header>
+    <Row>
+      <Head align="start">服务</Head>
+      <Head ellipsis>服务说明、最近一次生产部署上下文与异常原因</Head>
+      <Head align="end">成功率</Head>
+      <Head align="center">操作</Head>
+    </Row>
+  </Header>
+  <Body>
+    <Row>
+      <Cell>Realtime Gateway</Cell>
+      <Cell ellipsis>{description}</Cell>
+      <Cell align="end">99.98%</Cell>
+      <Cell align="center"><ActionCell /></Cell>
+    </Row>
+  </Body>
+</Table>`,
+      previewHeight: 430,
+      wide: true,
     },
   ],
   tooltip: [
@@ -4040,6 +4356,45 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
   chart: [],
   collapsible: [
     {
+      name: 'header',
+      description:
+        '设置始终可见的摘要内容；未传 trigger 时，整个 Header 同时作为触发器。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'content',
+      description: '设置展开后显示的内容。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'footer',
+      description: '设置内容区域后的可选底部信息或操作。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'trigger',
+      description:
+        '设置独立触发按钮的内容；传入后 Header 保持静态，不再响应展开操作。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'triggerProps',
+      description: '设置独立触发按钮的外观、尺寸和原生触发器属性。',
+      type: 'CollapsibleTriggerProps & ButtonVariantProps',
+    },
+    {
+      name: 'triggerIcon',
+      description:
+        '设置独立触发按钮末端的状态图标；展开时会与面板使用同一节奏旋转。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'icon',
+      description: '替换 Header 触发模式下的默认方向图标；传 null 时隐藏图标。',
+      type: 'ReactNode',
+      defaultValue: '<ChevronDownIcon />',
+    },
+    {
       name: 'open / defaultOpen',
       description: '使用受控或非受控方式管理内容展开状态。',
       type: 'boolean',
@@ -4056,17 +4411,14 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: 'false',
     },
     {
-      component: 'CollapsibleTrigger',
-      name: 'variant / size',
-      description: '设置独立触发按钮的外观和尺寸。',
-      type: 'Button variant / Button size',
+      name: 'headerClassName',
+      description: '扩展 Header 或 Header 与独立触发按钮所在行的样式。',
+      type: 'string',
     },
     {
-      component: 'CollapsibleIndicator',
-      name: 'rotation',
-      description: '设置展开时图标的旋转角度；children 可替换默认箭头。',
-      type: '0 | 90 | 180',
-      defaultValue: '180',
+      name: 'contentClassName',
+      description: '扩展展开内容区域的样式。',
+      type: 'string',
     },
   ],
   counter: [
@@ -4111,9 +4463,9 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     },
     {
       component: 'ColumnDef',
-      name: 'cell',
-      description: '根据当前 row、cell 和 table 上下文渲染内容或操作。',
-      type: '(context: CellContext) => ReactNode',
+      name: 'render',
+      description: '根据当前值、原始数据行和行索引渲染自定义内容或操作。',
+      type: '(value: TValue, row: TData, index: number) => ReactNode',
     },
     {
       component: 'ColumnDef',
@@ -4124,8 +4476,9 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       component: 'ColumnDef',
       name: 'meta',
-      description: '设置表头与单元格的对齐和扩展类名。',
-      type: "{ align?: 'start' | 'center' | 'end'; headerClassName?; cellClassName? }",
+      description:
+        '把列对齐、固定位置、省略和 Tooltip 映射到同一组 Table Head / Cell 属性，并允许扩展表头与单元格类名。',
+      type: '{ align?; fixed?; fixedOffset?; ellipsis?; ellipsisTooltip?; headerEllipsis?; headerEllipsisTooltip?; headerClassName?; cellClassName? }',
     },
     {
       name: 'ColumnHeader',
@@ -4134,7 +4487,8 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     },
     {
       name: 'Actions',
-      description: '在操作列内靠右组合一个或多个按钮、菜单或链接。',
+      description:
+        '在操作列内组合一个或多个按钮、菜单或链接，默认居中并可通过 align 调整。',
       type: 'component',
     },
     {
@@ -4144,9 +4498,43 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'string',
     },
     {
+      component: 'Actions',
+      name: 'align',
+      description: '控制整组操作在单元格内靠起始侧、居中或靠末端。',
+      type: "'start' | 'center' | 'end'",
+      defaultValue: "'center'",
+    },
+    {
       name: 'data',
       description: '提供表格数据记录。',
       type: 'TData[]',
+    },
+    {
+      name: 'caption',
+      description: '使用基础 Table Caption 为整张数据表提供标题或摘要。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'footer',
+      description:
+        '使用基础 Table Footer 展示当前可见行的汇总内容；函数形式会收到当前页数据。',
+      type: 'ReactNode | (visibleRows: readonly TData[]) => ReactNode',
+    },
+    {
+      name: 'showHeader',
+      description: '显示或隐藏自动生成的 Table Header。',
+      type: 'boolean',
+      defaultValue: 'true',
+    },
+    {
+      name: 'getRowKey',
+      description: '为展开状态、虚拟滚动和 React 渲染提供稳定的业务行标识。',
+      type: '(row: TData, index: number) => React.Key',
+    },
+    {
+      name: 'rowProps',
+      description: '根据当前记录扩展基础 Table Row 的类名、事件和原生属性。',
+      type: '(row: TData, index: number) => TableRowProps',
     },
     {
       name: 'filterColumn',
@@ -4158,6 +4546,32 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       description: '设置筛选输入框提示与可访问名称。',
       type: 'string',
       defaultValue: "'筛选…'",
+    },
+    {
+      name: 'tableProps',
+      description:
+        '透传基础 Table 的表格与滚动容器属性，用于设置最小宽度、表格布局和容器尺寸。',
+      type: "Omit<TableProps, 'children'>",
+    },
+    {
+      name: 'pagination',
+      description:
+        '使用标准 Pagination 管理当前页、每页数量和页码回调；传 false 时展示全部数据。',
+      type: 'false | DataTablePaginationProps',
+      defaultValue: '{ pageSize: 10 }',
+    },
+    {
+      name: 'expandable',
+      description:
+        '自动组装 ExpandButton 与 ExpandedRow，并支持受控或非受控的展开行 key。',
+      type: 'DataTableExpandableProps<TData>',
+    },
+    {
+      name: 'virtual',
+      description:
+        '使用基础 Table VirtualBody 只渲染可视范围附近的等高单行数据。',
+      type: 'boolean | DataTableVirtualProps<TData>',
+      defaultValue: 'false',
     },
     {
       name: 'emptyMessage',
@@ -4294,19 +4708,113 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
   ],
   table: [
     {
+      component: 'Table',
+      name: 'containerClassName / containerStyle / containerRef',
+      description:
+        '配置内置滚动容器的尺寸、样式和引用，用于横向、纵向滚动或外部滚动控制。',
+      type: 'string / CSSProperties / Ref<HTMLDivElement>',
+    },
+    {
+      component: 'VirtualBody',
+      name: 'items / children',
+      description:
+        '接收完整数据集合，并通过渲染函数只创建当前可视区域与缓冲范围内的 Row。',
+      type: 'readonly T[] / (item: T, index: number) => ReactElement<RowProps>',
+    },
+    {
+      component: 'VirtualBody',
+      name: 'colSpan',
+      description:
+        '声明当前 Table 的叶子列数量，使虚拟滚动占位行跨越整张表格并保持列宽。',
+      type: 'number',
+    },
+    {
+      component: 'VirtualBody',
+      name: 'rowHeight',
+      description:
+        '设置单行的固定像素高度；虚拟 Table 当前面向等高单行数据，展开行和动态高度内容应使用普通 Body。',
+      type: 'number',
+      defaultValue: '48',
+    },
+    {
+      component: 'VirtualBody',
+      name: 'overscan',
+      description: '设置可视区域上下额外渲染的行数，减少快速滚动时的空白。',
+      type: 'number',
+      defaultValue: '8',
+    },
+    {
+      component: 'VirtualBody',
+      name: 'getItemKey',
+      description:
+        '为虚拟行提供跨滚动稳定的业务主键；大型数据集不应使用数组索引。',
+      type: '(item: T, index: number) => Key',
+    },
+    {
+      component: 'VirtualBody',
+      name: 'rowIndexOffset',
+      description:
+        '设置第一条虚拟数据行的 aria-rowindex；默认值会为 Header 预留一行。',
+      type: 'number',
+      defaultValue: '2',
+    },
+    {
       name: 'Caption',
       description: '提供整张表格的语义标题或补充说明。',
       type: 'component',
     },
     {
       name: 'Header / Head',
-      description: '定义列标题和表头语义。',
+      description:
+        '定义列标题和表头语义；标题过长时通过 Head 的 ellipsis 提供截断与全文 Tooltip。',
       type: 'component',
     },
     {
       name: 'Body / Row / Cell',
       description: '组织数据行与单元格，并支持选中状态。',
       type: 'component',
+    },
+    {
+      component: 'Head / Cell',
+      name: 'align',
+      description: '按文字书写方向设置列内容靠起始侧、居中或靠末端。',
+      type: "'start' | 'center' | 'end'",
+      defaultValue: "'start'",
+    },
+    {
+      component: 'Head / Cell',
+      name: 'fixed / fixedOffset',
+      description:
+        '对应的 Head 与 Cell 设置 fixed="start" 可固定在起始侧，设置 fixed="end" 可固定在末端；多固定列通过 fixedOffset 声明累计偏移。',
+      type: "'start' | 'end' / number | string",
+    },
+    {
+      component: 'Head / Cell',
+      name: 'ellipsis',
+      description:
+        '省略单个超长列标题或 Cell，并在内容真实溢出时自动通过 Tooltip 提供全文；应配合列宽或 table-fixed。',
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      component: 'Head / Cell',
+      name: 'ellipsisTooltip',
+      description:
+        '自定义省略内容的 Tooltip；未设置时使用 Head 或 Cell 子节点，已有 title 会兼容作为 Tooltip 内容。',
+      type: 'ReactNode',
+    },
+    {
+      component: 'ExpandButton',
+      name: 'expanded / onExpandedChange',
+      description:
+        '以受控方式切换一行的展开状态，并同步 aria-expanded 与箭头方向。',
+      type: 'boolean / (expanded: boolean) => void',
+    },
+    {
+      component: 'ExpandedRow',
+      name: 'colSpan',
+      description: '渲染跨越指定列数的详情行，并保留合法的表格语义。',
+      type: 'number',
     },
     {
       name: 'Footer',
@@ -4609,46 +5117,90 @@ componentDocumentation.collapsible.whenToUse = [
 componentDocumentation.collapsible.parts = [
   {
     name: 'Collapsible',
-    description: '管理单个内容区域的受控或非受控展开状态。',
-  },
-  {
-    name: 'CollapsibleTrigger',
-    description: '使用带 Button 外观与尺寸的独立按钮控制内容展开。',
-  },
-  {
-    name: 'CollapsibleHeader / CollapsibleIndicator',
     description:
-      '让任意 Header 内容成为整块触发器，并使用默认或自定义图标反馈展开状态。',
-  },
-  {
-    name: 'CollapsibleContent / CollapsibleFooter',
-    description: '组合带默认展开动效的内容区域和可选底部信息。',
+      '通过 header、content、trigger、icon 与 footer 组合单个可展开内容区域。',
   },
 ];
 componentDocumentation.collapsible.accessibility = [
-  'Header 和独立 Trigger 都使用原生按钮语义，并通过 aria-expanded 传达展开状态。',
+  'Header 触发和独立按钮触发都使用原生按钮语义，并通过 aria-expanded 传达展开状态。',
   '动效会响应 prefers-reduced-motion；不要移除键盘焦点样式。',
 ];
 componentDocumentation.collapsible.pitfalls = [
-  '不要在可点击的 CollapsibleHeader 内嵌套链接或按钮；有额外操作时改用独立 CollapsibleTrigger。',
+  '不要在可点击的 Header 内嵌套链接或按钮；有额外操作时传入 trigger，改用独立按钮触发。',
   '不要用 Collapsible 组织多个需要单选或多选联动的面板，这类结构应使用 Accordion。',
 ];
 
+componentDocumentation.table.summary =
+  'Table 是不管理数据状态的表格布局原语：业务直接组合表头、行和单元格，并精确控制固定列、滚动、行展开与自定义内容。';
+componentDocumentation.table.whenToUse = [
+  '数据已经是可直接渲染的行列结构，不需要列模型、筛选或排序状态。',
+  '需要精确控制表头、汇总、固定列、展开详情或与 Pagination 的组合方式。',
+  '等高单行数据量较大，需要用 VirtualBody 限制真实 DOM 行数。',
+];
+componentDocumentation.table.relatedComponents = [
+  {
+    name: 'Data Table',
+    slug: 'data-table',
+    description:
+      '常规数据列表优先使用组装好的 DataTable；它保留 Table 能力并补齐数据状态与默认交互。',
+  },
+];
+componentDocumentation.table.parts = [
+  {
+    name: 'Table / Header / Body / Footer',
+    description: '建立表格、滚动容器和表头、表体、汇总等语义区域。',
+  },
+  {
+    name: 'Row / Head / Cell',
+    description: '组织行列，并控制单元格对齐、固定位置和超长省略。',
+  },
+  {
+    name: 'ExpandButton / ExpandedRow',
+    description: '以受控状态展开一行，并使用合法的跨列详情行承载内容。',
+  },
+  {
+    name: 'VirtualBody',
+    description:
+      '为等高单行数据建立纵向虚拟窗口，并继续支持 Table 的横向滚动和 fixed 列。',
+  },
+];
+componentDocumentation.table.accessibility = [
+  '使用 Header 与 Head 明确每列的数据含义；列标题过长时通过 ellipsis 保留可聚焦查看的全文 Tooltip。',
+  'ExpandButton 默认同步 aria-expanded，并提供展开或收起标签；业务应在 label 中加入当前行名称。',
+  'Head 与 Cell 的 ellipsis 只在文本真实溢出时启用 Tooltip，并允许键盘聚焦查看全文；复杂内容可通过 ellipsisTooltip 提供更合适的说明。',
+  '虚拟滚动时在 Table 上提供 aria-rowcount，并通过 rowIndexOffset 保持每条可视行的真实 aria-rowindex。',
+];
+componentDocumentation.table.pitfalls = [
+  '固定列需要明确列宽；多列同时固定时使用 fixedOffset 声明前面固定列的累计宽度。',
+  '分页时只把当前页数据传给 Table，由 Pagination 或服务端请求管理页码。',
+  'VirtualBody 只适用于固定高度的单行数据；动态高度、行展开和跨行内容继续使用普通 Body。',
+  '需要筛选、排序、列分组和复杂行模型时使用 DataTable，不要把这些状态塞进基础 Table。',
+];
+
 componentDocumentation['data-table'].summary =
-  'DataTable 把 TanStack Table 的数据模型渲染成组件库表格；列定义同时负责访问数据、组合表头、渲染单元格和声明行操作。';
+  'DataTable 是基于 Table 组装好的默认数据表格：除筛选、排序和分页外，也完整提供固定列、省略 Tooltip、Caption、Footer、行展开与虚拟滚动。';
 componentDocumentation['data-table'].whenToUse = [
-  '需要对一组同构记录进行筛选、排序、分页，或在每行提供上下文操作。',
-  '字段较多，需要通过分组表头表达列之间的层级关系。',
+  '常规业务数据列表默认使用 DataTable，由 data 与 ColumnDef 驱动完整表格。',
+  '需要筛选、排序、分页、固定列、分组表头、行展开或虚拟滚动中的任意能力。',
+];
+componentDocumentation['data-table'].relatedComponents = [
+  {
+    name: 'Table',
+    slug: 'table',
+    description:
+      '数据状态由业务自行处理，或需要完全控制表头、汇总、行展开与虚拟表体时直接组合。',
+  },
 ];
 componentDocumentation['data-table'].parts = [
   {
     name: 'DataTable',
-    description: '连接数据、列模型、筛选、排序、表头分组和分页渲染。',
+    description:
+      '以基础 Table 为渲染层，组装数据、列模型、筛选、排序、分页、展开和虚拟滚动。',
   },
   {
     name: 'ColumnDef',
     description:
-      '通过 header、cell、columns 和 meta 声明每列的结构与展示方式。',
+      '通过 header、render、columns 和 meta 声明数据访问、列结构与 Table 布局属性。',
   },
   {
     name: 'ColumnHeader',
@@ -4662,10 +5214,14 @@ componentDocumentation['data-table'].parts = [
 componentDocumentation['data-table'].accessibility = [
   '分组表头使用 colgroup/col scope，并保留正确的 colSpan 与 rowSpan 关系。',
   '只有图标的行操作必须包含当前记录，例如“v0.12.0 更多操作”，不能让每行都只有“更多”。',
+  '展开按钮自动同步 aria-expanded；getRowKey 应返回可以辨认且稳定的业务标识。',
+  '虚拟滚动会提供 aria-rowcount 和真实 aria-rowindex，业务仍需保证每一行高度固定。',
 ];
 componentDocumentation['data-table'].pitfalls = [
-  '不要在 DataTable 内硬编码业务操作；通过 ColumnDef.cell 读取 row.original 后组合业务按钮。',
+  '不要在 DataTable 内硬编码业务操作；通过 ColumnDef.render 读取当前 row 后组合业务按钮。',
   '不要为了视觉分区手写两个并列表格；使用嵌套 columns 生成真正关联的数据表头。',
+  '不要在 DataTable 外再包一套表格滚动与圆角容器；通过 tableProps 复用基础 Table 的容器。',
+  '虚拟滚动只适用于固定高度的单行数据，不与 expandable 同时使用；需要动态详情高度时关闭 virtual。',
   '操作较多时保留一个高频动作，其余收进菜单，避免操作列无限变宽。',
 ];
 
@@ -5007,7 +5563,7 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
     },
     {
       name: 'orientation',
-      description: '声明键盘导航方向；横向时启用 Masonry 自适应分栏。',
+      description: '声明键盘导航方向；横向时使用 Stack 自适应换行。',
       type: "'horizontal' | 'vertical'",
     },
     {
@@ -5079,20 +5635,8 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'component',
     },
     {
-      component: 'NativeSelect',
-      name: 'size',
-      description: '设置原生选择控件的默认或紧凑高度。',
-      type: "'default' | 'sm'",
-      defaultValue: "'default'",
-    },
-    {
-      name: 'NativeSelectOptGroup',
-      description: '通过浏览器原生 optgroup 为选项分组。',
-      type: 'component',
-    },
-    {
       name: 'disabled',
-      description: '禁用 Select 或 NativeSelect。',
+      description: '禁用 Select。',
       type: 'boolean',
       defaultValue: 'false',
     },
@@ -5316,17 +5860,12 @@ componentDocumentation.select.summary =
 componentDocumentation.select.whenToUse = [
   '候选项固定时使用 Select；列表较长时直接输入关键词过滤，无需切换组件。',
   '需要分组、禁用项、多选或自定义弹出层时组合 Select 的对应子组件。',
-  '选项简单并希望沿用操作系统交互时使用 NativeSelect。',
 ];
 componentDocumentation.select.parts = [
   {
     name: 'Select',
     description:
       '通过 options、value、onChange 与搜索相关 props 管理完整选择交互。',
-  },
-  {
-    name: 'NativeSelect',
-    description: '使用浏览器原生选择交互完成轻量单选。',
   },
 ];
 
@@ -5477,20 +6016,6 @@ replaceExampleCodes('select', [
       disabled: item.disabled,
     })),
   }))}
-/>`,
-  `import { NativeSelect } from '@heliannuuthus/ui/native-select'
-
-<NativeSelect
-  defaultValue="cn-east"
-  options={[
-    {
-      label: '中国大陆',
-      options: [
-        { label: '华东', value: 'cn-east' },
-        { label: '华北', value: 'cn-north' },
-      ],
-    },
-  ]}
 />`,
 ]);
 
@@ -5775,11 +6300,25 @@ replaceExampleCodes('table', [
   Cell,
   Caption,
 } from '@heliannuuthus/ui/table'
+import { Button } from '@heliannuuthus/ui/button'
 
 <Table>
   <Caption>今晚发布窗口中的服务。</Caption>
-  <Header><Row><Head>服务</Head><Head>状态</Head></Row></Header>
-  <Body><Row><Cell>Web Console</Cell><Cell>已通过</Cell></Row></Body>
+  <Header><Row><Head>服务</Head><Head align="center">操作</Head></Row></Header>
+  <Body>
+    <Row>
+      <Cell>Web Console</Cell>
+      <Cell align="center">
+        <Button
+          aria-label="查看 Web Console"
+          size="xs"
+          variant="ghost"
+        >
+          查看
+        </Button>
+      </Cell>
+    </Row>
+  </Body>
   <Footer><Row><Cell colSpan={2}>共 1 项</Cell></Row></Footer>
 </Table>`,
 ]);
@@ -6153,23 +6692,14 @@ componentDocumentation.alert.api = componentDocumentation.alert.api.filter(
 componentDocumentation.select.whenToUse = [
   '候选项固定时使用 Select；列表较长时直接输入关键词过滤。',
   '通过 options 提供平铺或分组候选项，通过受控或非受控 props 管理选择。',
-  '选项简单并希望沿用操作系统交互时使用 NativeSelect。',
 ];
 componentDocumentation.select.api = componentDocumentation.select.api
-  .filter(
-    (property) =>
-      !property.name.startsWith('Select') &&
-      !property.name.startsWith('NativeSelectOptGroup')
-  )
+  .filter((property) => !property.name.startsWith('Select'))
   .map((property) => ({
     ...property,
     name: property.name === 'items' ? 'options' : property.name,
     component:
-      property.component === 'SelectTrigger'
-        ? undefined
-        : property.component === 'NativeSelect'
-          ? 'NativeSelect'
-          : property.component,
+      property.component === 'SelectTrigger' ? undefined : property.component,
   }));
 
 const inputBasicExample = componentDocumentation.input.examples[0];
@@ -6268,5 +6798,12 @@ const masonryNavigationComponents = [
 for (const slug of masonryNavigationComponents) {
   for (const example of componentDocumentation[slug]?.examples ?? []) {
     example.wide = false;
+  }
+}
+
+for (const documentation of Object.values(componentDocumentation)) {
+  const basicExample = documentation.examples[0];
+  if (basicExample) {
+    basicExample.title = '基础用法';
   }
 }

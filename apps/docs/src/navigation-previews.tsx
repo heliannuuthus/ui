@@ -165,6 +165,7 @@ export function PaginationOverflowDemo() {
 export function TabsDashboardDemo() {
   return (
     <Tabs
+      animation="none"
       className="tabs-dashboard-demo"
       defaultValue="overview"
       items={[
