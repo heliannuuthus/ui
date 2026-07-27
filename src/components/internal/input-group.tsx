@@ -1,9 +1,9 @@
 import * as React from 'react';
+import { Input as InputPrimitive } from '@base-ui/react/input';
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { cn } from '../lib/utils';
-import { Button } from './button';
-import { Input, TextArea } from './input';
+import { cn } from '../../lib/utils';
+import { Button } from '../button';
 
 function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
@@ -115,10 +115,10 @@ function InputGroupInput({
   ...props
 }: React.ComponentProps<'input'>) {
   return (
-    <Input
+    <InputPrimitive
       data-slot="input-group-control"
       className={cn(
-        'flex-1 rounded-none border-0 bg-transparent shadow-none ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent',
+        'h-9 min-w-0 flex-1 rounded-none border-0 bg-transparent px-3 py-1 text-base shadow-none outline-none ring-0 placeholder:text-muted-foreground focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60 aria-invalid:ring-0 md:text-sm dark:bg-transparent',
         className
       )}
       {...props}
@@ -131,10 +131,10 @@ function InputGroupTextArea({
   ...props
 }: React.ComponentProps<'textarea'>) {
   return (
-    <TextArea
+    <textarea
       data-slot="input-group-control"
       className={cn(
-        'flex-1 resize-none rounded-none border-0 bg-transparent py-2.5 shadow-none ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent',
+        'field-sizing-content min-h-16 w-full flex-1 resize-none rounded-none border-0 bg-transparent px-3 py-2.5 text-base shadow-none outline-none ring-0 placeholder:text-muted-foreground focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-60 aria-invalid:ring-0 md:text-sm dark:bg-transparent',
         className
       )}
       {...props}
@@ -142,8 +142,16 @@ function InputGroupTextArea({
   );
 }
 
+const InputGroupCompound = Object.assign(InputGroup, {
+  Addon: InputGroupAddon,
+  Button: InputGroupButton,
+  Input: InputGroupInput,
+  Text: InputGroupText,
+  TextArea: InputGroupTextArea,
+});
+
 export {
-  InputGroup,
+  InputGroupCompound as InputGroup,
   InputGroupAddon as Addon,
   InputGroupButton as Button,
   InputGroupInput as Input,

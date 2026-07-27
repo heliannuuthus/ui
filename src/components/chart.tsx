@@ -363,8 +363,16 @@ function getPayloadConfigFromPayload(
   return configLabelKey in config ? config[configLabelKey] : config[key];
 }
 
+const Chart = Object.assign(ChartContainer, {
+  Legend: ChartLegend,
+  LegendContent: ChartLegendContent,
+  Style: ChartStyle,
+  Tooltip: ChartTooltip,
+  TooltipContent: ChartTooltipContent,
+});
+
 export {
-  ChartContainer as Chart,
+  Chart,
   ChartLegend as Legend,
   ChartLegendContent as LegendContent,
   ChartStyle as Style,

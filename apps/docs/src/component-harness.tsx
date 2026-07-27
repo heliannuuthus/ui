@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Badge } from '@heliannuuthus/ui/badge';
+import { Badge } from '@heliannuuthus/ui';
 
 export type ComponentHarnessCase = {
   description?: string;
@@ -22,16 +22,21 @@ export type ComponentHarnessCaseAxis = {
 
 export type ComponentHarnessValues = Record<string, string>;
 
-type ComponentHarnessCaseProps = {
-  axes?: never;
-  cases: ComponentHarnessCase[];
+export type ComponentHarnessLayout = 'grid' | 'stack';
+
+type ComponentHarnessSharedProps = {
   children: (values: ComponentHarnessValues) => ReactNode;
+  layout?: ComponentHarnessLayout;
 };
 
-type ComponentHarnessAxisProps = {
+type ComponentHarnessCaseProps = ComponentHarnessSharedProps & {
+  axes?: never;
+  cases: ComponentHarnessCase[];
+};
+
+type ComponentHarnessAxisProps = ComponentHarnessSharedProps & {
   axes: ComponentHarnessCaseAxis[];
   cases?: never;
-  children: (values: ComponentHarnessValues) => ReactNode;
 };
 
 type ComponentHarnessProps =
@@ -91,7 +96,9 @@ export function ComponentHarness(props: ComponentHarnessProps) {
       className="component-harness component-harness-cases"
       data-slot="component-harness"
     >
-      <div className="component-harness-case-grid">
+      <div
+        className={`component-harness-case-grid component-harness-case-grid-${props.layout ?? 'grid'}`}
+      >
         {cases.map((harnessCase) => (
           <section
             aria-label={harnessCase.label}

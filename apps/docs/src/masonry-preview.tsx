@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Item as MasonryItem, Masonry } from '@heliannuuthus/ui/masonry';
-import { Slider } from '@heliannuuthus/ui/slider';
+import { Masonry } from '@heliannuuthus/ui';
+import { Slider } from '@heliannuuthus/ui';
 
 const masonryItems = [
   {
@@ -119,7 +119,7 @@ export function MasonryResponsiveDemo() {
         role="list"
       >
         {masonryItems.map((item, index) => (
-          <MasonryItem
+          <Masonry.Item
             className={`masonry-layout-item ${item.className}`}
             key={item.title}
             role="listitem"
@@ -127,9 +127,9 @@ export function MasonryResponsiveDemo() {
             <span>{String(index + 1).padStart(2, '0')}</span>
             <strong>{item.title}</strong>
             <p>{item.description}</p>
-          </MasonryItem>
+          </Masonry.Item>
         ))}
-        <MasonryItem
+        <Masonry.Item
           className="masonry-layout-item masonry-layout-item-full"
           role="listitem"
           span="full"
@@ -137,7 +137,7 @@ export function MasonryResponsiveDemo() {
           <span>FULL</span>
           <strong>发布检查</strong>
           <p>这一项始终从第一列跨到最后一列。</p>
-        </MasonryItem>
+        </Masonry.Item>
       </Masonry>
     </div>
   );

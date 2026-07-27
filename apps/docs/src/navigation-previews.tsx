@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react';
-import { NavigationMenu } from '@heliannuuthus/ui/navigation-menu';
-import { Pagination } from '@heliannuuthus/ui/pagination';
-import { Tabs, type TabsAnimation } from '@heliannuuthus/ui/tabs';
+import { NavigationMenu } from '@heliannuuthus/ui';
+import { Pagination } from '@heliannuuthus/ui';
+import { Tabs, type TabsAnimation } from '@heliannuuthus/ui';
 import {
   Activity,
   Blocks,
@@ -165,6 +165,7 @@ export function PaginationOverflowDemo() {
 export function TabsDashboardDemo() {
   return (
     <Tabs
+      animation="none"
       className="tabs-dashboard-demo"
       defaultValue="overview"
       items={[

@@ -18,6 +18,10 @@
     "README.md"
   ],
   "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
     "./*": {
       "types": "./dist/*.d.ts",
       "import": "./dist/*.js"
@@ -70,6 +74,10 @@
       "types": "./dist/radio.d.ts",
       "import": "./dist/radio.js"
     },
+    "./data-table": {
+      "types": "./dist/data-table.d.ts",
+      "import": "./dist/data-table.js"
+    },
     "./separator": {
       "types": "./dist/separator.d.ts",
       "import": "./dist/separator.js"
@@ -81,6 +89,10 @@
     "./toast": {
       "types": "./dist/toast.d.ts",
       "import": "./dist/toast.js"
+    },
+    "./table": {
+      "types": "./dist/table.d.ts",
+      "import": "./dist/table.js"
     },
     "./styles.css": "./dist/styles.css",
     "./utils": {
@@ -114,6 +126,7 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-virtual": "^3.14.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",

@@ -242,5 +242,9 @@ function MasonryItem({ className, span = 'auto', ...props }: MasonryItemProps) {
   );
 }
 
-export { Masonry, MasonryItem as Item };
+const MasonryCompound = Object.assign(Masonry, {
+  Item: MasonryItem,
+});
+
+export { MasonryCompound as Masonry, MasonryItem as Item };
 export type { MasonryGap, MasonryItemProps, MasonryLength, MasonryProps };

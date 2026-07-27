@@ -402,19 +402,29 @@ function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
+function CarouselItem({
+  children,
+  className,
+  ...props
+}: React.ComponentProps<'div'>) {
   return (
     <div
       role="group"
       aria-roledescription="slide"
       data-slot="carousel-item"
       className={cn(
-        'min-w-0 shrink-0 grow-0 basis-full pl-4',
-        'opacity-55 transition-[transform,opacity] duration-500 ease-out [transform:rotateY(-8deg)_scale(.94)] [transform-style:preserve-3d] data-[carousel-position=active]:z-10 data-[carousel-position=active]:opacity-100 data-[carousel-position=active]:[transform:rotateY(0deg)_scale(1)] data-[carousel-position=before]:[transform:rotateY(8deg)_scale(.94)] motion-reduce:transform-none motion-reduce:transition-none',
+        'group/carousel-item min-w-0 shrink-0 grow-0 basis-full pl-4 data-[carousel-position=active]:z-10',
         className
       )}
       {...props}
-    />
+    >
+      <div
+        className="h-full opacity-55 transition-[transform,opacity] duration-500 ease-out [transform:rotateY(-8deg)_scale(.94)] [transform-style:preserve-3d] group-data-[carousel-position=active]/carousel-item:opacity-100 group-data-[carousel-position=active]/carousel-item:[transform:rotateY(0deg)_scale(1)] group-data-[carousel-position=before]/carousel-item:[transform:rotateY(8deg)_scale(.94)] motion-reduce:transform-none motion-reduce:transition-none"
+        data-slot="carousel-item-content"
+      >
+        {children}
+      </div>
+    </div>
   );
 }
 

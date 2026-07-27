@@ -3,7 +3,11 @@ import { Radio as RadioPrimitive } from '@base-ui/react/radio';
 import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
 
 import { cn } from '../lib/utils';
-import { Masonry, type MasonryGap, type MasonryLength } from './masonry';
+import { Stack } from './stack';
+
+type RadioLength = number | string;
+type RadioGap =
+  RadioLength | readonly [columnGap: RadioLength, rowGap: RadioLength];
 
 type RadioClassNames = {
   control?: string;
@@ -31,8 +35,8 @@ type RadioGroupProps<Value = string> = Omit<
   'children' | 'onChange' | 'onValueChange'
 > & {
   columns?: number;
-  gap?: MasonryGap;
-  minColumnWidth?: MasonryLength;
+  gap?: RadioGap;
+  minColumnWidth?: RadioLength;
   onChange?: (
     value: Value,
     eventDetails: RadioGroupPrimitive.ChangeEventDetails
@@ -40,6 +44,15 @@ type RadioGroupProps<Value = string> = Omit<
   options: readonly RadioOption<Value>[];
   orientation?: 'horizontal' | 'vertical';
 };
+
+function toCssLength(value: RadioLength) {
+  return typeof value === 'number' ? `${value}px` : value;
+}
+
+function resolveGap(gap: RadioGap) {
+  const [columnGap, rowGap] = Array.isArray(gap) ? gap : [gap, gap];
+  return [toCssLength(columnGap), toCssLength(rowGap)] as const;
+}
 
 function RadioRoot<Value = string>({
   children,
@@ -129,35 +142,57 @@ function RadioGroup<Value = string>({
   orientation = 'horizontal',
   ...props
 }: RadioGroupProps<Value>) {
+  const columnCount = Number.isFinite(columns)
+    ? Math.max(1, Math.floor(columns))
+    : 3;
+  const [columnGap, rowGap] = resolveGap(gap);
+  const totalGap =
+    columnCount === 1
+      ? '0px'
+      : Array.from({ length: columnCount - 1 }, () => columnGap).join(' + ');
+  const itemBasis = `max(${toCssLength(minColumnWidth)}, calc((100% - (${totalGap})) / ${columnCount}))`;
+
   return (
-    <Masonry
-      asChild
-      columns={orientation === 'horizontal' ? columns : 1}
-      gap={gap}
-      minColumnWidth={minColumnWidth}
+    <RadioGroupPrimitive
+      render={
+        <Stack
+          block
+          gap={0}
+          orientation={orientation}
+          style={{ columnGap, rowGap }}
+          wrap={orientation === 'horizontal'}
+        />
+      }
+      data-slot="radio-group"
+      data-orientation={orientation}
+      aria-orientation={orientation}
+      className={className}
+      onValueChange={onChange}
+      {...props}
     >
-      <RadioGroupPrimitive
-        data-slot="radio-group"
-        data-orientation={orientation}
-        aria-orientation={orientation}
-        className={cn('w-full', className)}
-        onValueChange={onChange}
-        {...props}
-      >
-        {options.map((option) => (
-          <RadioRoot
-            className={option.className}
-            disabled={option.disabled}
-            key={String(option.value)}
-            value={option.value}
-          >
-            {option.label}
-          </RadioRoot>
-        ))}
-      </RadioGroupPrimitive>
-    </Masonry>
+      {options.map((option) => (
+        <RadioRoot
+          className={cn(
+            orientation === 'horizontal' ? 'min-w-0 flex-1' : 'w-full',
+            option.className
+          )}
+          disabled={option.disabled}
+          key={String(option.value)}
+          style={
+            orientation === 'horizontal' ? { flexBasis: itemBasis } : undefined
+          }
+          value={option.value}
+        >
+          {option.label}
+        </RadioRoot>
+      ))}
+    </RadioGroupPrimitive>
   );
 }
 
-export { RadioRoot as Radio, RadioGroup as Group };
+const Radio = Object.assign(RadioRoot, {
+  Group: RadioGroup,
+});
+
+export { Radio, RadioGroup as Group };
 export type { RadioClassNames, RadioGroupProps, RadioOption, RadioProps };

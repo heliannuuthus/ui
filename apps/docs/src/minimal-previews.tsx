@@ -1,30 +1,34 @@
 import type { ReactNode } from 'react';
-import { Alert } from '@heliannuuthus/ui/alert';
-import { Group as AvatarGroup } from '@heliannuuthus/ui/avatar';
-import { Breadcrumb } from '@heliannuuthus/ui/breadcrumb';
-import { Button } from '@heliannuuthus/ui/button';
-import { Checkbox } from '@heliannuuthus/ui/checkbox';
-import { Counter } from '@heliannuuthus/ui/counter';
-import { Empty } from '@heliannuuthus/ui/empty';
-import { Input } from '@heliannuuthus/ui/input';
-import { Label } from '@heliannuuthus/ui/label';
-import { Menubar } from '@heliannuuthus/ui/menubar';
-import { Progress } from '@heliannuuthus/ui/progress';
-import { ScrollArea } from '@heliannuuthus/ui/scroll-area';
-import { Skeleton } from '@heliannuuthus/ui/skeleton';
-import { Slider } from '@heliannuuthus/ui/slider';
-import { Spinner } from '@heliannuuthus/ui/spinner';
-import { Switch } from '@heliannuuthus/ui/switch';
+import { Alert } from '@heliannuuthus/ui';
+import { Avatar } from '@heliannuuthus/ui';
+import { Breadcrumb } from '@heliannuuthus/ui';
+import { Button } from '@heliannuuthus/ui';
+import { Checkbox } from '@heliannuuthus/ui';
+import { Command } from '@heliannuuthus/ui';
+import { ContextMenu } from '@heliannuuthus/ui';
+import { Counter } from '@heliannuuthus/ui';
+import { DirectionProvider } from '@heliannuuthus/ui';
+import { Empty } from '@heliannuuthus/ui';
+import { Input } from '@heliannuuthus/ui';
+import { Label } from '@heliannuuthus/ui';
+import { Menubar } from '@heliannuuthus/ui';
+import { Progress } from '@heliannuuthus/ui';
+import { ScrollArea } from '@heliannuuthus/ui';
+import { Skeleton } from '@heliannuuthus/ui';
+import { Slider } from '@heliannuuthus/ui';
+import { Spinner } from '@heliannuuthus/ui';
+import { Switch } from '@heliannuuthus/ui';
+import { Table } from '@heliannuuthus/ui';
+import { Toggle } from '@heliannuuthus/ui';
 import {
-  Body as TableBody,
-  Cell as TableCell,
-  Head as TableHead,
-  Header as TableHeader,
-  Row as TableRow,
-  Table,
-} from '@heliannuuthus/ui/table';
-import { Toggle } from '@heliannuuthus/ui/toggle';
-import { Bold, Plus } from 'lucide-react';
+  ArrowLeft,
+  Bold,
+  Copy,
+  FilePlus2,
+  Plus,
+  Settings2,
+  Trash2,
+} from 'lucide-react';
 import { AspectRatioCoverDemo } from './aspect-ratio-preview';
 import { CardBasicDemo } from './card-preview';
 import { ResizableWorkspaceDemo } from './resizable-preview';
@@ -112,7 +116,7 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
     />
   ),
   avatar: (
-    <AvatarGroup
+    <Avatar.Group
       items={['HN', 'UI', '林', '周', '陈'].map((fallback) => ({
         alt: fallback,
         fallback,
@@ -151,24 +155,79 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
       ]}
     />
   ),
+  command: (
+    <Command
+      className="minimal-command"
+      groups={[
+        {
+          heading: '常用命令',
+          options: [
+            {
+              icon: <FilePlus2 />,
+              label: '新建文件',
+              shortcut: '⌘N',
+              value: 'new-file',
+            },
+            {
+              icon: <Settings2 />,
+              label: '打开设置',
+              shortcut: '⌘,',
+              value: 'settings',
+            },
+          ],
+        },
+      ]}
+      placeholder="搜索命令…"
+    />
+  ),
+  'context-menu': (
+    <ContextMenu
+      items={[
+        { icon: <Copy />, label: '复制链接', shortcut: '⌘C' },
+        { icon: <Settings2 />, label: '项目设置' },
+        { type: 'separator' },
+        { destructive: true, icon: <Trash2 />, label: '删除项目' },
+      ]}
+      trigger={
+        <button className="minimal-context-menu-trigger" type="button">
+          <span>组件文档</span>
+          <small>在这里单击右键</small>
+        </button>
+      }
+    />
+  ),
+  direction: (
+    <DirectionProvider direction="rtl">
+      <div className="minimal-direction" dir="rtl">
+        <div>
+          <strong>واجهة عربية</strong>
+          <span>组件布局会跟随阅读方向排列</span>
+        </div>
+        <Button variant="outline">
+          下一步
+          <ArrowLeft />
+        </Button>
+      </div>
+    </DirectionProvider>
+  ),
   table: (
     <Table className="minimal-table">
-      <TableHeader>
-        <TableRow>
-          <TableHead>组件</TableHead>
-          <TableHead>状态</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow>
-          <TableCell>Button</TableCell>
-          <TableCell>稳定</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>Dialog</TableCell>
-          <TableCell>稳定</TableCell>
-        </TableRow>
-      </TableBody>
+      <Table.Header>
+        <Table.Row>
+          <Table.Head>组件</Table.Head>
+          <Table.Head>状态</Table.Head>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        <Table.Row>
+          <Table.Cell>Button</Table.Cell>
+          <Table.Cell>稳定</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell>Dialog</Table.Cell>
+          <Table.Cell>稳定</Table.Cell>
+        </Table.Row>
+      </Table.Body>
     </Table>
   ),
 };

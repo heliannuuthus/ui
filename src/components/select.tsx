@@ -10,7 +10,7 @@ import {
   Button as InputGroupButton,
   Input as InputGroupInput,
   InputGroup,
-} from './input-group';
+} from './internal/input-group';
 
 type SelectRootProps<
   Value,

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { AspectRatio } from '@heliannuuthus/ui/aspect-ratio';
-import { Button } from '@heliannuuthus/ui/button';
-import { Input } from '@heliannuuthus/ui/input';
-import { Label } from '@heliannuuthus/ui/label';
+import { AspectRatio } from '@heliannuuthus/ui';
+import { Button } from '@heliannuuthus/ui';
+import { Input } from '@heliannuuthus/ui';
+import { Label } from '@heliannuuthus/ui';
 
 const coverRatios = [
   {

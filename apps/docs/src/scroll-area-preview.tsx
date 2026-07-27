@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import {
   ScrollArea,
   type ScrollAreaScrollbarVisibility,
-} from '@heliannuuthus/ui/scroll-area';
+} from '@heliannuuthus/ui';
 import {
   Check,
   CheckCircle2,

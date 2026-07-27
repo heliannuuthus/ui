@@ -1,6 +1,6 @@
 'use client';
 
-import { Breadcrumb } from '@heliannuuthus/ui/breadcrumb';
+import { Breadcrumb } from '@heliannuuthus/ui';
 import { Box, Component, Folder, LayoutGrid, Settings2 } from 'lucide-react';
 
 const pageItems = [

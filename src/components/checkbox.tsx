@@ -167,7 +167,11 @@ function CheckboxGroup({
   );
 }
 
-export { CheckboxRoot as Checkbox, CheckboxGroup as Group };
+const Checkbox = Object.assign(CheckboxRoot, {
+  Group: CheckboxGroup,
+});
+
+export { Checkbox, CheckboxGroup as Group };
 export type {
   CheckboxClassNames,
   CheckboxGroupProps,

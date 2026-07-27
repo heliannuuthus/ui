@@ -12,6 +12,7 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
+      "@heliannuuthus/ui": ["../../src/index.ts"],
       "@heliannuuthus/ui/*": ["../../src/components/*"]
     }
   },

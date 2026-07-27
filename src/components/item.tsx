@@ -234,9 +234,13 @@ function Group({
   );
 }
 
+const ItemCompound = Object.assign(Item, {
+  Group,
+});
+
 export {
   Group,
-  Item,
+  ItemCompound as Item,
   type ItemClassNames,
   type ItemGroupEntry,
   type ItemGroupProps,

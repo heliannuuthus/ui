@@ -17,6 +17,12 @@ export default defineConfig({
         ),
       },
       {
+        find: '@heliannuuthus/ui',
+        replacement: fileURLToPath(
+          new URL('../../src/index.ts', import.meta.url)
+        ),
+      },
+      {
         find: /^@heliannuuthus\/ui\/(.+)$/,
         replacement: fileURLToPath(
           new URL('../../src/components/$1.tsx', import.meta.url)

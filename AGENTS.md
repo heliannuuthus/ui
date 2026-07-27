@@ -4,7 +4,12 @@
 
 - `src/components/` contains domain-neutral public UI primitives.
 - `apps/docs/` is the documentation and component showcase deployed to `ui.heliannuuthus.com`.
-- Every public component is imported through an explicit `@heliannuuthus/ui/<component>` subpath.
+- Every public component is exported from the `@heliannuuthus/ui` package root.
+- Explicit `@heliannuuthus/ui/<component>` subpaths remain compatibility
+  entries, not the preferred public API.
+- The JavaScript root must remain free of implicit CSS imports. Keep
+  `styles.css` as an explicit compatibility entry until component-scoped style
+  entries replace it.
 
 ## Rules
 
@@ -16,7 +21,9 @@
 - Ant Design is an API-design reference only. Do not introduce `antd`, copy its implementation, or create an Ant-compatible facade.
 - Do not design a component solely around one current screen. Cover common composition, loading, empty, error and disabled states, long content, accessibility, narrow layouts, and backward-compatible evolution.
 - Prefer composable primitives and compound components over boolean-prop proliferation. Expose `className`, semantic slots, `asChild` or equivalent escape hatches only when their contract remains type-safe and predictable.
-- Every new public component must add an explicit package export, documentation/example coverage, and a changeset or release note when the release workflow requires one.
+- Every new public component must be added to the root export manifest,
+  documentation/example coverage, and a changeset or release note when the
+  release workflow requires one.
 - Update the documentation index whenever a public component is added or removed.
 
 ## Validation

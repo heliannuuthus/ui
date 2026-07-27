@@ -92,11 +92,26 @@ const TypographyCode = ({
   />
 );
 
+const Typography = Object.assign(TypographyP, {
+  Blockquote: TypographyBlockquote,
+  Code: TypographyCode,
+  H1,
+  H2,
+  H3,
+  H4,
+  Large: TypographyLarge,
+  Lead: TypographyLead,
+  Muted: TypographyMuted,
+  P: TypographyP,
+  Small: TypographySmall,
+});
+
 export {
   H1,
   H2,
   H3,
   H4,
+  Typography,
   TypographyBlockquote as Blockquote,
   TypographyCode as Code,
   TypographyLarge as Large,

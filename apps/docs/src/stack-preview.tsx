@@ -1,24 +1,13 @@
 import { useState, type ReactNode } from 'react';
-import { Button } from '@heliannuuthus/ui/button';
-import { Input } from '@heliannuuthus/ui/input';
-import {
-  Addon as InputGroupAddon,
-  Input as InputGroupInput,
-  InputGroup,
-  Text as InputGroupText,
-} from '@heliannuuthus/ui/input-group';
-import { Select } from '@heliannuuthus/ui/select';
-import { Slider } from '@heliannuuthus/ui/slider';
-import {
-  Compact,
-  Stack,
-  type StackAlign,
-  type StackJustify,
-} from '@heliannuuthus/ui/stack';
+import { Button } from '@heliannuuthus/ui';
+import { Input } from '@heliannuuthus/ui';
+import { Select } from '@heliannuuthus/ui';
+import { Slider } from '@heliannuuthus/ui';
+import { Stack, type StackAlign, type StackJustify } from '@heliannuuthus/ui';
 import {
   Muted as TypographyMuted,
   Small as TypographySmall,
-} from '@heliannuuthus/ui/typography';
+} from '@heliannuuthus/ui';
 import { Search } from 'lucide-react';
 
 const protocols = ['https://', 'http://'];
@@ -212,7 +201,7 @@ export function StackCompactVariantsDemo() {
         description="独立 Select 作为输入协议前缀。"
         title="前置选择控件"
       >
-        <Compact aria-label="项目地址" block>
+        <Stack.Compact aria-label="项目地址" block>
           <StringSelect
             ariaLabel="协议"
             className="w-28 shrink-0"
@@ -220,14 +209,14 @@ export function StackCompactVariantsDemo() {
             items={protocols}
           />
           <Input aria-label="项目域名" defaultValue="ui.heliannuuthus.com" />
-        </Compact>
+        </Stack.Compact>
       </CompactCase>
 
       <CompactCase
         description="Select 作为数值输入的单位后缀。"
         title="后置选择控件"
       >
-        <Compact aria-label="存储配额" block>
+        <Stack.Compact aria-label="存储配额" block>
           <Input aria-label="存储配额数值" defaultValue="100" type="number" />
           <StringSelect
             ariaLabel="存储单位"
@@ -235,30 +224,29 @@ export function StackCompactVariantsDemo() {
             defaultValue={storageUnits[0]}
             items={storageUnits}
           />
-        </Compact>
+        </Stack.Compact>
       </CompactCase>
 
       <CompactCase
-        description="Select、带内部前缀的 InputGroup 与操作按钮共同拼接。"
+        description="Select、带内部前缀的 Input 与操作按钮共同拼接。"
         title="混合控件组合"
       >
-        <Compact aria-label="组件搜索" block>
+        <Stack.Compact aria-label="组件搜索" block>
           <StringSelect
             ariaLabel="组件范围"
             className="w-32 shrink-0"
             defaultValue={scopes[0]}
             items={scopes}
           />
-          <InputGroup>
-            <InputGroupAddon>
-              <Search />
-            </InputGroupAddon>
-            <InputGroupInput aria-label="组件名称" placeholder="搜索组件" />
-          </InputGroup>
+          <Input
+            aria-label="组件名称"
+            placeholder="搜索组件"
+            prefix={<Search />}
+          />
           <Button className="shrink-0" variant="outline">
             查询
           </Button>
-        </Compact>
+        </Stack.Compact>
       </CompactCase>
 
       <CompactCase
@@ -266,8 +254,8 @@ export function StackCompactVariantsDemo() {
         title="Slider 数值联动"
       >
         <Stack block gap={8}>
-          <Compact aria-label="压缩质量" block>
-            <InputGroup className="px-4 has-[[data-slot=slider-thumb]:focus-visible]:border-primary">
+          <Stack.Compact aria-label="压缩质量" block>
+            <div className="flex min-h-9 flex-1 items-center border border-input px-4 focus-within:border-primary">
               <Slider
                 aria-label="压缩质量滑块"
                 max={100}
@@ -276,22 +264,19 @@ export function StackCompactVariantsDemo() {
                 step={1}
                 value={quality}
               />
-            </InputGroup>
-            <InputGroup className="w-24 shrink-0">
-              <InputGroupInput
-                aria-label="压缩质量数值"
-                inputMode="numeric"
-                max={100}
-                min={0}
-                onChange={(event) => updateQuality(event.target.value)}
-                type="number"
-                value={quality}
-              />
-              <InputGroupAddon align="inline-end">
-                <InputGroupText>%</InputGroupText>
-              </InputGroupAddon>
-            </InputGroup>
-          </Compact>
+            </div>
+            <Input
+              aria-label="压缩质量数值"
+              className="w-24 shrink-0"
+              inputMode="numeric"
+              max={100}
+              min={0}
+              onChange={(event) => updateQuality(event.target.value)}
+              suffix="%"
+              type="number"
+              value={quality}
+            />
+          </Stack.Compact>
           <TypographyMuted aria-live="polite">
             当前压缩质量：{quality}%
           </TypographyMuted>

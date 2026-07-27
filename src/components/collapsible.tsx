@@ -17,6 +17,7 @@ type CollapsibleProps = Omit<
   headerClassName?: string;
   icon?: React.ReactNode;
   trigger?: React.ReactNode;
+  triggerIcon?: React.ReactNode;
   triggerProps?: Omit<
     CollapsiblePrimitive.Trigger.Props,
     'children' | 'className'
@@ -33,6 +34,7 @@ function Collapsible({
   headerClassName,
   icon = <ChevronDownIcon className="size-4" />,
   trigger,
+  triggerIcon,
   triggerProps,
   ...props
 }: CollapsibleProps) {
@@ -57,6 +59,15 @@ function Collapsible({
             {...restTriggerProps}
           >
             {trigger}
+            {triggerIcon != null ? (
+              <span
+                aria-hidden
+                className="grid size-4 shrink-0 place-items-center text-current transition-transform duration-240 ease-[cubic-bezier(0.16,1,0.3,1)] group-data-open/collapsible:rotate-90 motion-reduce:transition-none"
+                data-slot="collapsible-trigger-indicator"
+              >
+                {triggerIcon}
+              </span>
+            ) : null}
           </CollapsiblePrimitive.Trigger>
         </div>
       ) : (
@@ -72,7 +83,7 @@ function Collapsible({
           {icon != null ? (
             <span
               aria-hidden
-              className="ml-auto grid size-5 shrink-0 place-items-center text-muted-foreground transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-open/collapsible:rotate-180 motion-reduce:transition-none"
+              className="ml-auto grid size-5 shrink-0 place-items-center text-muted-foreground transition-transform duration-240 ease-[cubic-bezier(0.16,1,0.3,1)] group-data-open/collapsible:rotate-180 motion-reduce:transition-none"
               data-slot="collapsible-indicator"
             >
               {icon}
@@ -82,7 +93,7 @@ function Collapsible({
       )}
       <CollapsiblePrimitive.Panel
         className={cn(
-          "h-(--collapsible-panel-height) origin-top overflow-hidden transition-[height,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[height,opacity,transform] [&[hidden]:not([hidden='until-found'])]:hidden data-ending-style:h-0 data-ending-style:scale-y-95 data-ending-style:-translate-y-1 data-ending-style:opacity-0 data-starting-style:h-0 data-starting-style:scale-y-95 data-starting-style:-translate-y-1 data-starting-style:opacity-0 motion-reduce:transform-none motion-reduce:transition-none",
+          "h-(--collapsible-panel-height) origin-top overflow-hidden transition-[height,opacity,transform] duration-240 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[height,opacity,transform] [&[hidden]:not([hidden='until-found'])]:hidden data-ending-style:h-0 data-ending-style:-translate-y-1.5 data-ending-style:opacity-0 data-starting-style:h-0 data-starting-style:-translate-y-1.5 data-starting-style:opacity-0 motion-reduce:transform-none motion-reduce:transition-none",
           contentClassName
         )}
         data-slot="collapsible-content"

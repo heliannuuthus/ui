@@ -1,50 +1,32 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
-import type { ColumnDef } from '@tanstack/react-table';
-import { Accordion } from '@heliannuuthus/ui/accordion';
-import { Group as AttachmentGroup } from '@heliannuuthus/ui/attachment';
-import { Avatar, Group as AvatarGroup } from '@heliannuuthus/ui/avatar';
-import { Badge } from '@heliannuuthus/ui/badge';
-import { Button } from '@heliannuuthus/ui/button';
-import { Carousel } from '@heliannuuthus/ui/carousel';
-import {
-  Chart as ChartContainer,
-  Tooltip as ChartTooltip,
-  TooltipContent as ChartTooltipContent,
-  type ChartConfig,
-} from '@heliannuuthus/ui/chart';
-import { Collapsible } from '@heliannuuthus/ui/collapsible';
-import { Counter } from '@heliannuuthus/ui/counter';
-import {
-  Actions as DataTableActions,
-  ColumnHeader as DataTableColumnHeader,
-  DataTable,
-} from '@heliannuuthus/ui/data-table';
-import { DropdownMenu } from '@heliannuuthus/ui/dropdown-menu';
-import { Empty } from '@heliannuuthus/ui/empty';
-import { Group as ItemGroup } from '@heliannuuthus/ui/item';
-import { Marker } from '@heliannuuthus/ui/marker';
-import { Bubble, Group as BubbleGroup } from '@heliannuuthus/ui/bubble';
-import { ScrollArea } from '@heliannuuthus/ui/scroll-area';
-import { Slider } from '@heliannuuthus/ui/slider';
-import { Stack } from '@heliannuuthus/ui/stack';
-import { Separator } from '@heliannuuthus/ui/separator';
-import {
-  Body as TableBody,
-  Caption as TableCaption,
-  Cell as TableCell,
-  Footer as TableFooter,
-  Head as TableHead,
-  Header as TableHeader,
-  Row as TableRow,
-  Table,
-} from '@heliannuuthus/ui/table';
-import { Small as TypographySmall } from '@heliannuuthus/ui/typography';
-import { Tooltip } from '@heliannuuthus/ui/tooltip';
+import { Fragment, useState, type ReactNode } from 'react';
+import { Accordion } from '@heliannuuthus/ui';
+import { Attachment } from '@heliannuuthus/ui';
+import { Avatar } from '@heliannuuthus/ui';
+import { Badge } from '@heliannuuthus/ui';
+import { Button } from '@heliannuuthus/ui';
+import { Carousel } from '@heliannuuthus/ui';
+import { Chart, type ChartConfig } from '@heliannuuthus/ui';
+import { Collapsible } from '@heliannuuthus/ui';
+import { Counter } from '@heliannuuthus/ui';
+import { DataTable, type ColumnDef } from '@heliannuuthus/ui';
+import { DropdownMenu } from '@heliannuuthus/ui';
+import { Empty } from '@heliannuuthus/ui';
+import { Item } from '@heliannuuthus/ui';
+import { Marker } from '@heliannuuthus/ui';
+import { Bubble } from '@heliannuuthus/ui';
+import { Pagination } from '@heliannuuthus/ui';
+import { ScrollArea } from '@heliannuuthus/ui';
+import { Slider } from '@heliannuuthus/ui';
+import { Separator } from '@heliannuuthus/ui';
+import { Table } from '@heliannuuthus/ui';
+import { Tooltip } from '@heliannuuthus/ui';
 import {
   Activity,
   Archive,
+  ArrowLeft,
+  ArrowRight,
   ArrowUpRight,
   Check,
   CheckCircle2,
@@ -274,7 +256,7 @@ export function AttachmentReleaseDemo({
       <div className="display-section-label">
         {orientation === 'vertical' ? '纵向缩略卡' : '横向文件行'}
       </div>
-      <AttachmentGroup
+      <Attachment.Group
         items={releaseFiles.map((file) => {
           const Icon = file.icon;
           return {
@@ -359,7 +341,7 @@ export function AvatarGroupDemo() {
           <span>发布协作者</span>
           <strong>当前展示 {Math.min(max, avatarPeople.length)} 人</strong>
         </div>
-        <AvatarGroup
+        <Avatar.Group
           aria-label={`展示 ${Math.min(max, avatarPeople.length)} 位协作者，其余自动汇总`}
           items={avatarPeople.map((person) => ({
             alt: person.initials,
@@ -492,14 +474,14 @@ export function BubbleVariantsDemo() {
             <strong>{reply.label}</strong>
             <span>{reply.token}</span>
           </div>
-          <BubbleGroup>
+          <Bubble.Group>
             <Bubble
               align="end"
               content="已经补充完成，可以重新评审。"
               reactions="✓ 2"
               variant={reply.variant}
             />
-          </BubbleGroup>
+          </Bubble.Group>
           {index < replies.length - 1 && (
             <Separator className="display-bubble-separator" />
           )}
@@ -718,38 +700,63 @@ export function CarouselCustomPaginationDemo() {
         pageCount,
         scrollNext,
         scrollPrev,
+        scrollTo,
       }) => (
-        <Stack
-          align="center"
+        <div
           aria-label="轮播分页"
-          className="my-3"
-          gap={8}
-          justify="center"
-          orientation="horizontal"
+          className="display-carousel-pagination"
           role="group"
         >
           <Button
             aria-label="上一页"
+            className="display-carousel-pagination-button"
             disabled={!canScrollPrev}
             onClick={scrollPrev}
-            size="sm"
-            variant="outline"
+            size="icon-sm"
+            variant="ghost"
           >
-            上一页
+            <ArrowLeft aria-hidden />
           </Button>
-          <TypographySmall aria-live="polite" className="min-w-14 text-center">
-            {currentPage} / {Math.max(pageCount, 1)}
-          </TypographySmall>
+          <div className="display-carousel-pagination-status">
+            <span aria-live="polite" className="display-carousel-page-count">
+              <strong>{String(currentPage).padStart(2, '0')}</strong>
+              <span>/</span>
+              <small>{String(Math.max(pageCount, 1)).padStart(2, '0')}</small>
+            </span>
+            <div
+              aria-label="选择轮播页面"
+              className="display-carousel-page-track"
+              role="group"
+            >
+              {Array.from({ length: pageCount }, (_, index) => {
+                const selected = currentPage === index + 1;
+
+                return (
+                  <button
+                    aria-current={selected ? 'page' : undefined}
+                    aria-label={`前往第 ${index + 1} 页`}
+                    data-selected={selected || undefined}
+                    key={index}
+                    onClick={() => scrollTo(index)}
+                    type="button"
+                  >
+                    <span />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
           <Button
             aria-label="下一页"
+            className="display-carousel-pagination-button"
             disabled={!canScrollNext}
             onClick={scrollNext}
-            size="sm"
-            variant="outline"
+            size="icon-sm"
+            variant="ghost"
           >
-            下一页
+            <ArrowRight aria-hidden />
           </Button>
-        </Stack>
+        </div>
       )}
     />
   );
@@ -834,7 +841,7 @@ export function ChartDeploymentDemo() {
           </div>
           <span>近七日</span>
         </div>
-        <ChartContainer
+        <Chart
           className="display-chart"
           config={deploymentChartConfig}
           initialDimension={{ width: 720, height: 280 }}
@@ -878,8 +885,8 @@ export function ChartDeploymentDemo() {
               tickLine={false}
               width={42}
             />
-            <ChartTooltip
-              content={<ChartTooltipContent indicator="line" />}
+            <Chart.Tooltip
+              content={<Chart.TooltipContent indicator="line" />}
               cursor={false}
             />
             <Area
@@ -891,7 +898,7 @@ export function ChartDeploymentDemo() {
               type="monotone"
             />
           </AreaChart>
-        </ChartContainer>
+        </Chart>
       </div>
 
       <footer className="display-chart-story-footer">
@@ -905,7 +912,26 @@ export function ChartDeploymentDemo() {
   );
 }
 
-export function CollapsibleBuildDemo() {
+export function CollapsibleBasicDemo() {
+  return (
+    <Collapsible
+      className="display-collapsible-basic"
+      content={
+        <p>优化筛选器响应速度，并修复轮播从最后一项回到第一项时的切换动效。</p>
+      }
+      contentClassName="display-collapsible-basic-content"
+      defaultOpen
+      header={
+        <div className="display-collapsible-summary">
+          <strong>本次发布包含 6 项变更</strong>
+          <span>点击 Header 收起内容</span>
+        </div>
+      }
+    />
+  );
+}
+
+function CollapsibleBuildDemo() {
   return (
     <Collapsible
       className="display-build-log"
@@ -946,16 +972,12 @@ export function CollapsibleBuildDemo() {
   );
 }
 
-export function CollapsiblePolicyDemo() {
+function CollapsiblePolicyDemo() {
   return (
     <Collapsible
       className="display-build-log display-policy"
-      trigger={
-        <>
-          配置
-          <ChevronRight className="ml-1" />
-        </>
-      }
+      trigger="配置"
+      triggerIcon={<ChevronRight />}
       triggerProps={{ size: 'sm', variant: 'outline' }}
       headerClassName="display-build-summary"
       header={
@@ -996,22 +1018,80 @@ export function CollapsiblePolicyDemo() {
   );
 }
 
-export function CollapsibleTriggersDemo() {
+export function CollapsibleTriggerModesDemo() {
   return (
-    <div className="display-collapsible-showcase">
+    <div className="display-collapsible-modes">
       <section>
-        <div className="display-collapsible-case-heading">
+        <div className="display-collapsible-mode-label">
           <span>Header 触发</span>
-          <small>自定义标题内容与方向图标</small>
+          <small>整个摘要区域都可点击</small>
         </div>
         <CollapsibleBuildDemo />
       </section>
       <section>
-        <div className="display-collapsible-case-heading">
-          <span>Button 触发</span>
-          <small>Header 保持静态，只让按钮控制内容</small>
+        <div className="display-collapsible-mode-label">
+          <span>按钮触发</span>
+          <small>Header 静态，仅按钮切换状态</small>
         </div>
         <CollapsiblePolicyDemo />
+      </section>
+    </div>
+  );
+}
+
+export function CollapsibleHeaderIconDemo() {
+  return (
+    <div className="display-collapsible-icon-demo">
+      <section>
+        <span>默认图标</span>
+        <Collapsible
+          className="display-collapsible-compact"
+          content={<p>使用组件内置的方向图标反馈展开状态。</p>}
+          contentClassName="display-collapsible-compact-content"
+          header={
+            <div className="display-collapsible-summary">
+              <strong>部署记录</strong>
+              <small>生产环境 · 3 分钟前</small>
+            </div>
+          }
+        />
+      </section>
+      <section>
+        <span>自定义图标</span>
+        <Collapsible
+          className="display-collapsible-compact"
+          content={<p>通过 icon 替换默认图标，Header 内容保持不变。</p>}
+          contentClassName="display-collapsible-compact-content"
+          header={
+            <>
+              <span className="display-status-icon is-success">
+                <PackageCheck />
+              </span>
+              <div className="display-collapsible-summary">
+                <strong>构建产物已就绪</strong>
+                <small>12 个文件 · 2.4 MB</small>
+              </div>
+            </>
+          }
+          icon={<ChevronRight />}
+        />
+      </section>
+      <section>
+        <span>隐藏图标</span>
+        <Collapsible
+          className="display-collapsible-compact"
+          content={
+            <p>传入 icon=null，保留 Header 触发能力但不显示指示图标。</p>
+          }
+          contentClassName="display-collapsible-compact-content"
+          header={
+            <div className="display-collapsible-summary">
+              <strong>纯文本摘要</strong>
+              <small>适合界面已提供其他状态反馈的场景</small>
+            </div>
+          }
+          icon={null}
+        />
       </section>
     </div>
   );
@@ -1032,12 +1112,36 @@ const releaseRecords: ReleaseRecord[] = [
   { version: 'v0.11.1', environment: '预览', owner: '周一', status: '成功' },
 ];
 
+type VirtualDataTableRecord = {
+  id: string;
+  latency: string;
+  region: string;
+  service: string;
+};
+
+const virtualDataTableRecords: VirtualDataTableRecord[] = Array.from(
+  { length: 1000 },
+  (_, index) => ({
+    id: `EVT-${String(index + 1).padStart(4, '0')}`,
+    service: ['Web Console', 'Auth API', 'Event Worker', 'Search Indexer'][
+      index % 4
+    ],
+    region: ['华东', '华北', '新加坡', '法兰克福'][index % 4],
+    latency: `${32 + ((index * 17) % 180)} ms`,
+  })
+);
+
 const releaseColumns: ColumnDef<ReleaseRecord>[] = [
   {
     accessorKey: 'version',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column}>版本</DataTableColumnHeader>
+      <DataTable.ColumnHeader column={column}>版本</DataTable.ColumnHeader>
     ),
+    meta: {
+      cellClassName: 'font-medium',
+      fixed: 'start',
+      headerClassName: 'w-28',
+    },
   },
   { accessorKey: 'environment', header: '环境', enableSorting: false },
   { accessorKey: 'owner', header: '负责人', enableSorting: false },
@@ -1045,8 +1149,8 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
     accessorKey: 'status',
     header: '状态',
     enableSorting: false,
-    cell: ({ row }) => {
-      const status = row.original.status;
+    render: (_, row) => {
+      const status = row.status;
       return (
         <Badge variant={status === '回滚' ? 'destructive' : 'secondary'}>
           {status}
@@ -1058,11 +1162,12 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
     id: 'actions',
     header: '操作',
     meta: {
-      align: 'end',
+      align: 'center',
+      fixed: 'end',
       headerClassName: 'w-36',
     },
-    cell: ({ row }) => (
-      <DataTableActions aria-label={`${row.original.version} 操作`}>
+    render: (_, row) => (
+      <DataTable.Actions aria-label={`${row.version} 操作`}>
         <Button size="xs" variant="ghost">
           查看
         </Button>
@@ -1071,7 +1176,7 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
           contentClassName="w-44"
           trigger={
             <Button
-              aria-label={`${row.original.version} 更多操作`}
+              aria-label={`${row.version} 更多操作`}
               size="icon-xs"
               variant="ghost"
             >
@@ -1085,7 +1190,7 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
             { label: '删除记录', icon: <Trash2 />, destructive: true },
           ]}
         />
-      </DataTableActions>
+      </DataTable.Actions>
     ),
   },
 ];
@@ -1098,7 +1203,7 @@ const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
       {
         accessorKey: 'version',
         header: ({ column }) => (
-          <DataTableColumnHeader column={column}>版本</DataTableColumnHeader>
+          <DataTable.ColumnHeader column={column}>版本</DataTable.ColumnHeader>
         ),
       },
       { accessorKey: 'environment', header: '环境', enableSorting: false },
@@ -1113,8 +1218,8 @@ const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
         accessorKey: 'status',
         header: '状态',
         enableSorting: false,
-        cell: ({ row }) => {
-          const status = row.original.status;
+        render: (_, row) => {
+          const status = row.status;
           return (
             <Badge variant={status === '回滚' ? 'destructive' : 'secondary'}>
               {status}
@@ -1127,21 +1232,70 @@ const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
   {
     id: 'operation',
     header: '操作',
-    meta: { align: 'end' },
+    meta: { align: 'center' },
     columns: [
       {
         id: 'detail',
         header: '记录',
-        meta: { align: 'end' },
-        cell: ({ row }) => (
-          <DataTableActions aria-label={`${row.original.version} 操作`}>
+        meta: { align: 'center' },
+        render: (_, row) => (
+          <DataTable.Actions aria-label={`${row.version} 操作`}>
             <Button size="xs" variant="outline">
-              {row.original.status === '运行中' ? '监控' : '详情'}
+              {row.status === '运行中' ? '监控' : '详情'}
             </Button>
-          </DataTableActions>
+          </DataTable.Actions>
         ),
       },
     ],
+  },
+];
+
+const virtualDataTableColumns: ColumnDef<VirtualDataTableRecord>[] = [
+  {
+    accessorKey: 'id',
+    header: '事件',
+    meta: {
+      fixed: 'start',
+      headerClassName: 'w-32',
+      cellClassName: 'font-medium',
+    },
+  },
+  {
+    accessorKey: 'service',
+    header: '服务',
+    meta: {
+      ellipsis: true,
+      headerClassName: 'w-64',
+    },
+  },
+  {
+    accessorKey: 'region',
+    header: '区域',
+    meta: { headerClassName: 'w-32' },
+  },
+  {
+    accessorKey: 'latency',
+    header: '延迟',
+    meta: {
+      align: 'end',
+      headerClassName: 'w-32',
+    },
+  },
+  {
+    id: 'actions',
+    header: '操作',
+    meta: {
+      align: 'center',
+      fixed: 'end',
+      headerClassName: 'w-28',
+    },
+    render: (_, row) => (
+      <DataTable.Actions aria-label={`${row.id} 操作`}>
+        <Button size="xs" variant="ghost">
+          查看
+        </Button>
+      </DataTable.Actions>
+    ),
   },
 ];
 
@@ -1149,11 +1303,41 @@ export function DataTableReleaseDemo() {
   return (
     <div className="display-data-table">
       <DataTable
+        caption="最近五次生产与预览环境发布。"
         columns={releaseColumns}
         data={releaseRecords}
         filterColumn="version"
         filterPlaceholder="筛选版本…"
         emptyMessage="没有匹配的发布记录"
+        footer={(rows) => `当前页 ${rows.length} 条发布记录`}
+        getRowKey={(row) => row.version}
+        pagination={{ pageSize: 3 }}
+        tableProps={{ className: 'min-w-[820px] table-fixed' }}
+      />
+    </div>
+  );
+}
+
+export function DataTableExpandableDemo() {
+  return (
+    <div className="display-data-table">
+      <DataTable
+        columns={releaseColumns.slice(0, 4)}
+        data={releaseRecords}
+        expandable={{
+          defaultExpandedRowKeys: ['v0.12.0'],
+          render: (row) => (
+            <div className="display-data-table-expanded">
+              <strong>{row.version} 部署详情</strong>
+              <span>
+                {row.environment}环境由{row.owner}负责，当前状态为{row.status}。
+              </span>
+            </div>
+          ),
+        }}
+        getRowKey={(row) => row.version}
+        pagination={false}
+        tableProps={{ className: 'min-w-[640px] table-fixed' }}
       />
     </div>
   );
@@ -1166,6 +1350,27 @@ export function DataTableGroupedHeaderDemo() {
         columns={groupedReleaseColumns}
         data={releaseRecords}
         emptyMessage="暂无发布记录"
+        tableProps={{ className: 'min-w-[660px] table-fixed' }}
+      />
+    </div>
+  );
+}
+
+export function DataTableVirtualScrollDemo() {
+  return (
+    <div className="display-data-table">
+      <DataTable
+        columns={virtualDataTableColumns}
+        data={virtualDataTableRecords}
+        getRowKey={(row) => row.id}
+        pagination={false}
+        tableProps={{ className: 'min-w-[900px] table-fixed' }}
+        virtual={{
+          containerHeight: 320,
+          getItemKey: (row) => row.id,
+          overscan: 8,
+          rowHeight: 48,
+        }}
       />
     </div>
   );
@@ -1230,7 +1435,7 @@ export function ItemActivityDemo({
   variant?: 'default' | 'outline' | 'muted';
 }) {
   return (
-    <ItemGroup
+    <Item.Group
       className="display-activity-list"
       items={[
         {
@@ -1285,47 +1490,496 @@ export function MarkerTimelineDemo({
 }
 
 const tableRows = [
-  ['Web Console', 'v0.12.0', '生产', '已发布'],
-  ['Auth API', 'v1.8.2', '生产', '已发布'],
-  ['Worker', 'v0.9.7', '预览', '待确认'],
+  ['Web Console', 'v0.12.0', '生产', '查看'],
+  ['Auth API', 'v1.8.2', '生产', '查看'],
+  ['Worker', 'v0.9.7', '预览', '确认'],
 ];
 
 export function TableReleaseDemo() {
   return (
     <div className="display-table-shell">
       <Table>
-        <TableCaption>今晚 22:00 发布窗口中的服务。</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>服务</TableHead>
-            <TableHead>版本</TableHead>
-            <TableHead>环境</TableHead>
-            <TableHead>状态</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {tableRows.map(([service, version, environment, status]) => (
-            <TableRow key={service}>
-              <TableCell className="display-table-service">
+        <Table.Caption>今晚 22:00 发布窗口中的服务。</Table.Caption>
+        <Table.Header>
+          <Table.Row>
+            <Table.Head>服务</Table.Head>
+            <Table.Head>版本</Table.Head>
+            <Table.Head>环境</Table.Head>
+            <Table.Head align="center">操作</Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {tableRows.map(([service, version, environment, action]) => (
+            <Table.Row key={service}>
+              <Table.Cell className="display-table-service">
                 <Server />
                 {service}
-              </TableCell>
-              <TableCell>{version}</TableCell>
-              <TableCell>{environment}</TableCell>
-              <TableCell>
-                <Badge variant={status === '已发布' ? 'secondary' : 'outline'}>
-                  {status}
-                </Badge>
-              </TableCell>
-            </TableRow>
+              </Table.Cell>
+              <Table.Cell>{version}</Table.Cell>
+              <Table.Cell>{environment}</Table.Cell>
+              <Table.Cell align="center">
+                <Button
+                  aria-label={`${action} ${service}`}
+                  size="xs"
+                  type="button"
+                  variant={action === '确认' ? 'outline' : 'ghost'}
+                >
+                  {action}
+                </Button>
+              </Table.Cell>
+            </Table.Row>
           ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>已就绪服务</TableCell>
-            <TableCell>2 / 3</TableCell>
-          </TableRow>
-        </TableFooter>
+        </Table.Body>
+        <Table.Footer>
+          <Table.Row>
+            <Table.Cell colSpan={3}>已就绪服务</Table.Cell>
+            <Table.Cell>2 / 3</Table.Cell>
+          </Table.Row>
+        </Table.Footer>
+      </Table>
+    </div>
+  );
+}
+
+const fixedTableRows = [
+  [
+    'Web Console',
+    '体验团队',
+    'v0.12.0',
+    '生产',
+    '42.8k',
+    '华东',
+    '今天 21:48',
+    '健康',
+  ],
+  [
+    'Auth API',
+    '身份团队',
+    'v1.8.2',
+    '生产',
+    '128.6k',
+    '华北',
+    '今天 20:36',
+    '健康',
+  ],
+  [
+    'Event Worker',
+    '平台团队',
+    'v0.9.7',
+    '预览',
+    '18.4k',
+    '新加坡',
+    '昨天 23:12',
+    '观察',
+  ],
+  [
+    'Billing API',
+    '商业团队',
+    'v2.4.1',
+    '生产',
+    '76.2k',
+    '法兰克福',
+    '昨天 18:04',
+    '健康',
+  ],
+  [
+    'Search Indexer',
+    '数据团队',
+    'v1.3.0',
+    '生产',
+    '31.7k',
+    '华东',
+    '周一 16:22',
+    '健康',
+  ],
+  [
+    'Audit Stream',
+    '安全团队',
+    'v0.8.6',
+    '预览',
+    '12.1k',
+    '华北',
+    '周一 14:08',
+    '观察',
+  ],
+  [
+    'Notification',
+    '增长团队',
+    'v3.1.4',
+    '生产',
+    '54.9k',
+    '新加坡',
+    '周日 22:45',
+    '健康',
+  ],
+];
+
+export function TableFixedDemo() {
+  return (
+    <div className="display-table-shell display-table-wide">
+      <Table className="min-w-[960px] table-fixed">
+        <Table.Header>
+          <Table.Row>
+            <Table.Head fixed="start" className="w-40">
+              服务
+            </Table.Head>
+            <Table.Head className="w-32">负责团队</Table.Head>
+            <Table.Head className="w-28">版本</Table.Head>
+            <Table.Head className="w-20">环境</Table.Head>
+            <Table.Head align="end" className="w-36">
+              每分钟请求
+            </Table.Head>
+            <Table.Head className="w-28">区域</Table.Head>
+            <Table.Head className="w-32">最近部署</Table.Head>
+            <Table.Head fixed="end" align="center" className="w-24">
+              操作
+            </Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {fixedTableRows.map(
+            ([
+              service,
+              owner,
+              version,
+              environment,
+              requests,
+              region,
+              deployedAt,
+              status,
+            ]) => (
+              <Table.Row key={service}>
+                <Table.Cell fixed="start" className="font-semibold">
+                  {service}
+                </Table.Cell>
+                <Table.Cell>{owner}</Table.Cell>
+                <Table.Cell>{version}</Table.Cell>
+                <Table.Cell>{environment}</Table.Cell>
+                <Table.Cell align="end">{requests}</Table.Cell>
+                <Table.Cell>{region}</Table.Cell>
+                <Table.Cell>{deployedAt}</Table.Cell>
+                <Table.Cell fixed="end" align="center">
+                  <Button
+                    aria-label={`${status === '健康' ? '监控' : '排查'} ${service}`}
+                    size="xs"
+                    type="button"
+                    variant="ghost"
+                  >
+                    {status === '健康' ? '监控' : '排查'}
+                  </Button>
+                </Table.Cell>
+              </Table.Row>
+            )
+          )}
+        </Table.Body>
+      </Table>
+    </div>
+  );
+}
+
+const virtualTableRows = Array.from({ length: 1000 }, (_, index) => ({
+  id: `EVT-${String(index + 1).padStart(4, '0')}`,
+  service: ['Web Console', 'Auth API', 'Event Worker', 'Search Indexer'][
+    index % 4
+  ],
+  region: ['华东', '华北', '新加坡', '法兰克福'][index % 4],
+  latency: `${32 + ((index * 17) % 180)} ms`,
+  requests: `${(18.4 + ((index * 13) % 720) / 10).toFixed(1)}k`,
+  status: index % 9 === 0 ? '观察' : '健康',
+}));
+
+function getVirtualTableRowKey(row: (typeof virtualTableRows)[number]) {
+  return row.id;
+}
+
+export function TableVirtualScrollDemo() {
+  return (
+    <div className="display-table-shell display-table-wide">
+      <div className="display-table-virtual-meta">
+        <span>1,000 条单行数据</span>
+        <small>当前仅渲染可视区域附近的行</small>
+      </div>
+      <Table
+        aria-rowcount={virtualTableRows.length + 1}
+        className="min-w-[820px] table-fixed"
+        containerClassName="max-h-80"
+      >
+        <Table.Header>
+          <Table.Row>
+            <Table.Head fixed="start" className="w-32">
+              事件
+            </Table.Head>
+            <Table.Head className="w-52">服务</Table.Head>
+            <Table.Head className="w-32">区域</Table.Head>
+            <Table.Head align="end" className="w-32">
+              延迟
+            </Table.Head>
+            <Table.Head align="end" className="w-36">
+              每分钟请求
+            </Table.Head>
+            <Table.Head fixed="end" align="center" className="w-28">
+              操作
+            </Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.VirtualBody
+          colSpan={6}
+          items={virtualTableRows}
+          getItemKey={getVirtualTableRowKey}
+          rowHeight={48}
+          overscan={8}
+        >
+          {(row) => (
+            <Table.Row>
+              <Table.Cell fixed="start" className="font-medium">
+                {row.id}
+              </Table.Cell>
+              <Table.Cell>{row.service}</Table.Cell>
+              <Table.Cell>{row.region}</Table.Cell>
+              <Table.Cell align="end">{row.latency}</Table.Cell>
+              <Table.Cell align="end">{row.requests}</Table.Cell>
+              <Table.Cell fixed="end" align="center" className="py-2">
+                <Button
+                  aria-label={`${row.status === '健康' ? '查看' : '排查'} ${row.id}`}
+                  size="xs"
+                  type="button"
+                  variant="ghost"
+                >
+                  {row.status === '健康' ? '查看' : '排查'}
+                </Button>
+              </Table.Cell>
+            </Table.Row>
+          )}
+        </Table.VirtualBody>
+      </Table>
+    </div>
+  );
+}
+
+const paginatedTableRows = [
+  ['REL-1842', 'Web Console', '林默', '已完成'],
+  ['REL-1841', 'Auth API', '周一', '已完成'],
+  ['REL-1840', 'Event Worker', '许澄', '进行中'],
+  ['REL-1839', 'Billing API', '林默', '待审批'],
+  ['REL-1838', 'Search Indexer', '周一', '已完成'],
+  ['REL-1837', 'Audit Stream', '许澄', '已回滚'],
+  ['REL-1836', 'Notification', '林默', '已完成'],
+];
+
+export function TablePaginationDemo() {
+  const [page, setPage] = useState(1);
+  const pageSize = 3;
+  const pageCount = Math.ceil(paginatedTableRows.length / pageSize);
+  const rows = paginatedTableRows.slice((page - 1) * pageSize, page * pageSize);
+
+  return (
+    <div className="display-table-composite">
+      <div className="display-table-shell">
+        <Table>
+          <Table.Header>
+            <Table.Row>
+              <Table.Head>发布单</Table.Head>
+              <Table.Head>服务</Table.Head>
+              <Table.Head>负责人</Table.Head>
+              <Table.Head align="center">操作</Table.Head>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {rows.map(([release, service, owner, status]) => (
+              <Table.Row key={release}>
+                <Table.Cell className="font-medium">{release}</Table.Cell>
+                <Table.Cell>{service}</Table.Cell>
+                <Table.Cell>{owner}</Table.Cell>
+                <Table.Cell align="center">
+                  <Button
+                    aria-label={`${
+                      status === '待审批'
+                        ? '审批'
+                        : status === '进行中'
+                          ? '跟进'
+                          : '查看'
+                    } ${release}`}
+                    size="xs"
+                    type="button"
+                    variant="ghost"
+                  >
+                    {status === '待审批'
+                      ? '审批'
+                      : status === '进行中'
+                        ? '跟进'
+                        : '查看'}
+                  </Button>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      </div>
+      <div className="display-table-pagination">
+        <span>
+          共 {paginatedTableRows.length} 项 · 第 {page} / {pageCount} 页
+        </span>
+        <Pagination
+          current={page}
+          onChange={setPage}
+          pageCount={pageCount}
+          previousText="上一页"
+          nextText="下一页"
+        />
+      </div>
+    </div>
+  );
+}
+
+const expandableTableRows = [
+  {
+    id: 'REL-1842',
+    service: 'Web Console',
+    status: '成功',
+    duration: '1m 48s',
+    detail: '流量已分四批切换完成，错误率维持在 0.03%，无需人工干预。',
+  },
+  {
+    id: 'REL-1841',
+    service: 'Auth API',
+    status: '观察中',
+    duration: '2m 16s',
+    detail: '新实例已全部就绪，当前继续观察登录成功率与令牌刷新延迟。',
+  },
+  {
+    id: 'REL-1840',
+    service: 'Event Worker',
+    status: '待执行',
+    duration: '—',
+    detail: '等待 Auth API 观察窗口结束后开始部署，预计占用 3 个执行实例。',
+  },
+];
+
+export function TableExpandableDemo() {
+  const [expandedId, setExpandedId] = useState<string | null>('REL-1842');
+
+  return (
+    <div className="display-table-shell">
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.Head className="w-12">
+              <span className="sr-only">展开</span>
+            </Table.Head>
+            <Table.Head>发布单</Table.Head>
+            <Table.Head>服务</Table.Head>
+            <Table.Head align="end">耗时</Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {expandableTableRows.map((row) => {
+            const expanded = expandedId === row.id;
+
+            return (
+              <Fragment key={row.id}>
+                <Table.Row>
+                  <Table.Cell>
+                    <Table.ExpandButton
+                      aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}
+                      expanded={expanded}
+                      onExpandedChange={(nextExpanded) =>
+                        setExpandedId(nextExpanded ? row.id : null)
+                      }
+                    />
+                  </Table.Cell>
+                  <Table.Cell className="font-medium">{row.id}</Table.Cell>
+                  <Table.Cell>
+                    <span className="display-table-cell-stack">
+                      <strong>{row.service}</strong>
+                      <small>{row.status}</small>
+                    </span>
+                  </Table.Cell>
+                  <Table.Cell align="end">{row.duration}</Table.Cell>
+                </Table.Row>
+                {expanded ? (
+                  <Table.ExpandedRow colSpan={4}>
+                    <strong>部署详情</strong>
+                    <p>{row.detail}</p>
+                  </Table.ExpandedRow>
+                ) : null}
+              </Fragment>
+            );
+          })}
+        </Table.Body>
+      </Table>
+    </div>
+  );
+}
+
+const cellTableRows = [
+  {
+    service: 'Realtime Collaboration Gateway',
+    description: '承载多人编辑光标、文档增量同步以及离线重连后的冲突合并。',
+    successRate: '99.98%',
+    action: '配置',
+  },
+  {
+    service: 'Notification',
+    description: '推送发布通知。',
+    successRate: '98.62%',
+    action: '查看',
+  },
+];
+
+function TableActionCell({
+  action,
+  service,
+}: {
+  action: string;
+  service: string;
+}) {
+  return (
+    <Button
+      aria-label={`${action} ${service}`}
+      size="xs"
+      type="button"
+      variant="ghost"
+    >
+      {action}
+      <ArrowUpRight data-icon="inline-end" />
+    </Button>
+  );
+}
+
+export function TableCellDemo() {
+  return (
+    <div className="display-table-shell display-table-wide">
+      <Table className="min-w-[680px] table-fixed">
+        <Table.Header>
+          <Table.Row>
+            <Table.Head className="w-52">服务（靠左）</Table.Head>
+            <Table.Head
+              ellipsis
+              className="w-64"
+              ellipsisTooltip="服务说明、最近一次生产部署上下文与异常原因"
+            >
+              服务说明、最近一次生产部署上下文与异常原因
+            </Table.Head>
+            <Table.Head align="end" className="w-28">
+              成功率（靠右）
+            </Table.Head>
+            <Table.Head align="center" className="w-28">
+              操作（居中）
+            </Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {cellTableRows.map((row) => (
+            <Table.Row key={row.service}>
+              <Table.Cell className="font-medium">{row.service}</Table.Cell>
+              <Table.Cell ellipsis>{row.description}</Table.Cell>
+              <Table.Cell align="end">{row.successRate}</Table.Cell>
+              <Table.Cell align="center">
+                <TableActionCell action={row.action} service={row.service} />
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
       </Table>
     </div>
   );

@@ -131,5 +131,9 @@ function ToggleGroup<Value extends string = string>({
   );
 }
 
-export { ToggleRoot as Toggle, ToggleGroup as Group, toggleVariants };
+const Toggle = Object.assign(ToggleRoot, {
+  Group: ToggleGroup,
+});
+
+export { Toggle, ToggleGroup as Group, toggleVariants };
 export type { ToggleGroupOption, ToggleGroupProps, ToggleProps };

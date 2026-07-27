@@ -1,7 +1,7 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { Toaster as Sonner, type ToasterProps } from 'sonner';
+import { Toaster as SonnerPrimitive, type ToasterProps } from 'sonner';
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -14,7 +14,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme();
 
   return (
-    <Sonner
+    <SonnerPrimitive
       theme={theme as ToasterProps['theme']}
       className="toaster group"
       icons={{
@@ -42,4 +42,9 @@ const Toaster = ({ ...props }: ToasterProps) => {
   );
 };
 
-export { Toaster };
+const Sonner = Object.assign(Toaster, {
+  Toaster,
+});
+
+export { Sonner, Toaster };
+export type { ToasterProps as SonnerProps };

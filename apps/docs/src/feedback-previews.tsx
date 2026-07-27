@@ -1,22 +1,22 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { Alert } from '@heliannuuthus/ui/alert';
-import { AlertDialog } from '@heliannuuthus/ui/alert-dialog';
-import { Avatar } from '@heliannuuthus/ui/avatar';
-import { Badge } from '@heliannuuthus/ui/badge';
-import { Button } from '@heliannuuthus/ui/button';
-import { Checkbox } from '@heliannuuthus/ui/checkbox';
-import { Dialog } from '@heliannuuthus/ui/dialog';
-import { Drawer } from '@heliannuuthus/ui/drawer';
-import { Label } from '@heliannuuthus/ui/label';
-import { Input } from '@heliannuuthus/ui/input';
-import { Popover } from '@heliannuuthus/ui/popover';
-import { Progress } from '@heliannuuthus/ui/progress';
-import { Skeleton } from '@heliannuuthus/ui/skeleton';
-import { Toaster as SonnerToaster } from '@heliannuuthus/ui/sonner';
-import { Spinner } from '@heliannuuthus/ui/spinner';
-import { Provider as ToastProvider, useToast } from '@heliannuuthus/ui/toast';
+import { Alert } from '@heliannuuthus/ui';
+import { AlertDialog } from '@heliannuuthus/ui';
+import { Avatar } from '@heliannuuthus/ui';
+import { Badge } from '@heliannuuthus/ui';
+import { Button } from '@heliannuuthus/ui';
+import { Checkbox } from '@heliannuuthus/ui';
+import { Dialog } from '@heliannuuthus/ui';
+import { Drawer } from '@heliannuuthus/ui';
+import { Label } from '@heliannuuthus/ui';
+import { Input } from '@heliannuuthus/ui';
+import { Popover } from '@heliannuuthus/ui';
+import { Progress } from '@heliannuuthus/ui';
+import { Skeleton } from '@heliannuuthus/ui';
+import { Sonner } from '@heliannuuthus/ui';
+import { Spinner } from '@heliannuuthus/ui';
+import { Toast, useToast } from '@heliannuuthus/ui';
 import {
   ArrowDown,
   ArrowLeft,
@@ -483,7 +483,7 @@ export function SonnerPublishDemo() {
         <Rocket />
         模拟异步发布
       </Button>
-      <SonnerToaster position="bottom-right" richColors />
+      <Sonner position="bottom-right" richColors />
     </>
   );
 }
@@ -614,9 +614,9 @@ function ToastSemanticActions() {
 
 export function ToastSemanticDemo() {
   return (
-    <ToastProvider id="toast-semantic-demo">
+    <Toast.Provider id="toast-semantic-demo">
       <ToastSemanticActions />
-    </ToastProvider>
+    </Toast.Provider>
   );
 }
 
@@ -648,9 +648,9 @@ function ToastLocalActions() {
 export function ToastLocalDemo() {
   return (
     <div className="feedback-toast-local-stage">
-      <ToastProvider id="toast-local-demo" scope="local">
+      <Toast.Provider id="toast-local-demo" scope="local">
         <ToastLocalActions />
-      </ToastProvider>
+      </Toast.Provider>
     </div>
   );
 }

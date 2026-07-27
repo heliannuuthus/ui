@@ -200,7 +200,13 @@ function useToast() {
   return context;
 }
 
+const Toast = Object.assign(Toaster, {
+  Provider: ToastProvider,
+  Toaster,
+});
+
 export {
+  Toast,
   Toaster,
   ToastProvider as Provider,
   sonnerToast as toast,

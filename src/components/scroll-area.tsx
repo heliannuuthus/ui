@@ -134,8 +134,12 @@ function ScrollBar({
   );
 }
 
+const ScrollAreaCompound = Object.assign(ScrollArea, {
+  Bar: ScrollBar,
+});
+
 export {
-  ScrollArea,
+  ScrollAreaCompound as ScrollArea,
   ScrollBar as Bar,
   type ScrollAreaFadeEdges,
   type ScrollAreaOrientation,

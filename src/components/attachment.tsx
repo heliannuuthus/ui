@@ -215,8 +215,12 @@ function AttachmentGroup({ className, items, ...props }: AttachmentGroupProps) {
   );
 }
 
+const AttachmentCompound = Object.assign(Attachment, {
+  Group: AttachmentGroup,
+});
+
 export {
-  Attachment,
+  AttachmentCompound as Attachment,
   AttachmentGroup as Group,
   type AttachmentGroupProps,
   type AttachmentProps,
