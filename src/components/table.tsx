@@ -480,8 +480,21 @@ function TableCaption({
   );
 }
 
+const TableCompound = Object.assign(Table, {
+  Body: TableBody,
+  Caption: TableCaption,
+  Cell: TableCell,
+  ExpandedRow: TableExpandedRow,
+  ExpandButton: TableExpandButton,
+  Footer: TableFooter,
+  Head: TableHead,
+  Header: TableHeader,
+  Row: TableRow,
+  VirtualBody: TableVirtualBody,
+});
+
 export {
-  Table,
+  TableCompound as Table,
   TableBody as Body,
   TableCaption as Caption,
   TableCell as Cell,

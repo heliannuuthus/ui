@@ -6,34 +6,21 @@ import {
   useState,
   type CSSProperties,
 } from 'react';
-import { Badge } from '@heliannuuthus/ui/badge';
-import { Button } from '@heliannuuthus/ui/button';
-import { Card } from '@heliannuuthus/ui/card';
-import { Command } from '@heliannuuthus/ui/command';
-import { Empty } from '@heliannuuthus/ui/empty';
-import { Input } from '@heliannuuthus/ui/input';
-import { Item } from '@heliannuuthus/ui/item';
-import { Label } from '@heliannuuthus/ui/label';
-import { Item as MasonryItem, Masonry } from '@heliannuuthus/ui/masonry';
-import { Separator } from '@heliannuuthus/ui/separator';
-import {
-  Content as SidebarContent,
-  Group as SidebarGroup,
-  GroupContent as SidebarGroupContent,
-  GroupLabel as SidebarGroupLabel,
-  Header as SidebarHeader,
-  Inset as SidebarInset,
-  Menu as SidebarMenu,
-  MenuButton as SidebarMenuButton,
-  MenuItem as SidebarMenuItem,
-  Provider as SidebarProvider,
-  Separator as SidebarSeparator,
-  Sidebar,
-} from '@heliannuuthus/ui/sidebar';
-import { Toggle } from '@heliannuuthus/ui/toggle';
-import { Stack } from '@heliannuuthus/ui/stack';
-import { Tabs } from '@heliannuuthus/ui/tabs';
-import { Tooltip } from '@heliannuuthus/ui/tooltip';
+import { Badge } from '@heliannuuthus/ui';
+import { Button } from '@heliannuuthus/ui';
+import { Card } from '@heliannuuthus/ui';
+import { Command } from '@heliannuuthus/ui';
+import { Empty } from '@heliannuuthus/ui';
+import { Input } from '@heliannuuthus/ui';
+import { Item } from '@heliannuuthus/ui';
+import { Label } from '@heliannuuthus/ui';
+import { Masonry } from '@heliannuuthus/ui';
+import { Separator } from '@heliannuuthus/ui';
+import { Sidebar } from '@heliannuuthus/ui';
+import { Toggle } from '@heliannuuthus/ui';
+import { Stack } from '@heliannuuthus/ui';
+import { Tabs } from '@heliannuuthus/ui';
+import { Tooltip } from '@heliannuuthus/ui';
 import {
   Code as TypographyCode,
   H1,
@@ -43,7 +30,7 @@ import {
   Lead as TypographyLead,
   Muted as TypographyMuted,
   Small as TypographySmall,
-} from '@heliannuuthus/ui/typography';
+} from '@heliannuuthus/ui';
 import {
   ArrowRight,
   Blocks,
@@ -68,6 +55,7 @@ import {
 import { Navigate, NavLink, useNavigate, useParams } from 'react-router-dom';
 import {
   componentDocumentation,
+  type ApiProperty,
   type ComponentExample,
 } from './component-docs';
 import { ComponentHarness } from './component-harness';
@@ -85,6 +73,26 @@ const installCommands = {
   bun: 'bun add @heliannuuthus/ui',
 } as const;
 type PackageManager = keyof typeof installCommands;
+
+function groupApiProperties(
+  properties: ApiProperty[],
+  defaultComponent: string
+) {
+  const groups = new Map<string, ApiProperty[]>();
+
+  for (const property of properties) {
+    const component = property.component ?? defaultComponent;
+    const group = groups.get(component);
+
+    if (group) {
+      group.push(property);
+    } else {
+      groups.set(component, [property]);
+    }
+  }
+
+  return Array.from(groups, ([component, api]) => ({ api, component }));
+}
 
 const componentGroups = [
   {
@@ -177,7 +185,7 @@ const spaciousComponentSlugs = new Set(
     .flatMap((group) => group.items.map(componentSlug))
 );
 
-const demoCode = `import { Button } from '@heliannuuthus/ui/button'
+const demoCode = `import { Button } from '@heliannuuthus/ui'
 
 export function ButtonDemo() {
   return (
@@ -850,44 +858,44 @@ function ComponentNavigation({ component }: { component: string }) {
       className="component-docs-sidebar"
       collapsible="none"
     >
-      <SidebarHeader className="component-docs-sidebar-header">
+      <Sidebar.Header className="component-docs-sidebar-header">
         <NavLink to="/components">
           <span>组件</span>
           <small>{componentCatalog.length}</small>
         </NavLink>
-      </SidebarHeader>
-      <SidebarSeparator />
-      <SidebarContent
+      </Sidebar.Header>
+      <Sidebar.Separator />
+      <Sidebar.Content
         className="component-docs-sidebar-content"
         ref={contentRef}
       >
         {componentGroups.map((group) => (
-          <SidebarGroup key={group.title}>
-            <SidebarGroupLabel className="component-docs-sidebar-label">
+          <Sidebar.Group key={group.title}>
+            <Sidebar.GroupLabel className="component-docs-sidebar-label">
               <span>{group.title}</span>
               <small>{group.items.length}</small>
-            </SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
+            </Sidebar.GroupLabel>
+            <Sidebar.GroupContent>
+              <Sidebar.Menu>
                 {group.items.map((item) => {
                   const slug = componentSlug(item);
                   return (
-                    <SidebarMenuItem key={item}>
-                      <SidebarMenuButton
+                    <Sidebar.MenuItem key={item}>
+                      <Sidebar.MenuButton
                         isActive={slug === component}
                         render={<NavLink to={`/components/${slug}`} />}
                         size="sm"
                       >
                         <span>{item}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
+                      </Sidebar.MenuButton>
+                    </Sidebar.MenuItem>
                   );
                 })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+              </Sidebar.Menu>
+            </Sidebar.GroupContent>
+          </Sidebar.Group>
         ))}
-      </SidebarContent>
+      </Sidebar.Content>
     </Sidebar>
   );
 }
@@ -923,7 +931,7 @@ function ComponentPage() {
     'Button';
   const documentation = componentDocumentation[component];
   return (
-    <SidebarProvider
+    <Sidebar.Provider
       className="component-detail-layout"
       style={
         {
@@ -932,7 +940,7 @@ function ComponentPage() {
       }
     >
       <ComponentNavigation component={component} />
-      <SidebarInset
+      <Sidebar.Inset
         className={`component-detail${
           spaciousComponentSlugs.has(component)
             ? ' component-detail-spacious'
@@ -1013,34 +1021,36 @@ function ComponentPage() {
                 )}
                 {documentation.api.length > 0 && (
                   <div className="component-reference-block">
-                    {documentation.parts && documentation.parts.length > 0 && (
-                      <h3>属性</h3>
-                    )}
-                    <div className="component-api-table">
-                      <div className="component-api-head">
-                        <span>属性</span>
-                        <span>说明</span>
-                        <span>类型</span>
-                        <span>默认值</span>
-                      </div>
-                      {documentation.api.map((property) => (
-                        <div
-                          key={`${property.component ?? documentation.name}:${property.name}`}
+                    <h3>属性</h3>
+                    <div className="component-api-groups">
+                      {groupApiProperties(
+                        documentation.api,
+                        documentation.name
+                      ).map((group) => (
+                        <section
+                          className="component-api-group"
+                          key={group.component}
                         >
-                          {property.component ? (
-                            <Stack gap={2}>
-                              <TypographySmall className="font-mono text-muted-foreground">
-                                {property.component}
-                              </TypographySmall>
-                              <code>{property.name}</code>
-                            </Stack>
-                          ) : (
-                            <code>{property.name}</code>
-                          )}
-                          <span>{property.description}</span>
-                          <code>{property.type}</code>
-                          <code>{property.defaultValue ?? '—'}</code>
-                        </div>
+                          <h4>
+                            <code>{group.component}</code>
+                          </h4>
+                          <div className="component-api-table">
+                            <div className="component-api-head">
+                              <span>属性</span>
+                              <span>说明</span>
+                              <span>类型</span>
+                              <span>默认值</span>
+                            </div>
+                            {group.api.map((property) => (
+                              <div key={property.name}>
+                                <code>{property.name}</code>
+                                <span>{property.description}</span>
+                                <code>{property.type}</code>
+                                <code>{property.defaultValue ?? '—'}</code>
+                              </div>
+                            ))}
+                          </div>
+                        </section>
                       ))}
                     </div>
                   </div>
@@ -1067,8 +1077,8 @@ function ComponentPage() {
             </div>
           </>
         ) : null}
-      </SidebarInset>
-    </SidebarProvider>
+      </Sidebar.Inset>
+    </Sidebar.Provider>
   );
 }
 
@@ -1087,13 +1097,13 @@ function ComponentExampleList({
       minColumnWidth={300}
     >
       {examples.map((example) => (
-        <MasonryItem
+        <Masonry.Item
           className={`example-item${example.wide ? ' example-item-wide' : ''}`}
           key={example.title}
           span={example.wide ? 'full' : 'auto'}
         >
           <ComponentExampleCard component={component} example={example} />
-        </MasonryItem>
+        </Masonry.Item>
       ))}
     </Masonry>
   );
@@ -1225,7 +1235,7 @@ function ComponentExampleCard({
         }
       >
         {example.cases ? (
-          <ComponentHarness cases={example.cases}>
+          <ComponentHarness cases={example.cases} layout={example.caseLayout}>
             {(values) =>
               typeof example.preview === 'function'
                 ? example.preview(values)
@@ -1233,7 +1243,7 @@ function ComponentExampleCard({
             }
           </ComponentHarness>
         ) : example.caseAxes ? (
-          <ComponentHarness axes={example.caseAxes}>
+          <ComponentHarness axes={example.caseAxes} layout={example.caseLayout}>
             {(values) =>
               typeof example.preview === 'function'
                 ? example.preview(values)

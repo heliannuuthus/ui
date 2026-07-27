@@ -572,8 +572,13 @@ function DataTable<TData, TValue>({
   );
 }
 
+const DataTableCompound = Object.assign(DataTable, {
+  Actions: DataTableActions,
+  ColumnHeader: DataTableColumnHeader,
+});
+
 export {
-  DataTable,
+  DataTableCompound as DataTable,
   DataTableActions as Actions,
   DataTableColumnHeader as ColumnHeader,
 };

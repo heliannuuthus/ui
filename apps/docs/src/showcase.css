@@ -943,6 +943,9 @@ a {
   grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 32px;
 }
+.component-harness-case-grid-stack {
+  grid-template-columns: minmax(0, 1fr);
+}
 .component-harness-case {
   min-width: 0;
   display: grid;
@@ -3195,6 +3198,22 @@ a {
   border-radius: 11px;
   overflow: hidden;
 }
+.component-api-groups {
+  display: grid;
+  gap: 24px;
+}
+.component-api-group {
+  min-width: 0;
+}
+.component-api-group > h4 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.component-api-group > h4 code {
+  color: var(--primary);
+  font-family: var(--font-mono);
+}
 .component-api-table > div {
   display: grid;
   grid-template-columns: 145px 1.45fr 1.15fr 92px;
@@ -3735,10 +3754,6 @@ a {
   width: 18px;
 }
 
-.data-otp-card [data-slot='input-otp'] {
-  justify-content: flex-end;
-}
-
 .data-otp-variants {
   display: grid;
   gap: 24px;
@@ -3775,10 +3790,6 @@ a {
   gap: 16px;
   text-align: center;
 }
-.component-harness-case .data-otp-card [data-slot='input-otp'] {
-  justify-content: center;
-}
-
 .data-label-row {
   align-items: baseline;
 }

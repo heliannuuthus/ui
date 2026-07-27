@@ -144,8 +144,12 @@ function BubbleReactions({
   );
 }
 
+const BubbleCompound = Object.assign(Bubble, {
+  Group: BubbleGroup,
+});
+
 export {
-  Bubble,
+  BubbleCompound as Bubble,
   BubbleGroup as Group,
   type BubbleProps,
   type BubbleReactionsProps,

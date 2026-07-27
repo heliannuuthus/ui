@@ -685,8 +685,33 @@ function SidebarMenuSubButton({
   });
 }
 
+const SidebarCompound = Object.assign(Sidebar, {
+  Content: SidebarContent,
+  Footer: SidebarFooter,
+  Group: SidebarGroup,
+  GroupAction: SidebarGroupAction,
+  GroupContent: SidebarGroupContent,
+  GroupLabel: SidebarGroupLabel,
+  Header: SidebarHeader,
+  Input: SidebarInput,
+  Inset: SidebarInset,
+  Menu: SidebarMenu,
+  MenuAction: SidebarMenuAction,
+  MenuBadge: SidebarMenuBadge,
+  MenuButton: SidebarMenuButton,
+  MenuItem: SidebarMenuItem,
+  MenuSkeleton: SidebarMenuSkeleton,
+  MenuSub: SidebarMenuSub,
+  MenuSubButton: SidebarMenuSubButton,
+  MenuSubItem: SidebarMenuSubItem,
+  Provider: SidebarProvider,
+  Rail: SidebarRail,
+  Separator: SidebarSeparator,
+  Trigger: SidebarTrigger,
+});
+
 export {
-  Sidebar,
+  SidebarCompound as Sidebar,
   SidebarContent as Content,
   SidebarFooter as Footer,
   SidebarGroup as Group,

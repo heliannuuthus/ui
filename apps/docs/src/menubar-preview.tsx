@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { Menubar } from '@heliannuuthus/ui/menubar';
+import { Menubar } from '@heliannuuthus/ui';
 import {
   Archive,
   FileCode2,

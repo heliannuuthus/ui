@@ -1,10 +1,4 @@
-import {
-  Content as LayoutContent,
-  Footer as LayoutFooter,
-  Header as LayoutHeader,
-  Layout,
-  Sidebar as LayoutSidebar,
-} from '@heliannuuthus/ui/layout';
+import { Layout } from '@heliannuuthus/ui';
 import {
   Bell,
   Blocks,
@@ -26,14 +20,14 @@ const navigationItems = [
 
 function PreviewHeader({ compact = false }: { compact?: boolean }) {
   return (
-    <LayoutHeader className="layout-demo-header">
+    <Layout.Header className="layout-demo-header">
       <span className="layout-demo-brand">H</span>
       {!compact && <strong>Heliannuuthus</strong>}
       <span className="layout-demo-header-spacer" />
       <Search />
       <Bell />
       <CircleUserRound />
-    </LayoutHeader>
+    </Layout.Header>
   );
 }
 
@@ -45,7 +39,7 @@ function PreviewSidebar({
   width?: number;
 }) {
   return (
-    <LayoutSidebar
+    <Layout.Sidebar
       aria-label={label}
       className="layout-demo-sidebar"
       width={width}
@@ -67,13 +61,13 @@ function PreviewSidebar({
         <Settings />
         <span>设置</span>
       </a>
-    </LayoutSidebar>
+    </Layout.Sidebar>
   );
 }
 
 function PreviewContent({ detailed = false }: { detailed?: boolean }) {
   return (
-    <LayoutContent className="layout-demo-content" render={<div />}>
+    <Layout.Content className="layout-demo-content" render={<div />}>
       <div className="layout-demo-heading">
         <span>工作台</span>
         <strong>{detailed ? '项目进度' : '欢迎回来'}</strong>
@@ -102,7 +96,7 @@ function PreviewContent({ detailed = false }: { detailed?: boolean }) {
         <span />
         <span />
       </div>
-    </LayoutContent>
+    </Layout.Content>
   );
 }
 
@@ -112,10 +106,10 @@ export function LayoutPageDemo() {
       <Layout className="layout-demo-shell">
         <PreviewHeader />
         <PreviewContent />
-        <LayoutFooter className="layout-demo-footer">
+        <Layout.Footer className="layout-demo-footer">
           <span>© 2026 Heliannuuthus</span>
           <span>状态正常</span>
-        </LayoutFooter>
+        </Layout.Footer>
       </Layout>
     </div>
   );
@@ -142,11 +136,11 @@ export function LayoutRightSidebarDemo() {
         <Layout>
           <PreviewHeader compact />
           <PreviewContent />
-          <LayoutFooter className="layout-demo-footer">
+          <Layout.Footer className="layout-demo-footer">
             <span>最后更新于 14:32</span>
-          </LayoutFooter>
+          </Layout.Footer>
         </Layout>
-        <LayoutSidebar
+        <Layout.Sidebar
           aria-label="详情面板"
           className="layout-demo-sidebar layout-demo-sidebar-detail"
           width={104}
@@ -166,7 +160,7 @@ export function LayoutRightSidebarDemo() {
               <dd>v0.12</dd>
             </div>
           </dl>
-        </LayoutSidebar>
+        </Layout.Sidebar>
       </Layout>
     </div>
   );
@@ -181,10 +175,10 @@ export function LayoutApplicationDemo() {
           <PreviewSidebar width={124} />
           <PreviewContent detailed />
         </Layout>
-        <LayoutFooter className="layout-demo-footer">
+        <Layout.Footer className="layout-demo-footer">
           <span>生产环境</span>
           <span>所有系统运行正常</span>
-        </LayoutFooter>
+        </Layout.Footer>
       </Layout>
     </div>
   );

@@ -190,5 +190,9 @@ function RadioGroup<Value = string>({
   );
 }
 
-export { RadioRoot as Radio, RadioGroup as Group };
+const Radio = Object.assign(RadioRoot, {
+  Group: RadioGroup,
+});
+
+export { Radio, RadioGroup as Group };
 export type { RadioClassNames, RadioGroupProps, RadioOption, RadioProps };

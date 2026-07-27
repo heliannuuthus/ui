@@ -213,7 +213,11 @@ function AvatarGroupCount({
   );
 }
 
-export { Avatar, AvatarGroup as Group };
+const AvatarCompound = Object.assign(Avatar, {
+  Group: AvatarGroup,
+});
+
+export { AvatarCompound as Avatar, AvatarGroup as Group };
 
 export type {
   AvatarGroupItem,

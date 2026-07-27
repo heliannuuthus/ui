@@ -223,4 +223,8 @@ function CalendarDayButton({
   );
 }
 
-export { Calendar, CalendarDayButton as DayButton };
+const CalendarCompound = Object.assign(Calendar, {
+  DayButton: CalendarDayButton,
+});
+
+export { CalendarCompound as Calendar, CalendarDayButton as DayButton };

@@ -1,9 +1,6 @@
 import { useState, type ReactNode } from 'react';
-import { Button } from '@heliannuuthus/ui/button';
-import {
-  DropdownMenu,
-  type DropdownMenuEntry,
-} from '@heliannuuthus/ui/dropdown-menu';
+import { Button } from '@heliannuuthus/ui';
+import { DropdownMenu, type DropdownMenuEntry } from '@heliannuuthus/ui';
 import {
   Archive,
   ChevronDown,

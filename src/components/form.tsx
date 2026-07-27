@@ -110,8 +110,17 @@ function FormMessage({
   );
 }
 
+const FormCompound = Object.assign(Form, {
+  Control: FormControl,
+  Description: FormDescription,
+  Field: FormField,
+  Item: FormItem,
+  Label: FormLabel,
+  Message: FormMessage,
+});
+
 export {
-  Form,
+  FormCompound as Form,
   FormControl as Control,
   FormDescription as Description,
   FormField as Field,

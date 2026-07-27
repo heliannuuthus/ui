@@ -224,8 +224,20 @@ function FieldError({
   );
 }
 
+const FieldCompound = Object.assign(Field, {
+  Content: FieldContent,
+  Description: FieldDescription,
+  Error: FieldError,
+  Group: FieldGroup,
+  Label: FieldLabel,
+  Legend: FieldLegend,
+  Separator: FieldSeparator,
+  Set: FieldSet,
+  Title: FieldTitle,
+});
+
 export {
-  Field,
+  FieldCompound as Field,
   FieldContent as Content,
   FieldDescription as Description,
   FieldError as Error,

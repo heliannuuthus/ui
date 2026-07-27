@@ -1,50 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@heliannuuthus/ui/button';
-import { Group as CheckboxGroup } from '@heliannuuthus/ui/checkbox';
-import { DatePicker } from '@heliannuuthus/ui/date-picker';
-import {
-  Content as FieldContent,
-  Description as FieldDescription,
-  Error as FieldError,
-  Field,
-  Group as FieldGroup,
-  Label as FieldLabel,
-  Legend as FieldLegend,
-  Set as FieldSet,
-  Title as FieldTitle,
-} from '@heliannuuthus/ui/field';
-import {
-  Control as FormControl,
-  Description as FormDescription,
-  Field as FormField,
-  Form,
-  Item as FormItem,
-  Label as FormLabel,
-  Message as FormMessage,
-} from '@heliannuuthus/ui/form';
-import { Input, TextArea } from '@heliannuuthus/ui/input';
-import { Label } from '@heliannuuthus/ui/label';
-import {
-  Addon as InputGroupAddon,
-  Button as InputGroupButton,
-  Input as InputGroupInput,
-  InputGroup,
-  Text as InputGroupText,
-  TextArea as InputGroupTextArea,
-} from '@heliannuuthus/ui/input-group';
-import {
-  Group as InputOTPGroup,
-  InputOTP,
-  Separator as InputOTPSeparator,
-  Slot as InputOTPSlot,
-} from '@heliannuuthus/ui/input-otp';
-import { Group as RadioGroup } from '@heliannuuthus/ui/radio';
-import { Select } from '@heliannuuthus/ui/select';
-import { Slider } from '@heliannuuthus/ui/slider';
-import { Switch } from '@heliannuuthus/ui/switch';
-import { Toggle } from '@heliannuuthus/ui/toggle';
+import { Button } from '@heliannuuthus/ui';
+import { Checkbox } from '@heliannuuthus/ui';
+import { DatePicker } from '@heliannuuthus/ui';
+import { Field } from '@heliannuuthus/ui';
+import { Form } from '@heliannuuthus/ui';
+import { Input } from '@heliannuuthus/ui';
+import { Label } from '@heliannuuthus/ui';
+import { Radio } from '@heliannuuthus/ui';
+import { Select } from '@heliannuuthus/ui';
+import { Slider } from '@heliannuuthus/ui';
+import { Switch } from '@heliannuuthus/ui';
+import { Toggle } from '@heliannuuthus/ui';
 import {
   Bold,
   Check,
@@ -118,7 +86,7 @@ export function CheckboxPermissionsDemo() {
         </div>
         <span>{selected.length} 项已开启</span>
       </div>
-      <CheckboxGroup
+      <Checkbox.Group
         aria-label="成员权限"
         className="data-option-stack"
         gap={0}
@@ -184,32 +152,32 @@ export function DatePickerReleaseDemo() {
 export function FieldProfileDemo() {
   return (
     <div className="data-form-shell">
-      <FieldSet>
-        <FieldLegend>公开资料</FieldLegend>
-        <FieldGroup>
+      <Field.Set>
+        <Field.Legend>公开资料</Field.Legend>
+        <Field.Group>
           <Field>
-            <FieldLabel htmlFor="field-display-name">显示名称</FieldLabel>
+            <Field.Label htmlFor="field-display-name">显示名称</Field.Label>
             <Input id="field-display-name" defaultValue="Heliannuuthus" />
-            <FieldDescription>
+            <Field.Description>
               会显示在评论、提交记录和成员列表中。
-            </FieldDescription>
+            </Field.Description>
           </Field>
           <Field data-invalid="true">
-            <FieldLabel htmlFor="field-handle">个人标识</FieldLabel>
+            <Field.Label htmlFor="field-handle">个人标识</Field.Label>
             <Input id="field-handle" defaultValue="hello world" aria-invalid />
-            <FieldError>只能使用小写字母、数字和连字符。</FieldError>
+            <Field.Error>只能使用小写字母、数字和连字符。</Field.Error>
           </Field>
           <Field orientation="horizontal">
-            <FieldContent>
-              <FieldTitle>公开邮箱</FieldTitle>
-              <FieldDescription>
+            <Field.Content>
+              <Field.Title>公开邮箱</Field.Title>
+              <Field.Description>
                 允许其他成员通过资料页联系你。
-              </FieldDescription>
-            </FieldContent>
+              </Field.Description>
+            </Field.Content>
             <Switch aria-label="公开邮箱" />
           </Field>
-        </FieldGroup>
-      </FieldSet>
+        </Field.Group>
+      </Field.Set>
     </div>
   );
 }
@@ -233,7 +201,7 @@ export function FormInviteDemo() {
           className="data-form-stack"
           onSubmit={form.handleSubmit((values) => setSubmitted(values.email))}
         >
-          <FormField
+          <Form.Field
             control={form.control}
             name="email"
             rules={{
@@ -241,29 +209,29 @@ export function FormInviteDemo() {
               pattern: { value: /^\S+@\S+\.\S+$/, message: '邮箱格式不正确。' },
             }}
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>邮箱地址</FormLabel>
-                <FormControl>
+              <Form.Item>
+                <Form.Label>邮箱地址</Form.Label>
+                <Form.Control>
                   <Input placeholder="name@example.com" {...field} />
-                </FormControl>
-                <FormDescription>
+                </Form.Control>
+                <Form.Description>
                   成员会收到一封加入工作区的邮件。
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
+                </Form.Description>
+                <Form.Message />
+              </Form.Item>
             )}
           />
-          <FormField
+          <Form.Field
             control={form.control}
             name="note"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>附言（可选）</FormLabel>
-                <FormControl>
-                  <TextArea placeholder="补充邀请背景…" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+              <Form.Item>
+                <Form.Label>附言（可选）</Form.Label>
+                <Form.Control>
+                  <Input.TextArea placeholder="补充邀请背景…" {...field} />
+                </Form.Control>
+                <Form.Message />
+              </Form.Item>
             )}
           />
           <div className="data-form-actions">
@@ -300,7 +268,7 @@ export function InputStatesDemo() {
   );
 }
 
-export function InputGroupAddressDemo() {
+export function InputAffixDemo() {
   const [copied, setCopied] = useState(false);
   const [note, setNote] = useState('本次发布包含导航与数据录入组件。');
 
@@ -308,44 +276,45 @@ export function InputGroupAddressDemo() {
     <div className="data-form-stack data-group-demo">
       <div className="minimal-field">
         <Label htmlFor="project-url">项目地址</Label>
-        <InputGroup>
-          <InputGroupAddon>
-            <Globe2 />
-            <InputGroupText>ui.dev/</InputGroupText>
-          </InputGroupAddon>
-          <InputGroupInput id="project-url" defaultValue="docs" />
-          <InputGroupAddon align="inline-end">
-            <InputGroupButton
+        <Input
+          id="project-url"
+          defaultValue="docs"
+          prefix={
+            <>
+              <Globe2 />
+              <span>ui.dev/</span>
+            </>
+          }
+          suffix={
+            <Button
               aria-label="复制地址"
+              size="xs"
+              variant="ghost"
               onClick={() => setCopied(true)}
             >
               {copied ? <Check /> : <Copy />}
               {copied ? '已复制' : '复制'}
-            </InputGroupButton>
-          </InputGroupAddon>
-        </InputGroup>
+            </Button>
+          }
+        />
       </div>
       <div className="minimal-field">
         <Label htmlFor="release-note">发布说明</Label>
-        <InputGroup>
-          <InputGroupTextArea
-            id="release-note"
-            value={note}
-            onChange={(event) => setNote(event.target.value)}
-          />
-          <InputGroupAddon align="block-end">
-            <InputGroupText>{note.length} / 120</InputGroupText>
-          </InputGroupAddon>
-        </InputGroup>
+        <Input.TextArea
+          id="release-note"
+          value={note}
+          onChange={(event) => setNote(event.target.value)}
+        />
+        <span className="data-field-hint">{note.length} / 120</span>
       </div>
     </div>
   );
 }
 
 export function InputOtpVerificationDemo({
-  shape = 'connected',
+  variant = 'connected',
 }: {
-  shape?: 'connected' | 'separated';
+  variant?: 'connected' | 'separated';
 }) {
   const [value, setValue] = useState('');
 
@@ -359,35 +328,22 @@ export function InputOtpVerificationDemo({
       <div className="data-otp-variants">
         <div className="data-otp-variant-row">
           <span>
-            <strong>{shape === 'connected' ? '连接方块' : '独立方块'}</strong>
+            <strong>{variant === 'connected' ? '连接方块' : '独立方块'}</strong>
             <small>
-              {shape === 'connected'
+              {variant === 'connected'
                 ? '适合分段验证码或序列号'
                 : '适合强调每一位输入状态'}
             </small>
           </span>
-          <InputOTP
+          <Input.OTP
             maxLength={6}
             value={value}
             onChange={setValue}
-            shape={shape}
-          >
-            <InputOTPGroup>
-              {(shape === 'connected' ? [0, 1, 2] : [0, 1, 2, 3, 4, 5]).map(
-                (index) => (
-                  <InputOTPSlot key={index} index={index} />
-                )
-              )}
-            </InputOTPGroup>
-            {shape === 'connected' && <InputOTPSeparator />}
-            {shape === 'connected' && (
-              <InputOTPGroup>
-                {[3, 4, 5].map((index) => (
-                  <InputOTPSlot key={index} index={index} />
-                ))}
-              </InputOTPGroup>
-            )}
-          </InputOTP>
+            variant={variant}
+            aria-label={
+              variant === 'connected' ? '连接方块验证码' : '独立方块验证码'
+            }
+          />
         </div>
       </div>
       <span>
@@ -423,7 +379,7 @@ export function RadioDeliveryDemo() {
   const [delivery, setDelivery] = useState('email');
 
   return (
-    <RadioGroup
+    <Radio.Group
       aria-label="选择通知方式"
       minColumnWidth={120}
       onChange={setDelivery}
@@ -450,7 +406,7 @@ export function RadioPlanDemo({
   ];
 
   return (
-    <RadioGroup
+    <Radio.Group
       className="data-radio-cards"
       value={plan}
       onChange={setPlan}
@@ -699,7 +655,7 @@ export function TextAreaCounterDemo() {
           {value.length} / {maxLength}
         </span>
       </div>
-      <TextArea
+      <Input.TextArea
         id="textarea-release"
         value={value}
         maxLength={maxLength}

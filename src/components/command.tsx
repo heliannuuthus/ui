@@ -4,7 +4,7 @@ import { CheckIcon, SearchIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
 import { Dialog, type DialogProps } from './dialog';
-import { Addon, InputGroup } from './input-group';
+import { Addon, InputGroup } from './internal/input-group';
 
 type CommandOption = {
   disabled?: boolean;

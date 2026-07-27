@@ -1,49 +1,27 @@
 'use client';
 
 import { Fragment, useState, type ReactNode } from 'react';
-import { Accordion } from '@heliannuuthus/ui/accordion';
-import { Group as AttachmentGroup } from '@heliannuuthus/ui/attachment';
-import { Avatar, Group as AvatarGroup } from '@heliannuuthus/ui/avatar';
-import { Badge } from '@heliannuuthus/ui/badge';
-import { Button } from '@heliannuuthus/ui/button';
-import { Carousel } from '@heliannuuthus/ui/carousel';
-import {
-  Chart as ChartContainer,
-  Tooltip as ChartTooltip,
-  TooltipContent as ChartTooltipContent,
-  type ChartConfig,
-} from '@heliannuuthus/ui/chart';
-import { Collapsible } from '@heliannuuthus/ui/collapsible';
-import { Counter } from '@heliannuuthus/ui/counter';
-import {
-  Actions as DataTableActions,
-  ColumnHeader as DataTableColumnHeader,
-  DataTable,
-  type ColumnDef,
-} from '@heliannuuthus/ui/data-table';
-import { DropdownMenu } from '@heliannuuthus/ui/dropdown-menu';
-import { Empty } from '@heliannuuthus/ui/empty';
-import { Group as ItemGroup } from '@heliannuuthus/ui/item';
-import { Marker } from '@heliannuuthus/ui/marker';
-import { Bubble, Group as BubbleGroup } from '@heliannuuthus/ui/bubble';
-import { Pagination } from '@heliannuuthus/ui/pagination';
-import { ScrollArea } from '@heliannuuthus/ui/scroll-area';
-import { Slider } from '@heliannuuthus/ui/slider';
-import { Separator } from '@heliannuuthus/ui/separator';
-import {
-  Body as TableBody,
-  Caption as TableCaption,
-  Cell as TableCell,
-  ExpandedRow as TableExpandedRow,
-  ExpandButton as TableExpandButton,
-  Footer as TableFooter,
-  Head as TableHead,
-  Header as TableHeader,
-  Row as TableRow,
-  Table,
-  VirtualBody as TableVirtualBody,
-} from '@heliannuuthus/ui/table';
-import { Tooltip } from '@heliannuuthus/ui/tooltip';
+import { Accordion } from '@heliannuuthus/ui';
+import { Attachment } from '@heliannuuthus/ui';
+import { Avatar } from '@heliannuuthus/ui';
+import { Badge } from '@heliannuuthus/ui';
+import { Button } from '@heliannuuthus/ui';
+import { Carousel } from '@heliannuuthus/ui';
+import { Chart, type ChartConfig } from '@heliannuuthus/ui';
+import { Collapsible } from '@heliannuuthus/ui';
+import { Counter } from '@heliannuuthus/ui';
+import { DataTable, type ColumnDef } from '@heliannuuthus/ui';
+import { DropdownMenu } from '@heliannuuthus/ui';
+import { Empty } from '@heliannuuthus/ui';
+import { Item } from '@heliannuuthus/ui';
+import { Marker } from '@heliannuuthus/ui';
+import { Bubble } from '@heliannuuthus/ui';
+import { Pagination } from '@heliannuuthus/ui';
+import { ScrollArea } from '@heliannuuthus/ui';
+import { Slider } from '@heliannuuthus/ui';
+import { Separator } from '@heliannuuthus/ui';
+import { Table } from '@heliannuuthus/ui';
+import { Tooltip } from '@heliannuuthus/ui';
 import {
   Activity,
   Archive,
@@ -278,7 +256,7 @@ export function AttachmentReleaseDemo({
       <div className="display-section-label">
         {orientation === 'vertical' ? '纵向缩略卡' : '横向文件行'}
       </div>
-      <AttachmentGroup
+      <Attachment.Group
         items={releaseFiles.map((file) => {
           const Icon = file.icon;
           return {
@@ -363,7 +341,7 @@ export function AvatarGroupDemo() {
           <span>发布协作者</span>
           <strong>当前展示 {Math.min(max, avatarPeople.length)} 人</strong>
         </div>
-        <AvatarGroup
+        <Avatar.Group
           aria-label={`展示 ${Math.min(max, avatarPeople.length)} 位协作者，其余自动汇总`}
           items={avatarPeople.map((person) => ({
             alt: person.initials,
@@ -496,14 +474,14 @@ export function BubbleVariantsDemo() {
             <strong>{reply.label}</strong>
             <span>{reply.token}</span>
           </div>
-          <BubbleGroup>
+          <Bubble.Group>
             <Bubble
               align="end"
               content="已经补充完成，可以重新评审。"
               reactions="✓ 2"
               variant={reply.variant}
             />
-          </BubbleGroup>
+          </Bubble.Group>
           {index < replies.length - 1 && (
             <Separator className="display-bubble-separator" />
           )}
@@ -863,7 +841,7 @@ export function ChartDeploymentDemo() {
           </div>
           <span>近七日</span>
         </div>
-        <ChartContainer
+        <Chart
           className="display-chart"
           config={deploymentChartConfig}
           initialDimension={{ width: 720, height: 280 }}
@@ -907,8 +885,8 @@ export function ChartDeploymentDemo() {
               tickLine={false}
               width={42}
             />
-            <ChartTooltip
-              content={<ChartTooltipContent indicator="line" />}
+            <Chart.Tooltip
+              content={<Chart.TooltipContent indicator="line" />}
               cursor={false}
             />
             <Area
@@ -920,7 +898,7 @@ export function ChartDeploymentDemo() {
               type="monotone"
             />
           </AreaChart>
-        </ChartContainer>
+        </Chart>
       </div>
 
       <footer className="display-chart-story-footer">
@@ -1157,7 +1135,7 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
   {
     accessorKey: 'version',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column}>版本</DataTableColumnHeader>
+      <DataTable.ColumnHeader column={column}>版本</DataTable.ColumnHeader>
     ),
     meta: {
       cellClassName: 'font-medium',
@@ -1189,7 +1167,7 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
       headerClassName: 'w-36',
     },
     render: (_, row) => (
-      <DataTableActions aria-label={`${row.version} 操作`}>
+      <DataTable.Actions aria-label={`${row.version} 操作`}>
         <Button size="xs" variant="ghost">
           查看
         </Button>
@@ -1212,7 +1190,7 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
             { label: '删除记录', icon: <Trash2 />, destructive: true },
           ]}
         />
-      </DataTableActions>
+      </DataTable.Actions>
     ),
   },
 ];
@@ -1225,7 +1203,7 @@ const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
       {
         accessorKey: 'version',
         header: ({ column }) => (
-          <DataTableColumnHeader column={column}>版本</DataTableColumnHeader>
+          <DataTable.ColumnHeader column={column}>版本</DataTable.ColumnHeader>
         ),
       },
       { accessorKey: 'environment', header: '环境', enableSorting: false },
@@ -1261,11 +1239,11 @@ const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
         header: '记录',
         meta: { align: 'center' },
         render: (_, row) => (
-          <DataTableActions aria-label={`${row.version} 操作`}>
+          <DataTable.Actions aria-label={`${row.version} 操作`}>
             <Button size="xs" variant="outline">
               {row.status === '运行中' ? '监控' : '详情'}
             </Button>
-          </DataTableActions>
+          </DataTable.Actions>
         ),
       },
     ],
@@ -1312,11 +1290,11 @@ const virtualDataTableColumns: ColumnDef<VirtualDataTableRecord>[] = [
       headerClassName: 'w-28',
     },
     render: (_, row) => (
-      <DataTableActions aria-label={`${row.id} 操作`}>
+      <DataTable.Actions aria-label={`${row.id} 操作`}>
         <Button size="xs" variant="ghost">
           查看
         </Button>
-      </DataTableActions>
+      </DataTable.Actions>
     ),
   },
 ];
@@ -1457,7 +1435,7 @@ export function ItemActivityDemo({
   variant?: 'default' | 'outline' | 'muted';
 }) {
   return (
-    <ItemGroup
+    <Item.Group
       className="display-activity-list"
       items={[
         {
@@ -1521,25 +1499,25 @@ export function TableReleaseDemo() {
   return (
     <div className="display-table-shell">
       <Table>
-        <TableCaption>今晚 22:00 发布窗口中的服务。</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>服务</TableHead>
-            <TableHead>版本</TableHead>
-            <TableHead>环境</TableHead>
-            <TableHead align="center">操作</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
+        <Table.Caption>今晚 22:00 发布窗口中的服务。</Table.Caption>
+        <Table.Header>
+          <Table.Row>
+            <Table.Head>服务</Table.Head>
+            <Table.Head>版本</Table.Head>
+            <Table.Head>环境</Table.Head>
+            <Table.Head align="center">操作</Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {tableRows.map(([service, version, environment, action]) => (
-            <TableRow key={service}>
-              <TableCell className="display-table-service">
+            <Table.Row key={service}>
+              <Table.Cell className="display-table-service">
                 <Server />
                 {service}
-              </TableCell>
-              <TableCell>{version}</TableCell>
-              <TableCell>{environment}</TableCell>
-              <TableCell align="center">
+              </Table.Cell>
+              <Table.Cell>{version}</Table.Cell>
+              <Table.Cell>{environment}</Table.Cell>
+              <Table.Cell align="center">
                 <Button
                   aria-label={`${action} ${service}`}
                   size="xs"
@@ -1548,16 +1526,16 @@ export function TableReleaseDemo() {
                 >
                   {action}
                 </Button>
-              </TableCell>
-            </TableRow>
+              </Table.Cell>
+            </Table.Row>
           ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>已就绪服务</TableCell>
-            <TableCell>2 / 3</TableCell>
-          </TableRow>
-        </TableFooter>
+        </Table.Body>
+        <Table.Footer>
+          <Table.Row>
+            <Table.Cell colSpan={3}>已就绪服务</Table.Cell>
+            <Table.Cell>2 / 3</Table.Cell>
+          </Table.Row>
+        </Table.Footer>
       </Table>
     </div>
   );
@@ -1640,25 +1618,25 @@ export function TableFixedDemo() {
   return (
     <div className="display-table-shell display-table-wide">
       <Table className="min-w-[960px] table-fixed">
-        <TableHeader>
-          <TableRow>
-            <TableHead fixed="start" className="w-40">
+        <Table.Header>
+          <Table.Row>
+            <Table.Head fixed="start" className="w-40">
               服务
-            </TableHead>
-            <TableHead className="w-32">负责团队</TableHead>
-            <TableHead className="w-28">版本</TableHead>
-            <TableHead className="w-20">环境</TableHead>
-            <TableHead align="end" className="w-36">
+            </Table.Head>
+            <Table.Head className="w-32">负责团队</Table.Head>
+            <Table.Head className="w-28">版本</Table.Head>
+            <Table.Head className="w-20">环境</Table.Head>
+            <Table.Head align="end" className="w-36">
               每分钟请求
-            </TableHead>
-            <TableHead className="w-28">区域</TableHead>
-            <TableHead className="w-32">最近部署</TableHead>
-            <TableHead fixed="end" align="center" className="w-24">
+            </Table.Head>
+            <Table.Head className="w-28">区域</Table.Head>
+            <Table.Head className="w-32">最近部署</Table.Head>
+            <Table.Head fixed="end" align="center" className="w-24">
               操作
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
+            </Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {fixedTableRows.map(
             ([
               service,
@@ -1670,17 +1648,17 @@ export function TableFixedDemo() {
               deployedAt,
               status,
             ]) => (
-              <TableRow key={service}>
-                <TableCell fixed="start" className="font-semibold">
+              <Table.Row key={service}>
+                <Table.Cell fixed="start" className="font-semibold">
                   {service}
-                </TableCell>
-                <TableCell>{owner}</TableCell>
-                <TableCell>{version}</TableCell>
-                <TableCell>{environment}</TableCell>
-                <TableCell align="end">{requests}</TableCell>
-                <TableCell>{region}</TableCell>
-                <TableCell>{deployedAt}</TableCell>
-                <TableCell fixed="end" align="center">
+                </Table.Cell>
+                <Table.Cell>{owner}</Table.Cell>
+                <Table.Cell>{version}</Table.Cell>
+                <Table.Cell>{environment}</Table.Cell>
+                <Table.Cell align="end">{requests}</Table.Cell>
+                <Table.Cell>{region}</Table.Cell>
+                <Table.Cell>{deployedAt}</Table.Cell>
+                <Table.Cell fixed="end" align="center">
                   <Button
                     aria-label={`${status === '健康' ? '监控' : '排查'} ${service}`}
                     size="xs"
@@ -1689,11 +1667,11 @@ export function TableFixedDemo() {
                   >
                     {status === '健康' ? '监控' : '排查'}
                   </Button>
-                </TableCell>
-              </TableRow>
+                </Table.Cell>
+              </Table.Row>
             )
           )}
-        </TableBody>
+        </Table.Body>
       </Table>
     </div>
   );
@@ -1726,25 +1704,25 @@ export function TableVirtualScrollDemo() {
         className="min-w-[820px] table-fixed"
         containerClassName="max-h-80"
       >
-        <TableHeader>
-          <TableRow>
-            <TableHead fixed="start" className="w-32">
+        <Table.Header>
+          <Table.Row>
+            <Table.Head fixed="start" className="w-32">
               事件
-            </TableHead>
-            <TableHead className="w-52">服务</TableHead>
-            <TableHead className="w-32">区域</TableHead>
-            <TableHead align="end" className="w-32">
+            </Table.Head>
+            <Table.Head className="w-52">服务</Table.Head>
+            <Table.Head className="w-32">区域</Table.Head>
+            <Table.Head align="end" className="w-32">
               延迟
-            </TableHead>
-            <TableHead align="end" className="w-36">
+            </Table.Head>
+            <Table.Head align="end" className="w-36">
               每分钟请求
-            </TableHead>
-            <TableHead fixed="end" align="center" className="w-28">
+            </Table.Head>
+            <Table.Head fixed="end" align="center" className="w-28">
               操作
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableVirtualBody
+            </Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.VirtualBody
           colSpan={6}
           items={virtualTableRows}
           getItemKey={getVirtualTableRowKey}
@@ -1752,15 +1730,15 @@ export function TableVirtualScrollDemo() {
           overscan={8}
         >
           {(row) => (
-            <TableRow>
-              <TableCell fixed="start" className="font-medium">
+            <Table.Row>
+              <Table.Cell fixed="start" className="font-medium">
                 {row.id}
-              </TableCell>
-              <TableCell>{row.service}</TableCell>
-              <TableCell>{row.region}</TableCell>
-              <TableCell align="end">{row.latency}</TableCell>
-              <TableCell align="end">{row.requests}</TableCell>
-              <TableCell fixed="end" align="center" className="py-2">
+              </Table.Cell>
+              <Table.Cell>{row.service}</Table.Cell>
+              <Table.Cell>{row.region}</Table.Cell>
+              <Table.Cell align="end">{row.latency}</Table.Cell>
+              <Table.Cell align="end">{row.requests}</Table.Cell>
+              <Table.Cell fixed="end" align="center" className="py-2">
                 <Button
                   aria-label={`${row.status === '健康' ? '查看' : '排查'} ${row.id}`}
                   size="xs"
@@ -1769,10 +1747,10 @@ export function TableVirtualScrollDemo() {
                 >
                   {row.status === '健康' ? '查看' : '排查'}
                 </Button>
-              </TableCell>
-            </TableRow>
+              </Table.Cell>
+            </Table.Row>
           )}
-        </TableVirtualBody>
+        </Table.VirtualBody>
       </Table>
     </div>
   );
@@ -1798,21 +1776,21 @@ export function TablePaginationDemo() {
     <div className="display-table-composite">
       <div className="display-table-shell">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>发布单</TableHead>
-              <TableHead>服务</TableHead>
-              <TableHead>负责人</TableHead>
-              <TableHead align="center">操作</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+          <Table.Header>
+            <Table.Row>
+              <Table.Head>发布单</Table.Head>
+              <Table.Head>服务</Table.Head>
+              <Table.Head>负责人</Table.Head>
+              <Table.Head align="center">操作</Table.Head>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
             {rows.map(([release, service, owner, status]) => (
-              <TableRow key={release}>
-                <TableCell className="font-medium">{release}</TableCell>
-                <TableCell>{service}</TableCell>
-                <TableCell>{owner}</TableCell>
-                <TableCell align="center">
+              <Table.Row key={release}>
+                <Table.Cell className="font-medium">{release}</Table.Cell>
+                <Table.Cell>{service}</Table.Cell>
+                <Table.Cell>{owner}</Table.Cell>
+                <Table.Cell align="center">
                   <Button
                     aria-label={`${
                       status === '待审批'
@@ -1831,10 +1809,10 @@ export function TablePaginationDemo() {
                         ? '跟进'
                         : '查看'}
                   </Button>
-                </TableCell>
-              </TableRow>
+                </Table.Cell>
+              </Table.Row>
             ))}
-          </TableBody>
+          </Table.Body>
         </Table>
       </div>
       <div className="display-table-pagination">
@@ -1883,51 +1861,51 @@ export function TableExpandableDemo() {
   return (
     <div className="display-table-shell">
       <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-12">
+        <Table.Header>
+          <Table.Row>
+            <Table.Head className="w-12">
               <span className="sr-only">展开</span>
-            </TableHead>
-            <TableHead>发布单</TableHead>
-            <TableHead>服务</TableHead>
-            <TableHead align="end">耗时</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
+            </Table.Head>
+            <Table.Head>发布单</Table.Head>
+            <Table.Head>服务</Table.Head>
+            <Table.Head align="end">耗时</Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {expandableTableRows.map((row) => {
             const expanded = expandedId === row.id;
 
             return (
               <Fragment key={row.id}>
-                <TableRow>
-                  <TableCell>
-                    <TableExpandButton
+                <Table.Row>
+                  <Table.Cell>
+                    <Table.ExpandButton
                       aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}
                       expanded={expanded}
                       onExpandedChange={(nextExpanded) =>
                         setExpandedId(nextExpanded ? row.id : null)
                       }
                     />
-                  </TableCell>
-                  <TableCell className="font-medium">{row.id}</TableCell>
-                  <TableCell>
+                  </Table.Cell>
+                  <Table.Cell className="font-medium">{row.id}</Table.Cell>
+                  <Table.Cell>
                     <span className="display-table-cell-stack">
                       <strong>{row.service}</strong>
                       <small>{row.status}</small>
                     </span>
-                  </TableCell>
-                  <TableCell align="end">{row.duration}</TableCell>
-                </TableRow>
+                  </Table.Cell>
+                  <Table.Cell align="end">{row.duration}</Table.Cell>
+                </Table.Row>
                 {expanded ? (
-                  <TableExpandedRow colSpan={4}>
+                  <Table.ExpandedRow colSpan={4}>
                     <strong>部署详情</strong>
                     <p>{row.detail}</p>
-                  </TableExpandedRow>
+                  </Table.ExpandedRow>
                 ) : null}
               </Fragment>
             );
           })}
-        </TableBody>
+        </Table.Body>
       </Table>
     </div>
   );
@@ -1972,36 +1950,36 @@ export function TableCellDemo() {
   return (
     <div className="display-table-shell display-table-wide">
       <Table className="min-w-[680px] table-fixed">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-52">服务（靠左）</TableHead>
-            <TableHead
+        <Table.Header>
+          <Table.Row>
+            <Table.Head className="w-52">服务（靠左）</Table.Head>
+            <Table.Head
               ellipsis
               className="w-64"
               ellipsisTooltip="服务说明、最近一次生产部署上下文与异常原因"
             >
               服务说明、最近一次生产部署上下文与异常原因
-            </TableHead>
-            <TableHead align="end" className="w-28">
+            </Table.Head>
+            <Table.Head align="end" className="w-28">
               成功率（靠右）
-            </TableHead>
-            <TableHead align="center" className="w-28">
+            </Table.Head>
+            <Table.Head align="center" className="w-28">
               操作（居中）
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
+            </Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {cellTableRows.map((row) => (
-            <TableRow key={row.service}>
-              <TableCell className="font-medium">{row.service}</TableCell>
-              <TableCell ellipsis>{row.description}</TableCell>
-              <TableCell align="end">{row.successRate}</TableCell>
-              <TableCell align="center">
+            <Table.Row key={row.service}>
+              <Table.Cell className="font-medium">{row.service}</Table.Cell>
+              <Table.Cell ellipsis>{row.description}</Table.Cell>
+              <Table.Cell align="end">{row.successRate}</Table.Cell>
+              <Table.Cell align="center">
                 <TableActionCell action={row.action} service={row.service} />
-              </TableCell>
-            </TableRow>
+              </Table.Cell>
+            </Table.Row>
           ))}
-        </TableBody>
+        </Table.Body>
       </Table>
     </div>
   );

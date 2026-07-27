@@ -1,4 +1,4 @@
-import { Resizable } from '@heliannuuthus/ui/resizable';
+import { Resizable } from '@heliannuuthus/ui';
 import { FileCode2, FolderOpen } from 'lucide-react';
 
 const files = ['button.tsx', 'card.tsx', 'resizable.tsx'];
