@@ -1,118 +1,82 @@
 import * as React from 'react';
-import { mergeProps } from '@base-ui/react/merge-props';
-import { useRender } from '@base-ui/react/use-render';
 
 import { cn } from '../lib/utils';
 
-type LayoutProps = useRender.ComponentProps<'div'> &
-  React.ComponentProps<'div'>;
-type LayoutHeaderProps = useRender.ComponentProps<'header'> &
-  React.ComponentProps<'header'>;
-type LayoutContentProps = useRender.ComponentProps<'main'> &
-  React.ComponentProps<'main'>;
-type LayoutFooterProps = useRender.ComponentProps<'footer'> &
-  React.ComponentProps<'footer'>;
-type LayoutSidebarProps = useRender.ComponentProps<'aside'> &
-  React.ComponentProps<'aside'> & {
-    width?: number | string;
-  };
+type LayoutProps = React.ComponentProps<'div'>;
+type LayoutHeaderProps = React.ComponentProps<'header'>;
+type LayoutContentProps = React.ComponentProps<'main'>;
+type LayoutFooterProps = React.ComponentProps<'footer'>;
+type LayoutSidebarProps = React.ComponentProps<'aside'> & {
+  width?: number | string;
+};
 
-function LayoutRoot({ className, render, ...props }: LayoutProps) {
-  return useRender({
-    defaultTagName: 'div',
-    props: mergeProps<'div'>(
-      {
-        className: cn(
-          'flex min-h-0 min-w-0 flex-auto flex-col has-[>[data-slot=layout-sidebar]]:flex-row',
-          className
-        ),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: 'layout',
-    },
-  });
+function LayoutRoot({ className, ...props }: LayoutProps) {
+  return (
+    <div
+      className={cn(
+        'flex min-h-0 min-w-0 flex-auto flex-col has-[>[data-slot=layout-sidebar]]:flex-row',
+        className
+      )}
+      data-slot="layout"
+      {...props}
+    />
+  );
 }
 
-function LayoutHeader({ className, render, ...props }: LayoutHeaderProps) {
-  return useRender({
-    defaultTagName: 'header',
-    props: mergeProps<'header'>(
-      {
-        className: cn('min-w-0 shrink-0', className),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: 'layout-header',
-    },
-  });
+function LayoutHeader({ className, ...props }: LayoutHeaderProps) {
+  return (
+    <header
+      className={cn('min-w-0 shrink-0', className)}
+      data-slot="layout-header"
+      {...props}
+    />
+  );
 }
 
-function LayoutContent({ className, render, ...props }: LayoutContentProps) {
-  return useRender({
-    defaultTagName: 'main',
-    props: mergeProps<'main'>(
-      {
-        className: cn('min-h-0 min-w-0 flex-auto', className),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: 'layout-content',
-    },
-  });
+function LayoutContent({ className, ...props }: LayoutContentProps) {
+  return (
+    <main
+      className={cn('min-h-0 min-w-0 flex-auto', className)}
+      data-slot="layout-content"
+      {...props}
+    />
+  );
 }
 
-function LayoutFooter({ className, render, ...props }: LayoutFooterProps) {
-  return useRender({
-    defaultTagName: 'footer',
-    props: mergeProps<'footer'>(
-      {
-        className: cn('min-w-0 shrink-0', className),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: 'layout-footer',
-    },
-  });
+function LayoutFooter({ className, ...props }: LayoutFooterProps) {
+  return (
+    <footer
+      className={cn('min-w-0 shrink-0', className)}
+      data-slot="layout-footer"
+      {...props}
+    />
+  );
 }
 
 function LayoutSidebar({
   className,
-  render,
   style,
   width = 240,
   ...props
 }: LayoutSidebarProps) {
   const resolvedWidth = typeof width === 'number' ? `${width}px` : width;
 
-  return useRender({
-    defaultTagName: 'aside',
-    props: mergeProps<'aside'>(
-      {
-        className: cn(
-          'min-h-0 min-w-0 shrink-0 basis-(--layout-sidebar-width)',
-          className
-        ),
-        style: {
+  return (
+    <aside
+      className={cn(
+        'min-h-0 min-w-0 shrink-0 basis-(--layout-sidebar-width)',
+        className
+      )}
+      data-slot="layout-sidebar"
+      style={
+        {
           '--layout-sidebar-width': resolvedWidth,
           ...style,
-        } as React.CSSProperties,
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: 'layout-sidebar',
-    },
-  });
+        } as React.CSSProperties
+      }
+      {...props}
+    />
+  );
 }
 
 const Layout = Object.assign(LayoutRoot, {
@@ -122,13 +86,7 @@ const Layout = Object.assign(LayoutRoot, {
   Sidebar: LayoutSidebar,
 });
 
-export {
-  Layout,
-  LayoutContent as Content,
-  LayoutFooter as Footer,
-  LayoutHeader as Header,
-  LayoutSidebar as Sidebar,
-};
+export { Layout };
 export type {
   LayoutContentProps,
   LayoutFooterProps,

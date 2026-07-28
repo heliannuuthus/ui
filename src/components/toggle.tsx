@@ -25,46 +25,36 @@ const toggleVariants = cva(
 type ToggleVariantProps = VariantProps<typeof toggleVariants>;
 
 type ToggleProps = Omit<
-  TogglePrimitive.Props<string>,
-  | 'defaultPressed'
-  | 'defaultValue'
-  | 'onChange'
-  | 'onPressedChange'
-  | 'pressed'
-  | 'value'
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'defaultValue' | 'onChange' | 'value'
 > &
   ToggleVariantProps & {
     value?: boolean;
     defaultValue?: boolean;
-    onChange?: (
-      value: boolean,
-      eventDetails: TogglePrimitive.ChangeEventDetails
-    ) => void;
+    onChange?: (value: boolean) => void;
   };
 
 type ToggleGroupOption<Value extends string = string> = Omit<
-  TogglePrimitive.Props<Value>,
-  | 'children'
-  | 'defaultPressed'
-  | 'onChange'
-  | 'onPressedChange'
-  | 'pressed'
-  | 'value'
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'children' | 'defaultValue' | 'onChange' | 'value'
 > & {
   label: React.ReactNode;
   value: Value;
 };
 
 type ToggleGroupProps<Value extends string = string> = Omit<
-  ToggleGroupPrimitive.Props<Value>,
-  'children' | 'onChange' | 'onValueChange'
+  React.ComponentProps<'div'>,
+  'children' | 'defaultValue' | 'onChange'
 > &
   ToggleVariantProps & {
+    defaultValue?: readonly Value[];
+    disabled?: boolean;
     items: readonly ToggleGroupOption<Value>[];
-    onChange?: (
-      value: Value[],
-      eventDetails: ToggleGroupPrimitive.ChangeEventDetails
-    ) => void;
+    loopFocus?: boolean;
+    multiple?: boolean;
+    onChange?: (value: Value[]) => void;
+    orientation?: 'horizontal' | 'vertical';
+    value?: readonly Value[];
   };
 
 function ToggleRoot({
@@ -135,5 +125,5 @@ const Toggle = Object.assign(ToggleRoot, {
   Group: ToggleGroup,
 });
 
-export { Toggle, ToggleGroup as Group, toggleVariants };
+export { Toggle, toggleVariants };
 export type { ToggleGroupOption, ToggleGroupProps, ToggleProps };

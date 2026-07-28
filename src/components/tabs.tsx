@@ -30,15 +30,22 @@ type TabsItem = {
   value: string;
 };
 
-type TabsProps = Omit<TabsPrimitive.Root.Props, 'children'> &
+type TabsProps = Omit<
+  React.ComponentProps<'div'>,
+  'children' | 'defaultValue' | 'onChange'
+> &
   VariantProps<typeof tabsListVariants> & {
     animation?: TabsAnimation;
     centered?: boolean;
+    defaultValue?: string | null;
     indicatorClassName?: string;
     items: readonly TabsItem[];
     listClassName?: string;
+    onValueChange?: (value: string | null) => void;
+    orientation?: 'horizontal' | 'vertical';
     panelClassName?: string;
     tabClassName?: string;
+    value?: string | null;
   };
 
 function Tabs({

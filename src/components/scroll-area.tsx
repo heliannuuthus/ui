@@ -6,27 +6,23 @@ import { cn } from '../lib/utils';
 type ScrollAreaOrientation = 'vertical' | 'horizontal' | 'both';
 type ScrollAreaScrollbarVisibility = 'auto' | 'always' | 'hidden';
 type ScrollAreaFadeEdges = boolean | Exclude<ScrollAreaOrientation, 'both'>;
+type ScrollAreaOverflowEdgeThreshold =
+  | number
+  | Partial<{
+      xStart: number;
+      xEnd: number;
+      yStart: number;
+      yEnd: number;
+    }>;
 
-type ScrollAreaProps = ScrollAreaPrimitive.Root.Props & {
+type ScrollAreaProps = React.ComponentProps<'div'> & {
   fadeEdges?: ScrollAreaFadeEdges;
   fadeSize?: number | string;
   orientation?: ScrollAreaOrientation;
+  overflowEdgeThreshold?: ScrollAreaOverflowEdgeThreshold;
   scrollbarVisibility?: ScrollAreaScrollbarVisibility;
-  viewportProps?: ScrollAreaPrimitive.Viewport.Props;
+  viewportProps?: React.ComponentProps<'div'>;
 };
-
-type StatefulClassName<State> = string | ((state: State) => string | undefined);
-
-function mergeClassName<State>(
-  baseClassName: string,
-  className: StatefulClassName<State> | undefined
-): StatefulClassName<State> {
-  if (typeof className === 'function') {
-    return (state) => cn(baseClassName, className(state));
-  }
-
-  return cn(baseClassName, className);
-}
 
 function toCssLength(value: number | string) {
   return typeof value === 'number' ? `${value}px` : value;
@@ -54,13 +50,7 @@ function ScrollArea({
         '--scroll-area-fade-size': toCssLength(fadeSize),
       } as React.CSSProperties)
     : undefined;
-  const resolvedStyle =
-    typeof style === 'function'
-      ? (state: ScrollAreaPrimitive.Root.State) => ({
-          ...style(state),
-          ...fadeStyle,
-        })
-      : { ...style, ...fadeStyle };
+  const resolvedStyle = { ...style, ...fadeStyle };
 
   return (
     <ScrollAreaPrimitive.Root
@@ -68,17 +58,14 @@ function ScrollArea({
       data-fade={fadeAxis}
       data-orientation={orientation}
       data-scrollbar-visibility={scrollbarVisibility}
-      className={mergeClassName<ScrollAreaPrimitive.Root.State>(
-        'relative',
-        className
-      )}
+      className={cn('relative', className)}
       style={resolvedStyle}
       {...props}
     >
       <ScrollAreaPrimitive.Viewport
         {...resolvedViewportProps}
         data-slot="scroll-area-viewport"
-        className={mergeClassName<ScrollAreaPrimitive.Viewport.State>(
+        className={cn(
           'size-full rounded-[inherit] outline-none',
           viewportClassName
         )}
@@ -104,7 +91,9 @@ function ScrollArea({
   );
 }
 
-type ScrollBarProps = ScrollAreaPrimitive.Scrollbar.Props & {
+type ScrollBarProps = React.ComponentProps<'div'> & {
+  keepMounted?: boolean;
+  orientation?: Exclude<ScrollAreaOrientation, 'both'>;
   visibility?: Exclude<ScrollAreaScrollbarVisibility, 'hidden'>;
 };
 
@@ -120,7 +109,7 @@ function ScrollBar({
       data-orientation={orientation}
       data-visibility={visibility}
       orientation={orientation}
-      className={mergeClassName<ScrollAreaPrimitive.Scrollbar.State>(
+      className={cn(
         'pointer-events-none flex touch-none p-px opacity-0 transition-[opacity,colors] duration-150 select-none data-hovering:pointer-events-auto data-hovering:opacity-100 data-scrolling:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0 data-[visibility=always]:pointer-events-auto data-[visibility=always]:opacity-100 data-horizontal:h-2.5 data-horizontal:flex-col data-horizontal:border-t data-horizontal:border-t-transparent data-vertical:h-full data-vertical:w-2.5 data-vertical:border-l data-vertical:border-l-transparent',
         className
       )}
@@ -140,9 +129,9 @@ const ScrollAreaCompound = Object.assign(ScrollArea, {
 
 export {
   ScrollAreaCompound as ScrollArea,
-  ScrollBar as Bar,
   type ScrollAreaFadeEdges,
   type ScrollAreaOrientation,
+  type ScrollAreaOverflowEdgeThreshold,
   type ScrollAreaProps,
   type ScrollAreaScrollbarVisibility,
   type ScrollBarProps,

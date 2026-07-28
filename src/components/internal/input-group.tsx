@@ -3,7 +3,7 @@ import { Input as InputPrimitive } from '@base-ui/react/input';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../../lib/utils';
-import { Button } from '../button';
+import { Button, type ButtonNativeProps } from '../button';
 
 function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
@@ -83,7 +83,7 @@ function InputGroupButton({
   variant = 'ghost',
   size = 'xs',
   ...props
-}: Omit<React.ComponentProps<typeof Button>, 'size' | 'type'> &
+}: Omit<ButtonNativeProps, 'size' | 'type'> &
   VariantProps<typeof inputGroupButtonVariants> & {
     type?: 'button' | 'submit' | 'reset';
   }) {

@@ -42,9 +42,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
   );
 };
 
-const Sonner = Object.assign(Toaster, {
-  Toaster,
-});
+const Sonner = Toaster;
 
-export { Sonner, Toaster };
+export { Sonner };
 export type { ToasterProps as SonnerProps };

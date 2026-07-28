@@ -2,18 +2,28 @@ import * as React from 'react';
 import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
 
 import { cn } from '../lib/utils';
+import type {
+  DataAttributes,
+  OpenStateProps,
+  PopupAlign,
+  PopupSide,
+} from './internal/public-types';
 
-type TooltipProps = Omit<TooltipPrimitive.Root.Props, 'children'> &
-  Pick<
-    TooltipPrimitive.Positioner.Props,
-    'align' | 'alignOffset' | 'side' | 'sideOffset'
-  > & {
-    content: React.ReactNode;
-    contentClassName?: string;
-    contentProps?: Omit<TooltipPrimitive.Popup.Props, 'children'>;
-    delay?: number;
-    trigger: TooltipPrimitive.Trigger.Props['render'];
-  };
+type TooltipProps = OpenStateProps & {
+  align?: PopupAlign;
+  alignOffset?: number;
+  content: React.ReactNode;
+  contentClassName?: string;
+  contentProps?: Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> &
+    DataAttributes;
+  delay?: number;
+  disabled?: boolean;
+  disableHoverablePopup?: boolean;
+  side?: PopupSide;
+  sideOffset?: number;
+  trackCursorAxis?: 'both' | 'none' | 'x' | 'y';
+  trigger: React.ReactElement;
+};
 
 function Tooltip({
   align = 'center',

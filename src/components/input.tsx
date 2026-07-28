@@ -4,11 +4,7 @@ import { OTPInput, OTPInputContext } from 'input-otp';
 import { MinusIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
-import {
-  Addon as InputGroupAddon,
-  Input as InputGroupControl,
-  InputGroup,
-} from './internal/input-group';
+import { InputGroup } from './internal/input-group';
 
 type InputOTPVariant = 'connected' | 'separated';
 
@@ -178,32 +174,35 @@ function InputRoot({
     return (
       <InputGroup className={cn(classNames?.root, className)}>
         {addonBefore != null ? (
-          <InputGroupAddon
+          <InputGroup.Addon
             align="block-start"
             className={classNames?.addonBefore}
           >
             {addonBefore}
-          </InputGroupAddon>
+          </InputGroup.Addon>
         ) : null}
         {prefix != null ? (
-          <InputGroupAddon align="inline-start" className={classNames?.prefix}>
+          <InputGroup.Addon align="inline-start" className={classNames?.prefix}>
             {prefix}
-          </InputGroupAddon>
+          </InputGroup.Addon>
         ) : null}
-        <InputGroupControl
+        <InputGroup.Input
           {...props}
           className={classNames?.input}
           type={type}
         />
         {suffix != null ? (
-          <InputGroupAddon align="inline-end" className={classNames?.suffix}>
+          <InputGroup.Addon align="inline-end" className={classNames?.suffix}>
             {suffix}
-          </InputGroupAddon>
+          </InputGroup.Addon>
         ) : null}
         {addonAfter != null ? (
-          <InputGroupAddon align="block-end" className={classNames?.addonAfter}>
+          <InputGroup.Addon
+            align="block-end"
+            className={classNames?.addonAfter}
+          >
             {addonAfter}
-          </InputGroupAddon>
+          </InputGroup.Addon>
         ) : null}
       </InputGroup>
     );
@@ -240,7 +239,7 @@ const Input = Object.assign(InputRoot, {
   TextArea,
 });
 
-export { Input, TextArea };
+export { Input };
 export type {
   InputClassNames,
   InputOTPVariant,

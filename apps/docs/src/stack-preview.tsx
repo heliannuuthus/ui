@@ -4,10 +4,7 @@ import { Input } from '@heliannuuthus/ui';
 import { Select } from '@heliannuuthus/ui';
 import { Slider } from '@heliannuuthus/ui';
 import { Stack, type StackAlign, type StackJustify } from '@heliannuuthus/ui';
-import {
-  Muted as TypographyMuted,
-  Small as TypographySmall,
-} from '@heliannuuthus/ui';
+import { Typography } from '@heliannuuthus/ui';
 import { Search } from 'lucide-react';
 
 const protocols = ['https://', 'http://'];
@@ -156,8 +153,8 @@ function CompactCase({
   return (
     <Stack block gap={8}>
       <Stack block gap={2}>
-        <TypographySmall className="font-bold">{title}</TypographySmall>
-        <TypographyMuted>{description}</TypographyMuted>
+        <Typography.Small className="font-bold">{title}</Typography.Small>
+        <Typography.Muted>{description}</Typography.Muted>
       </Stack>
       {children}
     </Stack>
@@ -277,9 +274,9 @@ export function StackCompactVariantsDemo() {
               value={quality}
             />
           </Stack.Compact>
-          <TypographyMuted aria-live="polite">
+          <Typography.Muted aria-live="polite">
             当前压缩质量：{quality}%
-          </TypographyMuted>
+          </Typography.Muted>
         </Stack>
       </CompactCase>
     </Stack>

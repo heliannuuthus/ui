@@ -119,13 +119,4 @@ const FormCompound = Object.assign(Form, {
   Message: FormMessage,
 });
 
-export {
-  FormCompound as Form,
-  FormControl as Control,
-  FormDescription as Description,
-  FormField as Field,
-  FormItem as Item,
-  FormLabel as Label,
-  FormMessage as Message,
-  useFormField as useField,
-};
+export { FormCompound as Form };

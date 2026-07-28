@@ -7,6 +7,7 @@ import { cn } from '../lib/utils';
 
 type AvatarSize = 'default' | 'sm' | 'lg';
 type AvatarShape = 'circle' | 'square';
+type AvatarImageLoadingStatus = 'error' | 'idle' | 'loaded' | 'loading';
 
 type AvatarGroupContextValue = {
   shape?: AvatarShape;
@@ -15,12 +16,23 @@ type AvatarGroupContextValue = {
 
 const AvatarGroupContext = React.createContext<AvatarGroupContextValue>({});
 
-type AvatarProps = Omit<AvatarPrimitive.Root.Props, 'children'> & {
+type AvatarImageProps = Omit<
+  React.ComponentProps<'img'>,
+  'alt' | 'children' | 'src'
+> & {
+  onLoadingStatusChange?: (status: AvatarImageLoadingStatus) => void;
+};
+
+type AvatarFallbackProps = Omit<React.ComponentProps<'span'>, 'children'> & {
+  delay?: number;
+};
+
+type AvatarProps = Omit<React.ComponentProps<'span'>, 'children'> & {
   alt: string;
   badge?: React.ReactNode;
   fallback?: React.ReactNode;
-  fallbackProps?: Omit<AvatarPrimitive.Fallback.Props, 'children'>;
-  imageProps?: Omit<AvatarPrimitive.Image.Props, 'alt' | 'src'>;
+  fallbackProps?: AvatarFallbackProps;
+  imageProps?: AvatarImageProps;
   shape?: AvatarShape;
   size?: AvatarSize;
   src?: string;
@@ -217,11 +229,14 @@ const AvatarCompound = Object.assign(Avatar, {
   Group: AvatarGroup,
 });
 
-export { AvatarCompound as Avatar, AvatarGroup as Group };
+export { AvatarCompound as Avatar };
 
 export type {
   AvatarGroupItem,
   AvatarGroupProps,
+  AvatarFallbackProps,
+  AvatarImageLoadingStatus,
+  AvatarImageProps,
   AvatarProps,
   AvatarShape,
   AvatarSize,

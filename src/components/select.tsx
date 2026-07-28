@@ -12,30 +12,56 @@ import {
   InputGroup,
 } from './internal/input-group';
 
-type SelectRootProps<
+type SelectValue<
   Value,
-  Multiple extends boolean | undefined = false,
-> = Omit<
-  SelectPrimitive.Root.Props<Value, Multiple>,
-  'defaultInputValue' | 'inputValue' | 'onInputValueChange' | 'onValueChange'
-> & {
+  Multiple extends boolean | undefined,
+> = Multiple extends true ? Value[] : Value;
+
+type SelectRootProps<Value, Multiple extends boolean | undefined = false> = {
+  autoComplete?: 'list' | 'both' | 'inline' | 'none';
+  autoHighlight?: boolean;
+  children?: React.ReactNode;
+  defaultOpen?: boolean;
+  defaultValue?: SelectValue<Value, Multiple> | null;
   /** The uncontrolled search query when the select is initially rendered. */
-  defaultSearchValue?: SelectPrimitive.Root.Props<
-    Value,
-    Multiple
-  >['defaultInputValue'];
+  defaultSearchValue?: string;
+  disabled?: boolean;
+  filter?: null | ((item: Value, query: string) => boolean);
+  form?: string;
+  highlightItemOnHover?: boolean;
+  id?: string;
+  isItemEqualToValue?: (item: Value, value: Value) => boolean;
+  items?: readonly Value[];
+  itemToStringLabel?: (item: Value) => string;
+  itemToStringValue?: (item: Value) => string;
+  limit?: number;
+  locale?: Intl.LocalesArgument;
+  loopFocus?: boolean;
+  modal?: boolean;
+  multiple?: Multiple;
+  name?: string;
+  onOpenChange?: (open: boolean) => void;
+  onOpenChangeComplete?: (open: boolean) => void;
+  open?: boolean;
+  openOnInputClick?: boolean;
+  readOnly?: boolean;
+  required?: boolean;
   /** The controlled search query used to filter items. */
-  searchValue?: SelectPrimitive.Root.Props<Value, Multiple>['inputValue'];
+  searchValue?: string;
+  value?: SelectValue<Value, Multiple> | null;
   /** Called when the selected value changes. */
-  onChange?: SelectPrimitive.Root.Props<Value, Multiple>['onValueChange'];
+  onChange?: (
+    value: SelectValue<Value, Multiple> | (Multiple extends true ? never : null)
+  ) => void;
   /** Called when the search query changes. */
-  onSearch?: SelectPrimitive.Root.Props<Value, Multiple>['onInputValueChange'];
+  onSearch?: (searchValue: string) => void;
 };
 
 function SelectRoot<Value, Multiple extends boolean | undefined = false>({
   defaultSearchValue,
   searchValue,
   onChange,
+  onOpenChange,
   onSearch,
   ...props
 }: SelectRootProps<Value, Multiple>) {
@@ -48,7 +74,7 @@ function SelectRoot<Value, Multiple extends boolean | undefined = false>({
           eventDetails.reason === 'input-change' ||
           eventDetails.reason === 'input-clear'
         ) {
-          onSearch(nextSearchValue, eventDetails);
+          onSearch(nextSearchValue);
         }
       }
     : undefined;
@@ -58,7 +84,8 @@ function SelectRoot<Value, Multiple extends boolean | undefined = false>({
       defaultInputValue={defaultSearchValue}
       inputValue={searchValue}
       onInputValueChange={handleSearchChange}
-      onValueChange={onChange}
+      onOpenChange={onOpenChange ? (open) => onOpenChange(open) : undefined}
+      onValueChange={onChange ? (value) => onChange(value) : undefined}
       {...props}
     />
   );
@@ -101,6 +128,16 @@ function SelectClear({
   );
 }
 
+type SelectTriggerProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'children' | 'className'
+> & {
+  children?: React.ReactNode;
+  className?: string;
+  showClear?: boolean;
+  showTrigger?: boolean;
+};
+
 function SelectTrigger({
   className,
   children,
@@ -108,10 +145,7 @@ function SelectTrigger({
   showTrigger = true,
   showClear = false,
   ...props
-}: SelectPrimitive.Input.Props & {
-  showTrigger?: boolean;
-  showClear?: boolean;
-}) {
+}: SelectTriggerProps) {
   return (
     <InputGroup data-slot="select-trigger" className={cn('w-auto', className)}>
       <SelectPrimitive.Input
@@ -120,10 +154,8 @@ function SelectTrigger({
       />
       <InputGroupAddon align="inline-end">
         {showTrigger && (
-          <InputGroupButton
-            size="icon-xs"
-            variant="ghost"
-            render={<SelectTriggerButton />}
+          <SelectTriggerButton
+            render={<InputGroupButton size="icon-xs" variant="ghost" />}
             data-slot="input-group-button"
             className="group-has-data-[slot=select-clear]/input-group:hidden data-pressed:bg-transparent"
             disabled={disabled}
@@ -363,4 +395,10 @@ function Select<Value, Multiple extends boolean | undefined = false>({
 }
 
 export { Select, useSelectAnchor };
-export type { SelectOption, SelectOptionGroup, SelectProps };
+export type {
+  SelectOption,
+  SelectOptionGroup,
+  SelectProps,
+  SelectTriggerProps,
+  SelectValue,
+};

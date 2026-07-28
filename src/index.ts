@@ -16,11 +16,23 @@ export {
   Avatar,
   type AvatarGroupItem,
   type AvatarGroupProps,
+  type AvatarFallbackProps,
+  type AvatarImageLoadingStatus,
+  type AvatarImageProps,
   type AvatarProps,
   type AvatarShape,
   type AvatarSize,
 } from './components/avatar';
-export { Badge, badgeVariants } from './components/badge';
+export {
+  Badge,
+  badgeVariants,
+  type BadgeCountProps,
+  type BadgeDotProps,
+  type BadgeLabelProps,
+  type BadgeLinkProps,
+  type BadgeProps,
+  type BadgeRef,
+} from './components/badge';
 export {
   Breadcrumb,
   type BreadcrumbItem,
@@ -34,17 +46,19 @@ export {
   type BubbleReactionsProps,
 } from './components/bubble';
 export {
-  ButtonGroup,
-  buttonGroupVariants,
+  Button,
+  buttonVariants,
   type ButtonGroupProps,
-} from './components/button-group';
-export { Button, buttonVariants, type ButtonProps } from './components/button';
+  type ButtonLinkProps,
+  type ButtonNativeProps,
+  type ButtonProps,
+  type ButtonRef,
+} from './components/button';
 export { Calendar } from './components/calendar';
 export {
   Card,
   type CardClassNames,
   type CardProps,
-  type CardRadius,
   type CardVariant,
 } from './components/card';
 export {
@@ -68,6 +82,7 @@ export { Collapsible, type CollapsibleProps } from './components/collapsible';
 export {
   Command,
   type CommandGroup,
+  type CommandInputProps,
   type CommandOption,
   type CommandProps,
 } from './components/command';
@@ -91,12 +106,18 @@ export {
 } from './components/data-table';
 export { DatePicker, type DatePickerProps } from './components/date-picker';
 export { Dialog, type DialogProps } from './components/dialog';
-export { DirectionProvider, useDirection } from './components/direction';
+export {
+  DirectionProvider,
+  useDirection,
+  type DirectionProviderProps,
+  type TextDirection,
+} from './components/direction';
 export {
   Drawer,
   type DrawerBehavior,
   type DrawerProps,
   type DrawerSide,
+  type DrawerSnapPoint,
 } from './components/drawer';
 export {
   DropdownMenu,
@@ -117,8 +138,10 @@ export {
 export {
   Item,
   type ItemClassNames,
+  type ItemDivProps,
   type ItemGroupEntry,
   type ItemGroupProps,
+  type ItemLinkProps,
   type ItemProps,
 } from './components/item';
 export { Kbd, type KbdProps } from './components/kbd';
@@ -135,12 +158,15 @@ export {
   Marker,
   markerVariants,
   type MarkerClassNames,
+  type MarkerDivProps,
+  type MarkerLinkProps,
   type MarkerProps,
 } from './components/marker';
 export {
   Masonry,
   type MasonryGap,
-  type MasonryItemProps,
+  type MasonryItem,
+  type MasonryItemSpan,
   type MasonryLength,
   type MasonryProps,
 } from './components/masonry';
@@ -158,6 +184,7 @@ export {
   NavigationMenu,
   navigationMenuTriggerStyle,
   type NavigationMenuItemConfig,
+  type NavigationMenuLinkProps,
   type NavigationMenuProps,
 } from './components/navigation-menu';
 export { Pagination, type PaginationProps } from './components/pagination';
@@ -166,7 +193,11 @@ export {
   type PopoverProps,
   type PopoverTriggerMode,
 } from './components/popover';
-export { Progress, type ProgressEffect } from './components/progress';
+export {
+  Progress,
+  type ProgressEffect,
+  type ProgressProps,
+} from './components/progress';
 export {
   Radio,
   type RadioClassNames,
@@ -183,6 +214,7 @@ export {
   ScrollArea,
   type ScrollAreaFadeEdges,
   type ScrollAreaOrientation,
+  type ScrollAreaOverflowEdgeThreshold,
   type ScrollAreaProps,
   type ScrollAreaScrollbarVisibility,
   type ScrollBarProps,
@@ -192,9 +224,11 @@ export {
   type SelectOption,
   type SelectOptionGroup,
   type SelectProps,
+  type SelectTriggerProps,
+  type SelectValue,
   useSelectAnchor,
 } from './components/select';
-export { Separator } from './components/separator';
+export { Separator, type SeparatorProps } from './components/separator';
 export { Sheet, type SheetProps } from './components/sheet';
 export { Sidebar, useSidebar } from './components/sidebar';
 export { Skeleton, type SkeletonEffect } from './components/skeleton';
@@ -203,11 +237,7 @@ export {
   type SliderEffect,
   type SliderProps,
 } from './components/slider';
-export {
-  Sonner,
-  type SonnerProps,
-  Toaster as SonnerToaster,
-} from './components/sonner';
+export { Sonner, type SonnerProps } from './components/sonner';
 export {
   Spinner,
   type SpinnerProps,
@@ -244,8 +274,6 @@ export {
 } from './components/tabs';
 export {
   Toast,
-  Provider as ToastProvider,
-  Toaster as ToastToaster,
   toast,
   type ToasterProps as ToastToasterProps,
   type ToastProviderProps,
@@ -260,19 +288,6 @@ export {
   type ToggleProps,
 } from './components/toggle';
 export { Tooltip, type TooltipProps } from './components/tooltip';
-export {
-  Blockquote,
-  Code,
-  H1,
-  H2,
-  H3,
-  H4,
-  Large,
-  Lead,
-  Muted,
-  P,
-  Small,
-  Typography,
-} from './components/typography';
+export { Typography } from './components/typography';
 export { useIsMobile } from './hooks/use-mobile';
 export { cn } from './lib/utils';

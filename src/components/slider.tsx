@@ -18,14 +18,32 @@ const IDLE_SHELL_OPACITY = 0.88;
 type SliderEffect = 'none' | 'elastic';
 type ElasticEdge = 'none' | 'start' | 'end';
 
-type SliderProps<Value extends number | readonly number[]> =
-  SliderPrimitive.Root.Props<Value> & {
-    effect?: SliderEffect;
-    endIcon?: React.ReactNode;
-    endLabel?: React.ReactNode;
-    startIcon?: React.ReactNode;
-    startLabel?: React.ReactNode;
-  };
+type SliderProps<Value extends number | readonly number[]> = Omit<
+  React.ComponentProps<'div'>,
+  'defaultValue' | 'onChange'
+> & {
+  defaultValue?: Value;
+  disabled?: boolean;
+  effect?: SliderEffect;
+  endIcon?: React.ReactNode;
+  endLabel?: React.ReactNode;
+  form?: string;
+  format?: Intl.NumberFormatOptions;
+  largeStep?: number;
+  locale?: Intl.LocalesArgument;
+  max?: number;
+  min?: number;
+  minStepsBetweenValues?: number;
+  name?: string;
+  onValueChange?: (value: Value extends number ? number : Value) => void;
+  onValueCommitted?: (value: Value extends number ? number : Value) => void;
+  orientation?: 'horizontal' | 'vertical';
+  startIcon?: React.ReactNode;
+  startLabel?: React.ReactNode;
+  step?: number;
+  thumbCollisionBehavior?: 'none' | 'push' | 'swap';
+  value?: Value;
+};
 
 const elasticTransition = {
   type: 'spring',

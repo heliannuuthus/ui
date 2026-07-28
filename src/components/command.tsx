@@ -21,18 +21,32 @@ type CommandGroup = {
   options: readonly CommandOption[];
 };
 
-type CommandProps = Omit<
-  React.ComponentProps<typeof CommandPrimitive>,
-  'children'
+type CommandInputProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'children' | 'defaultValue' | 'onChange' | 'value'
 > & {
+  onValueChange?: (value: string) => void;
+  value?: string;
+};
+
+type CommandProps = Omit<
+  React.ComponentProps<'div'>,
+  'children' | 'defaultValue' | 'onChange'
+> & {
+  defaultValue?: string;
+  disablePointerSelection?: boolean;
   dialog?: Omit<DialogProps, 'children'>;
   emptyText?: React.ReactNode;
+  filter?: (value: string, search: string, keywords?: string[]) => number;
   groups: readonly CommandGroup[];
-  inputProps?: Omit<
-    React.ComponentProps<typeof CommandPrimitive.Input>,
-    'children'
-  >;
+  inputProps?: CommandInputProps;
+  label?: string;
+  loop?: boolean;
+  onValueChange?: (value: string) => void;
   placeholder?: string;
+  shouldFilter?: boolean;
+  value?: string;
+  vimBindings?: boolean;
 };
 
 function Command({
@@ -126,4 +140,10 @@ function Command({
   return dialog ? <Dialog {...dialog}>{command}</Dialog> : command;
 }
 
-export { Command, type CommandGroup, type CommandOption, type CommandProps };
+export {
+  Command,
+  type CommandGroup,
+  type CommandInputProps,
+  type CommandOption,
+  type CommandProps,
+};

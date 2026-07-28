@@ -583,7 +583,7 @@ a {
   height: 44px;
   border-color: transparent;
   border-radius: 10px;
-  background: var(--surface);
+  background: var(--header);
   box-shadow: none;
 }
 .component-command [data-slot='command-list'] {
@@ -618,7 +618,7 @@ a {
   border: 1px solid var(--line);
   border-radius: 9px;
   color: var(--primary);
-  background: var(--header);
+  background: color-mix(in srgb, var(--ink) 4%, var(--header));
 }
 .component-command-icon svg {
   width: 15px;
@@ -2161,6 +2161,127 @@ a {
   display: flex;
   gap: 7px;
 }
+.card-semantic-reference {
+  min-width: 760px;
+  display: grid;
+  grid-template-columns: minmax(340px, 0.95fr) minmax(380px, 1.05fr);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--header);
+}
+.card-semantic-stage {
+  min-height: 500px;
+  display: grid;
+  place-items: center;
+  padding: 48px;
+  background: color-mix(in srgb, var(--ink) 2%, var(--surface));
+}
+.card-semantic-card {
+  width: min(380px, 100%);
+  transition:
+    outline-color 140ms ease,
+    box-shadow 140ms ease;
+}
+.card-semantic-card [data-slot='card-header'],
+.card-semantic-card [data-slot='card-title'],
+.card-semantic-card [data-slot='card-description'],
+.card-semantic-card [data-slot='card-action'],
+.card-semantic-card [data-slot='card-content'],
+.card-semantic-card [data-slot='card-footer'] {
+  transition:
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+}
+.card-semantic-card [data-slot='card-footer'] {
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--docs-muted);
+  font-size: 11px;
+}
+.card-semantic-content {
+  display: grid;
+  gap: 7px;
+}
+.card-semantic-content > span {
+  color: var(--docs-muted);
+  font-size: 11px;
+}
+.card-semantic-content > strong {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 20px;
+}
+.card-semantic-content > p {
+  margin: 0;
+  color: var(--docs-muted);
+  line-height: 1.65;
+}
+.card-semantic-reference[data-active-slot='root'] .card-semantic-card {
+  outline: 2px solid color-mix(in srgb, var(--primary) 58%, transparent);
+  outline-offset: 4px;
+}
+.card-semantic-reference[data-active-slot='header'] [data-slot='card-header'],
+.card-semantic-reference[data-active-slot='title'] [data-slot='card-title'],
+.card-semantic-reference[data-active-slot='description']
+  [data-slot='card-description'],
+.card-semantic-reference[data-active-slot='action'] [data-slot='card-action'],
+.card-semantic-reference[data-active-slot='content'] [data-slot='card-content'],
+.card-semantic-reference[data-active-slot='footer'] [data-slot='card-footer'] {
+  background: color-mix(in srgb, var(--primary) 10%, var(--header));
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--primary) 42%, transparent);
+}
+.card-semantic-regions {
+  border-left: 1px solid var(--line);
+}
+.card-semantic-regions > button {
+  width: 100%;
+  display: grid;
+  gap: 6px;
+  padding: 17px 18px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--docs-text);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    color 140ms ease,
+    background-color 140ms ease;
+}
+.card-semantic-regions > button:last-child {
+  border-bottom: 0;
+}
+.card-semantic-regions > button:hover,
+.card-semantic-regions > button[data-active] {
+  background: color-mix(in srgb, var(--ink) 4%, var(--surface));
+}
+.card-semantic-regions > button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -3px;
+}
+.card-semantic-regions > button > span {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+.card-semantic-regions strong {
+  color: var(--ink);
+  font-size: 13px;
+}
+.card-semantic-regions code {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.card-semantic-regions small {
+  color: var(--docs-muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
 .resizable-workspace-shell {
   width: min(920px, 100%);
   height: 440px;
@@ -2350,14 +2471,8 @@ a {
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 24px;
-  background:
-    radial-gradient(
-      circle at 85% -15%,
-      color-mix(in srgb, var(--primary) 13%, transparent),
-      transparent 40%
-    ),
-    var(--surface);
-  box-shadow: 0 24px 65px rgb(28 39 59 / 12%);
+  background: var(--surface);
+  box-shadow: 0 18px 48px rgb(24 24 27 / 9%);
 }
 .scroll-area-release-demo > header {
   display: grid;
@@ -2372,10 +2487,10 @@ a {
   height: 38px;
   display: grid;
   place-items: center;
-  border: 1px solid color-mix(in srgb, var(--primary) 24%, var(--line));
+  border: 1px solid var(--line);
   border-radius: 12px;
-  color: var(--primary);
-  background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+  color: var(--docs-text);
+  background: var(--header);
 }
 .scroll-area-release-mark svg {
   width: 17px;
@@ -2387,7 +2502,7 @@ a {
   gap: 2px;
 }
 .scroll-area-release-demo > header > div > span {
-  color: var(--primary);
+  color: var(--docs-muted);
   font-family: var(--font-mono);
   font-size: 9px;
   font-weight: 800;
@@ -2405,10 +2520,10 @@ a {
   align-items: center;
   gap: 7px;
   padding: 6px 9px;
-  border: 1px solid color-mix(in srgb, var(--success) 28%, var(--line));
+  border: 1px solid var(--line);
   border-radius: 999px;
   color: var(--success);
-  background: color-mix(in srgb, var(--success) 7%, var(--surface));
+  background: var(--header);
   font-size: 10px;
   font-weight: 700;
 }
@@ -2417,11 +2532,10 @@ a {
   height: 6px;
   border-radius: 50%;
   background: currentColor;
-  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 13%, transparent);
 }
 .scroll-area-release-list {
   height: 342px;
-  background: color-mix(in srgb, var(--header) 72%, transparent);
+  background: color-mix(in srgb, var(--ink) 2%, var(--header));
 }
 .scroll-area-release-events {
   display: grid;
@@ -2439,8 +2553,7 @@ a {
   border: 1px solid transparent;
   border-radius: 13px;
   color: var(--docs-text);
-  background: color-mix(in srgb, var(--surface) 84%, transparent);
-  box-shadow: 0 1px 0 rgb(24 34 51 / 5%);
+  background: var(--header);
   cursor: pointer;
   transition:
     border-color 160ms ease,
@@ -2449,13 +2562,15 @@ a {
 }
 .scroll-area-release-event:hover,
 .scroll-area-release-event[data-active] {
-  border-color: color-mix(in srgb, var(--primary) 28%, var(--line));
-  background: var(--surface);
-  box-shadow: 0 9px 24px rgb(37 53 80 / 8%);
+  border-color: color-mix(in srgb, var(--docs-text) 18%, var(--line));
+  background: color-mix(in srgb, var(--ink) 3%, var(--header));
+  box-shadow: 0 5px 16px rgb(24 24 27 / 6%);
 }
 .scroll-area-release-event[aria-selected='true'] {
-  border-color: color-mix(in srgb, var(--primary) 42%, var(--line));
-  background: color-mix(in srgb, var(--primary-soft) 62%, var(--surface));
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--ink) 4%, var(--header));
+  box-shadow: inset 2px 0 0
+    color-mix(in srgb, var(--docs-text) 42%, transparent);
 }
 .scroll-area-release-event-icon {
   width: 34px;
@@ -2472,13 +2587,13 @@ a {
 }
 .scroll-area-release-event[data-status='complete']
   .scroll-area-release-event-icon {
-  color: var(--success);
-  background: color-mix(in srgb, var(--success) 9%, var(--surface));
+  color: var(--docs-muted);
+  background: color-mix(in srgb, var(--ink) 4%, var(--header));
 }
 .scroll-area-release-event[data-status='current']
   .scroll-area-release-event-icon {
   color: var(--primary);
-  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface));
 }
 .scroll-area-release-event-copy {
   min-width: 0;
@@ -2509,7 +2624,7 @@ a {
   top: 50%;
   right: 12px;
   display: grid;
-  color: var(--primary);
+  color: var(--docs-text);
   opacity: 0;
   transform: translateY(-50%) scale(0.75);
   transition:
@@ -2533,7 +2648,7 @@ a {
   gap: 8px;
   padding: 14px 20px;
   border-top: 1px solid var(--line);
-  background: color-mix(in srgb, var(--header) 86%, transparent);
+  background: color-mix(in srgb, var(--ink) 2%, var(--header));
   font-size: 10px;
 }
 .scroll-area-release-demo > footer > span {
@@ -2689,6 +2804,7 @@ a {
 }
 .masonry-layout-demo {
   width: 100%;
+  padding-block: 24px;
 }
 .masonry-responsive-demo {
   width: min(1040px, 100%);
@@ -2769,11 +2885,8 @@ a {
 }
 .masonry-layout-item {
   display: grid;
-  grid-template-rows: auto auto 1fr;
   gap: 8px;
-  height: 156px;
   padding: 15px;
-  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--header);
@@ -2787,28 +2900,16 @@ a {
   letter-spacing: 0.08em;
 }
 .masonry-layout-item > strong {
-  align-self: end;
   color: var(--ink);
   font-size: 14px;
 }
 .masonry-layout-item > p {
-  align-self: end;
   margin: 0;
   color: var(--docs-muted);
   font-size: 11px;
   line-height: 1.55;
 }
-.masonry-layout-item-tall {
-  height: 190px;
-}
-.masonry-layout-item-short {
-  height: 128px;
-}
-.masonry-layout-item-medium {
-  height: 158px;
-}
 .masonry-layout-item-full {
-  height: 108px;
   grid-template: auto / auto minmax(0, 1fr) auto;
   align-items: center;
   column-gap: 16px;
@@ -3011,8 +3112,6 @@ a {
     height: 36px;
   }
   .masonry-layout-item-full {
-    height: auto;
-    min-height: 128px;
     grid-template: none;
   }
 }
@@ -3160,6 +3259,20 @@ a {
   margin: 0 0 14px;
   font-size: 15px;
   line-height: 1.5;
+}
+.component-semantic-dom-heading {
+  margin-bottom: 14px;
+}
+.component-semantic-dom-heading h3 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.component-semantic-dom-heading p {
+  margin: 5px 0 0;
+  color: var(--docs-muted);
+  font-size: 12px;
+  line-height: 1.65;
 }
 .component-parts-table {
   min-width: 600px;
@@ -3416,6 +3529,18 @@ a {
   }
   .aspect-cover-frame {
     width: 100%;
+  }
+  .card-semantic-reference {
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .card-semantic-stage {
+    min-height: 400px;
+    padding: 32px 20px;
+  }
+  .card-semantic-regions {
+    border-top: 1px solid var(--line);
+    border-left: 0;
   }
   .component-title {
     align-items: start;

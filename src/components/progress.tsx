@@ -6,6 +6,22 @@ import { cn } from '../lib/utils';
 
 type ProgressEffect = 'none' | 'sparkle';
 
+type ProgressProps = Omit<React.ComponentProps<'div'>, 'children'> & {
+  children?: React.ReactNode;
+  effect?: ProgressEffect;
+  format?: Intl.NumberFormatOptions;
+  getAriaValueText?: (
+    formattedValue: string | null,
+    value: number | null
+  ) => string;
+  label?: React.ReactNode;
+  locale?: Intl.LocalesArgument;
+  max?: number;
+  min?: number;
+  showValue?: boolean | ((value: number | null) => React.ReactNode);
+  value: number | null;
+};
+
 function Progress({
   className,
   children,
@@ -14,11 +30,7 @@ function Progress({
   showValue = false,
   value,
   ...props
-}: ProgressPrimitive.Root.Props & {
-  effect?: ProgressEffect;
-  label?: React.ReactNode;
-  showValue?: boolean | ((value: number | null) => React.ReactNode);
-}) {
+}: ProgressProps) {
   return (
     <ProgressPrimitive.Root
       value={value}
@@ -113,4 +125,4 @@ function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
   );
 }
 
-export { Progress, type ProgressEffect };
+export { Progress, type ProgressEffect, type ProgressProps };

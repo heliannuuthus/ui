@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { mergeProps } from '@base-ui/react/merge-props';
-import { useRender } from '@base-ui/react/use-render';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
@@ -55,18 +53,32 @@ type ItemClassNames = {
   title?: string;
 };
 
-type ItemProps = Omit<useRender.ComponentProps<'div'>, 'children' | 'title'> &
-  VariantProps<typeof itemVariants> & {
-    actions?: React.ReactNode;
-    classNames?: ItemClassNames;
-    content?: React.ReactNode;
-    description?: React.ReactNode;
-    footer?: React.ReactNode;
-    header?: React.ReactNode;
-    media?: React.ReactNode;
-    mediaVariant?: VariantProps<typeof itemMediaVariants>['variant'];
-    title?: React.ReactNode;
+type ItemSharedProps = VariantProps<typeof itemVariants> & {
+  actions?: React.ReactNode;
+  classNames?: ItemClassNames;
+  content?: React.ReactNode;
+  description?: React.ReactNode;
+  footer?: React.ReactNode;
+  header?: React.ReactNode;
+  media?: React.ReactNode;
+  mediaVariant?: VariantProps<typeof itemMediaVariants>['variant'];
+  title?: React.ReactNode;
+};
+
+type ItemDivProps = Omit<React.ComponentProps<'div'>, 'children' | 'title'> &
+  ItemSharedProps & {
+    href?: never;
   };
+
+type ItemLinkProps = Omit<
+  React.ComponentProps<'a'>,
+  'children' | 'href' | 'media' | 'title'
+> &
+  ItemSharedProps & {
+    href: string;
+  };
+
+type ItemProps = ItemDivProps | ItemLinkProps;
 
 type ItemGroupEntry = ItemProps & {
   key?: React.Key;
@@ -88,7 +100,6 @@ function Item({
   header,
   media,
   mediaVariant = 'default',
-  render,
   size = 'default',
   title,
   variant = 'default',
@@ -96,102 +107,107 @@ function Item({
 }: ItemProps) {
   const hasContent = title != null || description != null || content != null;
 
-  return useRender({
-    defaultTagName: 'div',
-    props: mergeProps<'div'>(
-      {
-        children: (
-          <>
-            {header != null ? (
-              <div
-                className={cn(
-                  'flex basis-full items-center justify-between gap-2',
-                  classNames?.header
-                )}
-                data-slot="item-header"
-              >
-                {header}
-              </div>
-            ) : null}
-            {media != null ? (
-              <div
-                className={cn(
-                  itemMediaVariants({
-                    className: classNames?.media,
-                    variant: mediaVariant,
-                  })
-                )}
-                data-slot="item-media"
-                data-variant={mediaVariant}
-              >
-                {media}
-              </div>
-            ) : null}
-            {hasContent ? (
-              <div
-                className={cn(
-                  'flex flex-1 flex-col gap-1 group-data-[size=xs]/item:gap-0.5 [&+[data-slot=item-content]]:flex-none',
-                  classNames?.content
-                )}
-                data-slot="item-content"
-              >
-                {title != null ? (
-                  <div
-                    className={cn(
-                      'line-clamp-1 flex w-fit items-center gap-2 text-sm leading-snug font-medium underline-offset-4',
-                      classNames?.title
-                    )}
-                    data-slot="item-title"
-                  >
-                    {title}
-                  </div>
-                ) : null}
-                {description != null ? (
-                  <p
-                    className={cn(
-                      'line-clamp-2 text-left text-sm font-normal text-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
-                      classNames?.description
-                    )}
-                    data-slot="item-description"
-                  >
-                    {description}
-                  </p>
-                ) : null}
-                {content}
-              </div>
-            ) : null}
-            {actions != null ? (
-              <div
-                className={cn('flex items-center gap-2', classNames?.actions)}
-                data-slot="item-actions"
-              >
-                {actions}
-              </div>
-            ) : null}
-            {footer != null ? (
-              <div
-                className={cn(
-                  'flex basis-full items-center justify-between gap-2',
-                  classNames?.footer
-                )}
-                data-slot="item-footer"
-              >
-                {footer}
-              </div>
-            ) : null}
-          </>
-        ),
-        className: cn(itemVariants({ className, size, variant })),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: 'item',
-      size,
-      variant,
-    },
-  });
+  const children = (
+    <>
+      {header != null ? (
+        <div
+          className={cn(
+            'flex basis-full items-center justify-between gap-2',
+            classNames?.header
+          )}
+          data-slot="item-header"
+        >
+          {header}
+        </div>
+      ) : null}
+      {media != null ? (
+        <div
+          className={cn(
+            itemMediaVariants({
+              className: classNames?.media,
+              variant: mediaVariant,
+            })
+          )}
+          data-slot="item-media"
+          data-variant={mediaVariant}
+        >
+          {media}
+        </div>
+      ) : null}
+      {hasContent ? (
+        <div
+          className={cn(
+            'flex flex-1 flex-col gap-1 group-data-[size=xs]/item:gap-0.5 [&+[data-slot=item-content]]:flex-none',
+            classNames?.content
+          )}
+          data-slot="item-content"
+        >
+          {title != null ? (
+            <div
+              className={cn(
+                'line-clamp-1 flex w-fit items-center gap-2 text-sm leading-snug font-medium underline-offset-4',
+                classNames?.title
+              )}
+              data-slot="item-title"
+            >
+              {title}
+            </div>
+          ) : null}
+          {description != null ? (
+            <p
+              className={cn(
+                'line-clamp-2 text-left text-sm font-normal text-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
+                classNames?.description
+              )}
+              data-slot="item-description"
+            >
+              {description}
+            </p>
+          ) : null}
+          {content}
+        </div>
+      ) : null}
+      {actions != null ? (
+        <div
+          className={cn('flex items-center gap-2', classNames?.actions)}
+          data-slot="item-actions"
+        >
+          {actions}
+        </div>
+      ) : null}
+      {footer != null ? (
+        <div
+          className={cn(
+            'flex basis-full items-center justify-between gap-2',
+            classNames?.footer
+          )}
+          data-slot="item-footer"
+        >
+          {footer}
+        </div>
+      ) : null}
+    </>
+  );
+  const rootProps = {
+    className: cn(itemVariants({ className, size, variant })),
+    'data-size': size,
+    'data-slot': 'item',
+    'data-variant': variant,
+  };
+
+  if (typeof props.href === 'string') {
+    return (
+      <a {...props} {...rootProps}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <div {...props} {...rootProps}>
+      {children}
+    </div>
+  );
 }
 
 function Group({
@@ -239,10 +255,11 @@ const ItemCompound = Object.assign(Item, {
 });
 
 export {
-  Group,
   ItemCompound as Item,
+  type ItemDivProps,
   type ItemClassNames,
   type ItemGroupEntry,
   type ItemGroupProps,
+  type ItemLinkProps,
   type ItemProps,
 };

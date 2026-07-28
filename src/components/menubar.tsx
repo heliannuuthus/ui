@@ -231,9 +231,13 @@ type MenubarMenuConfig = {
   disabled?: boolean;
 };
 
-type MenubarProps = Omit<MenubarPrimitive.Props, 'children'> & {
+type MenubarProps = Omit<React.ComponentProps<'div'>, 'children'> & {
+  disabled?: boolean;
+  loopFocus?: boolean;
   menus: MenubarMenuConfig[];
-  size?: 'sm' | 'default' | 'lg';
+  modal?: boolean;
+  orientation?: 'horizontal' | 'vertical';
+  size?: 'default' | 'lg' | 'sm';
 };
 
 function renderMenubarEntries(items: DropdownMenuEntry[]) {

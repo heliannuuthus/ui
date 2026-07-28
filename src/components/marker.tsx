@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { mergeProps } from '@base-ui/react/merge-props';
-import { useRender } from '@base-ui/react/use-render';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
@@ -24,61 +22,83 @@ type MarkerClassNames = {
   icon?: string;
 };
 
-type MarkerProps = Omit<useRender.ComponentProps<'div'>, 'children'> &
-  VariantProps<typeof markerVariants> & {
-    classNames?: MarkerClassNames;
-    content: React.ReactNode;
-    icon?: React.ReactNode;
+type MarkerSharedProps = VariantProps<typeof markerVariants> & {
+  classNames?: MarkerClassNames;
+  content: React.ReactNode;
+  icon?: React.ReactNode;
+};
+
+type MarkerDivProps = Omit<React.ComponentProps<'div'>, 'children'> &
+  MarkerSharedProps & {
+    href?: never;
   };
+
+type MarkerLinkProps = Omit<React.ComponentProps<'a'>, 'children' | 'href'> &
+  MarkerSharedProps & {
+    href: string;
+  };
+
+type MarkerProps = MarkerDivProps | MarkerLinkProps;
 
 function Marker({
   className,
   classNames,
   content,
   icon,
-  render,
   variant = 'default',
   ...props
 }: MarkerProps) {
-  return useRender({
-    defaultTagName: 'div',
-    props: mergeProps<'div'>(
-      {
-        children: (
-          <>
-            {icon != null ? (
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "size-4 shrink-0 [&_svg:not([class*='size-'])]:size-4",
-                  classNames?.icon
-                )}
-                data-slot="marker-icon"
-              >
-                {icon}
-              </span>
-            ) : null}
-            <span
-              className={cn(
-                'min-w-0 wrap-break-word group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
-                classNames?.content
-              )}
-              data-slot="marker-content"
-            >
-              {content}
-            </span>
-          </>
-        ),
-        className: cn(markerVariants({ className, variant })),
-      },
-      props
-    ),
-    render,
-    state: {
-      slot: 'marker',
-      variant,
-    },
-  });
+  const children = (
+    <>
+      {icon != null ? (
+        <span
+          aria-hidden="true"
+          className={cn(
+            "size-4 shrink-0 [&_svg:not([class*='size-'])]:size-4",
+            classNames?.icon
+          )}
+          data-slot="marker-icon"
+        >
+          {icon}
+        </span>
+      ) : null}
+      <span
+        className={cn(
+          'min-w-0 wrap-break-word group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
+          classNames?.content
+        )}
+        data-slot="marker-content"
+      >
+        {content}
+      </span>
+    </>
+  );
+  const rootProps = {
+    className: cn(markerVariants({ className, variant })),
+    'data-slot': 'marker',
+    'data-variant': variant,
+  };
+
+  if (typeof props.href === 'string') {
+    return (
+      <a {...props} {...rootProps}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <div {...props} {...rootProps}>
+      {children}
+    </div>
+  );
 }
 
-export { Marker, markerVariants, type MarkerClassNames, type MarkerProps };
+export {
+  Marker,
+  markerVariants,
+  type MarkerClassNames,
+  type MarkerDivProps,
+  type MarkerLinkProps,
+  type MarkerProps,
+};

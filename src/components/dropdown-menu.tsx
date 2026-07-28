@@ -2,6 +2,11 @@ import * as React from 'react';
 import { Menu as MenuPrimitive } from '@base-ui/react/menu';
 
 import { cn } from '../lib/utils';
+import type {
+  OpenStateProps,
+  PopupAlign,
+  PopupSide,
+} from './internal/public-types';
 import { ChevronRightIcon, CheckIcon } from 'lucide-react';
 
 function DropdownMenuRoot({ ...props }: MenuPrimitive.Root.Props) {
@@ -255,13 +260,18 @@ type DropdownMenuEntry =
       }>;
     };
 
-type DropdownMenuProps = Omit<MenuPrimitive.Root.Props, 'children'> & {
-  trigger: React.ReactElement;
-  items: DropdownMenuEntry[];
-  align?: MenuPrimitive.Positioner.Props['align'];
-  side?: MenuPrimitive.Positioner.Props['side'];
-  size?: 'sm' | 'default' | 'lg';
+type DropdownMenuProps = OpenStateProps & {
+  align?: PopupAlign;
   contentClassName?: string;
+  disabled?: boolean;
+  highlightItemOnHover?: boolean;
+  items: DropdownMenuEntry[];
+  loopFocus?: boolean;
+  modal?: boolean;
+  orientation?: 'horizontal' | 'vertical';
+  side?: PopupSide;
+  size?: 'default' | 'lg' | 'sm';
+  trigger: React.ReactElement;
 };
 
 function renderEntries(items: DropdownMenuEntry[]) {

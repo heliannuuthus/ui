@@ -15,12 +15,17 @@ type RadioClassNames = {
 };
 
 type RadioProps<Value = string> = Omit<
-  RadioPrimitive.Root.Props<Value>,
-  'children' | 'className' | 'render'
+  React.ComponentProps<'label'>,
+  'children' | 'onChange' | 'value'
 > & {
   children?: React.ReactNode;
   className?: string;
   classNames?: RadioClassNames;
+  disabled?: boolean;
+  inputRef?: React.Ref<HTMLInputElement>;
+  readOnly?: boolean;
+  required?: boolean;
+  value: Value;
 };
 
 type RadioOption<Value = string> = {
@@ -31,18 +36,23 @@ type RadioOption<Value = string> = {
 };
 
 type RadioGroupProps<Value = string> = Omit<
-  RadioGroupPrimitive.Props<Value>,
-  'children' | 'onChange' | 'onValueChange'
+  React.ComponentProps<'div'>,
+  'children' | 'defaultValue' | 'onChange'
 > & {
   columns?: number;
+  defaultValue?: Value;
+  disabled?: boolean;
+  form?: string;
   gap?: RadioGap;
+  inputRef?: React.Ref<HTMLInputElement>;
   minColumnWidth?: RadioLength;
-  onChange?: (
-    value: Value,
-    eventDetails: RadioGroupPrimitive.ChangeEventDetails
-  ) => void;
+  name?: string;
+  onChange?: (value: Value) => void;
   options: readonly RadioOption<Value>[];
   orientation?: 'horizontal' | 'vertical';
+  readOnly?: boolean;
+  required?: boolean;
+  value?: Value;
 };
 
 function toCssLength(value: RadioLength) {
@@ -68,7 +78,9 @@ function RadioRoot<Value = string>({
   const handleClick: NonNullable<
     RadioPrimitive.Root.Props<Value>['onClick']
   > = (event) => {
-    onClick?.(event);
+    onClick?.(
+      event as unknown as React.MouseEvent<HTMLLabelElement, MouseEvent>
+    );
     if (
       !event.defaultPrevented &&
       !event.currentTarget.hasAttribute('data-checked') &&
@@ -90,7 +102,7 @@ function RadioRoot<Value = string>({
       disabled={disabled}
       onClick={handleClick}
       readOnly={readOnly}
-      {...props}
+      {...(props as RadioPrimitive.Root.Props<Value>)}
     >
       <span
         data-slot="radio-control"
@@ -194,5 +206,5 @@ const Radio = Object.assign(RadioRoot, {
   Group: RadioGroup,
 });
 
-export { Radio, RadioGroup as Group };
+export { Radio };
 export type { RadioClassNames, RadioGroupProps, RadioOption, RadioProps };

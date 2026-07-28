@@ -21,16 +21,7 @@ import { Toggle } from '@heliannuuthus/ui';
 import { Stack } from '@heliannuuthus/ui';
 import { Tabs } from '@heliannuuthus/ui';
 import { Tooltip } from '@heliannuuthus/ui';
-import {
-  Code as TypographyCode,
-  H1,
-  H2,
-  H3,
-  Large as TypographyLarge,
-  Lead as TypographyLead,
-  Muted as TypographyMuted,
-  Small as TypographySmall,
-} from '@heliannuuthus/ui';
+import { Typography } from '@heliannuuthus/ui';
 import {
   ArrowRight,
   Blocks,
@@ -52,7 +43,14 @@ import {
   X,
   Zap,
 } from 'lucide-react';
-import { Navigate, NavLink, useNavigate, useParams } from 'react-router-dom';
+import {
+  Navigate,
+  NavLink,
+  useHref,
+  useLinkClickHandler,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import {
   componentDocumentation,
   type ApiProperty,
@@ -266,8 +264,7 @@ function SiteHeader({
         </Button>
         <Button
           className="icon-button"
-          nativeButton={false}
-          render={<a href={repositoryUrl} />}
+          href={repositoryUrl}
           size="icon"
           variant="ghost"
           aria-label="在 GitHub 查看源码"
@@ -307,27 +304,18 @@ function HomePage() {
               <Sparkles data-icon="inline-start" />
               {componentCatalog.length} 个可组合组件
             </Badge>
-            <H1>构建清晰、一致的产品界面</H1>
-            <TypographyLead className="hero-copy">
+            <Typography.H1>构建清晰、一致的产品界面</Typography.H1>
+            <Typography.Lead className="hero-copy">
               Heliannuuthus UI 提供稳定的 React 组件、明确的 API
               与可访问交互，让产品团队把注意力留给真正的业务问题。
-            </TypographyLead>
+            </Typography.Lead>
           </Stack>
 
           <Stack align="center" gap={12} orientation="horizontal" wrap>
-            <Button
-              nativeButton={false}
-              render={<NavLink to="/docs/getting-started" />}
-              size="lg"
-            >
+            <Button href="/docs/getting-started" size="lg">
               开始使用 <ArrowRight data-icon="inline-end" />
             </Button>
-            <Button
-              nativeButton={false}
-              render={<NavLink to="/components" />}
-              size="lg"
-              variant="outline"
-            >
+            <Button href="/components" size="lg" variant="outline">
               浏览组件
             </Button>
           </Stack>
@@ -347,7 +335,9 @@ function HomePage() {
                     onClick={() => copyInstall(manager)}
                     variant="outline"
                   >
-                    <TypographyCode>{installCommands[manager]}</TypographyCode>
+                    <Typography.Code>
+                      {installCommands[manager]}
+                    </Typography.Code>
                     {copiedManager === manager ? (
                       <Check data-icon="inline-end" />
                     ) : (
@@ -361,8 +351,7 @@ function HomePage() {
         </Stack>
 
         <Card
-          className="hero-showcase"
-          radius="sm"
+          className="hero-showcase rounded-lg"
           title="组件组合预览"
           description="使用公共组件完成真实界面，而不是绘制静态示意图。"
           action={<Badge variant="secondary">Live</Badge>}
@@ -413,18 +402,14 @@ function HomePage() {
       <section className="home-section philosophy-section">
         <Stack block gap={48}>
           <Stack block className="section-heading" gap={16}>
-            <TypographySmall className="section-label">
+            <Typography.Small className="section-label">
               DESIGN SYSTEM
-            </TypographySmall>
-            <H2>让每一个产品共享同一套界面语言</H2>
-            <TypographyLead>
+            </Typography.Small>
+            <Typography.H2>让每一个产品共享同一套界面语言</Typography.H2>
+            <Typography.Lead>
               公共组件负责稳定的行为和表达，业务项目专注自己的流程与语义。
-            </TypographyLead>
-            <Button
-              nativeButton={false}
-              render={<NavLink to="/design" />}
-              variant="link"
-            >
+            </Typography.Lead>
+            <Button href="/design" variant="link">
               了解设计理念 <ArrowRight data-icon="inline-end" />
             </Button>
           </Stack>
@@ -432,22 +417,24 @@ function HomePage() {
             className="principle-grid"
             columns={4}
             gap={14}
-            minColumnWidth={220}
-          >
-            {[
+            items={[
               ['清晰', '信息层级先于装饰，让状态、操作与反馈始终可理解。'],
               ['一致', '相同的问题提供相同的解法，跨产品也保持熟悉感。'],
               ['可组合', '小而稳定的能力可以自由组合，业务语义留在业务中。'],
               ['可生长', 'API 为真实场景保留扩展点，并尊重长期兼容性。'],
-            ].map(([title, copy]) => (
-              <Card key={title} radius="sm">
-                <Stack block gap={12}>
-                  <H3>{title}</H3>
-                  <TypographyMuted>{copy}</TypographyMuted>
-                </Stack>
-              </Card>
-            ))}
-          </Masonry>
+            ].map(([title, copy]) => ({
+              content: (
+                <Card className="rounded-lg">
+                  <Stack block gap={12}>
+                    <Typography.H3>{title}</Typography.H3>
+                    <Typography.Muted>{copy}</Typography.Muted>
+                  </Stack>
+                </Card>
+              ),
+              key: title,
+            }))}
+            minColumnWidth={220}
+          />
         </Stack>
       </section>
 
@@ -462,37 +449,34 @@ function HomePage() {
             orientation="horizontal"
           >
             <Stack gap={16}>
-              <TypographySmall className="section-label">
+              <Typography.Small className="section-label">
                 COMPONENTS
-              </TypographySmall>
-              <H2>从基础控件到完整交互</H2>
+              </Typography.Small>
+              <Typography.H2>从基础控件到完整交互</Typography.H2>
             </Stack>
-            <Button
-              nativeButton={false}
-              render={<NavLink to="/components" />}
-              variant="link"
-            >
+            <Button href="/components" variant="link">
               查看全部组件 <ArrowRight data-icon="inline-end" />
             </Button>
           </Stack>
-          <Masonry columns={3} gap={14} minColumnWidth={240}>
-            {componentGroups.slice(0, 6).map((group) => (
-              <Item
-                actions={<ArrowRight />}
-                description={`${group.items.length} 个组件`}
-                key={group.title}
-                media={<Package />}
-                mediaVariant="icon"
-                render={
-                  <NavLink
-                    to={`/components/${componentSlug(group.items[0])}`}
-                  />
-                }
-                title={group.title}
-                variant="outline"
-              />
-            ))}
-          </Masonry>
+          <Masonry
+            columns={3}
+            gap={14}
+            items={componentGroups.slice(0, 6).map((group) => ({
+              content: (
+                <Item
+                  actions={<ArrowRight />}
+                  description={`${group.items.length} 个组件`}
+                  media={<Package />}
+                  mediaVariant="icon"
+                  href={`/components/${componentSlug(group.items[0])}`}
+                  title={group.title}
+                  variant="outline"
+                />
+              ),
+              key: group.title,
+            }))}
+            minColumnWidth={240}
+          />
         </Stack>
       </section>
     </main>
@@ -565,13 +549,13 @@ function GettingStartedPage() {
         id="next-step"
         media={<LayoutGrid strokeWidth={2.5} />}
         mediaVariant="icon"
-        render={<NavLink to="/components" />}
+        href="/components"
         title={
           <Stack align="center" gap={8} orientation="horizontal">
             <Badge variant="secondary">04</Badge>
-            <TypographyLarge className="font-bold">
+            <Typography.Large className="font-bold">
               浏览完整组件目录
-            </TypographyLarge>
+            </Typography.Large>
           </Stack>
         }
         variant="outline"
@@ -641,10 +625,10 @@ function DesignPage() {
       <Stack block className="design-values" gap={0} separator={<Separator />}>
         {principles.map(([number, title, copy]) => (
           <article id={`principle-${number}`} key={number}>
-            <TypographySmall>{number}</TypographySmall>
+            <Typography.Small>{number}</Typography.Small>
             <Stack block gap={8}>
-              <H3>{title}</H3>
-              <TypographyMuted>{copy}</TypographyMuted>
+              <Typography.H3>{title}</Typography.H3>
+              <Typography.Muted>{copy}</Typography.Muted>
             </Stack>
           </article>
         ))}
@@ -698,17 +682,19 @@ function ComponentsOverview() {
                 className="component-group-grid"
                 columns={4}
                 gap={12}
+                items={group.items.map((item) => ({
+                  content: (
+                    <NavLink to={`/components/${componentSlug(item)}`}>
+                      <strong>{item}</strong>
+                      <p>
+                        {componentDocumentation[componentSlug(item)]?.summary}
+                      </p>
+                    </NavLink>
+                  ),
+                  key: item,
+                }))}
                 minColumnWidth={180}
-              >
-                {group.items.map((item) => (
-                  <NavLink key={item} to={`/components/${componentSlug(item)}`}>
-                    <strong>{item}</strong>
-                    <p>
-                      {componentDocumentation[componentSlug(item)]?.summary}
-                    </p>
-                  </NavLink>
-                ))}
-              </Masonry>
+              />
             </section>
           ))}
         </div>
@@ -881,13 +867,11 @@ function ComponentNavigation({ component }: { component: string }) {
                   const slug = componentSlug(item);
                   return (
                     <Sidebar.MenuItem key={item}>
-                      <Sidebar.MenuButton
+                      <ComponentNavigationLink
                         isActive={slug === component}
-                        render={<NavLink to={`/components/${slug}`} />}
-                        size="sm"
-                      >
-                        <span>{item}</span>
-                      </Sidebar.MenuButton>
+                        item={item}
+                        slug={slug}
+                      />
                     </Sidebar.MenuItem>
                   );
                 })}
@@ -897,6 +881,31 @@ function ComponentNavigation({ component }: { component: string }) {
         ))}
       </Sidebar.Content>
     </Sidebar>
+  );
+}
+
+function ComponentNavigationLink({
+  isActive,
+  item,
+  slug,
+}: {
+  isActive: boolean;
+  item: string;
+  slug: string;
+}) {
+  const to = `/components/${slug}`;
+  const href = useHref(to);
+  const handleClick = useLinkClickHandler(to);
+
+  return (
+    <Sidebar.MenuButton
+      href={href}
+      isActive={isActive}
+      onClick={handleClick}
+      size="sm"
+    >
+      <span>{item}</span>
+    </Sidebar.MenuButton>
   );
 }
 
@@ -998,10 +1007,20 @@ function ComponentPage() {
                 />
               </section>
             )}
-            {((documentation.parts?.length ?? 0) > 0 ||
+            {(documentation.semanticDom != null ||
+              (documentation.parts?.length ?? 0) > 0 ||
               documentation.api.length > 0) && (
               <section className="component-reference-section">
                 <h2>API</h2>
+                {documentation.semanticDom && (
+                  <div className="component-reference-block component-semantic-dom">
+                    <div className="component-semantic-dom-heading">
+                      <h3>Semantic DOM</h3>
+                      <p>{documentation.semanticDom.description}</p>
+                    </div>
+                    {documentation.semanticDom.preview}
+                  </div>
+                )}
                 {documentation.parts && documentation.parts.length > 0 && (
                   <div className="component-reference-block">
                     <h3>组成组件</h3>
@@ -1094,18 +1113,16 @@ function ComponentExampleList({
       className="example-list"
       columns={2}
       gap={[20, 32]}
-      minColumnWidth={300}
-    >
-      {examples.map((example) => (
-        <Masonry.Item
-          className={`example-item${example.wide ? ' example-item-wide' : ''}`}
-          key={example.title}
-          span={example.wide ? 'full' : 'auto'}
-        >
+      items={examples.map((example) => ({
+        className: `example-item${example.wide ? ' example-item-wide' : ''}`,
+        content: (
           <ComponentExampleCard component={component} example={example} />
-        </Masonry.Item>
-      ))}
-    </Masonry>
+        ),
+        key: example.title,
+        span: example.wide ? 'full' : 'auto',
+      }))}
+      minColumnWidth={300}
+    />
   );
 }
 
@@ -1323,7 +1340,9 @@ function DocSection({
           title={
             <Stack align="center" gap={8} orientation="horizontal">
               <Badge variant="secondary">{step}</Badge>
-              <H2 className="border-0 pb-0 text-2xl font-bold">{title}</H2>
+              <Typography.H2 className="border-0 pb-0 text-2xl font-bold">
+                {title}
+              </Typography.H2>
             </Stack>
           }
         />
@@ -1357,10 +1376,10 @@ function DocLayout({
           <Badge className="doc-kicker" variant="outline">
             {kicker}
           </Badge>
-          <H1 id="page-title">{title}</H1>
-          <TypographyLead className="text-lg leading-8">
+          <Typography.H1 id="page-title">{title}</Typography.H1>
+          <Typography.Lead className="text-lg leading-8">
             {description}
-          </TypographyLead>
+          </Typography.Lead>
         </Stack>
         <Stack
           block
@@ -1375,14 +1394,13 @@ function DocLayout({
         <Stack align="stretch" gap={16} orientation="horizontal">
           <Separator orientation="vertical" />
           <Stack gap={8}>
-            <TypographySmall>本页目录</TypographySmall>
+            <Typography.Small>本页目录</Typography.Small>
             <Stack gap={2}>
               {toc.map((item, index) => (
                 <Button
                   className="doc-toc-link"
+                  href={item.href}
                   key={item.href}
-                  nativeButton={false}
-                  render={<a href={item.href} />}
                   size="sm"
                   variant="ghost"
                 >

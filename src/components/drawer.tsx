@@ -5,6 +5,11 @@ import { Drawer as DrawerPrimitive } from '@base-ui/react/drawer';
 
 import { cn } from '../lib/utils';
 import { Button } from './button';
+import type {
+  DataAttributes,
+  OpenStateProps,
+  PortalContainer,
+} from './internal/public-types';
 import { XIcon } from 'lucide-react';
 
 type DrawerSide = 'top' | 'right' | 'bottom' | 'left';
@@ -311,19 +316,35 @@ function DrawerDescription({
   );
 }
 
-type DrawerProps = Omit<React.ComponentProps<typeof DrawerRoot>, 'children'> & {
+type DrawerSnapPoint = number | string;
+
+type DrawerProps = OpenStateProps & {
+  behavior?: DrawerBehavior;
   children?: React.ReactNode;
   closeText?: React.ReactNode;
   closeVariant?: React.ComponentProps<typeof Button>['variant'];
+  container?: PortalContainer;
   contentClassName?: string;
-  contentProps?: Omit<DrawerPrimitive.Popup.Props, 'children' | 'className'> &
-    React.HTMLAttributes<HTMLDivElement> &
-    Partial<Record<`data-${string}`, string>>;
+  contentProps?: Omit<
+    React.HTMLAttributes<HTMLDivElement>,
+    'children' | 'className'
+  > &
+    DataAttributes;
+  defaultSnapPoint?: DrawerSnapPoint | null;
   description?: React.ReactNode;
+  disablePointerDismissal?: boolean;
   footer?: React.ReactNode;
+  modal?: boolean | 'trap-focus';
+  onSnapPointChange?: (snapPoint: DrawerSnapPoint | null) => void;
   showCloseButton?: boolean;
+  showSwipeHandle?: boolean;
+  side?: DrawerSide;
+  snapPoint?: DrawerSnapPoint | null;
+  snapPoints?: DrawerSnapPoint[];
+  snapToSequentialPoints?: boolean;
+  swipeDirection?: 'down' | 'left' | 'right' | 'up';
   title?: React.ReactNode;
-  trigger?: DrawerPrimitive.Trigger.Props['render'];
+  trigger?: React.ReactElement;
 };
 
 function Drawer({
@@ -371,4 +392,10 @@ function Drawer({
   );
 }
 
-export { Drawer, type DrawerBehavior, type DrawerProps, type DrawerSide };
+export {
+  Drawer,
+  type DrawerBehavior,
+  type DrawerProps,
+  type DrawerSide,
+  type DrawerSnapPoint,
+};

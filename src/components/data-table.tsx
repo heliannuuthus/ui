@@ -16,22 +16,12 @@ import {
   type Updater,
 } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
-import { Button } from './button';
+import { Button, type ButtonNativeProps } from './button';
 import { Input } from './input';
 import { Pagination, type PaginationProps } from './pagination';
 import { cn } from '../lib/utils';
 import {
-  Body as TableBody,
-  Caption as TableCaption,
-  Cell as TableCell,
-  ExpandedRow as TableExpandedRow,
-  ExpandButton as TableExpandButton,
-  Footer as TableFooter,
-  Head as TableHead,
-  Header as TableHeader,
-  Row as TableRow,
   Table,
-  VirtualBody as TableVirtualBody,
   type TableCellAlign,
   type TableCellFixed,
   type TableProps,
@@ -136,7 +126,7 @@ export interface DataTableProps<TData, TValue> extends Omit<
 }
 
 export interface DataTableColumnHeaderProps<TData, TValue> extends Omit<
-  React.ComponentProps<typeof Button>,
+  ButtonNativeProps,
   'children' | 'disabled' | 'onClick'
 > {
   column: Column<TData, TValue>;
@@ -335,7 +325,7 @@ function DataTable<TData, TValue>({
       const meta = cell.column.columnDef.meta;
 
       return (
-        <TableCell
+        <Table.Cell
           key={cell.id}
           align={meta?.align}
           data-column-id={cell.column.id}
@@ -349,25 +339,25 @@ function DataTable<TData, TValue>({
           className={meta?.cellClassName}
         >
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </TableCell>
+        </Table.Cell>
       );
     });
   const renderRow = (row: Row<TData>) => {
     const resolvedRowProps = rowProps?.(row.original, row.index);
 
     return (
-      <TableRow
+      <Table.Row
         {...resolvedRowProps}
         key={row.id}
         data-state={row.getIsSelected() ? 'selected' : undefined}
       >
         {supportsExpandedRows ? (
-          <TableCell
+          <Table.Cell
             fixed="start"
             className={cn('w-12', expandable.columnClassName)}
           >
             {expandable.rowExpandable?.(row.original, row.index) !== false ? (
-              <TableExpandButton
+              <Table.ExpandButton
                 aria-label={`${
                   expandedRowKeySet.has(resolveRowKey(row)) ? '收起' : '展开'
                 } ${String(resolveRowKey(row))}`}
@@ -375,10 +365,10 @@ function DataTable<TData, TValue>({
                 onExpandedChange={(expanded) => setRowExpanded(row, expanded)}
               />
             ) : null}
-          </TableCell>
+          </Table.Cell>
         ) : null}
         {renderCells(row)}
-      </TableRow>
+      </Table.Row>
     );
   };
 
@@ -420,13 +410,13 @@ function DataTable<TData, TValue>({
           ...containerStyle,
         }}
       >
-        {caption != null ? <TableCaption>{caption}</TableCaption> : null}
+        {caption != null ? <Table.Caption>{caption}</Table.Caption> : null}
         {showHeader ? (
-          <TableHeader>
+          <Table.Header>
             {table.getHeaderGroups().map((group, groupIndex, groups) => (
-              <TableRow key={group.id}>
+              <Table.Row key={group.id}>
                 {supportsExpandedRows && groupIndex === 0 ? (
-                  <TableHead
+                  <Table.Head
                     fixed="start"
                     className={cn('w-12', expandable.columnClassName)}
                     rowSpan={groups.length}
@@ -434,14 +424,14 @@ function DataTable<TData, TValue>({
                     {expandable.columnHeader ?? (
                       <span className="sr-only">展开行</span>
                     )}
-                  </TableHead>
+                  </Table.Head>
                 ) : null}
                 {group.headers.map((header) => {
                   const meta = header.column.columnDef.meta;
                   const sorting = header.column.getIsSorted();
 
                   return (
-                    <TableHead
+                    <Table.Head
                       key={header.id}
                       align={meta?.align}
                       colSpan={header.colSpan}
@@ -480,16 +470,16 @@ function DataTable<TData, TValue>({
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                    </TableHead>
+                    </Table.Head>
                   );
                 })}
-              </TableRow>
+              </Table.Row>
             ))}
-          </TableHeader>
+          </Table.Header>
         ) : null}
         {visibleRows.length ? (
           virtualOptions ? (
-            <TableVirtualBody
+            <Table.VirtualBody
               colSpan={visibleColumnCount}
               items={visibleRows}
               getItemKey={(row) =>
@@ -501,9 +491,9 @@ function DataTable<TData, TValue>({
               rowIndexOffset={showHeader ? 2 : 1}
             >
               {(row) => renderRow(row)}
-            </TableVirtualBody>
+            </Table.VirtualBody>
           ) : (
-            <TableBody>
+            <Table.Body>
               {visibleRows.map((row) => (
                 <React.Fragment key={row.id}>
                   {renderRow(row)}
@@ -511,36 +501,36 @@ function DataTable<TData, TValue>({
                   expandedRowKeySet.has(resolveRowKey(row)) &&
                   expandable.rowExpandable?.(row.original, row.index) !==
                     false ? (
-                    <TableExpandedRow colSpan={visibleColumnCount}>
+                    <Table.ExpandedRow colSpan={visibleColumnCount}>
                       {expandable.render(row.original, row.index)}
-                    </TableExpandedRow>
+                    </Table.ExpandedRow>
                   ) : null}
                 </React.Fragment>
               ))}
-            </TableBody>
+            </Table.Body>
           )
         ) : (
-          <TableBody>
-            <TableRow>
-              <TableCell
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell
                 colSpan={visibleColumnCount}
                 className="h-24 text-center text-muted-foreground"
               >
                 {emptyMessage}
-              </TableCell>
-            </TableRow>
-          </TableBody>
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
         )}
         {footer != null ? (
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={visibleColumnCount}>
+          <Table.Footer>
+            <Table.Row>
+              <Table.Cell colSpan={visibleColumnCount}>
                 {typeof footer === 'function'
                   ? footer(visibleRows.map((row) => row.original))
                   : footer}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
+              </Table.Cell>
+            </Table.Row>
+          </Table.Footer>
         ) : null}
       </Table>
       {paginationOptions && table.getPageCount() > 1 ? (
@@ -577,8 +567,4 @@ const DataTableCompound = Object.assign(DataTable, {
   ColumnHeader: DataTableColumnHeader,
 });
 
-export {
-  DataTableCompound as DataTable,
-  DataTableActions as Actions,
-  DataTableColumnHeader as ColumnHeader,
-};
+export { DataTableCompound as DataTable };

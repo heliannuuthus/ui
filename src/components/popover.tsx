@@ -4,6 +4,11 @@ import { PreviewCard as PreviewCardPrimitive } from '@base-ui/react/preview-card
 import { useRender } from '@base-ui/react/use-render';
 
 import { cn } from '../lib/utils';
+import type {
+  OpenStateProps,
+  PopupAlign,
+  PopupSide,
+} from './internal/public-types';
 
 type PopoverTriggerMode = 'click' | 'hover';
 
@@ -220,26 +225,21 @@ function PopoverDescription({
   );
 }
 
-type PopoverProps = (
-  | (Omit<ClickPopoverRootProps, 'children' | 'trigger'> & {
-      triggerMode?: 'click';
-    })
-  | (Omit<HoverPopoverRootProps, 'children' | 'trigger'> & {
-      triggerMode: 'hover';
-    })
-) &
-  Pick<
-    PopoverPrimitive.Positioner.Props,
-    'align' | 'alignOffset' | 'side' | 'sideOffset'
-  > & {
-    content: React.ReactNode;
-    contentClassName?: string;
-    description?: React.ReactNode;
-    title?: React.ReactNode;
-    trigger: PopoverTriggerProps extends { render?: infer Render }
-      ? Render
-      : never;
-  };
+type PopoverProps = OpenStateProps & {
+  align?: PopupAlign;
+  alignOffset?: number;
+  closeDelay?: number;
+  content: React.ReactNode;
+  contentClassName?: string;
+  delay?: number;
+  description?: React.ReactNode;
+  modal?: boolean | 'trap-focus';
+  side?: PopupSide;
+  sideOffset?: number;
+  title?: React.ReactNode;
+  trigger: React.ReactElement;
+  triggerMode?: PopoverTriggerMode;
+};
 
 function Popover({
   align,
