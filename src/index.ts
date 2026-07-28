@@ -207,8 +207,14 @@ export {
 } from './components/radio';
 export {
   Resizable,
-  type ResizablePanelConfig,
+  type ResizableClassNames,
+  type ResizableItem,
+  type ResizableItemKey,
+  type ResizableItemOnResize,
+  type ResizableItemSize,
   type ResizableProps,
+  type ResizableSeparator,
+  type ResizableSeparatorRenderProps,
 } from './components/resizable';
 export {
   ScrollArea,

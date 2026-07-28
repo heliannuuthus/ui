@@ -231,6 +231,7 @@ function SiteHeader({
         className="mobile-menu"
         size="icon"
         variant="ghost"
+        aria-controls="site-navigation"
         aria-label={open ? '关闭导航' : '打开导航'}
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
@@ -238,6 +239,7 @@ function SiteHeader({
         {open ? <X /> : <Menu />}
       </Button>
       <nav
+        id="site-navigation"
         className={open ? 'site-nav is-open' : 'site-nav'}
         aria-label="主导航"
       >
@@ -678,23 +680,11 @@ function ComponentsOverview() {
                 <h2>{group.title}</h2>
                 <span>{group.items.length}</span>
               </header>
-              <Masonry
-                className="component-group-grid"
-                columns={4}
-                gap={12}
-                items={group.items.map((item) => ({
-                  content: (
-                    <NavLink to={`/components/${componentSlug(item)}`}>
-                      <strong>{item}</strong>
-                      <p>
-                        {componentDocumentation[componentSlug(item)]?.summary}
-                      </p>
-                    </NavLink>
-                  ),
-                  key: item,
-                }))}
-                minColumnWidth={180}
-              />
+              <div className="component-group-grid">
+                {group.items.map((item) => (
+                  <ComponentOverviewCard item={item} key={item} />
+                ))}
+              </div>
             </section>
           ))}
         </div>
@@ -712,6 +702,48 @@ function ComponentsOverview() {
         />
       )}
     </div>
+  );
+}
+
+function ComponentOverviewCard({ item }: { item: string }) {
+  const summary = componentDocumentation[componentSlug(item)]?.summary ?? '';
+  const summaryRef = useRef<HTMLParagraphElement>(null);
+  const [overflowing, setOverflowing] = useState(false);
+
+  useEffect(() => {
+    const summaryElement = summaryRef.current;
+    if (summaryElement == null) return;
+
+    const updateOverflowing = () => {
+      setOverflowing(
+        summaryElement.scrollHeight > summaryElement.clientHeight + 1 ||
+          summaryElement.scrollWidth > summaryElement.clientWidth + 1
+      );
+    };
+
+    updateOverflowing();
+
+    if (typeof ResizeObserver === 'undefined') return;
+    const resizeObserver = new ResizeObserver(updateOverflowing);
+    resizeObserver.observe(summaryElement);
+
+    return () => resizeObserver.disconnect();
+  }, [summary]);
+
+  return (
+    <Tooltip
+      content={summary}
+      delay={300}
+      disabled={!overflowing}
+      trigger={
+        <NavLink to={`/components/${componentSlug(item)}`}>
+          <strong>{item}</strong>
+          <p ref={summaryRef} data-overflowing={overflowing || undefined}>
+            {summary}
+          </p>
+        </NavLink>
+      }
+    />
   );
 }
 

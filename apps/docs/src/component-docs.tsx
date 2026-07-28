@@ -134,6 +134,10 @@ import {
   TabsMotionDemo,
   TabsVariantsDemo,
 } from './navigation-previews';
+import {
+  ResizableAdvancedDemo,
+  ResizableVerticalDemo,
+} from './resizable-preview';
 import { minimalComponentPreviews } from './minimal-previews';
 import type {
   ComponentHarnessCase,
@@ -1506,15 +1510,92 @@ const resizableDocumentation: ComponentDocumentation = {
       wide: true,
       preview: minimalComponentPreviews.resizable,
       code: `import { Resizable } from '@heliannuuthus/ui'
+import { GripVertical } from 'lucide-react'
 
 export function Workspace() {
   return (
     <Resizable
       orientation="horizontal"
-      withHandle
-      panels={[
-        { id: 'files', defaultSize: '34', minSize: '24', content: '文件列表' },
-        { id: 'preview', defaultSize: '66', minSize: '40', content: '内容预览' },
+      separator={<GripVertical aria-hidden />}
+      items={[
+        { key: 'files', panel: '文件列表', size: ['34', '24'] },
+        { key: 'preview', panel: '内容预览', size: ['66', '40'] },
+      ]}
+    />
+  )
+}`,
+    },
+    {
+      title: '纵向区域',
+      description:
+        '设置 vertical 后可调整上下区域，适合编辑器与终端、预览与日志等场景。',
+      wide: true,
+      preview: <ResizableVerticalDemo />,
+      code: `import { Resizable } from '@heliannuuthus/ui'
+import { GripHorizontal } from 'lucide-react'
+
+export function EditorWithTerminal() {
+  return (
+    <Resizable
+      className="h-96"
+      orientation="vertical"
+      separator={<GripHorizontal aria-hidden />}
+      items={[
+        {
+          key: 'editor',
+          panel: <section>编辑器</section>,
+          size: ['64', '38'],
+        },
+        {
+          key: 'terminal',
+          panel: <section>终端</section>,
+          size: ['36', '20'],
+        },
+      ]}
+    />
+  )
+}`,
+    },
+    {
+      title: '尺寸约束与分隔线覆盖',
+      description:
+        'size 集中表达初始、最小和最大尺寸；item 可覆盖默认分隔线，并通过 onResize 获取实时尺寸。',
+      wide: true,
+      preview: <ResizableAdvancedDemo />,
+      code: `import { useState } from 'react'
+import { Resizable } from '@heliannuuthus/ui'
+import { GripVertical } from 'lucide-react'
+
+export function ConstrainedWorkspace() {
+  const [navigationSize, setNavigationSize] = useState(24)
+
+  return (
+    <Resizable
+      className="h-80"
+      separator={({ index }) => <span>{index + 1}</span>}
+      items={[
+        {
+          key: 'navigation',
+          panel: <aside>导航 · {navigationSize}%</aside>,
+          size: ['24', '18', '34'],
+          collapsible: true,
+          collapsedSize: 0,
+          separator: <GripVertical aria-hidden />,
+          onResize: (size) =>
+            setNavigationSize(Math.round(size.asPercentage)),
+        },
+        {
+          key: 'canvas',
+          panel: <main>画布</main>,
+          size: ['52', '36'],
+        },
+        {
+          key: 'inspector',
+          panel: <aside>属性</aside>,
+          size: ['24', '18', '34'],
+          collapsible: true,
+          collapsedSize: 0,
+        },
       ]}
     />
   )
@@ -1523,9 +1604,9 @@ export function Workspace() {
   ],
   api: [
     {
-      name: 'panels',
-      description: '定义每个区域的内容、标识和尺寸约束。',
-      type: 'ResizablePanelConfig[]',
+      name: 'items',
+      description: '定义各面板的内容、稳定标识、尺寸约束和分隔线覆盖。',
+      type: 'ResizableItem[]',
     },
     {
       name: 'orientation',
@@ -1534,23 +1615,70 @@ export function Workspace() {
       defaultValue: "'horizontal'",
     },
     {
-      name: 'withHandle',
-      description: '在自动生成的分隔线中显示可视拖动标记。',
+      name: 'separator',
+      description:
+        '所有分隔线的默认内容；可传入 ReactNode，或根据索引和方向动态渲染。',
+      type: 'ReactNode | ((props: ResizableSeparatorRenderProps) => ReactNode)',
+    },
+    {
+      name: 'classNames',
+      description: '扩展 panel 和 separator 语义槽的统一样式。',
+      type: '{ panel?: string; separator?: string }',
+    },
+    {
+      component: 'ResizableItem',
+      name: 'key',
+      description: '面板的稳定标识，同时用于 React 渲染和底层布局关联。',
+      type: 'string | number',
+    },
+    {
+      component: 'ResizableItem',
+      name: 'panel',
+      description: '面板中渲染的 React 节点。',
+      type: 'ReactNode',
+    },
+    {
+      component: 'ResizableItem',
+      name: 'size',
+      description:
+        '依次设置初始、最小和最大尺寸；数字按像素解释，无单位字符串按百分比解释。',
+      type: 'readonly [default, min?, max?]',
+    },
+    {
+      component: 'ResizableItem',
+      name: 'collapsible',
+      description: '尺寸低于 size 中的最小值时是否允许面板折叠。',
       type: 'boolean',
       defaultValue: 'false',
     },
     {
-      name: 'handleClassName',
-      description: '扩展自动生成的分隔线样式。',
-      type: 'string',
+      component: 'ResizableItem',
+      name: 'collapsedSize',
+      description: '面板折叠后的尺寸。',
+      type: 'number | string',
+      defaultValue: "'0%'",
+    },
+    {
+      component: 'ResizableItem',
+      name: 'separator',
+      description: '覆盖当前 item 之后的分隔线内容；传入 null 可隐藏视觉内容。',
+      type: 'ResizableSeparator',
+    },
+    {
+      component: 'ResizableItem',
+      name: 'onResize',
+      description: '面板尺寸变化时调用，并提供当前尺寸、item key 和上次尺寸。',
+      type: '(size: PanelSize, key, previousSize) => void',
     },
   ],
   accessibility: [
     '分隔线保持可聚焦，并支持方向键调整相邻区域尺寸。',
-    'panels 中的导航和内容仍需使用各自正确的语义结构。',
+    'separator 提供的纯装饰内容应使用 aria-hidden。',
+    'items 中的导航和内容仍需使用各自正确的语义结构。',
   ],
   pitfalls: [
     '不要让任一区域缩小到内容无法理解或操作的程度。',
+    '不要在 separator 中嵌套按钮等可聚焦控件，以免与分隔线的键盘交互冲突。',
     '移动端空间不足时，应评估是否改用纵向排列或折叠导航。',
   ],
 };
@@ -7413,7 +7541,7 @@ const spaciousPreviewHeights: Record<string, number> = {
   'aspect-ratio': 560,
   card: 340,
   masonry: 520,
-  resizable: 620,
+  resizable: 520,
   'scroll-area': 480,
 };
 
