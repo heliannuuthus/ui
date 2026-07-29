@@ -207,8 +207,6 @@ const Toast = Object.assign(Toaster, {
 
 export {
   Toast,
-  Toaster,
-  ToastProvider as Provider,
   sonnerToast as toast,
   useToast,
   type ToasterProps,

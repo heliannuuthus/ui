@@ -67,7 +67,7 @@ function PreviewSidebar({
 
 function PreviewContent({ detailed = false }: { detailed?: boolean }) {
   return (
-    <Layout.Content className="layout-demo-content" render={<div />}>
+    <Layout.Content className="layout-demo-content">
       <div className="layout-demo-heading">
         <span>工作台</span>
         <strong>{detailed ? '项目进度' : '欢迎回来'}</strong>

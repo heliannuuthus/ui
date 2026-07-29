@@ -1,21 +1,26 @@
 import * as React from 'react';
-import { Slot } from '@radix-ui/react-slot';
 
 import { cn } from '../lib/utils';
 
 type MasonryLength = number | string;
 type MasonryGap = MasonryLength | readonly [MasonryLength, MasonryLength];
+type MasonryItemSpan = 'auto' | 'full';
 
-type MasonryProps = Omit<React.ComponentProps<'div'>, 'ref'> & {
-  asChild?: boolean;
-  columns?: number;
-  gap?: MasonryGap;
-  minColumnWidth?: MasonryLength;
-  ref?: React.Ref<HTMLElement>;
+type MasonryItem = Omit<
+  React.ComponentProps<'div'>,
+  'children' | 'content' | 'key' | 'ref'
+> & {
+  content: React.ReactNode;
+  key: React.Key;
+  span?: MasonryItemSpan;
 };
 
-type MasonryItemProps = React.ComponentProps<'div'> & {
-  span?: 'auto' | 'full';
+type MasonryProps = Omit<React.ComponentProps<'div'>, 'children' | 'ref'> & {
+  columns?: number;
+  gap?: MasonryGap;
+  items: readonly MasonryItem[];
+  minColumnWidth?: MasonryLength;
+  ref?: React.Ref<HTMLDivElement>;
 };
 
 function toCssLength(value: MasonryLength) {
@@ -80,10 +85,21 @@ function useMasonryLayout(
 
     const layout = () => {
       frame = 0;
-      const containerWidth = container.clientWidth;
+      const computedStyle = getComputedStyle(container);
+      const paddingInlineStart =
+        Number.parseFloat(computedStyle.paddingInlineStart) || 0;
+      const paddingInlineEnd =
+        Number.parseFloat(computedStyle.paddingInlineEnd) || 0;
+      const paddingBlockStart =
+        Number.parseFloat(computedStyle.paddingBlockStart) || 0;
+      const paddingBlockEnd =
+        Number.parseFloat(computedStyle.paddingBlockEnd) || 0;
+      const containerWidth = Math.max(
+        0,
+        container.clientWidth - paddingInlineStart - paddingInlineEnd
+      );
       if (containerWidth <= 0) return;
 
-      const computedStyle = getComputedStyle(container);
       const columnGap = Number.parseFloat(computedStyle.columnGap) || 0;
       const rowGap = Number.parseFloat(computedStyle.rowGap) || 0;
       const measuredMinimum = lengthProbe.getBoundingClientRect().width;
@@ -110,7 +126,7 @@ function useMasonryLayout(
         item.style.insetInlineStart = '0';
         item.style.boxSizing = 'border-box';
         item.style.inlineSize = `${full ? containerWidth : columnWidth}px`;
-        item.style.translate = '0 0';
+        item.style.translate = `${paddingInlineStart}px ${paddingBlockStart}px`;
       }
 
       const columnHeights = Array.from({ length: resolvedColumns }, () => 0);
@@ -121,7 +137,9 @@ function useMasonryLayout(
 
         if (full) {
           const blockOffset = Math.max(...columnHeights);
-          item.style.translate = `0 ${blockOffset}px`;
+          item.style.translate = `${paddingInlineStart}px ${
+            paddingBlockStart + blockOffset
+          }px`;
           columnHeights.fill(blockOffset + itemHeight + rowGap);
           continue;
         }
@@ -135,12 +153,27 @@ function useMasonryLayout(
 
         const inlineOffset = columnIndex * (columnWidth + columnGap);
         const blockOffset = columnHeights[columnIndex];
-        item.style.translate = `${inlineOffset}px ${blockOffset}px`;
+        item.style.translate = `${paddingInlineStart + inlineOffset}px ${
+          paddingBlockStart + blockOffset
+        }px`;
         columnHeights[columnIndex] = blockOffset + itemHeight + rowGap;
       }
 
       const contentHeight = Math.max(...columnHeights, 0);
-      container.style.height = `${Math.max(0, contentHeight - rowGap)}px`;
+      const resolvedContentHeight = Math.max(0, contentHeight - rowGap);
+      const borderBlockStart =
+        Number.parseFloat(computedStyle.borderBlockStartWidth) || 0;
+      const borderBlockEnd =
+        Number.parseFloat(computedStyle.borderBlockEndWidth) || 0;
+      const containerHeight =
+        computedStyle.boxSizing === 'border-box'
+          ? resolvedContentHeight +
+            paddingBlockStart +
+            paddingBlockEnd +
+            borderBlockStart +
+            borderBlockEnd
+          : resolvedContentHeight;
+      container.style.height = `${containerHeight}px`;
       container.dataset.resolvedColumns = String(resolvedColumns);
     };
 
@@ -180,25 +213,23 @@ function useMasonryLayout(
 }
 
 function Masonry({
-  asChild = false,
-  children,
   className,
   columns = 3,
   gap = 16,
+  items,
   minColumnWidth = 240,
   ref,
   style,
   ...props
 }: MasonryProps) {
-  const Component = asChild ? Slot : 'div';
-  const containerRef = React.useRef<HTMLElement | null>(null);
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
   const columnCount = Number.isFinite(columns)
     ? Math.max(1, Math.floor(columns))
     : 3;
   const [columnGap, rowGap] = resolveGap(gap);
   const minimumWidth = toCssLength(minColumnWidth);
   const setContainerRef = React.useCallback(
-    (node: HTMLElement | null) => {
+    (node: HTMLDivElement | null) => {
       containerRef.current = node;
       assignRef(ref, node);
     },
@@ -208,10 +239,10 @@ function Masonry({
   useMasonryLayout(containerRef, columnCount, minimumWidth);
 
   return (
-    <Component
+    <div
       ref={setContainerRef}
       data-layout="masonry"
-      data-slot={asChild ? undefined : 'masonry'}
+      data-slot="masonry"
       data-columns={columnCount}
       className={cn('relative grid items-start', className)}
       style={{
@@ -226,25 +257,38 @@ function Masonry({
       }}
       {...props}
     >
-      {children}
-    </Component>
+      {items.map(
+        ({
+          className: itemClassName,
+          content,
+          key,
+          span = 'auto',
+          ...itemProps
+        }) => (
+          <div
+            {...itemProps}
+            className={cn(
+              'min-w-0',
+              span === 'full' && 'col-span-full',
+              itemClassName
+            )}
+            data-slot="masonry-item"
+            data-span={span}
+            key={key}
+          >
+            {content}
+          </div>
+        )
+      )}
+    </div>
   );
 }
 
-function MasonryItem({ className, span = 'auto', ...props }: MasonryItemProps) {
-  return (
-    <div
-      data-slot="masonry-item"
-      data-span={span}
-      className={cn('min-w-0', span === 'full' && 'col-span-full', className)}
-      {...props}
-    />
-  );
-}
-
-const MasonryCompound = Object.assign(Masonry, {
-  Item: MasonryItem,
-});
-
-export { MasonryCompound as Masonry, MasonryItem as Item };
-export type { MasonryGap, MasonryItemProps, MasonryLength, MasonryProps };
+export { Masonry };
+export type {
+  MasonryGap,
+  MasonryItem,
+  MasonryItemSpan,
+  MasonryLength,
+  MasonryProps,
+};

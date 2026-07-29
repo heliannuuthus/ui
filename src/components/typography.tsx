@@ -106,17 +106,4 @@ const Typography = Object.assign(TypographyP, {
   Small: TypographySmall,
 });
 
-export {
-  H1,
-  H2,
-  H3,
-  H4,
-  Typography,
-  TypographyBlockquote as Blockquote,
-  TypographyCode as Code,
-  TypographyLarge as Large,
-  TypographyLead as Lead,
-  TypographyMuted as Muted,
-  TypographyP as P,
-  TypographySmall as Small,
-};
+export { Typography };

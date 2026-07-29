@@ -371,11 +371,4 @@ const Chart = Object.assign(ChartContainer, {
   TooltipContent: ChartTooltipContent,
 });
 
-export {
-  Chart,
-  ChartLegend as Legend,
-  ChartLegendContent as LegendContent,
-  ChartStyle as Style,
-  ChartTooltip as Tooltip,
-  ChartTooltipContent as TooltipContent,
-};
+export { Chart };

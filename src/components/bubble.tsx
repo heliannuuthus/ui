@@ -4,6 +4,7 @@ import { useRender } from '@base-ui/react/use-render';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
+import type { DataAttributes } from './internal/public-types';
 
 function BubbleGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
@@ -53,7 +54,7 @@ type BubbleProps = Omit<React.ComponentProps<'div'>, 'children'> &
   VariantProps<typeof bubbleVariants> & {
     align?: 'start' | 'end';
     content: React.ReactNode;
-    contentProps?: useRender.ComponentProps<'div'>;
+    contentProps?: React.ComponentProps<'div'> & DataAttributes;
     reactions?: React.ReactNode;
     reactionsProps?: BubbleReactionsProps;
   };
@@ -150,7 +151,6 @@ const BubbleCompound = Object.assign(Bubble, {
 
 export {
   BubbleCompound as Bubble,
-  BubbleGroup as Group,
   type BubbleProps,
   type BubbleReactionsProps,
 };

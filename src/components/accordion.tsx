@@ -14,13 +14,20 @@ type AccordionItem = {
 };
 
 type AccordionProps = Omit<
-  AccordionPrimitive.Root.Props,
-  'children' | 'orientation'
+  React.ComponentProps<'div'>,
+  'children' | 'defaultValue' | 'onChange'
 > & {
+  defaultValue?: string[];
+  disabled?: boolean;
   expandedIndicator?: React.ReactNode;
+  hiddenUntilFound?: boolean;
   indicator?: React.ReactNode;
   indicatorPosition?: AccordionIndicatorPosition;
   items: readonly AccordionItem[];
+  keepMounted?: boolean;
+  multiple?: boolean;
+  onValueChange?: (value: string[]) => void;
+  value?: string[];
 };
 
 type AccordionIndicatorProps = {

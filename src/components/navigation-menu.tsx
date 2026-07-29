@@ -2,13 +2,24 @@ import { NavigationMenu as NavigationMenuPrimitive } from '@base-ui/react/naviga
 import { cva } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
+import type { PopupAlign } from './internal/public-types';
 import { ChevronDownIcon } from 'lucide-react';
+
+type NavigationMenuLinkProps = Omit<React.ComponentProps<'a'>, 'children'> & {
+  active?: boolean;
+  children?: React.ReactNode;
+  closeOnClick?: boolean;
+};
+
+type NavigationMenuLinkComponent = (
+  props: NavigationMenuLinkProps
+) => React.ReactNode;
 
 type NavigationMenuItemConfig = {
   active?: boolean;
   content?:
     | React.ReactNode
-    | ((slots: { Link: typeof NavigationMenuLink }) => React.ReactNode);
+    | ((slots: { Link: NavigationMenuLinkComponent }) => React.ReactNode);
   disabled?: boolean;
   href?: string;
   label: React.ReactNode;
@@ -16,12 +27,19 @@ type NavigationMenuItemConfig = {
 };
 
 type NavigationMenuProps = Omit<
-  NavigationMenuPrimitive.Root.Props,
-  'children'
-> &
-  Pick<NavigationMenuPrimitive.Positioner.Props, 'align'> & {
-    items: readonly NavigationMenuItemConfig[];
-  };
+  React.ComponentProps<'nav'>,
+  'children' | 'defaultValue' | 'onChange'
+> & {
+  align?: PopupAlign;
+  closeDelay?: number;
+  defaultValue?: string | null;
+  delay?: number;
+  items: readonly NavigationMenuItemConfig[];
+  onOpenChangeComplete?: (open: boolean) => void;
+  onValueChange?: (value: string | null) => void;
+  orientation?: 'horizontal' | 'vertical';
+  value?: string | null;
+};
 
 function NavigationMenu({
   align = 'start',
@@ -167,10 +185,7 @@ function NavigationMenuPositioner({
   );
 }
 
-function NavigationMenuLink({
-  className,
-  ...props
-}: NavigationMenuPrimitive.Link.Props) {
+function NavigationMenuLink({ className, ...props }: NavigationMenuLinkProps) {
   return (
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
@@ -187,5 +202,6 @@ export {
   NavigationMenu,
   navigationMenuTriggerStyle,
   type NavigationMenuItemConfig,
+  type NavigationMenuLinkProps,
   type NavigationMenuProps,
 };

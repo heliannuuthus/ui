@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Card, type CardProps } from '@heliannuuthus/ui';
 import { Stack } from '@heliannuuthus/ui';
-import { Small as TypographySmall } from '@heliannuuthus/ui';
+import { Typography } from '@heliannuuthus/ui';
 import {
   Highlight,
   type Language,
@@ -63,7 +63,7 @@ type SyntaxCodeProps = {
   code: string;
   fileName?: string;
   language?: Language;
-  radius?: CardProps['radius'];
+  radius?: 'default' | 'sm' | 'none';
   showLineNumbers?: boolean;
   variant?: CardProps['variant'];
 };
@@ -83,7 +83,9 @@ export function SyntaxCode({
 
   return (
     <Card
-      className={`syntax-code${className ? ` ${className}` : ''}`}
+      className={`syntax-code${radius === 'sm' ? ' rounded-lg' : ''}${
+        radius === 'none' ? ' rounded-none' : ''
+      }${className ? ` ${className}` : ''}`}
       classNames={{
         header: 'syntax-code-toolbar',
         title: 'syntax-code-title',
@@ -92,7 +94,6 @@ export function SyntaxCode({
       }}
       data-language={language}
       data-line-count={lineCount}
-      radius={radius}
       variant={variant}
       title={
         <Stack
@@ -103,9 +104,9 @@ export function SyntaxCode({
           orientation="horizontal"
         >
           <Stack align="center" gap={8} orientation="horizontal">
-            <TypographySmall className="font-heading font-bold">
+            <Typography.Small className="font-heading font-bold">
               {fileName}
-            </TypographySmall>
+            </Typography.Small>
           </Stack>
           <Stack
             align="center"

@@ -4,26 +4,25 @@ import type { VariantProps } from 'class-variance-authority';
 import { ChevronDownIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
-import { buttonVariants } from './button';
+import { buttonVariants, type ButtonNativeProps } from './button';
+import type { OpenStateProps } from './internal/public-types';
 
 type CollapsibleProps = Omit<
-  CollapsiblePrimitive.Root.Props,
+  React.ComponentProps<'div'>,
   'children' | 'content'
-> & {
-  content: React.ReactNode;
-  contentClassName?: string;
-  footer?: React.ReactNode;
-  header?: React.ReactNode;
-  headerClassName?: string;
-  icon?: React.ReactNode;
-  trigger?: React.ReactNode;
-  triggerIcon?: React.ReactNode;
-  triggerProps?: Omit<
-    CollapsiblePrimitive.Trigger.Props,
-    'children' | 'className'
-  > &
-    VariantProps<typeof buttonVariants>;
-};
+> &
+  OpenStateProps & {
+    content: React.ReactNode;
+    contentClassName?: string;
+    footer?: React.ReactNode;
+    header?: React.ReactNode;
+    headerClassName?: string;
+    icon?: React.ReactNode;
+    trigger?: React.ReactNode;
+    triggerIcon?: React.ReactNode;
+    triggerProps?: Omit<ButtonNativeProps, 'children' | 'className' | 'href'> &
+      VariantProps<typeof buttonVariants>;
+  };
 
 function Collapsible({
   className,

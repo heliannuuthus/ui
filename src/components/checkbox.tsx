@@ -14,16 +14,25 @@ type CheckboxClassNames = {
 };
 
 type CheckboxProps = Omit<
-  CheckboxPrimitive.Root.Props,
-  'children' | 'className' | 'onCheckedChange' | 'render'
+  React.ComponentProps<'label'>,
+  'children' | 'defaultChecked' | 'onChange'
 > & {
+  checked?: boolean;
   children?: React.ReactNode;
   className?: string;
   classNames?: CheckboxClassNames;
-  onChange?: (
-    checked: boolean,
-    eventDetails: CheckboxPrimitive.Root.ChangeEventDetails
-  ) => void;
+  defaultChecked?: boolean;
+  disabled?: boolean;
+  form?: string;
+  indeterminate?: boolean;
+  inputRef?: React.Ref<HTMLInputElement>;
+  name?: string;
+  onChange?: (checked: boolean) => void;
+  parent?: boolean;
+  readOnly?: boolean;
+  required?: boolean;
+  uncheckedValue?: string;
+  value?: string;
 };
 
 type CheckboxOption = {
@@ -34,19 +43,20 @@ type CheckboxOption = {
 };
 
 type CheckboxGroupProps = Omit<
-  CheckboxGroupPrimitive.Props,
-  'children' | 'onChange' | 'onValueChange'
+  React.ComponentProps<'div'>,
+  'children' | 'defaultValue' | 'onChange'
 > & {
+  allValues?: string[];
   columns?: number;
+  defaultValue?: string[];
+  disabled?: boolean;
   gap?: MasonryGap;
   minColumnWidth?: MasonryLength;
   name?: string;
-  onChange?: (
-    value: string[],
-    eventDetails: CheckboxGroupPrimitive.ChangeEventDetails
-  ) => void;
+  onChange?: (value: string[]) => void;
   options: readonly CheckboxOption[];
   orientation?: 'horizontal' | 'vertical';
+  value?: string[];
 };
 
 const CheckboxGroupNameContext = React.createContext<string | undefined>(
@@ -67,9 +77,9 @@ function CheckboxRoot({
 
   const handleCheckedChange: NonNullable<
     CheckboxPrimitive.Root.Props['onCheckedChange']
-  > = (checked, eventDetails) => {
+  > = (checked, _eventDetails) => {
     setParticleBurst((current) => (checked ? current + 1 : 0));
-    onChange?.(checked, eventDetails);
+    onChange?.(checked);
   };
 
   return (
@@ -83,7 +93,7 @@ function CheckboxRoot({
       disabled={disabled}
       name={name ?? groupName}
       onCheckedChange={handleCheckedChange}
-      {...props}
+      {...(props as CheckboxPrimitive.Root.Props)}
     >
       <span
         data-slot="checkbox-control"
@@ -136,34 +146,34 @@ function CheckboxGroup({
   ...props
 }: CheckboxGroupProps) {
   return (
-    <Masonry
-      asChild
-      columns={orientation === 'horizontal' ? columns : 1}
-      gap={gap}
-      minColumnWidth={minColumnWidth}
+    <CheckboxGroupPrimitive
+      data-slot="checkbox-group"
+      data-orientation={orientation}
+      aria-orientation={orientation}
+      className={cn('w-full', className)}
+      onValueChange={onChange}
+      {...props}
     >
-      <CheckboxGroupPrimitive
-        data-slot="checkbox-group"
-        data-orientation={orientation}
-        aria-orientation={orientation}
-        className={cn('w-full', className)}
-        onValueChange={onChange}
-        {...props}
-      >
-        <CheckboxGroupNameContext.Provider value={name}>
-          {options.map((option) => (
-            <CheckboxRoot
-              className={option.className}
-              disabled={option.disabled}
-              key={option.value}
-              value={option.value}
-            >
-              {option.label}
-            </CheckboxRoot>
-          ))}
-        </CheckboxGroupNameContext.Provider>
-      </CheckboxGroupPrimitive>
-    </Masonry>
+      <CheckboxGroupNameContext.Provider value={name}>
+        <Masonry
+          columns={orientation === 'horizontal' ? columns : 1}
+          gap={gap}
+          items={options.map((option) => ({
+            content: (
+              <CheckboxRoot
+                className={option.className}
+                disabled={option.disabled}
+                value={option.value}
+              >
+                {option.label}
+              </CheckboxRoot>
+            ),
+            key: option.value,
+          }))}
+          minColumnWidth={minColumnWidth}
+        />
+      </CheckboxGroupNameContext.Provider>
+    </CheckboxGroupPrimitive>
   );
 }
 
@@ -171,7 +181,7 @@ const Checkbox = Object.assign(CheckboxRoot, {
   Group: CheckboxGroup,
 });
 
-export { Checkbox, CheckboxGroup as Group };
+export { Checkbox };
 export type {
   CheckboxClassNames,
   CheckboxGroupProps,

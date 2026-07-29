@@ -1,21 +1,12 @@
 import type { ReactNode } from 'react';
 import { Badge } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
-import { ButtonGroup } from '@heliannuuthus/ui';
 import { Checkbox } from '@heliannuuthus/ui';
 import { Kbd } from '@heliannuuthus/ui';
 import { Separator } from '@heliannuuthus/ui';
 import { Stack } from '@heliannuuthus/ui';
-import { Switch } from '@heliannuuthus/ui';
 import { Toggle } from '@heliannuuthus/ui';
-import {
-  Blockquote as TypographyBlockquote,
-  Code as TypographyCode,
-  H2,
-  Lead as TypographyLead,
-  Muted as TypographyMuted,
-  P as TypographyP,
-} from '@heliannuuthus/ui';
+import { Typography } from '@heliannuuthus/ui';
 import {
   ArrowRight,
   Bold,
@@ -31,8 +22,16 @@ import {
   BreadcrumbCollapsedDemo,
   BreadcrumbVariantsDemo,
 } from './breadcrumb-preview';
-import { CardAnatomyDemo, CardBasicDemo } from './card-preview';
-import { MasonryResponsiveDemo } from './masonry-preview';
+import {
+  CardAnatomyDemo,
+  CardBasicDemo,
+  CardSemanticDomDemo,
+} from './card-preview';
+import {
+  MasonryBasicDemo,
+  MasonryResponsiveDemo,
+  MasonrySpanDemo,
+} from './masonry-preview';
 import { ScrollAreaAnimatedListDemo } from './scroll-area-preview';
 import {
   StackAlignmentDemo,
@@ -135,6 +134,10 @@ import {
   TabsMotionDemo,
   TabsVariantsDemo,
 } from './navigation-previews';
+import {
+  ResizableAdvancedDemo,
+  ResizableVerticalDemo,
+} from './resizable-preview';
 import { minimalComponentPreviews } from './minimal-previews';
 import type {
   ComponentHarnessCase,
@@ -182,6 +185,10 @@ export type ComponentDocumentation = {
   examples: ComponentExample[];
   parts?: ComponentPart[];
   relatedComponents?: RelatedComponent[];
+  semanticDom?: {
+    description: string;
+    preview: ReactNode;
+  };
   api: ApiProperty[];
   accessibility: string[];
   pitfalls: string[];
@@ -257,20 +264,19 @@ export function ButtonSizes() {
       title: '组合按钮',
       description: '将紧密相关的操作收进同一个视觉组，并保持操作语义单一。',
       preview: (
-        <ButtonGroup aria-label="分页操作">
+        <Button.Group aria-label="分页操作">
           <Button variant="outline">上一项</Button>
           <Button>下一项</Button>
-        </ButtonGroup>
+        </Button.Group>
       ),
       code: `import { Button } from '@heliannuuthus/ui'
-import { ButtonGroup } from '@heliannuuthus/ui'
 
 export function GroupedButtons() {
   return (
-    <ButtonGroup aria-label="分页操作">
+    <Button.Group aria-label="分页操作">
       <Button variant="outline">上一项</Button>
       <Button>下一项</Button>
-    </ButtonGroup>
+    </Button.Group>
   )
 }`,
     },
@@ -337,11 +343,43 @@ export function ButtonStates() {
   )
 }`,
     },
+    {
+      title: '导航按钮',
+      description:
+        '设置 href 后输出具有链接语义的 a 元素；不设置 href 时始终输出原生 button。导航不要通过点击事件手动修改地址。',
+      preview: (
+        <div className="example-row">
+          <Button href="/components/card" variant="outline">
+            查看 Card 文档
+            <ArrowRight data-icon="inline-end" />
+          </Button>
+          <Button disabled href="/components/card" variant="outline">
+            暂不可用
+          </Button>
+        </div>
+      ),
+      code: `${buttonImport}
+import { ArrowRight } from 'lucide-react'
+
+export function ButtonLink() {
+  return (
+    <>
+      <Button href="/components/card" variant="outline">
+        查看 Card 文档
+        <ArrowRight data-icon="inline-end" />
+      </Button>
+      <Button disabled href="/components/card" variant="outline">
+        暂不可用
+      </Button>
+    </>
+  )
+}`,
+    },
   ],
   parts: [
     { name: 'Button', description: '触发单个明确操作的基础按钮。' },
     {
-      name: 'ButtonGroup',
+      name: 'Button.Group',
       description: '组合紧密相关的按钮，并支持水平或垂直排列。',
     },
   ],
@@ -365,16 +403,81 @@ export function ButtonStates() {
       defaultValue: 'false',
     },
     {
+      name: 'href',
+      description: '导航地址；设置后渲染为 a 元素，未设置时渲染为原生 button。',
+      type: 'string',
+    },
+    {
       name: 'disabled',
-      description: '阻止鼠标和键盘触发操作。',
+      description:
+        '禁用当前操作；链接模式下同步设置 aria-disabled 并阻止导航。',
       type: 'boolean',
       defaultValue: 'false',
     },
-    { name: 'className', description: '扩展按钮根节点样式。', type: 'string' },
     {
-      name: 'render',
-      description: 'Base UI 渲染函数，用于替换底层元素。',
-      type: 'ReactElement | ((props, state) => ReactElement)',
+      name: 'type',
+      description: '原生按钮类型，仅在未设置 href 时使用。',
+      type: "'button' | 'submit' | 'reset'",
+      defaultValue: "'button'",
+    },
+    {
+      name: 'target',
+      description: '链接打开位置，仅在设置 href 时使用。',
+      type: 'HTMLAttributeAnchorTarget',
+    },
+    {
+      name: 'rel',
+      description: '链接与当前页面的关系，仅在设置 href 时使用。',
+      type: 'string',
+    },
+    {
+      name: 'download',
+      description: '下载链接资源，仅在设置 href 时使用。',
+      type: 'boolean | string',
+    },
+    {
+      name: 'onClick',
+      description: '点击后的回调；禁用状态下不会触发。',
+      type: 'MouseEventHandler<HTMLButtonElement> | MouseEventHandler<HTMLAnchorElement>',
+    },
+    {
+      name: 'children',
+      description: '按钮或链接中展示的内容。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'className',
+      description: '扩展按钮根节点样式。',
+      type: 'string',
+    },
+    {
+      name: 'style',
+      description: '扩展按钮根节点的行内样式。',
+      type: 'CSSProperties',
+    },
+    {
+      name: 'ref',
+      description: '访问实际渲染的 button 或 a 元素。',
+      type: 'Ref<HTMLButtonElement | HTMLAnchorElement>',
+    },
+    {
+      component: 'Button.Group',
+      name: 'orientation',
+      description: '设置按钮组水平或垂直拼接。',
+      type: "'horizontal' | 'vertical'",
+      defaultValue: "'horizontal'",
+    },
+    {
+      component: 'Button.Group',
+      name: 'block',
+      description: '让按钮组填满父容器的可用宽度。',
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: '原生属性',
+      description: '支持对应 button 或 a 的标准 HTML、ARIA、data 属性和事件。',
+      type: 'ButtonHTMLAttributes | AnchorHTMLAttributes',
     },
   ],
   accessibility: [
@@ -404,44 +507,37 @@ const typographyDocumentation: ComponentDocumentation = {
       wide: true,
       preview: (
         <div className="typography-stack">
-          <H2>让界面语言保持清晰</H2>
-          <TypographyLead>
+          <Typography.H2>让界面语言保持清晰</Typography.H2>
+          <Typography.Lead>
             稳定的排版让用户先理解内容，再自然地注意到设计。
-          </TypographyLead>
-          <TypographyP>
+          </Typography.Lead>
+          <Typography.P>
             Heliannuuthus UI
             通过一致的标题层级、正文节奏和辅助信息，帮助产品在不同页面中保持清晰、可信且易于阅读的表达。
-          </TypographyP>
-          <TypographyBlockquote>
+          </Typography.P>
+          <Typography.Blockquote>
             一致的界面，来自每一次一致的内容决策。
-          </TypographyBlockquote>
-          <TypographyP>
-            使用 <TypographyCode>@heliannuuthus/ui</TypographyCode>{' '}
+          </Typography.Blockquote>
+          <Typography.P>
+            使用 <Typography.Code>@heliannuuthus/ui</Typography.Code>{' '}
             中的语义组件组合内容，并让视觉层级始终服务于阅读顺序。
-          </TypographyP>
-          <TypographyMuted>设计系统札记 · 5 分钟阅读</TypographyMuted>
+          </Typography.P>
+          <Typography.Muted>设计系统札记 · 5 分钟阅读</Typography.Muted>
         </div>
       ),
-      code: `import {
-  H2,
-  TypographyBlockquote,
-  TypographyCode,
-  TypographyLead,
-  TypographyMuted,
-  TypographyP,
-} from '@heliannuuthus/ui'
+      code: `import { Typography } from '@heliannuuthus/ui'
 
 export function TypographyStory() {
   return (
     <article>
-      <H2>让界面语言保持清晰</H2>
-      <TypographyLead>稳定的排版让用户先理解内容，再自然地注意到设计。</TypographyLead>
-      <TypographyP>一致的标题层级和正文节奏，让内容清晰、可信且易于阅读。</TypographyP>
-      <TypographyBlockquote>一致的界面，来自每一次一致的内容决策。</TypographyBlockquote>
-      <TypographyP>
-        使用 <TypographyCode>@heliannuuthus/ui</TypographyCode> 组合内容。
-      </TypographyP>
-      <TypographyMuted>设计系统札记 · 5 分钟阅读</TypographyMuted>
+      <Typography.H2>让界面语言保持清晰</Typography.H2>
+      <Typography.Lead>稳定的排版让用户先理解内容，再自然地注意到设计。</Typography.Lead>
+      <Typography.P>一致的标题层级和正文节奏，让内容清晰、可信且易于阅读。</Typography.P>
+      <Typography.Blockquote>一致的界面，来自每一次一致的内容决策。</Typography.Blockquote>
+      <Typography.P>
+        使用 <Typography.Code>@heliannuuthus/ui</Typography.Code> 组合内容。
+      </Typography.P>
+      <Typography.Muted>设计系统札记 · 5 分钟阅读</Typography.Muted>
     </article>
   )
 }`,
@@ -449,23 +545,23 @@ export function TypographyStory() {
   ],
   parts: [
     {
-      name: 'H1–H4',
+      name: 'Typography.H1–Typography.H4',
       description: '语义化的四级标题。',
     },
     {
-      name: 'TypographyP',
+      name: 'Typography.P',
       description: '正文段落。',
     },
     {
-      name: 'TypographyLead / Muted',
+      name: 'Typography.Lead / Typography.Muted',
       description: '导语与辅助正文。',
     },
     {
-      name: 'TypographyLarge / Small',
+      name: 'Typography.Large / Typography.Small',
       description: '强调文字和较小标签。',
     },
     {
-      name: 'TypographyBlockquote / Code',
+      name: 'Typography.Blockquote / Typography.Code',
       description: '引用和行内代码。',
     },
   ],
@@ -498,92 +594,196 @@ const badgeDocumentation: ComponentDocumentation = {
   whenToUse: ['标记对象的状态或分类。', '在有限空间内展示短小、非交互属性。'],
   examples: [
     {
-      title: '徽标类型',
-      description: '根据语义选择层级，危险样式只用于需要注意的负向状态。',
-      caseAxes: [
-        {
-          name: 'variant',
-          label: '样式',
-          defaultValue: 'default',
-          options: [
-            { label: '默认', value: 'default' },
-            { label: '次要', value: 'secondary' },
-            { label: '描边', value: 'outline' },
-            { label: '弱化', value: 'ghost' },
-            { label: '危险', value: 'destructive' },
-          ],
-        },
-      ],
-      preview: (values) => {
-        const variant = (values.variant ?? 'default') as
-          'default' | 'secondary' | 'outline' | 'ghost' | 'destructive';
-        return (
-          <Stack gap={8} orientation="horizontal" wrap>
-            <Badge variant={variant}>组件稳定</Badge>
-            <Badge variant={variant}>v0.1.0</Badge>
-            <Badge variant={variant}>
-              <span className="status-dot" />
-              运行中
-            </Badge>
-          </Stack>
-        );
-      },
+      title: '基础用法',
+      description: '用简短文本标记对象当前最重要的状态或属性。',
+      preview: <Badge>已发布</Badge>,
       code: `import { Badge } from '@heliannuuthus/ui'
 
-export function BadgeVariants() {
-  return <><Badge>默认</Badge><Badge variant="secondary">次要</Badge><Badge variant="outline">描边</Badge><Badge variant="destructive">失败</Badge></>
+export function BadgeBasic() {
+  return <Badge>已发布</Badge>
 }`,
     },
     {
-      title: '状态与图标',
-      description: '短文本配合图标提升可扫描性，但文本仍需独立表达完整含义。',
+      title: '语义样式',
+      description:
+        'variant 只区分信息层级；同一种状态不要在页面内混用多套样式。',
+      preview: (
+        <div className="example-row">
+          <Badge>默认</Badge>
+          <Badge variant="secondary">次要</Badge>
+          <Badge variant="outline">描边</Badge>
+          <Badge variant="ghost">弱化</Badge>
+          <Badge variant="destructive">需处理</Badge>
+        </div>
+      ),
+      code: `import { Badge } from '@heliannuuthus/ui'
+
+<Badge>默认</Badge>
+<Badge variant="secondary">次要</Badge>
+<Badge variant="outline">描边</Badge>
+<Badge variant="destructive">需处理</Badge>`,
+    },
+    {
+      title: '消息提醒',
+      description:
+        '通过 count 展示未读数量，通过 dot 只提示是否有新内容；超出 overflowCount 时自动封顶。',
+      preview: (
+        <Stack gap={24} orientation="horizontal" wrap>
+          <Badge count={5} indicatorLabel="5 条未读消息">
+            <Button
+              aria-label="查看 5 条未读消息"
+              size="icon"
+              variant="outline"
+            >
+              <Mail />
+            </Button>
+          </Badge>
+          <Badge
+            count={123}
+            indicatorLabel="超过 99 条未读消息"
+            overflowCount={99}
+          >
+            <Button variant="outline">收件箱</Button>
+          </Badge>
+          <Badge dot indicatorLabel="有新的系统通知">
+            <Button variant="outline">系统通知</Button>
+          </Badge>
+          <Badge count={0} indicatorLabel="暂无待办" showZero>
+            <Button variant="outline">待办</Button>
+          </Badge>
+        </Stack>
+      ),
+      code: `import { Badge, Button } from '@heliannuuthus/ui'
+import { Mail } from 'lucide-react'
+
+<Badge count={5} indicatorLabel="5 条未读消息">
+  <Button aria-label="查看未读消息" size="icon" variant="outline">
+    <Mail />
+  </Button>
+</Badge>
+
+<Badge count={123} overflowCount={99}>
+  <Button variant="outline">收件箱</Button>
+</Badge>
+
+<Badge dot indicatorLabel="有新的系统通知">
+  <Button variant="outline">系统通知</Button>
+</Badge>`,
+    },
+    {
+      title: '状态与链接',
+      description:
+        '图标用于帮助扫描，文本仍需表达完整含义；需要导航时使用 href 获得链接语义。',
       preview: (
         <div className="example-row">
           <Badge>
-            <span className="status-dot" />
+            <span aria-hidden="true" className="status-dot" />
             运行中
           </Badge>
-          <Badge variant="secondary">草稿</Badge>
           <Badge variant="outline">v0.1.0</Badge>
-          <Badge variant="link" render={<a href={packageUrlForDocs()} />}>
+          <Badge
+            href="https://www.npmjs.com/package/@heliannuuthus/ui"
+            rel="noreferrer"
+            target="_blank"
+            variant="link"
+          >
             查看版本
-            <ArrowRight />
+            <ArrowRight data-icon="inline-end" />
           </Badge>
         </div>
       ),
       code: `import { Badge } from '@heliannuuthus/ui'
 
 <Badge><span aria-hidden="true" />运行中</Badge>
-<Badge variant="outline">v0.1.0</Badge>`,
+<Badge variant="outline">v0.1.0</Badge>
+<Badge href="/releases" variant="link">查看版本</Badge>`,
     },
   ],
   api: [
     {
       name: 'variant',
-      description: '徽标视觉样式。',
+      description:
+        '徽标视觉样式；文本徽标默认使用 default，数字和红点通知默认使用 destructive。',
       type: "'default' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'link'",
-      defaultValue: "'default'",
+      defaultValue: "'default' / 'destructive'",
     },
     {
-      name: 'render',
-      description: '替换默认 span，例如渲染为链接。',
-      type: 'ReactElement | render function',
+      name: 'count',
+      description:
+        '显示通知数量；传入数字时可配合 overflowCount 自动生成封顶文案。',
+      type: 'React.ReactNode',
+    },
+    {
+      name: 'dot',
+      description: '只显示通知红点，不展示 count 内容。',
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'overflowCount',
+      description: '数字通知的显示上限，例如 123 在上限 99 时显示为 99+。',
+      type: 'number',
+      defaultValue: '99',
+    },
+    {
+      name: 'showZero',
+      description: 'count 为 0 时是否仍显示数字。',
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'offset',
+      description: '微调通知标记相对锚点的水平与垂直位置。',
+      type: 'readonly [horizontal: number, vertical: number]',
+      defaultValue: '[0, 0]',
+    },
+    {
+      name: 'indicatorLabel',
+      description: '通知数字或红点的无障碍说明，红点场景应明确提供。',
+      type: 'string',
+    },
+    {
+      name: 'indicatorClassName',
+      description: '扩展数字或红点标记本身的样式。',
+      type: 'string',
+    },
+    {
+      name: 'href',
+      description: '将文本徽标渲染为原生链接；通知模式应把链接作为 children。',
+      type: 'string',
+    },
+    {
+      name: 'children',
+      description: '徽标文本或通知标记的锚点。',
+      type: 'React.ReactNode',
     },
     { name: 'className', description: '扩展根节点样式。', type: 'string' },
+    {
+      name: 'style',
+      description: '扩展根节点行内样式。',
+      type: 'React.CSSProperties',
+    },
+    {
+      name: 'ref',
+      description: '转发到根 span 或链接元素。',
+      type: 'React.Ref<HTMLSpanElement | HTMLAnchorElement>',
+    },
+    {
+      name: '原生属性',
+      description: '支持对应 span 或 a 的标准 HTML、ARIA、data 属性和事件。',
+      type: 'HTMLAttributes | AnchorHTMLAttributes',
+    },
   ],
   accessibility: [
     '状态不能只依靠颜色表达，必须保留文本。',
-    '可点击徽标应渲染为链接或按钮，获得正确语义。',
+    '红点没有可见文字，应通过 indicatorLabel 说明通知含义。',
+    '需要交互时使用 href，或把 Button、链接作为通知标记的 children。',
   ],
   pitfalls: [
     '避免放入长句或复杂操作。',
     '不要把 Badge 用作没有键盘语义的可点击控件。',
   ],
 };
-
-function packageUrlForDocs() {
-  return 'https://www.npmjs.com/package/@heliannuuthus/ui';
-}
 
 const kbdDocumentation: ComponentDocumentation = {
   name: 'Kbd',
@@ -748,9 +948,9 @@ const separatorDocumentation: ComponentDocumentation = {
       type: 'string',
     },
     {
-      name: 'style / render',
-      description: '通过行内样式或自定义渲染元素完成更深度的视觉扩展。',
-      type: 'CSSProperties | ReactElement | render function',
+      name: 'style / 原生属性',
+      description: '通过标准 div 的行内样式、ARIA、data 属性与事件完成扩展。',
+      type: 'CSSProperties / HTMLAttributes<HTMLDivElement>',
     },
   ],
   accessibility: [
@@ -773,18 +973,64 @@ const masonryDocumentation: ComponentDocumentation = {
   ],
   examples: [
     {
+      title: '基础用法',
+      description:
+        '通过 items 提供稳定 key 与内容，Masonry 会为每一项创建并测量布局节点。',
+      preview: <MasonryBasicDemo />,
+      code: `import { Masonry, type MasonryItem } from '@heliannuuthus/ui'
+
+const items = cards.map((card) => ({
+  key: card.id,
+  content: <Card {...card} />,
+})) satisfies readonly MasonryItem[]
+
+<Masonry
+  columns={3}
+  minColumnWidth={180}
+  gap={[14, 20]}
+  items={items}
+/>`,
+      wide: true,
+      previewHeight: 460,
+    },
+    {
       title: '自适应列数',
       description:
         '拖动滑块设置一行允许的最大列数；实际列数根据容器宽度与最小列宽自动回落，最多显示六列。',
       preview: <MasonryResponsiveDemo />,
       code: `import { Masonry } from '@heliannuuthus/ui'
 
-<Masonry columns={6} minColumnWidth={140} gap={14}>
-  <Masonry.Item style={{ minHeight: 180 }}>基础组件</Masonry.Item>
-  <Masonry.Item style={{ minHeight: 120 }}>布局规则</Masonry.Item>
-  <Masonry.Item style={{ minHeight: 150 }}>设计令牌</Masonry.Item>
-  <Masonry.Item span="full">发布检查</Masonry.Item>
-</Masonry>`,
+<Masonry
+  columns={6}
+  minColumnWidth={140}
+  gap={14}
+  items={cards}
+/>`,
+      wide: true,
+      previewHeight: 520,
+    },
+    {
+      title: '跨列内容',
+      description:
+        '在单项配置中设置 span="full"；该项会等待前面所有列结束并独占整行，后续内容再从统一位置继续排列。',
+      preview: <MasonrySpanDemo />,
+      code: `import { Masonry } from '@heliannuuthus/ui'
+
+<Masonry
+  columns={3}
+  minColumnWidth={180}
+  gap={14}
+  items={[
+    { key: 'a', content: <Card>A</Card> },
+    { key: 'b', content: <Card>B</Card> },
+    {
+      key: 'release',
+      content: <ReleaseNotice />,
+      span: 'full',
+    },
+    { key: 'c', content: <Card>C</Card> },
+  ]}
+/>`,
       wide: true,
       previewHeight: 520,
     },
@@ -792,14 +1038,16 @@ const masonryDocumentation: ComponentDocumentation = {
   parts: [
     {
       name: 'Masonry',
-      description: '定义最大列数、最小列宽与行列间距。',
-    },
-    {
-      name: 'Item',
-      description: '承载单个内容项，并可通过 span="full" 独占整行。',
+      description:
+        '接收 items，并统一完成内容包装、测量、最短列分配和跨列布局。',
     },
   ],
   api: [
+    {
+      name: 'items',
+      description: '提供需要布局的 MasonryItem 配置列表。',
+      type: 'readonly MasonryItem[]',
+    },
     {
       name: 'columns',
       description:
@@ -820,16 +1068,36 @@ const masonryDocumentation: ComponentDocumentation = {
       defaultValue: '16',
     },
     {
-      name: 'asChild',
-      description: '将 Masonry 布局属性合并到唯一子元素，避免增加包装节点。',
-      type: 'boolean',
-      defaultValue: 'false',
+      component: 'MasonryItem',
+      name: 'key',
+      description: '提供稳定且唯一的 React key，用于识别当前布局项。',
+      type: 'React.Key',
     },
     {
+      component: 'MasonryItem',
+      name: 'content',
+      description: '设置布局项内部展示的卡片、媒体或其他 React 内容。',
+      type: 'React.ReactNode',
+    },
+    {
+      component: 'MasonryItem',
       name: 'span',
-      description: 'Item 是否按普通单元或跨越整行排列。',
+      description: '控制单项按普通列宽排列，或等待当前各列结束后独占整行。',
       type: "'auto' | 'full'",
       defaultValue: "'auto'",
+    },
+    {
+      component: 'MasonryItem',
+      name: 'className',
+      description: '为当前布局项扩展样式类。',
+      type: 'string',
+    },
+    {
+      component: 'MasonryItem',
+      name: 'style / 原生属性',
+      description:
+        '通过标准 div 的行内样式、ARIA、data 属性、角色与事件扩展当前布局项。',
+      type: 'CSSProperties / HTMLAttributes<HTMLDivElement>',
     },
   ],
   accessibility: [
@@ -865,27 +1133,6 @@ const stackDocumentation: ComponentDocumentation = {
   ))}
 </Stack>`,
       previewHeight: 460,
-    },
-    {
-      title: '交叉轴与主轴对齐',
-      description:
-        'align 控制交叉轴对齐，justify 控制主轴分布；每个案例上方都直接声明使用的属性和值。',
-      preview: <StackAlignmentDemo />,
-      code: `import { Stack } from '@heliannuuthus/ui'
-
-<Stack orientation="horizontal" gap={6} align="center">
-  <Filter />
-  <Sort />
-  <Availability />
-</Stack>
-
-<Stack block orientation="horizontal" gap={6} justify="between">
-  <Filter />
-  <Sort />
-  <Availability />
-</Stack>`,
-      previewHeight: 820,
-      wide: true,
     },
     {
       title: '跨控件紧凑组合',
@@ -927,6 +1174,27 @@ export function SliderCompactExample() {
 }`,
       previewHeight: 760,
     },
+    {
+      title: '交叉轴与主轴对齐',
+      description:
+        'align 控制交叉轴对齐，justify 控制主轴分布；每个案例上方都直接声明使用的属性和值。',
+      preview: <StackAlignmentDemo />,
+      code: `import { Stack } from '@heliannuuthus/ui'
+
+<Stack orientation="horizontal" gap={6} align="center">
+  <Filter />
+  <Sort />
+  <Availability />
+</Stack>
+
+<Stack block orientation="horizontal" gap={6} justify="between">
+  <Filter />
+  <Sort />
+  <Availability />
+</Stack>`,
+      previewHeight: 820,
+      wide: true,
+    },
   ],
   parts: [
     {
@@ -934,7 +1202,7 @@ export function SliderCompactExample() {
       description: '按方向、间距与对齐规则排列一组相关内容。',
     },
     {
-      name: 'Compact',
+      name: 'Stack.Compact',
       description: '折叠相邻控件的间距、边框和圆角，形成连续操作组。',
     },
   ],
@@ -981,14 +1249,14 @@ export function SliderCompactExample() {
       type: 'ReactNode',
     },
     {
-      component: 'Compact',
+      component: 'Stack.Compact',
       name: 'orientation',
       description: '设置紧凑组的拼接方向；紧凑组不允许换行。',
       type: "'horizontal' | 'vertical'",
       defaultValue: "'horizontal'",
     },
     {
-      component: 'Compact',
+      component: 'Stack.Compact',
       name: 'block',
       description: '让紧凑组填满父容器，适合包含 Input 的组合。',
       type: 'boolean',
@@ -1132,13 +1400,12 @@ export function WorkspaceCard() {
 }`,
     },
   ],
+  semanticDom: {
+    description:
+      '悬停、聚焦或点击右侧属性行，查看 className 与 CardClassNames 各字段对应的真实区域。',
+    preview: <CardSemanticDomDemo />,
+  },
   api: [
-    {
-      name: 'radius',
-      description: '控制 Card 外轮廓的圆角密度。',
-      type: "'default' | 'sm' | 'none'",
-      defaultValue: "'default'",
-    },
     {
       name: 'variant',
       description: '控制 Card 的层级表达，可选择阴影、描边或透明容器。',
@@ -1172,12 +1439,48 @@ export function WorkspaceCard() {
     },
     {
       name: 'classNames',
-      description: '扩展 header、content、footer 等内部区域样式。',
+      description: '通过 CardClassNames 按语义区域扩展内部样式。',
       type: 'CardClassNames',
     },
     {
       name: 'className',
       description: '扩展 Card 根节点样式。',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      name: 'header',
+      description: '扩展包含标题、说明与右侧操作的头部区域。',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      name: 'title',
+      description: '扩展卡片标题区域。',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      name: 'description',
+      description: '扩展标题下方的辅助说明区域。',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      name: 'action',
+      description: '扩展头部右侧的辅助操作区域。',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      name: 'content',
+      description: '扩展卡片主要内容区域。',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      name: 'footer',
+      description: '扩展卡片底部的补充信息与操作区域。',
       type: 'string',
     },
   ],
@@ -1207,15 +1510,92 @@ const resizableDocumentation: ComponentDocumentation = {
       wide: true,
       preview: minimalComponentPreviews.resizable,
       code: `import { Resizable } from '@heliannuuthus/ui'
+import { GripVertical } from 'lucide-react'
 
 export function Workspace() {
   return (
     <Resizable
       orientation="horizontal"
-      withHandle
-      panels={[
-        { id: 'files', defaultSize: '34', minSize: '24', content: '文件列表' },
-        { id: 'preview', defaultSize: '66', minSize: '40', content: '内容预览' },
+      separator={<GripVertical aria-hidden />}
+      items={[
+        { key: 'files', panel: '文件列表', size: ['34', '24'] },
+        { key: 'preview', panel: '内容预览', size: ['66', '40'] },
+      ]}
+    />
+  )
+}`,
+    },
+    {
+      title: '纵向区域',
+      description:
+        '设置 vertical 后可调整上下区域，适合编辑器与终端、预览与日志等场景。',
+      wide: true,
+      preview: <ResizableVerticalDemo />,
+      code: `import { Resizable } from '@heliannuuthus/ui'
+import { GripHorizontal } from 'lucide-react'
+
+export function EditorWithTerminal() {
+  return (
+    <Resizable
+      className="h-96"
+      orientation="vertical"
+      separator={<GripHorizontal aria-hidden />}
+      items={[
+        {
+          key: 'editor',
+          panel: <section>编辑器</section>,
+          size: ['64', '38'],
+        },
+        {
+          key: 'terminal',
+          panel: <section>终端</section>,
+          size: ['36', '20'],
+        },
+      ]}
+    />
+  )
+}`,
+    },
+    {
+      title: '尺寸约束与分隔线覆盖',
+      description:
+        'size 集中表达初始、最小和最大尺寸；item 可覆盖默认分隔线，并通过 onResize 获取实时尺寸。',
+      wide: true,
+      preview: <ResizableAdvancedDemo />,
+      code: `import { useState } from 'react'
+import { Resizable } from '@heliannuuthus/ui'
+import { GripVertical } from 'lucide-react'
+
+export function ConstrainedWorkspace() {
+  const [navigationSize, setNavigationSize] = useState(24)
+
+  return (
+    <Resizable
+      className="h-80"
+      separator={({ index }) => <span>{index + 1}</span>}
+      items={[
+        {
+          key: 'navigation',
+          panel: <aside>导航 · {navigationSize}%</aside>,
+          size: ['24', '18', '34'],
+          collapsible: true,
+          collapsedSize: 0,
+          separator: <GripVertical aria-hidden />,
+          onResize: (size) =>
+            setNavigationSize(Math.round(size.asPercentage)),
+        },
+        {
+          key: 'canvas',
+          panel: <main>画布</main>,
+          size: ['52', '36'],
+        },
+        {
+          key: 'inspector',
+          panel: <aside>属性</aside>,
+          size: ['24', '18', '34'],
+          collapsible: true,
+          collapsedSize: 0,
+        },
       ]}
     />
   )
@@ -1224,9 +1604,9 @@ export function Workspace() {
   ],
   api: [
     {
-      name: 'panels',
-      description: '定义每个区域的内容、标识和尺寸约束。',
-      type: 'ResizablePanelConfig[]',
+      name: 'items',
+      description: '定义各面板的内容、稳定标识、尺寸约束和分隔线覆盖。',
+      type: 'ResizableItem[]',
     },
     {
       name: 'orientation',
@@ -1235,23 +1615,70 @@ export function Workspace() {
       defaultValue: "'horizontal'",
     },
     {
-      name: 'withHandle',
-      description: '在自动生成的分隔线中显示可视拖动标记。',
+      name: 'separator',
+      description:
+        '所有分隔线的默认内容；可传入 ReactNode，或根据索引和方向动态渲染。',
+      type: 'ReactNode | ((props: ResizableSeparatorRenderProps) => ReactNode)',
+    },
+    {
+      name: 'classNames',
+      description: '扩展 panel 和 separator 语义槽的统一样式。',
+      type: '{ panel?: string; separator?: string }',
+    },
+    {
+      component: 'ResizableItem',
+      name: 'key',
+      description: '面板的稳定标识，同时用于 React 渲染和底层布局关联。',
+      type: 'string | number',
+    },
+    {
+      component: 'ResizableItem',
+      name: 'panel',
+      description: '面板中渲染的 React 节点。',
+      type: 'ReactNode',
+    },
+    {
+      component: 'ResizableItem',
+      name: 'size',
+      description:
+        '依次设置初始、最小和最大尺寸；数字按像素解释，无单位字符串按百分比解释。',
+      type: 'readonly [default, min?, max?]',
+    },
+    {
+      component: 'ResizableItem',
+      name: 'collapsible',
+      description: '尺寸低于 size 中的最小值时是否允许面板折叠。',
       type: 'boolean',
       defaultValue: 'false',
     },
     {
-      name: 'handleClassName',
-      description: '扩展自动生成的分隔线样式。',
-      type: 'string',
+      component: 'ResizableItem',
+      name: 'collapsedSize',
+      description: '面板折叠后的尺寸。',
+      type: 'number | string',
+      defaultValue: "'0%'",
+    },
+    {
+      component: 'ResizableItem',
+      name: 'separator',
+      description: '覆盖当前 item 之后的分隔线内容；传入 null 可隐藏视觉内容。',
+      type: 'ResizableSeparator',
+    },
+    {
+      component: 'ResizableItem',
+      name: 'onResize',
+      description: '面板尺寸变化时调用，并提供当前尺寸、item key 和上次尺寸。',
+      type: '(size: PanelSize, key, previousSize) => void',
     },
   ],
   accessibility: [
     '分隔线保持可聚焦，并支持方向键调整相邻区域尺寸。',
-    'panels 中的导航和内容仍需使用各自正确的语义结构。',
+    'separator 提供的纯装饰内容应使用 aria-hidden。',
+    'items 中的导航和内容仍需使用各自正确的语义结构。',
   ],
   pitfalls: [
     '不要让任一区域缩小到内容无法理解或操作的程度。',
+    '不要在 separator 中嵌套按钮等可聚焦控件，以免与分隔线的键盘交互冲突。',
     '移动端空间不足时，应评估是否改用纵向排列或折叠导航。',
   ],
 };
@@ -1674,43 +2101,40 @@ const navigationMenuDocumentation: ComponentDocumentation = {
       wide: true,
       previewHeight: 500,
       preview: <NavigationMenuMegaDemo />,
-      code: `import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '@heliannuuthus/ui'
+      code: `import { NavigationMenu } from '@heliannuuthus/ui'
 
-<NavigationMenu>
-  <NavigationMenuList>
-    <NavigationMenuItem>
-      <NavigationMenuTrigger>产品</NavigationMenuTrigger>
-      <NavigationMenuContent>
-        <NavigationMenuLink href="/components">组件库</NavigationMenuLink>
-        <NavigationMenuLink href="/tokens">设计令牌</NavigationMenuLink>
-      </NavigationMenuContent>
-    </NavigationMenuItem>
-    <NavigationMenuItem>
-      <NavigationMenuLink active href="/components">组件</NavigationMenuLink>
-    </NavigationMenuItem>
-  </NavigationMenuList>
-</NavigationMenu>`,
+<NavigationMenu
+  items={[
+    {
+      label: '产品',
+      value: 'product',
+      content: ({ Link }) => (
+        <>
+          <Link href="/components">组件库</Link>
+          <Link href="/tokens">设计令牌</Link>
+        </>
+      ),
+    },
+    { active: true, href: '/components', label: '组件' },
+  ]}
+/>`,
     },
     {
       title: '局部导航与对齐',
       description:
         '在工具栏右侧使用较小内容面板，并通过 align 控制弹层相对导航的对齐方式。',
       preview: <NavigationMenuCompactDemo />,
-      code: `<NavigationMenu align="end">
-  <NavigationMenuList>
-    <NavigationMenuItem>
-      <NavigationMenuTrigger>产品</NavigationMenuTrigger>
-      <NavigationMenuContent>{/* compact links */}</NavigationMenuContent>
-    </NavigationMenuItem>
-  </NavigationMenuList>
-</NavigationMenu>`,
+      code: `<NavigationMenu
+  align="end"
+  items={[
+    {
+      label: '产品',
+      content: ({ Link }) => (
+        <Link href="/components">组件库</Link>
+      ),
+    },
+  ]}
+/>`,
     },
   ],
   api: [
@@ -1761,58 +2185,52 @@ const paginationDocumentation: ComponentDocumentation = {
       preview: <PaginationControlledDemo />,
       code: `const [page, setPage] = useState(3)
 
-<Pagination>
-  <PaginationContent>
-    <PaginationItem>
-      <PaginationPrevious onClick={() => setPage(page - 1)} />
-    </PaginationItem>
-    {[1, 2, 3, 4, 5].map((value) => (
-      <PaginationItem key={value}>
-        <PaginationLink isActive={page === value}>{value}</PaginationLink>
-      </PaginationItem>
-    ))}
-    <PaginationItem>
-      <PaginationNext onClick={() => setPage(page + 1)} />
-    </PaginationItem>
-  </PaginationContent>
-</Pagination>`,
+<Pagination
+  current={page}
+  onChange={setPage}
+  pageCount={12}
+/>`,
     },
     {
       title: '大量数据与省略',
       description: '保留首页、末页和当前页附近范围，其余页码用省略标记收起。',
       preview: <PaginationOverflowDemo />,
-      code: `<Pagination>
-  <PaginationContent>
-    <PaginationPrevious text="上一页" />
-    <PaginationLink>1</PaginationLink>
-    <PaginationEllipsis />
-    <PaginationLink>23</PaginationLink>
-    <PaginationLink isActive>24</PaginationLink>
-    <PaginationLink>25</PaginationLink>
-    <PaginationEllipsis />
-    <PaginationLink>80</PaginationLink>
-    <PaginationNext text="下一页" />
-  </PaginationContent>
-</Pagination>`,
+      code: `<Pagination
+  current={24}
+  pageCount={80}
+  previousText="上一页"
+  nextText="下一页"
+  siblingCount={1}
+/>`,
     },
   ],
   api: [
     {
-      name: 'isActive',
-      description: '标识当前页面并设置 aria-current。',
-      type: 'boolean',
-      defaultValue: 'false',
+      name: 'current / pageCount',
+      description: '设置当前页和总页数。',
+      type: 'number / number',
     },
     {
-      name: 'text',
+      name: 'onChange',
+      description: '页码变化时回传目标页。',
+      type: '(page: number) => void',
+    },
+    {
+      name: 'previousText / nextText',
       description: '自定义上一页和下一页的可见文字。',
-      type: 'string',
+      type: 'ReactNode',
       defaultValue: "'Previous' / 'Next'",
     },
     {
-      name: 'href',
-      description: '为页码提供可复制、可打开新窗口的真实地址。',
-      type: 'string',
+      name: 'getItemHref',
+      description: '为每个页码生成可复制、可打开新窗口的真实地址。',
+      type: '(page: number) => string',
+    },
+    {
+      name: 'siblingCount',
+      description: '控制当前页两侧保留多少个相邻页码。',
+      type: 'number',
+      defaultValue: '1',
     },
   ],
   accessibility: [
@@ -1838,16 +2256,14 @@ const tabsDocumentation: ComponentDocumentation = {
       title: '数据面板',
       description: '默认样式承载概览、动态与成员数据，切换后内容区域保持稳定。',
       preview: <TabsDashboardDemo />,
-      code: `<Tabs defaultValue="overview">
-  <TabsList>
-    <TabsTrigger value="overview">概览</TabsTrigger>
-    <TabsTrigger value="activity">动态</TabsTrigger>
-    <TabsTrigger value="members">成员</TabsTrigger>
-  </TabsList>
-  <TabsContent value="overview">概览数据</TabsContent>
-  <TabsContent value="activity">最近动态</TabsContent>
-  <TabsContent value="members">成员列表</TabsContent>
-</Tabs>`,
+      code: `<Tabs
+  defaultValue="overview"
+  items={[
+    { value: 'overview', label: '概览', content: <Overview /> },
+    { value: 'activity', label: '动态', content: <Activity /> },
+    { value: 'members', label: '成员', content: <Members /> },
+  ]}
+/>`,
     },
     {
       title: '四种样式与快捷居中',
@@ -1879,14 +2295,16 @@ const tabsDocumentation: ComponentDocumentation = {
           }
         />
       ),
-      code: `<Tabs defaultValue="preview">
-  <TabsList variant="line" centered>
-    <TabsTrigger value="preview">预览</TabsTrigger>
-    <TabsTrigger value="code">代码</TabsTrigger>
-    <TabsTrigger value="tests">测试</TabsTrigger>
-  </TabsList>
-  <TabsContent value="preview">实时预览当前组件。</TabsContent>
-</Tabs>`,
+      code: `<Tabs
+  centered
+  defaultValue="preview"
+  variant="line"
+  items={[
+    { value: 'preview', label: '预览', content: '实时预览当前组件。' },
+    { value: 'code', label: '代码', content: '查看实现代码。' },
+    { value: 'tests', label: '测试', content: '查看测试结果。' },
+  ]}
+/>`,
     },
     {
       title: '内容切换动效',
@@ -1913,16 +2331,17 @@ const tabsDocumentation: ComponentDocumentation = {
           }
         />
       ),
-      code: `<Tabs defaultValue="design" animation="slide">
-  <TabsList variant="soft" centered>
-    <TabsTrigger value="design">设计</TabsTrigger>
-    <TabsTrigger value="code">开发</TabsTrigger>
-    <TabsTrigger value="release">发布</TabsTrigger>
-  </TabsList>
-  <TabsContent value="design">整理组件视觉规范</TabsContent>
-  <TabsContent value="code">连接组件与业务状态</TabsContent>
-  <TabsContent value="release">完成验证并发布</TabsContent>
-</Tabs>`,
+      code: `<Tabs
+  animation="slide"
+  centered
+  defaultValue="design"
+  variant="soft"
+  items={[
+    { value: 'design', label: '设计', content: '整理组件视觉规范' },
+    { value: 'code', label: '开发', content: '连接组件与业务状态' },
+    { value: 'release', label: '发布', content: '完成验证并发布' },
+  ]}
+/>`,
       wide: true,
       previewHeight: 520,
     },
@@ -2048,25 +2467,25 @@ const layoutDocumentation: ComponentDocumentation = {
       description: '组合纵向区域；直接包含 Sidebar 时自动切换为横向排列。',
     },
     {
-      name: 'Header',
+      name: 'Layout.Header',
       description: '页面或局部布局顶部的固定区域。',
     },
     {
-      name: 'Content',
+      name: 'Layout.Content',
       description: '承载主要内容并占据布局中的剩余空间。',
     },
     {
-      name: 'Footer',
+      name: 'Layout.Footer',
       description: '页面或局部布局底部的固定区域。',
     },
     {
-      name: 'Sidebar',
+      name: 'Layout.Sidebar',
       description: '放置导航、目录或详情的侧边区域。',
     },
   ],
   api: [
     {
-      component: 'Sidebar',
+      component: 'Layout.Sidebar',
       name: 'width',
       description:
         '设置侧边区域宽度；数字按像素处理，也可以传入任意 CSS 长度。',
@@ -2075,14 +2494,15 @@ const layoutDocumentation: ComponentDocumentation = {
     },
     {
       component: '全部组成组件',
-      name: 'render',
-      description: '替换默认语义元素，同时保留对应布局样式和 data-slot。',
-      type: 'ReactElement',
+      name: '原生属性',
+      description:
+        'Layout 支持 div 属性；Header、Content、Footer 和 Sidebar 分别支持对应语义元素的标准属性。',
+      type: 'HTMLAttributes',
     },
   ],
   accessibility: [
     'Header、Content、Footer 和 Sidebar 默认使用 header、main、footer 和 aside 语义元素。',
-    '同一页面存在多个布局区域时，使用 render 调整嵌套区域语义，避免出现多个 main 地标。',
+    '同一页面只应保留一个 Content 主地标；局部布局请使用普通内容容器，避免出现多个 main。',
     'Sidebar 中的导航或详情区域需要提供可辨认的 aria-label。',
   ],
   pitfalls: [
@@ -2195,16 +2615,114 @@ for (const [name, slug, summary] of remainingComponents) {
   };
 }
 
+const minimalExampleCopy: Record<
+  string,
+  { description: string; code: string }
+> = {
+  checkbox: {
+    description:
+      '单个 Checkbox 表达一个可独立选择的布尔项，标签与控件保持整行可点击。',
+    code: `import { Checkbox } from '@heliannuuthus/ui'
+
+<Checkbox>接收产品更新</Checkbox>`,
+  },
+  command: {
+    description:
+      '通过 groups 和 options 创建可搜索的命令列表，选项负责图标、快捷键与执行回调。',
+    code: `import { Command } from '@heliannuuthus/ui'
+
+<Command
+  groups={[
+    {
+      heading: '常用命令',
+      options: [
+        { label: '新建文件', shortcut: '⌘N', value: 'new-file' },
+        { label: '打开设置', shortcut: '⌘,', value: 'settings' },
+      ],
+    },
+  ]}
+/>`,
+  },
+  'context-menu': {
+    description:
+      '将菜单绑定到明确的内容区域，右键或键盘菜单键打开与当前对象相关的操作。',
+    code: `import { ContextMenu } from '@heliannuuthus/ui'
+
+<ContextMenu
+  trigger={<button type="button">在这里单击右键</button>}
+  items={[
+    { label: '复制链接' },
+    { type: 'separator' },
+    { label: '删除项目', destructive: true },
+  ]}
+/>`,
+  },
+  counter: {
+    description: '传入 value 即可展示带逐位滚动反馈的数值。',
+    code: `import { Counter } from '@heliannuuthus/ui'
+
+<Counter value={7.4} fontSize={52} fontWeight={600} />`,
+  },
+  direction: {
+    description: 'DirectionProvider 为局部组件树声明 ltr 或 rtl 阅读方向。',
+    code: `import { DirectionProvider } from '@heliannuuthus/ui'
+
+<DirectionProvider direction="rtl">
+  <section dir="rtl">واجهة عربية</section>
+</DirectionProvider>`,
+  },
+  progress: {
+    description:
+      '用 label、value 和 showValue 同时说明进度对象、完成比例和剩余范围。',
+    code: `import { Progress } from '@heliannuuthus/ui'
+
+<Progress label="文档覆盖率" showValue value={68} />`,
+  },
+  skeleton: {
+    description: '用与最终内容相近的尺寸组合骨架，加载完成前维持页面结构稳定。',
+    code: `import { Skeleton } from '@heliannuuthus/ui'
+
+<div>
+  <Skeleton className="h-10 w-10 rounded-full" />
+  <Skeleton className="h-4 w-44" />
+</div>`,
+  },
+  slider: {
+    description: '使用单个滑块在明确的最小值和最大值之间选择数值。',
+    code: `import { Slider } from '@heliannuuthus/ui'
+
+<Slider aria-label="音量" defaultValue={64} min={0} max={100} />`,
+  },
+  spinner: {
+    description:
+      'Spinner 表示无法确定完成比例的短时加载，并与可见状态文字一起使用。',
+    code: `import { Spinner } from '@heliannuuthus/ui'
+
+<div><Spinner />正在加载组件……</div>`,
+  },
+  switch: {
+    description:
+      'Switch 用于立即生效的二元设置，标签应直接说明开启后会发生什么。',
+    code: `import { Switch } from '@heliannuuthus/ui'
+
+<label><Switch defaultChecked />启用通知</label>`,
+  },
+};
+
 for (const [slug, preview] of Object.entries(minimalComponentPreviews)) {
   const documentation = componentDocumentation[slug];
   if (!documentation || documentation.examples.length > 0) continue;
   const importName = documentation.name.replace(/ /g, '');
+  const copy = minimalExampleCopy[slug];
   documentation.examples = [
     {
       title: '基础用法',
-      description: `${documentation.name} 的真实默认结构与推荐内容层级。`,
+      description:
+        copy?.description ?? `${documentation.name} 的默认结构与最小推荐配置。`,
       preview,
-      code: `import * as ${importName} from '@heliannuuthus/ui/${slug}'\n\n// 根据下方预览组合该模块导出的组件。`,
+      code:
+        copy?.code ??
+        `import * as ${importName} from '@heliannuuthus/ui/${slug}'\n\n// 根据下方预览组合该模块导出的组件。`,
     },
   ];
 }
@@ -2251,7 +2769,7 @@ if (scrollAreaDocumentation) {
       description: '组合根容器、可聚焦视口、所需方向的滚动条与双轴交汇角。',
     },
     {
-      name: 'Bar',
+      name: 'ScrollArea.Bar',
       description:
         '可单独复用的滚动条部件，支持纵向、横向及自动或常驻可见策略。',
     },
@@ -2311,18 +2829,10 @@ componentDocumentation.avatar.examples = [
     description:
       'Avatar 支持圆形和圆角方形；小、中、大三档尺寸会同步调整文字与状态标记。',
     preview: <AvatarShapeDemo />,
-    code: `import {
-  Avatar,
-  AvatarFallback,
-} from '@heliannuuthus/ui'
+    code: `import { Avatar } from '@heliannuuthus/ui'
 
-<Avatar shape="circle" size="lg">
-  <AvatarFallback>林</AvatarFallback>
-</Avatar>
-
-<Avatar shape="square" size="lg">
-  <AvatarFallback>周</AvatarFallback>
-</Avatar>`,
+<Avatar alt="林默" fallback="林" shape="circle" size="lg" />
+<Avatar alt="周一" fallback="周" shape="square" size="lg" />`,
     previewHeight: 440,
   },
   {
@@ -2330,40 +2840,34 @@ componentDocumentation.avatar.examples = [
     description:
       'max 限制可见头像数量并自动生成 +N；overlap 使用像素值控制分组的紧凑程度。',
     preview: <AvatarGroupDemo />,
-    code: `import {
-  Avatar,
-  AvatarFallback,
-} from '@heliannuuthus/ui'
+    code: `import { Avatar } from '@heliannuuthus/ui'
 
-<Avatar.Group max={4} overlap={8} size="lg">
-  {members.map((member) => (
-    <Avatar key={member.id}>
-      <AvatarFallback>{member.initials}</AvatarFallback>
-    </Avatar>
-  ))}
-</Avatar.Group>`,
+<Avatar.Group
+  items={members.map((member) => ({
+    key: member.id,
+    alt: member.name,
+    fallback: member.initials,
+  }))}
+  max={4}
+  overlap={8}
+  size="lg"
+/>`,
     previewHeight: 460,
   },
   {
     title: '与 Badge 组合',
     description:
-      'AvatarBadge 默认表达在线点和认证图标，也可以通过 render 将 Badge 精确锚定在头像右下角。',
+      '通过 badge 放置在线点、认证图标或 Badge 节点，状态始终锚定在头像右下角。',
     preview: <AvatarBadgeDemo />,
-    code: `import {
-  Avatar,
-  AvatarBadge,
-  AvatarFallback,
-} from '@heliannuuthus/ui'
+    code: `import { Avatar } from '@heliannuuthus/ui'
 import { Badge } from '@heliannuuthus/ui'
 
-<Avatar size="lg">
-  <AvatarFallback>陈</AvatarFallback>
-  <AvatarBadge
-    render={<Badge variant="destructive" />}
-  >
-    8
-  </AvatarBadge>
-</Avatar>`,
+<Avatar
+  alt="陈序"
+  badge={<Badge variant="destructive">8</Badge>}
+  fallback="陈"
+  size="lg"
+/>`,
     previewHeight: 440,
   },
 ];
@@ -2658,15 +3162,16 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
       description:
         '候选项较多且用户知道关键词时，直接输入过滤、清除并重新选择。',
       preview: <SelectMemberSearchDemo />,
-      code: `<Select value={value} onChange={setValue} items={members}>
-  <SelectTrigger placeholder="搜索成员…" showClear />
-  <SelectContent>
-    <SelectEmpty>没有找到成员</SelectEmpty>
-    <SelectList>
-      {(member) => <SelectItem value={member}>{member}</SelectItem>}
-    </SelectList>
-  </SelectContent>
-</Select>`,
+      code: `<Select
+  value={value}
+  onChange={setValue}
+  options={members.map((member) => ({
+    label: member.name,
+    value: member.id,
+  }))}
+  placeholder="搜索成员…"
+  showClear
+/>`,
       previewHeight: 320,
     },
     {
@@ -2674,12 +3179,21 @@ const form = useForm({ defaultValues: { email: '', note: '' } })
       description:
         '候选项固定时仍使用同一 Select，通过分组、分隔线和禁用项明确列表结构。',
       preview: <SelectWorkspaceDemo />,
-      code: `<Select value={value} onChange={setValue} items={workspaceGroups}>
-  <SelectTrigger placeholder="选择工作区" />
-  <SelectContent>
-    <SelectList>{/* SelectGroup / SelectCollection */}</SelectList>
-  </SelectContent>
-</Select>`,
+      code: `<Select
+  value={value}
+  onChange={setValue}
+  options={[
+    {
+      label: '个人工作区',
+      options: personalWorkspaces,
+    },
+    {
+      label: '团队工作区',
+      options: teamWorkspaces,
+    },
+  ]}
+  placeholder="选择工作区"
+/>`,
       previewHeight: 380,
     },
   ],
@@ -2829,33 +3343,24 @@ const dataDisplayExamples: Record<string, ComponentExample[]> = {
       title: '展开模式',
       description: '纵向面板支持单项或多项展开，可按内容关系选择合适模式。',
       preview: <AccordionModesDemo />,
-      code: `import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@heliannuuthus/ui'
-
-<Accordion defaultValue={['preflight']}>
-  <AccordionItem value="preflight">
-    <AccordionTrigger>预检结果</AccordionTrigger>
-    <AccordionContent>42 项检查均已通过。</AccordionContent>
-  </AccordionItem>
-</Accordion>
+      code: `import { Accordion } from '@heliannuuthus/ui'
 
 <Accordion
-  multiple
   defaultValue={['preflight', 'rollback']}
->
-  <AccordionItem value="preflight">
-    <AccordionTrigger>预检结果</AccordionTrigger>
-    <AccordionContent>42 项检查均已通过。</AccordionContent>
-  </AccordionItem>
-  <AccordionItem value="rollback">
-    <AccordionTrigger>回滚方案</AccordionTrigger>
-    <AccordionContent>异常时切回上一版本。</AccordionContent>
-  </AccordionItem>
-</Accordion>`,
+  multiple
+  items={[
+    {
+      value: 'preflight',
+      title: '预检结果',
+      content: '42 项检查均已通过。',
+    },
+    {
+      value: 'rollback',
+      title: '回滚方案',
+      content: '异常时切回上一版本。',
+    },
+  ]}
+/>`,
       previewHeight: 500,
       wide: true,
     },
@@ -2864,31 +3369,22 @@ const dataDisplayExamples: Record<string, ComponentExample[]> = {
       description:
         '统一设置指示器的位置；传入一个节点时随状态旋转，或分别定义折叠态与展开态。',
       preview: <AccordionIndicatorDemo />,
-      code: `import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@heliannuuthus/ui'
+      code: `import { Accordion } from '@heliannuuthus/ui'
 import { Minus, Plus } from 'lucide-react'
 
-<Accordion indicatorPosition="start" defaultValue={['deployment']}>
-  <AccordionItem value="deployment">
-    <AccordionTrigger>部署策略</AccordionTrigger>
-    <AccordionContent>先灰度 10%，观察后全量发布。</AccordionContent>
-  </AccordionItem>
-</Accordion>
-
 <Accordion
+  defaultValue={['deployment']}
   indicator={<Plus />}
   expandedIndicator={<Minus />}
-  defaultValue={['deployment']}
->
-  <AccordionItem value="deployment">
-    <AccordionTrigger>部署策略</AccordionTrigger>
-    <AccordionContent>先灰度 10%，观察后全量发布。</AccordionContent>
-  </AccordionItem>
-</Accordion>`,
+  indicatorPosition="start"
+  items={[
+    {
+      value: 'deployment',
+      title: '部署策略',
+      content: '先灰度 10%，观察后全量发布。',
+    },
+  ]}
+/>`,
       previewHeight: 420,
       wide: true,
     },
@@ -2899,21 +3395,15 @@ import { Minus, Plus } from 'lucide-react'
       description:
         '将文件类型、名称、处理状态和操作排在同一行，适合列表与消息附件。',
       preview: <AttachmentReleaseDemo orientation="horizontal" />,
-      code: `import {
-  Attachment,
-  AttachmentContent,
-  AttachmentDescription,
-  AttachmentMedia,
-  AttachmentTitle,
-} from '@heliannuuthus/ui'
+      code: `import { Attachment } from '@heliannuuthus/ui'
 
-<Attachment state="processing" orientation="horizontal">
-  <AttachmentMedia><FileArchive /></AttachmentMedia>
-  <AttachmentContent>
-    <AttachmentTitle>web-console.tgz</AttachmentTitle>
-    <AttachmentDescription>8.4 MB · 正在校验</AttachmentDescription>
-  </AttachmentContent>
-</Attachment>`,
+<Attachment
+  title="web-console.tgz"
+  description="8.4 MB · 正在校验"
+  media={<FileArchive />}
+  state="processing"
+  orientation="horizontal"
+/>`,
       previewHeight: 360,
     },
     {
@@ -2921,21 +3411,15 @@ import { Minus, Plus } from 'lucide-react'
       description:
         '以缩略卡形式突出文件媒体，适合素材选择、上传结果和紧凑画廊。',
       preview: <AttachmentReleaseDemo orientation="vertical" />,
-      code: `import {
-  Attachment,
-  AttachmentContent,
-  AttachmentDescription,
-  AttachmentMedia,
-  AttachmentTitle,
-} from '@heliannuuthus/ui'
+      code: `import { Attachment } from '@heliannuuthus/ui'
 
-<Attachment state="processing" orientation="vertical">
-  <AttachmentMedia><FileArchive /></AttachmentMedia>
-  <AttachmentContent>
-    <AttachmentTitle>web-console.tgz</AttachmentTitle>
-    <AttachmentDescription>8.4 MB · 正在校验</AttachmentDescription>
-  </AttachmentContent>
-</Attachment>`,
+<Attachment
+  title="web-console.tgz"
+  description="8.4 MB · 正在校验"
+  media={<FileArchive />}
+  state="processing"
+  orientation="vertical"
+/>`,
       previewHeight: 360,
     },
   ],
@@ -2943,7 +3427,7 @@ import { Minus, Plus } from 'lucide-react'
     {
       title: '景深轮播与点位位置',
       description:
-        'Carousel 始终使用景深过渡；将 CarouselDots 写在 CarouselContent 前后，即可声明上方或下方点位。',
+        'Carousel 始终使用景深过渡；paginationPosition 控制默认点位位于内容前方或后方。',
       caseAxes: [
         {
           name: 'dotPosition',
@@ -2960,52 +3444,35 @@ import { Minus, Plus } from 'lucide-react'
           dotPosition={values.dotPosition === 'top' ? 'top' : 'bottom'}
         />
       ),
-      code: `import {
-  Carousel,
-  CarouselContent,
-  CarouselDots,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@heliannuuthus/ui'
+      code: `import { Carousel } from '@heliannuuthus/ui'
 
-<Carousel>
-  <CarouselContent>
-    {highlights.map((item) => <CarouselItem key={item.id}>{item.title}</CarouselItem>)}
-  </CarouselContent>
-  <CarouselPrevious />
-  <CarouselNext />
-  <CarouselDots />
-</Carousel>`,
+<Carousel
+  controls
+  items={highlights}
+  pagination="dots"
+  paginationPosition="after"
+  renderItem={(item) => <HighlightCard item={item} />}
+/>`,
       previewHeight: 440,
     },
     {
       title: '自定义翻页器',
       description:
-        'CarouselPagination 是完整翻页插槽，通过 render props 提供页码状态与控制方法，不需要接触底层实例。',
+        'pagination 接收函数时提供页码状态与控制方法，可直接组合符合当前页面的完整翻页器。',
       preview: <CarouselCustomPaginationDemo />,
-      code: `import { Button } from '@heliannuuthus/ui'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPagination,
-} from '@heliannuuthus/ui'
+      code: `import { Button, Carousel } from '@heliannuuthus/ui'
 
-<Carousel>
-  <CarouselContent>
-    {highlights.map((item) => <CarouselItem key={item.id}>{item.title}</CarouselItem>)}
-  </CarouselContent>
-  <CarouselPagination>
-    {({ currentPage, pageCount, scrollNext, scrollPrev }) => (
+<Carousel
+  items={highlights}
+  renderItem={(item) => <HighlightCard item={item} />}
+  pagination={({ currentPage, pageCount, scrollNext, scrollPrev }) => (
       <div role="group" aria-label="轮播分页">
         <Button onClick={scrollPrev}>上一页</Button>
         <span aria-live="polite">{currentPage} / {pageCount}</span>
         <Button onClick={scrollNext}>下一页</Button>
       </div>
-    )}
-  </CarouselPagination>
-</Carousel>`,
+  )}
+/>`,
       previewHeight: 440,
     },
     {
@@ -3013,28 +3480,16 @@ import {
       description:
         'autoplay 传 true 使用默认间隔，传数字直接设置秒数；loop 循环始终沿下一页方向越过首尾。',
       preview: <CarouselAutoplayDemo />,
-      code: `import {
-  Carousel,
-  CarouselContent,
-  CarouselDots,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@heliannuuthus/ui'
+      code: `import { Carousel } from '@heliannuuthus/ui'
 
 <Carousel
   autoplay={3}
+  controls
+  items={highlights}
   loop
->
-  <CarouselContent>
-    {highlights.map((item) => (
-      <CarouselItem key={item.id}>{item.title}</CarouselItem>
-    ))}
-  </CarouselContent>
-  <CarouselPrevious />
-  <CarouselNext />
-  <CarouselDots />
-</Carousel>`,
+  pagination="dots"
+  renderItem={(item) => <HighlightCard item={item} />}
+/>`,
       previewHeight: 480,
       wide: true,
     },
@@ -3171,8 +3626,6 @@ import { ChevronRight } from 'lucide-react'
         '默认组合筛选、排序、固定列、操作列、Caption、Footer 和 Pagination；业务只需要提供 data 与 ColumnDef。',
       preview: <DataTableReleaseDemo />,
       code: `import {
-  Actions,
-  ColumnHeader,
   DataTable,
   type ColumnDef,
 } from '@heliannuuthus/ui'
@@ -3184,7 +3637,7 @@ const columns: ColumnDef<Release>[] = [
   {
     accessorKey: 'version',
     header: ({ column }) => (
-      <ColumnHeader column={column}>版本</ColumnHeader>
+      <DataTable.ColumnHeader column={column}>版本</DataTable.ColumnHeader>
     ),
   },
   {
@@ -3195,7 +3648,7 @@ const columns: ColumnDef<Release>[] = [
       fixed: 'end',
     },
     render: (_, row) => (
-      <Actions aria-label={row.version + ' 操作'}>
+      <DataTable.Actions aria-label={row.version + ' 操作'}>
         <Button variant="ghost">查看</Button>
         <DropdownMenu
           align="end"
@@ -3215,7 +3668,7 @@ const columns: ColumnDef<Release>[] = [
             { label: '删除记录', destructive: true },
           ]}
         />
-      </Actions>
+      </DataTable.Actions>
     ),
   },
 ]
@@ -3445,22 +3898,22 @@ const columns: ColumnDef<Release>[] = [
       title: '气泡样式',
       description: '使用 Separator 分隔强调、浮起、柔和和描边样式。',
       preview: <BubbleVariantsDemo />,
-      code: `import {
-  Bubble,
-  BubbleContent,
-  BubbleReactions,
-} from '@heliannuuthus/ui'
+      code: `import { Bubble } from '@heliannuuthus/ui'
 import { Separator } from '@heliannuuthus/ui'
 
 <Bubble.Group>
-  <Bubble align="end" variant="default">
-    <BubbleContent>已经补充完成，可以重新评审。</BubbleContent>
-    <BubbleReactions>✓ 2</BubbleReactions>
-  </Bubble>
+  <Bubble
+    align="end"
+    content="已经补充完成，可以重新评审。"
+    reactions="✓ 2"
+    variant="default"
+  />
   <Separator />
-  <Bubble align="end" variant="elevated">
-    <BubbleContent>已经补充完成，可以重新评审。</BubbleContent>
-  </Bubble>
+  <Bubble
+    align="end"
+    content="已经补充完成，可以重新评审。"
+    variant="elevated"
+  />
 </Bubble.Group>`,
       previewHeight: 580,
     },
@@ -3469,11 +3922,8 @@ import { Separator } from '@heliannuuthus/ui'
       description:
         '不引入额外 Message 抽象，直接组合 Bubble、Avatar 与 ScrollArea 构建双向会话。',
       preview: <BubbleConversationDemo />,
-      code: `import {
-  Bubble,
-  BubbleContent,
-} from '@heliannuuthus/ui'
-import { Avatar, AvatarFallback } from '@heliannuuthus/ui'
+      code: `import { Bubble } from '@heliannuuthus/ui'
+import { Avatar } from '@heliannuuthus/ui'
 import { ScrollArea } from '@heliannuuthus/ui'
 
 <ScrollArea
@@ -3483,14 +3933,10 @@ import { ScrollArea } from '@heliannuuthus/ui'
 >
   {messages.map((message) => (
     <div className="flex gap-2" role="listitem">
-      <Avatar>
-        <AvatarFallback>{message.avatar}</AvatarFallback>
-      </Avatar>
+      <Avatar alt={message.author} fallback={message.avatar} />
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <span>{message.author} · {message.time}</span>
-        <Bubble variant="elevated">
-          <BubbleContent>{message.content}</BubbleContent>
-        </Bubble>
+        <Bubble content={message.content} variant="elevated" />
       </div>
     </div>
   ))}
@@ -3511,31 +3957,24 @@ import { ScrollArea } from '@heliannuuthus/ui'
         </>
       ),
       preview: <TableFixedDemo />,
-      code: `import {
-  Table,
-  Header,
-  Body,
-  Row,
-  Head,
-  Cell,
-} from '@heliannuuthus/ui'
+      code: `import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 
 <Table className="min-w-[960px] table-fixed">
-  <Header>
-    <Row>
-      <Head fixed="start" className="w-40">服务</Head>
-      <Head className="w-28">版本</Head>
-      <Head className="w-28">区域</Head>
-      <Head className="w-32">最近部署</Head>
-      <Head fixed="end" align="center" className="w-24">操作</Head>
-    </Row>
-  </Header>
-  <Body>
-    <Row>
-      <Cell fixed="start">Web Console</Cell>
-      <Cell>v0.12.0</Cell>
-      <Cell fixed="end" align="center">
+  <Table.Header>
+    <Table.Row>
+      <Table.Head fixed="start" className="w-40">服务</Table.Head>
+      <Table.Head className="w-28">版本</Table.Head>
+      <Table.Head className="w-28">区域</Table.Head>
+      <Table.Head className="w-32">最近部署</Table.Head>
+      <Table.Head fixed="end" align="center" className="w-24">操作</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell fixed="start">Web Console</Table.Cell>
+      <Table.Cell>v0.12.0</Table.Cell>
+      <Table.Cell fixed="end" align="center">
         <Button
           aria-label="监控 Web Console"
           size="xs"
@@ -3543,9 +3982,9 @@ import { Button } from '@heliannuuthus/ui'
         >
           监控
         </Button>
-      </Cell>
-    </Row>
-  </Body>
+      </Table.Cell>
+    </Table.Row>
+  </Table.Body>
 </Table>`,
       previewHeight: 500,
       wide: true,
@@ -3562,14 +4001,7 @@ import { Button } from '@heliannuuthus/ui'
         </>
       ),
       preview: <TableVirtualScrollDemo />,
-      code: `import {
-  Table,
-  Header,
-  Row,
-  Head,
-  Cell,
-  VirtualBody,
-} from '@heliannuuthus/ui'
+      code: `import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 
 <Table
@@ -3577,14 +4009,14 @@ import { Button } from '@heliannuuthus/ui'
   className="min-w-[820px] table-fixed"
   containerClassName="max-h-80"
 >
-  <Header>
-    <Row>
-      <Head fixed="start">事件</Head>
-      <Head>服务</Head>
-      <Head fixed="end" align="center">操作</Head>
-    </Row>
-  </Header>
-  <VirtualBody
+  <Table.Header>
+    <Table.Row>
+      <Table.Head fixed="start">事件</Table.Head>
+      <Table.Head>服务</Table.Head>
+      <Table.Head fixed="end" align="center">操作</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.VirtualBody
     colSpan={3}
     items={rows}
     getItemKey={(row) => row.id}
@@ -3592,10 +4024,10 @@ import { Button } from '@heliannuuthus/ui'
     overscan={8}
   >
     {(row) => (
-      <Row>
-        <Cell fixed="start">{row.id}</Cell>
-        <Cell>{row.service}</Cell>
-        <Cell fixed="end" align="center">
+      <Table.Row>
+        <Table.Cell fixed="start">{row.id}</Table.Cell>
+        <Table.Cell>{row.service}</Table.Cell>
+        <Table.Cell fixed="end" align="center">
           <Button
             aria-label={\`查看 \${row.id}\`}
             size="xs"
@@ -3603,10 +4035,10 @@ import { Button } from '@heliannuuthus/ui'
           >
             查看
           </Button>
-        </Cell>
-      </Row>
+        </Table.Cell>
+      </Table.Row>
     )}
-  </VirtualBody>
+  </Table.VirtualBody>
 </Table>`,
       previewHeight: 540,
       wide: true,
@@ -3617,14 +4049,7 @@ import { Button } from '@heliannuuthus/ui'
         'Table 只负责当前页的语义结构，Pagination 管理页码；本地数组或服务端数据都使用同一受控组合。',
       preview: <TablePaginationDemo />,
       code: `import { useState } from 'react'
-import {
-  Table,
-  Header,
-  Body,
-  Row,
-  Head,
-  Cell,
-} from '@heliannuuthus/ui'
+import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 import { Pagination } from '@heliannuuthus/ui'
 
@@ -3650,42 +4075,35 @@ const visibleRows = rows.slice((page - 1) * 10, page * 10)
         'ExpandButton 提供键盘可用的展开状态与图标，ExpandedRow 使用真实表格行承载跨列详情。',
       preview: <TableExpandableDemo />,
       code: `import { Fragment, useState } from 'react'
-import {
-  Table,
-  Body,
-  Row,
-  Cell,
-  ExpandButton,
-  ExpandedRow,
-} from '@heliannuuthus/ui'
+import { Table } from '@heliannuuthus/ui'
 
 const [expandedId, setExpandedId] = useState<string | null>(null)
 
 <Table>
-  <Body>
+  <Table.Body>
     {rows.map((row) => {
       const expanded = row.id === expandedId
       return (
         <Fragment key={row.id}>
-          <Row>
-            <Cell>
-              <ExpandButton
+          <Table.Row>
+            <Table.Cell>
+              <Table.ExpandButton
                 aria-label={\`\${expanded ? '收起' : '展开'} \${row.id}\`}
                 expanded={expanded}
                 onExpandedChange={(next) =>
                   setExpandedId(next ? row.id : null)
                 }
               />
-            </Cell>
-            <Cell>{row.name}</Cell>
-          </Row>
+            </Table.Cell>
+            <Table.Cell>{row.name}</Table.Cell>
+          </Table.Row>
           {expanded && (
-            <ExpandedRow colSpan={2}>{row.detail}</ExpandedRow>
+            <Table.ExpandedRow colSpan={2}>{row.detail}</Table.ExpandedRow>
           )}
         </Fragment>
       )
     })}
-  </Body>
+  </Table.Body>
 </Table>`,
       previewHeight: 520,
       wide: true,
@@ -3695,14 +4113,7 @@ const [expandedId, setExpandedId] = useState<string | null>(null)
       description:
         'align 统一控制起始、居中和末端对齐；Head 与 Cell 的 ellipsis 在溢出时提供全文 Tooltip，自定义组件直接作为 Cell 子节点。',
       preview: <TableCellDemo />,
-      code: `import {
-  Table,
-  Header,
-  Body,
-  Row,
-  Head,
-  Cell,
-} from '@heliannuuthus/ui'
+      code: `import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 import { ArrowUpRight } from 'lucide-react'
 
@@ -3719,22 +4130,22 @@ function ActionCell() {
 }
 
 <Table className="table-fixed">
-  <Header>
-    <Row>
-      <Head align="start">服务</Head>
-      <Head ellipsis>服务说明、最近一次生产部署上下文与异常原因</Head>
-      <Head align="end">成功率</Head>
-      <Head align="center">操作</Head>
-    </Row>
-  </Header>
-  <Body>
-    <Row>
-      <Cell>Realtime Gateway</Cell>
-      <Cell ellipsis>{description}</Cell>
-      <Cell align="end">99.98%</Cell>
-      <Cell align="center"><ActionCell /></Cell>
-    </Row>
-  </Body>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head align="start">服务</Table.Head>
+      <Table.Head ellipsis>服务说明、最近一次生产部署上下文与异常原因</Table.Head>
+      <Table.Head align="end">成功率</Table.Head>
+      <Table.Head align="center">操作</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Realtime Gateway</Table.Cell>
+      <Table.Cell ellipsis>{description}</Table.Cell>
+      <Table.Cell align="end">99.98%</Table.Cell>
+      <Table.Cell align="center"><ActionCell /></Table.Cell>
+    </Table.Row>
+  </Table.Body>
 </Table>`,
       previewHeight: 430,
       wide: true,
@@ -3746,19 +4157,15 @@ function ActionCell() {
       description:
         '将常用方位围绕同一参照物完整展示，悬停或聚焦任意按钮即可检查方向和对齐方式。',
       preview: <TooltipPlacementsDemo />,
-      code: `import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@heliannuuthus/ui'
+      code: `import { Button, Tooltip } from '@heliannuuthus/ui'
 
-<TooltipProvider delay={100}>
-  <Tooltip>
-    <TooltipTrigger><Button>左上</Button></TooltipTrigger>
-    <TooltipContent side="top" align="start">左上提示</TooltipContent>
-  </Tooltip>
-</TooltipProvider>`,
+<Tooltip
+  align="start"
+  content="左上提示"
+  delay={100}
+  side="top"
+  trigger={<Button>左上</Button>}
+/>`,
       previewHeight: 440,
       wide: true,
     },
@@ -3789,31 +4196,17 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       preview: (values) => (
         <AlertDialogDeleteDemo size={values.size === 'sm' ? 'sm' : 'default'} />
       ),
-      code: `import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@heliannuuthus/ui'
+      code: `import { AlertDialog, Button } from '@heliannuuthus/ui'
 
-<AlertDialog>
-  <AlertDialogTrigger>删除预览环境</AlertDialogTrigger>
-  <AlertDialogContent>
-    <AlertDialogHeader>
-      <AlertDialogTitle>删除 preview-142？</AlertDialogTitle>
-      <AlertDialogDescription>此操作无法撤销。</AlertDialogDescription>
-    </AlertDialogHeader>
-    <AlertDialogFooter>
-      <AlertDialogCancel>保留环境</AlertDialogCancel>
-      <AlertDialogAction variant="destructive">确认删除</AlertDialogAction>
-    </AlertDialogFooter>
-  </AlertDialogContent>
-</AlertDialog>`,
+<AlertDialog
+  trigger={<Button variant="destructive">删除预览环境</Button>}
+  title="删除 preview-142？"
+  description="此操作无法撤销。"
+  cancelText="保留环境"
+  confirmText="确认删除"
+  confirmVariant="destructive"
+  onConfirm={removePreview}
+/>`,
       previewHeight: 300,
     },
   ],
@@ -3823,26 +4216,17 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description:
         '在不离开当前页面的情况下完成一项聚焦编辑任务，并保留明确的取消和保存动作。',
       preview: <DialogReleaseDemo />,
-      code: `import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@heliannuuthus/ui'
+      code: `import { Button, Dialog } from '@heliannuuthus/ui'
 
-<Dialog>
-  <DialogTrigger>安排发布</DialogTrigger>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>安排生产环境发布</DialogTitle>
-      <DialogDescription>选择版本和发布时间。</DialogDescription>
-    </DialogHeader>
-    {/* fields */}
-    <DialogFooter>{/* actions */}</DialogFooter>
-  </DialogContent>
+<Dialog
+  trigger={<Button>安排发布</Button>}
+  title="安排生产环境发布"
+  description="选择版本和发布时间。"
+  cancelText="取消"
+  confirmText="保存"
+  onConfirm={scheduleRelease}
+>
+  <ReleaseFields />
 </Dialog>`,
       previewHeight: 300,
     },
@@ -3853,23 +4237,16 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description:
         '统一从上、右、下、左进入；adaptive 模式在窄屏保留手势，在宽屏收敛为稳定的边缘面板。',
       preview: <DrawerReleaseDemo />,
-      code: `import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@heliannuuthus/ui'
+      code: `import { Button, Drawer } from '@heliannuuthus/ui'
 
-<Drawer behavior="adaptive" side="right">
-  <DrawerTrigger>从右侧打开</DrawerTrigger>
-  <DrawerContent>
-    <DrawerHeader>
-      <DrawerTitle>今晚的发布窗口</DrawerTitle>
-      <DrawerDescription>22:00–23:00</DrawerDescription>
-    </DrawerHeader>
-  </DrawerContent>
+<Drawer
+  behavior="adaptive"
+  side="right"
+  trigger={<Button>从右侧打开</Button>}
+  title="今晚的发布窗口"
+  description="22:00–23:00"
+>
+  <ReleaseWindow />
 </Drawer>`,
       previewHeight: 340,
     },
@@ -3881,13 +4258,14 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       code: `const containerRef = useRef<HTMLDivElement>(null)
 
 <div ref={containerRef} className="relative overflow-hidden">
-  <Drawer container={containerRef} side="left" behavior="panel">
-    <DrawerTrigger>从左侧打开</DrawerTrigger>
-    <DrawerContent>
-      <DrawerHeader>
-        <DrawerTitle>局部筛选</DrawerTitle>
-      </DrawerHeader>
-    </DrawerContent>
+  <Drawer
+    behavior="panel"
+    container={containerRef}
+    side="left"
+    title="局部筛选"
+    trigger={<Button>从左侧打开</Button>}
+  >
+    <FilterFields />
   </Drawer>
 </div>`,
       previewHeight: 560,
@@ -3915,24 +4293,15 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
           side={values.side === 'right' ? 'right' : 'bottom'}
         />
       ),
-      code: `import {
-  Popover,
-  PopoverContent,
-  PopoverDescription,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverTrigger,
-} from '@heliannuuthus/ui'
+      code: `import { Button, Popover } from '@heliannuuthus/ui'
 
-<Popover>
-  <PopoverTrigger>3 位负责人</PopoverTrigger>
-  <PopoverContent side="bottom">
-    <PopoverHeader>
-      <PopoverTitle>发布负责人</PopoverTitle>
-      <PopoverDescription>发布和回滚时会通知这些成员。</PopoverDescription>
-    </PopoverHeader>
-  </PopoverContent>
-</Popover>`,
+<Popover
+  trigger={<Button variant="outline">3 位负责人</Button>}
+  title="发布负责人"
+  description="发布和回滚时会通知这些成员。"
+  content={<OwnerList />}
+  side="bottom"
+/>`,
       previewHeight: 300,
     },
     {
@@ -3955,16 +4324,16 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
           side={values.side === 'right' ? 'right' : 'bottom'}
         />
       ),
-      code: `import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@heliannuuthus/ui'
+      code: `import { Popover } from '@heliannuuthus/ui'
 
-<Popover trigger="hover" delay={300} closeDelay={150}>
-  <PopoverTrigger render={<button type="button" />}>@linmo</PopoverTrigger>
-  <PopoverContent side="bottom">负责人资料</PopoverContent>
-</Popover>`,
+<Popover
+  triggerMode="hover"
+  trigger={<button type="button">@linmo</button>}
+  content="负责人资料"
+  delay={300}
+  closeDelay={150}
+  side="bottom"
+/>`,
       previewHeight: 340,
     },
   ],
@@ -3974,16 +4343,14 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description:
         '把完成比例与当前阶段放在一起，让用户知道任务正在做什么以及还剩多少。',
       preview: <ProgressReleaseDemo />,
-      code: `import {
-  Progress,
-  ProgressLabel,
-  ProgressValue,
-} from '@heliannuuthus/ui'
+      code: `import { Progress } from '@heliannuuthus/ui'
 
-<Progress effect="sparkle" value={68}>
-  <ProgressLabel>生产环境</ProgressLabel>
-  <ProgressValue />
-</Progress>`,
+<Progress
+  effect="sparkle"
+  label="生产环境"
+  showValue
+  value={68}
+/>`,
       previewHeight: 360,
     },
   ],
@@ -4211,10 +4578,9 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: "'icon'",
     },
     {
-      component: 'AttachmentTrigger',
-      name: 'render',
-      description: '将整个附件渲染为链接或按钮触发区域。',
-      type: 'ReactElement | render function',
+      name: 'trigger',
+      description: '传入链接或按钮元素，使整个附件成为对应触发区域。',
+      type: 'ReactElement',
     },
   ],
   avatar: [
@@ -4242,10 +4608,9 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'component',
     },
     {
-      name: 'AvatarBadge',
-      description:
-        '在头像右下角表达在线或认证状态；通过 render 可以复用 Badge 等自定义节点。',
-      type: 'component',
+      name: 'badge',
+      description: '在头像右下角放置在线点、认证图标或 Badge 等状态节点。',
+      type: 'ReactNode',
     },
     {
       component: 'Avatar.Group',
@@ -4436,24 +4801,24 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: '{ align?; fixed?; fixedOffset?; ellipsis?; ellipsisTooltip?; headerEllipsis?; headerEllipsisTooltip?; headerClassName?; cellClassName? }',
     },
     {
-      name: 'ColumnHeader',
+      name: 'DataTable.ColumnHeader',
       description: '组合可排序的列标题，并显示排序提示图标。',
       type: 'component',
     },
     {
-      name: 'Actions',
+      name: 'DataTable.Actions',
       description:
         '在操作列内组合一个或多个按钮、菜单或链接，默认居中并可通过 align 调整。',
       type: 'component',
     },
     {
-      component: 'Actions',
+      component: 'DataTable.Actions',
       name: 'aria-label',
       description: '使用当前记录标识为每一行的操作组提供唯一名称。',
       type: 'string',
     },
     {
-      component: 'Actions',
+      component: 'DataTable.Actions',
       name: 'align',
       description: '控制整组操作在单元格内靠起始侧、居中或靠末端。',
       type: "'start' | 'center' | 'end'",
@@ -4589,9 +4954,9 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: "'default'",
     },
     {
-      name: 'render',
-      description: '将 Item 根节点渲染为链接、按钮或自定义元素。',
-      type: 'ReactElement | render function',
+      name: 'href',
+      description: '传入链接地址后使用原生 a 元素，否则渲染为普通 div。',
+      type: 'string',
     },
     {
       name: 'media / mediaVariant',
@@ -4618,9 +4983,9 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: "'default'",
     },
     {
-      name: 'render',
-      description: '将 Marker 根节点渲染为链接或自定义元素。',
-      type: 'ReactElement | render function',
+      name: 'href',
+      description: '传入链接地址后使用原生 a 元素，否则渲染为普通 div。',
+      type: 'string',
     },
     {
       name: 'icon',
@@ -4649,13 +5014,12 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: "'start'",
     },
     {
-      component: 'BubbleContent',
-      name: 'render',
-      description: '将内容渲染为可交互按钮、链接或自定义元素。',
-      type: 'ReactElement | render function',
+      name: 'contentProps',
+      description: '向内部内容 div 传递标准 HTML、ARIA、data 属性和事件。',
+      type: 'ComponentProps<"div">',
     },
     {
-      component: 'BubbleReactions',
+      component: 'Bubble',
       name: 'side / align',
       description: '定位气泡边缘的回应或状态。',
       type: "'top' | 'bottom' / 'start' | 'end'",
@@ -4670,21 +5034,21 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'string / CSSProperties / Ref<HTMLDivElement>',
     },
     {
-      component: 'VirtualBody',
+      component: 'Table.VirtualBody',
       name: 'items / children',
       description:
         '接收完整数据集合，并通过渲染函数只创建当前可视区域与缓冲范围内的 Row。',
       type: 'readonly T[] / (item: T, index: number) => ReactElement<RowProps>',
     },
     {
-      component: 'VirtualBody',
+      component: 'Table.VirtualBody',
       name: 'colSpan',
       description:
         '声明当前 Table 的叶子列数量，使虚拟滚动占位行跨越整张表格并保持列宽。',
       type: 'number',
     },
     {
-      component: 'VirtualBody',
+      component: 'Table.VirtualBody',
       name: 'rowHeight',
       description:
         '设置单行的固定像素高度；虚拟 Table 当前面向等高单行数据，展开行和动态高度内容应使用普通 Body。',
@@ -4692,21 +5056,21 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: '48',
     },
     {
-      component: 'VirtualBody',
+      component: 'Table.VirtualBody',
       name: 'overscan',
       description: '设置可视区域上下额外渲染的行数，减少快速滚动时的空白。',
       type: 'number',
       defaultValue: '8',
     },
     {
-      component: 'VirtualBody',
+      component: 'Table.VirtualBody',
       name: 'getItemKey',
       description:
         '为虚拟行提供跨滚动稳定的业务主键；大型数据集不应使用数组索引。',
       type: '(item: T, index: number) => Key',
     },
     {
-      component: 'VirtualBody',
+      component: 'Table.VirtualBody',
       name: 'rowIndexOffset',
       description:
         '设置第一条虚拟数据行的 aria-rowindex；默认值会为 Header 预留一行。',
@@ -4714,37 +5078,37 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: '2',
     },
     {
-      name: 'Caption',
+      name: 'Table.Caption',
       description: '提供整张表格的语义标题或补充说明。',
       type: 'component',
     },
     {
-      name: 'Header / Head',
+      name: 'Table.Header / Table.Head',
       description:
         '定义列标题和表头语义；标题过长时通过 Head 的 ellipsis 提供截断与全文 Tooltip。',
       type: 'component',
     },
     {
-      name: 'Body / Row / Cell',
+      name: 'Table.Body / Table.Row / Table.Cell',
       description: '组织数据行与单元格，并支持选中状态。',
       type: 'component',
     },
     {
-      component: 'Head / Cell',
+      component: 'Table.Head / Table.Cell',
       name: 'align',
       description: '按文字书写方向设置列内容靠起始侧、居中或靠末端。',
       type: "'start' | 'center' | 'end'",
       defaultValue: "'start'",
     },
     {
-      component: 'Head / Cell',
+      component: 'Table.Head / Table.Cell',
       name: 'fixed / fixedOffset',
       description:
         '对应的 Head 与 Cell 设置 fixed="start" 可固定在起始侧，设置 fixed="end" 可固定在末端；多固定列通过 fixedOffset 声明累计偏移。',
       type: "'start' | 'end' / number | string",
     },
     {
-      component: 'Head / Cell',
+      component: 'Table.Head / Table.Cell',
       name: 'ellipsis',
       description:
         '省略单个超长列标题或 Cell，并在内容真实溢出时自动通过 Tooltip 提供全文；应配合列宽或 table-fixed。',
@@ -4752,27 +5116,27 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: 'false',
     },
     {
-      component: 'Head / Cell',
+      component: 'Table.Head / Table.Cell',
       name: 'ellipsisTooltip',
       description:
         '自定义省略内容的 Tooltip；未设置时使用 Head 或 Cell 子节点，已有 title 会兼容作为 Tooltip 内容。',
       type: 'ReactNode',
     },
     {
-      component: 'ExpandButton',
+      component: 'Table.ExpandButton',
       name: 'expanded / onExpandedChange',
       description:
         '以受控方式切换一行的展开状态，并同步 aria-expanded 与箭头方向。',
       type: 'boolean / (expanded: boolean) => void',
     },
     {
-      component: 'ExpandedRow',
+      component: 'Table.ExpandedRow',
       name: 'colSpan',
       description: '渲染跨越指定列数的详情行，并保留合法的表格语义。',
       type: 'number',
     },
     {
-      name: 'Footer',
+      name: 'Table.Footer',
       description: '展示汇总、总计或表尾说明。',
       type: 'component',
     },
@@ -5102,19 +5466,19 @@ componentDocumentation.table.relatedComponents = [
 ];
 componentDocumentation.table.parts = [
   {
-    name: 'Table / Header / Body / Footer',
+    name: 'Table / Table.Header / Table.Body / Table.Footer',
     description: '建立表格、滚动容器和表头、表体、汇总等语义区域。',
   },
   {
-    name: 'Row / Head / Cell',
+    name: 'Table.Row / Table.Head / Table.Cell',
     description: '组织行列，并控制单元格对齐、固定位置和超长省略。',
   },
   {
-    name: 'ExpandButton / ExpandedRow',
+    name: 'Table.ExpandButton / Table.ExpandedRow',
     description: '以受控状态展开一行，并使用合法的跨列详情行承载内容。',
   },
   {
-    name: 'VirtualBody',
+    name: 'Table.VirtualBody',
     description:
       '为等高单行数据建立纵向虚拟窗口，并继续支持 Table 的横向滚动和 fixed 列。',
   },
@@ -5158,11 +5522,11 @@ componentDocumentation['data-table'].parts = [
       '通过 header、render、columns 和 meta 声明数据访问、列结构与 Table 布局属性。',
   },
   {
-    name: 'ColumnHeader',
+    name: 'DataTable.ColumnHeader',
     description: '为可排序列提供一致的按钮、状态切换和图标。',
   },
   {
-    name: 'Actions',
+    name: 'DataTable.Actions',
     description: '在普通 cell 中组合当前记录的按钮、菜单或链接。',
   },
 ];
@@ -5919,24 +6283,20 @@ componentDocumentation.form.whenToUse = [
 ];
 componentDocumentation.form.parts = [
   {
-    name: 'Form / Field',
-    description: '提供表单上下文，并连接字段状态、规则和提交行为。',
+    name: 'Form',
+    description: '提供表单上下文，并连接提交行为。',
   },
   {
-    name: 'Field',
-    description: '组织一个表单字段的布局、状态和语义关系。',
+    name: 'Form.Field',
+    description: '连接字段名称、校验规则和表单状态。',
   },
   {
-    name: 'Label',
-    description: '为输入控件提供可点击、可访问的文本标签。',
+    name: 'Form.Item / Form.Label / Form.Control',
+    description: '组织单个字段，并连接标签与实际输入控件。',
   },
   {
-    name: 'Description',
-    description: '补充输入格式、用途或影响。',
-  },
-  {
-    name: 'Error',
-    description: '展示与当前字段相关的校验错误。',
+    name: 'Form.Description / Form.Message',
+    description: '补充字段说明并展示当前校验错误。',
   },
 ];
 
@@ -6399,16 +6759,6 @@ replaceExampleCodes('layout', [
 </Layout>`,
 ]);
 
-replaceExampleCodes('masonry', [
-  `import { Masonry } from '@heliannuuthus/ui'
-
-<Masonry columns="auto" minColumnWidth={220} maxColumns={6} gap={16}>
-  {cards.map((card) => (
-    <Masonry.Item key={card.id}>{card.content}</Masonry.Item>
-  ))}
-</Masonry>`,
-]);
-
 replaceExampleCodes('table', [
   `import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
@@ -6624,7 +6974,7 @@ componentDocumentation.attachment.api = [
   {
     name: 'actions / trigger',
     description: '设置附件操作，以及覆盖整个附件的链接或按钮触发区域。',
-    type: 'ReactNode / render',
+    type: 'ReactNode / ReactElement',
   },
   {
     name: 'orientation / size / state',
@@ -6648,8 +6998,8 @@ componentDocumentation.bubble.parts = [
 componentDocumentation.bubble.api = [
   {
     name: 'content / contentProps',
-    description: '设置气泡内容，并扩展内部内容节点或渲染元素。',
-    type: 'ReactNode / ComponentProps',
+    description: '设置气泡内容，并向内部内容 div 传递标准属性。',
+    type: 'ReactNode / ComponentProps<"div">',
   },
   {
     name: 'reactions / reactionsProps',
@@ -6789,28 +7139,6 @@ if (toggleBasicExample) {
   toggleBasicExample.previewHeight = 300;
 }
 
-componentDocumentation.switch.examples.push({
-  title: '开关状态',
-  description: '真实展示开启、关闭和禁用状态，禁用开关不会响应指针操作。',
-  preview: (
-    <div className="example-row">
-      <label className="minimal-control">
-        <Switch defaultChecked />
-        已开启
-      </label>
-      <label className="minimal-control">
-        <Switch />
-        已关闭
-      </label>
-      <label className="minimal-control">
-        <Switch disabled />
-        不可用
-      </label>
-    </div>
-  ),
-  code: `import { Switch } from '@heliannuuthus/ui'\n\n<Switch defaultChecked />\n<Switch />\n<Switch disabled />`,
-});
-
 componentDocumentation.checkbox.examples.push({
   title: '选择状态',
   description:
@@ -6832,11 +7160,388 @@ componentDocumentation.checkbox.examples.push({
   code: `import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox>未选择</Checkbox>\n<Checkbox defaultChecked>已选择</Checkbox>\n<Checkbox indeterminate>部分选择</Checkbox>\n<Checkbox disabled>不可用</Checkbox>`,
 });
 
+const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
+  accordion: [
+    {
+      name: 'items',
+      description: '配置每个面板的 value、title、content 与禁用状态。',
+      type: 'AccordionItem[]',
+    },
+    {
+      name: 'value / defaultValue',
+      description: '以受控或非受控方式指定当前展开项。',
+      type: 'string[]',
+    },
+    {
+      name: 'onValueChange',
+      description: '展开项变化时回传完整 value 数组。',
+      type: '(value: string[]) => void',
+    },
+    {
+      name: 'multiple / disabled',
+      description: '允许同时展开多个面板，或禁用整个 Accordion。',
+      type: 'boolean / boolean',
+      defaultValue: 'false / false',
+    },
+    {
+      name: 'indicator / expandedIndicator / indicatorPosition',
+      description: '设置折叠态、展开态图标及图标所在一侧。',
+      type: "ReactNode / ReactNode / 'start' | 'end'",
+    },
+  ],
+  alert: [
+    {
+      name: 'title / description / icon',
+      description: '设置提示标题、补充说明和语义图标。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'action',
+      description: '放置与当前提示直接相关的查看、重试或关闭操作。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'variant',
+      description: '设置提示的语义状态。',
+      type: "'default' | 'info' | 'success' | 'warning' | 'error' | 'destructive'",
+      defaultValue: "'default'",
+    },
+  ],
+  'alert-dialog': [
+    {
+      name: 'trigger',
+      description: '打开确认对话框的按钮或其他交互元素。',
+      type: 'ReactElement',
+    },
+    {
+      name: 'title / description / media',
+      description: '设置确认事项、后果说明和辅助图标。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'confirmText / cancelText / confirmVariant',
+      description: '设置确认与取消操作的文字和确认按钮样式。',
+      type: 'ReactNode / ReactNode / ButtonVariant',
+    },
+    {
+      name: 'onConfirm',
+      description: '用户确认操作时调用。',
+      type: '() => void',
+    },
+    {
+      name: 'open / defaultOpen / onOpenChange',
+      description: '以受控或非受控方式管理打开状态。',
+      type: 'boolean / boolean / (open: boolean) => void',
+    },
+  ],
+  carousel: [
+    {
+      name: 'items / renderItem',
+      description: '提供轮播数据，并决定每一项的展示内容。',
+      type: 'Item[] / (item: Item, index: number) => ReactNode',
+    },
+    {
+      name: 'controls',
+      description: '是否显示上一页与下一页按钮。',
+      type: 'boolean',
+      defaultValue: 'true',
+    },
+    {
+      name: 'pagination / paginationPosition / renderDot',
+      description: '使用默认点位、关闭分页，或通过函数自定义完整翻页器。',
+      type: "false | 'dots' | ((controls) => ReactNode)",
+    },
+    {
+      name: 'autoplay / loop / pauseOnHover',
+      description: '设置自动播放间隔、首尾循环和悬停暂停策略。',
+      type: 'boolean | number / boolean / boolean',
+    },
+    {
+      name: 'ref',
+      description: '从外部滚动、播放或暂停轮播。',
+      type: 'Ref<CarouselRef>',
+    },
+  ],
+  command: [
+    {
+      name: 'groups',
+      description: '配置分组标题与可搜索命令选项。',
+      type: 'CommandGroup[]',
+    },
+    {
+      name: 'dialog',
+      description: '传入 Dialog 配置后以命令弹窗展示，否则渲染内联命令列表。',
+      type: 'Omit<DialogProps, "children">',
+    },
+    {
+      name: 'placeholder / emptyText',
+      description: '设置搜索提示和无匹配结果文案。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'value / defaultValue / onValueChange',
+      description: '管理当前搜索值。',
+      type: 'string / string / (value: string) => void',
+    },
+    {
+      name: 'shouldFilter / filter',
+      description: '启用内置过滤，或提供返回匹配分数的自定义过滤函数。',
+      type: 'boolean / (value, search, keywords) => number',
+    },
+  ],
+  'context-menu': [
+    {
+      name: 'trigger',
+      description: '响应右键或菜单键的目标元素。',
+      type: 'ReactElement',
+    },
+    {
+      name: 'items',
+      description: '配置普通操作、分隔线、选择项和子菜单。',
+      type: 'DropdownMenuEntry[]',
+    },
+    {
+      name: 'open / defaultOpen / onOpenChange',
+      description: '以受控或非受控方式管理菜单状态。',
+      type: 'boolean / boolean / (open: boolean) => void',
+    },
+    {
+      name: 'disabled',
+      description: '禁用上下文菜单触发。',
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+  ],
+  dialog: [
+    {
+      name: 'trigger',
+      description: '可选的对话框触发元素；受控场景可省略。',
+      type: 'ReactElement',
+    },
+    {
+      name: 'title / description / children',
+      description: '设置任务标题、辅助说明和主体内容。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'footer',
+      description:
+        '完全自定义底部操作；省略时可使用 cancelText 与 confirmText。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'confirmText / cancelText / onConfirm',
+      description: '配置默认底部操作及确认回调。',
+      type: 'ReactNode / ReactNode / (() => void)',
+    },
+    {
+      name: 'open / defaultOpen / onOpenChange',
+      description: '以受控或非受控方式管理打开状态。',
+      type: 'boolean / boolean / (open: boolean) => void',
+    },
+  ],
+  drawer: [
+    {
+      name: 'trigger',
+      description: '可选的抽屉触发元素；受控场景可省略。',
+      type: 'ReactElement',
+    },
+    {
+      name: 'title / description / children / footer',
+      description: '配置抽屉头部、主体内容和底部操作。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'side / behavior',
+      description: '设置进入方向以及自适应、手势或稳定面板行为。',
+      type: "'top' | 'right' | 'bottom' | 'left' / 'adaptive' | 'gesture' | 'panel'",
+    },
+    {
+      name: 'container',
+      description: '把抽屉约束在指定父容器内。',
+      type: 'HTMLElement | RefObject<HTMLElement | null>',
+    },
+    {
+      name: 'snapPoints / snapPoint / onSnapPointChange',
+      description: '配置并控制手势抽屉的分段展开位置。',
+      type: '(number | string)[] / number | string | null / callback',
+    },
+    {
+      name: 'open / defaultOpen / onOpenChange',
+      description: '以受控或非受控方式管理打开状态。',
+      type: 'boolean / boolean / (open: boolean) => void',
+    },
+  ],
+  'navigation-menu': [
+    {
+      name: 'items',
+      description: '配置直接链接或带弹层内容的顶级导航入口。',
+      type: 'NavigationMenuItemConfig[]',
+    },
+    {
+      name: 'align / orientation',
+      description: '设置弹层对齐方式与导航方向。',
+      type: "'start' | 'center' | 'end' / 'horizontal' | 'vertical'",
+    },
+    {
+      name: 'value / defaultValue / onValueChange',
+      description: '以受控或非受控方式管理当前展开入口。',
+      type: 'string | null / string | null / (value: string | null) => void',
+    },
+    {
+      name: 'delay / closeDelay',
+      description: '设置打开与关闭富导航面板的延迟。',
+      type: 'number / number',
+    },
+  ],
+  popover: [
+    {
+      name: 'trigger / triggerMode',
+      description: '设置触发元素，以及点击或悬停预览模式。',
+      type: "ReactElement / 'click' | 'hover'",
+    },
+    {
+      name: 'content / title / description',
+      description: '配置浮层主体和可选标题说明。',
+      type: 'ReactNode',
+    },
+    {
+      name: 'side / align / sideOffset / alignOffset',
+      description: '设置浮层方向、对齐方式和间距。',
+      type: 'PopupPosition',
+    },
+    {
+      name: 'delay / closeDelay',
+      description: '设置悬停模式打开与关闭前的等待时间。',
+      type: 'number / number',
+    },
+    {
+      name: 'open / defaultOpen / onOpenChange',
+      description: '以受控或非受控方式管理打开状态。',
+      type: 'boolean / boolean / (open: boolean) => void',
+    },
+  ],
+  progress: [
+    {
+      name: 'value / min / max',
+      description: '设置当前进度与数值范围；value 为 null 时表示进度未知。',
+      type: 'number | null / number / number',
+    },
+    {
+      name: 'label / showValue',
+      description: '设置进度名称，并决定是否或如何展示格式化数值。',
+      type: 'ReactNode / boolean | ((value) => ReactNode)',
+    },
+    {
+      name: 'effect',
+      description: '在数值推进时显示聚拢在进度前沿的短暂反馈。',
+      type: "'none' | 'sparkle'",
+      defaultValue: "'none'",
+    },
+    {
+      name: 'locale / format / getAriaValueText',
+      description: '配置数值格式和辅助技术读取的完整进度文本。',
+      type: 'Intl options / callback',
+    },
+  ],
+  select: [
+    {
+      name: 'options',
+      description: '提供平铺或分组候选项。',
+      type: '(SelectOption<Value> | SelectOptionGroup<Value>)[]',
+    },
+    {
+      name: 'value / defaultValue / onChange',
+      description: '以受控或非受控方式管理当前选择。',
+      type: 'Value | Value[] | null / callback',
+    },
+    {
+      name: 'searchValue / defaultSearchValue / onSearch',
+      description: '以受控或非受控方式管理搜索关键词。',
+      type: 'string / string / (query: string) => void',
+    },
+    {
+      name: 'placeholder / emptyText / showClear',
+      description: '设置输入提示、空结果文案和清除操作。',
+      type: 'ReactNode / ReactNode / boolean',
+    },
+    {
+      name: 'multiple / disabled / readOnly / required',
+      description: '设置多选、禁用、只读和表单必填状态。',
+      type: 'boolean',
+    },
+    {
+      name: 'triggerProps',
+      description: '配置输入框的标准属性，以及是否显示尾部展开按钮。',
+      type: 'SelectTriggerProps',
+    },
+  ],
+  tabs: [
+    {
+      name: 'items',
+      description: '配置每个标签的 value、label、content 与禁用状态。',
+      type: 'TabsItem[]',
+    },
+    {
+      name: 'value / defaultValue / onValueChange',
+      description: '以受控或非受控方式管理当前标签。',
+      type: 'string | null / callback',
+    },
+    {
+      name: 'variant / centered / orientation',
+      description: '设置标签列表的样式、居中方式和排列方向。',
+      type: "TabsVariant / boolean / 'horizontal' | 'vertical'",
+    },
+    {
+      name: 'animation',
+      description: '设置面板切换动效，并在减少动态效果偏好下自动降级。',
+      type: "'none' | 'fade' | 'slide'",
+    },
+    {
+      name: 'listClassName / tabClassName / panelClassName',
+      description: '分别扩展列表、标签与内容面板样式。',
+      type: 'string',
+    },
+  ],
+  tooltip: [
+    {
+      name: 'trigger / content',
+      description: '设置需要补充说明的交互元素和简短提示内容。',
+      type: 'ReactElement / ReactNode',
+    },
+    {
+      name: 'side / align / sideOffset / alignOffset',
+      description: '设置 Tooltip 方向、对齐和间距。',
+      type: 'PopupPosition',
+    },
+    {
+      name: 'delay / disabled',
+      description: '设置打开延迟，或临时禁用提示。',
+      type: 'number / boolean',
+    },
+    {
+      name: 'open / defaultOpen / onOpenChange',
+      description: '以受控或非受控方式管理打开状态。',
+      type: 'boolean / boolean / (open: boolean) => void',
+    },
+    {
+      name: 'contentProps',
+      description: '向提示内容 div 传递标准 HTML、ARIA、data 属性和事件。',
+      type: 'ComponentProps<"div">',
+    },
+  ],
+};
+
+for (const [slug, api] of Object.entries(publicWrapperApi)) {
+  const documentation = componentDocumentation[slug];
+  if (documentation && api) documentation.api = api;
+}
+
 const spaciousPreviewHeights: Record<string, number> = {
   'aspect-ratio': 560,
   card: 340,
   masonry: 520,
-  resizable: 620,
+  resizable: 520,
   'scroll-area': 480,
 };
 

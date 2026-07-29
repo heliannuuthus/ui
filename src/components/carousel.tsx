@@ -7,7 +7,7 @@ import useEmblaCarousel, {
 import { useReducedMotion } from 'motion/react';
 
 import { cn } from '../lib/utils';
-import { Button } from './button';
+import { Button, type ButtonNativeProps } from './button';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
 type EmblaCarouselApi = UseEmblaCarouselType[1];
@@ -29,12 +29,12 @@ type CarouselProps<Item = React.ReactNode> = Omit<
   itemClassName?: string;
   items: readonly Item[];
   loop?: boolean;
-  nextButtonProps?: React.ComponentProps<typeof Button>;
+  nextButtonProps?: ButtonNativeProps;
   pauseOnHover?: boolean;
   pagination?:
     false | 'dots' | ((controls: CarouselControls) => React.ReactNode);
   paginationPosition?: 'before' | 'after';
-  previousButtonProps?: React.ComponentProps<typeof Button>;
+  previousButtonProps?: ButtonNativeProps;
   renderDot?: (props: CarouselDotRenderProps) => React.ReactNode;
   renderItem?: (item: Item, index: number) => React.ReactNode;
 };
@@ -437,7 +437,7 @@ function CarouselPrevious({
   onClick,
   'aria-label': ariaLabel = 'Previous slide',
   ...props
-}: React.ComponentProps<typeof Button>) {
+}: ButtonNativeProps) {
   const { scrollPrev, canScrollPrev } = useCarousel();
 
   return (
@@ -471,7 +471,7 @@ function CarouselNext({
   onClick,
   'aria-label': ariaLabel = 'Next slide',
   ...props
-}: React.ComponentProps<typeof Button>) {
+}: ButtonNativeProps) {
   const { scrollNext, canScrollNext } = useCarousel();
 
   return (

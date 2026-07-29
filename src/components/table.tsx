@@ -495,16 +495,6 @@ const TableCompound = Object.assign(Table, {
 
 export {
   TableCompound as Table,
-  TableBody as Body,
-  TableCaption as Caption,
-  TableCell as Cell,
-  TableExpandedRow as ExpandedRow,
-  TableExpandButton as ExpandButton,
-  TableFooter as Footer,
-  TableHead as Head,
-  TableHeader as Header,
-  TableRow as Row,
-  TableVirtualBody as VirtualBody,
   type TableCellAlign,
   type TableCellFixed,
   type TableCellProps,

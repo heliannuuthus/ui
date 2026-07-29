@@ -31,7 +31,7 @@ type AttachmentProps = Omit<React.ComponentProps<'div'>, 'children' | 'title'> &
     mediaVariant?: 'icon' | 'image';
     state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
     title: React.ReactNode;
-    trigger?: useRender.ComponentProps<'button'>['render'];
+    trigger?: React.ReactElement;
   };
 
 function Attachment({
@@ -221,7 +221,6 @@ const AttachmentCompound = Object.assign(Attachment, {
 
 export {
   AttachmentCompound as Attachment,
-  AttachmentGroup as Group,
   type AttachmentGroupProps,
   type AttachmentProps,
 };

@@ -4,49 +4,89 @@ import { Slider } from '@heliannuuthus/ui';
 
 const masonryItems = [
   {
-    className: 'masonry-layout-item-tall',
-    description: '按钮、输入与选择器的交互规范。',
+    description:
+      '按钮、输入与选择器共享一致的交互反馈，并覆盖禁用、错误与加载状态。',
     title: '基础组件',
   },
   {
-    className: 'masonry-layout-item-short',
     description: '间距、对齐与响应式边界。',
     title: '布局规则',
   },
   {
-    className: 'masonry-layout-item-medium',
-    description: '颜色、圆角和排版的共享约束。',
+    description:
+      '颜色、圆角和排版由语义令牌统一约束，主题切换时不需要逐个覆盖组件。',
     title: '设计令牌',
   },
   {
-    className: 'masonry-layout-item-short',
-    description: '键盘、焦点与读屏顺序。',
+    description:
+      '键盘路径、焦点反馈与读屏顺序都跟随 DOM 语义，不依赖卡片当前被分配到哪一列。',
     title: '无障碍',
   },
   {
-    className: 'masonry-layout-item-tall',
-    description: '真实内容下的组合方式与边界。',
+    description:
+      '使用接近业务页面的标题、说明和操作验证组合方式，并检查长文本与窄屏边界。',
     title: '使用场景',
   },
   {
-    className: 'masonry-layout-item-medium',
-    description: '变更记录与升级注意事项。',
+    description:
+      '记录新增能力、行为调整、迁移方式，以及升级前需要确认的兼容性事项。',
     title: '版本说明',
   },
   {
-    className: 'masonry-layout-item-short',
     description: '主题颜色和暗色模式检查。',
     title: '主题适配',
   },
   {
-    className: 'masonry-layout-item-tall',
-    description: '桌面、平板与手机视口验证。',
+    description:
+      '同时验证桌面、平板与手机视口，确保实际列数能够根据可用空间自然回落。',
     title: '响应式',
   },
 ] as const;
 
+function MasonryPreviewCard({
+  index,
+  item,
+}: {
+  index: number;
+  item: (typeof masonryItems)[number];
+}) {
+  return (
+    <>
+      <span>{String(index + 1).padStart(2, '0')}</span>
+      <strong>{item.title}</strong>
+      <p>{item.description}</p>
+    </>
+  );
+}
+
+function createPreviewItems(
+  items: readonly (typeof masonryItems)[number][] = masonryItems,
+  startIndex = 0
+) {
+  return items.map((item, index) => ({
+    className: 'masonry-layout-item',
+    content: <MasonryPreviewCard index={startIndex + index} item={item} />,
+    key: item.title,
+    role: 'listitem' as const,
+  }));
+}
+
+export function MasonryBasicDemo() {
+  return (
+    <Masonry
+      aria-label="Masonry 基础布局示例"
+      className="masonry-layout-demo"
+      columns={3}
+      gap={[14, 20]}
+      items={createPreviewItems(masonryItems.slice(0, 6))}
+      minColumnWidth={180}
+      role="list"
+    />
+  );
+}
+
 export function MasonryResponsiveDemo() {
-  const masonryRef = useRef<HTMLElement>(null);
+  const masonryRef = useRef<HTMLDivElement>(null);
   const [maxColumns, setMaxColumns] = useState(6);
   const [resolvedColumns, setResolvedColumns] = useState(1);
 
@@ -114,31 +154,41 @@ export function MasonryResponsiveDemo() {
         className="masonry-layout-demo"
         columns={maxColumns}
         gap={14}
+        items={createPreviewItems()}
         minColumnWidth={140}
         ref={masonryRef}
         role="list"
-      >
-        {masonryItems.map((item, index) => (
-          <Masonry.Item
-            className={`masonry-layout-item ${item.className}`}
-            key={item.title}
-            role="listitem"
-          >
-            <span>{String(index + 1).padStart(2, '0')}</span>
-            <strong>{item.title}</strong>
-            <p>{item.description}</p>
-          </Masonry.Item>
-        ))}
-        <Masonry.Item
-          className="masonry-layout-item masonry-layout-item-full"
-          role="listitem"
-          span="full"
-        >
-          <span>FULL</span>
-          <strong>发布检查</strong>
-          <p>这一项始终从第一列跨到最后一列。</p>
-        </Masonry.Item>
-      </Masonry>
+      />
     </div>
+  );
+}
+
+export function MasonrySpanDemo() {
+  return (
+    <Masonry
+      aria-label="包含跨列内容的 Masonry 布局示例"
+      className="masonry-layout-demo masonry-span-demo"
+      columns={3}
+      gap={14}
+      items={[
+        ...createPreviewItems(masonryItems.slice(0, 3)),
+        {
+          className: 'masonry-layout-item masonry-layout-item-full',
+          content: (
+            <>
+              <span>FULL</span>
+              <strong>发布检查</strong>
+              <p>等待前面所有列结束，再独占整行展示发布结论。</p>
+            </>
+          ),
+          key: 'release-check',
+          role: 'listitem',
+          span: 'full',
+        } as const,
+        ...createPreviewItems(masonryItems.slice(3, 6), 3),
+      ]}
+      minColumnWidth={180}
+      role="list"
+    />
   );
 }

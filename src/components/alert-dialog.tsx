@@ -5,8 +5,9 @@ import { AlertDialog as AlertDialogPrimitive } from '@base-ui/react/alert-dialog
 
 import { cn } from '../lib/utils';
 import { Button } from './button';
+import type { OpenStateProps } from './internal/public-types';
 
-type AlertDialogProps = Omit<AlertDialogPrimitive.Root.Props, 'children'> & {
+type AlertDialogProps = OpenStateProps & {
   cancelText?: React.ReactNode;
   confirmText: React.ReactNode;
   confirmVariant?: React.ComponentProps<typeof Button>['variant'];
@@ -16,7 +17,7 @@ type AlertDialogProps = Omit<AlertDialogPrimitive.Root.Props, 'children'> & {
   onConfirm?: () => void;
   size?: 'default' | 'sm';
   title: React.ReactNode;
-  trigger: AlertDialogPrimitive.Trigger.Props['render'];
+  trigger: React.ReactElement;
 };
 
 function AlertDialog({

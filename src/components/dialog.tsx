@@ -4,19 +4,25 @@ import { XIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
 import { Button } from './button';
+import type { DataAttributes, OpenStateProps } from './internal/public-types';
 
-type DialogProps = Omit<DialogPrimitive.Root.Props, 'children'> & {
+type DialogProps = OpenStateProps & {
   cancelText?: React.ReactNode;
   children?: React.ReactNode;
   confirmText?: React.ReactNode;
   contentClassName?: string;
-  contentProps?: Omit<DialogPrimitive.Popup.Props, 'children' | 'className'>;
+  contentProps?: Omit<
+    React.HTMLAttributes<HTMLDivElement>,
+    'children' | 'className'
+  > &
+    DataAttributes;
+  disablePointerDismissal?: boolean;
   description?: React.ReactNode;
   footer?: React.ReactNode;
   onConfirm?: () => void;
   showCloseButton?: boolean;
   title?: React.ReactNode;
-  trigger?: DialogPrimitive.Trigger.Props['render'];
+  trigger?: React.ReactElement;
 };
 
 function Dialog({

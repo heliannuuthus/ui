@@ -1,31 +1,28 @@
+import type * as React from 'react';
 import { Switch as SwitchPrimitive } from '@base-ui/react/switch';
 
 import { cn } from '../lib/utils';
 
 type SwitchProps = Omit<
-  SwitchPrimitive.Root.Props,
-  'onChange' | 'onCheckedChange'
+  React.ComponentProps<'span'>,
+  'defaultChecked' | 'onChange'
 > & {
-  onChange?: (
-    checked: boolean,
-    eventDetails: SwitchPrimitive.Root.ChangeEventDetails
-  ) => void;
-  /** @deprecated Use `onChange` instead. */
-  onCheckedChange?: SwitchPrimitive.Root.Props['onCheckedChange'];
+  checked?: boolean;
+  defaultChecked?: boolean;
+  disabled?: boolean;
+  form?: string;
+  inputRef?: React.Ref<HTMLInputElement>;
+  name?: string;
+  onChange?: (checked: boolean) => void;
+  readOnly?: boolean;
+  required?: boolean;
+  uncheckedValue?: string;
+  value?: string;
 };
 
-function Switch({
-  className,
-  onChange,
-  onCheckedChange,
-  ...props
-}: SwitchProps) {
-  function handleCheckedChange(
-    checked: boolean,
-    eventDetails: SwitchPrimitive.Root.ChangeEventDetails
-  ) {
-    onChange?.(checked, eventDetails);
-    onCheckedChange?.(checked, eventDetails);
+function Switch({ className, onChange, ...props }: SwitchProps) {
+  function handleCheckedChange(checked: boolean) {
+    onChange?.(checked);
   }
 
   return (

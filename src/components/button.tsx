@@ -1,7 +1,14 @@
 import { Button as ButtonPrimitive } from '@base-ui/react/button';
 import { cva, type VariantProps } from 'class-variance-authority';
+import {
+  forwardRef,
+  type AnchorHTMLAttributes,
+  type ButtonHTMLAttributes,
+  type ForwardedRef,
+} from 'react';
 
 import { cn } from '../lib/utils';
+import { Stack, type StackCompactProps } from './stack';
 
 const buttonVariants = cva(
   "group/button inline-flex shrink-0 items-center justify-center rounded-4xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:not-aria-[haspopup]:translate-y-px active:not-aria-[haspopup]:scale-[0.97] motion-reduce:active:transform-none disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -38,28 +45,133 @@ const buttonVariants = cva(
   }
 );
 
-type ButtonProps = ButtonPrimitive.Props &
-  VariantProps<typeof buttonVariants> & {
-    block?: boolean;
+const buttonGroupVariants = cva(
+  "[&>[data-slot=button]]:bg-clip-border has-[>[data-slot=button-group]]:gap-2 has-[>[data-variant=outline]]:*:data-[slot=input-group]:border-border has-[>[data-variant=outline]]:*:data-[slot=select-trigger]:border-border has-[>[data-variant=outline]]:[&>[data-slot=input-group]:has(:focus-visible)]:border-ring has-[>[data-variant=outline]]:[&>[data-slot=select-trigger]:focus-visible]:border-ring has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-4xl [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1 has-[>[data-variant=outline]]:[&>input]:border-border has-[>[data-variant=outline]]:[&>input:focus-visible]:border-ring"
+);
+
+type ButtonStyleProps = VariantProps<typeof buttonVariants> & {
+  block?: boolean;
+};
+
+type ButtonNativeProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'color'
+> &
+  ButtonStyleProps & {
+    href?: never;
   };
 
-function Button({
-  block = false,
+type ButtonLinkProps = Omit<
+  AnchorHTMLAttributes<HTMLAnchorElement>,
+  'color' | 'href'
+> &
+  ButtonStyleProps & {
+    disabled?: boolean;
+    href: string;
+  };
+
+type ButtonProps = ButtonNativeProps | ButtonLinkProps;
+type ButtonRef = HTMLAnchorElement | HTMLButtonElement;
+type ButtonGroupProps = StackCompactProps;
+
+const ButtonRoot = forwardRef<ButtonRef, ButtonProps>(
+  function ButtonRoot(props, ref) {
+    if (typeof props.href === 'string') {
+      const {
+        'aria-disabled': ariaDisabled,
+        block = false,
+        className,
+        disabled = false,
+        href,
+        onClick,
+        size = 'default',
+        tabIndex,
+        variant = 'default',
+        ...linkProps
+      } = props;
+
+      return (
+        <a
+          {...linkProps}
+          ref={ref as ForwardedRef<HTMLAnchorElement>}
+          data-disabled={disabled ? '' : undefined}
+          data-slot="button"
+          aria-disabled={disabled ? true : ariaDisabled}
+          className={cn(
+            buttonVariants({ variant, size, className }),
+            block && 'w-full',
+            disabled &&
+              'cursor-not-allowed opacity-50 active:translate-y-0 active:scale-100'
+          )}
+          href={href}
+          tabIndex={disabled ? -1 : tabIndex}
+          onClick={(event) => {
+            if (disabled) {
+              event.preventDefault();
+              event.stopPropagation();
+              return;
+            }
+            onClick?.(event);
+          }}
+        />
+      );
+    }
+
+    const {
+      block = false,
+      className,
+      size = 'default',
+      type = 'button',
+      variant = 'default',
+      ...buttonProps
+    } = props;
+
+    return (
+      <ButtonPrimitive
+        {...buttonProps}
+        ref={ref as ForwardedRef<HTMLButtonElement>}
+        data-slot="button"
+        className={cn(
+          buttonVariants({ variant, size, className }),
+          block && 'w-full'
+        )}
+        type={type}
+      />
+    );
+  }
+);
+
+ButtonRoot.displayName = 'Button';
+
+function ButtonGroup({
   className,
-  variant = 'default',
-  size = 'default',
+  orientation,
+  children,
   ...props
-}: ButtonProps) {
+}: ButtonGroupProps) {
   return (
-    <ButtonPrimitive
-      data-slot="button"
-      className={cn(
-        buttonVariants({ variant, size, className }),
-        block && 'w-full'
-      )}
+    <Stack.Compact
+      role="group"
+      data-slot="button-group"
+      orientation={orientation ?? 'horizontal'}
+      className={cn(buttonGroupVariants(), className)}
       {...props}
-    />
+    >
+      {children}
+    </Stack.Compact>
   );
 }
 
-export { Button, buttonVariants, type ButtonProps };
+const Button = Object.assign(ButtonRoot, {
+  Group: ButtonGroup,
+});
+
+export {
+  Button,
+  buttonVariants,
+  type ButtonGroupProps,
+  type ButtonLinkProps,
+  type ButtonNativeProps,
+  type ButtonProps,
+  type ButtonRef,
+};

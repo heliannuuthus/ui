@@ -136,7 +136,7 @@ const Stack = Object.assign(StackRoot, {
   Compact: StackCompact,
 });
 
-export { Stack, StackCompact as Compact };
+export { Stack };
 export type {
   StackAlign,
   StackCompactProps,

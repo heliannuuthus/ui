@@ -5,6 +5,7 @@ import { ContextMenu as ContextMenuPrimitive } from '@base-ui/react/context-menu
 
 import { cn } from '../lib/utils';
 import type { DropdownMenuEntry } from './dropdown-menu';
+import type { OpenStateProps } from './internal/public-types';
 import { ChevronRightIcon, CheckIcon } from 'lucide-react';
 
 function ContextMenuRoot({ ...props }: ContextMenuPrimitive.Root.Props) {
@@ -242,10 +243,14 @@ function ContextMenuShortcut({
   );
 }
 
-type ContextMenuProps = Omit<ContextMenuPrimitive.Root.Props, 'children'> & {
+type ContextMenuProps = OpenStateProps & {
   contentClassName?: string;
+  disabled?: boolean;
+  highlightItemOnHover?: boolean;
   items: readonly DropdownMenuEntry[];
-  trigger: ContextMenuPrimitive.Trigger.Props['render'];
+  loopFocus?: boolean;
+  orientation?: 'horizontal' | 'vertical';
+  trigger: React.ReactElement;
 };
 
 function renderContextMenuEntries(items: readonly DropdownMenuEntry[]) {
