@@ -1135,27 +1135,6 @@ const stackDocumentation: ComponentDocumentation = {
       previewHeight: 460,
     },
     {
-      title: '交叉轴与主轴对齐',
-      description:
-        'align 控制交叉轴对齐，justify 控制主轴分布；每个案例上方都直接声明使用的属性和值。',
-      preview: <StackAlignmentDemo />,
-      code: `import { Stack } from '@heliannuuthus/ui'
-
-<Stack orientation="horizontal" gap={6} align="center">
-  <Filter />
-  <Sort />
-  <Availability />
-</Stack>
-
-<Stack block orientation="horizontal" gap={6} justify="between">
-  <Filter />
-  <Sort />
-  <Availability />
-</Stack>`,
-      previewHeight: 820,
-      wide: true,
-    },
-    {
       title: '跨控件紧凑组合',
       description:
         'Compact 不只组合按钮，也可以拼接 Input、Select、Slider 与操作控件。',
@@ -1194,6 +1173,27 @@ export function SliderCompactExample() {
   )
 }`,
       previewHeight: 760,
+    },
+    {
+      title: '交叉轴与主轴对齐',
+      description:
+        'align 控制交叉轴对齐，justify 控制主轴分布；每个案例上方都直接声明使用的属性和值。',
+      preview: <StackAlignmentDemo />,
+      code: `import { Stack } from '@heliannuuthus/ui'
+
+<Stack orientation="horizontal" gap={6} align="center">
+  <Filter />
+  <Sort />
+  <Availability />
+</Stack>
+
+<Stack block orientation="horizontal" gap={6} justify="between">
+  <Filter />
+  <Sort />
+  <Availability />
+</Stack>`,
+      previewHeight: 820,
+      wide: true,
     },
   ],
   parts: [
