@@ -22,95 +22,20 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "import": "./dist/*.js"
-    },
-    "./hooks/*": {
-      "types": "./dist/hooks/*.d.ts",
-      "import": "./dist/hooks/*.js"
-    },
-    "./avatar": {
-      "types": "./dist/avatar.d.ts",
-      "import": "./dist/avatar.js"
-    },
-    "./alert": {
-      "types": "./dist/alert.d.ts",
-      "import": "./dist/alert.js"
-    },
-    "./button": {
-      "types": "./dist/button.d.ts",
-      "import": "./dist/button.js"
-    },
-    "./card": {
-      "types": "./dist/card.d.ts",
-      "import": "./dist/card.js"
-    },
-    "./dialog": {
-      "types": "./dist/dialog.d.ts",
-      "import": "./dist/dialog.js"
-    },
-    "./dropdown-menu": {
-      "types": "./dist/dropdown-menu.d.ts",
-      "import": "./dist/dropdown-menu.js"
-    },
-    "./input": {
-      "types": "./dist/input.d.ts",
-      "import": "./dist/input.js"
-    },
-    "./label": {
-      "types": "./dist/label.d.ts",
-      "import": "./dist/label.js"
-    },
-    "./layout": {
-      "types": "./dist/layout.d.ts",
-      "import": "./dist/layout.js"
-    },
-    "./masonry": {
-      "types": "./dist/masonry.d.ts",
-      "import": "./dist/masonry.js"
-    },
-    "./radio": {
-      "types": "./dist/radio.d.ts",
-      "import": "./dist/radio.js"
-    },
-    "./data-table": {
-      "types": "./dist/data-table.d.ts",
-      "import": "./dist/data-table.js"
-    },
-    "./separator": {
-      "types": "./dist/separator.d.ts",
-      "import": "./dist/separator.js"
-    },
-    "./spinner": {
-      "types": "./dist/spinner.d.ts",
-      "import": "./dist/spinner.js"
-    },
-    "./toast": {
-      "types": "./dist/toast.d.ts",
-      "import": "./dist/toast.js"
-    },
-    "./table": {
-      "types": "./dist/table.d.ts",
-      "import": "./dist/table.js"
-    },
-    "./styles.css": "./dist/styles.css",
-    "./utils": {
-      "types": "./dist/utils.d.ts",
-      "import": "./dist/utils.js"
-    }
+    "./styles.css": "./dist/global.css"
   },
   "scripts": {
     "dev": "pnpm --filter @heliannuuthus/ui-docs dev",
     "build": "pnpm build:package && pnpm --filter @heliannuuthus/ui-docs build",
-    "build:package": "tsup && tailwindcss -i src/styles/globals.css -o dist/styles.css --minify",
+    "build:package": "tsup && node scripts/build-package.mjs && pnpm verify:package",
     "build:docs": "pnpm build:package && pnpm --filter @heliannuuthus/ui-docs build",
-    "lint": "eslint src apps/docs/src --max-warnings=0",
-    "format": "prettier --write \"{src,apps}/**/*.{ts,tsx,css,json,md}\"",
-    "format:check": "prettier --check \"{src,apps}/**/*.{ts,tsx,css,json,md}\"",
+    "lint": "eslint src apps/docs/src scripts tsup.config.ts --max-warnings=0",
+    "format": "prettier --write \"{src,apps}/**/*.{ts,tsx,css,json,md}\" \"scripts/**/*.mjs\" tsup.config.ts package.json",
+    "format:check": "prettier --check \"{src,apps}/**/*.{ts,tsx,css,json,md}\" \"scripts/**/*.mjs\" tsup.config.ts package.json",
     "type-check": "tsc --noEmit && pnpm --filter @heliannuuthus/ui-docs exec tsc --noEmit",
     "prepare": "pnpm build:package",
-    "prepack": "pnpm build:package"
+    "prepack": "pnpm build:package",
+    "verify:package": "node scripts/verify-package.mjs"
   },
   "peerDependencies": {
     "react": ">=18.3.0",
@@ -146,11 +71,13 @@
     "vaul": "^1.1.2"
   },
   "devDependencies": {
+    "@babel/parser": "^7.29.7",
     "@eslint/js": "^9.39.2",
     "@tailwindcss/cli": "^4.1.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
+    "esbuild": "^0.27.7",
     "eslint": "^9.39.2",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.4.7",

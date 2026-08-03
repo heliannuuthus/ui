@@ -193,6 +193,8 @@ export function ButtonDemo() {
     </div>
   )
 }`;
+const styleImportCode = `import '@heliannuuthus/ui/styles.css'
+import './app.css'`;
 
 const navItems = [
   { label: '快速开始', to: '/docs/getting-started' },
@@ -498,7 +500,12 @@ function GettingStartedPage() {
           icon: <PackagePlus data-icon="inline-start" strokeWidth={2.5} />,
         },
         {
-          label: '引入样式',
+          label: '导入样式',
+          href: '#build-integration',
+          icon: <Code2 data-icon="inline-start" strokeWidth={2.5} />,
+        },
+        {
+          label: '样式架构',
           href: '#styles',
           icon: <Palette data-icon="inline-start" strokeWidth={2.5} />,
         },
@@ -524,25 +531,61 @@ function GettingStartedPage() {
         <PackageManagerInstall />
       </DocSection>
       <DocSection
-        description="在应用入口加载一次全局主题样式。"
-        icon={<Palette strokeWidth={2.5} />}
-        id="styles"
+        description="在应用入口导入一次共享样式。这个方式不绑定包管理器或构建工具。"
+        icon={<Code2 strokeWidth={2.5} />}
+        id="build-integration"
         step="02"
-        title="引入样式"
+        title="导入样式"
       >
-        <CodeBlock
-          code="import '@heliannuuthus/ui/styles.css'"
-          fileName="app.tsx"
-        />
+        <Stack block gap={12}>
+          <CodeBlock code={styleImportCode} fileName="main.tsx" />
+          <Item
+            description="pnpm、npm、Yarn 和 Bun 都可以安装；Vite、Rollup、Webpack、Rspack、Parcel 与 Next.js 等现代构建工具都可以消费根入口和这份 CSS。"
+            title="构建工具无关"
+            variant="outline"
+          />
+        </Stack>
       </DocSection>
       <DocSection
-        description="每个组件都通过明确的子路径导入，便于 tree-shaking，也让依赖边界一目了然。"
+        description="样式在包发布前完成编译，业务运行时不生成或注入 CSS。"
+        icon={<Palette strokeWidth={2.5} />}
+        id="styles"
+        step="03"
+        title="静态样式架构"
+      >
+        <Stack block gap={12}>
+          <Item
+            description="完整组件源码只经过一次 Tailwind 扫描，相同工具类只生成一次，避免按组件 CSS 累积重复规则。"
+            title="一次生成，全局去重"
+            variant="outline"
+          />
+          <Item
+            description="浏览器直接加载普通 CSS；没有 CSS-in-JS 序列化、哈希、样式注入或 hydration 成本。"
+            title="零样式运行时"
+            variant="outline"
+          />
+          <Item
+            description="主题默认值位于较低优先级的 CSS layer，业务样式可以稳定覆盖；公共包只暴露根组件入口和 styles.css。"
+            title="稳定的层级与边界"
+            variant="outline"
+          />
+        </Stack>
+      </DocSection>
+      <DocSection
+        description="使用具名根导入；业务构建工具会自动 tree-shake，只保留实际使用的组件与依赖。"
         icon={<Blocks strokeWidth={2.5} />}
         id="usage"
-        step="03"
+        step="04"
         title="使用组件"
       >
-        <CodeBlock code={demoCode} fileName="button-example.tsx" />
+        <Stack block gap={12}>
+          <CodeBlock code={demoCode} fileName="button-example.tsx" />
+          <Item
+            description="所有构建工具都从 @heliannuuthus/ui 使用具名根导入。JavaScript 会正常 tree-shake，不需要 Vite、Webpack 或框架专用插件。"
+            title="稳定的公共入口"
+            variant="outline"
+          />
+        </Stack>
       </DocSection>
       <Item
         actions={<ArrowRight />}
@@ -554,7 +597,7 @@ function GettingStartedPage() {
         href="/components"
         title={
           <Stack align="center" gap={8} orientation="horizontal">
-            <Badge variant="secondary">04</Badge>
+            <Badge variant="secondary">05</Badge>
             <Typography.Large className="font-bold">
               浏览完整组件目录
             </Typography.Large>

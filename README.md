@@ -2,25 +2,34 @@
 
 Accessible shadcn-style primitives shared by Heliannuuthus products.
 
-Import every public component from the package root and load the theme once at
-the application entry:
+Import the static stylesheet once at the application entry, then use named
+imports from the package root:
 
 ```tsx
 import '@heliannuuthus/ui/styles.css';
 import { Button, Input, Radio } from '@heliannuuthus/ui';
+import './app.css';
 
 <Input.OTP maxLength={6} />
 <Radio.Group options={options} />
 ```
 
-The root entry is side-effect-free ESM, so application bundlers can remove
-unused component exports. Existing explicit subpaths such as
-`@heliannuuthus/ui/button` remain available for backwards compatibility.
+This integration is independent of the package manager and build tool. Install
+with pnpm, npm, Yarn, or Bun, and bundle with Vite, Rollup, Webpack, Rspack,
+Parcel, Next.js, or another ESM-aware tool.
 
-`styles.css` is intentionally a separate compatibility entry and is never
-imported by the JavaScript root. This keeps JavaScript tree-shaking independent
-from CSS side effects and leaves room for component-scoped style entries without
-changing component imports.
+The stylesheet is generated once from the complete component source set, so
+Tailwind utilities are deduplicated and no style runtime or framework plugin is
+required. The JavaScript root remains style-free and tree-shakeable.
+
+Semantic token defaults live in a named CSS layer, so unlayered application
+styles can override them even when a component is loaded by an asynchronous
+route. The theme has document-wide scope because tokens, reset, focus rules,
+portals, and composed components share the same visual contract.
+
+Component subpaths are private implementation details. The package build
+verifies every public export, the root and stylesheet integration, tree shaking,
+the packaged component modules, and a gzip size budget for the static CSS.
 
 The package is intentionally domain-neutral. Authentication flows, API calls, routing and product copy stay in Pallas.
 

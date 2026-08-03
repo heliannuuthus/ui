@@ -5,11 +5,11 @@
 - `src/components/` contains domain-neutral public UI primitives.
 - `apps/docs/` is the documentation and component showcase deployed to `ui.heliannuuthus.com`.
 - Every public component is exported from the `@heliannuuthus/ui` package root.
-- Explicit `@heliannuuthus/ui/<component>` subpaths remain compatibility
-  entries, not the preferred public API.
-- The JavaScript root must remain free of implicit CSS imports. Keep
-  `styles.css` as an explicit compatibility entry until component-scoped style
-  entries replace it.
+- The package has exactly two public entries: the component root and
+  `./styles.css`. Component modules are private build details.
+- The JavaScript root stays free of implicit CSS. Consumers import the static,
+  deduplicated stylesheet once at their application root. Do not add
+  build-tool-specific integration or runtime style generation.
 
 ## Rules
 
