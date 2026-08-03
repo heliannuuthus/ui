@@ -193,6 +193,13 @@ export function ButtonDemo() {
     </div>
   )
 }`;
+const viteConfigCode = `import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
+import { heliannuuthusUI } from '@heliannuuthus/ui/vite'
+
+export default defineConfig({
+  plugins: [heliannuuthusUI(), react()],
+})`;
 
 const navItems = [
   { label: '快速开始', to: '/docs/getting-started' },
@@ -498,7 +505,12 @@ function GettingStartedPage() {
           icon: <PackagePlus data-icon="inline-start" strokeWidth={2.5} />,
         },
         {
-          label: '引入样式',
+          label: '配置构建',
+          href: '#build-integration',
+          icon: <Code2 data-icon="inline-start" strokeWidth={2.5} />,
+        },
+        {
+          label: '自动样式',
           href: '#styles',
           icon: <Palette data-icon="inline-start" strokeWidth={2.5} />,
         },
@@ -524,26 +536,47 @@ function GettingStartedPage() {
         <PackageManagerInstall />
       </DocSection>
       <DocSection
-        description="在应用入口显式加载一次完整视觉契约，再在其后加载业务覆盖样式。"
+        description="在 React 插件之前启用 UI 构建插件，让具名根导入自动改写到私有组件入口。"
+        icon={<Code2 strokeWidth={2.5} />}
+        id="build-integration"
+        step="02"
+        title="配置构建"
+      >
+        <Stack block gap={12}>
+          <CodeBlock code={viteConfigCode} fileName="vite.config.ts" />
+          <Item
+            description="插件只处理来自 @heliannuuthus/ui 的静态具名导入，并在 Vite 编译前将它们拆到对应组件入口。组件子路径不属于公开 API，业务代码不需要也不应该直接使用。"
+            title="根导入，构建时拆分"
+            variant="outline"
+          />
+        </Stack>
+      </DocSection>
+      <DocSection
+        description="导入组件时会自动装配共享主题与该组件实际需要的 CSS。"
         icon={<Palette strokeWidth={2.5} />}
         id="styles"
-        step="02"
-        title="引入样式"
+        step="03"
+        title="自动样式"
       >
         <Stack block gap={12}>
           <CodeBlock
-            code={`import '@heliannuuthus/ui/styles.css'
+            code={`import { Button } from '@heliannuuthus/ui'
 import './app.css'`}
             fileName="app.tsx"
           />
           <Item
-            description="组件 JavaScript 负责结构、行为与无障碍交互；styles.css 提供组件使用的 Tailwind 工具类、明暗主题 token、基础规则、动画和 reduced-motion 降级。缺少它时组件仍可能渲染，但布局、主题、焦点样式和动效会缺失或不正确。"
-            title="为什么仍然需要全局 CSS？"
+            description="无需再引入 @heliannuuthus/ui/styles.css。每个组件入口会自动加载共享的明暗主题 token、基础规则和动画，以及仅由自身和内部依赖使用的 Tailwind 工具类。"
+            title="没有手动的全局 CSS 导入"
             variant="outline"
           />
           <Item
-            description="JavaScript 会按实际导入 tree-shake；当前 CSS 仍是单一兼容包，不会按组件裁剪。显式引入一次可以避免 JavaScript 入口产生隐藏副作用，并让业务样式通过加载顺序覆盖语义变量。"
-            title="JavaScript 与 CSS 的打包边界"
+            description="共享主题只保留一份，组件 CSS 随未使用的组件一起被 tree-shake。需要定制视觉时，在组件导入之后加载业务 CSS，并覆盖 --primary、--radius 等语义变量。"
+            title="JavaScript 与 CSS 一起按需打包"
+            variant="outline"
+          />
+          <Item
+            description="主题文件仍作用于整个文档，因为语义变量、明暗模式、reset 与焦点规则也必须覆盖 Portal 和组合组件。它不是兼容入口：第一个被使用的组件会自动加载，后续组件由 Vite 复用同一份。"
+            title="为什么仍有共享主题"
             variant="outline"
           />
         </Stack>
@@ -552,13 +585,13 @@ import './app.css'`}
         description="使用具名根导入；业务构建工具会自动 tree-shake，只保留实际使用的组件与依赖。"
         icon={<Blocks strokeWidth={2.5} />}
         id="usage"
-        step="03"
+        step="04"
         title="使用组件"
       >
         <Stack block gap={12}>
           <CodeBlock code={demoCode} fileName="button-example.tsx" />
           <Item
-            description="每个公共组件都会自动生成独立 ESM 入口。推荐继续从 @heliannuuthus/ui 使用具名导入，无需配置 Babel 或 Vite 转换插件；@heliannuuthus/ui/button 等子路径仅用于兼容旧代码。避免把 import * as UI 得到的命名空间动态传递，否则构建工具可能无法判断哪些导出未使用。"
+            description="每个公共组件都会自动生成独立 ESM 与 CSS 入口。只从 @heliannuuthus/ui 使用静态具名导入；组件子路径不属于公开 API。import * as UI 命名空间不会被构建插件转换。"
             title="按需打包发生在业务构建阶段"
             variant="outline"
           />
@@ -574,7 +607,7 @@ import './app.css'`}
         href="/components"
         title={
           <Stack align="center" gap={8} orientation="horizontal">
-            <Badge variant="secondary">04</Badge>
+            <Badge variant="secondary">05</Badge>
             <Typography.Large className="font-bold">
               浏览完整组件目录
             </Typography.Large>

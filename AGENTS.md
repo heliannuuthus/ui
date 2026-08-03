@@ -5,11 +5,12 @@
 - `src/components/` contains domain-neutral public UI primitives.
 - `apps/docs/` is the documentation and component showcase deployed to `ui.heliannuuthus.com`.
 - Every public component is exported from the `@heliannuuthus/ui` package root.
-- Explicit `@heliannuuthus/ui/<component>` subpaths remain compatibility
-  entries, not the preferred public API.
-- The JavaScript root must remain free of implicit CSS imports. Keep
-  `styles.css` as an explicit compatibility entry until component-scoped style
-  entries replace it.
+- The package root is the only public component entry; do not add component
+  subpath or global stylesheet compatibility exports.
+- Every generated component entry automatically imports the shared theme and
+  its component-scoped CSS. The official Vite plugin rewrites static named root
+  imports to those private entries so unused JavaScript and CSS stay out of
+  consumer builds.
 
 ## Rules
 
