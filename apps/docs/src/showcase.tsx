@@ -193,6 +193,8 @@ export function ButtonDemo() {
     </div>
   )
 }`;
+const styleImportCode = `import '@heliannuuthus/ui/styles.css'
+import './app.css'`;
 const viteConfigCode = `import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { heliannuuthusUI } from '@heliannuuthus/ui/vite'
@@ -505,12 +507,12 @@ function GettingStartedPage() {
           icon: <PackagePlus data-icon="inline-start" strokeWidth={2.5} />,
         },
         {
-          label: '配置构建',
+          label: '导入样式',
           href: '#build-integration',
           icon: <Code2 data-icon="inline-start" strokeWidth={2.5} />,
         },
         {
-          label: '自动样式',
+          label: 'Vite 优化',
           href: '#styles',
           icon: <Palette data-icon="inline-start" strokeWidth={2.5} />,
         },
@@ -536,47 +538,43 @@ function GettingStartedPage() {
         <PackageManagerInstall />
       </DocSection>
       <DocSection
-        description="在 React 插件之前启用 UI 构建插件，让具名根导入自动改写到私有组件入口。"
+        description="在应用入口导入一次共享样式。这个方式不绑定包管理器或构建工具。"
         icon={<Code2 strokeWidth={2.5} />}
         id="build-integration"
         step="02"
-        title="配置构建"
+        title="导入样式"
       >
         <Stack block gap={12}>
-          <CodeBlock code={viteConfigCode} fileName="vite.config.ts" />
+          <CodeBlock code={styleImportCode} fileName="main.tsx" />
           <Item
-            description="插件只处理来自 @heliannuuthus/ui 的静态具名导入，并在 Vite 编译前将它们拆到对应组件入口。组件子路径不属于公开 API，业务代码不需要也不应该直接使用。"
-            title="根导入，构建时拆分"
+            description="pnpm、npm、Yarn 和 Bun 都可以安装；Vite、Rollup、Webpack、Rspack、Parcel 与 Next.js 等现代构建工具都可以消费根入口和这份 CSS。"
+            title="构建工具无关"
             variant="outline"
           />
         </Stack>
       </DocSection>
       <DocSection
-        description="默认自动装配一份去重的共享样式，也可按应用规模选择其他策略。"
+        description="只使用少量组件的 Vite 应用可以选择按组件装配样式。"
         icon={<Palette strokeWidth={2.5} />}
         id="styles"
         step="03"
-        title="自动样式"
+        title="可选 Vite 优化"
       >
         <Stack block gap={12}>
-          <CodeBlock
-            code={`import { Button } from '@heliannuuthus/ui'
-import './app.css'`}
-            fileName="app.tsx"
-          />
+          <CodeBlock code={viteConfigCode} fileName="vite.config.ts" />
           <Item
-            description="默认的 global 策略只注入一份共享样式，适合使用常规数量组件的应用；重复导入会由 Vite 去重。"
-            title="稳定的默认策略"
+            description="启用插件时移除 @heliannuuthus/ui/styles.css。插件会把静态具名根导入改写到私有组件入口，并自动加载对应样式。"
+            title="窄组件集优化"
             variant="outline"
           />
           <Item
-            description="组件很少时可使用 heliannuuthusUI({ styles: 'components' }) 加载按组件 CSS；随着组件增多，共享样式通常更小。"
-            title="按规模选择组件样式"
+            description="按组件 CSS 会重复部分 Tailwind 工具类；使用组件较多时，共享样式通常更小，此时无需启用插件。"
+            title="按应用规模选择"
             variant="outline"
           />
           <Item
-            description="主题默认值位于较低优先级的 CSS layer，异步组件不会覆盖业务定义的语义变量。当前升级只提供官方 Vite 插件，不保留组件或样式兼容子路径。"
-            title="稳定覆盖，不保留兼容入口"
+            description="主题默认值位于较低优先级的 CSS layer，异步组件不会覆盖业务定义的语义变量。组件子路径始终是私有实现。"
+            title="稳定覆盖"
             variant="outline"
           />
         </Stack>
@@ -591,8 +589,8 @@ import './app.css'`}
         <Stack block gap={12}>
           <CodeBlock code={demoCode} fileName="button-example.tsx" />
           <Item
-            description="每个公共组件都会自动生成独立 ESM 与 CSS 入口。只从 @heliannuuthus/ui 使用静态具名导入；组件子路径不属于公开 API。import * as UI 命名空间不会被构建插件转换。"
-            title="按需打包发生在业务构建阶段"
+            description="所有构建工具都从 @heliannuuthus/ui 使用具名根导入。JavaScript 会正常 tree-shake；只有启用可选 Vite 插件时才要求静态具名导入。"
+            title="稳定的公共入口"
             variant="outline"
           />
         </Stack>

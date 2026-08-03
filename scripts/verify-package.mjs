@@ -40,11 +40,18 @@ if (
     (exportName) =>
       exportName !== '.' &&
       exportName !== './vite' &&
+      exportName !== './styles.css' &&
       !exportName.startsWith('./_')
   )
 ) {
   throw new Error(
-    'package.json must not expose legacy component or stylesheet entries.'
+    'package.json must only expose the root, stylesheet and Vite integration.'
+  );
+}
+
+if (packageJson.exports['./styles.css'] !== './dist/global.css') {
+  throw new Error(
+    'The public stylesheet must resolve to the global CSS build.'
   );
 }
 
@@ -84,13 +91,7 @@ const sourceWithRootButton = [
   "const example = `import { Missing } from '@heliannuuthus/ui';`;",
   "import { Button } from '@heliannuuthus/ui';",
 ].join('\n');
-const transformedGlobal = heliannuuthusUI().transform(
-  sourceWithRootButton,
-  resolve(packageRoot, 'tree-shaking-check.ts')
-);
-const transformedComponents = heliannuuthusUI({
-  styles: 'components',
-}).transform(
+const transformedOptimized = heliannuuthusUI().transform(
   sourceWithRootButton,
   resolve(packageRoot, 'tree-shaking-check.ts')
 );
@@ -100,41 +101,22 @@ const transformedTypes = heliannuuthusUI().transform(
 );
 
 if (
-  !transformedGlobal ||
-  !transformedGlobal.code.includes(
+  !transformedOptimized ||
+  !transformedOptimized.code.includes(
     "`import { Missing } from '@heliannuuthus/ui';`"
   ) ||
-  !transformedGlobal.code.includes(
-    '@heliannuuthus/ui/_internal/styles/global.css'
-  ) ||
-  !transformedGlobal.code.includes(
-    '@heliannuuthus/ui/_internal/components/button'
-  ) ||
-  !transformedGlobal.map.mappings
+  !transformedOptimized.code.includes('@heliannuuthus/ui/_components/button') ||
+  transformedOptimized.code.includes('@heliannuuthus/ui/styles.css') ||
+  !transformedOptimized.map.mappings
 ) {
   throw new Error(
-    'The Vite plugin did not safely rewrite the global-style Button import.'
-  );
-}
-
-if (
-  !transformedComponents?.code.includes(
-    '@heliannuuthus/ui/_components/button'
-  ) ||
-  transformedComponents.code.includes(
-    '@heliannuuthus/ui/_internal/styles/global.css'
-  )
-) {
-  throw new Error(
-    'The Vite plugin did not preserve opt-in component styles for Button.'
+    'The Vite plugin did not safely rewrite the optimized Button import.'
   );
 }
 
 if (
   !transformedTypes?.code.includes('import type') ||
-  transformedTypes.code.includes(
-    '@heliannuuthus/ui/_internal/styles/global.css'
-  )
+  transformedTypes.code.includes('@heliannuuthus/ui/styles.css')
 ) {
   throw new Error('Type-only imports must not load package styles.');
 }
@@ -180,14 +162,19 @@ for (const kind of ['value', 'type']) {
   }
 }
 
-const rootImportSizes = await bundleSource(transformedGlobal.code);
+const genericImportSizes = await bundleSource(
+  [
+    "import '@heliannuuthus/ui/styles.css';",
+    "import { Button } from '@heliannuuthus/ui';",
+  ].join('\n')
+);
 const directGlobalSizes = await bundleSource(
   [
-    "import '@heliannuuthus/ui/_internal/styles/global.css';",
+    "import '@heliannuuthus/ui/styles.css';",
     "import { Button } from '@heliannuuthus/ui/_internal/components/button';",
   ].join('\n')
 );
-const componentImportSizes = await bundleSource(transformedComponents.code);
+const optimizedImportSizes = await bundleSource(transformedOptimized.code);
 const directComponentSizes = await bundleSource(
   "import { Button } from '@heliannuuthus/ui/_components/button';"
 );
@@ -198,26 +185,26 @@ const allowedRootOverhead = { css: 128, js: 128 };
 
 for (const format of ['js', 'css']) {
   if (
-    !rootImportSizes[format] ||
-    rootImportSizes[format] >
+    !genericImportSizes[format] ||
+    genericImportSizes[format] >
       directGlobalSizes[format] + allowedRootOverhead[format]
   ) {
     throw new Error(
       [
-        `The global-style root no longer tree-shakes Button ${format.toUpperCase()}.`,
-        `Root: ${rootImportSizes[format] ?? 0} bytes.`,
+        `The generic root no longer tree-shakes Button ${format.toUpperCase()}.`,
+        `Root: ${genericImportSizes[format] ?? 0} bytes.`,
         `Direct component: ${directGlobalSizes[format] ?? 0} bytes.`,
       ].join(' ')
     );
   }
 
   if (
-    !componentImportSizes[format] ||
-    componentImportSizes[format] >
+    !optimizedImportSizes[format] ||
+    optimizedImportSizes[format] >
       directComponentSizes[format] + allowedRootOverhead[format]
   ) {
     throw new Error(
-      `The opt-in component strategy no longer tree-shakes Button ${format.toUpperCase()}.`
+      `The optional Vite optimization no longer tree-shakes Button ${format.toUpperCase()}.`
     );
   }
 }
@@ -250,6 +237,6 @@ if (globalStylesSize >= componentStylesSize) {
 
 globalThis.console.log(
   `Verified ${componentNames.length} component entries, ${publicExports.length} ` +
-    `public exports and both style strategies (global CSS: ${globalStylesSize} ` +
+    `public exports, generic integration and Vite optimization (global CSS: ${globalStylesSize} ` +
     `bytes; component CSS total: ${componentStylesSize} bytes).`
 );

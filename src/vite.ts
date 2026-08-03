@@ -21,31 +21,13 @@ declare const __HELIANNUUTHUS_UI_IMPORTS__: Record<string, ComponentImport>;
 
 type ParsedStatement = ReturnType<typeof parse>['program']['body'][number];
 
-export interface HeliannuuthusUIOptions {
-  /**
-   * `global` injects one deduplicated stylesheet and is the predictable default.
-   * `components` loads smaller component styles for narrow selections.
-   */
-  styles?: 'components' | 'global';
-}
-
-interface RewrittenImport {
-  code: string;
-  hasRuntimeComponent: boolean;
-}
-
-function rewriteImport(
-  statement: ParsedStatement,
-  styleStrategy: NonNullable<HeliannuuthusUIOptions['styles']>
-): RewrittenImport {
+function rewriteImport(statement: ParsedStatement): string {
   if (statement.type !== 'ImportDeclaration') {
     throw new Error('@heliannuuthus/ui: expected an import declaration.');
   }
 
   const statementIsTypeOnly = statement.importKind === 'type';
   const importsByModule = new Map<string, string[]>();
-  let hasRuntimeComponent = false;
-
   for (const specifier of statement.specifiers) {
     if (specifier.type !== 'ImportSpecifier') {
       throw new Error(
@@ -66,15 +48,7 @@ function rewriteImport(
       );
     }
 
-    const isComponent = componentImport.modulePath.startsWith('_components/');
-    const isTypeOnly = statementIsTypeOnly || specifier.importKind === 'type';
-    const modulePath =
-      isComponent && styleStrategy !== 'components'
-        ? componentImport.modulePath.replace(
-            '_components/',
-            '_internal/components/'
-          )
-        : componentImport.modulePath;
+    const modulePath = componentImport.modulePath;
     const importedBinding =
       componentImport.imported === localName
         ? componentImport.imported
@@ -87,26 +61,18 @@ function rewriteImport(
 
     moduleImports.push(rewrittenSpecifier);
     importsByModule.set(modulePath, moduleImports);
-    hasRuntimeComponent ||= isComponent && !isTypeOnly;
   }
 
-  return {
-    code: [...importsByModule]
-      .map(
-        ([modulePath, specifiers]) =>
-          `import ${statementIsTypeOnly ? 'type ' : ''}{ ${specifiers.join(', ')} } ` +
-          `from '@heliannuuthus/ui/${modulePath}';`
-      )
-      .join('\n'),
-    hasRuntimeComponent,
-  };
+  return [...importsByModule]
+    .map(
+      ([modulePath, specifiers]) =>
+        `import ${statementIsTypeOnly ? 'type ' : ''}{ ${specifiers.join(', ')} } ` +
+        `from '@heliannuuthus/ui/${modulePath}';`
+    )
+    .join('\n');
 }
 
-export function heliannuuthusUI(
-  options: HeliannuuthusUIOptions = {}
-): ViteLikePlugin {
-  const styleStrategy = options.styles ?? 'global';
-
+export function heliannuuthusUI(): ViteLikePlugin {
   return {
     name: 'heliannuuthus-ui',
     enforce: 'pre',
@@ -134,8 +100,6 @@ export function heliannuuthusUI(
       }
 
       const rewritten = new MagicString(code);
-      let shouldImportGlobalStyles = false;
-
       for (const statement of rootImports) {
         if (statement.start == null || statement.end == null) {
           throw new Error(
@@ -143,30 +107,10 @@ export function heliannuuthusUI(
           );
         }
 
-        const rewrittenImport = rewriteImport(statement, styleStrategy);
-
         rewritten.overwrite(
           statement.start,
           statement.end,
-          rewrittenImport.code
-        );
-        shouldImportGlobalStyles ||= rewrittenImport.hasRuntimeComponent;
-      }
-
-      const alreadyImportsGlobalStyles = program.body.some(
-        (statement) =>
-          statement.type === 'ImportDeclaration' &&
-          statement.source.value ===
-            '@heliannuuthus/ui/_internal/styles/global.css'
-      );
-
-      if (
-        styleStrategy === 'global' &&
-        shouldImportGlobalStyles &&
-        !alreadyImportsGlobalStyles
-      ) {
-        rewritten.prepend(
-          "import '@heliannuuthus/ui/_internal/styles/global.css';\n"
+          rewriteImport(statement)
         );
       }
 

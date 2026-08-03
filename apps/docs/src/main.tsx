@@ -6,7 +6,7 @@ import 'lxgw-wenkai-webfont/lxgwwenkai-regular.css';
 import 'lxgw-wenkai-webfont/lxgwwenkai-bold.css';
 import 'lxgw-wenkai-webfont/lxgwwenkaimono-regular.css';
 import 'lxgw-wenkai-webfont/lxgwwenkaimono-bold.css';
-import '@heliannuuthus/ui/_internal/styles/global.css';
+import '@heliannuuthus/ui/styles.css';
 import { Showcase } from './showcase';
 import './tailwind.css';
 import './showcase.css';

@@ -2,9 +2,11 @@
 
 Accessible shadcn-style primitives shared by Heliannuuthus products.
 
-Use named imports from the package root:
+The package works with any modern ESM bundler. Import the shared stylesheet
+once at the application entry, then use named imports from the package root:
 
 ```tsx
+import '@heliannuuthus/ui/styles.css';
 import { Button, Input, Radio } from '@heliannuuthus/ui';
 import './app.css';
 
@@ -12,9 +14,19 @@ import './app.css';
 <Radio.Group options={options} />
 ```
 
-For Vite applications, add the package plugin before React. The default
-strategy rewrites JavaScript imports for tree shaking and injects one shared,
-deduplicated stylesheet:
+This integration is independent of the package manager and build tool. Install
+with pnpm, npm, Yarn, or Bun, and bundle with Vite, Rollup, Webpack, Rspack,
+Parcel, Next.js, or another ESM-aware tool.
+
+The stylesheet contains the complete deduplicated component CSS. Semantic token
+defaults live in a named CSS layer, so unlayered application styles can override
+them even when a component is loaded by an asynchronous route.
+
+## Optional Vite optimization
+
+Vite applications that use only a narrow selection of components can replace
+the shared stylesheet with the optional package plugin. Add it before React and
+remove the `@heliannuuthus/ui/styles.css` import:
 
 ```ts
 import react from '@vitejs/plugin-react';
@@ -26,39 +38,24 @@ export default defineConfig({
 });
 ```
 
-Semantic token defaults live in a named CSS layer, so unlayered application
-styles can override them even when a component is loaded by an asynchronous
-route.
-
-The current package integration intentionally targets Vite and requires the
-plugin. There are no public component or stylesheet compatibility subpaths.
-
-## Style strategies
-
 The build discovers every public component automatically and emits an
-independent ESM and CSS entry for it. `heliannuuthusUI()` supports three style
-strategies:
+independent ESM and CSS entry for it. The plugin rewrites static named root
+imports to those private entries and automatically loads their styles.
+Component-scoped CSS can be smaller for narrow selections, but repeated
+Tailwind utilities may make it larger as the selection grows. Applications
+using a normal range of components should keep the build-tool-neutral shared
+stylesheet instead.
 
-- `global` (default) injects one deduplicated stylesheet. It is predictable for
-  applications that use a normal range of components.
-- `components` loads the selected component styles and shared theme. It can be
-  smaller for narrow selections, but repeated Tailwind utilities may make it
-  larger as the selection grows.
-
-```ts
-heliannuuthusUI({ styles: 'components' });
-```
-
-Component subpaths remain private implementation details. Use static named
-imports; namespace imports such as `import * as UI` are rejected by the
-plugin.
+Component subpaths remain private implementation details. The plugin requires
+static named imports; namespace imports such as `import * as UI` are rejected.
 
 The generated shared theme has document-wide CSS scope because semantic tokens,
 light/dark mode, reset and focus rules must also apply to portals and composed
 components.
 
-The package build verifies every public export, both plugin strategies, the
-style-free JavaScript root and the packaged component entries.
+The package build verifies every public export, the build-tool-neutral root and
+stylesheet integration, the optional Vite optimization, and the packaged
+component entries.
 
 The package is intentionally domain-neutral. Authentication flows, API calls, routing and product copy stay in Pallas.
 

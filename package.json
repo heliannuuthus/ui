@@ -26,6 +26,7 @@
       "types": "./dist/vite.d.ts",
       "import": "./dist/vite.js"
     },
+    "./styles.css": "./dist/global.css",
     "./_components/*": {
       "types": "./dist/*.d.ts",
       "import": "./dist/styled/*.js"
@@ -38,7 +39,6 @@
       "types": "./dist/hooks/*.d.ts",
       "import": "./dist/hooks/*.js"
     },
-    "./_internal/styles/global.css": "./dist/global.css",
     "./_internal/utils": {
       "types": "./dist/utils.d.ts",
       "import": "./dist/utils.js"

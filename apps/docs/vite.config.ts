@@ -3,22 +3,19 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath, URL } from 'node:url';
 
-export default defineConfig(async ({ command }) => {
+export default defineConfig(({ command }) => {
   const development = command === 'serve';
-  const uiPlugin = development
-    ? []
-    : [(await import('@heliannuuthus/ui/vite')).heliannuuthusUI()];
 
   return {
     // Relative assets work both at heliannuuthus.github.io/pallas/ and behind a
     // Cloudflare-backed custom domain without requiring a second build.
     base: './',
-    plugins: [...uiPlugin, react(), tailwindcss()],
+    plugins: [react(), tailwindcss()],
     resolve: {
       alias: development
         ? [
             {
-              find: '@heliannuuthus/ui/_internal/styles/global.css',
+              find: '@heliannuuthus/ui/styles.css',
               replacement: fileURLToPath(
                 new URL('../../src/styles/globals.css', import.meta.url)
               ),
