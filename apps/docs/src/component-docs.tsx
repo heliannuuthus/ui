@@ -152,6 +152,7 @@ export type ApiProperty = {
   description: string;
   type: string;
   defaultValue?: string;
+  required?: boolean;
 };
 
 export type ComponentPart = {
@@ -189,6 +190,7 @@ export type ComponentDocumentation = {
     description: string;
     preview: ReactNode;
   };
+  typeDefinitionGroups?: string[];
   api: ApiProperty[];
   accessibility: string[];
   pitfalls: string[];
@@ -966,6 +968,7 @@ const separatorDocumentation: ComponentDocumentation = {
 const masonryDocumentation: ComponentDocumentation = {
   name: 'Masonry',
   slug: 'masonry',
+  typeDefinitionGroups: ['MasonryItem'],
   summary: '将不同高度的内容持续放入当前最短列，并允许指定内容独占整行。',
   whenToUse: [
     '卡片需要根据容器宽度自动显示一至多列，并紧接当前最短列继续排列。',
@@ -1072,12 +1075,14 @@ const items = cards.map((card) => ({
       name: 'key',
       description: '提供稳定且唯一的 React key，用于识别当前布局项。',
       type: 'React.Key',
+      required: true,
     },
     {
       component: 'MasonryItem',
       name: 'content',
       description: '设置布局项内部展示的卡片、媒体或其他 React 内容。',
       type: 'React.ReactNode',
+      required: true,
     },
     {
       component: 'MasonryItem',
@@ -1094,10 +1099,10 @@ const items = cards.map((card) => ({
     },
     {
       component: 'MasonryItem',
-      name: 'style / 原生属性',
+      name: 'style',
       description:
         '通过标准 div 的行内样式、ARIA、data 属性、角色与事件扩展当前布局项。',
-      type: 'CSSProperties / HTMLAttributes<HTMLDivElement>',
+      type: 'React.CSSProperties',
     },
   ],
   accessibility: [
@@ -1348,6 +1353,7 @@ export function CoverEditor() {
 const cardDocumentation: ComponentDocumentation = {
   name: 'Card',
   slug: 'card',
+  typeDefinitionGroups: ['CardClassNames'],
   summary: '用清晰的头部、内容和底部区域承载同一主题的信息与操作。',
   whenToUse: [
     '需要将一组相关信息和操作组织成独立内容单元。',
@@ -1497,6 +1503,11 @@ export function WorkspaceCard() {
 const resizableDocumentation: ComponentDocumentation = {
   name: 'Resizable',
   slug: 'resizable',
+  typeDefinitionGroups: [
+    'ResizableClassNames',
+    'ResizableItem',
+    'ResizableSeparatorRenderProps',
+  ],
   summary: '通过可拖动分隔线调整相邻内容区域的尺寸。',
   whenToUse: [
     '文件树、列表或导航需要与详情内容共享同一工作区。',
@@ -1623,26 +1634,40 @@ export function ConstrainedWorkspace() {
     {
       name: 'classNames',
       description: '扩展 panel 和 separator 语义槽的统一样式。',
-      type: '{ panel?: string; separator?: string }',
+      type: 'ResizableClassNames',
+    },
+    {
+      component: 'ResizableClassNames',
+      name: 'panel',
+      description: '扩展所有面板内容区域的样式。',
+      type: 'string',
+    },
+    {
+      component: 'ResizableClassNames',
+      name: 'separator',
+      description: '扩展所有可拖动分隔线的样式。',
+      type: 'string',
     },
     {
       component: 'ResizableItem',
       name: 'key',
       description: '面板的稳定标识，同时用于 React 渲染和底层布局关联。',
       type: 'string | number',
+      required: true,
     },
     {
       component: 'ResizableItem',
       name: 'panel',
       description: '面板中渲染的 React 节点。',
       type: 'ReactNode',
+      required: true,
     },
     {
       component: 'ResizableItem',
       name: 'size',
       description:
         '依次设置初始、最小和最大尺寸；数字按像素解释，无单位字符串按百分比解释。',
-      type: 'readonly [default, min?, max?]',
+      type: 'readonly [defaultSize, minSize?, maxSize?]',
     },
     {
       component: 'ResizableItem',
@@ -1668,7 +1693,35 @@ export function ConstrainedWorkspace() {
       component: 'ResizableItem',
       name: 'onResize',
       description: '面板尺寸变化时调用，并提供当前尺寸、item key 和上次尺寸。',
-      type: '(size: PanelSize, key, previousSize) => void',
+      type: '(size: PanelSize, key: string | number, previousSize?: PanelSize) => void',
+    },
+    {
+      component: 'ResizableSeparatorRenderProps',
+      name: 'index',
+      description: '当前分隔线在 items 间的顺序索引。',
+      type: 'number',
+      required: true,
+    },
+    {
+      component: 'ResizableSeparatorRenderProps',
+      name: 'itemKey',
+      description: '分隔线前一个面板的稳定标识。',
+      type: 'string | number',
+      required: true,
+    },
+    {
+      component: 'ResizableSeparatorRenderProps',
+      name: 'nextItemKey',
+      description: '分隔线后一个面板的稳定标识。',
+      type: 'string | number',
+      required: true,
+    },
+    {
+      component: 'ResizableSeparatorRenderProps',
+      name: 'orientation',
+      description: '当前面板组的排列方向。',
+      type: "'horizontal' | 'vertical'",
+      required: true,
     },
   ],
   accessibility: [
@@ -1938,6 +1991,7 @@ import { DropdownMenu } from '@heliannuuthus/ui'
 const menubarDocumentation: ComponentDocumentation = {
   name: 'Menubar',
   slug: 'menubar',
+  typeDefinitionGroups: ['MenubarMenuConfig'],
   summary: '组织桌面应用式的顶层命令，让多组全局操作在稳定位置中被发现和执行。',
   whenToUse: [
     '产品具有文件、编辑、视图等跨页面或跨内容的全局命令。',
@@ -2055,10 +2109,24 @@ export function ViewMenubar() {
       type: 'MenubarMenuConfig[]',
     },
     {
-      component: 'menus[]',
+      component: 'MenubarMenuConfig',
+      name: 'label',
+      description: '设置顶层菜单触发项的可见名称。',
+      type: 'ReactNode',
+      required: true,
+    },
+    {
+      component: 'MenubarMenuConfig',
       name: 'items',
       description: '承载普通命令、标题、分隔线、勾选项、单选组及二级菜单。',
       type: 'DropdownMenuEntry[]',
+      required: true,
+    },
+    {
+      component: 'MenubarMenuConfig',
+      name: 'disabled',
+      description: '禁用当前顶层菜单及其触发项。',
+      type: 'boolean',
     },
     {
       name: 'size',
@@ -5498,6 +5566,7 @@ componentDocumentation.table.pitfalls = [
 
 componentDocumentation['data-table'].summary =
   'DataTable 是基于 Table 组装好的默认数据表格：除筛选、排序和分页外，也完整提供固定列、省略 Tooltip、Caption、Footer、行展开与虚拟滚动。';
+componentDocumentation['data-table'].typeDefinitionGroups = ['ColumnDef'];
 componentDocumentation['data-table'].whenToUse = [
   '常规业务数据列表默认使用 DataTable，由 data 与 ColumnDef 驱动完整表格。',
   '需要筛选、排序、分页、固定列、分组表头、行展开或虚拟滚动中的任意能力。',
@@ -6934,9 +7003,15 @@ for (const slug of propsOnlySlugs) {
   documentation.api = documentation.api
     .filter(
       (property) =>
-        property.component == null || property.component === documentation.name
+        property.component == null ||
+        property.component === documentation.name ||
+        documentation.typeDefinitionGroups?.includes(property.component)
     )
-    .map((property) => ({ ...property, component: undefined }));
+    .map((property) =>
+      documentation.typeDefinitionGroups?.includes(property.component ?? '')
+        ? property
+        : { ...property, component: undefined }
+    );
 }
 
 componentDocumentation.avatar.parts = [

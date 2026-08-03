@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { Card } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
@@ -99,6 +99,85 @@ export function CardAnatomyDemo() {
 
 export function CardSemanticDomDemo() {
   const [activeSlot, setActiveSlot] = useState<CardSemanticSlot>('root');
+  const [highlightStyle, setHighlightStyle] = useState<CSSProperties>();
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const stage = stageRef.current;
+    const card = stage?.querySelector<HTMLElement>('.card-semantic-card');
+
+    if (!stage || !card) {
+      return;
+    }
+
+    const updateHighlight = () => {
+      const target =
+        activeSlot === 'root'
+          ? card
+          : card.querySelector<HTMLElement>(`[data-slot="card-${activeSlot}"]`);
+
+      if (!target) {
+        return;
+      }
+
+      const stageRect = stage.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const cardStyle = getComputedStyle(card);
+      const inset = {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+      };
+      let borderRadius = '11px';
+
+      if (activeSlot === 'root') {
+        inset.top = 4;
+        inset.right = 4;
+        inset.bottom = 4;
+        inset.left = 4;
+        borderRadius = [
+          `calc(${cardStyle.borderTopLeftRadius} + 4px)`,
+          `calc(${cardStyle.borderTopRightRadius} + 4px)`,
+          `calc(${cardStyle.borderBottomRightRadius} + 4px)`,
+          `calc(${cardStyle.borderBottomLeftRadius} + 4px)`,
+        ].join(' ');
+      } else if (activeSlot === 'header') {
+        borderRadius = `${cardStyle.borderTopLeftRadius} ${cardStyle.borderTopRightRadius} 0 0`;
+      } else if (activeSlot === 'footer') {
+        borderRadius = `0 0 ${cardStyle.borderBottomRightRadius} ${cardStyle.borderBottomLeftRadius}`;
+      } else if (activeSlot === 'content') {
+        inset.top = 12;
+        inset.right = -14;
+        inset.bottom = 12;
+        inset.left = -14;
+        borderRadius = '16px';
+      } else {
+        inset.top = 6;
+        inset.right = 8;
+        inset.bottom = 6;
+        inset.left = 8;
+      }
+
+      setHighlightStyle({
+        borderRadius,
+        height: targetRect.height + inset.top + inset.bottom,
+        opacity: 1,
+        transform: `translate3d(${
+          targetRect.left - stageRect.left - inset.left
+        }px, ${targetRect.top - stageRect.top - inset.top}px, 0)`,
+        width: targetRect.width + inset.left + inset.right,
+      });
+    };
+
+    updateHighlight();
+
+    const resizeObserver = new ResizeObserver(updateHighlight);
+    resizeObserver.observe(stage);
+    resizeObserver.observe(card);
+
+    return () => resizeObserver.disconnect();
+  }, [activeSlot]);
 
   return (
     <div
@@ -111,7 +190,7 @@ export function CardSemanticDomDemo() {
         }
       }}
     >
-      <div className="card-semantic-stage">
+      <div className="card-semantic-stage" ref={stageRef}>
         <Card
           action={
             <Button aria-label="更多操作" size="icon-sm" variant="ghost">
@@ -134,6 +213,11 @@ export function CardSemanticDomDemo() {
             <p>包含导航结构调整与组件文档更新。</p>
           </div>
         </Card>
+        <span
+          aria-hidden="true"
+          className="card-semantic-highlight"
+          style={highlightStyle}
+        />
       </div>
 
       <div aria-label="Card 语义区域" className="card-semantic-regions">
