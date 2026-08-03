@@ -195,13 +195,6 @@ export function ButtonDemo() {
 }`;
 const styleImportCode = `import '@heliannuuthus/ui/styles.css'
 import './app.css'`;
-const viteConfigCode = `import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
-import { heliannuuthusUI } from '@heliannuuthus/ui/vite'
-
-export default defineConfig({
-  plugins: [heliannuuthusUI(), react()],
-})`;
 
 const navItems = [
   { label: '快速开始', to: '/docs/getting-started' },
@@ -512,7 +505,7 @@ function GettingStartedPage() {
           icon: <Code2 data-icon="inline-start" strokeWidth={2.5} />,
         },
         {
-          label: 'Vite 优化',
+          label: '样式架构',
           href: '#styles',
           icon: <Palette data-icon="inline-start" strokeWidth={2.5} />,
         },
@@ -554,27 +547,26 @@ function GettingStartedPage() {
         </Stack>
       </DocSection>
       <DocSection
-        description="只使用少量组件的 Vite 应用可以选择按组件装配样式。"
+        description="样式在包发布前完成编译，业务运行时不生成或注入 CSS。"
         icon={<Palette strokeWidth={2.5} />}
         id="styles"
         step="03"
-        title="可选 Vite 优化"
+        title="静态样式架构"
       >
         <Stack block gap={12}>
-          <CodeBlock code={viteConfigCode} fileName="vite.config.ts" />
           <Item
-            description="启用插件时移除 @heliannuuthus/ui/styles.css。插件会把静态具名根导入改写到私有组件入口，并自动加载对应样式。"
-            title="窄组件集优化"
+            description="完整组件源码只经过一次 Tailwind 扫描，相同工具类只生成一次，避免按组件 CSS 累积重复规则。"
+            title="一次生成，全局去重"
             variant="outline"
           />
           <Item
-            description="按组件 CSS 会重复部分 Tailwind 工具类；使用组件较多时，共享样式通常更小，此时无需启用插件。"
-            title="按应用规模选择"
+            description="浏览器直接加载普通 CSS；没有 CSS-in-JS 序列化、哈希、样式注入或 hydration 成本。"
+            title="零样式运行时"
             variant="outline"
           />
           <Item
-            description="主题默认值位于较低优先级的 CSS layer，异步组件不会覆盖业务定义的语义变量。组件子路径始终是私有实现。"
-            title="稳定覆盖"
+            description="主题默认值位于较低优先级的 CSS layer，业务样式可以稳定覆盖；公共包只暴露根组件入口和 styles.css。"
+            title="稳定的层级与边界"
             variant="outline"
           />
         </Stack>
@@ -589,7 +581,7 @@ function GettingStartedPage() {
         <Stack block gap={12}>
           <CodeBlock code={demoCode} fileName="button-example.tsx" />
           <Item
-            description="所有构建工具都从 @heliannuuthus/ui 使用具名根导入。JavaScript 会正常 tree-shake；只有启用可选 Vite 插件时才要求静态具名导入。"
+            description="所有构建工具都从 @heliannuuthus/ui 使用具名根导入。JavaScript 会正常 tree-shake，不需要 Vite、Webpack 或框架专用插件。"
             title="稳定的公共入口"
             variant="outline"
           />

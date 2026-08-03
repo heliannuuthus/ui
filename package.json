@@ -22,27 +22,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./vite": {
-      "types": "./dist/vite.d.ts",
-      "import": "./dist/vite.js"
-    },
-    "./styles.css": "./dist/global.css",
-    "./_components/*": {
-      "types": "./dist/*.d.ts",
-      "import": "./dist/styled/*.js"
-    },
-    "./_internal/components/*": {
-      "types": "./dist/*.d.ts",
-      "import": "./dist/*.js"
-    },
-    "./_internal/hooks/*": {
-      "types": "./dist/hooks/*.d.ts",
-      "import": "./dist/hooks/*.js"
-    },
-    "./_internal/utils": {
-      "types": "./dist/utils.d.ts",
-      "import": "./dist/utils.js"
-    }
+    "./styles.css": "./dist/global.css"
   },
   "scripts": {
     "dev": "pnpm --filter @heliannuuthus/ui-docs dev",
@@ -62,7 +42,6 @@
     "react-dom": ">=18.3.0"
   },
   "dependencies": {
-    "@babel/parser": "^7.29.7",
     "@base-ui/react": "^1.6.0",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-avatar": "^1.1.10",
@@ -80,7 +59,6 @@
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.468.0",
-    "magic-string": "^0.30.21",
     "motion": "^12.42.2",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.6.2",
@@ -93,6 +71,7 @@
     "vaul": "^1.1.2"
   },
   "devDependencies": {
+    "@babel/parser": "^7.29.7",
     "@eslint/js": "^9.39.2",
     "@tailwindcss/cli": "^4.1.0",
     "@tailwindcss/vite": "^4.3.3",

@@ -5,13 +5,11 @@
 - `src/components/` contains domain-neutral public UI primitives.
 - `apps/docs/` is the documentation and component showcase deployed to `ui.heliannuuthus.com`.
 - Every public component is exported from the `@heliannuuthus/ui` package root.
-- The package root is the only public component entry. `./styles.css` is the
-  build-tool-neutral stylesheet entry, and `./vite` is an optional optimization.
-  Component subpaths are private build details and may change without
-  compatibility guarantees.
-- The JavaScript root stays free of implicit CSS. All bundlers can use the root
-  plus the shared stylesheet. The optional Vite plugin rewrites static named
-  imports to private entries with component-scoped styles for narrow selections.
+- The package has exactly two public entries: the component root and
+  `./styles.css`. Component modules are private build details.
+- The JavaScript root stays free of implicit CSS. Consumers import the static,
+  deduplicated stylesheet once at their application root. Do not add
+  build-tool-specific integration or runtime style generation.
 
 ## Rules
 

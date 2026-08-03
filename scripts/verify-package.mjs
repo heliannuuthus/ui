@@ -1,13 +1,14 @@
-import { access, readFile, readdir, stat } from 'node:fs/promises';
+import { access, readFile, readdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { gzipSync } from 'node:zlib';
 import { parse } from '@babel/parser';
 import { build } from 'esbuild';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const componentDirectory = resolve(packageRoot, 'src/components');
 const distributionDirectory = resolve(packageRoot, 'dist');
-const styledEntryDirectory = resolve(distributionDirectory, 'styled');
+const maximumGzipStylesSize = 36 * 1024;
 
 const componentNames = (
   await readdir(componentDirectory, {
@@ -19,15 +20,28 @@ const componentNames = (
   .sort();
 
 await Promise.all(
-  componentNames.flatMap((componentName) => [
-    ...['js', 'd.ts', 'css'].map((extension) =>
+  componentNames.flatMap((componentName) =>
+    ['js', 'd.ts'].map((extension) =>
       access(resolve(distributionDirectory, `${componentName}.${extension}`))
-    ),
-    access(resolve(styledEntryDirectory, `${componentName}.js`)),
-  ])
+    )
+  )
 );
-await access(resolve(distributionDirectory, 'theme.css'));
 await access(resolve(distributionDirectory, 'global.css'));
+
+const distributionEntries = await readdir(distributionDirectory);
+const unexpectedStyleEntries = distributionEntries.filter(
+  (entry) => entry.endsWith('.css') && entry !== 'global.css'
+);
+
+if (unexpectedStyleEntries.length > 0) {
+  throw new Error(
+    `Only the deduplicated global stylesheet may be published: ${unexpectedStyleEntries.join(', ')}`
+  );
+}
+
+if (distributionEntries.includes('vite.js')) {
+  throw new Error('The package must not contain a build-tool-specific plugin.');
+}
 
 const packageJson = JSON.parse(
   await readFile(resolve(packageRoot, 'package.json'), 'utf8')
@@ -35,17 +49,12 @@ const packageJson = JSON.parse(
 const exportNames = Object.keys(packageJson.exports ?? {});
 
 if (
-  exportNames.includes('./*') ||
-  exportNames.some(
-    (exportName) =>
-      exportName !== '.' &&
-      exportName !== './vite' &&
-      exportName !== './styles.css' &&
-      !exportName.startsWith('./_')
-  )
+  exportNames.length !== 2 ||
+  !exportNames.includes('.') ||
+  !exportNames.includes('./styles.css')
 ) {
   throw new Error(
-    'package.json must only expose the root, stylesheet and Vite integration.'
+    'package.json must expose only the component root and static stylesheet.'
   );
 }
 
@@ -53,6 +62,13 @@ if (packageJson.exports['./styles.css'] !== './dist/global.css') {
   throw new Error(
     'The public stylesheet must resolve to the global CSS build.'
   );
+}
+
+if (
+  !Array.isArray(packageJson.sideEffects) ||
+  !packageJson.sideEffects.includes('**/*.css')
+) {
+  throw new Error('Published CSS must be marked as a package side effect.');
 }
 
 async function bundleSource(source, exposedName = 'Button') {
@@ -83,44 +99,6 @@ async function bundleSource(source, exposedName = 'Button') {
   );
 }
 
-const { heliannuuthusUI } = await import(
-  resolve(distributionDirectory, 'vite.js')
-);
-const sourceWithRootButton = [
-  "import { useEffect } from 'react';",
-  "const example = `import { Missing } from '@heliannuuthus/ui';`;",
-  "import { Button } from '@heliannuuthus/ui';",
-].join('\n');
-const transformedOptimized = heliannuuthusUI().transform(
-  sourceWithRootButton,
-  resolve(packageRoot, 'tree-shaking-check.ts')
-);
-const transformedTypes = heliannuuthusUI().transform(
-  "import type { ButtonProps } from '@heliannuuthus/ui';",
-  resolve(packageRoot, 'type-import-check.ts')
-);
-
-if (
-  !transformedOptimized ||
-  !transformedOptimized.code.includes(
-    "`import { Missing } from '@heliannuuthus/ui';`"
-  ) ||
-  !transformedOptimized.code.includes('@heliannuuthus/ui/_components/button') ||
-  transformedOptimized.code.includes('@heliannuuthus/ui/styles.css') ||
-  !transformedOptimized.map.mappings
-) {
-  throw new Error(
-    'The Vite plugin did not safely rewrite the optimized Button import.'
-  );
-}
-
-if (
-  !transformedTypes?.code.includes('import type') ||
-  transformedTypes.code.includes('@heliannuuthus/ui/styles.css')
-) {
-  throw new Error('Type-only imports must not load package styles.');
-}
-
 const indexSource = await readFile(
   resolve(packageRoot, 'src/index.ts'),
   'utf8'
@@ -144,22 +122,8 @@ const publicExports = indexProgram.body.flatMap((statement) =>
     : []
 );
 
-for (const kind of ['value', 'type']) {
-  const names = publicExports
-    .filter((entry) => entry.kind === kind)
-    .map((entry) => entry.name);
-  const source =
-    kind === 'type'
-      ? `import type { ${names.join(', ')} } from '@heliannuuthus/ui';`
-      : `import { ${names.join(', ')} } from '@heliannuuthus/ui';`;
-  const transformed = heliannuuthusUI().transform(
-    source,
-    resolve(packageRoot, `all-${kind}-exports.ts`)
-  );
-
-  if (!transformed || transformed.code.includes("from '@heliannuuthus/ui';")) {
-    throw new Error(`The Vite plugin did not rewrite every public ${kind}.`);
-  }
+if (publicExports.length === 0) {
+  throw new Error('The package root must expose public components and types.');
 }
 
 const genericImportSizes = await bundleSource(
@@ -168,17 +132,13 @@ const genericImportSizes = await bundleSource(
     "import { Button } from '@heliannuuthus/ui';",
   ].join('\n')
 );
-const directGlobalSizes = await bundleSource(
+const directImportSizes = await bundleSource(
   [
-    "import '@heliannuuthus/ui/styles.css';",
-    "import { Button } from '@heliannuuthus/ui/_internal/components/button';",
+    "import './dist/global.css';",
+    "import { Button } from './dist/button.js';",
   ].join('\n')
 );
-const optimizedImportSizes = await bundleSource(transformedOptimized.code);
-const directComponentSizes = await bundleSource(
-  "import { Button } from '@heliannuuthus/ui/_components/button';"
-);
-const untransformedRootSizes = await bundleSource(
+const unstyledRootSizes = await bundleSource(
   "import { Button } from '@heliannuuthus/ui';"
 );
 const allowedRootOverhead = { css: 128, js: 128 };
@@ -187,56 +147,37 @@ for (const format of ['js', 'css']) {
   if (
     !genericImportSizes[format] ||
     genericImportSizes[format] >
-      directGlobalSizes[format] + allowedRootOverhead[format]
+      directImportSizes[format] + allowedRootOverhead[format]
   ) {
     throw new Error(
       [
-        `The generic root no longer tree-shakes Button ${format.toUpperCase()}.`,
+        `The public root no longer tree-shakes Button ${format.toUpperCase()}.`,
         `Root: ${genericImportSizes[format] ?? 0} bytes.`,
-        `Direct component: ${directGlobalSizes[format] ?? 0} bytes.`,
+        `Direct component: ${directImportSizes[format] ?? 0} bytes.`,
       ].join(' ')
     );
   }
-
-  if (
-    !optimizedImportSizes[format] ||
-    optimizedImportSizes[format] >
-      directComponentSizes[format] + allowedRootOverhead[format]
-  ) {
-    throw new Error(
-      `The optional Vite optimization no longer tree-shakes Button ${format.toUpperCase()}.`
-    );
-  }
 }
 
-if (untransformedRootSizes.css) {
+if (unstyledRootSizes.css) {
   throw new Error(
-    'The package root must stay style-free without an explicit integration.'
+    'The JavaScript root must stay style-free without the explicit stylesheet.'
   );
 }
 
-const globalStylesSize = (
-  await stat(resolve(distributionDirectory, 'global.css'))
-).size;
-const componentStylesSize = (
-  await Promise.all(
-    componentNames.map(async (componentName) => {
-      const file = await stat(
-        resolve(distributionDirectory, `${componentName}.css`)
-      );
-      return file.size;
-    })
-  )
-).reduce((total, size) => total + size, 0);
+const globalStyles = await readFile(
+  resolve(distributionDirectory, 'global.css')
+);
+const globalStylesGzipSize = gzipSync(globalStyles, { level: 9 }).byteLength;
 
-if (globalStylesSize >= componentStylesSize) {
+if (globalStylesGzipSize > maximumGzipStylesSize) {
   throw new Error(
-    'The deduplicated global stylesheet must stay smaller than component CSS.'
+    `The stylesheet exceeds the ${maximumGzipStylesSize}-byte gzip budget: ${globalStylesGzipSize} bytes.`
   );
 }
 
 globalThis.console.log(
   `Verified ${componentNames.length} component entries, ${publicExports.length} ` +
-    `public exports, generic integration and Vite optimization (global CSS: ${globalStylesSize} ` +
-    `bytes; component CSS total: ${componentStylesSize} bytes).`
+    `public exports and static CSS (${globalStyles.byteLength} bytes raw; ` +
+    `${globalStylesGzipSize} bytes gzip).`
 );
