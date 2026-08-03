@@ -1,5 +1,12 @@
 import { execFile } from 'node:child_process';
-import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import {
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  rm,
+  writeFile,
+} from 'node:fs/promises';
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
@@ -9,6 +16,8 @@ const execute = promisify(execFile);
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const componentDirectory = resolve(packageRoot, 'src/components');
 const distributionDirectory = resolve(packageRoot, 'dist');
+const styledEntryDirectory = resolve(distributionDirectory, 'styled');
+const globalStylesSource = resolve(packageRoot, 'src/styles/globals.css');
 const themeSource = resolve(packageRoot, 'src/styles/theme.css');
 const tailwindBinary = resolve(packageRoot, 'node_modules/.bin/tailwindcss');
 const styleConcurrency = 8;
@@ -71,11 +80,14 @@ async function compileStyles(componentName, temporaryDirectory) {
     '--minify',
   ]);
 
-  const javascriptPath = resolve(distributionDirectory, `${componentName}.js`);
-  const javascript = await readFile(javascriptPath, 'utf8');
   await writeFile(
-    javascriptPath,
-    `import "./theme.css";\nimport "./${componentName}.css";\n${javascript}`
+    resolve(styledEntryDirectory, `${componentName}.js`),
+    [
+      "import '../theme.css';",
+      `import '../${componentName}.css';`,
+      `export * from '../${componentName}.js';`,
+      '',
+    ].join('\n')
   );
 }
 
@@ -102,12 +114,21 @@ await execute(tailwindBinary, [
   resolve(distributionDirectory, 'theme.css'),
   '--minify',
 ]);
+await execute(tailwindBinary, [
+  '-i',
+  globalStylesSource,
+  '-o',
+  resolve(distributionDirectory, 'global.css'),
+  '--minify',
+]);
 
 const temporaryDirectory = await mkdtemp(
   resolve(packageRoot, '.component-styles-')
 );
 
 try {
+  await mkdir(styledEntryDirectory, { recursive: true });
+
   for (
     let index = 0;
     index < componentNames.length;

@@ -28,19 +28,24 @@
     },
     "./_components/*": {
       "types": "./dist/*.d.ts",
+      "import": "./dist/styled/*.js"
+    },
+    "./_internal/components/*": {
+      "types": "./dist/*.d.ts",
       "import": "./dist/*.js"
     },
     "./_internal/hooks/*": {
       "types": "./dist/hooks/*.d.ts",
       "import": "./dist/hooks/*.js"
     },
+    "./_internal/styles/global.css": "./dist/global.css",
     "./_internal/utils": {
       "types": "./dist/utils.d.ts",
       "import": "./dist/utils.js"
     }
   },
   "scripts": {
-    "dev": "pnpm build:package && pnpm --filter @heliannuuthus/ui-docs dev",
+    "dev": "pnpm --filter @heliannuuthus/ui-docs dev",
     "build": "pnpm build:package && pnpm --filter @heliannuuthus/ui-docs build",
     "build:package": "tsup && node scripts/build-package.mjs && pnpm verify:package",
     "build:docs": "pnpm build:package && pnpm --filter @heliannuuthus/ui-docs build",
@@ -75,6 +80,7 @@
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.468.0",
+    "magic-string": "^0.30.21",
     "motion": "^12.42.2",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.6.2",

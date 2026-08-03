@@ -2,8 +2,7 @@
 
 Accessible shadcn-style primitives shared by Heliannuuthus products.
 
-Use named imports from the package root. Component styles are included
-automatically:
+Use named imports from the package root:
 
 ```tsx
 import { Button, Input, Radio } from '@heliannuuthus/ui';
@@ -13,10 +12,9 @@ import './app.css';
 <Radio.Group options={options} />
 ```
 
-Load application styles after component imports when they need to replace
-semantic tokens or component rules through the normal CSS cascade.
-
-Add the package plugin before React in `vite.config.ts`:
+For Vite applications, add the package plugin before React. The default
+strategy rewrites JavaScript imports for tree shaking and injects one shared,
+deduplicated stylesheet:
 
 ```ts
 import react from '@vitejs/plugin-react';
@@ -28,28 +26,39 @@ export default defineConfig({
 });
 ```
 
-## Automatic component bundles
+Semantic token defaults live in a named CSS layer, so unlayered application
+styles can override them even when a component is loaded by an asynchronous
+route.
+
+The current package integration intentionally targets Vite and requires the
+plugin. There are no public component or stylesheet compatibility subpaths.
+
+## Style strategies
 
 The build discovers every public component automatically and emits an
-independent ESM and CSS entry for it. During a Vite build,
-`heliannuuthusUI()` rewrites named root imports to private component entries.
-The application therefore includes only the selected components, their
-component CSS and their real JavaScript dependencies. Shared theme and base
-rules are imported by component entries and deduplicated by Vite.
+independent ESM and CSS entry for it. `heliannuuthusUI()` supports three style
+strategies:
 
-No global stylesheet import or manually maintained consumer import list is
-required. Component subpaths are intentionally not public. Use static named
-imports; namespace imports such as `import * as UI` are not transformed.
+- `global` (default) injects one deduplicated stylesheet. It is predictable for
+  applications that use a normal range of components.
+- `components` loads the selected component styles and shared theme. It can be
+  smaller for narrow selections, but repeated Tailwind utilities may make it
+  larger as the selection grows.
 
-The generated shared theme still has document-wide CSS scope because semantic
-tokens, light/dark mode, reset and focus rules must also apply to portals and
-composed components. It is not a legacy consumer entry: the first selected
-component loads it automatically, additional components reuse it, and
-applications can override its semantic variables from their own CSS.
+```ts
+heliannuuthusUI({ styles: 'components' });
+```
 
-The package build verifies that a transformed root `Button` import produces the
-same JavaScript and CSS as its private component entry. The current official
-build integration targets Vite.
+Component subpaths remain private implementation details. Use static named
+imports; namespace imports such as `import * as UI` are rejected by the
+plugin.
+
+The generated shared theme has document-wide CSS scope because semantic tokens,
+light/dark mode, reset and focus rules must also apply to portals and composed
+components.
+
+The package build verifies every public export, both plugin strategies, the
+style-free JavaScript root and the packaged component entries.
 
 The package is intentionally domain-neutral. Authentication flows, API calls, routing and product copy stay in Pallas.
 

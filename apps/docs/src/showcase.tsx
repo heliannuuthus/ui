@@ -552,7 +552,7 @@ function GettingStartedPage() {
         </Stack>
       </DocSection>
       <DocSection
-        description="导入组件时会自动装配共享主题与该组件实际需要的 CSS。"
+        description="默认自动装配一份去重的共享样式，也可按应用规模选择其他策略。"
         icon={<Palette strokeWidth={2.5} />}
         id="styles"
         step="03"
@@ -565,18 +565,18 @@ import './app.css'`}
             fileName="app.tsx"
           />
           <Item
-            description="无需再引入 @heliannuuthus/ui/styles.css。每个组件入口会自动加载共享的明暗主题 token、基础规则和动画，以及仅由自身和内部依赖使用的 Tailwind 工具类。"
-            title="没有手动的全局 CSS 导入"
+            description="默认的 global 策略只注入一份共享样式，适合使用常规数量组件的应用；重复导入会由 Vite 去重。"
+            title="稳定的默认策略"
             variant="outline"
           />
           <Item
-            description="共享主题只保留一份，组件 CSS 随未使用的组件一起被 tree-shake。需要定制视觉时，在组件导入之后加载业务 CSS，并覆盖 --primary、--radius 等语义变量。"
-            title="JavaScript 与 CSS 一起按需打包"
+            description="组件很少时可使用 heliannuuthusUI({ styles: 'components' }) 加载按组件 CSS；随着组件增多，共享样式通常更小。"
+            title="按规模选择组件样式"
             variant="outline"
           />
           <Item
-            description="主题文件仍作用于整个文档，因为语义变量、明暗模式、reset 与焦点规则也必须覆盖 Portal 和组合组件。它不是兼容入口：第一个被使用的组件会自动加载，后续组件由 Vite 复用同一份。"
-            title="为什么仍有共享主题"
+            description="主题默认值位于较低优先级的 CSS layer，异步组件不会覆盖业务定义的语义变量。当前升级只提供官方 Vite 插件，不保留组件或样式兼容子路径。"
+            title="稳定覆盖，不保留兼容入口"
             variant="outline"
           />
         </Stack>
