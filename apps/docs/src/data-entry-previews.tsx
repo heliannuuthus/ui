@@ -109,6 +109,49 @@ export function CheckboxPermissionsDemo() {
   );
 }
 
+export function CheckboxTasksDemo() {
+  const tasks = [
+    ['tokens', '确认设计令牌', '核对颜色、圆角与间距变量'],
+    ['docs', '更新组件文档', '补充示例与 API 说明'],
+    ['release', '发布新版本', '完成验证后创建版本记录'],
+  ] as const;
+  const [completed, setCompleted] = useState(['tokens']);
+
+  return (
+    <div className="data-settings-card">
+      <div className="data-card-heading">
+        <div>
+          <strong>发布清单</strong>
+          <p>勾选完成的事项，文字会自动进入完成态。</p>
+        </div>
+        <span>
+          {completed.length}/{tasks.length} 已完成
+        </span>
+      </div>
+      <Checkbox.Group
+        aria-label="发布清单"
+        className="data-option-stack"
+        gap={0}
+        name="release-task"
+        onChange={setCompleted}
+        options={tasks.map(([value, title, description]) => ({
+          className: 'data-check-row',
+          label: (
+            <span className="data-check-copy">
+              <strong>{title}</strong>
+              <small>{description}</small>
+            </span>
+          ),
+          value,
+        }))}
+        orientation="vertical"
+        value={completed}
+        variant="task"
+      />
+    </div>
+  );
+}
+
 export function SelectMemberSearchDemo() {
   const [value, setValue] = useState<string | null>(members[0]);
 

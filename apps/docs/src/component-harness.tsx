@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { Badge } from '@heliannuuthus/ui';
 
 export type ComponentHarnessCase = {
@@ -27,6 +27,7 @@ export type ComponentHarnessLayout = 'grid' | 'stack';
 type ComponentHarnessSharedProps = {
   children: (values: ComponentHarnessValues) => ReactNode;
   layout?: ComponentHarnessLayout;
+  minCaseWidth?: number;
 };
 
 type ComponentHarnessCaseProps = ComponentHarnessSharedProps & {
@@ -90,11 +91,17 @@ function createCasesFromAxes(
 
 export function ComponentHarness(props: ComponentHarnessProps) {
   const cases = props.cases ?? createCasesFromAxes(props.axes ?? []);
+  const style = props.minCaseWidth
+    ? ({
+        '--component-harness-case-min-width': `${props.minCaseWidth}px`,
+      } as CSSProperties)
+    : undefined;
 
   return (
     <div
       className="component-harness component-harness-cases"
       data-slot="component-harness"
+      style={style}
     >
       <div
         className={`component-harness-case-grid component-harness-case-grid-${props.layout ?? 'grid'}`}

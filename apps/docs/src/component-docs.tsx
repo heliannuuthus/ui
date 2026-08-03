@@ -45,6 +45,7 @@ import {
 } from './dropdown-menu-preview';
 import {
   CheckboxPermissionsDemo,
+  CheckboxTasksDemo,
   DatePickerInlineDemo,
   DatePickerReleaseDemo,
   FieldProfileDemo,
@@ -132,6 +133,7 @@ import {
   PaginationOverflowDemo,
   TabsDashboardDemo,
   TabsMotionDemo,
+  TabsResponsiveDemo,
   TabsVariantsDemo,
 } from './navigation-previews';
 import {
@@ -173,6 +175,7 @@ export type ComponentExample = {
   code: string;
   caseAxes?: ComponentHarnessCaseAxis[];
   caseLayout?: ComponentHarnessLayout;
+  caseMinWidth?: number;
   cases?: ComponentHarnessCase[];
   wide?: boolean;
   previewHeight?: number;
@@ -2339,30 +2342,7 @@ const tabsDocumentation: ComponentDocumentation = {
         '胶囊、线型、描边和柔和样式覆盖不同层级；centered 可直接让标签列表居中。',
       wide: true,
       previewHeight: 420,
-      caseAxes: [
-        {
-          name: 'variant',
-          label: '样式',
-          defaultValue: 'default',
-          options: [
-            { label: '胶囊', value: 'default' },
-            { label: '线型', value: 'line' },
-            { label: '描边', value: 'outline' },
-            { label: '柔和', value: 'soft' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <TabsVariantsDemo
-          variant={
-            values.variant === 'line' ||
-            values.variant === 'outline' ||
-            values.variant === 'soft'
-              ? values.variant
-              : 'default'
-          }
-        />
-      ),
+      preview: <TabsVariantsDemo />,
       code: `<Tabs
   centered
   defaultValue="preview"
@@ -2375,35 +2355,41 @@ const tabsDocumentation: ComponentDocumentation = {
 />`,
     },
     {
+      title: '窄容器压力测试',
+      description:
+        '320px 与 480px 只是代表性的测试容器，不是组件断点；空间不足时隐藏原生滚动条、显示两侧导航按钮，同时保留触摸与触控板横向滑动。',
+      preview: <TabsResponsiveDemo />,
+      code: `<div className="w-[320px] max-w-full">
+  <Tabs
+    defaultValue="overview"
+    items={[
+      { value: 'overview', label: '项目概览', content: <Overview /> },
+      { value: 'activity', label: '活动记录', content: <Activity /> },
+      { value: 'branches', label: '分支策略', content: <Branches /> },
+      { value: 'docs', label: '使用文档', content: <Docs /> },
+      { value: 'support', label: '帮助支持', content: <Support /> },
+    ]}
+    scrollButtonLabels={{
+      start: '向前滚动标签',
+      end: '向后滚动标签',
+    }}
+  />
+</div>`,
+      wide: true,
+      previewHeight: 440,
+    },
+    {
       title: '内容切换动效',
       description:
-        '在淡入、方向滑动和关闭动效之间即时切换；系统减少动态效果时自动降级。',
-      caseAxes: [
-        {
-          name: 'animation',
-          label: '动效',
-          defaultValue: 'slide',
-          options: [
-            { label: '淡入', value: 'fade' },
-            { label: '滑动', value: 'slide' },
-            { label: '关闭', value: 'none' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <TabsMotionDemo
-          animation={
-            values.animation === 'fade' || values.animation === 'none'
-              ? values.animation
-              : 'slide'
-          }
-        />
-      ),
+        '稳定的内容视口保持边框和尺寸不动；淡入或方向滑动只作用于面板内容，系统减少动态效果时自动降级。',
+      preview: <TabsMotionDemo />,
       code: `<Tabs
   animation="slide"
   centered
   defaultValue="design"
+  panelClassName="p-8"
   variant="soft"
+  viewportClassName="mt-4 min-h-48 rounded-xl border"
   items={[
     { value: 'design', label: '设计', content: '整理组件视觉规范' },
     { value: 'code', label: '开发', content: '连接组件与业务状态' },
@@ -2414,15 +2400,33 @@ const tabsDocumentation: ComponentDocumentation = {
       previewHeight: 520,
     },
   ],
+  typeDefinitionGroups: ['TabsItem', 'TabsScrollButtonLabels'],
   api: [
     {
-      name: 'defaultValue / value',
-      description: '以非受控或受控方式指定当前标签。',
-      type: 'string',
+      name: 'items',
+      description: '标签配置列表，决定标签、对应面板及禁用状态。必填。',
+      type: 'readonly TabsItem[]',
+      required: true,
+    },
+    {
+      name: 'value',
+      description: '受控模式下当前激活标签的 value；传入 null 时不激活标签。',
+      type: 'string | null',
+    },
+    {
+      name: 'defaultValue',
+      description: '非受控模式下的初始标签；省略时自动选择第一个可用标签。',
+      type: 'string | null',
+      defaultValue: '首个可用标签',
+    },
+    {
+      name: 'onValueChange',
+      description: '激活标签变化时调用，回传新的 value。',
+      type: '(value: string | null) => void',
     },
     {
       name: 'orientation',
-      description: '设置标签水平或纵向排列。',
+      description: '设置标签列表方向，同时决定键盘方向键行为。',
       type: "'horizontal' | 'vertical'",
       defaultValue: "'horizontal'",
     },
@@ -2434,7 +2438,7 @@ const tabsDocumentation: ComponentDocumentation = {
     },
     {
       name: 'animation',
-      description: '设置面板内容的切换动效。',
+      description: '设置面板内容的切换动效；减少动态效果偏好下自动降级。',
       type: "'none' | 'fade' | 'slide'",
       defaultValue: "'fade'",
     },
@@ -2444,14 +2448,97 @@ const tabsDocumentation: ComponentDocumentation = {
       type: 'boolean',
       defaultValue: 'false',
     },
+    {
+      name: 'scrollButtonLabels',
+      description: '本地化横向溢出时自动出现的起始与末尾滚动按钮名称。',
+      type: 'Partial<TabsScrollButtonLabels>',
+      defaultValue: '内置英文文案',
+    },
+    {
+      name: 'className',
+      description: '扩展 Tabs 根容器样式。',
+      type: 'string',
+    },
+    {
+      name: 'listClassName',
+      description: '扩展标签列表样式。',
+      type: 'string',
+    },
+    {
+      name: 'tabClassName',
+      description: '为每个标签触发器扩展样式。',
+      type: 'string',
+    },
+    {
+      name: 'indicatorClassName',
+      description: '扩展当前激活标签指示器样式。',
+      type: 'string',
+    },
+    {
+      name: 'viewportClassName',
+      description:
+        '为包裹所有面板的稳定视口添加样式，适合固定内容区尺寸、边框和背景。',
+      type: 'string',
+    },
+    {
+      name: 'panelClassName',
+      description: '为每个内容面板扩展样式；切换动效会作用于该节点。',
+      type: 'string',
+    },
+    {
+      component: 'TabsItem',
+      name: 'value',
+      description: '标签与对应面板共享的唯一标识。',
+      type: 'string',
+      required: true,
+    },
+    {
+      component: 'TabsItem',
+      name: 'label',
+      description: '标签触发器中展示的内容。',
+      type: 'React.ReactNode',
+      required: true,
+    },
+    {
+      component: 'TabsItem',
+      name: 'content',
+      description: '标签激活后展示的面板内容。',
+      type: 'React.ReactNode',
+      required: true,
+    },
+    {
+      component: 'TabsItem',
+      name: 'disabled',
+      description: '禁用该标签并跳过鼠标与键盘激活。',
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      component: 'TabsScrollButtonLabels',
+      name: 'start',
+      description: '向列表起始方向滚动按钮的可访问名称。',
+      type: 'string',
+      defaultValue: "'Scroll tabs backward'",
+      required: true,
+    },
+    {
+      component: 'TabsScrollButtonLabels',
+      name: 'end',
+      description: '向列表末尾方向滚动按钮的可访问名称。',
+      type: 'string',
+      defaultValue: "'Scroll tabs forward'",
+      required: true,
+    },
   ],
   accessibility: [
     '标签列表、标签和面板之间保留正确的 ARIA 关联。',
     '水平标签使用左右方向键，纵向标签使用上下方向键移动。',
+    '横向标签溢出时，前后按钮提供可本地化名称；触控滚动和焦点自动带出仍然可用。',
   ],
   pitfalls: [
     '不要用 Tabs 表达有前后依赖的步骤流程。',
     '标签过多时应减少分组或改用导航，不应挤压到无法辨认。',
+    '不要为 Tabs 硬编码设备断点；应让它服从实际父容器，并在嵌套窄空间中验证溢出行为。',
   ],
 };
 
@@ -2997,6 +3084,25 @@ if (alertBasicExample) {
 
 const dataEntryExamples: Record<string, ComponentExample[]> = {
   checkbox: [
+    {
+      title: '任务完成态',
+      description:
+        '使用 task 变体表达可完成事项；选中后标签自动弱化并添加删除线，取消选中后恢复。',
+      preview: <CheckboxTasksDemo />,
+      code: `import { Checkbox } from '@heliannuuthus/ui'
+
+<Checkbox.Group
+  variant="task"
+  value={completed}
+  onChange={setCompleted}
+  options={[
+    { label: '确认设计令牌', value: 'tokens' },
+    { label: '更新组件文档', value: 'docs' },
+    { label: '发布新版本', value: 'release' },
+  ]}
+/>`,
+      previewHeight: 380,
+    },
     {
       title: '权限组合',
       description: '使用 Checkbox.Group 管理多个权限值，并即时反馈已选数量。',
@@ -5757,10 +5863,24 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
     },
     {
       component: 'Checkbox',
+      name: 'variant',
+      description: '设置标签的视觉表达；task 在选中后弱化文字并添加删除线。',
+      type: "'default' | 'task'",
+      defaultValue: "'default'",
+    },
+    {
+      component: 'Checkbox',
       name: 'disabled',
       description: '阻止交互并降低视觉强调。',
       type: 'boolean',
       defaultValue: 'false',
+    },
+    {
+      component: 'Checkbox.Group',
+      name: 'variant',
+      description: '为组内所有选项设置统一变体，单个 option 可单独覆盖。',
+      type: "'default' | 'task'",
+      defaultValue: "'default'",
     },
     {
       component: 'Checkbox.Group',
@@ -7551,33 +7671,6 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       type: 'SelectTriggerProps',
     },
   ],
-  tabs: [
-    {
-      name: 'items',
-      description: '配置每个标签的 value、label、content 与禁用状态。',
-      type: 'TabsItem[]',
-    },
-    {
-      name: 'value / defaultValue / onValueChange',
-      description: '以受控或非受控方式管理当前标签。',
-      type: 'string | null / callback',
-    },
-    {
-      name: 'variant / centered / orientation',
-      description: '设置标签列表的样式、居中方式和排列方向。',
-      type: "TabsVariant / boolean / 'horizontal' | 'vertical'",
-    },
-    {
-      name: 'animation',
-      description: '设置面板切换动效，并在减少动态效果偏好下自动降级。',
-      type: "'none' | 'fade' | 'slide'",
-    },
-    {
-      name: 'listClassName / tabClassName / panelClassName',
-      description: '分别扩展列表、标签与内容面板样式。',
-      type: 'string',
-    },
-  ],
   tooltip: [
     {
       name: 'trigger / content',
@@ -7633,7 +7726,6 @@ const masonryNavigationComponents = [
   'menubar',
   'navigation-menu',
   'pagination',
-  'tabs',
 ] as const;
 
 for (const slug of masonryNavigationComponents) {

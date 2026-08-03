@@ -30,12 +30,12 @@ import {
   Code2,
   Copy,
   Github,
+  Languages,
   LayoutGrid,
   Menu,
   Moon,
   Package,
   PackagePlus,
-  Palette,
   Search,
   SearchX,
   Sparkles,
@@ -48,29 +48,42 @@ import {
   NavLink,
   useHref,
   useLinkClickHandler,
+  useLocation,
   useNavigate,
   useParams,
 } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   componentDocumentation,
   type ApiProperty,
   type ComponentExample,
 } from './component-docs';
+import {
+  componentCatalog,
+  componentGroups,
+  componentSlug,
+} from './component-catalog';
+import { localizedComponentMetadata } from './component-metadata';
 import { ComponentHarness } from './component-harness';
+import { useDocsLocale, useLocalizedPath } from './i18n/routing';
+import {
+  PackageManagerIcon,
+  type PackageManagerName,
+} from './package-manager-icon';
 import { SyntaxCode } from './syntax-code';
 
 const repositoryUrl = 'https://github.com/heliannuuthus/ui';
 const docsBasePath = window.location.hostname.endsWith('github.io')
   ? '/ui'
   : '';
-const avatarUrl = `${docsBasePath}/heliannuuthus.jpg`;
+const avatarUrl = `${docsBasePath}/heliannuuthus.png`;
 const installCommands = {
   pnpm: 'pnpm add @heliannuuthus/ui',
   npm: 'npm install @heliannuuthus/ui',
   yarn: 'yarn add @heliannuuthus/ui',
   bun: 'bun add @heliannuuthus/ui',
 } as const;
-type PackageManager = keyof typeof installCommands;
+type PackageManager = PackageManagerName;
 
 function groupApiProperties(
   properties: ApiProperty[],
@@ -108,6 +121,7 @@ function TypeDefinitionExplorer({
   api: ApiProperty[];
   component: string;
 }) {
+  const { t } = useTranslation();
   const [activeName, setActiveName] = useState(api[0]?.name ?? '');
   const [copied, setCopied] = useState(false);
   const activeProperty =
@@ -143,10 +157,13 @@ function TypeDefinitionExplorer({
     <div className="class-names-explorer">
       <section className="class-names-definition">
         <div className="class-names-definition-heading">
-          <span>类型定义</span>
+          <span>{t('docs.typeDefinition')}</span>
           <code>export type</code>
         </div>
-        <div aria-label={`${component} 字段`} className="class-names-source">
+        <div
+          aria-label={t('docs.field', { component })}
+          className="class-names-source"
+        >
           <p>
             <span>type</span> <strong>{declarationName}</strong> = {'{'}
           </p>
@@ -195,27 +212,27 @@ function TypeDefinitionExplorer({
         <p>{activeProperty.description}</p>
         <dl>
           <div>
-            <dt>类型</dt>
+            <dt>{t('components.type')}</dt>
             <dd>
               <code>{activeProperty.type}</code>
             </dd>
           </div>
           <div>
-            <dt>{isClassNames ? '作用域' : '约束'}</dt>
+            <dt>{t(isClassNames ? 'docs.scope' : 'docs.constraint')}</dt>
             <dd>
               {isClassNames
-                ? `${owner} 内部语义节点`
+                ? t('docs.internalNode', { component: owner })
                 : activeProperty.required
-                  ? '必填字段'
-                  : '可选字段'}
+                  ? t('docs.required')
+                  : t('docs.optional')}
             </dd>
           </div>
         </dl>
 
         <div className="class-names-usage-heading">
-          <span>{isClassNames ? '用法' : '类型访问'}</span>
+          <span>{t(isClassNames ? 'docs.usage' : 'docs.typeAccess')}</span>
           <Button
-            aria-label={copied ? '代码已复制' : '复制当前写法'}
+            aria-label={t(copied ? 'actions.copied' : 'actions.copy')}
             onClick={copyUsage}
             size="icon-sm"
             variant="ghost"
@@ -231,92 +248,7 @@ function TypeDefinitionExplorer({
   );
 }
 
-const componentGroups = [
-  {
-    title: '通用',
-    items: ['Button', 'Typography', 'Badge', 'Kbd'],
-  },
-  {
-    title: '布局',
-    items: [
-      'Aspect Ratio',
-      'Card',
-      'Resizable',
-      'Scroll Area',
-      'Masonry',
-      'Stack',
-      'Layout',
-      'Separator',
-    ],
-  },
-  {
-    title: '导航',
-    items: [
-      'Breadcrumb',
-      'Dropdown Menu',
-      'Menubar',
-      'Navigation Menu',
-      'Pagination',
-      'Tabs',
-    ],
-  },
-  {
-    title: '数据录入',
-    items: [
-      'Checkbox',
-      'Date Picker',
-      'Form',
-      'Input',
-      'Radio',
-      'Select',
-      'Slider',
-      'Switch',
-      'Toggle',
-    ],
-  },
-  {
-    title: '数据展示',
-    items: [
-      'Accordion',
-      'Attachment',
-      'Avatar',
-      'Bubble',
-      'Carousel',
-      'Chart',
-      'Collapsible',
-      'Counter',
-      'Data Table',
-      'Empty',
-      'Item',
-      'Marker',
-      'Table',
-      'Tooltip',
-    ],
-  },
-  {
-    title: '反馈',
-    items: [
-      'Alert',
-      'Alert Dialog',
-      'Dialog',
-      'Drawer',
-      'Popover',
-      'Progress',
-      'Skeleton',
-      'Sonner',
-      'Spinner',
-      'Toast',
-    ],
-  },
-  {
-    title: '其他',
-    items: ['Command', 'Context Menu', 'Direction'],
-  },
-] as const;
-
-const componentCatalog = componentGroups.flatMap((group) => group.items);
-const componentSlug = (name: string) => name.toLowerCase().replace(/ /g, '-');
-const spaciousComponentSlugs = new Set(
+const spaciousComponentSlugs = new Set<string>(
   componentGroups
     .filter((group) => group.title === '布局' || group.title === '导航')
     .flatMap((group) => group.items.map(componentSlug))
@@ -336,14 +268,21 @@ const styleImportCode = `import '@heliannuuthus/ui/styles.css'
 import './app.css'`;
 
 const navItems = [
-  { label: '快速开始', to: '/docs/getting-started' },
-  { label: '设计理念', to: '/design' },
-  { label: '组件库', to: '/components' },
+  { labelKey: 'navigation.gettingStarted', to: '/docs/getting-started' },
+  { labelKey: 'navigation.design', to: '/design' },
+  { labelKey: 'navigation.components', to: '/components' },
 ];
 
 function Brand() {
+  const { t } = useTranslation();
+  const path = useLocalizedPath();
+
   return (
-    <NavLink className="brand" to="/" aria-label="Heliannuuthus UI 首页">
+    <NavLink
+      className="brand"
+      to={path()}
+      aria-label={`Heliannuuthus UI ${t('navigation.home')}`}
+    >
       <span className="brand-avatar" aria-hidden="true">
         <img src={avatarUrl} alt="" />
       </span>
@@ -365,6 +304,25 @@ function SiteHeader({
   onTheme: () => void;
 }) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
+  const locale = useDocsLocale();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const path = useLocalizedPath();
+  const searchShortcut =
+    typeof navigator !== 'undefined' &&
+    !/Mac|iPhone|iPad/.test(navigator.platform)
+      ? 'Ctrl K'
+      : '⌘ K';
+  const nextLocale = locale === 'zh' ? 'en' : 'zh';
+  const switchLanguage = () => {
+    const nextPath = location.pathname.replace(
+      /^\/(?:zh|en)(?=\/|$)/,
+      `/${nextLocale}`
+    );
+    navigate(`${nextPath}${location.search}${location.hash}`);
+  };
+
   return (
     <header className="site-header">
       <Brand />
@@ -373,7 +331,7 @@ function SiteHeader({
         size="icon"
         variant="ghost"
         aria-controls="site-navigation"
-        aria-label={open ? '关闭导航' : '打开导航'}
+        aria-label={t(open ? 'navigation.close' : 'navigation.open')}
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
@@ -382,25 +340,29 @@ function SiteHeader({
       <nav
         id="site-navigation"
         className={open ? 'site-nav is-open' : 'site-nav'}
-        aria-label="主导航"
+        aria-label={t('navigation.main')}
       >
         {navItems.map((item) => (
-          <NavLink key={item.to} to={item.to} onClick={() => setOpen(false)}>
-            {item.label}
+          <NavLink
+            key={item.to}
+            to={path(item.to)}
+            onClick={() => setOpen(false)}
+          >
+            {t(item.labelKey)}
           </NavLink>
         ))}
       </nav>
       <div className="header-actions">
         <Button className="search-trigger" variant="outline" onClick={onSearch}>
           <Search size={16} />
-          <span>搜索组件</span>
-          <kbd>⌘ K</kbd>
+          <span>{t('search.trigger')}</span>
+          <kbd>{searchShortcut}</kbd>
         </Button>
         <Button
           className="mobile-search-trigger"
           size="icon"
           variant="ghost"
-          aria-label="搜索组件"
+          aria-label={t('search.trigger')}
           onClick={onSearch}
         >
           <Search />
@@ -410,7 +372,7 @@ function SiteHeader({
           href={repositoryUrl}
           size="icon"
           variant="ghost"
-          aria-label="在 GitHub 查看源码"
+          aria-label={t('actions.viewOnGitHub')}
         >
           <Github />
         </Button>
@@ -419,9 +381,18 @@ function SiteHeader({
           size="icon"
           variant="ghost"
           onClick={onTheme}
-          aria-label="切换主题"
+          aria-label={t('actions.toggleTheme')}
         >
           {dark ? <Sun /> : <Moon />}
+        </Button>
+        <Button
+          aria-label={t('language.switchLabel')}
+          className="language-trigger"
+          onClick={switchLanguage}
+          variant="ghost"
+        >
+          <Languages />
+          <span>{nextLocale === 'en' ? 'EN' : '中文'}</span>
         </Button>
       </div>
     </header>
@@ -429,6 +400,8 @@ function SiteHeader({
 }
 
 function HomePage() {
+  const path = useLocalizedPath();
+  const { t } = useTranslation();
   const [copiedManager, setCopiedManager] = useState<PackageManager | null>(
     null
   );
@@ -445,21 +418,20 @@ function HomePage() {
           <Stack block gap={16}>
             <Badge variant="outline">
               <Sparkles data-icon="inline-start" />
-              {componentCatalog.length} 个可组合组件
+              {t('home.componentCount', { count: componentCatalog.length })}
             </Badge>
-            <Typography.H1>构建清晰、一致的产品界面</Typography.H1>
+            <Typography.H1>{t('home.title')}</Typography.H1>
             <Typography.Lead className="hero-copy">
-              Heliannuuthus UI 提供稳定的 React 组件、明确的 API
-              与可访问交互，让产品团队把注意力留给真正的业务问题。
+              {t('home.description')}
             </Typography.Lead>
           </Stack>
 
           <Stack align="center" gap={12} orientation="horizontal" wrap>
-            <Button href="/docs/getting-started" size="lg">
-              开始使用 <ArrowRight data-icon="inline-end" />
+            <Button href={path('/docs/getting-started')} size="lg">
+              {t('actions.getStarted')} <ArrowRight data-icon="inline-end" />
             </Button>
-            <Button href="/components" size="lg" variant="outline">
-              浏览组件
+            <Button href={path('/components')} size="lg" variant="outline">
+              {t('actions.browseComponents')}
             </Button>
           </Stack>
 
@@ -471,16 +443,20 @@ function HomePage() {
             items={(Object.keys(installCommands) as PackageManager[]).map(
               (manager) => ({
                 value: manager,
-                label: manager,
+                label: (
+                  <>
+                    <PackageManagerIcon name={manager} />
+                    <span>{manager}</span>
+                  </>
+                ),
                 content: (
                   <Button
                     block
+                    className="hero-install-copy"
                     onClick={() => copyInstall(manager)}
                     variant="outline"
                   >
-                    <Typography.Code>
-                      {installCommands[manager]}
-                    </Typography.Code>
+                    <code>{installCommands[manager]}</code>
                     {copiedManager === manager ? (
                       <Check data-icon="inline-end" />
                     ) : (
@@ -495,8 +471,8 @@ function HomePage() {
 
         <Card
           className="hero-showcase rounded-lg"
-          title="组件组合预览"
-          description="使用公共组件完成真实界面，而不是绘制静态示意图。"
+          title={t('home.previewTitle')}
+          description={t('home.previewDescription')}
           action={<Badge variant="secondary">Live</Badge>}
         >
           <Stack block gap={24}>
@@ -506,7 +482,9 @@ function HomePage() {
               <Badge variant="outline">Composable</Badge>
             </Stack>
             <Stack block gap={8}>
-              <Label htmlFor="home-workspace-name">工作区名称</Label>
+              <Label htmlFor="home-workspace-name">
+                {t('home.workspaceName')}
+              </Label>
               <Input defaultValue="Heliannuuthus UI" id="home-workspace-name" />
             </Stack>
             <Stack
@@ -516,17 +494,17 @@ function HomePage() {
               justify="end"
               orientation="horizontal"
             >
-              <Button variant="outline">取消</Button>
-              <Button>保存修改</Button>
+              <Button variant="outline">{t('actions.cancel')}</Button>
+              <Button>{t('actions.save')}</Button>
             </Stack>
           </Stack>
         </Card>
       </section>
 
-      <section className="feature-strip" aria-label="项目特性">
+      <section className="feature-strip" aria-label={t('home.features')}>
         <div>
           <strong>{componentCatalog.length}</strong>
-          <span>个基础组件</span>
+          <span>{t('home.baseComponents')}</span>
         </div>
         <div>
           <strong>100%</strong>
@@ -534,11 +512,11 @@ function HomePage() {
         </div>
         <div>
           <strong>A11y</strong>
-          <span>可访问性优先</span>
+          <span>{t('home.accessibilityFirst')}</span>
         </div>
         <div>
           <strong>Open</strong>
-          <span>源码完全可控</span>
+          <span>{t('home.openSource')}</span>
         </div>
       </section>
 
@@ -548,12 +526,10 @@ function HomePage() {
             <Typography.Small className="section-label">
               DESIGN SYSTEM
             </Typography.Small>
-            <Typography.H2>让每一个产品共享同一套界面语言</Typography.H2>
-            <Typography.Lead>
-              公共组件负责稳定的行为和表达，业务项目专注自己的流程与语义。
-            </Typography.Lead>
-            <Button href="/design" variant="link">
-              了解设计理念 <ArrowRight data-icon="inline-end" />
+            <Typography.H2>{t('home.philosophyTitle')}</Typography.H2>
+            <Typography.Lead>{t('home.philosophyDescription')}</Typography.Lead>
+            <Button href={path('/design')} variant="link">
+              {t('home.philosophyAction')} <ArrowRight data-icon="inline-end" />
             </Button>
           </Stack>
           <Masonry
@@ -561,10 +537,10 @@ function HomePage() {
             columns={4}
             gap={14}
             items={[
-              ['清晰', '信息层级先于装饰，让状态、操作与反馈始终可理解。'],
-              ['一致', '相同的问题提供相同的解法，跨产品也保持熟悉感。'],
-              ['可组合', '小而稳定的能力可以自由组合，业务语义留在业务中。'],
-              ['可生长', 'API 为真实场景保留扩展点，并尊重长期兼容性。'],
+              [t('home.clarity'), t('home.clarityDescription')],
+              [t('home.consistency'), t('home.consistencyDescription')],
+              [t('home.composable'), t('home.composableDescription')],
+              [t('home.evolvable'), t('home.evolvableDescription')],
             ].map(([title, copy]) => ({
               content: (
                 <Card className="rounded-lg">
@@ -595,10 +571,11 @@ function HomePage() {
               <Typography.Small className="section-label">
                 COMPONENTS
               </Typography.Small>
-              <Typography.H2>从基础控件到完整交互</Typography.H2>
+              <Typography.H2>{t('home.componentsTitle')}</Typography.H2>
             </Stack>
-            <Button href="/components" variant="link">
-              查看全部组件 <ArrowRight data-icon="inline-end" />
+            <Button href={path('/components')} variant="link">
+              {t('actions.viewAllComponents')}{' '}
+              <ArrowRight data-icon="inline-end" />
             </Button>
           </Stack>
           <Masonry
@@ -608,11 +585,13 @@ function HomePage() {
               content: (
                 <Item
                   actions={<ArrowRight />}
-                  description={`${group.items.length} 个组件`}
+                  description={t('components.count', {
+                    count: group.items.length,
+                  })}
                   media={<Package />}
                   mediaVariant="icon"
-                  href={`/components/${componentSlug(group.items[0])}`}
-                  title={group.title}
+                  href={path(`/components/${componentSlug(group.items[0])}`)}
+                  title={t(`groups.${group.key}`)}
                   variant="outline"
                 />
               ),
@@ -627,118 +606,77 @@ function HomePage() {
 }
 
 function GettingStartedPage() {
+  const path = useLocalizedPath();
+  const { t } = useTranslation();
+
   return (
     <DocLayout
-      title="快速开始"
-      kicker="接入指南"
-      description="用几分钟把 Heliannuuthus UI 接入你的 React 项目。"
+      title={t('gettingStarted.title')}
+      kicker={t('gettingStarted.kicker')}
+      description={t('gettingStarted.description')}
       toc={[
         {
-          label: '安装',
+          label: t('gettingStarted.installation'),
           href: '#installation',
           icon: <PackagePlus data-icon="inline-start" strokeWidth={2.5} />,
         },
         {
-          label: '导入样式',
+          label: t('gettingStarted.importStyles'),
           href: '#build-integration',
           icon: <Code2 data-icon="inline-start" strokeWidth={2.5} />,
         },
         {
-          label: '样式架构',
-          href: '#styles',
-          icon: <Palette data-icon="inline-start" strokeWidth={2.5} />,
-        },
-        {
-          label: '使用组件',
+          label: t('gettingStarted.usage'),
           href: '#usage',
           icon: <Blocks data-icon="inline-start" strokeWidth={2.5} />,
         },
         {
-          label: '下一步',
+          label: t('gettingStarted.next'),
           href: '#next-step',
           icon: <LayoutGrid data-icon="inline-start" strokeWidth={2.5} />,
         },
       ]}
     >
       <DocSection
-        description="选择项目正在使用的包管理器安装。推荐使用 pnpm。"
+        description={t('gettingStarted.installationDescription')}
         icon={<PackagePlus strokeWidth={2.5} />}
         id="installation"
         step="01"
-        title="安装"
+        title={t('gettingStarted.installation')}
       >
         <PackageManagerInstall />
       </DocSection>
       <DocSection
-        description="在应用入口导入一次共享样式。这个方式不绑定包管理器或构建工具。"
+        description={t('gettingStarted.importStylesDescription')}
         icon={<Code2 strokeWidth={2.5} />}
         id="build-integration"
         step="02"
-        title="导入样式"
+        title={t('gettingStarted.importStyles')}
       >
-        <Stack block gap={12}>
-          <CodeBlock code={styleImportCode} fileName="main.tsx" />
-          <Item
-            description="pnpm、npm、Yarn 和 Bun 都可以安装；Vite、Rollup、Webpack、Rspack、Parcel 与 Next.js 等现代构建工具都可以消费根入口和这份 CSS。"
-            title="构建工具无关"
-            variant="outline"
-          />
-        </Stack>
+        <CodeBlock code={styleImportCode} fileName="main.tsx" />
       </DocSection>
       <DocSection
-        description="样式在包发布前完成编译，业务运行时不生成或注入 CSS。"
-        icon={<Palette strokeWidth={2.5} />}
-        id="styles"
-        step="03"
-        title="静态样式架构"
-      >
-        <Stack block gap={12}>
-          <Item
-            description="完整组件源码只经过一次 Tailwind 扫描，相同工具类只生成一次，避免按组件 CSS 累积重复规则。"
-            title="一次生成，全局去重"
-            variant="outline"
-          />
-          <Item
-            description="浏览器直接加载普通 CSS；没有 CSS-in-JS 序列化、哈希、样式注入或 hydration 成本。"
-            title="零样式运行时"
-            variant="outline"
-          />
-          <Item
-            description="主题默认值位于较低优先级的 CSS layer，业务样式可以稳定覆盖；公共包只暴露根组件入口和 styles.css。"
-            title="稳定的层级与边界"
-            variant="outline"
-          />
-        </Stack>
-      </DocSection>
-      <DocSection
-        description="使用具名根导入；业务构建工具会自动 tree-shake，只保留实际使用的组件与依赖。"
+        description={t('gettingStarted.usageDescription')}
         icon={<Blocks strokeWidth={2.5} />}
         id="usage"
-        step="04"
-        title="使用组件"
+        step="03"
+        title={t('gettingStarted.usage')}
       >
-        <Stack block gap={12}>
-          <CodeBlock code={demoCode} fileName="button-example.tsx" />
-          <Item
-            description="所有构建工具都从 @heliannuuthus/ui 使用具名根导入。JavaScript 会正常 tree-shake，不需要 Vite、Webpack 或框架专用插件。"
-            title="稳定的公共入口"
-            variant="outline"
-          />
-        </Stack>
+        <CodeBlock code={demoCode} fileName="button-example.tsx" />
       </DocSection>
       <Item
         actions={<ArrowRight />}
         className="next-card"
-        description="继续查看组件示例、API 与具体使用建议。"
+        description={t('gettingStarted.nextDescription')}
         id="next-step"
         media={<LayoutGrid strokeWidth={2.5} />}
         mediaVariant="icon"
-        href="/components"
+        href={path('/components')}
         title={
           <Stack align="center" gap={8} orientation="horizontal">
-            <Badge variant="secondary">05</Badge>
+            <Badge variant="secondary">04</Badge>
             <Typography.Large className="font-bold">
-              浏览完整组件目录
+              {t('gettingStarted.nextTitle')}
             </Typography.Large>
           </Stack>
         }
@@ -773,34 +711,19 @@ function PackageManagerInstall() {
 }
 
 function DesignPage() {
+  const { t } = useTranslation();
   const principles = [
-    [
-      '01',
-      '清晰胜过表现',
-      '视觉的首要职责是解释结构。颜色、间距和动效都应服务于理解，而不是争夺注意力。',
-    ],
-    [
-      '02',
-      '约定创造效率',
-      '一致的命名、状态和反馈让团队少做无谓选择，把注意力留给真正的产品问题。',
-    ],
-    [
-      '03',
-      '组合保持边界',
-      '公共组件提供可靠能力，业务层负责语义与流程。两者清楚分工，系统才能自由生长。',
-    ],
-    [
-      '04',
-      '细节建立信任',
-      '键盘操作、窄屏布局、加载与错误状态并非补充，它们共同决定一个组件是否值得依赖。',
-    ],
+    ['01', t('design.clarity'), t('design.clarityDescription')],
+    ['02', t('design.convention'), t('design.conventionDescription')],
+    ['03', t('design.composition'), t('design.compositionDescription')],
+    ['04', t('design.details'), t('design.detailsDescription')],
   ] as const;
 
   return (
     <DocLayout
-      title="设计理念"
+      title={t('design.title')}
       kicker="FOUNDATION"
-      description="组件不是终点。我们建立的是一套让产品持续保持清晰、一致和可维护的共同语言。"
+      description={t('design.description')}
       toc={principles.map(([number, title]) => ({
         label: title,
         href: `#principle-${number}`,
@@ -822,6 +745,8 @@ function DesignPage() {
 }
 
 function ComponentsOverview() {
+  const { t } = useTranslation();
+  const locale = useDocsLocale();
   const [query, setQuery] = useState('');
   const groups = useMemo(
     () =>
@@ -830,27 +755,33 @@ function ComponentsOverview() {
           ...group,
           items: group.items.filter((item) => {
             const slug = componentSlug(item);
-            const searchText =
-              `${item} ${group.title} ${componentDocumentation[slug]?.summary ?? ''}`.toLowerCase();
+            const metadata = localizedComponentMetadata(
+              slug,
+              locale,
+              componentDocumentation[slug]
+            );
+            const searchText = `${item} ${group.title} ${t(
+              `groups.${group.key}`
+            )} ${metadata.searchText.join(' ')}`.toLowerCase();
             return searchText.includes(query.trim().toLowerCase());
           }),
         }))
         .filter((group) => group.items.length),
-    [query]
+    [locale, query, t]
   );
 
   return (
     <div className="components-page">
       <header className="components-heading">
         <span>COMPONENTS</span>
-        <h1>组件总览</h1>
-        <p>覆盖界面构建中的常见场景，并持续从真实产品中沉淀更好的实践。</p>
+        <h1>{t('components.overviewTitle')}</h1>
+        <p>{t('components.overviewDescription')}</p>
         <label className="component-search">
           <Search />
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="搜索组件"
+            placeholder={t('search.overviewPlaceholder')}
           />
         </label>
       </header>
@@ -859,7 +790,7 @@ function ComponentsOverview() {
           {groups.map((group) => (
             <section key={group.title}>
               <header>
-                <h2>{group.title}</h2>
+                <h2>{t(`groups.${group.key}`)}</h2>
                 <span>{group.items.length}</span>
               </header>
               <div className="component-group-grid">
@@ -874,13 +805,13 @@ function ComponentsOverview() {
         <Empty
           actions={
             <Button variant="outline" onClick={() => setQuery('')}>
-              清除搜索
+              {t('search.clear')}
             </Button>
           }
           className="component-search-empty"
-          description="换一个组件名称试试，或清除搜索查看完整目录。"
+          description={t('search.overviewEmpty')}
           icon={<SearchX />}
-          title={`没有找到“${query}”`}
+          title={t('search.noResult', { query })}
         />
       )}
     </div>
@@ -888,7 +819,14 @@ function ComponentsOverview() {
 }
 
 function ComponentOverviewCard({ item }: { item: string }) {
-  const summary = componentDocumentation[componentSlug(item)]?.summary ?? '';
+  const path = useLocalizedPath();
+  const locale = useDocsLocale();
+  const slug = componentSlug(item);
+  const summary = localizedComponentMetadata(
+    slug,
+    locale,
+    componentDocumentation[slug]
+  ).summary;
   const summaryRef = useRef<HTMLParagraphElement>(null);
   const [overflowing, setOverflowing] = useState(false);
 
@@ -918,7 +856,7 @@ function ComponentOverviewCard({ item }: { item: string }) {
       delay={300}
       disabled={!overflowing}
       trigger={
-        <NavLink to={`/components/${componentSlug(item)}`}>
+        <NavLink to={path(`/components/${componentSlug(item)}`)}>
           <strong>{item}</strong>
           <p ref={summaryRef} data-overflowing={overflowing || undefined}>
             {summary}
@@ -937,10 +875,13 @@ function ComponentSearchDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const navigate = useNavigate();
+  const path = useLocalizedPath();
+  const { t } = useTranslation();
+  const locale = useDocsLocale();
 
   const selectComponent = (slug: string) => {
     onOpenChange(false);
-    navigate(`/components/${slug}`);
+    navigate(path(`/components/${slug}`));
   };
 
   return (
@@ -948,27 +889,27 @@ function ComponentSearchDialog({
       className="component-command"
       dialog={{
         contentClassName: 'component-command-dialog',
-        description: '搜索并打开 Heliannuuthus UI 组件文档',
+        description: t('search.description'),
         footer: (
           <div className="component-command-footer">
             <span>
               <kbd>↑</kbd>
               <kbd>↓</kbd>
-              选择
+              {t('search.select')}
             </span>
             <span>
               <kbd>↵</kbd>
-              打开
+              {t('search.open')}
             </span>
             <span>
               <kbd>esc</kbd>
-              关闭
+              {t('search.close')}
             </span>
           </div>
         ),
         open,
         showCloseButton: false,
-        title: '搜索组件',
+        title: t('search.title'),
         onOpenChange,
       }}
       emptyText={
@@ -976,22 +917,31 @@ function ComponentSearchDialog({
           <span className="component-command-empty-icon">
             <SearchX aria-hidden="true" />
           </span>
-          <strong>没有匹配的组件</strong>
-          <span>试试 Button、表单、导航或反馈。</span>
+          <strong>{t('search.emptyTitle')}</strong>
+          <span>{t('search.emptyDescription')}</span>
         </>
       }
       groups={componentGroups.map((group) => ({
-        heading: `${group.title} · ${group.items.length}`,
+        heading: `${t(`groups.${group.key}`)} · ${group.items.length}`,
         options: group.items.map((item) => {
           const slug = componentSlug(item);
-          const summary = componentDocumentation[slug]?.summary ?? '';
+          const metadata = localizedComponentMetadata(
+            slug,
+            locale,
+            componentDocumentation[slug]
+          );
+          const summary = metadata.summary;
           return {
             icon: (
               <span className="component-command-icon">
                 <Box aria-hidden="true" />
               </span>
             ),
-            keywords: [group.title, summary],
+            keywords: [
+              group.title,
+              t(`groups.${group.key}`),
+              ...metadata.searchText,
+            ],
             label: (
               <span className="component-command-copy">
                 <strong>{item}</strong>
@@ -1010,13 +960,15 @@ function ComponentSearchDialog({
         }),
       }))}
       inputProps={{ autoFocus: true }}
-      placeholder="搜索组件名称或用途…"
+      placeholder={t('search.placeholder')}
     />
   );
 }
 
 function ComponentNavigation({ component }: { component: string }) {
   const contentRef = useRef<HTMLDivElement>(null);
+  const path = useLocalizedPath();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
@@ -1054,13 +1006,13 @@ function ComponentNavigation({ component }: { component: string }) {
 
   return (
     <Sidebar
-      aria-label="组件导航"
+      aria-label={t('components.navigation')}
       className="component-docs-sidebar"
       collapsible="none"
     >
       <Sidebar.Header className="component-docs-sidebar-header">
-        <NavLink to="/components">
-          <span>组件</span>
+        <NavLink to={path('/components')}>
+          <span>{t('components.label')}</span>
           <small>{componentCatalog.length}</small>
         </NavLink>
       </Sidebar.Header>
@@ -1072,7 +1024,7 @@ function ComponentNavigation({ component }: { component: string }) {
         {componentGroups.map((group) => (
           <Sidebar.Group key={group.title}>
             <Sidebar.GroupLabel className="component-docs-sidebar-label">
-              <span>{group.title}</span>
+              <span>{t(`groups.${group.key}`)}</span>
               <small>{group.items.length}</small>
             </Sidebar.GroupLabel>
             <Sidebar.GroupContent>
@@ -1107,7 +1059,8 @@ function ComponentNavigationLink({
   item: string;
   slug: string;
 }) {
-  const to = `/components/${slug}`;
+  const path = useLocalizedPath();
+  const to = path(`/components/${slug}`);
   const href = useHref(to);
   const handleClick = useLinkClickHandler(to);
 
@@ -1125,6 +1078,9 @@ function ComponentNavigationLink({
 
 function ComponentPage() {
   const { component = 'button' } = useParams();
+  const path = useLocalizedPath();
+  const { t } = useTranslation();
+  const locale = useDocsLocale();
 
   useLayoutEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -1132,27 +1088,28 @@ function ComponentPage() {
   }, [component]);
 
   if (component === 'button-group') {
-    return <Navigate to="/components/button" replace />;
+    return <Navigate to={path('/components/button')} replace />;
   }
   if (component === 'calendar') {
-    return <Navigate to="/components/date-picker" replace />;
+    return <Navigate to={path('/components/date-picker')} replace />;
   }
   if (component === 'input-group' || component === 'input-otp') {
-    return <Navigate to="/components/input" replace />;
+    return <Navigate to={path('/components/input')} replace />;
   }
   if (component === 'field' || component === 'label') {
-    return <Navigate to="/components/form" replace />;
+    return <Navigate to={path('/components/form')} replace />;
   }
   if (component === 'native-select') {
-    return <Navigate to="/components/select" replace />;
+    return <Navigate to={path('/components/select')} replace />;
   }
   if (component === 'sidebar') {
-    return <Navigate to="/components/layout" replace />;
+    return <Navigate to={path('/components/layout')} replace />;
   }
   const name =
     componentCatalog.find((item) => componentSlug(item) === component) ??
     'Button';
   const documentation = componentDocumentation[component];
+  const metadata = localizedComponentMetadata(component, locale, documentation);
   return (
     <Sidebar.Provider
       className="component-detail-layout"
@@ -1171,24 +1128,26 @@ function ComponentPage() {
         }`}
       >
         <div className="breadcrumb">
-          <NavLink to="/components">组件</NavLink>
+          <NavLink to={path('/components')}>{t('components.label')}</NavLink>
           <span>/</span>
           <span>{name}</span>
         </div>
         <div className="component-title">
           <div>
             <h1>{name}</h1>
-            <p>
-              {documentation?.summary ??
-                '该组件的完整使用场景正在按组件目录顺序整理。'}
-            </p>
+            <p>{metadata.summary || t('components.draftSummary')}</p>
           </div>
           <a
             href={`${repositoryUrl}/blob/main/src/components/${component}.tsx`}
           >
-            <Github /> 查看源码
+            <Github /> {t('actions.viewSource')}
           </a>
         </div>
+        {locale === 'en' && documentation ? (
+          <p className="component-translation-fallback" role="status">
+            {t('components.translationFallback')}
+          </p>
+        ) : null}
         {documentation ? (
           <>
             {documentation.relatedComponents &&
@@ -1197,11 +1156,11 @@ function ComponentPage() {
                   className="component-related"
                   aria-label={`${documentation.name} 相关组件`}
                 >
-                  <span>相关组件</span>
+                  <span>{t('components.related')}</span>
                   {documentation.relatedComponents.map((related) => (
                     <NavLink
                       key={related.slug}
-                      to={`/components/${related.slug}`}
+                      to={path(`/components/${related.slug}`)}
                     >
                       <span>
                         <strong>{related.name}</strong>
@@ -1214,7 +1173,7 @@ function ComponentPage() {
               )}
             {documentation.examples.length > 0 && (
               <section className="demo-section">
-                <h2>示例</h2>
+                <h2>{t('components.examples')}</h2>
                 <ComponentExampleList
                   component={component}
                   examples={documentation.examples}
@@ -1237,11 +1196,11 @@ function ComponentPage() {
                 )}
                 {documentation.parts && documentation.parts.length > 0 && (
                   <div className="component-reference-block">
-                    <h3>组成组件</h3>
+                    <h3>{t('components.parts')}</h3>
                     <div className="component-parts-table">
                       <div className="component-parts-head">
-                        <span>组件</span>
-                        <span>用途</span>
+                        <span>{t('components.label')}</span>
+                        <span>{t('components.purpose')}</span>
                       </div>
                       {documentation.parts.map((part) => (
                         <div key={part.name}>
@@ -1254,7 +1213,7 @@ function ComponentPage() {
                 )}
                 {documentation.api.length > 0 && (
                   <div className="component-reference-block">
-                    <h3>属性</h3>
+                    <h3>{t('components.properties')}</h3>
                     <div className="component-api-groups">
                       {groupApiProperties(
                         documentation.api,
@@ -1277,10 +1236,10 @@ function ComponentPage() {
                           ) : (
                             <div className="component-api-table">
                               <div className="component-api-head">
-                                <span>属性</span>
-                                <span>说明</span>
-                                <span>类型</span>
-                                <span>默认值</span>
+                                <span>{t('components.properties')}</span>
+                                <span>{t('components.description')}</span>
+                                <span>{t('components.type')}</span>
+                                <span>{t('components.defaultValue')}</span>
                               </div>
                               {group.api.map((property) => (
                                 <div key={property.name}>
@@ -1301,7 +1260,7 @@ function ComponentPage() {
             )}
             <div className="guidance-grid">
               <section>
-                <h2>无障碍</h2>
+                <h2>{t('components.accessibility')}</h2>
                 <ul>
                   {documentation.accessibility.map((item) => (
                     <li key={item}>{item}</li>
@@ -1309,7 +1268,7 @@ function ComponentPage() {
                 </ul>
               </section>
               <section>
-                <h2>避免这样使用</h2>
+                <h2>{t('components.pitfalls')}</h2>
                 <ul>
                   {documentation.pitfalls.map((item) => (
                     <li key={item}>{item}</li>
@@ -1356,6 +1315,7 @@ function ComponentExampleCard({
   component: string;
   example: ComponentExample;
 }) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
   const copy = async () => {
@@ -1379,67 +1339,69 @@ function ComponentExampleCard({
         <div className="example-card-footer-content">
           <div className="demo-actions">
             <Tooltip
-              content={copied ? '已复制' : '复制代码'}
+              content={t(copied ? 'demo.copied' : 'demo.copyCode')}
               delay={300}
               trigger={
                 <button
                   type="button"
                   onClick={copy}
-                  aria-label={copied ? '代码已复制' : '复制代码'}
+                  aria-label={t(copied ? 'actions.copied' : 'demo.copyCode')}
                 >
                   {copied ? <Check /> : <Copy />}
                 </button>
               }
             />
             <Tooltip
-              content="在 GitHub 查看源码"
+              content={t('actions.viewOnGitHub')}
               delay={300}
               trigger={
                 <a
                   href={`${repositoryUrl}/blob/main/src/components/${component}.tsx`}
                   target="_blank"
                   rel="noreferrer"
-                  aria-label="在 GitHub 查看源码"
+                  aria-label={t('actions.viewOnGitHub')}
                 >
                   <Github />
                 </a>
               }
             />
             <Tooltip
-              content="在 CodeSandbox 打开"
+              content={t('demo.openCodeSandbox')}
               delay={300}
               trigger={
                 <a
                   href="https://codesandbox.io/p/github/heliannuuthus/ui/main"
                   target="_blank"
                   rel="noreferrer"
-                  aria-label="在 CodeSandbox 打开"
+                  aria-label={t('demo.openCodeSandbox')}
                 >
                   <Box />
                 </a>
               }
             />
             <Tooltip
-              content="在 StackBlitz 打开"
+              content={t('demo.openStackBlitz')}
               delay={300}
               trigger={
                 <a
                   href="https://stackblitz.com/github/heliannuuthus/ui"
                   target="_blank"
                   rel="noreferrer"
-                  aria-label="在 StackBlitz 打开"
+                  aria-label={t('demo.openStackBlitz')}
                 >
                   <Zap />
                 </a>
               }
             />
             <Tooltip
-              content={expanded ? '收起代码' : '展开代码'}
+              content={t(expanded ? 'demo.collapseCode' : 'demo.expandCode')}
               delay={300}
               trigger={
                 <Toggle
                   className="demo-expand-toggle size-8 min-w-8 p-0"
-                  aria-label={expanded ? '收起代码' : '展开代码'}
+                  aria-label={t(
+                    expanded ? 'demo.collapseCode' : 'demo.expandCode'
+                  )}
                   value={expanded}
                   onChange={setExpanded}
                 >
@@ -1475,7 +1437,11 @@ function ComponentExampleCard({
         }
       >
         {example.cases ? (
-          <ComponentHarness cases={example.cases} layout={example.caseLayout}>
+          <ComponentHarness
+            cases={example.cases}
+            layout={example.caseLayout}
+            minCaseWidth={example.caseMinWidth}
+          >
             {(values) =>
               typeof example.preview === 'function'
                 ? example.preview(values)
@@ -1483,7 +1449,11 @@ function ComponentExampleCard({
             }
           </ComponentHarness>
         ) : example.caseAxes ? (
-          <ComponentHarness axes={example.caseAxes} layout={example.caseLayout}>
+          <ComponentHarness
+            axes={example.caseAxes}
+            layout={example.caseLayout}
+            minCaseWidth={example.caseMinWidth}
+          >
             {(values) =>
               typeof example.preview === 'function'
                 ? example.preview(values)
@@ -1511,12 +1481,13 @@ function CodeBlock({
   language?: 'bash' | 'tsx';
   showLineNumbers?: boolean;
 }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   return (
     <SyntaxCode
       action={
         <Button
-          aria-label={copied ? '代码已复制' : '复制代码'}
+          aria-label={t(copied ? 'actions.copied' : 'demo.copyCode')}
           size="icon-sm"
           variant="ghost"
           onClick={async () => {
@@ -1592,6 +1563,8 @@ function DocLayout({
   }>;
   children: React.ReactNode;
 }) {
+  const { t } = useTranslation();
+
   return (
     <main className="doc-page">
       <Stack block className="doc-content" gap={48}>
@@ -1613,11 +1586,11 @@ function DocLayout({
           {children}
         </Stack>
       </Stack>
-      <aside aria-label="本页目录" className="doc-toc">
+      <aside aria-label={t('docs.onThisPage')} className="doc-toc">
         <Stack align="stretch" gap={16} orientation="horizontal">
           <Separator orientation="vertical" />
           <Stack gap={8}>
-            <Typography.Small>本页目录</Typography.Small>
+            <Typography.Small>{t('docs.onThisPage')}</Typography.Small>
             <Stack gap={2}>
               {toc.map((item, index) => (
                 <Button
@@ -1654,7 +1627,7 @@ export function Showcase({
     const openSearch = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();
-        setSearchOpen(true);
+        setSearchOpen((open) => !open);
       }
     };
 

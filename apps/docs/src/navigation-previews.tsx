@@ -1,7 +1,11 @@
-import { useState, type ReactNode } from 'react';
-import { NavigationMenu } from '@heliannuuthus/ui';
-import { Pagination } from '@heliannuuthus/ui';
-import { Tabs, type TabsAnimation } from '@heliannuuthus/ui';
+import { useState, type CSSProperties, type ReactNode } from 'react';
+import {
+  Button,
+  NavigationMenu,
+  Pagination,
+  Tabs,
+  type TabsAnimation,
+} from '@heliannuuthus/ui';
 import {
   Activity,
   Blocks,
@@ -222,19 +226,48 @@ export function TabsDashboardDemo() {
 
 type TabsListVariant = 'default' | 'line' | 'outline' | 'soft';
 
-export function TabsVariantsDemo({
-  variant = 'default',
-}: {
-  variant?: TabsListVariant;
-}) {
-  const centered = variant === 'line' || variant === 'soft';
+const tabsVariantOptions: Array<{
+  label: string;
+  value: TabsListVariant;
+}> = [
+  { label: '胶囊', value: 'default' },
+  { label: '线型', value: 'line' },
+  { label: '描边', value: 'outline' },
+  { label: '柔和', value: 'soft' },
+];
+
+export function TabsVariantsDemo() {
+  const [variant, setVariant] = useState<TabsListVariant>('default');
 
   return (
     <div className="tabs-variants-demo">
-      <div className="tabs-style-sample">
+      <header className="tabs-demo-toolbar">
+        <div>
+          <span>VARIANT</span>
+          <strong>保持内容不动，只比较标签外观</strong>
+        </div>
+        <div
+          aria-label="选择标签样式"
+          className="tabs-demo-options"
+          role="group"
+        >
+          {tabsVariantOptions.map((option) => (
+            <Button
+              aria-pressed={variant === option.value}
+              key={option.value}
+              onClick={() => setVariant(option.value)}
+              size="xs"
+              variant={variant === option.value ? 'secondary' : 'ghost'}
+            >
+              {option.label}
+            </Button>
+          ))}
+        </div>
+      </header>
+      <div className="tabs-variants-stage">
         <Tabs
           animation="none"
-          centered={centered}
+          centered
           defaultValue="preview"
           items={[
             { value: 'preview', label: '预览', content: '实时预览当前组件。' },
@@ -247,70 +280,187 @@ export function TabsVariantsDemo({
             },
           ]}
           variant={variant}
+          viewportClassName="tabs-variants-viewport"
         />
       </div>
     </div>
   );
 }
 
-export function TabsMotionDemo({
-  animation = 'slide',
-}: {
-  animation?: TabsAnimation;
-}) {
+const responsiveTabsItems = [
+  {
+    value: 'overview',
+    label: (
+      <>
+        <Gauge /> 项目概览
+      </>
+    ),
+    content: '查看项目状态、负责人和近期变化。',
+  },
+  {
+    value: 'activity',
+    label: (
+      <>
+        <Activity /> 活动记录
+      </>
+    ),
+    content: '查看团队最近完成的操作。',
+  },
+  {
+    value: 'branches',
+    label: (
+      <>
+        <GitBranch /> 分支策略
+      </>
+    ),
+    content: '查看分支保护与合并规则。',
+  },
+  {
+    value: 'docs',
+    label: (
+      <>
+        <BookOpen /> 使用文档
+      </>
+    ),
+    content: '查看组件接入与升级说明。',
+  },
+  {
+    value: 'support',
+    label: (
+      <>
+        <CircleHelp /> 帮助支持
+      </>
+    ),
+    content: '查看常见问题与支持渠道。',
+  },
+] as const;
+
+export function TabsResponsiveDemo() {
+  return (
+    <div className="tabs-responsive-demo">
+      <p>
+        这些宽度只用于验证嵌套场景；组件不会读取固定断点，而是响应当前可用空间。
+      </p>
+      {[320, 480].map((width) => (
+        <section
+          className="tabs-responsive-frame"
+          key={width}
+          style={
+            {
+              '--tabs-responsive-width': `${width}px`,
+            } as CSSProperties
+          }
+        >
+          <header>
+            <strong>≤ {width}px 测试容器</strong>
+            <span>使用方向键浏览全部标签</span>
+          </header>
+          <Tabs
+            animation="none"
+            defaultValue="overview"
+            items={responsiveTabsItems}
+            scrollButtonLabels={{
+              end: '向后滚动标签',
+              start: '向前滚动标签',
+            }}
+            variant={width === 320 ? 'soft' : 'line'}
+          />
+        </section>
+      ))}
+    </div>
+  );
+}
+
+const tabsAnimationOptions: Array<{
+  label: string;
+  value: TabsAnimation;
+}> = [
+  { label: '淡入', value: 'fade' },
+  { label: '滑动', value: 'slide' },
+  { label: '关闭', value: 'none' },
+];
+
+export function TabsMotionDemo() {
+  const [animation, setAnimation] = useState<TabsAnimation>('slide');
+
   return (
     <div className="tabs-motion-demo">
-      <Tabs
-        animation={animation}
-        centered
-        defaultValue="design"
-        panelClassName="tabs-motion-viewport"
-        variant="soft"
-        items={[
-          {
-            value: 'design',
-            label: (
-              <>
-                <Palette /> 设计
-              </>
-            ),
-            content: (
-              <>
-                <strong>整理组件视觉规范</strong>
-                <p>确认状态、密度与响应式表现，再进入实现。</p>
-              </>
-            ),
-          },
-          {
-            value: 'code',
-            label: (
-              <>
-                <Code2 /> 开发
-              </>
-            ),
-            content: (
-              <>
-                <strong>连接组件与业务状态</strong>
-                <p>键盘切换时，内容沿操作方向移动并保持上下文。</p>
-              </>
-            ),
-          },
-          {
-            value: 'release',
-            label: (
-              <>
-                <Package /> 发布
-              </>
-            ),
-            content: (
-              <>
-                <strong>完成验证并发布</strong>
-                <p>降低动态效果时会自动取消位移，仅保留即时切换。</p>
-              </>
-            ),
-          },
-        ]}
-      />
+      <header className="tabs-demo-toolbar">
+        <div>
+          <span>MOTION</span>
+          <strong>固定视口，仅切换面板内容</strong>
+        </div>
+        <div
+          aria-label="选择内容切换动效"
+          className="tabs-demo-options"
+          role="group"
+        >
+          {tabsAnimationOptions.map((option) => (
+            <Button
+              aria-pressed={animation === option.value}
+              key={option.value}
+              onClick={() => setAnimation(option.value)}
+              size="xs"
+              variant={animation === option.value ? 'secondary' : 'ghost'}
+            >
+              {option.label}
+            </Button>
+          ))}
+        </div>
+      </header>
+      <div className="tabs-motion-stage">
+        <Tabs
+          animation={animation}
+          centered
+          defaultValue="design"
+          variant="soft"
+          viewportClassName="tabs-motion-viewport"
+          items={[
+            {
+              value: 'design',
+              label: (
+                <>
+                  <Palette /> 设计
+                </>
+              ),
+              content: (
+                <>
+                  <strong>整理组件视觉规范</strong>
+                  <p>确认状态、密度与响应式表现，再进入实现。</p>
+                </>
+              ),
+            },
+            {
+              value: 'code',
+              label: (
+                <>
+                  <Code2 /> 开发
+                </>
+              ),
+              content: (
+                <>
+                  <strong>连接组件与业务状态</strong>
+                  <p>键盘切换时，内容沿操作方向移动并保持上下文。</p>
+                </>
+              ),
+            },
+            {
+              value: 'release',
+              label: (
+                <>
+                  <Package /> 发布
+                </>
+              ),
+              content: (
+                <>
+                  <strong>完成验证并发布</strong>
+                  <p>降低动态效果时会自动取消位移，仅保留即时切换。</p>
+                </>
+              ),
+            },
+          ]}
+        />
+      </div>
     </div>
   );
 }
