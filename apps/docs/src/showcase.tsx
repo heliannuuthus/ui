@@ -524,25 +524,45 @@ function GettingStartedPage() {
         <PackageManagerInstall />
       </DocSection>
       <DocSection
-        description="在应用入口加载一次全局主题样式。"
+        description="在应用入口显式加载一次完整视觉契约，再在其后加载业务覆盖样式。"
         icon={<Palette strokeWidth={2.5} />}
         id="styles"
         step="02"
         title="引入样式"
       >
-        <CodeBlock
-          code="import '@heliannuuthus/ui/styles.css'"
-          fileName="app.tsx"
-        />
+        <Stack block gap={12}>
+          <CodeBlock
+            code={`import '@heliannuuthus/ui/styles.css'
+import './app.css'`}
+            fileName="app.tsx"
+          />
+          <Item
+            description="组件 JavaScript 负责结构、行为与无障碍交互；styles.css 提供组件使用的 Tailwind 工具类、明暗主题 token、基础规则、动画和 reduced-motion 降级。缺少它时组件仍可能渲染，但布局、主题、焦点样式和动效会缺失或不正确。"
+            title="为什么仍然需要全局 CSS？"
+            variant="outline"
+          />
+          <Item
+            description="JavaScript 会按实际导入 tree-shake；当前 CSS 仍是单一兼容包，不会按组件裁剪。显式引入一次可以避免 JavaScript 入口产生隐藏副作用，并让业务样式通过加载顺序覆盖语义变量。"
+            title="JavaScript 与 CSS 的打包边界"
+            variant="outline"
+          />
+        </Stack>
       </DocSection>
       <DocSection
-        description="统一从包根目录导入；构建工具会自动 tree-shake，只保留实际使用的组件与依赖。"
+        description="使用具名根导入；业务构建工具会自动 tree-shake，只保留实际使用的组件与依赖。"
         icon={<Blocks strokeWidth={2.5} />}
         id="usage"
         step="03"
         title="使用组件"
       >
-        <CodeBlock code={demoCode} fileName="button-example.tsx" />
+        <Stack block gap={12}>
+          <CodeBlock code={demoCode} fileName="button-example.tsx" />
+          <Item
+            description="每个公共组件都会自动生成独立 ESM 入口。推荐继续从 @heliannuuthus/ui 使用具名导入，无需配置 Babel 或 Vite 转换插件；@heliannuuthus/ui/button 等子路径仅用于兼容旧代码。避免把 import * as UI 得到的命名空间动态传递，否则构建工具可能无法判断哪些导出未使用。"
+            title="按需打包发生在业务构建阶段"
+            variant="outline"
+          />
+        </Stack>
       </DocSection>
       <Item
         actions={<ArrowRight />}
