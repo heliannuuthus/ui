@@ -35,13 +35,13 @@ async function loadHarnessModule() {
       `,
       loader: 'ts',
       resolveDir: packageRoot,
-      sourcefile: 'docs-i18n-harness-entry.ts',
+      sourcefile: 'verify-docs-i18n-entry.ts',
     },
     write: false,
   });
   const [output] = result.outputFiles;
 
-  assert.ok(output, 'The i18n harness bundle must produce JavaScript.');
+  assert.ok(output, 'The i18n verifier bundle must produce JavaScript.');
 
   return import(
     `data:text/javascript;base64,${Buffer.from(output.contents).toString('base64')}`

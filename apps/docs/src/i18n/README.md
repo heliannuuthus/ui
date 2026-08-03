@@ -27,5 +27,6 @@ implementation refactors, styles, and test-only changes do not require locale
 updates unless they change visible behavior or search terminology.
 
 Run `pnpm --filter @heliannuuthus/ui-docs verify:i18n` to execute the
-documentation i18n harness directly. It also runs automatically before every
-documentation production build.
+project-local documentation i18n verifier directly. It also runs automatically
+before every documentation production build. The reusable Agent workflow lives
+in the root workspace `ui-docs-harness` skill.
