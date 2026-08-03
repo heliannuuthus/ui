@@ -92,6 +92,145 @@ function groupApiProperties(
   return Array.from(groups, ([component, api]) => ({ api, component }));
 }
 
+const classNameSlotExamples: Record<string, string> = {
+  action: 'text-primary',
+  content: 'space-y-4',
+  description: 'text-muted-foreground',
+  footer: 'justify-end gap-2',
+  header: 'border-primary/20 bg-primary/5',
+  title: 'text-lg font-semibold',
+};
+
+function TypeDefinitionExplorer({
+  api,
+  component,
+}: {
+  api: ApiProperty[];
+  component: string;
+}) {
+  const [activeName, setActiveName] = useState(api[0]?.name ?? '');
+  const [copied, setCopied] = useState(false);
+  const activeProperty =
+    api.find((property) => property.name === activeName) ?? api[0];
+
+  if (!activeProperty) {
+    return null;
+  }
+
+  const activeIndex = api.indexOf(activeProperty);
+  const isClassNames = component.endsWith('ClassNames');
+  const owner = component.replace(/ClassNames$/, '');
+  const declarationName =
+    component === 'ColumnDef' ? 'ColumnDef<TData, TValue>' : component;
+  const exampleClassName = isClassNames
+    ? (classNameSlotExamples[activeProperty.name] ?? 'your-class-name')
+    : '';
+  const usageExample = isClassNames
+    ? `<${owner}
+  classNames={{
+    ${activeProperty.name}: '${exampleClassName}',
+  }}
+/>`
+    : `type FieldType = ${declarationName}['${activeProperty.name}']`;
+
+  const copyUsage = async () => {
+    await navigator.clipboard.writeText(usageExample);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1200);
+  };
+
+  return (
+    <div className="class-names-explorer">
+      <section className="class-names-definition">
+        <div className="class-names-definition-heading">
+          <span>类型定义</span>
+          <code>export type</code>
+        </div>
+        <div aria-label={`${component} 字段`} className="class-names-source">
+          <p>
+            <span>type</span> <strong>{declarationName}</strong> = {'{'}
+          </p>
+          {api.map((property, index) => (
+            <button
+              aria-pressed={activeProperty.name === property.name}
+              data-active={
+                activeProperty.name === property.name ? '' : undefined
+              }
+              key={property.name}
+              onClick={() => setActiveName(property.name)}
+              onFocus={() => setActiveName(property.name)}
+              onMouseEnter={() => setActiveName(property.name)}
+              type="button"
+            >
+              <span aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <code>
+                <strong>{property.name}</strong>
+                <i>{property.required ? ':' : '?:'}</i> {property.type};
+              </code>
+            </button>
+          ))}
+          <p>{'}'}</p>
+        </div>
+      </section>
+
+      <section
+        aria-live="polite"
+        className="class-names-inspector"
+        data-property={activeProperty.name}
+        key={activeProperty.name}
+      >
+        <div className="class-names-inspector-heading">
+          <span>
+            {String(activeIndex + 1).padStart(2, '0')} /{' '}
+            {String(api.length).padStart(2, '0')}
+          </span>
+          <code>
+            {isClassNames
+              ? `classNames.${activeProperty.name}`
+              : activeProperty.name}
+          </code>
+        </div>
+        <p>{activeProperty.description}</p>
+        <dl>
+          <div>
+            <dt>类型</dt>
+            <dd>
+              <code>{activeProperty.type}</code>
+            </dd>
+          </div>
+          <div>
+            <dt>{isClassNames ? '作用域' : '约束'}</dt>
+            <dd>
+              {isClassNames
+                ? `${owner} 内部语义节点`
+                : activeProperty.required
+                  ? '必填字段'
+                  : '可选字段'}
+            </dd>
+          </div>
+        </dl>
+
+        <div className="class-names-usage-heading">
+          <span>{isClassNames ? '用法' : '类型访问'}</span>
+          <Button
+            aria-label={copied ? '代码已复制' : '复制当前写法'}
+            onClick={copyUsage}
+            size="icon-sm"
+            variant="ghost"
+          >
+            {copied ? <Check /> : <Copy />}
+          </Button>
+        </div>
+        <pre className="class-names-usage">
+          <code>{usageExample}</code>
+        </pre>
+      </section>
+    </div>
+  );
+}
+
 const componentGroups = [
   {
     title: '通用',
@@ -1128,22 +1267,31 @@ function ComponentPage() {
                           <h4>
                             <code>{group.component}</code>
                           </h4>
-                          <div className="component-api-table">
-                            <div className="component-api-head">
-                              <span>属性</span>
-                              <span>说明</span>
-                              <span>类型</span>
-                              <span>默认值</span>
-                            </div>
-                            {group.api.map((property) => (
-                              <div key={property.name}>
-                                <code>{property.name}</code>
-                                <span>{property.description}</span>
-                                <code>{property.type}</code>
-                                <code>{property.defaultValue ?? '—'}</code>
+                          {documentation.typeDefinitionGroups?.includes(
+                            group.component
+                          ) ? (
+                            <TypeDefinitionExplorer
+                              api={group.api}
+                              component={group.component}
+                            />
+                          ) : (
+                            <div className="component-api-table">
+                              <div className="component-api-head">
+                                <span>属性</span>
+                                <span>说明</span>
+                                <span>类型</span>
+                                <span>默认值</span>
                               </div>
-                            ))}
-                          </div>
+                              {group.api.map((property) => (
+                                <div key={property.name}>
+                                  <code>{property.name}</code>
+                                  <span>{property.description}</span>
+                                  <code>{property.type}</code>
+                                  <code>{property.defaultValue ?? '—'}</code>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </section>
                       ))}
                     </div>
