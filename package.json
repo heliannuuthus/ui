@@ -103,14 +103,15 @@
   "scripts": {
     "dev": "pnpm --filter @heliannuuthus/ui-docs dev",
     "build": "pnpm build:package && pnpm --filter @heliannuuthus/ui-docs build",
-    "build:package": "tsup && tailwindcss -i src/styles/globals.css -o dist/styles.css --minify",
+    "build:package": "tsup && tailwindcss -i src/styles/globals.css -o dist/styles.css --minify && pnpm verify:package",
     "build:docs": "pnpm build:package && pnpm --filter @heliannuuthus/ui-docs build",
-    "lint": "eslint src apps/docs/src --max-warnings=0",
-    "format": "prettier --write \"{src,apps}/**/*.{ts,tsx,css,json,md}\"",
-    "format:check": "prettier --check \"{src,apps}/**/*.{ts,tsx,css,json,md}\"",
+    "lint": "eslint src apps/docs/src scripts tsup.config.ts --max-warnings=0",
+    "format": "prettier --write \"{src,apps}/**/*.{ts,tsx,css,json,md}\" \"scripts/**/*.mjs\" tsup.config.ts package.json",
+    "format:check": "prettier --check \"{src,apps}/**/*.{ts,tsx,css,json,md}\" \"scripts/**/*.mjs\" tsup.config.ts package.json",
     "type-check": "tsc --noEmit && pnpm --filter @heliannuuthus/ui-docs exec tsc --noEmit",
     "prepare": "pnpm build:package",
-    "prepack": "pnpm build:package"
+    "prepack": "pnpm build:package",
+    "verify:package": "node scripts/verify-package.mjs"
   },
   "peerDependencies": {
     "react": ">=18.3.0",
@@ -151,6 +152,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
+    "esbuild": "^0.27.7",
     "eslint": "^9.39.2",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.4.7",

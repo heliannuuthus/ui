@@ -13,9 +13,15 @@ import { Button, Input, Radio } from '@heliannuuthus/ui';
 <Radio.Group options={options} />
 ```
 
-The root entry is side-effect-free ESM, so application bundlers can remove
-unused component exports. Existing explicit subpaths such as
-`@heliannuuthus/ui/button` remain available for backwards compatibility.
+The build discovers every public component automatically and emits an
+independent ESM entry for it. Keep importing from the package root: application
+bundlers remove unused component exports and include only the components and
+shared dependencies that the application actually uses. The package build
+verifies this behavior against the equivalent component subpath.
+
+Existing explicit subpaths such as `@heliannuuthus/ui/button` remain available
+for backwards compatibility; consumers do not need an import transform plugin
+or a manually maintained component list.
 
 `styles.css` is intentionally a separate compatibility entry and is never
 imported by the JavaScript root. This keeps JavaScript tree-shaking independent

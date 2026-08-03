@@ -536,7 +536,7 @@ function GettingStartedPage() {
         />
       </DocSection>
       <DocSection
-        description="每个组件都通过明确的子路径导入，便于 tree-shaking，也让依赖边界一目了然。"
+        description="统一从包根目录导入；构建工具会自动 tree-shake，只保留实际使用的组件与依赖。"
         icon={<Blocks strokeWidth={2.5} />}
         id="usage"
         step="03"
