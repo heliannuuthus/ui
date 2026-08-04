@@ -155,11 +155,11 @@ export const zhComponentNames = {
   Direction: '文字方向',
 } satisfies Record<ComponentName, string>;
 
-export function localizedComponentName(name: string, locale: 'zh' | 'en') {
+export const localizedComponentName = (name: string, locale: 'zh' | 'en') => {
   if (locale === 'en') return name;
   return zhComponentNames[name as ComponentName] ?? name;
-}
+};
 
-export function componentSlug(name: string) {
+export const componentSlug = (name: string) => {
   return name.toLowerCase().replace(/ /g, '-') as ComponentSlug;
-}
+};

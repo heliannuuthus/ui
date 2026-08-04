@@ -16,7 +16,7 @@ const roleOptions = [
   { label: 'Member', value: 'member' },
 ] as const;
 
-export function FormTypeTest() {
+export const FormTypeTest = () => {
   const form = Form.useForm<Values>({
     defaultValues: {
       enabled: false,
@@ -68,4 +68,4 @@ export function FormTypeTest() {
       </Form.Field>
     </Form>
   );
-}
+};

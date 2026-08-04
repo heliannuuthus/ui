@@ -17,7 +17,7 @@ import {
   Upload,
 } from 'lucide-react';
 
-function DemoFrame({
+const DemoFrame = ({
   eyebrow,
   title,
   children,
@@ -25,7 +25,7 @@ function DemoFrame({
   eyebrow: string;
   title: string;
   children: ReactNode;
-}) {
+}) => {
   return (
     <div className="dropdown-menu-demo">
       <div>
@@ -35,9 +35,9 @@ function DemoFrame({
       {children}
     </div>
   );
-}
+};
 
-export function DropdownMenuActionsDemo() {
+export const DropdownMenuActionsDemo = () => {
   const [lastAction, setLastAction] = useState(docsCopy('等待选择'));
   const items: DropdownMenuEntry[] = [
     { type: 'label', label: docsCopy('文件操作') },
@@ -85,9 +85,9 @@ export function DropdownMenuActionsDemo() {
       />
     </DemoFrame>
   );
-}
+};
 
-export function DropdownMenuSelectionDemo() {
+export const DropdownMenuSelectionDemo = () => {
   const [sidebar, setSidebar] = useState(true);
   const [density, setDensity] = useState('comfortable');
   const densityLabel =
@@ -129,9 +129,9 @@ export function DropdownMenuSelectionDemo() {
       />
     </DemoFrame>
   );
-}
+};
 
-export function DropdownMenuSubmenuDemo() {
+export const DropdownMenuSubmenuDemo = () => {
   const [format, setFormat] = useState(docsCopy('尚未选择格式'));
 
   return (
@@ -178,4 +178,4 @@ export function DropdownMenuSubmenuDemo() {
       />
     </DemoFrame>
   );
-}
+};

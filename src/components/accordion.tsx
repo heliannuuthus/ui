@@ -36,11 +36,11 @@ type AccordionIndicatorProps = {
   position: AccordionIndicatorPosition;
 };
 
-function AccordionIndicator({
+const AccordionIndicator = ({
   expandedIndicator,
   indicator,
   position,
-}: AccordionIndicatorProps) {
+}: AccordionIndicatorProps) => {
   const collapsedIndicator =
     indicator === undefined ? (
       position === 'start' ? (
@@ -83,9 +83,9 @@ function AccordionIndicator({
       ) : null}
     </span>
   );
-}
+};
 
-function Accordion({
+const Accordion = ({
   className,
   expandedIndicator,
   indicator,
@@ -93,7 +93,7 @@ function Accordion({
   items,
   onChange,
   ...props
-}: AccordionProps) {
+}: AccordionProps) => {
   return (
     <AccordionPrimitive.Root
       data-slot="accordion"
@@ -145,7 +145,7 @@ function Accordion({
       ))}
     </AccordionPrimitive.Root>
   );
-}
+};
 
 export {
   Accordion,

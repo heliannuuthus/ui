@@ -6,7 +6,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/utils';
 import type { DataAttributes } from './internal/public-types';
 
-function BubbleGroup({ className, ...props }: React.ComponentProps<'div'>) {
+const BubbleGroup = ({ className, ...props }: React.ComponentProps<'div'>) => {
   return (
     <div
       data-slot="bubble-group"
@@ -14,7 +14,7 @@ function BubbleGroup({ className, ...props }: React.ComponentProps<'div'>) {
       {...props}
     />
   );
-}
+};
 
 const bubbleVariants = cva(
   'group/bubble relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1 data-[align=end]:self-end data-[variant=ghost]:max-w-full',
@@ -59,7 +59,7 @@ type BubbleProps = Omit<React.ComponentProps<'div'>, 'children'> &
     reactionsProps?: BubbleReactionsProps;
   };
 
-function Bubble({
+const Bubble = ({
   align = 'start',
   className,
   content,
@@ -68,7 +68,7 @@ function Bubble({
   reactionsProps,
   variant = 'default',
   ...props
-}: BubbleProps) {
+}: BubbleProps) => {
   return (
     <div
       data-slot="bubble"
@@ -83,13 +83,13 @@ function Bubble({
       ) : null}
     </div>
   );
-}
+};
 
-function BubbleContent({
+const BubbleContent = ({
   className,
   render,
   ...props
-}: useRender.ComponentProps<'div'>) {
+}: useRender.ComponentProps<'div'>) => {
   return useRender({
     defaultTagName: 'div',
     props: mergeProps<'div'>(
@@ -106,7 +106,7 @@ function BubbleContent({
       slot: 'bubble-content',
     },
   });
-}
+};
 
 const bubbleReactionsVariants = cva(
   'absolute z-10 flex w-fit shrink-0 items-center justify-center gap-1 rounded-full bg-muted px-1.5 py-0.5 text-sm ring-3 ring-card has-[button]:p-0',
@@ -128,12 +128,12 @@ const bubbleReactionsVariants = cva(
   }
 );
 
-function BubbleReactions({
+const BubbleReactions = ({
   side = 'bottom',
   align = 'end',
   className,
   ...props
-}: BubbleReactionsProps) {
+}: BubbleReactionsProps) => {
   return (
     <div
       data-slot="bubble-reactions"
@@ -143,7 +143,7 @@ function BubbleReactions({
       {...props}
     />
   );
-}
+};
 
 const BubbleCompound = Object.assign(Bubble, {
   Group: BubbleGroup,

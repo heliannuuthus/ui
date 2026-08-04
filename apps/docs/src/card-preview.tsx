@@ -46,7 +46,7 @@ const cardSemanticRegions = [
 
 type CardSemanticSlot = (typeof cardSemanticRegions)[number]['slot'];
 
-export function CardBasicDemo() {
+export const CardBasicDemo = () => {
   return (
     <Card className="card-basic-demo" title={docsCopy('设计系统更新')}>
       <p>
@@ -54,9 +54,9 @@ export function CardBasicDemo() {
       </p>
     </Card>
   );
-}
+};
 
-export function CardAnatomyDemo() {
+export const CardAnatomyDemo = () => {
   return (
     <Card
       className="card-showcase"
@@ -102,9 +102,9 @@ export function CardAnatomyDemo() {
       </div>
     </Card>
   );
-}
+};
 
-export function CardSemanticDomDemo() {
+export const CardSemanticDomDemo = () => {
   const [activeSlot, setActiveSlot] = useState<CardSemanticSlot>('root');
   const [highlightStyle, setHighlightStyle] = useState<CSSProperties>();
   const stageRef = useRef<HTMLDivElement>(null);
@@ -255,4 +255,4 @@ export function CardSemanticDomDemo() {
       </div>
     </div>
   );
-}
+};

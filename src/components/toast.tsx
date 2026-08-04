@@ -36,21 +36,21 @@ type ToastContextValue = {
 
 const ToastContext = React.createContext<ToastContextValue | null>(null);
 
-function getToastOptions(
+const getToastOptions = (
   options: ExternalToast | undefined,
   toasterId: string | undefined
-): ExternalToast {
+): ExternalToast => {
   return toasterId ? { ...options, toasterId } : (options ?? {});
-}
+};
 
-function isToastInScope(
+const isToastInScope = (
   item: ReturnType<typeof sonnerToast.getToasts>[number],
   toasterId: string | undefined
-): item is ToastT {
+): item is ToastT => {
   return !('dismiss' in item) && item.toasterId === toasterId;
-}
+};
 
-function createToastApi(toasterId?: string): typeof sonnerToast {
+const createToastApi = (toasterId?: string): typeof sonnerToast => {
   const scopedToast = ((message, options) =>
     sonnerToast(
       message,
@@ -94,9 +94,9 @@ function createToastApi(toasterId?: string): typeof sonnerToast {
     sonnerToast.getToasts().filter((item) => isToastInScope(item, toasterId));
 
   return scopedToast;
-}
+};
 
-function Toaster({
+const Toaster = ({
   className,
   closeButton = true,
   position = 'top-center',
@@ -105,7 +105,7 @@ function Toaster({
   style,
   toastOptions,
   ...props
-}: ToasterProps) {
+}: ToasterProps) => {
   const { theme = 'system' } = useTheme();
 
   return (
@@ -165,14 +165,14 @@ function Toaster({
       {...props}
     />
   );
-}
+};
 
-function ToastProvider({
+const ToastProvider = ({
   children,
   id,
   scope = 'global',
   ...toasterProps
-}: ToastProviderProps) {
+}: ToastProviderProps) => {
   const generatedId = React.useId();
   const toasterId =
     id ??
@@ -188,9 +188,9 @@ function ToastProvider({
       <Toaster id={toasterId} scope={scope} {...toasterProps} />
     </ToastContext.Provider>
   );
-}
+};
 
-function useToast() {
+const useToast = () => {
   const context = React.useContext(ToastContext);
 
   if (!context) {
@@ -198,7 +198,7 @@ function useToast() {
   }
 
   return context;
-}
+};
 
 const Toast = Object.assign(Toaster, {
   Provider: ToastProvider,

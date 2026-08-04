@@ -87,10 +87,10 @@ const installCommands = {
 } as const;
 type PackageManager = PackageManagerName;
 
-function groupApiProperties(
+const groupApiProperties = (
   properties: ApiProperty[],
   defaultComponent: string
-) {
+) => {
   const groups = new Map<string, ApiProperty[]>();
 
   for (const property of properties) {
@@ -105,7 +105,7 @@ function groupApiProperties(
   }
 
   return Array.from(groups, ([component, api]) => ({ api, component }));
-}
+};
 
 const classNameSlotExamples: Record<string, string> = {
   action: 'text-primary',
@@ -116,13 +116,13 @@ const classNameSlotExamples: Record<string, string> = {
   title: 'text-lg font-semibold',
 };
 
-function TypeDefinitionExplorer({
+const TypeDefinitionExplorer = ({
   api,
   component,
 }: {
   api: ApiProperty[];
   component: string;
-}) {
+}) => {
   const { t } = useTranslation();
   const [activeName, setActiveName] = useState(api[0]?.name ?? '');
   const [copied, setCopied] = useState(false);
@@ -248,7 +248,7 @@ function TypeDefinitionExplorer({
       </section>
     </div>
   );
-}
+};
 
 const spaciousComponentSlugs = new Set<string>(
   componentGroups
@@ -258,7 +258,7 @@ const spaciousComponentSlugs = new Set<string>(
 
 const demoCode = docsCopy(`import { Button } from '@heliannuuthus/ui'
 
-export function ButtonDemo() {
+export const ButtonDemo = () => {
   return (
     <div className="flex gap-3">
       <Button>开始使用</Button>
@@ -275,7 +275,7 @@ const navItems = [
   { labelKey: 'navigation.components', to: '/components' },
 ];
 
-function Brand() {
+const Brand = () => {
   const { t } = useTranslation();
   const path = useLocalizedPath();
 
@@ -294,9 +294,9 @@ function Brand() {
       </span>
     </NavLink>
   );
-}
+};
 
-function SiteHeader({
+const SiteHeader = ({
   dark,
   onSearch,
   onTheme,
@@ -304,7 +304,7 @@ function SiteHeader({
   dark: boolean;
   onSearch: () => void;
   onTheme: () => void;
-}) {
+}) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const locale = useDocsLocale();
@@ -398,9 +398,9 @@ function SiteHeader({
       </div>
     </header>
   );
-}
+};
 
-function HomePage() {
+const HomePage = () => {
   const path = useLocalizedPath();
   const { t } = useTranslation();
   const [copiedManager, setCopiedManager] = useState<PackageManager | null>(
@@ -604,9 +604,9 @@ function HomePage() {
       </section>
     </main>
   );
-}
+};
 
-function GettingStartedPage() {
+const GettingStartedPage = () => {
   const path = useLocalizedPath();
   const { t } = useTranslation();
 
@@ -685,9 +685,9 @@ function GettingStartedPage() {
       />
     </DocLayout>
   );
-}
+};
 
-function PackageManagerInstall() {
+const PackageManagerInstall = () => {
   return (
     <Tabs
       animation="none"
@@ -709,9 +709,9 @@ function PackageManagerInstall() {
       )}
     />
   );
-}
+};
 
-function DesignPage() {
+const DesignPage = () => {
   const { t } = useTranslation();
   const principles = [
     ['01', t('design.clarity'), t('design.clarityDescription')],
@@ -743,9 +743,9 @@ function DesignPage() {
       </Stack>
     </DocLayout>
   );
-}
+};
 
-function ComponentsOverview() {
+const ComponentsOverview = () => {
   const { t } = useTranslation();
   const locale = useDocsLocale();
   const [query, setQuery] = useState('');
@@ -820,9 +820,9 @@ function ComponentsOverview() {
       )}
     </div>
   );
-}
+};
 
-function ComponentOverviewCard({ item }: { item: string }) {
+const ComponentOverviewCard = ({ item }: { item: string }) => {
   const path = useLocalizedPath();
   const locale = useDocsLocale();
   const slug = componentSlug(item);
@@ -869,15 +869,15 @@ function ComponentOverviewCard({ item }: { item: string }) {
       }
     />
   );
-}
+};
 
-function ComponentSearchDialog({
+const ComponentSearchDialog = ({
   open,
   onOpenChange,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-}) {
+}) => {
   const navigate = useNavigate();
   const path = useLocalizedPath();
   const { t } = useTranslation();
@@ -968,9 +968,9 @@ function ComponentSearchDialog({
       placeholder={t('search.placeholder')}
     />
   );
-}
+};
 
-function ComponentNavigation({ component }: { component: string }) {
+const ComponentNavigation = ({ component }: { component: string }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const path = useLocalizedPath();
   const { t } = useTranslation();
@@ -1053,9 +1053,9 @@ function ComponentNavigation({ component }: { component: string }) {
       </Sidebar.Content>
     </Sidebar>
   );
-}
+};
 
-function ComponentNavigationLink({
+const ComponentNavigationLink = ({
   isActive,
   item,
   slug,
@@ -1063,7 +1063,7 @@ function ComponentNavigationLink({
   isActive: boolean;
   item: string;
   slug: string;
-}) {
+}) => {
   const path = useLocalizedPath();
   const locale = useDocsLocale();
   const to = path(`/components/${slug}`);
@@ -1080,9 +1080,9 @@ function ComponentNavigationLink({
       <span>{localizedComponentName(item, locale)}</span>
     </Sidebar.MenuButton>
   );
-}
+};
 
-function ComponentPage() {
+const ComponentPage = () => {
   const { component = 'button' } = useParams();
   const path = useLocalizedPath();
   const { t } = useTranslation();
@@ -1287,15 +1287,15 @@ function ComponentPage() {
       </Sidebar.Inset>
     </Sidebar.Provider>
   );
-}
+};
 
-function ComponentExampleList({
+const ComponentExampleList = ({
   component,
   examples,
 }: {
   component: string;
   examples: ComponentExample[];
-}) {
+}) => {
   return (
     <Masonry
       className="example-list"
@@ -1312,15 +1312,15 @@ function ComponentExampleList({
       minColumnWidth={300}
     />
   );
-}
+};
 
-function ComponentExampleCard({
+const ComponentExampleCard = ({
   component,
   example,
 }: {
   component: string;
   example: ComponentExample;
-}) {
+}) => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -1477,9 +1477,9 @@ function ComponentExampleCard({
       </div>
     </Card>
   );
-}
+};
 
-function CodeBlock({
+const CodeBlock = ({
   code,
   fileName = 'example.tsx',
   language = 'tsx',
@@ -1489,7 +1489,7 @@ function CodeBlock({
   fileName?: string;
   language?: 'bash' | 'tsx';
   showLineNumbers?: boolean;
-}) {
+}) => {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   return (
@@ -1514,9 +1514,9 @@ function CodeBlock({
       showLineNumbers={showLineNumbers}
     />
   );
-}
+};
 
-function DocSection({
+const DocSection = ({
   children,
   description,
   icon,
@@ -1530,7 +1530,7 @@ function DocSection({
   id: string;
   step: string;
   title: string;
-}) {
+}) => {
   return (
     <section className="doc-section" id={id}>
       <Stack block gap={16}>
@@ -1553,9 +1553,9 @@ function DocSection({
       </Stack>
     </section>
   );
-}
+};
 
-function DocLayout({
+const DocLayout = ({
   title,
   kicker,
   description,
@@ -1571,7 +1571,7 @@ function DocLayout({
     icon?: React.ReactNode;
   }>;
   children: React.ReactNode;
-}) {
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -1622,13 +1622,13 @@ function DocLayout({
       </aside>
     </main>
   );
-}
+};
 
-export function Showcase({
+export const Showcase = ({
   page,
 }: {
   page: 'home' | 'getting-started' | 'design' | 'components' | 'component';
-}) {
+}) => {
   const [dark, setDark] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -1659,4 +1659,4 @@ export function Showcase({
       {page === 'component' && <ComponentPage />}
     </div>
   );
-}
+};

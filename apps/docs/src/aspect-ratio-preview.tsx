@@ -26,7 +26,7 @@ const coverRatios = [
   },
 ] as const;
 
-export function AspectRatioCoverDemo() {
+export const AspectRatioCoverDemo = () => {
   const [activeRatio, setActiveRatio] = useState<(typeof coverRatios)[number]>(
     coverRatios[0]
   );
@@ -101,4 +101,4 @@ export function AspectRatioCoverDemo() {
       </form>
     </div>
   );
-}
+};

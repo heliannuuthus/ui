@@ -25,7 +25,7 @@ type SwitchProps = Omit<
   value?: string;
 };
 
-function Switch({
+const Switch = ({
   checked,
   className,
   defaultChecked,
@@ -39,17 +39,17 @@ function Switch({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   ...props
-}: SwitchProps) {
+}: SwitchProps) => {
   const formControl = useFormControl<boolean>();
   const controlRef = useMergedRefs(
     inputRef,
     formControl?.ref as React.Ref<HTMLInputElement> | undefined
   );
 
-  function handleCheckedChange(checked: boolean) {
+  const handleCheckedChange = (checked: boolean) => {
     onChange?.(checked);
     formControl?.onChange(checked);
-  }
+  };
 
   return (
     <SwitchPrimitive.Root
@@ -84,7 +84,7 @@ function Switch({
       />
     </SwitchPrimitive.Root>
   );
-}
+};
 
 export { Switch };
 export type { SwitchProps };

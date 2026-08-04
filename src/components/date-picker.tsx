@@ -33,7 +33,7 @@ interface DatePickerProps extends Pick<
   >;
 }
 
-function DatePicker({
+const DatePicker = ({
   display = 'popover',
   value,
   defaultValue,
@@ -51,7 +51,7 @@ function DatePicker({
   className,
   calendarClassName,
   calendarProps,
-}: DatePickerProps) {
+}: DatePickerProps) => {
   const formControl = useFormControl<Date | undefined>();
   const controlRef = useMergedRefs(
     inputRef,
@@ -125,6 +125,6 @@ function DatePicker({
       }
     />
   );
-}
+};
 
 export { DatePicker, type DatePickerProps };

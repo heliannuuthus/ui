@@ -19,13 +19,13 @@ const FormControlContext = React.createContext<FormControlContextValue | null>(
   null
 );
 
-function FormControlProvider<Value>({
+const FormControlProvider = <Value,>({
   children,
   value,
 }: {
   children: React.ReactNode;
   value: FormControlContextValue<Value>;
-}) {
+}) => {
   return (
     <FormControlContext.Provider
       value={value as FormControlContextValue<unknown>}
@@ -33,34 +33,34 @@ function FormControlProvider<Value>({
       {children}
     </FormControlContext.Provider>
   );
-}
+};
 
-function FormControlBoundary({ children }: { children: React.ReactNode }) {
+const FormControlBoundary = ({ children }: { children: React.ReactNode }) => {
   return (
     <FormControlContext.Provider value={null}>
       {children}
     </FormControlContext.Provider>
   );
-}
+};
 
-function useFormControl<Value>() {
+const useFormControl = <Value,>() => {
   return React.useContext(
     FormControlContext
   ) as FormControlContextValue<Value> | null;
-}
+};
 
-function assignRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
+const assignRef = <T,>(ref: React.Ref<T> | undefined, value: T | null) => {
   if (typeof ref === 'function') {
     ref(value);
   } else if (ref) {
     ref.current = value;
   }
-}
+};
 
-function useMergedRefs<T>(
+const useMergedRefs = <T,>(
   firstRef: React.Ref<T> | undefined,
   secondRef: React.Ref<T> | undefined
-) {
+) => {
   return React.useCallback(
     (value: T | null) => {
       assignRef(firstRef, value);
@@ -68,15 +68,15 @@ function useMergedRefs<T>(
     },
     [firstRef, secondRef]
   );
-}
+};
 
-function mergeIds(...ids: Array<string | undefined>) {
+const mergeIds = (...ids: Array<string | undefined>) => {
   const value = [...new Set(ids.flatMap((id) => id?.split(' ') ?? []))]
     .filter(Boolean)
     .join(' ');
 
   return value || undefined;
-}
+};
 
 export {
   FormControlBoundary,

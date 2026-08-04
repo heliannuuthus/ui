@@ -51,11 +51,11 @@ import {
 } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
-export function AccordionReleaseDemo({
+export const AccordionReleaseDemo = ({
   mode = 'single',
 }: {
   mode?: 'single' | 'multiple';
-}) {
+}) => {
   const multiple = mode === 'multiple';
 
   return (
@@ -93,9 +93,9 @@ export function AccordionReleaseDemo({
       />
     </div>
   );
-}
+};
 
-export function CounterBuildDemo() {
+export const CounterBuildDemo = () => {
   const [count, setCount] = useState(1284);
 
   return (
@@ -128,9 +128,9 @@ export function CounterBuildDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function AccordionModesDemo() {
+export const AccordionModesDemo = () => {
   return (
     <div className="accordion-modes-demo">
       <section className="accordion-mode-example">
@@ -149,9 +149,9 @@ export function AccordionModesDemo() {
       </section>
     </div>
   );
-}
+};
 
-function AccordionIndicatorSample({
+const AccordionIndicatorSample = ({
   description,
   expandedIndicator,
   indicator,
@@ -165,7 +165,7 @@ function AccordionIndicatorSample({
   indicatorPosition?: 'start' | 'end';
   kind: 'custom' | 'end' | 'start';
   title: string;
-}) {
+}) => {
   return (
     <section className="accordion-indicator-example" data-example={kind}>
       <div className="accordion-mode-heading">
@@ -192,9 +192,9 @@ function AccordionIndicatorSample({
       />
     </section>
   );
-}
+};
 
-export function AccordionIndicatorDemo() {
+export const AccordionIndicatorDemo = () => {
   return (
     <div className="accordion-indicator-demo">
       <AccordionIndicatorSample
@@ -217,7 +217,7 @@ export function AccordionIndicatorDemo() {
       />
     </div>
   );
-}
+};
 
 type AttachmentState = 'idle' | 'uploading' | 'processing' | 'error' | 'done';
 
@@ -247,11 +247,11 @@ const releaseFiles: Array<{
   },
 ];
 
-export function AttachmentReleaseDemo({
+export const AttachmentReleaseDemo = ({
   orientation = 'horizontal',
 }: {
   orientation?: 'horizontal' | 'vertical';
-}) {
+}) => {
   return (
     <div className="display-attachments">
       <div className="display-section-label">
@@ -283,7 +283,7 @@ export function AttachmentReleaseDemo({
       />
     </div>
   );
-}
+};
 
 const avatarPeople = [
   { initials: docsCopy('林'), tone: 'blue' },
@@ -294,7 +294,7 @@ const avatarPeople = [
   { initials: docsCopy('宋'), tone: 'slate' },
 ] as const;
 
-export function AvatarShapeDemo() {
+export const AvatarShapeDemo = () => {
   const sizes = [
     { label: docsCopy('小'), meta: '24 px', value: 'sm' },
     { label: docsCopy('中'), meta: '32 px', value: 'default' },
@@ -333,9 +333,9 @@ export function AvatarShapeDemo() {
       ))}
     </div>
   );
-}
+};
 
-export function AvatarGroupDemo() {
+export const AvatarGroupDemo = () => {
   const [max, setMax] = useState(4);
   const [overlap, setOverlap] = useState(8);
 
@@ -404,9 +404,9 @@ export function AvatarGroupDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function AvatarBadgeDemo() {
+export const AvatarBadgeDemo = () => {
   const cases = [
     {
       title: docsCopy('在线状态'),
@@ -467,9 +467,9 @@ export function AvatarBadgeDemo() {
       ))}
     </div>
   );
-}
+};
 
-export function BubbleVariantsDemo() {
+export const BubbleVariantsDemo = () => {
   const replies = [
     { label: docsCopy('强调'), token: 'default', variant: 'default' },
     { label: docsCopy('浮起'), token: 'elevated', variant: 'elevated' },
@@ -500,7 +500,7 @@ export function BubbleVariantsDemo() {
       ))}
     </div>
   );
-}
+};
 
 const conversationMessages: ReadonlyArray<{
   time: string;
@@ -557,7 +557,7 @@ const conversationMessages: ReadonlyArray<{
   },
 ];
 
-export function BubbleConversationDemo() {
+export const BubbleConversationDemo = () => {
   return (
     <div className="display-scroller-shell">
       <div className="display-scroller-header">
@@ -620,7 +620,7 @@ export function BubbleConversationDemo() {
       </ScrollArea>
     </div>
   );
-}
+};
 
 const releaseHighlights = [
   {
@@ -643,7 +643,7 @@ const releaseHighlights = [
   },
 ];
 
-export function CarouselHighlightsDemo({
+export const CarouselHighlightsDemo = ({
   autoplay = false,
   dotPosition = 'bottom',
   loop = false,
@@ -653,7 +653,7 @@ export function CarouselHighlightsDemo({
   dotPosition?: 'top' | 'bottom';
   loop?: boolean;
   pauseOnHover?: boolean;
-}) {
+}) => {
   return (
     <Carousel
       aria-label={docsCopy('版本亮点')}
@@ -681,9 +681,9 @@ export function CarouselHighlightsDemo({
       previousButtonProps={{ className: 'display-carousel-previous' }}
     />
   );
-}
+};
 
-export function CarouselCustomPaginationDemo() {
+export const CarouselCustomPaginationDemo = () => {
   return (
     <Carousel
       aria-label={docsCopy('带自定义翻页器的版本亮点')}
@@ -771,9 +771,9 @@ export function CarouselCustomPaginationDemo() {
       )}
     />
   );
-}
+};
 
-export function CarouselAutoplayDemo() {
+export const CarouselAutoplayDemo = () => {
   return (
     <div className="display-carousel-autoplay-stage">
       <div className="display-carousel-autoplay-heading">
@@ -784,7 +784,7 @@ export function CarouselAutoplayDemo() {
       <CarouselHighlightsDemo autoplay={2.2} loop />
     </div>
   );
-}
+};
 
 const deploymentData = [
   { day: '07.21', success: 92.4 },
@@ -800,7 +800,7 @@ const deploymentChartConfig = {
   success: { label: docsCopy('发布成功率'), color: 'var(--primary)' },
 } satisfies ChartConfig;
 
-export function ChartDeploymentDemo() {
+export const ChartDeploymentDemo = () => {
   return (
     <section
       aria-label={docsCopy('发布健康度趋势')}
@@ -924,9 +924,9 @@ export function ChartDeploymentDemo() {
       </footer>
     </section>
   );
-}
+};
 
-export function CollapsibleBasicDemo() {
+export const CollapsibleBasicDemo = () => {
   return (
     <Collapsible
       className="display-collapsible-basic"
@@ -947,9 +947,9 @@ export function CollapsibleBasicDemo() {
       }
     />
   );
-}
+};
 
-function CollapsibleBuildDemo() {
+const CollapsibleBuildDemo = () => {
   return (
     <Collapsible
       className="display-build-log"
@@ -988,9 +988,9 @@ function CollapsibleBuildDemo() {
       }
     />
   );
-}
+};
 
-function CollapsiblePolicyDemo() {
+const CollapsiblePolicyDemo = () => {
   return (
     <Collapsible
       className="display-build-log display-policy"
@@ -1034,9 +1034,9 @@ function CollapsiblePolicyDemo() {
       }
     />
   );
-}
+};
 
-export function CollapsibleTriggerModesDemo() {
+export const CollapsibleTriggerModesDemo = () => {
   return (
     <div className="display-collapsible-modes">
       <section>
@@ -1055,9 +1055,9 @@ export function CollapsibleTriggerModesDemo() {
       </section>
     </div>
   );
-}
+};
 
-export function CollapsibleHeaderIconDemo() {
+export const CollapsibleHeaderIconDemo = () => {
   return (
     <div className="display-collapsible-icon-demo">
       <section>
@@ -1119,7 +1119,7 @@ export function CollapsibleHeaderIconDemo() {
       </section>
     </div>
   );
-}
+};
 
 type ReleaseRecord = {
   environment: string;
@@ -1381,7 +1381,7 @@ const virtualDataTableColumns: ColumnDef<VirtualDataTableRecord>[] = [
   },
 ];
 
-export function DataTableReleaseDemo() {
+export const DataTableReleaseDemo = () => {
   return (
     <div className="display-data-table">
       <DataTable
@@ -1410,9 +1410,9 @@ export function DataTableReleaseDemo() {
       />
     </div>
   );
-}
+};
 
-export function DataTableExpandableDemo() {
+export const DataTableExpandableDemo = () => {
   return (
     <div className="display-data-table">
       <DataTable
@@ -1445,9 +1445,9 @@ export function DataTableExpandableDemo() {
       />
     </div>
   );
-}
+};
 
-export function DataTableGroupedHeaderDemo() {
+export const DataTableGroupedHeaderDemo = () => {
   return (
     <div className="display-data-table display-data-table-grouped">
       <DataTable
@@ -1458,9 +1458,9 @@ export function DataTableGroupedHeaderDemo() {
       />
     </div>
   );
-}
+};
 
-export function DataTableVirtualScrollDemo() {
+export const DataTableVirtualScrollDemo = () => {
   return (
     <div className="display-data-table">
       <DataTable
@@ -1478,13 +1478,13 @@ export function DataTableVirtualScrollDemo() {
       />
     </div>
   );
-}
+};
 
-export function EmptyReleaseDemo({
+export const EmptyReleaseDemo = ({
   context = 'new',
 }: {
   context?: 'new' | 'filtered';
-}) {
+}) => {
   const filtered = context === 'filtered';
 
   return (
@@ -1507,13 +1507,13 @@ export function EmptyReleaseDemo({
       }
     />
   );
-}
+};
 
-export function EmptyDefaultDemo() {
+export const EmptyDefaultDemo = () => {
   return <Empty className="display-empty" title={docsCopy('暂无内容')} />;
-}
+};
 
-export function EmptyCompositionDemo() {
+export const EmptyCompositionDemo = () => {
   return (
     <Empty
       actions={
@@ -1533,13 +1533,13 @@ export function EmptyCompositionDemo() {
       title={docsCopy('等待安全审计')}
     />
   );
-}
+};
 
-export function ItemActivityDemo({
+export const ItemActivityDemo = ({
   variant = 'outline',
 }: {
   variant?: 'default' | 'outline' | 'muted';
-}) {
+}) => {
   return (
     <Item.Group
       className="display-activity-list"
@@ -1573,13 +1573,13 @@ export function ItemActivityDemo({
       ]}
     />
   );
-}
+};
 
-export function MarkerTimelineDemo({
+export const MarkerTimelineDemo = ({
   variant = 'separator',
 }: {
   variant?: 'default' | 'separator' | 'border';
-}) {
+}) => {
   return (
     <div className="display-timeline">
       <div className="display-timeline-event">
@@ -1597,7 +1597,7 @@ export function MarkerTimelineDemo({
       </div>
     </div>
   );
-}
+};
 
 const tableRows = [
   ['Web Console', 'v0.12.0', docsCopy('生产'), docsCopy('查看')],
@@ -1605,7 +1605,7 @@ const tableRows = [
   ['Worker', 'v0.9.7', docsCopy('预览'), docsCopy('确认')],
 ];
 
-export function TableReleaseDemo() {
+export const TableReleaseDemo = () => {
   return (
     <div className="display-table-shell">
       <Table>
@@ -1651,7 +1651,7 @@ export function TableReleaseDemo() {
       </Table>
     </div>
   );
-}
+};
 
 const fixedTableRows = [
   [
@@ -1726,7 +1726,7 @@ const fixedTableRows = [
   ],
 ];
 
-export function TableFixedDemo() {
+export const TableFixedDemo = () => {
   return (
     <div className="display-table-shell display-table-wide">
       <Table className="min-w-[960px] table-fixed">
@@ -1789,7 +1789,7 @@ export function TableFixedDemo() {
       </Table>
     </div>
   );
-}
+};
 
 const virtualTableRows = Array.from({ length: 1000 }, (_, index) => ({
   id: `EVT-${String(index + 1).padStart(4, '0')}`,
@@ -1807,11 +1807,11 @@ const virtualTableRows = Array.from({ length: 1000 }, (_, index) => ({
   status: index % 9 === 0 ? docsCopy('观察') : docsCopy('健康'),
 }));
 
-function getVirtualTableRowKey(row: (typeof virtualTableRows)[number]) {
+const getVirtualTableRowKey = (row: (typeof virtualTableRows)[number]) => {
   return row.id;
-}
+};
 
-export function TableVirtualScrollDemo() {
+export const TableVirtualScrollDemo = () => {
   return (
     <div className="display-table-shell display-table-wide">
       <div className="display-table-virtual-meta">
@@ -1875,7 +1875,7 @@ export function TableVirtualScrollDemo() {
       </Table>
     </div>
   );
-}
+};
 
 const paginatedTableRows = [
   ['REL-1842', 'Web Console', docsCopy('林默'), docsCopy('已完成')],
@@ -1887,7 +1887,7 @@ const paginatedTableRows = [
   ['REL-1836', 'Notification', docsCopy('林默'), docsCopy('已完成')],
 ];
 
-export function TablePaginationDemo() {
+export const TablePaginationDemo = () => {
   const [page, setPage] = useState(1);
   const pageSize = 3;
   const pageCount = Math.ceil(paginatedTableRows.length / pageSize);
@@ -1960,7 +1960,7 @@ export function TablePaginationDemo() {
       </div>
     </div>
   );
-}
+};
 
 const expandableTableRows = [
   {
@@ -1992,7 +1992,7 @@ const expandableTableRows = [
   },
 ];
 
-export function TableExpandableDemo() {
+export const TableExpandableDemo = () => {
   const [expandedId, setExpandedId] = useState<string | null>('REL-1842');
 
   return (
@@ -2046,7 +2046,7 @@ export function TableExpandableDemo() {
       </Table>
     </div>
   );
-}
+};
 
 const cellTableRows = [
   {
@@ -2065,13 +2065,13 @@ const cellTableRows = [
   },
 ];
 
-function TableActionCell({
+const TableActionCell = ({
   action,
   service,
 }: {
   action: string;
   service: string;
-}) {
+}) => {
   return (
     <Button
       aria-label={`${action} ${service}`}
@@ -2083,9 +2083,9 @@ function TableActionCell({
       <ArrowUpRight data-icon="inline-end" />
     </Button>
   );
-}
+};
 
-export function TableCellDemo() {
+export const TableCellDemo = () => {
   return (
     <div className="display-table-shell display-table-wide">
       <Table className="min-w-[680px] table-fixed">
@@ -2124,7 +2124,7 @@ export function TableCellDemo() {
       </Table>
     </div>
   );
-}
+};
 
 const tooltipPlacements = [
   {
@@ -2162,7 +2162,7 @@ const tooltipPlacements = [
   },
 ] as const;
 
-export function TooltipPlacementsDemo() {
+export const TooltipPlacementsDemo = () => {
   return (
     <div
       className="display-tooltip-placements"
@@ -2197,4 +2197,4 @@ export function TooltipPlacementsDemo() {
       </div>
     </div>
   );
-}
+};

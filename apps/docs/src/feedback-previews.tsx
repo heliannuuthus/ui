@@ -71,7 +71,7 @@ const alertScenarios = {
   }
 >;
 
-export function AlertReleaseDemo() {
+export const AlertReleaseDemo = () => {
   const [status, setStatus] = useState<AlertStatus | null>('info');
   const scenario = status ? alertScenarios[status] : null;
   const Icon = scenario?.icon;
@@ -123,13 +123,13 @@ export function AlertReleaseDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function AlertDialogDeleteDemo({
+export const AlertDialogDeleteDemo = ({
   size = 'default',
 }: {
   size?: 'default' | 'sm';
-}) {
+}) => {
   return (
     <AlertDialog
       cancelText={docsCopy('保留环境')}
@@ -147,9 +147,9 @@ export function AlertDialogDeleteDemo({
       }
     />
   );
-}
+};
 
-export function DialogReleaseDemo() {
+export const DialogReleaseDemo = () => {
   return (
     <Dialog
       cancelText={docsCopy('取消')}
@@ -175,9 +175,9 @@ export function DialogReleaseDemo() {
       </div>
     </Dialog>
   );
-}
+};
 
-export function DrawerReleaseDemo() {
+export const DrawerReleaseDemo = () => {
   const placements = [
     { side: 'left', label: docsCopy('从左侧'), icon: ArrowRight },
     { side: 'right', label: docsCopy('从右侧'), icon: ArrowLeft },
@@ -217,9 +217,9 @@ export function DrawerReleaseDemo() {
       })}
     </div>
   );
-}
+};
 
-function DrawerReleaseContent() {
+const DrawerReleaseContent = () => {
   return (
     <div className="feedback-drawer-list">
       <ReleaseRow label="Web Console" meta={docsCopy('已通过 · 21:42')} ready />
@@ -227,9 +227,9 @@ function DrawerReleaseContent() {
       <ReleaseRow label="Worker" meta={docsCopy('等待负责人确认')} />
     </div>
   );
-}
+};
 
-function ReleaseRow({
+const ReleaseRow = ({
   label,
   meta,
   ready = false,
@@ -237,7 +237,7 @@ function ReleaseRow({
   label: string;
   meta: string;
   ready?: boolean;
-}) {
+}) => {
   return (
     <div className="feedback-release-row">
       <span className={ready ? 'is-ready' : undefined} />
@@ -250,13 +250,13 @@ function ReleaseRow({
       </Badge>
     </div>
   );
-}
+};
 
-export function PopoverOwnersDemo({
+export const PopoverOwnersDemo = ({
   side = 'bottom',
 }: {
   side?: 'bottom' | 'right';
-}) {
+}) => {
   return (
     <Popover
       description={docsCopy('发布开始和回滚时会通知以下成员。')}
@@ -294,13 +294,13 @@ export function PopoverOwnersDemo({
       }
     />
   );
-}
+};
 
-export function PopoverOwnerPreviewDemo({
+export const PopoverOwnerPreviewDemo = ({
   side = 'bottom',
 }: {
   side?: 'bottom' | 'right';
-}) {
+}) => {
   return (
     <div className="display-hover-stage">
       {docsCopy('发布负责人是')}{' '}
@@ -339,9 +339,9 @@ export function PopoverOwnerPreviewDemo({
       {docsCopy('，悬停或聚焦名字查看详情。')}
     </div>
   );
-}
+};
 
-export function ProgressReleaseDemo() {
+export const ProgressReleaseDemo = () => {
   const [value, setValue] = useState(68);
   const complete = value === 100;
 
@@ -382,9 +382,9 @@ export function ProgressReleaseDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function DrawerContainedDemo() {
+export const DrawerContainedDemo = () => {
   const boundaryRef = useRef<HTMLDivElement>(null);
   const placements = [
     { side: 'left', label: docsCopy('左'), icon: ArrowRight },
@@ -452,15 +452,15 @@ export function DrawerContainedDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function SkeletonReleaseDemo({
+export const SkeletonReleaseDemo = ({
   density = 'comfortable',
   effect = 'shimmer',
 }: {
   density?: 'comfortable' | 'compact';
   effect?: 'shimmer' | 'pulse' | 'none';
-}) {
+}) => {
   const rows = density === 'compact' ? 4 : 3;
 
   return (
@@ -489,10 +489,10 @@ export function SkeletonReleaseDemo({
       </div>
     </div>
   );
-}
+};
 
-export function SonnerPublishDemo() {
-  function publish() {
+export const SonnerPublishDemo = () => {
+  const publish = () => {
     sonnerToast.promise(
       new Promise<string>((resolve) => {
         window.setTimeout(() => resolve('v0.12.0'), 1200);
@@ -503,7 +503,7 @@ export function SonnerPublishDemo() {
         error: docsCopy('发布失败，请检查构建日志'),
       }
     );
-  }
+  };
 
   return (
     <>
@@ -514,9 +514,9 @@ export function SonnerPublishDemo() {
       <Sonner position="bottom-right" richColors />
     </>
   );
-}
+};
 
-export function SpinnerSizesDemo() {
+export const SpinnerSizesDemo = () => {
   const sizes = [
     { label: docsCopy('小'), size: 'sm', pixels: '14 px' },
     { label: docsCopy('默认'), size: 'default', pixels: '16 px' },
@@ -543,9 +543,9 @@ export function SpinnerSizesDemo() {
       ))}
     </div>
   );
-}
+};
 
-export function SpinnerLoadingDemo() {
+export const SpinnerLoadingDemo = () => {
   return (
     <div className="feedback-local-loading-demo">
       <article aria-busy="true">
@@ -582,7 +582,7 @@ export function SpinnerLoadingDemo() {
       </section>
     </div>
   );
-}
+};
 
 const toastScenarios = {
   success: {
@@ -613,13 +613,13 @@ const toastScenarios = {
 
 type ToastStatus = keyof typeof toastScenarios;
 
-function ToastSemanticActions() {
+const ToastSemanticActions = () => {
   const { toast } = useToast();
 
-  function notify(status: ToastStatus) {
+  const notify = (status: ToastStatus) => {
     const scenario = toastScenarios[status];
     toast[status](scenario.title, { description: scenario.description });
-  }
+  };
 
   return (
     <div className="feedback-toast-semantic-actions">
@@ -641,17 +641,17 @@ function ToastSemanticActions() {
       })}
     </div>
   );
-}
+};
 
-export function ToastSemanticDemo() {
+export const ToastSemanticDemo = () => {
   return (
     <Toast.Provider id="toast-semantic-demo">
       <ToastSemanticActions />
     </Toast.Provider>
   );
-}
+};
 
-function ToastLocalActions() {
+const ToastLocalActions = () => {
   const { toast } = useToast();
 
   return (
@@ -674,9 +674,9 @@ function ToastLocalActions() {
       </Button>
     </div>
   );
-}
+};
 
-export function ToastLocalDemo() {
+export const ToastLocalDemo = () => {
   return (
     <div className="feedback-toast-local-stage">
       <Toast.Provider id="toast-local-demo" scope="local">
@@ -684,4 +684,4 @@ export function ToastLocalDemo() {
       </Toast.Provider>
     </div>
   );
-}
+};

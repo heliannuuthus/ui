@@ -62,14 +62,14 @@ type SelectRootProps<Value, Multiple extends boolean | undefined = false> = {
   onSearch?: (searchValue: string) => void;
 };
 
-function SelectRoot<Value, Multiple extends boolean | undefined = false>({
+const SelectRoot = <Value, Multiple extends boolean | undefined = false>({
   defaultSearchValue,
   searchValue,
   onChange,
   onOpenChange,
   onSearch,
   ...props
-}: SelectRootProps<Value, Multiple>) {
+}: SelectRootProps<Value, Multiple>) => {
   const handleSearchChange: SelectPrimitive.Root.Props<
     Value,
     Multiple
@@ -94,14 +94,14 @@ function SelectRoot<Value, Multiple extends boolean | undefined = false>({
       {...props}
     />
   );
-}
+};
 
-function SelectTriggerButton({
+const SelectTriggerButton = ({
   className,
   children,
   'aria-label': ariaLabel = 'Toggle options',
   ...props
-}: SelectPrimitive.Trigger.Props) {
+}: SelectPrimitive.Trigger.Props) => {
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger-button"
@@ -113,13 +113,13 @@ function SelectTriggerButton({
       <ChevronDownIcon className="pointer-events-none size-4 text-muted-foreground" />
     </SelectPrimitive.Trigger>
   );
-}
+};
 
-function SelectClear({
+const SelectClear = ({
   className,
   'aria-label': ariaLabel = 'Clear selection',
   ...props
-}: SelectPrimitive.Clear.Props) {
+}: SelectPrimitive.Clear.Props) => {
   return (
     <SelectPrimitive.Clear
       data-slot="select-clear"
@@ -131,7 +131,7 @@ function SelectClear({
       <XIcon className="pointer-events-none" />
     </SelectPrimitive.Clear>
   );
-}
+};
 
 type SelectTriggerProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -144,7 +144,7 @@ type SelectTriggerProps = Omit<
   showTrigger?: boolean;
 };
 
-function SelectTrigger({
+const SelectTrigger = ({
   className,
   children,
   disabled = false,
@@ -152,7 +152,7 @@ function SelectTrigger({
   showTrigger = true,
   showClear = false,
   ...props
-}: SelectTriggerProps) {
+}: SelectTriggerProps) => {
   return (
     <InputGroup data-slot="select-trigger" className={cn('w-auto', className)}>
       <SelectPrimitive.Input
@@ -174,9 +174,9 @@ function SelectTrigger({
       {children}
     </InputGroup>
   );
-}
+};
 
-function SelectContent({
+const SelectContent = ({
   className,
   side = 'bottom',
   sideOffset = 6,
@@ -188,7 +188,7 @@ function SelectContent({
   Pick<
     SelectPrimitive.Positioner.Props,
     'side' | 'align' | 'sideOffset' | 'alignOffset' | 'anchor'
-  >) {
+  >) => {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Positioner
@@ -211,9 +211,9 @@ function SelectContent({
       </SelectPrimitive.Positioner>
     </SelectPrimitive.Portal>
   );
-}
+};
 
-function SelectList({ className, ...props }: SelectPrimitive.List.Props) {
+const SelectList = ({ className, ...props }: SelectPrimitive.List.Props) => {
   return (
     <SelectPrimitive.List
       data-slot="select-list"
@@ -224,13 +224,13 @@ function SelectList({ className, ...props }: SelectPrimitive.List.Props) {
       {...props}
     />
   );
-}
+};
 
-function SelectItem({
+const SelectItem = ({
   className,
   children,
   ...props
-}: SelectPrimitive.Item.Props) {
+}: SelectPrimitive.Item.Props) => {
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
@@ -250,9 +250,9 @@ function SelectItem({
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );
-}
+};
 
-function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
+const SelectGroup = ({ className, ...props }: SelectPrimitive.Group.Props) => {
   return (
     <SelectPrimitive.Group
       data-slot="select-group"
@@ -260,12 +260,12 @@ function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
       {...props}
     />
   );
-}
+};
 
-function SelectLabel({
+const SelectLabel = ({
   className,
   ...props
-}: SelectPrimitive.GroupLabel.Props) {
+}: SelectPrimitive.GroupLabel.Props) => {
   return (
     <SelectPrimitive.GroupLabel
       data-slot="select-label"
@@ -273,15 +273,15 @@ function SelectLabel({
       {...props}
     />
   );
-}
+};
 
-function SelectCollection({ ...props }: SelectPrimitive.Collection.Props) {
+const SelectCollection = ({ ...props }: SelectPrimitive.Collection.Props) => {
   return (
     <SelectPrimitive.Collection data-slot="select-collection" {...props} />
   );
-}
+};
 
-function SelectEmpty({ className, ...props }: SelectPrimitive.Empty.Props) {
+const SelectEmpty = ({ className, ...props }: SelectPrimitive.Empty.Props) => {
   return (
     <SelectPrimitive.Empty
       data-slot="select-empty"
@@ -292,12 +292,12 @@ function SelectEmpty({ className, ...props }: SelectPrimitive.Empty.Props) {
       {...props}
     />
   );
-}
+};
 
-function SelectSeparator({
+const SelectSeparator = ({
   className,
   ...props
-}: SelectPrimitive.Separator.Props) {
+}: SelectPrimitive.Separator.Props) => {
   return (
     <SelectPrimitive.Separator
       data-slot="select-separator"
@@ -305,11 +305,11 @@ function SelectSeparator({
       {...props}
     />
   );
-}
+};
 
-function useSelectAnchor() {
+const useSelectAnchor = () => {
   return React.useRef<HTMLDivElement | null>(null);
-}
+};
 
 type SelectOption<Value> = {
   disabled?: boolean;
@@ -337,7 +337,7 @@ type SelectProps<Value, Multiple extends boolean | undefined = false> = Omit<
   >;
 };
 
-function Select<Value, Multiple extends boolean | undefined = false>({
+const Select = <Value, Multiple extends boolean | undefined = false>({
   defaultValue,
   disabled,
   emptyText = '没有找到选项',
@@ -352,7 +352,7 @@ function Select<Value, Multiple extends boolean | undefined = false>({
   triggerProps,
   value,
   ...props
-}: SelectProps<Value, Multiple>) {
+}: SelectProps<Value, Multiple>) => {
   const formControl = useFormControl<
     SelectValue<Value, Multiple> | null | undefined
   >();
@@ -451,7 +451,7 @@ function Select<Value, Multiple extends boolean | undefined = false>({
       </SelectContent>
     </SelectRoot>
   );
-}
+};
 
 export { Select, useSelectAnchor };
 export type {

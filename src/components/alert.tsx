@@ -34,7 +34,7 @@ type AlertProps = Omit<React.ComponentProps<'div'>, 'title'> &
     title?: React.ReactNode;
   };
 
-function Alert({
+const Alert = ({
   action,
   children,
   className,
@@ -43,7 +43,7 @@ function Alert({
   title,
   variant,
   ...props
-}: AlertProps) {
+}: AlertProps) => {
   return (
     <div
       data-slot="alert"
@@ -75,6 +75,6 @@ function Alert({
       ) : null}
     </div>
   );
-}
+};
 
 export { Alert, type AlertProps };

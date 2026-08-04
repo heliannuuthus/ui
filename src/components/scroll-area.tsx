@@ -24,11 +24,11 @@ type ScrollAreaProps = React.ComponentProps<'div'> & {
   viewportProps?: React.ComponentProps<'div'>;
 };
 
-function toCssLength(value: number | string) {
+const toCssLength = (value: number | string) => {
   return typeof value === 'number' ? `${value}px` : value;
-}
+};
 
-function ScrollArea({
+const ScrollArea = ({
   className,
   children,
   fadeEdges = false,
@@ -38,7 +38,7 @@ function ScrollArea({
   style,
   viewportProps,
   ...props
-}: ScrollAreaProps) {
+}: ScrollAreaProps) => {
   const fadeAxis = fadeEdges === true ? 'vertical' : fadeEdges || undefined;
   const {
     className: viewportClassName,
@@ -89,7 +89,7 @@ function ScrollArea({
       )}
     </ScrollAreaPrimitive.Root>
   );
-}
+};
 
 type ScrollBarProps = React.ComponentProps<'div'> & {
   keepMounted?: boolean;
@@ -97,12 +97,12 @@ type ScrollBarProps = React.ComponentProps<'div'> & {
   visibility?: Exclude<ScrollAreaScrollbarVisibility, 'hidden'>;
 };
 
-function ScrollBar({
+const ScrollBar = ({
   className,
   orientation = 'vertical',
   visibility = 'auto',
   ...props
-}: ScrollBarProps) {
+}: ScrollBarProps) => {
   return (
     <ScrollAreaPrimitive.Scrollbar
       data-slot="scroll-area-scrollbar"
@@ -121,7 +121,7 @@ function ScrollBar({
       />
     </ScrollAreaPrimitive.Scrollbar>
   );
-}
+};
 
 const ScrollAreaCompound = Object.assign(ScrollArea, {
   Bar: ScrollBar,

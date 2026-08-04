@@ -4,8 +4,8 @@ import { Drawer, type DrawerProps } from './drawer';
 type SheetProps = Omit<DrawerProps, 'behavior'>;
 
 /** @deprecated Use Drawer with behavior="panel" instead. */
-function Sheet(props: SheetProps) {
+const Sheet = (props: SheetProps) => {
   return <Drawer behavior="panel" {...props} />;
-}
+};
 
 export { Sheet, type SheetProps };

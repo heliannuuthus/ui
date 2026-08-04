@@ -19,7 +19,7 @@ import { Showcase } from './showcase';
 type ShowcasePage =
   'home' | 'getting-started' | 'design' | 'components' | 'component';
 
-function LocalizedShowcase({ page }: { page: ShowcasePage }) {
+const LocalizedShowcase = ({ page }: { page: ShowcasePage }) => {
   const { locale } = useParams<{ locale: string }>();
 
   useEffect(() => {
@@ -34,17 +34,17 @@ function LocalizedShowcase({ page }: { page: ShowcasePage }) {
   }
 
   return <Showcase page={page} />;
-}
+};
 
-function LegacyLocaleRedirect() {
+const LegacyLocaleRedirect = () => {
   const location = useLocation();
   const target = localizedPath(preferredLocale(), location.pathname);
   return (
     <Navigate replace to={`${target}${location.search}${location.hash}`} />
   );
-}
+};
 
-export function DocsApp() {
+export const DocsApp = () => {
   return (
     <Routes>
       <Route path="/:locale" element={<LocalizedShowcase page="home" />} />
@@ -67,4 +67,4 @@ export function DocsApp() {
       <Route path="*" element={<LegacyLocaleRedirect />} />
     </Routes>
   );
-}
+};

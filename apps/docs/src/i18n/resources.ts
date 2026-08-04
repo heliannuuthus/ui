@@ -326,10 +326,12 @@ export type DocsLocale = keyof typeof resources;
 export const defaultLocale: DocsLocale = 'zh';
 export const supportedLocales = Object.keys(resources) as DocsLocale[];
 
-export function isDocsLocale(value: string | undefined): value is DocsLocale {
+export const isDocsLocale = (
+  value: string | undefined
+): value is DocsLocale => {
   return supportedLocales.includes(value as DocsLocale);
-}
+};
 
-export function htmlLanguage(locale: DocsLocale) {
+export const htmlLanguage = (locale: DocsLocale) => {
   return locale === 'zh' ? 'zh-Hans' : 'en';
-}
+};

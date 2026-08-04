@@ -232,7 +232,7 @@ const buttonDocumentation: ComponentDocumentation = {
       ),
       code: docsCopy(`${buttonImport}
 
-export function ButtonVariants() {
+export const ButtonVariants = () => {
   return (
     <div className="flex flex-wrap gap-3">
       <Button>主要操作</Button>
@@ -260,7 +260,7 @@ export function ButtonVariants() {
       ),
       code: docsCopy(`${buttonImport}
 
-export function ButtonSizes() {
+export const ButtonSizes = () => {
   return (
     <div className="flex items-end gap-3">
       <Button size="xs">超小按钮</Button>
@@ -284,7 +284,7 @@ export function ButtonSizes() {
       ),
       code: docsCopy(`import { Button } from '@heliannuuthus/ui'
 
-export function GroupedButtons() {
+export const GroupedButtons = () => {
   return (
     <Button.Group aria-label="分页操作">
       <Button variant="outline">上一项</Button>
@@ -323,7 +323,7 @@ export function GroupedButtons() {
       code: docsCopy(`${buttonImport}
 import { Download, Mail, Plus } from 'lucide-react'
 
-export function ButtonWithIcon() {
+export const ButtonWithIcon = () => {
   return (
     <>
       <Button><Plus data-icon="inline-start" />新建项目</Button>
@@ -352,7 +352,7 @@ export function ButtonWithIcon() {
       ),
       code: docsCopy(`${buttonImport}
 
-export function ButtonStates() {
+export const ButtonStates = () => {
   return (
     <>
       <Button disabled>不可用</Button>
@@ -381,7 +381,7 @@ export function ButtonStates() {
       code: docsCopy(`${buttonImport}
 import { ArrowRight } from 'lucide-react'
 
-export function ButtonLink() {
+export const ButtonLink = () => {
   return (
     <>
       <Button href="/components/card" variant="outline">
@@ -557,7 +557,7 @@ const typographyDocumentation: ComponentDocumentation = {
       ),
       code: docsCopy(`import { Typography } from '@heliannuuthus/ui'
 
-export function TypographyStory() {
+export const TypographyStory = () => {
   return (
     <article>
       <Typography.H2>让界面语言保持清晰</Typography.H2>
@@ -632,7 +632,7 @@ const badgeDocumentation: ComponentDocumentation = {
       preview: <Badge>{docsCopy('已发布')}</Badge>,
       code: docsCopy(`import { Badge } from '@heliannuuthus/ui'
 
-export function BadgeBasic() {
+export const BadgeBasic = () => {
   return <Badge>已发布</Badge>
 }`),
     },
@@ -1228,7 +1228,7 @@ import { Input } from '@heliannuuthus/ui'
 import { Slider } from '@heliannuuthus/ui'
 import { Stack } from '@heliannuuthus/ui'
 
-export function SliderCompactExample() {
+export const SliderCompactExample = () => {
   const [quality, setQuality] = useState(68)
 
   return (
@@ -1388,7 +1388,7 @@ const ratios = [
   { label: '1:1', value: 1 },
 ]
 
-export function CoverEditor() {
+export const CoverEditor = () => {
   const [ratio, setRatio] = useState(ratios[0])
 
   return (
@@ -1450,7 +1450,7 @@ const cardDocumentation: ComponentDocumentation = {
       preview: <CardBasicDemo />,
       code: docsCopy(`import { Card } from '@heliannuuthus/ui'
 
-export function UpdateCard() {
+export const UpdateCard = () => {
   return (
     <Card title="设计系统更新">
       <p>本周补充了组件示例与无障碍说明。</p>
@@ -1468,7 +1468,7 @@ export function UpdateCard() {
       preview: <CardAnatomyDemo />,
       code: docsCopy(`import { Card } from '@heliannuuthus/ui'
 
-export function WorkspaceCard() {
+export const WorkspaceCard = () => {
   return (
     <Card
       title="工作区资料"
@@ -1611,7 +1611,7 @@ const resizableDocumentation: ComponentDocumentation = {
       code: docsCopy(`import { Resizable } from '@heliannuuthus/ui'
 import { GripVertical } from 'lucide-react'
 
-export function Workspace() {
+export const Workspace = () => {
   return (
     <Resizable
       orientation="horizontal"
@@ -1634,7 +1634,7 @@ export function Workspace() {
       code: docsCopy(`import { Resizable } from '@heliannuuthus/ui'
 import { GripHorizontal } from 'lucide-react'
 
-export function EditorWithTerminal() {
+export const EditorWithTerminal = () => {
   return (
     <Resizable
       className="h-96"
@@ -1667,7 +1667,7 @@ export function EditorWithTerminal() {
 import { Resizable } from '@heliannuuthus/ui'
 import { GripVertical } from 'lucide-react'
 
-export function ConstrainedWorkspace() {
+export const ConstrainedWorkspace = () => {
   const [navigationSize, setNavigationSize] = useState(24)
 
   return (
@@ -1862,7 +1862,7 @@ const items = [
   { label: 'Breadcrumb' },
 ]
 
-export function PageBreadcrumb() {
+export const PageBreadcrumb = () => {
   return <Breadcrumb items={items} homeIcon />
 }`),
       wide: true,
@@ -1998,7 +1998,7 @@ import { FilePlus2, Trash2 } from 'lucide-react'
 import { Button } from '@heliannuuthus/ui'
 import { DropdownMenu } from '@heliannuuthus/ui'
 
-export function ViewSettings() {
+export const ViewSettings = () => {
   const [sidebar, setSidebar] = useState(true)
   const [density, setDensity] = useState('comfortable')
 
@@ -2162,7 +2162,7 @@ const menubarDocumentation: ComponentDocumentation = {
       code: docsCopy(`import { useState } from 'react'
 import { Menubar } from '@heliannuuthus/ui'
 
-export function ViewMenubar() {
+export const ViewMenubar = () => {
   const [sidebar, setSidebar] = useState(true)
   const [theme, setTheme] = useState('system')
 
@@ -3857,7 +3857,7 @@ import { Volume1, Volume2 } from 'lucide-react'
       code: docsCopy(`import { useState } from 'react'
 import { Toggle } from '@heliannuuthus/ui'
 
-export function ControlledToggle() {
+export const ControlledToggle = () => {
   const [value, setValue] = useState(true)
 
   return (
@@ -4741,7 +4741,7 @@ const [expandedId, setExpandedId] = useState<string | null>(null)
 import { Button } from '@heliannuuthus/ui'
 import { ArrowUpRight } from 'lucide-react'
 
-function ActionCell() {
+const ActionCell = () => {
   return (
     <Button
       aria-label="配置 Realtime Gateway"
@@ -5096,7 +5096,7 @@ toast.promise(publish(), {
       preview: <ToastSemanticDemo />,
       code: docsCopy(`import { Toast, useToast } from '@heliannuuthus/ui'
 
-function PublishAction() {
+const PublishAction = () => {
   const { toast } = useToast()
 
   return (
@@ -5119,7 +5119,7 @@ function PublishAction() {
       preview: <ToastLocalDemo />,
       code: docsCopy(`import { Toast, useToast } from '@heliannuuthus/ui'
 
-function WorkspaceAction() {
+const WorkspaceAction = () => {
   const { toast } = useToast()
   return <Button onClick={() => toast.info('预览已刷新')}>刷新</Button>
 }
@@ -7327,12 +7327,12 @@ componentDocumentation.select.parts = [
   },
 ];
 
-function replaceExampleCodes(slug: string, codes: readonly string[]) {
+const replaceExampleCodes = (slug: string, codes: readonly string[]) => {
   codes.forEach((code, index) => {
     const example = componentDocumentation[slug]?.examples[index];
     if (example) example.code = code;
   });
-}
+};
 
 replaceExampleCodes('navigation-menu', [
   docsCopy(`import { NavigationMenu } from '@heliannuuthus/ui'

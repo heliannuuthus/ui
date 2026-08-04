@@ -56,7 +56,7 @@ type TabsProps = Omit<
     viewportClassName?: string;
   };
 
-function Tabs({
+const Tabs = ({
   animation = 'fade',
   centered = false,
   className,
@@ -71,7 +71,7 @@ function Tabs({
   variant = 'default',
   viewportClassName,
   ...props
-}: TabsProps) {
+}: TabsProps) => {
   const listRef = React.useRef<HTMLDivElement>(null);
   const [overflowState, setOverflowState] = React.useState({
     end: false,
@@ -292,7 +292,7 @@ function Tabs({
       </div>
     </TabsPrimitive.Root>
   );
-}
+};
 
 export {
   Tabs,

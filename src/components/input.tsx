@@ -48,7 +48,7 @@ type TextAreaProps = React.ComponentProps<'textarea'>;
 
 const InputOTPShapeContext = React.createContext<InputOTPVariant>('connected');
 
-function OTPGroup({ className, ...props }: React.ComponentProps<'div'>) {
+const OTPGroup = ({ className, ...props }: React.ComponentProps<'div'>) => {
   const shape = React.useContext(InputOTPShapeContext);
 
   return (
@@ -64,15 +64,15 @@ function OTPGroup({ className, ...props }: React.ComponentProps<'div'>) {
       {...props}
     />
   );
-}
+};
 
-function OTPSlot({
+const OTPSlot = ({
   index,
   className,
   ...props
 }: React.ComponentProps<'div'> & {
   index: number;
-}) {
+}) => {
   const inputOTPContext = React.useContext(OTPInputContext);
   const shape = React.useContext(InputOTPShapeContext);
   const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {};
@@ -99,9 +99,9 @@ function OTPSlot({
       )}
     </div>
   );
-}
+};
 
-function OTPSeparator() {
+const OTPSeparator = () => {
   return (
     <div
       data-slot="input-otp-separator"
@@ -111,9 +111,9 @@ function OTPSeparator() {
       <MinusIcon />
     </div>
   );
-}
+};
 
-function OTPField({
+const OTPField = ({
   className,
   maxLength = 6,
   variant = 'connected',
@@ -130,7 +130,7 @@ function OTPField({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   ...props
-}: InputOTPProps) {
+}: InputOTPProps) => {
   const formControl = useFormControl<string>();
   const inputRef = useMergedRefs(
     ref,
@@ -194,9 +194,9 @@ function OTPField({
       </OTPInput>
     </InputOTPShapeContext.Provider>
   );
-}
+};
 
-function InputRoot(inputProps: InputProps) {
+const InputRoot = (inputProps: InputProps) => {
   const formControl = useFormControl<
     string | number | readonly string[] | undefined
   >();
@@ -300,9 +300,9 @@ function InputRoot(inputProps: InputProps) {
       )}
     />
   );
-}
+};
 
-function TextArea({
+const TextArea = ({
   className,
   defaultValue,
   disabled,
@@ -316,7 +316,7 @@ function TextArea({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   ...props
-}: TextAreaProps) {
+}: TextAreaProps) => {
   const formControl = useFormControl<string | undefined>();
   const textAreaRef = useMergedRefs(
     ref,
@@ -354,7 +354,7 @@ function TextArea({
       )}
     />
   );
-}
+};
 
 const Input = Object.assign(InputRoot, {
   OTP: OTPField,

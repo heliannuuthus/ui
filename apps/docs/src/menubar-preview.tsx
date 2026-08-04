@@ -14,7 +14,7 @@ import {
   Trash2,
 } from 'lucide-react';
 
-function DemoWindow({
+const DemoWindow = ({
   title,
   status,
   children,
@@ -22,7 +22,7 @@ function DemoWindow({
   title: string;
   status: string;
   children: ReactNode;
-}) {
+}) => {
   return (
     <div className="menubar-demo-window">
       <div className="menubar-demo-chrome">
@@ -41,9 +41,9 @@ function DemoWindow({
       </div>
     </div>
   );
-}
+};
 
-export function MenubarCommandsDemo() {
+export const MenubarCommandsDemo = () => {
   const [status, setStatus] = useState(docsCopy('文档已保存'));
 
   return (
@@ -145,9 +145,9 @@ export function MenubarCommandsDemo() {
       </div>
     </DemoWindow>
   );
-}
+};
 
-export function MenubarViewDemo() {
+export const MenubarViewDemo = () => {
   const [sidebar, setSidebar] = useState(true);
   const [lineNumbers, setLineNumbers] = useState(true);
   const [theme, setTheme] = useState('system');
@@ -209,7 +209,7 @@ export function MenubarViewDemo() {
           <div className="menubar-demo-code">
             <div>
               {lineNumbers && <span>16</span>}
-              <code>{'export function MenubarPreview() {'}</code>
+              <code>{'export const MenubarPreview = () => {'}</code>
             </div>
             <div className="active">
               {lineNumbers && <span>17</span>}
@@ -224,9 +224,9 @@ export function MenubarViewDemo() {
       </div>
     </DemoWindow>
   );
-}
+};
 
-export function MenubarNestedDemo() {
+export const MenubarNestedDemo = () => {
   const [status, setStatus] = useState(docsCopy('选择组件文档或导出格式'));
 
   return (
@@ -319,4 +319,4 @@ export function MenubarNestedDemo() {
       </div>
     </DemoWindow>
   );
-}
+};

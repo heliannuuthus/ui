@@ -71,43 +71,43 @@ const TableContext = React.createContext<TableContextValue>({
   containerElement: null,
 });
 
-function assignRef<TValue>(
+const assignRef = <TValue,>(
   ref: React.Ref<TValue> | undefined,
   value: TValue | null
-) {
+) => {
   if (typeof ref === 'function') {
     ref(value);
   } else if (ref != null) {
     (ref as React.MutableRefObject<TValue | null>).current = value;
   }
-}
+};
 
-function getAlignmentClassName(align?: TableCellAlign) {
+const getAlignmentClassName = (align?: TableCellAlign) => {
   if (align === 'center') return 'text-center';
   if (align === 'end') return 'text-end';
   return 'text-start';
-}
+};
 
-function getFixedCellStyle(
+const getFixedCellStyle = (
   fixed: TableCellFixed | undefined,
   fixedOffset: number | string,
   style: React.CSSProperties | undefined
-) {
+) => {
   if (fixed == null) return style;
 
   return {
     ...style,
     [fixed === 'start' ? 'insetInlineStart' : 'insetInlineEnd']: fixedOffset,
   };
-}
+};
 
-function TableEllipsisContent({
+const TableEllipsisContent = ({
   children,
   tooltipContent,
 }: {
   children: React.ReactNode;
   tooltipContent: React.ReactNode;
-}) {
+}) => {
   const contentRef = React.useRef<HTMLSpanElement>(null);
   const [overflowing, setOverflowing] = React.useState(false);
 
@@ -146,15 +146,15 @@ function TableEllipsisContent({
       }
     />
   );
-}
+};
 
-function Table({
+const Table = ({
   className,
   containerClassName,
   containerRef,
   containerStyle,
   ...props
-}: TableProps) {
+}: TableProps) => {
   const [containerElement, setContainerElement] =
     React.useState<HTMLDivElement | null>(null);
   const handleContainerRef = React.useCallback(
@@ -185,9 +185,12 @@ function Table({
       </div>
     </TableContext.Provider>
   );
-}
+};
 
-function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
+const TableHeader = ({
+  className,
+  ...props
+}: React.ComponentProps<'thead'>) => {
   return (
     <thead
       data-slot="table-header"
@@ -195,9 +198,9 @@ function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
       {...props}
     />
   );
-}
+};
 
-function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {
+const TableBody = ({ className, ...props }: React.ComponentProps<'tbody'>) => {
   return (
     <tbody
       data-slot="table-body"
@@ -205,9 +208,9 @@ function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {
       {...props}
     />
   );
-}
+};
 
-function TableVirtualBody<TItem>({
+const TableVirtualBody = <TItem,>({
   children,
   className,
   colSpan,
@@ -218,7 +221,7 @@ function TableVirtualBody<TItem>({
   rowIndexOffset = 2,
   style,
   ...props
-}: TableVirtualBodyProps<TItem>) {
+}: TableVirtualBodyProps<TItem>) => {
   const { containerElement } = React.useContext(TableContext);
   const resolvedRowHeight = Math.max(1, rowHeight);
   const estimateSize = React.useCallback(
@@ -289,9 +292,12 @@ function TableVirtualBody<TItem>({
       ) : null}
     </tbody>
   );
-}
+};
 
-function TableFooter({ className, ...props }: React.ComponentProps<'tfoot'>) {
+const TableFooter = ({
+  className,
+  ...props
+}: React.ComponentProps<'tfoot'>) => {
   return (
     <tfoot
       data-slot="table-footer"
@@ -302,9 +308,9 @@ function TableFooter({ className, ...props }: React.ComponentProps<'tfoot'>) {
       {...props}
     />
   );
-}
+};
 
-function TableRow({ className, ...props }: TableRowProps) {
+const TableRow = ({ className, ...props }: TableRowProps) => {
   return (
     <tr
       data-slot="table-row"
@@ -315,9 +321,9 @@ function TableRow({ className, ...props }: TableRowProps) {
       {...props}
     />
   );
-}
+};
 
-function TableHead({
+const TableHead = ({
   align = 'start',
   children,
   className,
@@ -328,7 +334,7 @@ function TableHead({
   style,
   title,
   ...props
-}: TableHeadProps) {
+}: TableHeadProps) => {
   return (
     <th
       data-slot="table-head"
@@ -357,9 +363,9 @@ function TableHead({
       )}
     </th>
   );
-}
+};
 
-function TableCell({
+const TableCell = ({
   align = 'start',
   children,
   className,
@@ -370,7 +376,7 @@ function TableCell({
   style,
   title,
   ...props
-}: TableCellProps) {
+}: TableCellProps) => {
   return (
     <td
       data-slot="table-cell"
@@ -399,9 +405,9 @@ function TableCell({
       )}
     </td>
   );
-}
+};
 
-function TableExpandButton({
+const TableExpandButton = ({
   'aria-label': ariaLabel,
   children,
   className,
@@ -409,7 +415,7 @@ function TableExpandButton({
   onClick,
   onExpandedChange,
   ...props
-}: TableExpandButtonProps) {
+}: TableExpandButtonProps) => {
   return (
     <button
       type="button"
@@ -438,15 +444,15 @@ function TableExpandButton({
       )}
     </button>
   );
-}
+};
 
-function TableExpandedRow({
+const TableExpandedRow = ({
   cellClassName,
   children,
   className,
   colSpan,
   ...props
-}: TableExpandedRowProps) {
+}: TableExpandedRowProps) => {
   return (
     <tr
       data-slot="table-expanded-row"
@@ -465,12 +471,12 @@ function TableExpandedRow({
       </td>
     </tr>
   );
-}
+};
 
-function TableCaption({
+const TableCaption = ({
   className,
   ...props
-}: React.ComponentProps<'caption'>) {
+}: React.ComponentProps<'caption'>) => {
   return (
     <caption
       data-slot="table-caption"
@@ -478,7 +484,7 @@ function TableCaption({
       {...props}
     />
   );
-}
+};
 
 const TableCompound = Object.assign(Table, {
   Body: TableBody,

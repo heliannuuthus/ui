@@ -50,13 +50,13 @@ const masonryItems = [
   },
 ] as const;
 
-function MasonryPreviewCard({
+const MasonryPreviewCard = ({
   index,
   item,
 }: {
   index: number;
   item: (typeof masonryItems)[number];
-}) {
+}) => {
   return (
     <>
       <span>{String(index + 1).padStart(2, '0')}</span>
@@ -64,21 +64,21 @@ function MasonryPreviewCard({
       <p>{item.description}</p>
     </>
   );
-}
+};
 
-function createPreviewItems(
+const createPreviewItems = (
   items: readonly (typeof masonryItems)[number][] = masonryItems,
   startIndex = 0
-) {
+) => {
   return items.map((item, index) => ({
     className: 'masonry-layout-item',
     content: <MasonryPreviewCard index={startIndex + index} item={item} />,
     key: item.title,
     role: 'listitem' as const,
   }));
-}
+};
 
-export function MasonryBasicDemo() {
+export const MasonryBasicDemo = () => {
   return (
     <Masonry
       aria-label={docsCopy('Masonry 基础布局示例')}
@@ -90,9 +90,9 @@ export function MasonryBasicDemo() {
       role="list"
     />
   );
-}
+};
 
-export function MasonryResponsiveDemo() {
+export const MasonryResponsiveDemo = () => {
   const masonryRef = useRef<HTMLDivElement>(null);
   const [maxColumns, setMaxColumns] = useState(6);
   const [resolvedColumns, setResolvedColumns] = useState(1);
@@ -171,9 +171,9 @@ export function MasonryResponsiveDemo() {
       />
     </div>
   );
-}
+};
 
-export function MasonrySpanDemo() {
+export const MasonrySpanDemo = () => {
   return (
     <Masonry
       aria-label={docsCopy('包含跨列内容的 Masonry 布局示例')}
@@ -201,4 +201,4 @@ export function MasonrySpanDemo() {
       role="list"
     />
   );
-}
+};

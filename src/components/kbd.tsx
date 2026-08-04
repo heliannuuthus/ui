@@ -7,13 +7,13 @@ type KbdProps = React.ComponentProps<'kbd'> & {
   separator?: React.ReactNode;
 };
 
-function Kbd({
+const Kbd = ({
   className,
   keys,
   separator = '+',
   children,
   ...props
-}: KbdProps) {
+}: KbdProps) => {
   if (keys) {
     return (
       <kbd
@@ -50,6 +50,6 @@ function Kbd({
       {children}
     </kbd>
   );
-}
+};
 
 export { Kbd, type KbdProps };

@@ -81,13 +81,13 @@ const releaseEvents: ReleaseEvent[] = [
   },
 ];
 
-function EventIcon({ status }: Pick<ReleaseEvent, 'status'>) {
+const EventIcon = ({ status }: Pick<ReleaseEvent, 'status'>) => {
   if (status === 'complete') return <Check />;
   if (status === 'current') return <CircleDot />;
   return <Clock3 />;
-}
+};
 
-function AnimatedReleaseEvent({
+const AnimatedReleaseEvent = ({
   active,
   event,
   index,
@@ -101,7 +101,7 @@ function AnimatedReleaseEvent({
   onActivate: () => void;
   onSelect: () => void;
   selected: boolean;
-}) {
+}) => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { amount: 0.45, once: false });
   const reduceMotion = useReducedMotion();
@@ -142,20 +142,20 @@ function AnimatedReleaseEvent({
       </span>
     </motion.div>
   );
-}
+};
 
-export function ScrollAreaAnimatedListDemo({
+export const ScrollAreaAnimatedListDemo = ({
   scrollbarVisibility = 'auto',
 }: {
   scrollbarVisibility?: ScrollAreaScrollbarVisibility;
-}) {
+}) => {
   const viewportRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const selectedEvent = releaseEvents[selectedIndex];
 
-  function moveActive(nextIndex: number) {
+  const moveActive = (nextIndex: number) => {
     const boundedIndex = Math.max(
       0,
       Math.min(nextIndex, releaseEvents.length - 1)
@@ -170,9 +170,9 @@ export function ScrollAreaAnimatedListDemo({
           block: 'nearest',
         });
     });
-  }
+  };
 
-  function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       moveActive(activeIndex + 1);
@@ -189,7 +189,7 @@ export function ScrollAreaAnimatedListDemo({
       event.preventDefault();
       setSelectedIndex(activeIndex);
     }
-  }
+  };
 
   return (
     <section className="scroll-area-release-demo">
@@ -253,4 +253,4 @@ export function ScrollAreaAnimatedListDemo({
       </footer>
     </section>
   );
-}
+};

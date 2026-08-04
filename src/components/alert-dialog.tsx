@@ -20,7 +20,7 @@ type AlertDialogProps = OpenStateProps & {
   trigger: React.ReactElement;
 };
 
-function AlertDialog({
+const AlertDialog = ({
   cancelText = '取消',
   confirmText,
   confirmVariant = 'default',
@@ -32,7 +32,7 @@ function AlertDialog({
   title,
   trigger,
   ...props
-}: AlertDialogProps) {
+}: AlertDialogProps) => {
   return (
     <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props}>
       <AlertDialogPrimitive.Trigger
@@ -102,6 +102,6 @@ function AlertDialog({
       </AlertDialogPrimitive.Portal>
     </AlertDialogPrimitive.Root>
   );
-}
+};
 
 export { AlertDialog, type AlertDialogProps };

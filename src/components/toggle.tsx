@@ -64,7 +64,7 @@ type ToggleGroupProps<Value extends string = string> = Omit<
     value?: readonly Value[];
   };
 
-function ToggleRoot({
+const ToggleRoot = ({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   className,
@@ -78,7 +78,7 @@ function ToggleRoot({
   value,
   variant = 'default',
   ...props
-}: ToggleProps) {
+}: ToggleProps) => {
   const formControl = useFormControl<boolean>();
   const controlRef = useMergedRefs(
     inputRef,
@@ -113,9 +113,9 @@ function ToggleRoot({
       ref={controlRef}
     />
   );
-}
+};
 
-function ToggleGroup<Value extends string = string>({
+const ToggleGroup = <Value extends string = string>({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   'aria-labelledby': ariaLabelledBy,
@@ -130,7 +130,7 @@ function ToggleGroup<Value extends string = string>({
   value,
   variant = 'default',
   ...props
-}: ToggleGroupProps<Value>) {
+}: ToggleGroupProps<Value>) => {
   const formControl = useFormControl<Value[]>();
 
   return (
@@ -184,7 +184,7 @@ function ToggleGroup<Value extends string = string>({
       ))}
     </ToggleGroupPrimitive>
   );
-}
+};
 
 const Toggle = Object.assign(ToggleRoot, {
   Group: ToggleGroup,
