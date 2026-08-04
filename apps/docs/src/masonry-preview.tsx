@@ -136,7 +136,7 @@ export function MasonryResponsiveDemo() {
             aria-label={docsCopy('Masonry 最大列数')}
             max={6}
             min={1}
-            onValueChange={(value) =>
+            onChange={(value) =>
               setMaxColumns(typeof value === 'number' ? value : (value[0] ?? 6))
             }
             step={1}

@@ -26,6 +26,47 @@
   release workflow requires one.
 - Update the documentation index whenever a public component is added or removed.
 
+## Form architecture
+
+- `Field` is the form-library-independent presentation layer. It owns field
+  layout, labels, descriptions, errors, grouping and accessible relationships,
+  but it does not own form values or validation state.
+- `Form` is the integration layer for field registration, validation state,
+  submission and binding Heliannuuthus UI data-entry components. Its public
+  component must represent the actual HTML `<form>` boundary; do not expose a
+  context provider under the ambiguous `Form` name.
+- Heliannuuthus UI data-entry components must support controlled and
+  uncontrolled use where the underlying interaction permits it. Preserve
+  component-appropriate semantics such as `value` for value controls and
+  `checked` for boolean controls instead of forcing every control into one
+  public prop shape.
+- Public controlled-state callbacks use `onChange` consistently, regardless of
+  whether the underlying primitive calls its event `onValueChange` or
+  `onCheckedChange`. Reserve specific names such as `onOpenChange`,
+  `onSearch`, and `onChangeComplete` for genuinely distinct state or lifecycle
+  events; primitive-specific callback names remain implementation details.
+- Form integration must use a typed, component-owned binding contract so
+  `Input`, `Select`, `Switch`, `Checkbox`, `Radio.Group`, `DatePicker` and
+  similar controls can be used by `Form.Item` without product code wiring
+  library-specific controllers.
+- `Form.Item` owns the field name, label, description, required marker,
+  validation message and ARIA wiring. Product code must not manually repeat
+  these concerns for supported Heliannuuthus UI controls.
+- Provide a typed render-prop escape hatch for third-party, composite and
+  otherwise non-standard controls. Do not infer bindings from component display
+  names, DOM inspection or undocumented child shapes.
+- Keep the binding contract independent of `react-hook-form`. A form engine may
+  be used internally, but engine-specific objects such as `Controller`,
+  `control` and `UseFormReturn` are not the target product-facing API.
+- Do not create per-control public wrappers such as `FormInput`, `FormSelect`
+  and `FormSwitch`; extend the common binding contract instead.
+- Keep the unified Form implementation, type tests and public documentation in
+  sync. Do not reintroduce the provider-based compound API or require consumers
+  to render a second nested `<form>`.
+- The detailed target contract, compatibility matrix and migration plan live in
+  `docs/form-integration.md`. Update that document when changing Form or any
+  data-entry component's binding semantics.
+
 ## Validation
 
 1. `pnpm type-check`

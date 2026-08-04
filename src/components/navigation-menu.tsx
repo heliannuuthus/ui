@@ -36,7 +36,7 @@ type NavigationMenuProps = Omit<
   delay?: number;
   items: readonly NavigationMenuItemConfig[];
   onOpenChangeComplete?: (open: boolean) => void;
-  onValueChange?: (value: string | null) => void;
+  onChange?: (value: string | null) => void;
   orientation?: 'horizontal' | 'vertical';
   value?: string | null;
 };
@@ -45,6 +45,7 @@ function NavigationMenu({
   align = 'start',
   className,
   items,
+  onChange,
   ...props
 }: NavigationMenuProps) {
   return (
@@ -54,6 +55,7 @@ function NavigationMenu({
         'group/navigation-menu relative flex max-w-max flex-1 items-center justify-center',
         className
       )}
+      onValueChange={onChange}
       {...props}
     >
       <NavigationMenuList>

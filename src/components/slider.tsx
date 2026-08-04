@@ -10,6 +10,11 @@ import {
 } from 'motion/react';
 
 import { cn } from '../lib/utils';
+import {
+  mergeIds,
+  useMergedRefs,
+  useFormControl,
+} from './internal/form-control';
 
 const MAX_ELASTIC_OVERFLOW = 20;
 const ACTIVE_SHELL_SCALE = 1.045;
@@ -29,14 +34,15 @@ type SliderProps<Value extends number | readonly number[]> = Omit<
   endLabel?: React.ReactNode;
   form?: string;
   format?: Intl.NumberFormatOptions;
+  inputRef?: React.Ref<HTMLInputElement>;
   largeStep?: number;
   locale?: Intl.LocalesArgument;
   max?: number;
   min?: number;
   minStepsBetweenValues?: number;
   name?: string;
-  onValueChange?: (value: Value extends number ? number : Value) => void;
-  onValueCommitted?: (value: Value extends number ? number : Value) => void;
+  onChange?: (value: Value extends number ? number : Value) => void;
+  onChangeComplete?: (value: Value extends number ? number : Value) => void;
   orientation?: 'horizontal' | 'vertical';
   startIcon?: React.ReactNode;
   startLabel?: React.ReactNode;
@@ -53,24 +59,39 @@ const elasticTransition = {
 } as const;
 
 function Slider<Value extends number | readonly number[]>({
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   className,
   defaultValue,
   disabled,
   effect = 'elastic',
   endIcon,
   endLabel,
+  id,
+  inputRef,
   max = 100,
   min = 0,
+  name,
+  onBlur,
+  onChange,
+  onChangeComplete,
   orientation = 'horizontal',
   startIcon,
   startLabel,
   value,
   ...props
 }: SliderProps<Value>) {
-  const _values = Array.isArray(value)
-    ? value
-    : typeof value === 'number'
-      ? [value]
+  const formControl = useFormControl<Value>();
+  const formInputRef = useMergedRefs(
+    inputRef,
+    formControl?.ref as React.Ref<HTMLInputElement> | undefined
+  );
+  const resolvedValue = formControl?.value ?? value;
+  const resolvedDisabled = disabled || formControl?.disabled;
+  const _values = Array.isArray(resolvedValue)
+    ? resolvedValue
+    : typeof resolvedValue === 'number'
+      ? [resolvedValue]
       : Array.isArray(defaultValue)
         ? defaultValue
         : typeof defaultValue === 'number'
@@ -83,13 +104,14 @@ function Slider<Value extends number | readonly number[]>({
   const reduceMotion = useReducedMotion();
   const shellScale = useMotionValue(1);
   const shellOpacity = useMotionValue(
-    effect === 'elastic' && !disabled ? IDLE_SHELL_OPACITY : 1
+    effect === 'elastic' && !resolvedDisabled ? IDLE_SHELL_OPACITY : 1
   );
   const startIconOffset = useMotionValue(0);
   const endIconOffset = useMotionValue(0);
   const startIconScale = useMotionValue(1);
   const endIconScale = useMotionValue(1);
-  const elasticEnabled = effect === 'elastic' && !reduceMotion && !disabled;
+  const elasticEnabled =
+    effect === 'elastic' && !reduceMotion && !resolvedDisabled;
 
   const setInteractionActive = React.useCallback(
     (active: boolean, immediate = false) => {
@@ -208,6 +230,9 @@ function Slider<Value extends number | readonly number[]>({
   }
 
   function handleBlur(event: React.FocusEvent<HTMLDivElement>) {
+    onBlur?.(event);
+    formControl?.onBlur();
+
     if (
       !elasticEnabled ||
       pointerActiveRef.current ||
@@ -222,6 +247,13 @@ function Slider<Value extends number | readonly number[]>({
 
   return (
     <SliderPrimitive.Root
+      {...props}
+      aria-describedby={mergeIds(
+        ariaDescribedBy,
+        formControl?.descriptionId,
+        formControl?.messageId
+      )}
+      aria-invalid={ariaInvalid ?? formControl?.invalid}
       className={cn(
         'group/slider data-horizontal:w-full data-vertical:h-full',
         effect === 'elastic' &&
@@ -230,14 +262,22 @@ function Slider<Value extends number | readonly number[]>({
       )}
       data-effect={effect}
       data-slot="slider"
-      defaultValue={defaultValue}
-      disabled={disabled}
+      defaultValue={formControl ? undefined : defaultValue}
+      disabled={resolvedDisabled}
+      id={id ?? formControl?.controlId}
       max={max}
       min={min}
+      name={formControl?.name ?? name}
+      onValueChange={(nextValue) => {
+        onChange?.(nextValue as Value extends number ? number : Value);
+        formControl?.onChange(nextValue as Value);
+      }}
+      onValueCommitted={(nextValue) =>
+        onChangeComplete?.(nextValue as Value extends number ? number : Value)
+      }
       orientation={orientation}
       thumbAlignment="edge"
-      value={value}
-      {...props}
+      value={resolvedValue}
     >
       <motion.div
         ref={shellRef}
@@ -298,6 +338,19 @@ function Slider<Value extends number | readonly number[]>({
           {Array.from({ length: _values.length }, (_, index) => (
             <SliderPrimitive.Thumb
               data-slot="slider-thumb"
+              aria-describedby={
+                index === 0
+                  ? mergeIds(
+                      ariaDescribedBy,
+                      formControl?.descriptionId,
+                      formControl?.messageId
+                    )
+                  : undefined
+              }
+              aria-invalid={
+                index === 0 ? (ariaInvalid ?? formControl?.invalid) : undefined
+              }
+              inputRef={index === 0 ? formInputRef : undefined}
               key={index}
               className="block h-4 w-6 shrink-0 rounded-full bg-white shadow-md ring-1 ring-black/10 transition-[color,box-shadow,background-color,transform] select-none not-dark:bg-clip-padding hover:scale-105 hover:ring-4 hover:ring-ring/30 focus-visible:scale-105 focus-visible:ring-4 focus-visible:ring-ring/30 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 data-dragging:scale-110 data-vertical:h-6 data-vertical:w-4"
             />

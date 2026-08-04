@@ -47,7 +47,7 @@ type TabsProps = Omit<
     indicatorClassName?: string;
     items: readonly TabsItem[];
     listClassName?: string;
-    onValueChange?: (value: string | null) => void;
+    onChange?: (value: string | null) => void;
     orientation?: 'horizontal' | 'vertical';
     panelClassName?: string;
     scrollButtonLabels?: Partial<TabsScrollButtonLabels>;
@@ -63,6 +63,7 @@ function Tabs({
   indicatorClassName,
   items,
   listClassName,
+  onChange,
   orientation = 'horizontal',
   panelClassName,
   scrollButtonLabels,
@@ -181,6 +182,7 @@ function Tabs({
         'group/tabs flex min-w-0 max-w-full gap-2 data-horizontal:flex-col',
         className
       )}
+      onValueChange={onChange}
       orientation={orientation}
       {...props}
     >

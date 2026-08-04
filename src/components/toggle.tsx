@@ -6,6 +6,11 @@ import { ToggleGroup as ToggleGroupPrimitive } from '@base-ui/react/toggle-group
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
+import {
+  mergeIds,
+  useMergedRefs,
+  useFormControl,
+} from './internal/form-control';
 
 const toggleVariants = cva(
   "group/toggle inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-3xl px-3 text-sm font-medium whitespace-nowrap transition-colors outline-none has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5 hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:hover:bg-primary/85 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -31,7 +36,9 @@ type ToggleProps = Omit<
   ToggleVariantProps & {
     value?: boolean;
     defaultValue?: boolean;
+    inputRef?: React.Ref<HTMLButtonElement>;
     onChange?: (value: boolean) => void;
+    required?: boolean;
   };
 
 type ToggleGroupOption<Value extends string = string> = Omit<
@@ -58,46 +65,104 @@ type ToggleGroupProps<Value extends string = string> = Omit<
   };
 
 function ToggleRoot({
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   className,
   defaultValue,
-  variant = 'default',
+  disabled,
+  id,
+  inputRef,
   onChange,
+  onBlur,
+  required,
   value,
+  variant = 'default',
   ...props
 }: ToggleProps) {
+  const formControl = useFormControl<boolean>();
+  const controlRef = useMergedRefs(
+    inputRef,
+    formControl?.ref as React.Ref<HTMLButtonElement> | undefined
+  );
+
   return (
     <TogglePrimitive
+      {...props}
+      aria-describedby={mergeIds(
+        ariaDescribedBy,
+        formControl?.descriptionId,
+        formControl?.messageId
+      )}
+      aria-invalid={ariaInvalid ?? formControl?.invalid}
+      aria-required={required || formControl?.required}
       data-slot="toggle"
       data-variant={variant}
       className={cn(toggleVariants({ variant, className }))}
-      defaultPressed={defaultValue}
-      onPressedChange={onChange}
-      pressed={value}
-      {...props}
+      defaultPressed={formControl ? undefined : defaultValue}
+      disabled={disabled || formControl?.disabled}
+      id={id ?? formControl?.controlId}
+      onBlur={(event) => {
+        onBlur?.(event);
+        formControl?.onBlur();
+      }}
+      onPressedChange={(nextValue) => {
+        onChange?.(nextValue);
+        formControl?.onChange(nextValue);
+      }}
+      pressed={formControl ? Boolean(formControl.value) : value}
+      ref={controlRef}
     />
   );
 }
 
 function ToggleGroup<Value extends string = string>({
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
+  'aria-labelledby': ariaLabelledBy,
   className,
+  defaultValue,
+  disabled,
+  id,
   items,
   onChange,
+  onBlur,
   orientation = 'horizontal',
+  value,
   variant = 'default',
   ...props
 }: ToggleGroupProps<Value>) {
+  const formControl = useFormControl<Value[]>();
+
   return (
     <ToggleGroupPrimitive
+      {...props}
+      aria-describedby={mergeIds(
+        ariaDescribedBy,
+        formControl?.descriptionId,
+        formControl?.messageId
+      )}
+      aria-invalid={ariaInvalid ?? formControl?.invalid}
+      aria-labelledby={mergeIds(ariaLabelledBy, formControl?.labelId)}
       data-slot="toggle-group"
       data-variant={variant}
       data-orientation={orientation}
+      defaultValue={formControl ? undefined : defaultValue}
+      disabled={disabled || formControl?.disabled}
+      id={id ?? formControl?.controlId}
       orientation={orientation}
       className={cn(
         'group/toggle-group flex w-fit flex-row items-center gap-2 data-vertical:flex-col data-vertical:items-stretch',
         className
       )}
-      onValueChange={onChange}
-      {...props}
+      onBlur={(event) => {
+        onBlur?.(event);
+        formControl?.onBlur();
+      }}
+      onValueChange={(nextValue) => {
+        onChange?.(nextValue);
+        formControl?.onChange(nextValue);
+      }}
+      value={formControl ? (formControl.value ?? []) : value}
     >
       {items.map(({ className: itemClassName, label, value, ...itemProps }) => (
         <TogglePrimitive

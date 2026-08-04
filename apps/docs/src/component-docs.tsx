@@ -1237,7 +1237,7 @@ export function SliderCompactExample() {
           <Slider
             aria-label="压缩质量滑块"
             value={quality}
-            onValueChange={setQuality}
+            onChange={setQuality}
             min={0}
             max={100}
           />
@@ -2009,13 +2009,13 @@ export function ViewSettings() {
           type: 'checkbox',
           label: '显示侧栏',
           checked: sidebar,
-          onCheckedChange: setSidebar,
+          onChange: setSidebar,
         },
         { type: 'separator' },
         {
           type: 'radio',
           value: density,
-          onValueChange: setDensity,
+          onChange: setDensity,
           items: [
             { label: '紧凑', value: 'compact' },
             { label: '舒适', value: 'comfortable' },
@@ -2175,13 +2175,13 @@ export function ViewMenubar() {
               type: 'checkbox',
               label: '显示侧栏',
               checked: sidebar,
-              onCheckedChange: setSidebar,
+              onChange: setSidebar,
             },
             { type: 'separator' },
             {
               type: 'radio',
               value: theme,
-              onValueChange: setTheme,
+              onChange: setTheme,
               items: [
                 { label: '跟随系统', value: 'system' },
                 { label: '浅色', value: 'light' },
@@ -2569,7 +2569,7 @@ const tabsDocumentation: ComponentDocumentation = {
       defaultValue: docsCopy('首个可用标签'),
     },
     {
-      name: 'onValueChange',
+      name: 'onChange',
       description: docsCopy('激活标签变化时调用，回传新的 value。'),
       type: '(value: string | null) => void',
     },
@@ -3415,28 +3415,26 @@ const dataEntryExamples: Record<string, ComponentExample[]> = {
     {
       title: docsCopy('带校验的邀请表单'),
       description: docsCopy(
-        '连接 react-hook-form，展示必填校验、错误关联和提交结果。'
+        '通过统一的 Form.Item 连接控件、校验、错误和提交状态。'
       ),
       preview: <FormInviteDemo />,
-      code: docsCopy(`import { Form } from '@heliannuuthus/ui'
+      code: docsCopy(`import { Form, Input, Switch } from '@heliannuuthus/ui'
 
-const form = useForm({ defaultValues: { email: '', note: '' } })
+const form = Form.useForm({
+  defaultValues: { email: '', notify: true },
+})
 
-<Form {...form}>
-  <form onSubmit={form.handleSubmit(onSubmit)}>
-    <Form.Field
-      control={form.control}
-      name="email"
-      rules={{ required: '请输入邮箱地址。' }}
-      render={({ field }) => (
-        <Form.Item>
-          <Form.Label>邮箱地址</Form.Label>
-          <Form.Control><Input {...field} /></Form.Control>
-          <Form.Message />
-        </Form.Item>
-      )}
-    />
-  </form>
+<Form form={form} onSubmit={onSubmit}>
+  <Form.Item
+    name="email"
+    label="邮箱地址"
+    rules={{ required: '请输入邮箱地址。' }}
+  >
+    <Input />
+  </Form.Item>
+  <Form.Item name="notify" label="发送邮件通知">
+    <Switch />
+  </Form.Item>
 </Form>`),
       previewHeight: 560,
     },
@@ -3634,7 +3632,7 @@ import { Volume1, Volume2 } from 'lucide-react'
   startLabel="静音"
   endLabel="最大"
   value={volume}
-  onValueChange={setVolume}
+  onChange={setVolume}
   min={0}
   max={100}
   step={2}
@@ -3649,7 +3647,7 @@ import { Volume1, Volume2 } from 'lucide-react'
       preview: <SliderBudgetDemo />,
       code: `<Slider
   value={range}
-  onValueChange={setRange}
+  onChange={setRange}
   min={0}
   max={100}
   step={2}
@@ -3667,7 +3665,7 @@ import { Volume1, Volume2 } from 'lucide-react'
   className="h-56"
   orientation="vertical"
   value={level}
-  onValueChange={setLevel}
+  onChange={setLevel}
   min={0}
   max={100}
   step={2}
@@ -4987,7 +4985,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'string[]',
     },
     {
-      name: 'onValueChange',
+      name: 'onChange',
       description: docsCopy('展开项变化时调用。'),
       type: '(value, eventDetails) => void',
     },
@@ -6468,28 +6466,48 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
   ],
   form: [
     {
-      component: 'Form.Field',
-      name: 'control',
-      description: docsCopy('连接 react-hook-form 创建的表单控制器。'),
-      type: 'Control',
+      component: 'Form',
+      name: 'form',
+      description: docsCopy('连接 Form.useForm 创建的表单实例。'),
+      type: 'FormInstance',
     },
     {
-      component: 'Form.Field',
+      component: 'Form',
+      name: 'onSubmit',
+      description: docsCopy('校验通过后接收完整表单数据。'),
+      type: '(values) => void | Promise<void>',
+    },
+    {
+      component: 'Form.Item',
       name: 'name',
       description: docsCopy('指定当前字段在表单数据中的唯一路径。'),
       type: 'FieldPath',
     },
     {
-      component: 'Form.Field',
+      component: 'Form.Item',
+      name: 'label',
+      description: docsCopy('设置字段标签并自动关联实际控件。'),
+      type: 'ReactNode',
+    },
+    {
+      component: 'Form.Item',
+      name: 'description',
+      description: docsCopy('补充字段说明并建立无障碍描述关联。'),
+      type: 'ReactNode',
+    },
+    {
+      component: 'Form.Item',
       name: 'rules',
       description: docsCopy('声明当前字段的必填、格式和自定义校验规则。'),
       type: 'RegisterOptions',
     },
     {
-      component: 'Form.Field',
-      name: 'render',
-      description: docsCopy('接收字段值、事件和状态，并渲染对应控件结构。'),
-      type: 'ControllerProps.render',
+      component: 'Form.Item',
+      name: 'children',
+      description: docsCopy(
+        '直接绑定内置控件，或使用 render 函数接入第三方控件。'
+      ),
+      type: 'ReactNode | FormItemRender',
     },
     {
       component: 'Field',
@@ -6850,6 +6868,18 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
     },
     {
       component: 'Slider',
+      name: 'onChange',
+      description: docsCopy('滑块值变化时调用。'),
+      type: '(value: number | number[]) => void',
+    },
+    {
+      component: 'Slider',
+      name: 'onChangeComplete',
+      description: docsCopy('一次指针或键盘调整完成后调用。'),
+      type: '(value: number | number[]) => void',
+    },
+    {
+      component: 'Slider',
       name: 'min',
       description: docsCopy('设置允许选择的最小值。'),
       type: 'number',
@@ -6893,8 +6923,8 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
     {
       component: 'Switch',
       name: 'onChange',
-      description: docsCopy('开关状态变化时立即调用，并提供底层交互事件详情。'),
-      type: '(checked: boolean, eventDetails) => void',
+      description: docsCopy('开关状态变化时立即调用。'),
+      type: '(checked: boolean) => void',
     },
     {
       component: 'Switch',
@@ -7011,28 +7041,24 @@ componentDocumentation.input.parts = [
 ];
 
 componentDocumentation.form.summary = docsCopy(
-  '通过 Field 与 Label 组织字段语义，并连接表单状态、校验和提交行为。'
+  '通过 Form.Item 统一连接数据录入组件、校验状态和提交行为。'
 );
 componentDocumentation.form.whenToUse = [
-  docsCopy('组织标签、控件、说明和错误信息，建立完整的字段语义。'),
-  docsCopy('需要连接表单状态、校验规则、错误反馈与提交行为。'),
+  docsCopy('使用统一方式组织标签、控件、说明和错误信息。'),
+  docsCopy('让内置数据录入组件自动连接字段值、校验状态和提交行为。'),
 ];
 componentDocumentation.form.parts = [
   {
     name: 'Form',
-    description: docsCopy('提供表单上下文，并连接提交行为。'),
+    description: docsCopy('渲染原生表单并连接 Form.useForm 实例。'),
   },
   {
-    name: 'Form.Field',
-    description: docsCopy('连接字段名称、校验规则和表单状态。'),
+    name: 'Form.useForm',
+    description: docsCopy('创建类型化表单实例并管理完整表单状态。'),
   },
   {
-    name: 'Form.Item / Form.Label / Form.Control',
-    description: docsCopy('组织单个字段，并连接标签与实际输入控件。'),
-  },
-  {
-    name: 'Form.Description / Form.Message',
-    description: docsCopy('补充字段说明并展示当前校验错误。'),
+    name: 'Form.Item',
+    description: docsCopy('自动绑定内置控件，并组织标签、说明和校验错误。'),
   },
 ];
 
@@ -7953,7 +7979,7 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       type: 'string[]',
     },
     {
-      name: 'onValueChange',
+      name: 'onChange',
       description: docsCopy('展开项变化时回传完整 value 数组。'),
       type: '(value: string[]) => void',
     },
@@ -8063,7 +8089,7 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       type: 'ReactNode',
     },
     {
-      name: 'value / defaultValue / onValueChange',
+      name: 'value / defaultValue / onChange',
       description: docsCopy('管理当前搜索值。'),
       type: 'string / string / (value: string) => void',
     },
@@ -8171,7 +8197,7 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       type: "'start' | 'center' | 'end' / 'horizontal' | 'vertical'",
     },
     {
-      name: 'value / defaultValue / onValueChange',
+      name: 'value / defaultValue / onChange',
       description: docsCopy('以受控或非受控方式管理当前展开入口。'),
       type: 'string | null / string | null / (value: string | null) => void',
     },

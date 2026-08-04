@@ -377,7 +377,7 @@ export function AvatarGroupDemo() {
             effect="none"
             max={6}
             min={1}
-            onValueChange={(value) =>
+            onChange={(value) =>
               setMax(Array.isArray(value) ? (value[0] ?? 4) : value)
             }
             step={1}
@@ -394,7 +394,7 @@ export function AvatarGroupDemo() {
             effect="none"
             max={12}
             min={0}
-            onValueChange={(value) =>
+            onChange={(value) =>
               setOverlap(Array.isArray(value) ? (value[0] ?? 8) : value)
             }
             step={2}

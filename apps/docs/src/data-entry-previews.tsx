@@ -21,7 +21,6 @@ import {
   Volume1,
   Volume2,
 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { useDocsLocale } from './i18n/routing';
 
 const members = [
@@ -265,11 +264,13 @@ export function FieldProfileDemo() {
   );
 }
 
-type InviteForm = { email: string; note: string };
+type InviteForm = { email: string; note: string; notify: boolean };
 
 export function FormInviteDemo() {
   const [submitted, setSubmitted] = useState('');
-  const form = useForm<InviteForm>({ defaultValues: { email: '', note: '' } });
+  const form = Form.useForm<InviteForm>({
+    defaultValues: { email: '', note: '', notify: true },
+  });
 
   return (
     <div className="data-form-shell">
@@ -279,60 +280,49 @@ export function FormInviteDemo() {
           <p>{docsCopy('校验、错误提示与提交状态由同一份表单状态驱动。')}</p>
         </div>
       </div>
-      <Form {...form}>
-        <form
-          className="data-form-stack"
-          onSubmit={form.handleSubmit((values) => setSubmitted(values.email))}
+      <Form
+        className="data-form-stack"
+        form={form}
+        onSubmit={(values) => setSubmitted(values.email)}
+      >
+        <Form.Item
+          name="email"
+          label={docsCopy('邮箱地址')}
+          description={docsCopy('成员会收到一封加入工作区的邮件。')}
+          rules={{
+            required: docsCopy('请输入邮箱地址。'),
+            pattern: {
+              value: /^\S+@\S+\.\S+$/,
+              message: docsCopy('邮箱格式不正确。'),
+            },
+          }}
         >
-          <Form.Field
-            control={form.control}
-            name="email"
-            rules={{
-              required: docsCopy('请输入邮箱地址。'),
-              pattern: {
-                value: /^\S+@\S+\.\S+$/,
-                message: docsCopy('邮箱格式不正确。'),
-              },
-            }}
-            render={({ field }) => (
-              <Form.Item>
-                <Form.Label>{docsCopy('邮箱地址')}</Form.Label>
-                <Form.Control>
-                  <Input placeholder="name@example.com" {...field} />
-                </Form.Control>
-                <Form.Description>
-                  {docsCopy('成员会收到一封加入工作区的邮件。')}
-                </Form.Description>
-                <Form.Message />
-              </Form.Item>
-            )}
-          />
-          <Form.Field
-            control={form.control}
-            name="note"
-            render={({ field }) => (
-              <Form.Item>
-                <Form.Label>{docsCopy('附言（可选）')}</Form.Label>
-                <Form.Control>
-                  <Input.TextArea
-                    placeholder={docsCopy('补充邀请背景…')}
-                    {...field}
-                  />
-                </Form.Control>
-                <Form.Message />
-              </Form.Item>
-            )}
-          />
-          <div className="data-form-actions">
-            {submitted && (
-              <span>
-                {docsCopy('邀请已发送至')}
-                {submitted}
-              </span>
-            )}
-            <Button type="submit">{docsCopy('发送邀请')}</Button>
-          </div>
-        </form>
+          <Input placeholder="name@example.com" />
+        </Form.Item>
+        <Form.Item name="note" label={docsCopy('附言（可选）')}>
+          <Input.TextArea placeholder={docsCopy('补充邀请背景…')} />
+        </Form.Item>
+        <Form.Item
+          name="notify"
+          label={docsCopy('发送邮件通知')}
+          description={docsCopy('关闭后只会创建邀请记录。')}
+          orientation="horizontal"
+        >
+          <Switch />
+        </Form.Item>
+        <div className="data-form-actions">
+          {submitted && (
+            <span>
+              {docsCopy('邀请已发送至')}
+              {submitted}
+            </span>
+          )}
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting
+              ? docsCopy('正在发送…')
+              : docsCopy('发送邀请')}
+          </Button>
+        </div>
       </Form>
     </div>
   );
@@ -604,7 +594,7 @@ export function SliderBudgetDemo() {
       </div>
       <Slider
         value={range}
-        onValueChange={(next) =>
+        onChange={(next) =>
           setRange(typeof next === 'number' ? [next] : [...next])
         }
         min={0}
@@ -640,7 +630,7 @@ export function SliderElasticDemo() {
         endLabel={docsCopy('最大')}
         max={100}
         min={0}
-        onValueChange={setVolume}
+        onChange={setVolume}
         startIcon={<Volume1 />}
         startLabel={docsCopy('静音')}
         step={2}
@@ -676,7 +666,7 @@ export function SliderVerticalDemo() {
               className="data-vertical-slider"
               max={100}
               min={0}
-              onValueChange={(value) => updateLevel(index, value)}
+              onChange={(value) => updateLevel(index, value)}
               orientation="vertical"
               step={2}
               value={levels[index]}

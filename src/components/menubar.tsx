@@ -264,9 +264,7 @@ function renderMenubarEntries(items: DropdownMenuEntry[]) {
           key={index}
           checked={item.checked}
           disabled={item.disabled}
-          onCheckedChange={(checked) =>
-            item.onCheckedChange?.(checked === true)
-          }
+          onCheckedChange={(checked) => item.onChange?.(checked === true)}
         >
           {item.label}
         </MenubarCheckboxItem>
@@ -278,7 +276,7 @@ function renderMenubarEntries(items: DropdownMenuEntry[]) {
         <MenubarRadioGroup
           key={index}
           value={item.value}
-          onValueChange={(value) => item.onValueChange?.(String(value))}
+          onValueChange={(value) => item.onChange?.(String(value))}
         >
           {item.items.map((option) => (
             <MenubarRadioItem

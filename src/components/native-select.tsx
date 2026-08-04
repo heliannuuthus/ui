@@ -2,6 +2,11 @@ import * as React from 'react';
 
 import { cn } from '../lib/utils';
 import { ChevronDownIcon } from 'lucide-react';
+import {
+  mergeIds,
+  useMergedRefs,
+  useFormControl,
+} from './internal/form-control';
 
 type NativeSelectProps = Omit<React.ComponentProps<'select'>, 'size'> & {
   options?: readonly NativeSelectOption[];
@@ -24,12 +29,29 @@ type NativeSelectOption =
     };
 
 function NativeSelect({
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   children,
   className,
+  defaultValue,
+  disabled,
+  id,
+  name,
+  onBlur,
+  onChange,
   options,
+  ref,
+  required,
   size = 'default',
+  value,
   ...props
 }: NativeSelectProps) {
+  const formControl = useFormControl<string | readonly string[] | undefined>();
+  const selectRef = useMergedRefs(
+    ref,
+    formControl?.ref as React.Ref<HTMLSelectElement> | undefined
+  );
+
   return (
     <div
       className={cn(
@@ -40,10 +62,38 @@ function NativeSelect({
       data-size={size}
     >
       <select
+        {...props}
+        aria-describedby={mergeIds(
+          ariaDescribedBy,
+          formControl?.descriptionId,
+          formControl?.messageId
+        )}
+        aria-invalid={ariaInvalid ?? formControl?.invalid}
         data-slot="native-select"
         data-size={size}
+        defaultValue={formControl ? undefined : defaultValue}
+        disabled={disabled || formControl?.disabled}
+        id={id ?? formControl?.controlId}
+        name={formControl?.name ?? name}
+        onBlur={(event) => {
+          onBlur?.(event);
+          formControl?.onBlur();
+        }}
+        onChange={(event) => {
+          onChange?.(event);
+          formControl?.onChange(
+            event.target.multiple
+              ? Array.from(
+                  event.target.selectedOptions,
+                  (option) => option.value
+                )
+              : event.target.value
+          );
+        }}
+        ref={selectRef}
+        required={required || formControl?.required}
+        value={formControl ? (formControl.value ?? '') : value}
         className="h-9 w-full min-w-0 appearance-none rounded-3xl border border-input bg-background py-1 pr-8 pl-3 text-sm transition-[color,box-shadow,background-color,border-color] outline-none select-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground hover:border-primary/35 focus-visible:border-primary focus-visible:ring-3 focus-visible:ring-primary/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted/50 disabled:opacity-60 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-[size=sm]:h-8 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
-        {...props}
       >
         {options?.map((option) =>
           'options' in option ? (

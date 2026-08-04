@@ -41,6 +41,11 @@ The package implements the complete shadcn/ui component catalog for the Radix fo
 
 Public APIs target Ant Design-level maturity—consistent naming and defaults, strong TypeScript types, controlled and uncontrolled modes where appropriate, refs, events, sizes, variants, composition, and deliberate extension points—without depending on Ant Design or providing a compatibility facade.
 
+## Design documents
+
+- [`docs/form-integration.md`](docs/form-integration.md) defines the unified
+  Form integration contract, control compatibility matrix and engine boundary.
+
 ## CI/CD
 
 The repository uses the reusable workflows from

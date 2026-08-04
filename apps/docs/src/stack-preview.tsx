@@ -85,7 +85,7 @@ export function StackGapDemo() {
           aria-label={docsCopy('Stack 间距')}
           max={12}
           min={0}
-          onValueChange={setGap}
+          onChange={setGap}
           step={3}
           value={gap}
         />
@@ -271,7 +271,7 @@ export function StackCompactVariantsDemo() {
                 aria-label={docsCopy('压缩质量滑块')}
                 max={100}
                 min={0}
-                onValueChange={setQuality}
+                onChange={setQuality}
                 step={1}
                 value={quality}
               />

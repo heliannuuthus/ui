@@ -4,6 +4,11 @@ import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group';
 
 import { cn } from '../lib/utils';
 import { Stack } from './stack';
+import {
+  mergeIds,
+  useMergedRefs,
+  useFormControl,
+} from './internal/form-control';
 
 type RadioLength = number | string;
 type RadioGap =
@@ -145,15 +150,31 @@ function RadioRoot<Value = string>({
 }
 
 function RadioGroup<Value = string>({
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
+  'aria-labelledby': ariaLabelledBy,
   className,
   columns = 3,
+  defaultValue,
+  disabled,
   gap = 12,
+  id,
+  inputRef,
   minColumnWidth = 180,
+  name,
+  onBlur,
   onChange,
   options,
   orientation = 'horizontal',
+  required,
+  value,
   ...props
 }: RadioGroupProps<Value>) {
+  const formControl = useFormControl<Value>();
+  const controlRef = useMergedRefs(
+    inputRef,
+    formControl?.ref as React.Ref<HTMLInputElement> | undefined
+  );
   const columnCount = Number.isFinite(columns)
     ? Math.max(1, Math.floor(columns))
     : 3;
@@ -166,6 +187,7 @@ function RadioGroup<Value = string>({
 
   return (
     <RadioGroupPrimitive
+      {...props}
       render={
         <Stack
           block
@@ -177,10 +199,30 @@ function RadioGroup<Value = string>({
       }
       data-slot="radio-group"
       data-orientation={orientation}
+      aria-describedby={mergeIds(
+        ariaDescribedBy,
+        formControl?.descriptionId,
+        formControl?.messageId
+      )}
+      aria-invalid={ariaInvalid ?? formControl?.invalid}
+      aria-labelledby={mergeIds(ariaLabelledBy, formControl?.labelId)}
       aria-orientation={orientation}
       className={className}
-      onValueChange={onChange}
-      {...props}
+      defaultValue={formControl ? undefined : defaultValue}
+      disabled={disabled || formControl?.disabled}
+      id={id ?? formControl?.controlId}
+      inputRef={controlRef}
+      name={formControl?.name ?? name}
+      onBlur={(event) => {
+        onBlur?.(event);
+        formControl?.onBlur();
+      }}
+      onValueChange={(nextValue) => {
+        onChange?.(nextValue);
+        formControl?.onChange(nextValue);
+      }}
+      required={required || formControl?.required}
+      value={formControl ? formControl.value : value}
     >
       {options.map((option) => (
         <RadioRoot
