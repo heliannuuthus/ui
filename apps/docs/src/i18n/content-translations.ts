@@ -1,8 +1,8 @@
 // English translations keyed by the canonical Chinese documentation copy.
 export const englishContentTranslations: Readonly<Record<string, string>> = {
   自定义控件接入: 'Custom control integration',
-  '通过稳定的 render contract 将业务自制或第三方控件接入同一套值、校验、焦点和无障碍管理。':
-    'Connect user-authored or third-party controls to the same value, validation, focus, and accessibility management through the stable render contract.',
+  '自制控件实现统一协议并声明一次，即可直接接入值、校验、焦点和无障碍管理；render 仅用于无法修改的第三方控件。':
+    'Implement the unified protocol and declare a user-authored control once to connect value, validation, focus, and accessibility management directly; render is reserved for third-party controls that cannot be modified.',
   '自制组件只依赖稳定的值、事件与无障碍属性。':
     'User-authored controls depend only on stable values, events, and accessibility attributes.',
   优先级: 'Priority',
@@ -12,10 +12,23 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   'Form.Field 统一管理值、校验、焦点与错误描述。':
     'Form.Field consistently manages values, validation, focus, and error descriptions.',
   '请选择优先级。': 'Choose a priority.',
+  当前优先级: 'Current priority',
   已保存优先级: 'Saved priority',
   保存优先级: 'Save priority',
-  '直接绑定内置控件，或使用 render 函数接入自制、第三方和复合控件。':
-    'Bind built-in controls directly, or use a render function to integrate user-authored, third-party, and composite controls.',
+  '直接绑定内置控件或通过 Form.defineControl 声明的自制控件；render 函数仅用于无法修改的第三方控件。':
+    'Bind built-in controls or user-authored controls declared through Form.defineControl directly; use a render function only for third-party controls that cannot be modified.',
+  '声明实现 FormControlProps 协议并转发 ref 的自定义控件，使其可被 Form.Field 直接绑定。':
+    'Declare a custom control that implements FormControlProps and forwards its ref so Form.Field can bind it directly.',
+  '自定义控件必须接收 value、onChange、onBlur、disabled、required、id、name、defaultValue 和字段 ARIA 属性，并将 ref 转发到聚焦目标。':
+    'Custom controls must accept value, onChange, onBlur, disabled, required, id, name, defaultValue, and field ARIA attributes, and forward the ref to the focus target.',
+  '普通控件默认无需设置；复合控件声明为 group 后使用组级标签与 ARIA 关系。':
+    'Standard controls need no option; declare composite controls as group to use group-level labels and ARIA relationships.',
+  '订阅指定字段并只在该值变化时重新渲染当前组件。':
+    'Subscribe to one field and re-render the current component only when that value changes.',
+  '同步读取指定字段的当前值，不触发重新渲染。':
+    'Read the current value of one field synchronously without triggering a re-render.',
+  '在 React 渲染之外订阅指定字段变化，并返回取消订阅函数。':
+    'Subscribe to one field outside React rendering and return an unsubscribe function.',
   '提供当前字段的 name、value、onChange、onBlur 和 ref。':
     'Provides the current field name, value, onChange, onBlur, and ref.',
   '提供 disabled、required、invalid 和当前错误消息。':

@@ -3519,29 +3519,30 @@ const form = Form.useForm({
     {
       title: docsCopy('自定义控件接入'),
       description: docsCopy(
-        '通过稳定的 render contract 将业务自制或第三方控件接入同一套值、校验、焦点和无障碍管理。'
+        '自制控件实现统一协议并声明一次，即可直接接入值、校验、焦点和无障碍管理；render 仅用于无法修改的第三方控件。'
       ),
       preview: <FormCustomControlDemo />,
       code: `import {
   forwardRef,
   type ComponentPropsWithoutRef,
-  type Ref,
 } from 'react'
-import { Button, Form } from '@heliannuuthus/ui'
+import {
+  Button,
+  Form,
+  type FormControlProps,
+} from '@heliannuuthus/ui'
 
 type Priority = '' | 'routine' | 'important' | 'urgent'
 
 type PriorityControlProps = Omit<
   ComponentPropsWithoutRef<'div'>,
-  'onBlur' | 'onChange'
-> & {
-  disabled?: boolean
-  onBlur?: () => void
-  onChange: (value: Priority) => void
-  value: Priority
-}
+  'defaultValue' | 'onBlur' | 'onChange'
+> & FormControlProps<Priority>
 
-const PriorityControl = forwardRef<HTMLButtonElement, PriorityControlProps>(
+const PriorityControlRoot = forwardRef<
+  HTMLButtonElement,
+  PriorityControlProps
+>(
   ({ disabled, onBlur, onChange, value, ...groupProps }, ref) => {
     const options = [
       { label: t('priority.routine'), value: 'routine' },
@@ -3554,7 +3555,7 @@ const PriorityControl = forwardRef<HTMLButtonElement, PriorityControlProps>(
         {...groupProps}
         role="radiogroup"
         onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) onBlur?.()
+          if (!event.currentTarget.contains(event.relatedTarget)) onBlur()
         }}
       >
         {options.map((option, index) => (
@@ -3575,9 +3576,22 @@ const PriorityControl = forwardRef<HTMLButtonElement, PriorityControlProps>(
   }
 )
 
+const PriorityControl = Form.defineControl(PriorityControlRoot, {
+  semantics: 'group',
+})
+
 const form = Form.useForm<{ priority: Priority }>({
   defaultValues: { priority: '' },
 })
+
+const PriorityValue = () => {
+  const priority = Form.useFieldValue<
+    { priority: Priority },
+    'priority'
+  >('priority')
+
+  return <output>{priority}</output>
+}
 
 <Form form={form} onSubmit={onSubmit}>
   <Form.Field<{ priority: Priority }, 'priority'>
@@ -3586,16 +3600,9 @@ const form = Form.useForm<{ priority: Priority }>({
     description={t('priority.description')}
     rules={{ required: t('priority.required') }}
   >
-    {({ field, groupProps }) => (
-      <PriorityControl
-        {...groupProps}
-        ref={field.ref as Ref<HTMLButtonElement>}
-        value={field.value}
-        onBlur={field.onBlur}
-        onChange={field.onChange}
-      />
-    )}
+    <PriorityControl />
   </Form.Field>
+  <PriorityValue />
   <Button type="submit">{t('actions.save')}</Button>
 </Form>`,
       previewHeight: 410,
@@ -6667,9 +6674,54 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       component: 'Form.Field',
       name: 'children',
       description: docsCopy(
-        '直接绑定内置控件，或使用 render 函数接入自制、第三方和复合控件。'
+        '直接绑定内置控件或通过 Form.defineControl 声明的自制控件；render 函数仅用于无法修改的第三方控件。'
       ),
       type: 'ReactNode | (props: FormFieldRenderProps<Value>) => ReactNode',
+    },
+    {
+      component: 'Form.defineControl',
+      name: 'component',
+      description: docsCopy(
+        '声明实现 FormControlProps 协议并转发 ref 的自定义控件，使其可被 Form.Field 直接绑定。'
+      ),
+      type: 'ForwardRefComponent<FormControlProps<Value>>',
+    },
+    {
+      component: 'FormControlProps<Value>',
+      name: 'protocol',
+      description: docsCopy(
+        '自定义控件必须接收 value、onChange、onBlur、disabled、required、id、name、defaultValue 和字段 ARIA 属性，并将 ref 转发到聚焦目标。'
+      ),
+      type: 'FormControlProps<Value> + forwarded ref',
+    },
+    {
+      component: 'Form.defineControl',
+      name: 'options.semantics',
+      description: docsCopy(
+        '普通控件默认无需设置；复合控件声明为 group 后使用组级标签与 ARIA 关系。'
+      ),
+      type: "'control' | 'group'",
+      defaultValue: "'control'",
+    },
+    {
+      component: 'Form.useFieldValue',
+      name: 'name',
+      description: docsCopy('订阅指定字段并只在该值变化时重新渲染当前组件。'),
+      type: 'FieldPath',
+    },
+    {
+      component: 'Form instance',
+      name: 'getValue',
+      description: docsCopy('同步读取指定字段的当前值，不触发重新渲染。'),
+      type: '(name: FieldPath) => Value',
+    },
+    {
+      component: 'Form instance',
+      name: 'subscribe',
+      description: docsCopy(
+        '在 React 渲染之外订阅指定字段变化，并返回取消订阅函数。'
+      ),
+      type: '(name, callback) => unsubscribe',
     },
     {
       component: 'Form.Field render',

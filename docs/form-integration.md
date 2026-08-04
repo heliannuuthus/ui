@@ -85,10 +85,12 @@ The integration follows these rules:
 - lookup does not depend on `displayName`, source inspection or DOM structure;
 - form state takes precedence over a child's `value`, `checked`,
   `defaultValue` or `defaultChecked`;
-- a child's explicit `onChange` still runs before the form field is updated;
+- a child's explicit `onChange` still runs in addition to the form update;
 - group controls isolate their internal items so only the group binds to the
   form field;
-- unsupported controls use the render prop and receive stable,
+- user-authored controls implement `FormControlProps` once and are registered
+  with `Form.defineControl`;
+- unmodifiable third-party controls use the render prop and receive stable,
   engine-independent field members.
 
 ## Usage
@@ -169,45 +171,53 @@ The adapter layer preserves these component-facing conventions:
 Changing a component's controlled props or event payload requires updating its
 form binding, tests and this matrix in the same change.
 
-## Third-party and composite controls
+## User-authored controls
 
-Unsupported controls use a typed render prop:
+A reusable custom form control implements one explicit controlled-component
+protocol:
 
-```tsx
-<Form.Field name="location" label="位置">
-  {({ controlProps, field }) => (
-    <ThirdPartyMap
-      {...controlProps}
-      ref={field.ref}
-      location={field.value}
-      onBlur={field.onBlur}
-      onLocationChange={field.onChange}
-    />
-  )}
-</Form.Field>
+```ts
+type FormControlProps<Value> = {
+  value: Value;
+  onChange: (value: Value) => void;
+  onBlur: () => void;
+  defaultValue: Value | undefined;
+  disabled: boolean;
+  required: boolean | undefined;
+  id: string;
+  name: string | undefined;
+  'aria-describedby': string | undefined;
+  'aria-errormessage': string | undefined;
+  'aria-invalid': React.AriaAttributes['aria-invalid'];
+  'aria-labelledby': string | undefined;
+  'aria-required': React.AriaAttributes['aria-required'];
+};
 ```
 
-The same contract supports reusable user-authored controls. Keep the custom
-component controlled through its natural value and event props, then adapt
-those props at the `Form.Field` boundary:
+The component must also forward its ref to the focus target. These requirements
+are checked by `Form.defineControl` at compile time. Every key is required in
+the underlying component's type so the accepted protocol is explicit; members
+whose runtime value may be absent include `undefined`. After definition all
+protocol members become optional at the connected component call site because
+`Form.Field` supplies them.
 
 ```tsx
 type Priority = 'routine' | 'important' | 'urgent'
 
-const PriorityControl = React.forwardRef<
+type PriorityControlProps = Omit<
+  React.ComponentPropsWithoutRef<'div'>,
+  'defaultValue' | 'onBlur' | 'onChange'
+> & FormControlProps<Priority>
+
+const PriorityControlRoot = React.forwardRef<
   HTMLButtonElement,
-  {
-    disabled?: boolean
-    value?: Priority
-    onChange: (value: Priority) => void
-    onBlur?: () => void
-  } & FormFieldGroupProps
+  PriorityControlProps
 >(({ disabled, value, onChange, onBlur, ...groupProps }, ref) => (
   <div
     {...groupProps}
     role="radiogroup"
     onBlur={(event) => {
-      if (!event.currentTarget.contains(event.relatedTarget)) onBlur?.()
+      if (!event.currentTarget.contains(event.relatedTarget)) onBlur()
     }}
   >
     {priorities.map((priority, index) => (
@@ -226,22 +236,42 @@ const PriorityControl = React.forwardRef<
   </div>
 ))
 
+const PriorityControl = Form.defineControl(PriorityControlRoot, {
+  semantics: 'group',
+})
+
 <Form.Field<Values, 'priority'> name="priority" label="Priority">
-  {({ field, groupProps }) => (
-    <PriorityControl
-      {...groupProps}
-      ref={field.ref as React.Ref<HTMLButtonElement>}
-      value={field.value}
+  <PriorityControl />
+</Form.Field>
+```
+
+`semantics` defaults to `control`. Only compound widgets declare
+`semantics: 'group'`. This does not change value binding; it tells the field
+where native `name` and `required` semantics belong, changes the accessible
+label relationship from `htmlFor` to `aria-labelledby`, and keeps the ref on
+the group's actual focus target.
+
+The underlying `PriorityControlRoot` remains an ordinary controlled component.
+The connected `PriorityControl` is intended for direct use under `Form.Field`;
+there is no per-field render mapping.
+
+## Third-party escape hatch
+
+Unsupported controls use a typed render prop:
+
+```tsx
+<Form.Field name="location" label="位置">
+  {({ controlProps, field }) => (
+    <ThirdPartyMap
+      {...controlProps}
+      ref={field.ref}
+      location={field.value}
       onBlur={field.onBlur}
-      onChange={field.onChange}
+      onLocationChange={field.onChange}
     />
   )}
 </Form.Field>
 ```
-
-This keeps custom controls independent of the internal form engine. The
-component remains a normal controlled React component, while `Form.Field`
-continues to own registration, validation, focus and accessible relationships.
 
 `controlProps` is ready to spread onto a single interactive control. It
 contains the generated `id`, field `name`, disabled and required semantics,
@@ -277,6 +307,41 @@ type FormFieldRenderProps<Value> = {
 ```
 
 Do not expose a raw `react-hook-form` controller field through this contract.
+
+## Reading and observing values
+
+Components rendered below `Form` subscribe to one field with
+`Form.useFieldValue`. The hook reads the existing form provider and only
+re-renders its caller when the selected value changes:
+
+```tsx
+const PrioritySummary = () => {
+  const priority = Form.useFieldValue<Values, 'priority'>('priority');
+
+  return <output>{priority}</output>;
+};
+```
+
+Imperative code can read a snapshot without subscribing:
+
+```ts
+const priority = form.getValue('priority');
+```
+
+Code outside React rendering can subscribe to a field and explicitly dispose
+the listener:
+
+```ts
+const unsubscribe = form.subscribe('priority', (priority) => {
+  analytics.setFormProperty('priority', priority);
+});
+
+unsubscribe();
+```
+
+Application code should not consume the raw form engine context. Use
+`Form.useFieldValue` for rendering, `getValue` for snapshots and `subscribe`
+for non-rendering integrations.
 
 `Form.Item` remains a deprecated alias of `Form.Field` for compatibility. New
 code and documentation use `Form.Field`.
@@ -387,6 +452,8 @@ The unified API remains complete only while:
 - field and form-level errors are tested;
 - labels, descriptions and errors pass accessibility checks;
 - third-party render-prop integration is documented and tested;
+- custom controls are compile-time checked against `FormControlProps`;
+- field-level value observation does not expose the internal form engine;
 - no public signature exposes the selected form engine;
 - the legacy migration and release strategy is documented;
 - type-check, lint, formatting, build and package verification pass.

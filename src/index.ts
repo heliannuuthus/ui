@@ -129,6 +129,9 @@ export { Empty, type EmptyProps } from './components/empty';
 export { Field } from './components/field';
 export {
   Form,
+  type FormControlOptions,
+  type FormControlProps,
+  type FormControlSemantics,
   type FormFieldControlProps,
   type FormFieldGroupProps,
   type FormFieldProps,

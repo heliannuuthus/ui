@@ -1,15 +1,10 @@
 import { docsCopy } from './i18n/content';
-import {
-  forwardRef,
-  useState,
-  type ComponentPropsWithoutRef,
-  type Ref,
-} from 'react';
+import { forwardRef, useState, type ComponentPropsWithoutRef } from 'react';
 import { Button } from '@heliannuuthus/ui';
 import { Checkbox } from '@heliannuuthus/ui';
 import { DatePicker } from '@heliannuuthus/ui';
 import { Field } from '@heliannuuthus/ui';
-import { Form } from '@heliannuuthus/ui';
+import { Form, type FormControlProps } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
 import { Label } from '@heliannuuthus/ui';
 import { NativeSelect } from '@heliannuuthus/ui';
@@ -509,15 +504,11 @@ type Priority = '' | 'routine' | 'important' | 'urgent';
 
 type PriorityControlProps = Omit<
   ComponentPropsWithoutRef<'div'>,
-  'onBlur' | 'onChange'
-> & {
-  disabled?: boolean;
-  onBlur?: () => void;
-  onChange: (value: Priority) => void;
-  value: Priority;
-};
+  'defaultValue' | 'onBlur' | 'onChange'
+> &
+  FormControlProps<Priority>;
 
-const PriorityControl = forwardRef<HTMLButtonElement, PriorityControlProps>(
+const PriorityControlRoot = forwardRef<HTMLButtonElement, PriorityControlProps>(
   (
     { className, disabled, onBlur, onChange, value, ...props },
     forwardedRef
@@ -536,7 +527,7 @@ const PriorityControl = forwardRef<HTMLButtonElement, PriorityControlProps>(
           .join(' ')}
         role="radiogroup"
         onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) onBlur?.();
+          if (!event.currentTarget.contains(event.relatedTarget)) onBlur();
         }}
       >
         {options.map((option, index) => (
@@ -557,8 +548,24 @@ const PriorityControl = forwardRef<HTMLButtonElement, PriorityControlProps>(
   }
 );
 
+const PriorityControl = Form.defineControl(PriorityControlRoot, {
+  semantics: 'group',
+});
+
 type CustomControlValues = {
   priority: Priority;
+};
+
+const PriorityValue = () => {
+  const priority = Form.useFieldValue<CustomControlValues, 'priority'>(
+    'priority'
+  );
+
+  return priority ? (
+    <span>
+      {docsCopy('当前优先级')}：{priority}
+    </span>
+  ) : null;
 };
 
 export const FormCustomControlDemo = () => {
@@ -588,17 +595,10 @@ export const FormCustomControlDemo = () => {
           )}
           rules={{ required: docsCopy('请选择优先级。') }}
         >
-          {({ field, groupProps }) => (
-            <PriorityControl
-              {...groupProps}
-              ref={field.ref as Ref<HTMLButtonElement>}
-              value={field.value}
-              onBlur={field.onBlur}
-              onChange={field.onChange}
-            />
-          )}
+          <PriorityControl />
         </Form.Field>
         <div className="data-form-actions">
+          <PriorityValue />
           {submitted && (
             <span>
               {docsCopy('已保存优先级')}：{submitted}

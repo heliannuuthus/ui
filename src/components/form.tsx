@@ -3,6 +3,8 @@ import {
   FormProvider,
   useController,
   useForm as useReactHookForm,
+  useFormContext,
+  useWatch,
   type FieldPath,
   type FieldPathValue,
   type FieldValues,
@@ -18,10 +20,26 @@ import { Field } from './field';
 import {
   FormControlProvider,
   mergeIds,
+  useFormControl,
+  useMergedRefs,
   type FormControlContextValue,
 } from './internal/form-control';
 
 const INTERNAL_FORM_METHODS = Symbol('form-methods');
+const FORM_CONTROL_DEFINITION = Symbol('form-control-definition');
+
+type FormGetValue<TFieldValues extends FieldValues> = <
+  TName extends FieldPath<TFieldValues>,
+>(
+  name: TName
+) => FieldPathValue<TFieldValues, TName>;
+
+type FormSubscribe<TFieldValues extends FieldValues> = <
+  TName extends FieldPath<TFieldValues>,
+>(
+  name: TName,
+  callback: (value: FieldPathValue<TFieldValues, TName>) => void
+) => () => void;
 
 type FormInstance<
   TFieldValues extends FieldValues = FieldValues,
@@ -42,6 +60,8 @@ type FormInstance<
   | 'unregister'
   | 'watch'
 > & {
+  getValue: FormGetValue<TFieldValues>;
+  subscribe: FormSubscribe<TFieldValues>;
   readonly [INTERNAL_FORM_METHODS]: UseFormReturn<
     TFieldValues,
     TContext,
@@ -96,6 +116,66 @@ type FormFieldRenderProps<Value> = {
   groupProps: FormFieldGroupProps;
 };
 
+type FormControlProps<Value> = {
+  'aria-describedby': string | undefined;
+  'aria-errormessage': string | undefined;
+  'aria-invalid': React.AriaAttributes['aria-invalid'];
+  'aria-labelledby': string | undefined;
+  'aria-required': React.AriaAttributes['aria-required'];
+  defaultValue: Value | undefined;
+  disabled: boolean;
+  id: string;
+  name: string | undefined;
+  onBlur: () => void;
+  onChange: (value: Value) => void;
+  required: boolean | undefined;
+  value: Value;
+};
+
+type FormControlSemantics = 'control' | 'group';
+
+type FormControlOptions = {
+  semantics?: FormControlSemantics;
+};
+
+type FormControlComponent<
+  Element extends HTMLElement,
+  Props extends object,
+> = React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<Props> & React.RefAttributes<Element>
+>;
+
+type FormControlValue<Props> = Props extends {
+  value: infer Value;
+}
+  ? Value
+  : never;
+
+type FormControlInjectedKey = keyof FormControlProps<unknown>;
+
+type DefinedFormControlProps<Props extends object> = Omit<
+  Props,
+  FormControlInjectedKey
+> &
+  Partial<Pick<Props, Extract<keyof Props, FormControlInjectedKey>>>;
+
+type DefinedFormControlComponent<
+  Element extends HTMLElement,
+  Props extends object,
+> = React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<DefinedFormControlProps<Props>> &
+    React.RefAttributes<Element>
+> &
+  FormControlDefinitionCarrier;
+
+type FormControlDefinition = {
+  semantics: FormControlSemantics;
+};
+
+type FormControlDefinitionCarrier = {
+  [FORM_CONTROL_DEFINITION]?: FormControlDefinition;
+};
+
 type FormFieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
@@ -118,6 +198,96 @@ type FormFieldProps<
   shouldUnregister?: boolean;
 };
 
+const defineControl = <Element extends HTMLElement, Props extends object>(
+  Component: FormControlComponent<Element, Props> &
+    (Props extends FormControlProps<FormControlValue<Props>> ? unknown : never),
+  { semantics = 'control' }: FormControlOptions = {}
+): DefinedFormControlComponent<Element, Props> => {
+  type Value = FormControlValue<Props>;
+
+  const DefinedControl = React.forwardRef<
+    Element,
+    DefinedFormControlProps<Props>
+  >((componentProps, forwardedRef) => {
+    const props = componentProps as unknown as DefinedFormControlProps<Props> &
+      FormControlProps<Value>;
+    const formControl = useFormControl<Value>();
+    const mergedRef = useMergedRefs(
+      forwardedRef,
+      formControl?.ref as React.Ref<Element> | undefined
+    );
+
+    if (!formControl) {
+      return React.createElement(Component as React.ElementType, {
+        ...componentProps,
+        ref: mergedRef,
+      });
+    }
+
+    const describedBy = mergeIds(
+      props['aria-describedby'],
+      formControl.descriptionId,
+      formControl.messageId
+    );
+    const errorMessage = mergeIds(
+      props['aria-errormessage'],
+      formControl.messageId
+    );
+    const labelledBy =
+      semantics === 'group'
+        ? mergeIds(props['aria-labelledby'], formControl.labelId)
+        : props['aria-labelledby'];
+    const resolvedProps = {
+      ...props,
+      'aria-describedby': describedBy,
+      'aria-errormessage': errorMessage,
+      'aria-invalid': formControl.invalid ? true : props['aria-invalid'],
+      'aria-labelledby': labelledBy,
+      'aria-required': formControl.required ? true : props['aria-required'],
+      defaultValue: undefined,
+      disabled: props.disabled || formControl.disabled,
+      id: formControl.controlId,
+      name: semantics === 'control' ? formControl.name : undefined,
+      onBlur: () => {
+        formControl.onBlur();
+        props.onBlur?.();
+      },
+      onChange: (value: Value) => {
+        formControl.onChange(value);
+        props.onChange?.(value);
+      },
+      required:
+        semantics === 'control'
+          ? props.required || formControl.required
+          : undefined,
+      value: formControl.value,
+    } as Props;
+
+    return React.createElement(Component as React.ElementType, {
+      ...resolvedProps,
+      ref: mergedRef,
+    });
+  });
+
+  DefinedControl.displayName = `FormControl(${
+    Component.displayName || Component.name || 'Component'
+  })`;
+
+  return Object.assign(DefinedControl, {
+    [FORM_CONTROL_DEFINITION]: { semantics },
+  }) as DefinedFormControlComponent<Element, Props>;
+};
+
+const getControlSemantics = (children: React.ReactNode) => {
+  if (!React.isValidElement(children)) return 'control';
+
+  const definition = (children.type as FormControlDefinitionCarrier)[
+    FORM_CONTROL_DEFINITION
+  ];
+
+  return definition?.semantics ?? 'control';
+};
+
 const useForm = <
   TFieldValues extends FieldValues = FieldValues,
   TContext = unknown,
@@ -128,22 +298,48 @@ const useForm = <
   const methods = useReactHookForm<TFieldValues, TContext, TTransformedValues>(
     options
   );
+  const getValue: FormGetValue<TFieldValues> = (name) =>
+    methods.getValues(name);
+  const subscribe: FormSubscribe<TFieldValues> = (name, callback) =>
+    methods.subscribe({
+      callback: () => callback(methods.getValues(name)),
+      exact: true,
+      formState: { values: true },
+      name,
+    });
 
   return {
     clearErrors: methods.clearErrors,
     formState: methods.formState,
     getFieldState: methods.getFieldState,
+    getValue,
     getValues: methods.getValues,
     reset: methods.reset,
     resetField: methods.resetField,
     setError: methods.setError,
     setFocus: methods.setFocus,
     setValue: methods.setValue,
+    subscribe,
     trigger: methods.trigger,
     unregister: methods.unregister,
     watch: methods.watch,
     [INTERNAL_FORM_METHODS]: methods,
   };
+};
+
+const useFieldValue = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  name: TName
+): FieldPathValue<TFieldValues, TName> => {
+  const { control } = useFormContext<TFieldValues>();
+
+  return useWatch<TFieldValues, TName>({
+    control,
+    exact: true,
+    name,
+  }) as FieldPathValue<TFieldValues, TName>;
 };
 
 const FormRoot = <
@@ -199,6 +395,8 @@ const FormField = <
   ...props
 }: FormFieldProps<TFieldValues, TName>) => {
   const reactId = React.useId();
+  const controlSemantics =
+    typeof children === 'function' ? 'control' : getControlSemantics(children);
   const controlId = `${reactId}-control`;
   const labelId = label == null ? undefined : `${reactId}-label`;
   const descriptionId =
@@ -275,7 +473,10 @@ const FormField = <
       {...props}
     >
       {label != null ? (
-        <Field.Label htmlFor={controlId} id={labelId}>
+        <Field.Label
+          htmlFor={controlSemantics === 'control' ? controlId : undefined}
+          id={labelId}
+        >
           {label}
           {isRequired ? (
             <span aria-hidden="true" className="text-destructive">
@@ -306,10 +507,21 @@ const FormField = <
   );
 };
 
-const Form = Object.assign(FormRoot, {
+type FormComponent = typeof FormRoot & {
+  defineControl: typeof defineControl;
+  Field: typeof FormField;
+  /** @deprecated Use Form.Field. */
+  Item: typeof FormField;
+  useFieldValue: typeof useFieldValue;
+  useForm: typeof useForm;
+};
+
+const Form: FormComponent = Object.assign(FormRoot, {
+  defineControl,
   Field: FormField,
   /** @deprecated Use Form.Field. */
   Item: FormField,
+  useFieldValue,
   useForm,
 });
 
@@ -333,6 +545,9 @@ export type {
   FormFieldRenderField,
   FormFieldRenderProps,
   FormFieldRenderState,
+  FormControlOptions,
+  FormControlProps,
+  FormControlSemantics,
   FormInstance,
   FormItemProps,
   FormItemRenderField,

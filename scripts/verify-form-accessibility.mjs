@@ -17,11 +17,53 @@ const attribute = (element, name) => {
   return element.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
 };
 
+const TextControlRoot = React.forwardRef(
+  ({ onBlur, onChange, value, ...props }, ref) =>
+    React.createElement('input', {
+      ...props,
+      'data-slot': 'custom-control',
+      onBlur,
+      onChange: (event) => onChange(event.target.value),
+      ref,
+      value,
+    })
+);
+const TextControl = Form.defineControl(TextControlRoot);
+
+const PriorityControlRoot = React.forwardRef(
+  ({ disabled, onBlur, onChange, value, ...props }, ref) =>
+    React.createElement(
+      'div',
+      {
+        ...props,
+        'data-slot': 'custom-group',
+        onBlur,
+        role: 'radiogroup',
+      },
+      React.createElement(
+        'button',
+        {
+          'aria-checked': value === 'urgent',
+          disabled,
+          onClick: () => onChange('urgent'),
+          ref,
+          role: 'radio',
+          type: 'button',
+        },
+        'Urgent'
+      )
+    )
+);
+const PriorityControl = Form.defineControl(PriorityControlRoot, {
+  semantics: 'group',
+});
+
 const AccessibilityFixture = () => {
   const form = Form.useForm({
     defaultValues: {
       email: '',
       location: '',
+      map: '',
       priority: '',
       role: 'reader',
       threshold: 50,
@@ -48,10 +90,19 @@ const AccessibilityFixture = () => {
         label: 'Location',
         name: 'location',
       },
+      React.createElement(TextControl)
+    ),
+    React.createElement(
+      Form.Field,
+      {
+        description: 'Choose a point on the map.',
+        label: 'Map point',
+        name: 'map',
+      },
       ({ controlProps, field }) =>
         React.createElement('input', {
           ...controlProps,
-          'data-slot': 'custom-control',
+          'data-slot': 'third-party-control',
           onBlur: field.onBlur,
           onChange: (event) => field.onChange(event.target.value),
           ref: field.ref,
@@ -89,25 +140,7 @@ const AccessibilityFixture = () => {
         name: 'priority',
         rules: { required: 'Choose a priority.' },
       },
-      ({ field, groupProps }) =>
-        React.createElement(
-          'div',
-          {
-            ...groupProps,
-            'data-slot': 'custom-group',
-            role: 'radiogroup',
-          },
-          React.createElement(
-            'button',
-            {
-              'aria-checked': field.value === 'urgent',
-              onClick: () => field.onChange('urgent'),
-              role: 'radio',
-              type: 'button',
-            },
-            'Urgent'
-          )
-        )
+      React.createElement(PriorityControl)
     )
   );
 };
@@ -123,8 +156,8 @@ const descriptions = [
   ...markup.matchAll(/<p[^>]*data-slot="field-description"[^>]*>/g),
 ].map(([element]) => element);
 
-assert.equal(labels.length, 5);
-assert.equal(descriptions.length, 5);
+assert.equal(labels.length, 6);
+assert.equal(descriptions.length, 6);
 
 const input = elementWithSlot(markup, 'input', 'input');
 assert.equal(attribute(labels[0], 'for'), attribute(input, 'id'));
@@ -143,31 +176,44 @@ assert.equal(
 );
 assert.equal(attribute(customControl, 'name'), 'location');
 
+const thirdPartyControl = elementWithSlot(
+  markup,
+  'input',
+  'third-party-control'
+);
+assert.equal(attribute(labels[2], 'for'), attribute(thirdPartyControl, 'id'));
+assert.equal(
+  attribute(thirdPartyControl, 'aria-describedby'),
+  attribute(descriptions[2], 'id')
+);
+assert.equal(attribute(thirdPartyControl, 'name'), 'map');
+
 const radioGroup = elementWithSlot(markup, 'div', 'radio-group');
 assert.equal(
   attribute(radioGroup, 'aria-labelledby'),
-  attribute(labels[2], 'id')
+  attribute(labels[3], 'id')
 );
 assert.equal(
   attribute(radioGroup, 'aria-describedby'),
-  attribute(descriptions[2], 'id')
-);
-
-const slider = elementWithSlot(markup, 'div', 'slider');
-assert.equal(attribute(slider, 'aria-labelledby'), attribute(labels[3], 'id'));
-assert.equal(
-  attribute(slider, 'aria-describedby'),
   attribute(descriptions[3], 'id')
 );
 
+const slider = elementWithSlot(markup, 'div', 'slider');
+assert.equal(attribute(slider, 'aria-labelledby'), attribute(labels[4], 'id'));
+assert.equal(
+  attribute(slider, 'aria-describedby'),
+  attribute(descriptions[4], 'id')
+);
+
 const customGroup = elementWithSlot(markup, 'div', 'custom-group');
+assert.equal(attribute(labels[5], 'for'), undefined);
 assert.equal(
   attribute(customGroup, 'aria-labelledby'),
-  attribute(labels[4], 'id')
+  attribute(labels[5], 'id')
 );
 assert.equal(
   attribute(customGroup, 'aria-describedby'),
-  attribute(descriptions[4], 'id')
+  attribute(descriptions[5], 'id')
 );
 assert.equal(attribute(customGroup, 'aria-required'), 'true');
 
