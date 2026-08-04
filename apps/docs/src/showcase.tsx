@@ -1435,9 +1435,12 @@ function ComponentExampleCard({
           example.cases || example.caseAxes ? ' demo-preview-harness' : ''
         }`}
         style={
-          example.previewHeight
+          example.previewHeight != null
             ? ({
-                '--demo-preview-height': `${example.previewHeight}px`,
+                '--demo-preview-height':
+                  typeof example.previewHeight === 'number'
+                    ? `${example.previewHeight}px`
+                    : example.previewHeight,
               } as CSSProperties)
             : undefined
         }

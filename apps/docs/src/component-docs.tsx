@@ -179,7 +179,7 @@ export type ComponentExample = {
   caseMinWidth?: number;
   cases?: ComponentHarnessCase[];
   wide?: boolean;
-  previewHeight?: number;
+  previewHeight?: number | 'auto';
 };
 
 export type ComponentDocumentation = {
@@ -3360,7 +3360,7 @@ const dataEntryExamples: Record<string, ComponentExample[]> = {
       code: `const [date, setDate] = useState<Date>()
 
 <DatePicker display="inline" value={date} onChange={setDate} />`,
-      previewHeight: 500,
+      previewHeight: 'auto',
     },
     {
       title: docsCopy('定时发布'),
@@ -3373,7 +3373,7 @@ const dataEntryExamples: Record<string, ComponentExample[]> = {
   onChange={setDate}
   placeholder="选择发布日期"
 />`),
-      previewHeight: 500,
+      previewHeight: 'auto',
     },
   ],
   form: [
@@ -8312,7 +8312,9 @@ const spaciousPreviewHeights: Record<string, number> = {
 for (const [slug, minimumHeight] of Object.entries(spaciousPreviewHeights)) {
   for (const example of componentDocumentation[slug]?.examples ?? []) {
     example.wide = true;
-    example.previewHeight = Math.max(example.previewHeight ?? 0, minimumHeight);
+    const previewHeight =
+      typeof example.previewHeight === 'number' ? example.previewHeight : 0;
+    example.previewHeight = Math.max(previewHeight, minimumHeight);
   }
 }
 
