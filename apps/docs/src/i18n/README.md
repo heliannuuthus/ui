@@ -19,7 +19,9 @@ type checking.
 Every component in `component-catalog.ts` must also have an entry in
 `component-metadata.ts`. That entry supplies the English summary and the
 Chinese and English search aliases used by the component overview and command
-palette. Adding a component without this metadata fails type checking.
+palette. Component display names use the `zhComponentNames` map in the same
+catalog, while the canonical catalog name remains the English API name. Adding
+a component without either localization entry fails the i18n verifier.
 
 Detailed component guidance and demo copy remain part of the documentation
 content. Wrap canonical Chinese copy in `docsCopy()` and add the corresponding

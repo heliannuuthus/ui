@@ -62,6 +62,7 @@ import {
   componentCatalog,
   componentGroups,
   componentSlug,
+  localizedComponentName,
 } from './component-catalog';
 import { localizedComponentMetadata } from './component-metadata';
 import { ComponentHarness } from './component-harness';
@@ -760,9 +761,12 @@ function ComponentsOverview() {
               locale,
               componentDocumentation[slug]
             );
-            const searchText = `${item} ${group.title} ${t(
-              `groups.${group.key}`
-            )} ${metadata.searchText.join(' ')}`.toLowerCase();
+            const searchText = `${item} ${localizedComponentName(
+              item,
+              locale
+            )} ${group.title} ${t(`groups.${group.key}`)} ${metadata.searchText.join(
+              ' '
+            )}`.toLowerCase();
             return searchText.includes(query.trim().toLowerCase());
           }),
         }))
@@ -857,7 +861,7 @@ function ComponentOverviewCard({ item }: { item: string }) {
       disabled={!overflowing}
       trigger={
         <NavLink to={path(`/components/${componentSlug(item)}`)}>
-          <strong>{item}</strong>
+          <strong>{localizedComponentName(item, locale)}</strong>
           <p ref={summaryRef} data-overflowing={overflowing || undefined}>
             {summary}
           </p>
@@ -938,13 +942,14 @@ function ComponentSearchDialog({
               </span>
             ),
             keywords: [
+              localizedComponentName(item, locale),
               group.title,
               t(`groups.${group.key}`),
               ...metadata.searchText,
             ],
             label: (
               <span className="component-command-copy">
-                <strong>{item}</strong>
+                <strong>{localizedComponentName(item, locale)}</strong>
                 <span>{summary}</span>
               </span>
             ),
@@ -1060,6 +1065,7 @@ function ComponentNavigationLink({
   slug: string;
 }) {
   const path = useLocalizedPath();
+  const locale = useDocsLocale();
   const to = path(`/components/${slug}`);
   const href = useHref(to);
   const handleClick = useLinkClickHandler(to);
@@ -1071,7 +1077,7 @@ function ComponentNavigationLink({
       onClick={handleClick}
       size="sm"
     >
-      <span>{item}</span>
+      <span>{localizedComponentName(item, locale)}</span>
     </Sidebar.MenuButton>
   );
 }
@@ -1105,9 +1111,10 @@ function ComponentPage() {
   if (component === 'sidebar') {
     return <Navigate to={path('/components/layout')} replace />;
   }
-  const name =
+  const canonicalName =
     componentCatalog.find((item) => componentSlug(item) === component) ??
     'Button';
+  const name = localizedComponentName(canonicalName, locale);
   const documentation = componentDocumentation[component];
   const metadata = localizedComponentMetadata(component, locale, documentation);
   return (
@@ -1160,7 +1167,9 @@ function ComponentPage() {
                       to={path(`/components/${related.slug}`)}
                     >
                       <span>
-                        <strong>{related.name}</strong>
+                        <strong>
+                          {localizedComponentName(related.name, locale)}
+                        </strong>
                         <small>{related.description}</small>
                       </span>
                       <ArrowRight aria-hidden="true" />

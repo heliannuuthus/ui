@@ -21,6 +21,8 @@ async function loadHarnessModule() {
           componentCatalog,
           componentGroups,
           componentSlug,
+          localizedComponentName,
+          zhComponentNames,
         } from './apps/docs/src/component-catalog.ts'
         export {
           componentSearchMetadata,
@@ -79,10 +81,12 @@ const {
   englishContentTranslations,
   htmlLanguage,
   isDocsLocale,
+  localizedComponentName,
   localizedComponentMetadata,
   localizedPath,
   resources,
   supportedLocales,
+  zhComponentNames,
 } = await loadHarnessModule();
 
 const chinesePattern = /[\u3400-\u9fff]/u;
@@ -240,6 +244,12 @@ assert.equal(
 const catalogSlugs = componentCatalog.map(componentSlug);
 const metadataSlugs = Object.keys(componentSearchMetadata);
 
+assert.deepEqual(
+  Object.keys(zhComponentNames).sort(),
+  [...componentCatalog].sort(),
+  'Every catalog component must have exactly one Chinese display name.'
+);
+
 assert.equal(
   new Set(catalogSlugs).size,
   catalogSlugs.length,
@@ -282,6 +292,16 @@ for (const slug of catalogSlugs) {
   assert.equal(localized.summary, summary);
   assert.deepEqual(localized.aliases, enAliases);
   assert.deepEqual(localized.searchText, [summary, ...enAliases]);
+}
+
+for (const componentName of componentCatalog) {
+  assert.equal(localizedComponentName(componentName, 'en'), componentName);
+  const zhName = localizedComponentName(componentName, 'zh');
+  assert.ok(zhName.trim(), `"${componentName}" needs a Chinese display name.`);
+  assert.ok(
+    chinesePattern.test(zhName),
+    `"${componentName}" must use a translated Chinese display name.`
+  );
 }
 
 const documentationFixture = {
