@@ -168,20 +168,20 @@ export function MenubarViewDemo() {
                 type: 'checkbox',
                 label: docsCopy('显示侧栏'),
                 checked: sidebar,
-                onCheckedChange: setSidebar,
+                onChange: setSidebar,
               },
               {
                 type: 'checkbox',
                 label: docsCopy('显示行号'),
                 checked: lineNumbers,
-                onCheckedChange: setLineNumbers,
+                onChange: setLineNumbers,
               },
               { type: 'separator' },
               { type: 'label', label: docsCopy('主题') },
               {
                 type: 'radio',
                 value: theme,
-                onValueChange: setTheme,
+                onChange: setTheme,
                 items: [
                   { label: docsCopy('跟随系统'), value: 'system' },
                   { label: docsCopy('浅色'), value: 'light' },

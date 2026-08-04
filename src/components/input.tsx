@@ -5,6 +5,11 @@ import { MinusIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
 import { InputGroup } from './internal/input-group';
+import {
+  mergeIds,
+  useMergedRefs,
+  useFormControl,
+} from './internal/form-control';
 
 type InputOTPVariant = 'connected' | 'separated';
 
@@ -113,8 +118,24 @@ function OTPField({
   maxLength = 6,
   variant = 'connected',
   autoComplete = 'one-time-code',
+  defaultValue,
+  disabled,
+  id,
+  name,
+  onBlur,
+  onChange,
+  ref,
+  required,
+  value,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   ...props
 }: InputOTPProps) {
+  const formControl = useFormControl<string>();
+  const inputRef = useMergedRefs(
+    ref,
+    formControl?.ref as React.Ref<HTMLInputElement> | undefined
+  );
   const slotCount = Number.isFinite(maxLength)
     ? Math.max(1, Math.floor(maxLength))
     : 6;
@@ -130,6 +151,12 @@ function OTPField({
       <OTPInput
         {...props}
         autoComplete={autoComplete}
+        aria-describedby={mergeIds(
+          ariaDescribedBy,
+          formControl?.descriptionId,
+          formControl?.messageId
+        )}
+        aria-invalid={ariaInvalid ?? formControl?.invalid}
         className="disabled:cursor-not-allowed"
         containerClassName={cn(
           'cn-input-otp flex w-full items-center justify-center gap-3 has-disabled:opacity-50',
@@ -137,8 +164,23 @@ function OTPField({
         )}
         data-slot="input-otp"
         data-variant={variant}
+        defaultValue={formControl ? undefined : defaultValue}
+        disabled={disabled || formControl?.disabled}
+        id={id ?? formControl?.controlId}
         maxLength={slotCount}
+        name={formControl?.name ?? name}
+        onBlur={(event) => {
+          onBlur?.(event);
+          formControl?.onBlur();
+        }}
+        onChange={(nextValue) => {
+          onChange?.(nextValue);
+          formControl?.onChange(nextValue);
+        }}
+        ref={inputRef}
+        required={required || formControl?.required}
         spellCheck={false}
+        value={formControl ? (formControl.value ?? '') : value}
       >
         {variant === 'connected' && slotCount > 1 ? (
           <>
@@ -154,21 +196,65 @@ function OTPField({
   );
 }
 
-function InputRoot({
-  addonAfter,
-  addonBefore,
-  className,
-  classNames,
-  prefix,
-  suffix,
-  type,
-  ...props
-}: InputProps) {
+function InputRoot(inputProps: InputProps) {
+  const formControl = useFormControl<
+    string | number | readonly string[] | undefined
+  >();
+  const {
+    addonAfter,
+    addonBefore,
+    className,
+    classNames,
+    defaultValue,
+    disabled,
+    id,
+    name,
+    onBlur,
+    onChange,
+    prefix,
+    ref,
+    required,
+    suffix,
+    type,
+    value,
+    'aria-describedby': ariaDescribedBy,
+    'aria-invalid': ariaInvalid,
+    ...props
+  } = inputProps;
+  const inputRef = useMergedRefs(
+    ref,
+    formControl?.ref as React.Ref<HTMLInputElement> | undefined
+  );
   const hasDecoration =
     addonAfter != null ||
     addonBefore != null ||
     prefix != null ||
     suffix != null;
+  const controlProps: React.ComponentProps<'input'> = {
+    ...props,
+    'aria-describedby': mergeIds(
+      ariaDescribedBy,
+      formControl?.descriptionId,
+      formControl?.messageId
+    ),
+    'aria-invalid': ariaInvalid ?? formControl?.invalid,
+    defaultValue: formControl ? undefined : defaultValue,
+    disabled: disabled || formControl?.disabled,
+    id: id ?? formControl?.controlId,
+    name: formControl?.name ?? name,
+    onBlur: (event) => {
+      onBlur?.(event);
+      formControl?.onBlur();
+    },
+    onChange: (event) => {
+      onChange?.(event);
+      formControl?.onChange(event.target.value);
+    },
+    ref: inputRef,
+    required: required || formControl?.required,
+    type,
+    value: formControl ? (formControl.value ?? '') : value,
+  };
 
   if (hasDecoration) {
     return (
@@ -186,11 +272,7 @@ function InputRoot({
             {prefix}
           </InputGroup.Addon>
         ) : null}
-        <InputGroup.Input
-          {...props}
-          className={classNames?.input}
-          type={type}
-        />
+        <InputGroup.Input {...controlProps} className={classNames?.input} />
         {suffix != null ? (
           <InputGroup.Addon align="inline-end" className={classNames?.suffix}>
             {suffix}
@@ -210,26 +292,66 @@ function InputRoot({
 
   return (
     <InputPrimitive
-      type={type}
+      {...controlProps}
       data-slot="input"
       className={cn(
         'h-9 w-full min-w-0 rounded-3xl border border-input bg-background px-3 py-1 text-base transition-[color,box-shadow,background-color,border-color] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground hover:border-primary/35 focus-visible:border-primary focus-visible:ring-3 focus-visible:ring-primary/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted/50 disabled:opacity-60 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
         className
       )}
-      {...props}
     />
   );
 }
 
-function TextArea({ className, ...props }: TextAreaProps) {
+function TextArea({
+  className,
+  defaultValue,
+  disabled,
+  id,
+  name,
+  onBlur,
+  onChange,
+  ref,
+  required,
+  value,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
+  ...props
+}: TextAreaProps) {
+  const formControl = useFormControl<string | undefined>();
+  const textAreaRef = useMergedRefs(
+    ref,
+    formControl?.ref as React.Ref<HTMLTextAreaElement> | undefined
+  );
+
   return (
     <textarea
+      {...props}
+      aria-describedby={mergeIds(
+        ariaDescribedBy,
+        formControl?.descriptionId,
+        formControl?.messageId
+      )}
+      aria-invalid={ariaInvalid ?? formControl?.invalid}
       data-slot="textarea"
+      defaultValue={formControl ? undefined : defaultValue}
+      disabled={disabled || formControl?.disabled}
+      id={id ?? formControl?.controlId}
+      name={formControl?.name ?? name}
+      onBlur={(event) => {
+        onBlur?.(event);
+        formControl?.onBlur();
+      }}
+      onChange={(event) => {
+        onChange?.(event);
+        formControl?.onChange(event.target.value);
+      }}
+      ref={textAreaRef}
+      required={required || formControl?.required}
+      value={formControl ? (formControl.value ?? '') : value}
       className={cn(
         'flex field-sizing-content min-h-16 w-full resize-none rounded-2xl border border-input bg-background px-3 py-3 text-base transition-[color,box-shadow,background-color,border-color] outline-none placeholder:text-muted-foreground hover:border-primary/35 focus-visible:border-primary focus-visible:ring-3 focus-visible:ring-primary/20 disabled:cursor-not-allowed disabled:bg-muted/50 disabled:opacity-60 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
         className
       )}
-      {...props}
     />
   );
 }

@@ -26,7 +26,7 @@ type AccordionProps = Omit<
   items: readonly AccordionItem[];
   keepMounted?: boolean;
   multiple?: boolean;
-  onValueChange?: (value: string[]) => void;
+  onChange?: (value: string[]) => void;
   value?: string[];
 };
 
@@ -91,6 +91,7 @@ function Accordion({
   indicator,
   indicatorPosition = 'end',
   items,
+  onChange,
   ...props
 }: AccordionProps) {
   return (
@@ -100,6 +101,7 @@ function Accordion({
         'flex w-full flex-col overflow-hidden rounded-2xl border',
         className
       )}
+      onValueChange={onChange}
       {...props}
       orientation="vertical"
     >

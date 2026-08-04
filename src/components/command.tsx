@@ -25,7 +25,7 @@ type CommandInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   'children' | 'defaultValue' | 'onChange' | 'value'
 > & {
-  onValueChange?: (value: string) => void;
+  onChange?: (value: string) => void;
   value?: string;
 };
 
@@ -42,7 +42,7 @@ type CommandProps = Omit<
   inputProps?: CommandInputProps;
   label?: string;
   loop?: boolean;
-  onValueChange?: (value: string) => void;
+  onChange?: (value: string) => void;
   placeholder?: string;
   shouldFilter?: boolean;
   value?: string;
@@ -55,9 +55,15 @@ function Command({
   emptyText = '没有找到命令',
   groups,
   inputProps,
+  onChange,
   placeholder = '搜索命令…',
   ...props
 }: CommandProps) {
+  const {
+    className: inputClassName,
+    onChange: onInputChange,
+    ...otherInputProps
+  } = inputProps ?? {};
   const command = (
     <CommandPrimitive
       data-slot="command"
@@ -65,6 +71,7 @@ function Command({
         'flex size-full flex-col overflow-hidden rounded-4xl bg-popover p-1 text-popover-foreground',
         className
       )}
+      onValueChange={onChange}
       {...props}
     >
       <div data-slot="command-input-wrapper" className="p-1 pb-0">
@@ -72,10 +79,11 @@ function Command({
           <CommandPrimitive.Input
             data-slot="command-input"
             placeholder={placeholder}
-            {...inputProps}
+            {...otherInputProps}
+            onValueChange={onInputChange}
             className={cn(
               'w-full text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
-              inputProps?.className
+              inputClassName
             )}
           />
           <Addon>

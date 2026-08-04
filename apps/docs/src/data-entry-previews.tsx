@@ -1,5 +1,10 @@
 import { docsCopy } from './i18n/content';
-import { useState } from 'react';
+import {
+  forwardRef,
+  useState,
+  type ComponentPropsWithoutRef,
+  type Ref,
+} from 'react';
 import { Button } from '@heliannuuthus/ui';
 import { Checkbox } from '@heliannuuthus/ui';
 import { DatePicker } from '@heliannuuthus/ui';
@@ -7,6 +12,7 @@ import { Field } from '@heliannuuthus/ui';
 import { Form } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
 import { Label } from '@heliannuuthus/ui';
+import { NativeSelect } from '@heliannuuthus/ui';
 import { Radio } from '@heliannuuthus/ui';
 import { Select } from '@heliannuuthus/ui';
 import { Slider } from '@heliannuuthus/ui';
@@ -21,7 +27,6 @@ import {
   Volume1,
   Volume2,
 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { useDocsLocale } from './i18n/routing';
 
 const members = [
@@ -265,74 +270,342 @@ export function FieldProfileDemo() {
   );
 }
 
-type InviteForm = { email: string; note: string };
+type FormShowcaseValues = {
+  confirmation: boolean;
+  formats: string[];
+  inviteCode: string;
+  launchDate?: Date;
+  name: string;
+  notifications: boolean;
+  permissions: string[];
+  pinned: boolean;
+  region: string;
+  reviewThreshold: number;
+  summary: string;
+  visibility: string;
+  workspace: string | null;
+};
 
-export function FormInviteDemo() {
-  const [submitted, setSubmitted] = useState('');
-  const form = useForm<InviteForm>({ defaultValues: { email: '', note: '' } });
+export function FormIntegrationDemo() {
+  const locale = useDocsLocale();
+  const [submitted, setSubmitted] = useState<FormShowcaseValues | null>(null);
+  const form = Form.useForm<FormShowcaseValues>({
+    defaultValues: {
+      confirmation: false,
+      formats: ['markdown'],
+      inviteCode: '',
+      launchDate: new Date(2026, 7, 12),
+      name: 'Heliannuuthus UI',
+      notifications: true,
+      permissions: ['read', 'comment'],
+      pinned: false,
+      region: 'asia',
+      reviewThreshold: 2,
+      summary: '',
+      visibility: 'team',
+      workspace: 'design',
+    },
+  });
+
+  return (
+    <div className="data-form-shell data-form-showcase">
+      <div className="data-card-heading">
+        <div>
+          <strong>{docsCopy('完整表单集成')}</strong>
+          <p>
+            {docsCopy('所有数据录入组件共享同一份表单状态、校验和无障碍关系。')}
+          </p>
+        </div>
+      </div>
+      <Form className="data-form-stack" form={form} onSubmit={setSubmitted}>
+        <div className="data-form-grid">
+          <Form.Field
+            name="name"
+            label={docsCopy('工作区名称')}
+            description={docsCopy('会显示在导航和成员列表中。')}
+            rules={{ required: docsCopy('请输入工作区名称。') }}
+          >
+            <Input placeholder="Heliannuuthus UI" />
+          </Form.Field>
+
+          <Form.Field
+            name="inviteCode"
+            label={docsCopy('邀请码')}
+            description={docsCopy('输入 6 位数字确认创建操作。')}
+            rules={{
+              pattern: {
+                value: /^\d{6}$/,
+                message: docsCopy('请输入 6 位数字邀请码。'),
+              },
+              required: docsCopy('请输入邀请码。'),
+            }}
+          >
+            <Input.OTP maxLength={6} />
+          </Form.Field>
+
+          <Form.Field name="region" label={docsCopy('部署区域')}>
+            <NativeSelect
+              className="data-wide-control"
+              options={[
+                { label: docsCopy('中国大陆'), value: 'china' },
+                { label: docsCopy('亚太地区'), value: 'asia' },
+                { label: docsCopy('欧洲地区'), value: 'europe' },
+              ]}
+            />
+          </Form.Field>
+
+          <Form.Field
+            name="workspace"
+            label={docsCopy('关联空间')}
+            description={docsCopy('支持搜索、清除和分组选项。')}
+          >
+            <Select
+              options={workspaceGroups.map((group) => ({
+                label: group.label,
+                options: group.items,
+              }))}
+              placeholder={docsCopy('选择工作区')}
+              showClear
+              triggerClassName="data-wide-control"
+            />
+          </Form.Field>
+
+          <Form.Field
+            className="data-form-span"
+            name="summary"
+            label={docsCopy('工作区说明')}
+          >
+            <Input.TextArea
+              placeholder={docsCopy('介绍这个工作区的用途和协作方式…')}
+            />
+          </Form.Field>
+
+          <Form.Field
+            name="launchDate"
+            label={docsCopy('启用日期')}
+            description={docsCopy('选择或清除计划启用日期。')}
+          >
+            <DatePicker
+              className="data-wide-control"
+              locale={locale}
+              placeholder={docsCopy('选择启用日期')}
+            />
+          </Form.Field>
+
+          <Form.Field
+            name="reviewThreshold"
+            label={docsCopy('审核阈值')}
+            description={docsCopy('设置发布前需要的审核人数。')}
+          >
+            <Slider min={1} max={5} step={1} />
+          </Form.Field>
+
+          <Form.Field
+            className="data-form-span"
+            name="visibility"
+            label={docsCopy('可见范围')}
+            description={docsCopy('单选组通过字段标签获得可访问名称。')}
+          >
+            <Radio.Group
+              minColumnWidth={120}
+              options={[
+                { label: docsCopy('仅自己'), value: 'private' },
+                { label: docsCopy('团队成员'), value: 'team' },
+                { label: docsCopy('所有人'), value: 'public' },
+              ]}
+            />
+          </Form.Field>
+
+          <Form.Field
+            className="data-form-span"
+            name="permissions"
+            label={docsCopy('权限范围')}
+            description={docsCopy('多选组的值以字符串数组提交。')}
+          >
+            <Checkbox.Group
+              columns={3}
+              minColumnWidth={120}
+              options={[
+                { label: docsCopy('查看'), value: 'read' },
+                { label: docsCopy('评论'), value: 'comment' },
+                { label: docsCopy('管理'), value: 'manage' },
+              ]}
+            />
+          </Form.Field>
+
+          <Form.Field
+            className="data-form-span"
+            name="formats"
+            label={docsCopy('内容格式')}
+            description={docsCopy('切换组同样提交一个数组值。')}
+          >
+            <Toggle.Group
+              multiple
+              variant="outline"
+              items={[
+                { label: 'Markdown', value: 'markdown' },
+                { label: docsCopy('富文本'), value: 'rich-text' },
+                { label: docsCopy('纯文本'), value: 'plain-text' },
+              ]}
+            />
+          </Form.Field>
+
+          <Form.Field
+            name="notifications"
+            label={docsCopy('发送状态通知')}
+            description={docsCopy('布尔值通过 checked 语义绑定。')}
+            orientation="horizontal"
+          >
+            <Switch />
+          </Form.Field>
+
+          <Form.Field
+            name="pinned"
+            label={docsCopy('置顶工作区')}
+            description={docsCopy('Toggle 保留 pressed 状态语义。')}
+            orientation="horizontal"
+          >
+            <Toggle variant="outline">{docsCopy('置顶')}</Toggle>
+          </Form.Field>
+
+          <Form.Field
+            className="data-form-span"
+            name="confirmation"
+            description={docsCopy('提交前必须明确确认。')}
+            rules={{ required: docsCopy('请确认以上设置。') }}
+          >
+            <Checkbox>{docsCopy('我已确认以上设置')}</Checkbox>
+          </Form.Field>
+        </div>
+
+        <div className="data-form-actions">
+          {submitted && (
+            <span>
+              {docsCopy('已保存完整表单')}：{submitted.name}
+            </span>
+          )}
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => {
+              form.reset();
+              setSubmitted(null);
+            }}
+          >
+            {docsCopy('重置')}
+          </Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting
+              ? docsCopy('正在保存…')
+              : docsCopy('保存设置')}
+          </Button>
+        </div>
+      </Form>
+    </div>
+  );
+}
+
+type Priority = '' | 'routine' | 'important' | 'urgent';
+
+type PriorityControlProps = Omit<
+  ComponentPropsWithoutRef<'div'>,
+  'onBlur' | 'onChange'
+> & {
+  disabled?: boolean;
+  onBlur?: () => void;
+  onChange: (value: Priority) => void;
+  value: Priority;
+};
+
+const PriorityControl = forwardRef<HTMLButtonElement, PriorityControlProps>(
+  (
+    { className, disabled, onBlur, onChange, value, ...props },
+    forwardedRef
+  ) => {
+    const options = [
+      { label: docsCopy('常规'), value: 'routine' },
+      { label: docsCopy('重要'), value: 'important' },
+      { label: docsCopy('紧急'), value: 'urgent' },
+    ] as const;
+
+    return (
+      <div
+        {...props}
+        className={['data-priority-control', className]
+          .filter(Boolean)
+          .join(' ')}
+        role="radiogroup"
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) onBlur?.();
+        }}
+      >
+        {options.map((option, index) => (
+          <button
+            ref={index === 0 ? forwardedRef : undefined}
+            aria-checked={value === option.value}
+            disabled={disabled}
+            key={option.value}
+            onClick={() => onChange(option.value)}
+            role="radio"
+            type="button"
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    );
+  }
+);
+
+type CustomControlValues = {
+  priority: Priority;
+};
+
+export function FormCustomControlDemo() {
+  const [submitted, setSubmitted] = useState<Priority>('');
+  const form = Form.useForm<CustomControlValues>({
+    defaultValues: { priority: '' },
+  });
 
   return (
     <div className="data-form-shell">
       <div className="data-card-heading">
         <div>
-          <strong>{docsCopy('邀请团队成员')}</strong>
-          <p>{docsCopy('校验、错误提示与提交状态由同一份表单状态驱动。')}</p>
+          <strong>{docsCopy('自定义控件接入')}</strong>
+          <p>{docsCopy('自制组件只依赖稳定的值、事件与无障碍属性。')}</p>
         </div>
       </div>
-      <Form {...form}>
-        <form
-          className="data-form-stack"
-          onSubmit={form.handleSubmit((values) => setSubmitted(values.email))}
+      <Form
+        className="data-form-stack"
+        form={form}
+        onSubmit={(values) => setSubmitted(values.priority)}
+      >
+        <Form.Field<CustomControlValues, 'priority'>
+          name="priority"
+          label={docsCopy('优先级')}
+          description={docsCopy(
+            'Form.Field 统一管理值、校验、焦点与错误描述。'
+          )}
+          rules={{ required: docsCopy('请选择优先级。') }}
         >
-          <Form.Field
-            control={form.control}
-            name="email"
-            rules={{
-              required: docsCopy('请输入邮箱地址。'),
-              pattern: {
-                value: /^\S+@\S+\.\S+$/,
-                message: docsCopy('邮箱格式不正确。'),
-              },
-            }}
-            render={({ field }) => (
-              <Form.Item>
-                <Form.Label>{docsCopy('邮箱地址')}</Form.Label>
-                <Form.Control>
-                  <Input placeholder="name@example.com" {...field} />
-                </Form.Control>
-                <Form.Description>
-                  {docsCopy('成员会收到一封加入工作区的邮件。')}
-                </Form.Description>
-                <Form.Message />
-              </Form.Item>
-            )}
-          />
-          <Form.Field
-            control={form.control}
-            name="note"
-            render={({ field }) => (
-              <Form.Item>
-                <Form.Label>{docsCopy('附言（可选）')}</Form.Label>
-                <Form.Control>
-                  <Input.TextArea
-                    placeholder={docsCopy('补充邀请背景…')}
-                    {...field}
-                  />
-                </Form.Control>
-                <Form.Message />
-              </Form.Item>
-            )}
-          />
-          <div className="data-form-actions">
-            {submitted && (
-              <span>
-                {docsCopy('邀请已发送至')}
-                {submitted}
-              </span>
-            )}
-            <Button type="submit">{docsCopy('发送邀请')}</Button>
-          </div>
-        </form>
+          {({ field, groupProps }) => (
+            <PriorityControl
+              {...groupProps}
+              ref={field.ref as Ref<HTMLButtonElement>}
+              value={field.value}
+              onBlur={field.onBlur}
+              onChange={field.onChange}
+            />
+          )}
+        </Form.Field>
+        <div className="data-form-actions">
+          {submitted && (
+            <span>
+              {docsCopy('已保存优先级')}：{submitted}
+            </span>
+          )}
+          <Button type="submit">{docsCopy('保存优先级')}</Button>
+        </div>
       </Form>
     </div>
   );
@@ -604,7 +877,7 @@ export function SliderBudgetDemo() {
       </div>
       <Slider
         value={range}
-        onValueChange={(next) =>
+        onChange={(next) =>
           setRange(typeof next === 'number' ? [next] : [...next])
         }
         min={0}
@@ -640,7 +913,7 @@ export function SliderElasticDemo() {
         endLabel={docsCopy('最大')}
         max={100}
         min={0}
-        onValueChange={setVolume}
+        onChange={setVolume}
         startIcon={<Volume1 />}
         startLabel={docsCopy('静音')}
         step={2}
@@ -676,7 +949,7 @@ export function SliderVerticalDemo() {
               className="data-vertical-slider"
               max={100}
               min={0}
-              onValueChange={(value) => updateLevel(index, value)}
+              onChange={(value) => updateLevel(index, value)}
               orientation="vertical"
               step={2}
               value={levels[index]}

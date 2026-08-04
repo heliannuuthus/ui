@@ -267,9 +267,7 @@ function renderContextMenuEntries(items: readonly DropdownMenuEntry[]) {
           checked={item.checked}
           disabled={item.disabled}
           key={index}
-          onCheckedChange={(checked) =>
-            item.onCheckedChange?.(checked === true)
-          }
+          onCheckedChange={(checked) => item.onChange?.(checked === true)}
         >
           {item.label}
         </ContextMenuCheckboxItem>
@@ -279,7 +277,7 @@ function renderContextMenuEntries(items: readonly DropdownMenuEntry[]) {
       return (
         <ContextMenuRadioGroup
           key={index}
-          onValueChange={(value) => item.onValueChange?.(String(value))}
+          onValueChange={(value) => item.onChange?.(String(value))}
           value={item.value}
         >
           {item.items.map((option) => (

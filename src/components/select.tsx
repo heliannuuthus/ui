@@ -11,6 +11,11 @@ import {
   Input as InputGroupInput,
   InputGroup,
 } from './internal/input-group';
+import {
+  mergeIds,
+  useMergedRefs,
+  useFormControl,
+} from './internal/form-control';
 
 type SelectValue<
   Value,
@@ -134,6 +139,7 @@ type SelectTriggerProps = Omit<
 > & {
   children?: React.ReactNode;
   className?: string;
+  inputRef?: React.Ref<HTMLInputElement>;
   showClear?: boolean;
   showTrigger?: boolean;
 };
@@ -142,6 +148,7 @@ function SelectTrigger({
   className,
   children,
   disabled = false,
+  inputRef,
   showTrigger = true,
   showClear = false,
   ...props
@@ -149,6 +156,7 @@ function SelectTrigger({
   return (
     <InputGroup data-slot="select-trigger" className={cn('w-auto', className)}>
       <SelectPrimitive.Input
+        ref={inputRef}
         render={<InputGroupInput disabled={disabled} />}
         {...props}
       />
@@ -330,24 +338,75 @@ type SelectProps<Value, Multiple extends boolean | undefined = false> = Omit<
 };
 
 function Select<Value, Multiple extends boolean | undefined = false>({
+  defaultValue,
+  disabled,
   emptyText = '没有找到选项',
+  id,
+  name,
+  onChange,
   options,
   placeholder,
+  required,
   showClear,
   triggerClassName,
   triggerProps,
+  value,
   ...props
 }: SelectProps<Value, Multiple>) {
+  const formControl = useFormControl<
+    SelectValue<Value, Multiple> | null | undefined
+  >();
   const flatOptions = options.flatMap((option) =>
     'options' in option ? option.options : [option]
   );
+  const {
+    'aria-describedby': triggerAriaDescribedBy,
+    'aria-invalid': triggerAriaInvalid,
+    id: triggerId,
+    onBlur: triggerOnBlur,
+    inputRef: triggerRef,
+    ...otherTriggerProps
+  } = triggerProps ?? {};
+  const controlRef = useMergedRefs(
+    triggerRef,
+    formControl?.ref as React.Ref<HTMLInputElement> | undefined
+  );
 
   return (
-    <SelectRoot {...props} items={flatOptions.map((option) => option.value)}>
+    <SelectRoot
+      {...props}
+      defaultValue={formControl ? undefined : defaultValue}
+      disabled={disabled || formControl?.disabled}
+      id={id}
+      items={flatOptions.map((option) => option.value)}
+      name={formControl?.name ?? name}
+      onChange={(nextValue) => {
+        onChange?.(nextValue);
+        formControl?.onChange(nextValue);
+      }}
+      required={required || formControl?.required}
+      value={
+        formControl
+          ? (formControl.value as SelectValue<Value, Multiple> | null)
+          : value
+      }
+    >
       <SelectTrigger
-        {...triggerProps}
+        {...otherTriggerProps}
+        aria-describedby={mergeIds(
+          triggerAriaDescribedBy,
+          formControl?.descriptionId,
+          formControl?.messageId
+        )}
+        aria-invalid={triggerAriaInvalid ?? formControl?.invalid}
         className={triggerClassName}
+        id={triggerId ?? formControl?.controlId ?? id}
+        onBlur={(event) => {
+          triggerOnBlur?.(event);
+          formControl?.onBlur();
+        }}
         placeholder={placeholder}
+        inputRef={controlRef}
         showClear={showClear}
       />
       <SelectContent>

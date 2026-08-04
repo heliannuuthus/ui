@@ -112,14 +112,14 @@ export function DropdownMenuSelectionDemo() {
             type: 'checkbox',
             label: docsCopy('显示侧栏'),
             checked: sidebar,
-            onCheckedChange: setSidebar,
+            onChange: setSidebar,
           },
           { type: 'separator' },
           { type: 'label', label: docsCopy('内容密度') },
           {
             type: 'radio',
             value: density,
-            onValueChange: setDensity,
+            onChange: setDensity,
             items: [
               { label: docsCopy('紧凑'), value: 'compact' },
               { label: docsCopy('舒适'), value: 'comfortable' },

@@ -7,6 +7,12 @@ import { CheckIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
 import { Masonry, type MasonryGap, type MasonryLength } from './masonry';
+import {
+  FormControlBoundary,
+  mergeIds,
+  useMergedRefs,
+  useFormControl,
+} from './internal/form-control';
 
 type CheckboxClassNames = {
   control?: string;
@@ -51,6 +57,8 @@ type CheckboxGroupProps = Omit<
   'children' | 'defaultValue' | 'onChange'
 > & {
   allValues?: string[];
+  'aria-describedby'?: string;
+  'aria-invalid'?: boolean;
   columns?: number;
   defaultValue?: string[];
   disabled?: boolean;
@@ -69,38 +77,67 @@ const CheckboxGroupNameContext = React.createContext<string | undefined>(
 );
 
 function CheckboxRoot({
+  checked,
   children,
   className,
   classNames,
+  defaultChecked,
   disabled,
+  id,
+  inputRef,
   name,
+  onBlur,
   onChange,
+  required,
   variant = 'default',
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
   ...props
 }: CheckboxProps) {
+  const formControl = useFormControl<boolean>();
   const groupName = React.useContext(CheckboxGroupNameContext);
   const [particleBurst, setParticleBurst] = React.useState(0);
+  const controlRef = useMergedRefs(
+    inputRef,
+    formControl?.ref as React.Ref<HTMLInputElement> | undefined
+  );
 
   const handleCheckedChange: NonNullable<
     CheckboxPrimitive.Root.Props['onCheckedChange']
   > = (checked, _eventDetails) => {
     setParticleBurst((current) => (checked ? current + 1 : 0));
     onChange?.(checked);
+    formControl?.onChange(checked);
   };
 
   return (
     <CheckboxPrimitive.Root
+      {...(props as CheckboxPrimitive.Root.Props)}
+      aria-describedby={mergeIds(
+        ariaDescribedBy,
+        formControl?.descriptionId,
+        formControl?.messageId
+      )}
+      aria-invalid={ariaInvalid ?? formControl?.invalid}
+      checked={formControl ? Boolean(formControl.value) : checked}
       render={<label />}
       data-slot="checkbox"
       data-variant={variant}
+      defaultChecked={formControl ? undefined : defaultChecked}
       className={cn(
         'group/checkbox inline-flex w-fit cursor-pointer items-start gap-2 text-sm leading-5 outline-none focus-visible:[&>[data-slot=checkbox-control]]:border-ring focus-visible:[&>[data-slot=checkbox-control]]:ring-3 focus-visible:[&>[data-slot=checkbox-control]]:ring-ring/30 data-disabled:cursor-not-allowed data-disabled:opacity-50',
         className
       )}
-      disabled={disabled}
-      name={name ?? groupName}
+      disabled={disabled || formControl?.disabled}
+      id={id ?? formControl?.controlId}
+      inputRef={controlRef}
+      name={formControl?.name ?? name ?? groupName}
+      onBlur={(event) => {
+        onBlur?.(event as unknown as React.FocusEvent<HTMLLabelElement>);
+        formControl?.onBlur();
+      }}
       onCheckedChange={handleCheckedChange}
-      {...(props as CheckboxPrimitive.Root.Props)}
+      required={required || formControl?.required}
     >
       <span
         data-slot="checkbox-control"
@@ -147,40 +184,70 @@ function CheckboxRoot({
 }
 
 function CheckboxGroup({
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
+  'aria-labelledby': ariaLabelledBy,
   className,
   columns = 3,
+  defaultValue,
+  disabled,
   gap = 12,
+  id,
   minColumnWidth = 180,
   name,
+  onBlur,
   onChange,
   options,
   orientation = 'horizontal',
+  value,
   variant = 'default',
   ...props
 }: CheckboxGroupProps) {
+  const formControl = useFormControl<string[]>();
+
   return (
     <CheckboxGroupPrimitive
+      {...props}
       data-slot="checkbox-group"
       data-orientation={orientation}
+      aria-describedby={mergeIds(
+        ariaDescribedBy,
+        formControl?.descriptionId,
+        formControl?.messageId
+      )}
+      aria-invalid={ariaInvalid ?? formControl?.invalid}
+      aria-labelledby={mergeIds(ariaLabelledBy, formControl?.labelId)}
       aria-orientation={orientation}
       className={cn('w-full', className)}
-      onValueChange={onChange}
-      {...props}
+      defaultValue={formControl ? undefined : defaultValue}
+      disabled={disabled || formControl?.disabled}
+      id={id ?? formControl?.controlId}
+      onBlur={(event) => {
+        onBlur?.(event);
+        formControl?.onBlur();
+      }}
+      onValueChange={(nextValue) => {
+        onChange?.(nextValue);
+        formControl?.onChange(nextValue);
+      }}
+      value={formControl ? (formControl.value ?? []) : value}
     >
-      <CheckboxGroupNameContext.Provider value={name}>
+      <CheckboxGroupNameContext.Provider value={formControl?.name ?? name}>
         <Masonry
           columns={orientation === 'horizontal' ? columns : 1}
           gap={gap}
           items={options.map((option) => ({
             content: (
-              <CheckboxRoot
-                className={option.className}
-                disabled={option.disabled}
-                value={option.value}
-                variant={option.variant ?? variant}
-              >
-                {option.label}
-              </CheckboxRoot>
+              <FormControlBoundary>
+                <CheckboxRoot
+                  className={option.className}
+                  disabled={option.disabled}
+                  value={option.value}
+                  variant={option.variant ?? variant}
+                >
+                  {option.label}
+                </CheckboxRoot>
+              </FormControlBoundary>
             ),
             key: option.value,
           }))}

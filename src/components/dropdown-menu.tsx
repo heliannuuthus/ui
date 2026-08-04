@@ -247,12 +247,12 @@ type DropdownMenuEntry =
       label: React.ReactNode;
       checked: boolean;
       disabled?: boolean;
-      onCheckedChange?: (checked: boolean) => void;
+      onChange?: (checked: boolean) => void;
     }
   | {
       type: 'radio';
       value: string;
-      onValueChange?: (value: string) => void;
+      onChange?: (value: string) => void;
       items: Array<{
         label: React.ReactNode;
         value: string;
@@ -298,9 +298,7 @@ function renderEntries(items: DropdownMenuEntry[]) {
           key={index}
           checked={item.checked}
           disabled={item.disabled}
-          onCheckedChange={(checked) =>
-            item.onCheckedChange?.(checked === true)
-          }
+          onCheckedChange={(checked) => item.onChange?.(checked === true)}
         >
           {item.label}
         </DropdownMenuCheckboxItem>
@@ -312,7 +310,7 @@ function renderEntries(items: DropdownMenuEntry[]) {
         <DropdownMenuRadioGroup
           key={index}
           value={item.value}
-          onValueChange={(value) => item.onValueChange?.(String(value))}
+          onValueChange={(value) => item.onChange?.(String(value))}
         >
           {item.items.map((option) => (
             <DropdownMenuRadioItem
