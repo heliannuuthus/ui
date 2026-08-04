@@ -47,9 +47,9 @@
   events; primitive-specific callback names remain implementation details.
 - Form integration must use a typed, component-owned binding contract so
   `Input`, `Select`, `Switch`, `Checkbox`, `Radio.Group`, `DatePicker` and
-  similar controls can be used by `Form.Item` without product code wiring
+  similar controls can be used by `Form.Field` without product code wiring
   library-specific controllers.
-- `Form.Item` owns the field name, label, description, required marker,
+- `Form.Field` owns the field name, label, description, required marker,
   validation message and ARIA wiring. Product code must not manually repeat
   these concerns for supported Heliannuuthus UI controls.
 - Provide a typed render-prop escape hatch for third-party, composite and

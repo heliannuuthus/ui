@@ -34,22 +34,38 @@ export function FormTypeTest() {
         values.enabled.valueOf();
       }}
     >
-      <Form.Item<Values> name="name" label="Name">
+      <Form.Field<Values> name="name" label="Name">
         <Input />
-      </Form.Item>
-      <Form.Item<Values> name="role" label="Role">
+      </Form.Field>
+      <Form.Field<Values> name="role" label="Role">
         <Select options={roleOptions} />
-      </Form.Item>
-      <Form.Item<Values> name="enabled" label="Enabled">
+      </Form.Field>
+      <Form.Field<Values> name="enabled" label="Enabled">
         <Switch />
-      </Form.Item>
-      <Form.Item<Values> name="volume" label="Volume">
+      </Form.Field>
+      <Form.Field<Values> name="volume" label="Volume">
         <Slider min={0} max={100} />
-      </Form.Item>
+      </Form.Field>
+      <Form.Field<Values, 'name'>
+        name="name"
+        label="Custom name"
+        description="Rendered with the public accessibility contract."
+      >
+        {({ controlProps, field, fieldState }) => (
+          <input
+            {...controlProps}
+            ref={field.ref as React.Ref<HTMLInputElement>}
+            value={field.value}
+            onBlur={field.onBlur}
+            onChange={(event) => field.onChange(event.target.value)}
+            data-invalid={fieldState.invalid || undefined}
+          />
+        )}
+      </Form.Field>
       {/* @ts-expect-error Unknown field names must be rejected. */}
-      <Form.Item<Values> name="missing">
+      <Form.Field<Values> name="missing">
         <Input />
-      </Form.Item>
+      </Form.Field>
     </Form>
   );
 }

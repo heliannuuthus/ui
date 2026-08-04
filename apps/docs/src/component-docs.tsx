@@ -51,7 +51,8 @@ import {
   DatePickerReleaseDemo,
   FieldProfileDemo,
   FieldLabelPairingDemo,
-  FormInviteDemo,
+  FormCustomControlDemo,
+  FormIntegrationDemo,
   InputAffixDemo,
   InputOtpVerificationDemo,
   InputStatesDemo,
@@ -3413,30 +3414,191 @@ const dataEntryExamples: Record<string, ComponentExample[]> = {
       previewHeight: 340,
     },
     {
-      title: docsCopy('带校验的邀请表单'),
+      title: docsCopy('完整组件表单'),
       description: docsCopy(
-        '通过统一的 Form.Item 连接控件、校验、错误和提交状态。'
+        '在一个表单中验证全部受支持控件的值绑定、校验状态与无障碍关系。'
       ),
-      preview: <FormInviteDemo />,
-      code: docsCopy(`import { Form, Input, Switch } from '@heliannuuthus/ui'
+      preview: <FormIntegrationDemo />,
+      code: `import {
+  Button,
+  Checkbox,
+  DatePicker,
+  Form,
+  Input,
+  NativeSelect,
+  Radio,
+  Select,
+  Slider,
+  Switch,
+  Toggle,
+} from '@heliannuuthus/ui'
 
 const form = Form.useForm({
-  defaultValues: { email: '', notify: true },
+  defaultValues: {
+    confirmation: false,
+    formats: ['markdown'],
+    inviteCode: '',
+    launchDate: undefined,
+    name: '',
+    notifications: true,
+    permissions: ['read'],
+    pinned: false,
+    region: 'asia',
+    reviewThreshold: 2,
+    summary: '',
+    visibility: 'team',
+    workspace: null,
+  },
 })
 
 <Form form={form} onSubmit={onSubmit}>
-  <Form.Item
-    name="email"
-    label="邮箱地址"
-    rules={{ required: '请输入邮箱地址。' }}
+  <Form.Field
+    name="name"
+    label={t('workspace.name')}
+    rules={{ required: t('validation.required') }}
   >
     <Input />
-  </Form.Item>
-  <Form.Item name="notify" label="发送邮件通知">
+  </Form.Field>
+
+  <Form.Field name="summary" label={t('workspace.description')}>
+    <Input.TextArea />
+  </Form.Field>
+
+  <Form.Field name="inviteCode" label={t('workspace.inviteCode')}>
+    <Input.OTP maxLength={6} />
+  </Form.Field>
+
+  <Form.Field name="region" label={t('workspace.region')}>
+    <NativeSelect options={regionOptions} />
+  </Form.Field>
+
+  <Form.Field name="workspace" label={t('workspace.parent')}>
+    <Select options={workspaceOptions} showClear />
+  </Form.Field>
+
+  <Form.Field name="notifications" label={t('workspace.notifications')}>
     <Switch />
-  </Form.Item>
-</Form>`),
-      previewHeight: 560,
+  </Form.Field>
+
+  <Form.Field
+    name="confirmation"
+    rules={{ required: t('validation.confirm') }}
+  >
+    <Checkbox>{t('workspace.confirm')}</Checkbox>
+  </Form.Field>
+
+  <Form.Field name="permissions" label={t('workspace.permissions')}>
+    <Checkbox.Group options={permissionOptions} />
+  </Form.Field>
+
+  <Form.Field name="visibility" label={t('workspace.visibility')}>
+    <Radio.Group options={visibilityOptions} />
+  </Form.Field>
+
+  <Form.Field name="launchDate" label={t('workspace.launchDate')}>
+    <DatePicker />
+  </Form.Field>
+
+  <Form.Field name="reviewThreshold" label={t('workspace.reviewThreshold')}>
+    <Slider min={1} max={5} />
+  </Form.Field>
+
+  <Form.Field name="pinned" label={t('workspace.pinned')}>
+    <Toggle>{t('actions.pin')}</Toggle>
+  </Form.Field>
+
+  <Form.Field name="formats" label={t('workspace.formats')}>
+    <Toggle.Group multiple items={formatOptions} />
+  </Form.Field>
+
+  <Button type="submit">{t('actions.save')}</Button>
+</Form>`,
+      previewHeight: 'auto',
+      wide: true,
+    },
+    {
+      title: docsCopy('自定义控件接入'),
+      description: docsCopy(
+        '通过稳定的 render contract 将业务自制或第三方控件接入同一套值、校验、焦点和无障碍管理。'
+      ),
+      preview: <FormCustomControlDemo />,
+      code: `import {
+  forwardRef,
+  type ComponentPropsWithoutRef,
+  type Ref,
+} from 'react'
+import { Button, Form } from '@heliannuuthus/ui'
+
+type Priority = '' | 'routine' | 'important' | 'urgent'
+
+type PriorityControlProps = Omit<
+  ComponentPropsWithoutRef<'div'>,
+  'onBlur' | 'onChange'
+> & {
+  disabled?: boolean
+  onBlur?: () => void
+  onChange: (value: Priority) => void
+  value: Priority
+}
+
+const PriorityControl = forwardRef<HTMLButtonElement, PriorityControlProps>(
+  ({ disabled, onBlur, onChange, value, ...groupProps }, ref) => {
+    const options = [
+      { label: t('priority.routine'), value: 'routine' },
+      { label: t('priority.important'), value: 'important' },
+      { label: t('priority.urgent'), value: 'urgent' },
+    ] as const
+
+    return (
+      <div
+        {...groupProps}
+        role="radiogroup"
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) onBlur?.()
+        }}
+      >
+        {options.map((option, index) => (
+          <button
+            key={option.value}
+            ref={index === 0 ? ref : undefined}
+            type="button"
+            role="radio"
+            aria-checked={value === option.value}
+            disabled={disabled}
+            onClick={() => onChange(option.value)}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    )
+  }
+)
+
+const form = Form.useForm<{ priority: Priority }>({
+  defaultValues: { priority: '' },
+})
+
+<Form form={form} onSubmit={onSubmit}>
+  <Form.Field<{ priority: Priority }, 'priority'>
+    name="priority"
+    label={t('priority.label')}
+    description={t('priority.description')}
+    rules={{ required: t('priority.required') }}
+  >
+    {({ field, groupProps }) => (
+      <PriorityControl
+        {...groupProps}
+        ref={field.ref as Ref<HTMLButtonElement>}
+        value={field.value}
+        onBlur={field.onBlur}
+        onChange={field.onChange}
+      />
+    )}
+  </Form.Field>
+  <Button type="submit">{t('actions.save')}</Button>
+</Form>`,
+      previewHeight: 410,
     },
   ],
   input: [
@@ -6478,36 +6640,68 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: '(values) => void | Promise<void>',
     },
     {
-      component: 'Form.Item',
+      component: 'Form.Field',
       name: 'name',
       description: docsCopy('指定当前字段在表单数据中的唯一路径。'),
       type: 'FieldPath',
     },
     {
-      component: 'Form.Item',
+      component: 'Form.Field',
       name: 'label',
       description: docsCopy('设置字段标签并自动关联实际控件。'),
       type: 'ReactNode',
     },
     {
-      component: 'Form.Item',
+      component: 'Form.Field',
       name: 'description',
       description: docsCopy('补充字段说明并建立无障碍描述关联。'),
       type: 'ReactNode',
     },
     {
-      component: 'Form.Item',
+      component: 'Form.Field',
       name: 'rules',
       description: docsCopy('声明当前字段的必填、格式和自定义校验规则。'),
       type: 'RegisterOptions',
     },
     {
-      component: 'Form.Item',
+      component: 'Form.Field',
       name: 'children',
       description: docsCopy(
-        '直接绑定内置控件，或使用 render 函数接入第三方控件。'
+        '直接绑定内置控件，或使用 render 函数接入自制、第三方和复合控件。'
       ),
-      type: 'ReactNode | FormItemRender',
+      type: 'ReactNode | (props: FormFieldRenderProps<Value>) => ReactNode',
+    },
+    {
+      component: 'Form.Field render',
+      name: 'field',
+      description: docsCopy(
+        '提供当前字段的 name、value、onChange、onBlur 和 ref。'
+      ),
+      type: 'FormFieldRenderField<Value>',
+    },
+    {
+      component: 'Form.Field render',
+      name: 'fieldState',
+      description: docsCopy(
+        '提供 disabled、required、invalid 和当前错误消息。'
+      ),
+      type: 'FormFieldRenderState',
+    },
+    {
+      component: 'Form.Field render',
+      name: 'controlProps',
+      description: docsCopy(
+        '用于单个交互控件，包含 id、name、required、disabled 和 ARIA 属性。'
+      ),
+      type: 'FormFieldControlProps',
+    },
+    {
+      component: 'Form.Field render',
+      name: 'groupProps',
+      description: docsCopy(
+        '用于复合控件，将字段标签、说明、错误和禁用状态传递给控件组。'
+      ),
+      type: 'FormFieldGroupProps',
     },
     {
       component: 'Field',
@@ -7041,7 +7235,7 @@ componentDocumentation.input.parts = [
 ];
 
 componentDocumentation.form.summary = docsCopy(
-  '通过 Form.Item 统一连接数据录入组件、校验状态和提交行为。'
+  '通过 Form.Field 统一连接数据录入组件、校验状态和提交行为。'
 );
 componentDocumentation.form.whenToUse = [
   docsCopy('使用统一方式组织标签、控件、说明和错误信息。'),
@@ -7057,7 +7251,7 @@ componentDocumentation.form.parts = [
     description: docsCopy('创建类型化表单实例并管理完整表单状态。'),
   },
   {
-    name: 'Form.Item',
+    name: 'Form.Field',
     description: docsCopy('自动绑定内置控件，并组织标签、说明和校验错误。'),
   },
 ];

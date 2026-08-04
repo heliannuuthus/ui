@@ -61,6 +61,7 @@ const elasticTransition = {
 function Slider<Value extends number | readonly number[]>({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
+  'aria-labelledby': ariaLabelledBy,
   className,
   defaultValue,
   disabled,
@@ -254,6 +255,7 @@ function Slider<Value extends number | readonly number[]>({
         formControl?.messageId
       )}
       aria-invalid={ariaInvalid ?? formControl?.invalid}
+      aria-labelledby={mergeIds(ariaLabelledBy, formControl?.labelId)}
       className={cn(
         'group/slider data-horizontal:w-full data-vertical:h-full',
         effect === 'elastic' &&
@@ -349,6 +351,11 @@ function Slider<Value extends number | readonly number[]>({
               }
               aria-invalid={
                 index === 0 ? (ariaInvalid ?? formControl?.invalid) : undefined
+              }
+              aria-labelledby={
+                index === 0
+                  ? mergeIds(ariaLabelledBy, formControl?.labelId)
+                  : undefined
               }
               inputRef={index === 0 ? formInputRef : undefined}
               key={index}

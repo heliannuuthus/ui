@@ -1,9 +1,89 @@
 // English translations keyed by the canonical Chinese documentation copy.
 export const englishContentTranslations: Readonly<Record<string, string>> = {
-  '通过统一的 Form.Item 连接控件、校验、错误和提交状态。':
-    'Connect controls, validation, errors, and submission state through the unified Form.Item API.',
-  'import { Form, Input, Switch } from \'@heliannuuthus/ui\'\n\nconst form = Form.useForm({\n  defaultValues: { email: \'\', notify: true },\n})\n\n<Form form={form} onSubmit={onSubmit}>\n  <Form.Item\n    name="email"\n    label="邮箱地址"\n    rules={{ required: \'请输入邮箱地址。\' }}\n  >\n    <Input />\n  </Form.Item>\n  <Form.Item name="notify" label="发送邮件通知">\n    <Switch />\n  </Form.Item>\n</Form>':
-    'import { Form, Input, Switch } from \'@heliannuuthus/ui\'\n\nconst form = Form.useForm({\n  defaultValues: { email: \'\', notify: true },\n})\n\n<Form form={form} onSubmit={onSubmit}>\n  <Form.Item\n    name="email"\n    label="Email address"\n    rules={{ required: \'Please enter an email address.\' }}\n  >\n    <Input />\n  </Form.Item>\n  <Form.Item name="notify" label="Send email notification">\n    <Switch />\n  </Form.Item>\n</Form>',
+  自定义控件接入: 'Custom control integration',
+  '通过稳定的 render contract 将业务自制或第三方控件接入同一套值、校验、焦点和无障碍管理。':
+    'Connect user-authored or third-party controls to the same value, validation, focus, and accessibility management through the stable render contract.',
+  '自制组件只依赖稳定的值、事件与无障碍属性。':
+    'User-authored controls depend only on stable values, events, and accessibility attributes.',
+  优先级: 'Priority',
+  常规: 'Routine',
+  重要: 'Important',
+  紧急: 'Urgent',
+  'Form.Field 统一管理值、校验、焦点与错误描述。':
+    'Form.Field consistently manages values, validation, focus, and error descriptions.',
+  '请选择优先级。': 'Choose a priority.',
+  已保存优先级: 'Saved priority',
+  保存优先级: 'Save priority',
+  '直接绑定内置控件，或使用 render 函数接入自制、第三方和复合控件。':
+    'Bind built-in controls directly, or use a render function to integrate user-authored, third-party, and composite controls.',
+  '提供当前字段的 name、value、onChange、onBlur 和 ref。':
+    'Provides the current field name, value, onChange, onBlur, and ref.',
+  '提供 disabled、required、invalid 和当前错误消息。':
+    'Provides disabled, required, invalid, and the current error message.',
+  '用于单个交互控件，包含 id、name、required、disabled 和 ARIA 属性。':
+    'For a single interactive control; includes id, name, required, disabled, and ARIA attributes.',
+  '用于复合控件，将字段标签、说明、错误和禁用状态传递给控件组。':
+    'For composite controls; passes the field label, description, error, and disabled state to the control group.',
+  完整组件表单: 'Complete component form',
+  '在一个表单中验证全部受支持控件的值绑定、校验状态与无障碍关系。':
+    'Validate value binding, validation state, and accessible relationships for every supported control in one form.',
+  完整表单集成: 'Complete form integration',
+  '所有数据录入组件共享同一份表单状态、校验和无障碍关系。':
+    'All data-entry controls share the same form state, validation, and accessible relationships.',
+  '会显示在导航和成员列表中。': 'Shown in navigation and member lists.',
+  '请输入工作区名称。': 'Enter a workspace name.',
+  邀请码: 'Invitation code',
+  '输入 6 位数字确认创建操作。':
+    'Enter the six-digit code to confirm creation.',
+  '请输入 6 位数字邀请码。': 'Enter a six-digit invitation code.',
+  '请输入邀请码。': 'Enter the invitation code.',
+  部署区域: 'Deployment region',
+  中国大陆: 'Mainland China',
+  亚太地区: 'Asia Pacific',
+  欧洲地区: 'Europe',
+  关联空间: 'Parent workspace',
+  '支持搜索、清除和分组选项。':
+    'Supports search, clearing, and grouped options.',
+  工作区说明: 'Workspace description',
+  '介绍这个工作区的用途和协作方式…':
+    'Describe the purpose of this workspace and how people collaborate…',
+  启用日期: 'Launch date',
+  '选择或清除计划启用日期。': 'Choose or clear the planned launch date.',
+  选择启用日期: 'Choose a launch date',
+  审核阈值: 'Review threshold',
+  '设置发布前需要的审核人数。':
+    'Set the number of approvals required before publishing.',
+  可见范围: 'Visibility',
+  '单选组通过字段标签获得可访问名称。':
+    'The radio group receives its accessible name from the field label.',
+  仅自己: 'Only me',
+  团队成员: 'Team members',
+  所有人: 'Everyone',
+  权限范围: 'Permissions',
+  '多选组的值以字符串数组提交。':
+    'The checkbox group submits its value as a string array.',
+  评论: 'Comment',
+  内容格式: 'Content formats',
+  '切换组同样提交一个数组值。': 'The toggle group also submits an array value.',
+  富文本: 'Rich text',
+  纯文本: 'Plain text',
+  发送状态通知: 'Send status notifications',
+  '布尔值通过 checked 语义绑定。':
+    'The boolean value binds through checked semantics.',
+  置顶工作区: 'Pin workspace',
+  'Toggle 保留 pressed 状态语义。': 'Toggle preserves pressed-state semantics.',
+  置顶: 'Pin',
+  '提交前必须明确确认。':
+    'Explicit confirmation is required before submission.',
+  '请确认以上设置。': 'Confirm the settings above.',
+  我已确认以上设置: 'I have confirmed the settings above',
+  已保存完整表单: 'Complete form saved',
+  '正在保存…': 'Saving…',
+  保存设置: 'Save settings',
+  '通过统一的 Form.Field 连接控件、校验、错误和提交状态。':
+    'Connect controls, validation, errors, and submission state through the unified Form.Field API.',
+  'import { Form, Input, Switch } from \'@heliannuuthus/ui\'\n\nconst form = Form.useForm({\n  defaultValues: { email: \'\', notify: true },\n})\n\n<Form form={form} onSubmit={onSubmit}>\n  <Form.Field\n    name="email"\n    label="邮箱地址"\n    description="成员会收到一封加入工作区的邮件。"\n    rules={{ required: \'请输入邮箱地址。\' }}\n  >\n    <Input />\n  </Form.Field>\n  <Form.Field name="notify" label="发送邮件通知">\n    <Switch />\n  </Form.Field>\n</Form>':
+    'import { Form, Input, Switch } from \'@heliannuuthus/ui\'\n\nconst form = Form.useForm({\n  defaultValues: { email: \'\', notify: true },\n})\n\n<Form form={form} onSubmit={onSubmit}>\n  <Form.Field\n    name="email"\n    label="Email address"\n    description="The member will receive an email invitation to join the workspace."\n    rules={{ required: \'Please enter an email address.\' }}\n  >\n    <Input />\n  </Form.Field>\n  <Form.Field name="notify" label="Send email notification">\n    <Switch />\n  </Form.Field>\n</Form>',
   '连接 Form.useForm 创建的表单实例。':
     'Connects the form instance created by Form.useForm.',
   '校验通过后接收完整表单数据。':
@@ -17,8 +97,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '滑块值变化时调用。': 'Called whenever the slider value changes.',
   '一次指针或键盘调整完成后调用。':
     'Called after a pointer or keyboard adjustment completes.',
-  '通过 Form.Item 统一连接数据录入组件、校验状态和提交行为。':
-    'Uses Form.Item to connect data-entry controls, validation state, and submission behavior consistently.',
+  '通过 Form.Field 统一连接数据录入组件、校验状态和提交行为。':
+    'Uses Form.Field to connect data-entry controls, validation state, and submission behavior consistently.',
   '使用统一方式组织标签、控件、说明和错误信息。':
     'Organizes labels, controls, descriptions, and errors consistently.',
   '让内置数据录入组件自动连接字段值、校验状态和提交行为。':

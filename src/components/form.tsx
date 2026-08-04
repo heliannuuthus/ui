@@ -17,6 +17,7 @@ import { cn } from '../lib/utils';
 import { Field } from './field';
 import {
   FormControlProvider,
+  mergeIds,
   type FormControlContextValue,
 } from './internal/form-control';
 
@@ -58,7 +59,7 @@ type FormProps<
   onSubmit: SubmitHandler<TTransformedValues>;
 };
 
-type FormItemRenderField<Value> = {
+type FormFieldRenderField<Value> = {
   name: string;
   onBlur: () => void;
   onChange: (value: Value) => void;
@@ -66,26 +67,43 @@ type FormItemRenderField<Value> = {
   value: Value;
 };
 
-type FormItemRenderState = {
+type FormFieldRenderState = {
   disabled: boolean;
   error?: string;
   invalid: boolean;
   required: boolean;
 };
 
-type FormItemRenderProps<Value> = {
-  field: FormItemRenderField<Value>;
-  fieldState: FormItemRenderState;
+type FormFieldControlProps = {
+  'aria-describedby'?: string;
+  'aria-errormessage'?: string;
+  'aria-invalid'?: true;
+  'aria-required'?: true;
+  disabled: boolean;
+  id: string;
+  name: string;
+  required: boolean;
 };
 
-type FormItemProps<
+type FormFieldGroupProps = Omit<FormFieldControlProps, 'name' | 'required'> & {
+  'aria-labelledby'?: string;
+};
+
+type FormFieldRenderProps<Value> = {
+  controlProps: FormFieldControlProps;
+  field: FormFieldRenderField<Value>;
+  fieldState: FormFieldRenderState;
+  groupProps: FormFieldGroupProps;
+};
+
+type FormFieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = Omit<React.ComponentProps<typeof Field>, 'children'> & {
   children:
     | React.ReactNode
     | ((
-        props: FormItemRenderProps<FieldPathValue<TFieldValues, TName>>
+        props: FormFieldRenderProps<FieldPathValue<TFieldValues, TName>>
       ) => React.ReactNode);
   defaultValue?: FieldPathValue<TFieldValues, TName>;
   description?: React.ReactNode;
@@ -136,6 +154,7 @@ function FormRoot<
   children,
   className,
   form,
+  noValidate = true,
   onInvalid,
   onSubmit,
   ...props
@@ -148,6 +167,7 @@ function FormRoot<
         data-slot="form"
         data-submitting={methods.formState.isSubmitting || undefined}
         className={className}
+        noValidate={noValidate}
         onSubmit={methods.handleSubmit(onSubmit, onInvalid)}
         {...props}
       >
@@ -162,7 +182,7 @@ function hasRequiredRule(rule: RegisterOptions['required']) {
   return Boolean(rule);
 }
 
-function FormItem<
+function FormField<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
@@ -177,7 +197,7 @@ function FormItem<
   rules,
   shouldUnregister,
   ...props
-}: FormItemProps<TFieldValues, TName>) {
+}: FormFieldProps<TFieldValues, TName>) {
   const reactId = React.useId();
   const controlId = `${reactId}-control`;
   const labelId = label == null ? undefined : `${reactId}-label`;
@@ -193,18 +213,42 @@ function FormItem<
     shouldUnregister,
   });
   const error = fieldState.error?.message;
-  const fieldValue: FormItemRenderField<FieldPathValue<TFieldValues, TName>> = {
-    name: field.name,
-    onBlur: field.onBlur,
-    onChange: field.onChange,
-    ref: field.ref,
-    value: field.value,
-  };
-  const renderState: FormItemRenderState = {
+  const fieldValue: FormFieldRenderField<FieldPathValue<TFieldValues, TName>> =
+    {
+      name: field.name,
+      onBlur: field.onBlur,
+      onChange: field.onChange,
+      ref: field.ref,
+      value: field.value,
+    };
+  const renderState: FormFieldRenderState = {
     disabled: Boolean(field.disabled),
     error,
     invalid: fieldState.invalid,
     required: isRequired,
+  };
+  const describedBy = mergeIds(
+    descriptionId,
+    fieldState.invalid ? messageId : undefined
+  );
+  const controlProps: FormFieldControlProps = {
+    'aria-describedby': describedBy,
+    'aria-errormessage': fieldState.invalid ? messageId : undefined,
+    'aria-invalid': fieldState.invalid || undefined,
+    'aria-required': isRequired || undefined,
+    disabled: Boolean(field.disabled),
+    id: controlId,
+    name: field.name,
+    required: isRequired,
+  };
+  const groupProps: FormFieldGroupProps = {
+    'aria-describedby': describedBy,
+    'aria-errormessage': fieldState.invalid ? messageId : undefined,
+    'aria-invalid': fieldState.invalid || undefined,
+    'aria-labelledby': labelId,
+    'aria-required': isRequired || undefined,
+    disabled: Boolean(field.disabled),
+    id: controlId,
   };
   const controlContext: FormControlContextValue<
     FieldPathValue<TFieldValues, TName>
@@ -241,7 +285,12 @@ function FormItem<
         </Field.Label>
       ) : null}
       {typeof children === 'function' ? (
-        children({ field: fieldValue, fieldState: renderState })
+        children({
+          controlProps,
+          field: fieldValue,
+          fieldState: renderState,
+          groupProps,
+        })
       ) : (
         <FormControlProvider value={controlContext}>
           {children}
@@ -258,12 +307,32 @@ function FormItem<
 }
 
 const Form = Object.assign(FormRoot, {
-  Item: FormItem,
+  Field: FormField,
+  /** @deprecated Use Form.Field. */
+  Item: FormField,
   useForm,
 });
 
+/** @deprecated Use FormFieldProps. */
+type FormItemProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = FormFieldProps<TFieldValues, TName>;
+/** @deprecated Use FormFieldRenderField. */
+type FormItemRenderField<Value> = FormFieldRenderField<Value>;
+/** @deprecated Use FormFieldRenderProps. */
+type FormItemRenderProps<Value> = FormFieldRenderProps<Value>;
+/** @deprecated Use FormFieldRenderState. */
+type FormItemRenderState = FormFieldRenderState;
+
 export { Form };
 export type {
+  FormFieldControlProps,
+  FormFieldGroupProps,
+  FormFieldProps,
+  FormFieldRenderField,
+  FormFieldRenderProps,
+  FormFieldRenderState,
   FormInstance,
   FormItemProps,
   FormItemRenderField,

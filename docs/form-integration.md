@@ -4,14 +4,14 @@ Status: Implemented
 
 This document defines the implemented contract for using Heliannuuthus UI
 data-entry components inside a form. `Form` renders the native HTML form,
-`Form.Item` owns field presentation and binding, and supported controls consume
+`Form.Field` owns field presentation and binding, and supported controls consume
 an internal engine-independent field context. Consumers do not render a nested
 form, import `Controller`, or manually adapt controls such as `Switch`.
 
 ## Goals
 
 - Make all Heliannuuthus UI data-entry components directly usable through the
-  same `Form.Item` composition model.
+  same `Form.Field` composition model.
 - Keep product code independent of the selected form-state engine.
 - Preserve the natural public semantics of each control.
 - Centralize labels, descriptions, errors, required state and accessible
@@ -59,9 +59,9 @@ form, import `Controller`, or manually adapt controls such as `Switch`.
 
 The product-facing API must not require a second nested `<form>`.
 
-### `Form.Item`: field integration
+### `Form.Field`: field integration
 
-`Form.Item` connects one named form value to one supported control. It owns:
+`Form.Field` connects one named form value to one supported control. It owns:
 
 - the field path;
 - label and required marker;
@@ -70,11 +70,11 @@ The product-facing API must not require a second nested `<form>`.
 - invalid and disabled propagation;
 - control value, change, blur and focus/ref binding.
 
-`Form.Item` uses `Field` internally for presentation.
+`Form.Field` uses `Field` internally for presentation.
 
 ### Control integration: component-owned binding
 
-`Form.Item` provides an internal, engine-independent field context. Each
+`Form.Field` provides an internal, engine-independent field context. Each
 supported Heliannuuthus UI data-entry component consumes that context next to
 its own implementation and translates it into the component's natural value,
 change, blur and ref semantics.
@@ -113,21 +113,21 @@ const form = Form.useForm<Values>({
 })
 
 <Form form={form} onSubmit={save}>
-  <Form.Item name="name" label="名称" required>
+  <Form.Field name="name" label="名称" required>
     <Input />
-  </Form.Item>
+  </Form.Field>
 
-  <Form.Item name="role" label="角色">
+  <Form.Field name="role" label="角色">
     <Select options={roles} />
-  </Form.Item>
+  </Form.Field>
 
-  <Form.Item name="enabled" label="启用">
+  <Form.Field name="enabled" label="启用">
     <Switch />
-  </Form.Item>
+  </Form.Field>
 
-  <Form.Item name="birthday" label="生日">
+  <Form.Field name="birthday" label="生日">
     <DatePicker />
-  </Form.Item>
+  </Form.Field>
 
   <Button type="submit">保存</Button>
 </Form>
@@ -137,13 +137,13 @@ The caller does not manually pass `control`, render a `Controller`, read the
 field error object, map `checked`, or reproduce ARIA attributes for supported
 controls.
 
-Use an explicit form value generic on `Form.Item` when compile-time field-path
+Use an explicit form value generic on `Form.Field` when compile-time field-path
 checking is required:
 
 ```tsx
-<Form.Item<Values> name="name" label="名称">
+<Form.Field<Values> name="name" label="名称">
   <Input />
-</Form.Item>
+</Form.Field>
 ```
 
 ## Supported control semantics
@@ -174,22 +174,86 @@ form binding, tests and this matrix in the same change.
 Unsupported controls use a typed render prop:
 
 ```tsx
-<Form.Item name="location" label="位置">
-  {({ field, fieldState }) => (
+<Form.Field name="location" label="位置">
+  {({ controlProps, field }) => (
     <ThirdPartyMap
+      {...controlProps}
+      ref={field.ref}
       location={field.value}
       onBlur={field.onBlur}
       onLocationChange={field.onChange}
-      aria-invalid={fieldState.invalid}
     />
   )}
-</Form.Item>
+</Form.Field>
 ```
 
-The field binding exposes only stable, engine-independent members:
+The same contract supports reusable user-authored controls. Keep the custom
+component controlled through its natural value and event props, then adapt
+those props at the `Form.Field` boundary:
+
+```tsx
+type Priority = 'routine' | 'important' | 'urgent'
+
+const PriorityControl = React.forwardRef<
+  HTMLButtonElement,
+  {
+    disabled?: boolean
+    value?: Priority
+    onChange: (value: Priority) => void
+    onBlur?: () => void
+  } & FormFieldGroupProps
+>(({ disabled, value, onChange, onBlur, ...groupProps }, ref) => (
+  <div
+    {...groupProps}
+    role="radiogroup"
+    onBlur={(event) => {
+      if (!event.currentTarget.contains(event.relatedTarget)) onBlur?.()
+    }}
+  >
+    {priorities.map((priority, index) => (
+      <button
+        key={priority}
+        ref={index === 0 ? ref : undefined}
+        type="button"
+        role="radio"
+        aria-checked={value === priority}
+        disabled={disabled}
+        onClick={() => onChange(priority)}
+      >
+        {priority}
+      </button>
+    ))}
+  </div>
+))
+
+<Form.Field<Values, 'priority'> name="priority" label="Priority">
+  {({ field, groupProps }) => (
+    <PriorityControl
+      {...groupProps}
+      ref={field.ref as React.Ref<HTMLButtonElement>}
+      value={field.value}
+      onBlur={field.onBlur}
+      onChange={field.onChange}
+    />
+  )}
+</Form.Field>
+```
+
+This keeps custom controls independent of the internal form engine. The
+component remains a normal controlled React component, while `Form.Field`
+continues to own registration, validation, focus and accessible relationships.
+
+`controlProps` is ready to spread onto a single interactive control. It
+contains the generated `id`, field `name`, disabled and required semantics,
+plus `aria-describedby`, `aria-errormessage`, `aria-invalid` and
+`aria-required`. Composite controls use `groupProps` instead; it replaces the
+native field name with `aria-labelledby` so a radio, checkbox or custom widget
+group receives its accessible name from the field label.
+
+The render contract exposes only stable, engine-independent members:
 
 ```ts
-type FormItemRenderField<Value> = {
+type FormFieldRenderField<Value> = {
   name: string;
   value: Value;
   onChange: (value: Value) => void;
@@ -197,22 +261,32 @@ type FormItemRenderField<Value> = {
   ref: React.Ref<unknown>;
 };
 
-type FormItemRenderState = {
+type FormFieldRenderState = {
   disabled: boolean;
   invalid: boolean;
   required: boolean;
   error?: string;
 };
+
+type FormFieldRenderProps<Value> = {
+  field: FormFieldRenderField<Value>;
+  fieldState: FormFieldRenderState;
+  controlProps: FormFieldControlProps;
+  groupProps: FormFieldGroupProps;
+};
 ```
 
 Do not expose a raw `react-hook-form` controller field through this contract.
+
+`Form.Item` remains a deprecated alias of `Form.Field` for compatibility. New
+code and documentation use `Form.Field`.
 
 ## Validation and errors
 
 - Product code owns validation schemas and domain rules.
 - `Form` may provide adapters for supported standard-schema validators, but the
   UI package does not own product schemas.
-- `Form.Item` displays field errors through `Field.Error`.
+- `Form.Field` displays field errors through `Field.Error`.
 - The default presentation shows the active field error message.
 - Server errors can be assigned to a field path with `form.setError`.
 - A description remains associated with its control when an error is present.
@@ -225,11 +299,11 @@ Do not expose a raw `react-hook-form` controller field through this contract.
 
 - A control may be used independently of `Form` with its documented controlled
   or uncontrolled props.
-- Inside `Form.Item`, form state is the single source of truth unless an
+- Inside `Form.Field`, form state is the single source of truth unless an
   explicitly documented controlled Form mode is selected.
 - Supplying a child `value`, `checked`, `defaultValue` or `defaultChecked`
-  inside `Form.Item` does not replace form state; initialize through
-  `Form.useForm`, `form.reset` or `Form.Item.defaultValue`.
+  inside `Form.Field` does not replace form state; initialize through
+  `Form.useForm`, `form.reset` or `Form.Field.defaultValue`.
 - Reset restores the form's declared default values.
 - Asynchronously loaded edit data is applied through a documented form
   initialization or reset operation, not by switching individual controls
@@ -246,7 +320,7 @@ Do not expose a raw `react-hook-form` controller field through this contract.
 
 ## Accessibility
 
-The common `Form.Item` path must provide:
+The common `Form.Field` path must provide:
 
 - a stable control ID;
 - label-to-control association;
@@ -294,9 +368,9 @@ with the unified API:
 const form = Form.useForm<Values>({ defaultValues })
 
 <Form form={form} onSubmit={save}>
-  <Form.Item<Values> name="name" label="名称">
+  <Form.Field<Values> name="name" label="名称">
     <Input />
-  </Form.Item>
+  </Form.Field>
 </Form>
 ```
 
@@ -326,5 +400,5 @@ The unified API remains complete only while:
 - Do not create a wrapper component for every combination of Form and control.
 - Do not use runtime component-name checks to choose adapters.
 - Do not put API requests, server DTO conversion or product copy in `Form`.
-- Do not bypass `Form.Item` with product-authored controller wiring for
+- Do not bypass `Form.Field` with product-authored controller wiring for
   supported controls.
