@@ -28,7 +28,7 @@ type NativeSelectOption =
       }[];
     };
 
-function NativeSelect({
+const NativeSelect = ({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   children,
@@ -45,7 +45,7 @@ function NativeSelect({
   size = 'default',
   value,
   ...props
-}: NativeSelectProps) {
+}: NativeSelectProps) => {
   const formControl = useFormControl<string | readonly string[] | undefined>();
   const selectRef = useMergedRefs(
     ref,
@@ -127,6 +127,6 @@ function NativeSelect({
       />
     </div>
   );
-}
+};
 
 export { NativeSelect, type NativeSelectOption, type NativeSelectProps };

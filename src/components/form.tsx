@@ -118,13 +118,13 @@ type FormFieldProps<
   shouldUnregister?: boolean;
 };
 
-function useForm<
+const useForm = <
   TFieldValues extends FieldValues = FieldValues,
   TContext = unknown,
   TTransformedValues = TFieldValues,
 >(
   options?: UseFormProps<TFieldValues, TContext, TTransformedValues>
-): FormInstance<TFieldValues, TContext, TTransformedValues> {
+): FormInstance<TFieldValues, TContext, TTransformedValues> => {
   const methods = useReactHookForm<TFieldValues, TContext, TTransformedValues>(
     options
   );
@@ -144,9 +144,9 @@ function useForm<
     watch: methods.watch,
     [INTERNAL_FORM_METHODS]: methods,
   };
-}
+};
 
-function FormRoot<
+const FormRoot = <
   TFieldValues extends FieldValues = FieldValues,
   TContext = unknown,
   TTransformedValues = TFieldValues,
@@ -158,7 +158,7 @@ function FormRoot<
   onInvalid,
   onSubmit,
   ...props
-}: FormProps<TFieldValues, TContext, TTransformedValues>) {
+}: FormProps<TFieldValues, TContext, TTransformedValues>) => {
   const methods = form[INTERNAL_FORM_METHODS];
 
   return (
@@ -175,14 +175,14 @@ function FormRoot<
       </form>
     </FormProvider>
   );
-}
+};
 
-function hasRequiredRule(rule: RegisterOptions['required']) {
+const hasRequiredRule = (rule: RegisterOptions['required']) => {
   if (typeof rule === 'object') return rule.value;
   return Boolean(rule);
-}
+};
 
-function FormField<
+const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
@@ -197,7 +197,7 @@ function FormField<
   rules,
   shouldUnregister,
   ...props
-}: FormFieldProps<TFieldValues, TName>) {
+}: FormFieldProps<TFieldValues, TName>) => {
   const reactId = React.useId();
   const controlId = `${reactId}-control`;
   const labelId = label == null ? undefined : `${reactId}-label`;
@@ -304,7 +304,7 @@ function FormField<
       ) : null}
     </Field>
   );
-}
+};
 
 const Form = Object.assign(FormRoot, {
   Field: FormField,

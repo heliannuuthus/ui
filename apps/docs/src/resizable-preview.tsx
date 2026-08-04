@@ -10,7 +10,7 @@ import {
 
 const files = ['button.tsx', 'card.tsx', 'resizable.tsx'];
 
-export function ResizableWorkspaceDemo() {
+export const ResizableWorkspaceDemo = () => {
   return (
     <div className="resizable-workspace-shell">
       <div className="resizable-workspace-label">
@@ -96,9 +96,9 @@ export function ResizableWorkspaceDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function ResizableVerticalDemo() {
+export const ResizableVerticalDemo = () => {
   return (
     <div className="resizable-vertical-shell">
       <div className="resizable-workspace-label">
@@ -160,9 +160,9 @@ export function ResizableVerticalDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function ResizableAdvancedDemo() {
+export const ResizableAdvancedDemo = () => {
   const [navigationSize, setNavigationSize] = useState(24);
 
   return (
@@ -245,4 +245,4 @@ export function ResizableAdvancedDemo() {
       </div>
     </div>
   );
-}
+};

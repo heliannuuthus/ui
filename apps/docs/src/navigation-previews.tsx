@@ -46,7 +46,7 @@ const productLinks = [
   },
 ];
 
-function ProductMenu({ compact = false }: { compact?: boolean }) {
+const ProductMenu = ({ compact = false }: { compact?: boolean }) => {
   return (
     <NavigationMenu
       align={compact ? 'end' : 'start'}
@@ -104,9 +104,9 @@ function ProductMenu({ compact = false }: { compact?: boolean }) {
       ]}
     />
   );
-}
+};
 
-export function NavigationMenuMegaDemo() {
+export const NavigationMenuMegaDemo = () => {
   return (
     <div className="navigation-menu-stage">
       <div className="navigation-menu-sitebar">
@@ -129,22 +129,22 @@ export function NavigationMenuMegaDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function NavigationMenuCompactDemo() {
+export const NavigationMenuCompactDemo = () => {
   return (
     <div className="navigation-menu-compact-stage">
       <span>{docsCopy('右对齐的局部导航')}</span>
       <ProductMenu compact />
     </div>
   );
-}
+};
 
-function PageSummary({ children }: { children: ReactNode }) {
+const PageSummary = ({ children }: { children: ReactNode }) => {
   return <div className="pagination-summary">{children}</div>;
-}
+};
 
-export function PaginationControlledDemo() {
+export const PaginationControlledDemo = () => {
   const [page, setPage] = useState(3);
   return (
     <div className="pagination-demo-stack">
@@ -171,9 +171,9 @@ export function PaginationControlledDemo() {
       />
     </div>
   );
-}
+};
 
-export function PaginationOverflowDemo() {
+export const PaginationOverflowDemo = () => {
   return (
     <div className="pagination-demo-stack">
       <PageSummary>
@@ -195,9 +195,9 @@ export function PaginationOverflowDemo() {
       />
     </div>
   );
-}
+};
 
-export function TabsDashboardDemo() {
+export const TabsDashboardDemo = () => {
   return (
     <Tabs
       animation="none"
@@ -258,7 +258,7 @@ export function TabsDashboardDemo() {
       ]}
     />
   );
-}
+};
 
 type TabsListVariant = 'default' | 'line' | 'outline' | 'soft';
 
@@ -272,7 +272,7 @@ const tabsVariantOptions: Array<{
   { label: docsCopy('柔和'), value: 'soft' },
 ];
 
-export function TabsVariantsDemo() {
+export const TabsVariantsDemo = () => {
   const [variant, setVariant] = useState<TabsListVariant>('default');
 
   return (
@@ -329,7 +329,7 @@ export function TabsVariantsDemo() {
       </div>
     </div>
   );
-}
+};
 
 const responsiveTabsItems = [
   {
@@ -384,7 +384,7 @@ const responsiveTabsItems = [
   },
 ] as const;
 
-export function TabsResponsiveDemo() {
+export const TabsResponsiveDemo = () => {
   return (
     <div className="tabs-responsive-demo">
       <p>
@@ -423,7 +423,7 @@ export function TabsResponsiveDemo() {
       ))}
     </div>
   );
-}
+};
 
 const tabsAnimationOptions: Array<{
   label: string;
@@ -434,7 +434,7 @@ const tabsAnimationOptions: Array<{
   { label: docsCopy('关闭'), value: 'none' },
 ];
 
-export function TabsMotionDemo() {
+export const TabsMotionDemo = () => {
   const [animation, setAnimation] = useState<TabsAnimation>('slide');
 
   return (
@@ -524,4 +524,4 @@ export function TabsMotionDemo() {
       </div>
     </div>
   );
-}
+};

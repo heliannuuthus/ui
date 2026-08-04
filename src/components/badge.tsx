@@ -101,23 +101,23 @@ type BadgeProps =
 
 type BadgeRef = HTMLAnchorElement | HTMLSpanElement;
 
-function getDisplayCount(count: ReactNode, overflowCount: number) {
+const getDisplayCount = (count: ReactNode, overflowCount: number) => {
   const maximum = Number.isFinite(overflowCount)
     ? Math.max(0, Math.floor(overflowCount))
     : 99;
 
   return typeof count === 'number' && count > maximum ? `${maximum}+` : count;
-}
+};
 
-function hasNotification(props: BadgeProps) {
+const hasNotification = (props: BadgeProps) => {
   return 'count' in props || props.dot === true;
-}
+};
 
-function normalizeOffset(value: number) {
+const normalizeOffset = (value: number) => {
   return Number.isFinite(value) ? value : 0;
-}
+};
 
-const Badge = forwardRef<BadgeRef, BadgeProps>(function Badge(props, ref) {
+const Badge = forwardRef<BadgeRef, BadgeProps>((props, ref) => {
   if (hasNotification(props)) {
     const {
       children,

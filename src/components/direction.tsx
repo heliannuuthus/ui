@@ -10,13 +10,13 @@ type DirectionProviderProps = {
   direction?: TextDirection;
 };
 
-function DirectionProvider(props: DirectionProviderProps) {
+const DirectionProvider = (props: DirectionProviderProps) => {
   return <BaseDirectionProvider {...props} />;
-}
+};
 
-function useDirection(): TextDirection {
+const useDirection = (): TextDirection => {
   return useBaseDirection();
-}
+};
 
 export {
   DirectionProvider,

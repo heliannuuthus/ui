@@ -69,7 +69,7 @@ type SyntaxCodeProps = {
   variant?: CardProps['variant'];
 };
 
-export function SyntaxCode({
+export const SyntaxCode = ({
   action,
   className,
   code,
@@ -78,7 +78,7 @@ export function SyntaxCode({
   radius = 'sm',
   showLineNumbers = true,
   variant = 'outline',
-}: SyntaxCodeProps) {
+}: SyntaxCodeProps) => {
   const normalizedCode = code.replace(/^\n/, '').trimEnd();
   const lineCount = normalizedCode.split('\n').length;
 
@@ -161,4 +161,4 @@ export function SyntaxCode({
       </Highlight>
     </Card>
   );
-}
+};

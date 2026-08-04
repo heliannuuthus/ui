@@ -45,12 +45,12 @@ type BreadcrumbEntry =
   | { type: 'item'; item: BreadcrumbItem; index: number }
   | { type: 'collapsed'; items: BreadcrumbItem[] };
 
-function getEntries(
+const getEntries = (
   items: BreadcrumbItem[],
   maxItems: number | undefined,
   itemsBeforeCollapse: number,
   itemsAfterCollapse: number
-): BreadcrumbEntry[] {
+): BreadcrumbEntry[] => {
   if (!maxItems || items.length <= maxItems || maxItems < 2) {
     return items.map((item, index) => ({ type: 'item', item, index }));
   }
@@ -72,9 +72,9 @@ function getEntries(
       index: hiddenEnd + index,
     })),
   ];
-}
+};
 
-function Separator({ value }: { value: BreadcrumbSeparator }) {
+const Separator = ({ value }: { value: BreadcrumbSeparator }) => {
   const content =
     value === 'chevron' ? (
       <ChevronRightIcon />
@@ -97,9 +97,9 @@ function Separator({ value }: { value: BreadcrumbSeparator }) {
       {content}
     </li>
   );
-}
+};
 
-function getMenuEntries(items: BreadcrumbMenuItem[]): DropdownMenuEntry[] {
+const getMenuEntries = (items: BreadcrumbMenuItem[]): DropdownMenuEntry[] => {
   return items.map((item) => ({
     label: item.label,
     href: item.href,
@@ -107,15 +107,15 @@ function getMenuEntries(items: BreadcrumbMenuItem[]): DropdownMenuEntry[] {
     disabled: item.disabled,
     onSelect: item.onSelect,
   }));
-}
+};
 
-function ItemMenu({
+const ItemMenu = ({
   item,
   className,
 }: {
   item: BreadcrumbItem;
   className: string;
-}) {
+}) => {
   return (
     <DropdownMenu
       trigger={
@@ -129,9 +129,9 @@ function ItemMenu({
       contentClassName="w-auto min-w-40"
     />
   );
-}
+};
 
-function CollapsedItems({
+const CollapsedItems = ({
   items,
   label,
   className,
@@ -139,7 +139,7 @@ function CollapsedItems({
   items: BreadcrumbItem[];
   label: string;
   className: string;
-}) {
+}) => {
   return (
     <DropdownMenu
       trigger={
@@ -155,9 +155,9 @@ function CollapsedItems({
       contentClassName="w-auto min-w-40"
     />
   );
-}
+};
 
-function Breadcrumb({
+const Breadcrumb = ({
   items,
   variant = 'default',
   separator = 'chevron',
@@ -169,7 +169,7 @@ function Breadcrumb({
   collapseLabel = '显示完整路径',
   className,
   ...props
-}: BreadcrumbProps) {
+}: BreadcrumbProps) => {
   const entries = getEntries(
     items,
     maxItems,
@@ -262,7 +262,7 @@ function Breadcrumb({
       </ol>
     </nav>
   );
-}
+};
 
 export {
   Breadcrumb,

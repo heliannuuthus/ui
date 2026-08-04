@@ -8,7 +8,7 @@ import { build } from 'esbuild';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-async function loadHarnessModule() {
+const loadHarnessModule = async () => {
   const result = await build({
     absWorkingDir: packageRoot,
     bundle: true,
@@ -53,9 +53,9 @@ async function loadHarnessModule() {
   return import(
     `data:text/javascript;base64,${Buffer.from(output.contents).toString('base64')}`
   );
-}
+};
 
-function flattenStrings(value, prefix = '') {
+const flattenStrings = (value, prefix = '') => {
   if (typeof value === 'string') return new Map([[prefix, value]]);
 
   return new Map(
@@ -64,13 +64,13 @@ function flattenStrings(value, prefix = '') {
       return [...flattenStrings(child, childPrefix)];
     })
   );
-}
+};
 
-function interpolationNames(value) {
+const interpolationNames = (value) => {
   return [...value.matchAll(/\{\{\s*([^},\s]+)[^}]*\}\}/g)]
     .map((match) => match[1])
     .sort();
-}
+};
 
 const {
   componentCatalog,
@@ -124,20 +124,20 @@ const intentionalSourceCopy = new Set(['中文', '导航', '布局']);
 const untranslatedNodes = [];
 const uncoveredSourceCopy = [];
 
-function normalizeJsxText(value) {
+const normalizeJsxText = (value) => {
   return value.replace(/\s+/g, ' ').trim();
-}
+};
 
-function isInsideDocsCopy(ancestors) {
+const isInsideDocsCopy = (ancestors) => {
   return ancestors.some(
     (node) =>
       node.type === 'CallExpression' &&
       node.callee.type === 'Identifier' &&
       node.callee.name === 'docsCopy'
   );
-}
+};
 
-function inspectContentNode(node, ancestors, file) {
+const inspectContentNode = (node, ancestors, file) => {
   if (!node || typeof node !== 'object') return;
 
   const localized = isInsideDocsCopy(ancestors);
@@ -173,7 +173,7 @@ function inspectContentNode(node, ancestors, file) {
       inspectContentNode(value, nextAncestors, file);
     }
   }
-}
+};
 
 for (const file of sourceFiles) {
   if (contentSourceExclusions.has(file)) continue;

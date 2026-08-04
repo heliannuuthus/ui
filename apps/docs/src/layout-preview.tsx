@@ -19,7 +19,7 @@ const navigationItems = [
   { label: docsCopy('报告'), icon: FileText },
 ];
 
-function PreviewHeader({ compact = false }: { compact?: boolean }) {
+const PreviewHeader = ({ compact = false }: { compact?: boolean }) => {
   return (
     <Layout.Header className="layout-demo-header">
       <span className="layout-demo-brand">H</span>
@@ -30,15 +30,15 @@ function PreviewHeader({ compact = false }: { compact?: boolean }) {
       <CircleUserRound />
     </Layout.Header>
   );
-}
+};
 
-function PreviewSidebar({
+const PreviewSidebar = ({
   label = docsCopy('工作区'),
   width = 112,
 }: {
   label?: string;
   width?: number;
-}) {
+}) => {
   return (
     <Layout.Sidebar
       aria-label={label}
@@ -64,9 +64,9 @@ function PreviewSidebar({
       </a>
     </Layout.Sidebar>
   );
-}
+};
 
-function PreviewContent({ detailed = false }: { detailed?: boolean }) {
+const PreviewContent = ({ detailed = false }: { detailed?: boolean }) => {
   return (
     <Layout.Content className="layout-demo-content">
       <div className="layout-demo-heading">
@@ -101,9 +101,9 @@ function PreviewContent({ detailed = false }: { detailed?: boolean }) {
       </div>
     </Layout.Content>
   );
-}
+};
 
-export function LayoutPageDemo() {
+export const LayoutPageDemo = () => {
   return (
     <div className="layout-demo-frame">
       <Layout className="layout-demo-shell">
@@ -116,9 +116,9 @@ export function LayoutPageDemo() {
       </Layout>
     </div>
   );
-}
+};
 
-export function LayoutLeftSidebarDemo() {
+export const LayoutLeftSidebarDemo = () => {
   return (
     <div className="layout-demo-frame">
       <Layout className="layout-demo-shell">
@@ -130,9 +130,9 @@ export function LayoutLeftSidebarDemo() {
       </Layout>
     </div>
   );
-}
+};
 
-export function LayoutRightSidebarDemo() {
+export const LayoutRightSidebarDemo = () => {
   return (
     <div className="layout-demo-frame">
       <Layout className="layout-demo-shell">
@@ -167,9 +167,9 @@ export function LayoutRightSidebarDemo() {
       </Layout>
     </div>
   );
-}
+};
 
-export function LayoutApplicationDemo() {
+export const LayoutApplicationDemo = () => {
   return (
     <div className="layout-demo-frame layout-demo-frame-wide">
       <Layout className="layout-demo-shell">
@@ -185,4 +185,4 @@ export function LayoutApplicationDemo() {
       </Layout>
     </div>
   );
-}
+};

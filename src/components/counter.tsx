@@ -48,7 +48,7 @@ const defaultSpringOptions: SpringOptions = {
   mass: 0.7,
 };
 
-function CounterNumber({ height, motionValue, number }: CounterNumberProps) {
+const CounterNumber = ({ height, motionValue, number }: CounterNumberProps) => {
   const y = useTransform(motionValue, (latest) => {
     const placeValue = latest % 10;
     const offset = (10 + number - placeValue) % 10;
@@ -68,9 +68,9 @@ function CounterNumber({ height, motionValue, number }: CounterNumberProps) {
       {number}
     </motion.span>
   );
-}
+};
 
-function RollingDigit({
+const RollingDigit = ({
   className,
   digitStyle,
   height,
@@ -84,7 +84,7 @@ function RollingDigit({
   place: number;
   springOptions: SpringOptions;
   value: number;
-}) {
+}) => {
   const roundedValue = getValueRoundedToPlace(value, place);
   const animatedValue = useSpring(roundedValue, springOptions);
   const reduceMotion = useReducedMotion();
@@ -113,9 +113,9 @@ function RollingDigit({
       ))}
     </span>
   );
-}
+};
 
-function Counter({
+const Counter = ({
   'aria-live': ariaLive = 'off',
   borderRadius = 8,
   className,
@@ -139,7 +139,7 @@ function Counter({
   value,
   valueText,
   ...props
-}: CounterProps) {
+}: CounterProps) => {
   const finiteValue = Number.isFinite(value);
   const absoluteValue = Math.abs(value);
   const resolvedPlaces = (places ?? getAutomaticPlaces(absoluteValue)).filter(
@@ -233,20 +233,20 @@ function Counter({
       </span>
     </span>
   );
-}
+};
 
-function normalizeNearInteger(value: number) {
+const normalizeNearInteger = (value: number) => {
   const nearest = Math.round(value);
   const tolerance = 1e-9 * Math.max(1, Math.abs(value));
 
   return Math.abs(value - nearest) < tolerance ? nearest : value;
-}
+};
 
-function getValueRoundedToPlace(value: number, place: number) {
+const getValueRoundedToPlace = (value: number, place: number) => {
   return Math.floor(normalizeNearInteger(value / place));
-}
+};
 
-function getAutomaticPlaces(value: number): CounterPlace[] {
+const getAutomaticPlaces = (value: number): CounterPlace[] => {
   if (!Number.isFinite(value)) return [];
 
   const normalized = normalizeNearInteger(value);
@@ -272,6 +272,6 @@ function getAutomaticPlaces(value: number): CounterPlace[] {
       (_, index) => 10 ** -(index + 1)
     ),
   ];
-}
+};
 
 export { Counter, type CounterPlace, type CounterProps };

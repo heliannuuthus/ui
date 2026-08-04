@@ -40,7 +40,7 @@ const menuItems = [
   { label: 'Breadcrumb' },
 ];
 
-export function BreadcrumbBasicDemo() {
+export const BreadcrumbBasicDemo = () => {
   return (
     <section className="breadcrumb-page-demo">
       <Breadcrumb items={pageItems} homeIcon />
@@ -64,9 +64,9 @@ export function BreadcrumbBasicDemo() {
       </div>
     </section>
   );
-}
+};
 
-export function BreadcrumbCollapsedDemo() {
+export const BreadcrumbCollapsedDemo = () => {
   return (
     <section className="breadcrumb-collapse-demo">
       <div className="breadcrumb-demo-caption">
@@ -88,9 +88,9 @@ export function BreadcrumbCollapsedDemo() {
       </p>
     </section>
   );
-}
+};
 
-export function BreadcrumbVariantsDemo() {
+export const BreadcrumbVariantsDemo = () => {
   return (
     <div className="breadcrumb-variants-demo">
       <section>
@@ -125,4 +125,4 @@ export function BreadcrumbVariantsDemo() {
       </section>
     </div>
   );
-}
+};

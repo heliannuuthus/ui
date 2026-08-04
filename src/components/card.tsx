@@ -22,7 +22,7 @@ type CardProps = Omit<React.ComponentProps<'div'>, 'title'> & {
   classNames?: CardClassNames;
 };
 
-function Card({
+const Card = ({
   className,
   variant = 'elevated',
   title,
@@ -32,7 +32,7 @@ function Card({
   classNames,
   children,
   ...props
-}: CardProps) {
+}: CardProps) => {
   const hasHeader = title != null || description != null || action != null;
 
   return (
@@ -107,6 +107,6 @@ function Card({
       )}
     </div>
   );
-}
+};
 
 export { Card, type CardClassNames, type CardProps, type CardVariant };

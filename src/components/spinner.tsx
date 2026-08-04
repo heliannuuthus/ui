@@ -13,7 +13,7 @@ const spinnerSizes: Record<SpinnerSize, string> = {
   lg: 'size-6',
 };
 
-function Spinner({ className, size = 'default', ...props }: SpinnerProps) {
+const Spinner = ({ className, size = 'default', ...props }: SpinnerProps) => {
   return (
     <Loader2Icon
       data-slot="spinner"
@@ -23,6 +23,6 @@ function Spinner({ className, size = 'default', ...props }: SpinnerProps) {
       {...props}
     />
   );
-}
+};
 
 export { Spinner, type SpinnerProps, type SpinnerSize };

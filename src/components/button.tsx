@@ -74,81 +74,81 @@ type ButtonProps = ButtonNativeProps | ButtonLinkProps;
 type ButtonRef = HTMLAnchorElement | HTMLButtonElement;
 type ButtonGroupProps = StackCompactProps;
 
-const ButtonRoot = forwardRef<ButtonRef, ButtonProps>(
-  function ButtonRoot(props, ref) {
-    if (typeof props.href === 'string') {
-      const {
-        'aria-disabled': ariaDisabled,
-        block = false,
-        className,
-        disabled = false,
-        href,
-        onClick,
-        size = 'default',
-        tabIndex,
-        variant = 'default',
-        ...linkProps
-      } = props;
-
-      return (
-        <a
-          {...linkProps}
-          ref={ref as ForwardedRef<HTMLAnchorElement>}
-          data-disabled={disabled ? '' : undefined}
-          data-slot="button"
-          aria-disabled={disabled ? true : ariaDisabled}
-          className={cn(
-            buttonVariants({ variant, size, className }),
-            block && 'w-full',
-            disabled &&
-              'cursor-not-allowed opacity-50 active:translate-y-0 active:scale-100'
-          )}
-          href={href}
-          tabIndex={disabled ? -1 : tabIndex}
-          onClick={(event) => {
-            if (disabled) {
-              event.preventDefault();
-              event.stopPropagation();
-              return;
-            }
-            onClick?.(event);
-          }}
-        />
-      );
-    }
-
+const ButtonRender = (props: ButtonProps, ref: ForwardedRef<ButtonRef>) => {
+  if (typeof props.href === 'string') {
     const {
+      'aria-disabled': ariaDisabled,
       block = false,
       className,
+      disabled = false,
+      href,
+      onClick,
       size = 'default',
-      type = 'button',
+      tabIndex,
       variant = 'default',
-      ...buttonProps
+      ...linkProps
     } = props;
 
     return (
-      <ButtonPrimitive
-        {...buttonProps}
-        ref={ref as ForwardedRef<HTMLButtonElement>}
+      <a
+        {...linkProps}
+        ref={ref as ForwardedRef<HTMLAnchorElement>}
+        data-disabled={disabled ? '' : undefined}
         data-slot="button"
+        aria-disabled={disabled ? true : ariaDisabled}
         className={cn(
           buttonVariants({ variant, size, className }),
-          block && 'w-full'
+          block && 'w-full',
+          disabled &&
+            'cursor-not-allowed opacity-50 active:translate-y-0 active:scale-100'
         )}
-        type={type}
+        href={href}
+        tabIndex={disabled ? -1 : tabIndex}
+        onClick={(event) => {
+          if (disabled) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+          }
+          onClick?.(event);
+        }}
       />
     );
   }
-);
+
+  const {
+    block = false,
+    className,
+    size = 'default',
+    type = 'button',
+    variant = 'default',
+    ...buttonProps
+  } = props;
+
+  return (
+    <ButtonPrimitive
+      {...buttonProps}
+      ref={ref as ForwardedRef<HTMLButtonElement>}
+      data-slot="button"
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        block && 'w-full'
+      )}
+      type={type}
+    />
+  );
+};
+
+const ButtonRoot = forwardRef<ButtonRef, ButtonProps>(ButtonRender);
 
 ButtonRoot.displayName = 'Button';
 
-function ButtonGroup({
+const ButtonGroup = ({
   className,
   orientation,
   children,
   ...props
-}: ButtonGroupProps) {
+}: ButtonGroupProps) => {
   return (
     <Stack.Compact
       role="group"
@@ -160,7 +160,7 @@ function ButtonGroup({
       {children}
     </Stack.Compact>
   );
-}
+};
 
 const Button = Object.assign(ButtonRoot, {
   Group: ButtonGroup,

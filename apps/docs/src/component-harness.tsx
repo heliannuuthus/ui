@@ -51,9 +51,9 @@ type CaseCombination = {
   values: ComponentHarnessValues;
 };
 
-function createCasesFromAxes(
+const createCasesFromAxes = (
   axes: ComponentHarnessCaseAxis[]
-): ComponentHarnessCase[] {
+): ComponentHarnessCase[] => {
   const combinations = axes.reduce<CaseCombination[]>(
     (currentCases, axis) =>
       currentCases.flatMap((currentCase) => {
@@ -88,9 +88,9 @@ function createCasesFromAxes(
     label: combination.labels.join(' · '),
     values: combination.values,
   }));
-}
+};
 
-export function ComponentHarness(props: ComponentHarnessProps) {
+export const ComponentHarness = (props: ComponentHarnessProps) => {
   const cases = props.cases ?? createCasesFromAxes(props.axes ?? []);
   const style = props.minCaseWidth
     ? ({
@@ -133,4 +133,4 @@ export function ComponentHarness(props: ComponentHarnessProps) {
       </div>
     </div>
   );
-}
+};

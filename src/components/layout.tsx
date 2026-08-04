@@ -10,7 +10,7 @@ type LayoutSidebarProps = React.ComponentProps<'aside'> & {
   width?: number | string;
 };
 
-function LayoutRoot({ className, ...props }: LayoutProps) {
+const LayoutRoot = ({ className, ...props }: LayoutProps) => {
   return (
     <div
       className={cn(
@@ -21,9 +21,9 @@ function LayoutRoot({ className, ...props }: LayoutProps) {
       {...props}
     />
   );
-}
+};
 
-function LayoutHeader({ className, ...props }: LayoutHeaderProps) {
+const LayoutHeader = ({ className, ...props }: LayoutHeaderProps) => {
   return (
     <header
       className={cn('min-w-0 shrink-0', className)}
@@ -31,9 +31,9 @@ function LayoutHeader({ className, ...props }: LayoutHeaderProps) {
       {...props}
     />
   );
-}
+};
 
-function LayoutContent({ className, ...props }: LayoutContentProps) {
+const LayoutContent = ({ className, ...props }: LayoutContentProps) => {
   return (
     <main
       className={cn('min-h-0 min-w-0 flex-auto', className)}
@@ -41,9 +41,9 @@ function LayoutContent({ className, ...props }: LayoutContentProps) {
       {...props}
     />
   );
-}
+};
 
-function LayoutFooter({ className, ...props }: LayoutFooterProps) {
+const LayoutFooter = ({ className, ...props }: LayoutFooterProps) => {
   return (
     <footer
       className={cn('min-w-0 shrink-0', className)}
@@ -51,14 +51,14 @@ function LayoutFooter({ className, ...props }: LayoutFooterProps) {
       {...props}
     />
   );
-}
+};
 
-function LayoutSidebar({
+const LayoutSidebar = ({
   className,
   style,
   width = 240,
   ...props
-}: LayoutSidebarProps) {
+}: LayoutSidebarProps) => {
   const resolvedWidth = typeof width === 'number' ? `${width}px` : width;
 
   return (
@@ -77,7 +77,7 @@ function LayoutSidebar({
       {...props}
     />
   );
-}
+};
 
 const Layout = Object.assign(LayoutRoot, {
   Header: LayoutHeader,

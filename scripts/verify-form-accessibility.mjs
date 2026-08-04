@@ -4,20 +4,20 @@ import { renderToStaticMarkup } from 'react-dom/server';
 
 import { Form, Input, Radio, Slider } from '../dist/index.js';
 
-function elementWithSlot(markup, tagName, slot) {
+const elementWithSlot = (markup, tagName, slot) => {
   const match = markup.match(
     new RegExp(`<${tagName}[^>]*data-slot="${slot}"[^>]*>`)
   );
 
   assert.ok(match, `Expected a <${tagName}> with data-slot="${slot}".`);
   return match[0];
-}
+};
 
-function attribute(element, name) {
+const attribute = (element, name) => {
   return element.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
-}
+};
 
-function AccessibilityFixture() {
+const AccessibilityFixture = () => {
   const form = Form.useForm({
     defaultValues: {
       email: '',
@@ -110,7 +110,7 @@ function AccessibilityFixture() {
         )
     )
   );
-}
+};
 
 const markup = renderToStaticMarkup(React.createElement(AccessibilityFixture));
 const form = elementWithSlot(markup, 'form', 'form');

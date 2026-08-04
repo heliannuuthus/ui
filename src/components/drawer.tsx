@@ -42,7 +42,7 @@ type DrawerContextProps = {
 
 const DrawerContext = React.createContext<DrawerContextProps | null>(null);
 
-function useDrawer() {
+const useDrawer = () => {
   const context = React.useContext(DrawerContext);
 
   if (!context) {
@@ -50,9 +50,9 @@ function useDrawer() {
   }
 
   return context;
-}
+};
 
-function DrawerRoot({
+const DrawerRoot = ({
   behavior = 'adaptive',
   container,
   modal,
@@ -66,7 +66,7 @@ function DrawerRoot({
   container?: DrawerPrimitive.Portal.Props['container'];
   showSwipeHandle?: boolean;
   side?: DrawerSide;
-}) {
+}) => {
   const resolvedSwipeDirection =
     sideToSwipeDirection[
       side ?? swipeDirectionToSide[swipeDirection ?? 'down']
@@ -112,13 +112,16 @@ function DrawerRoot({
       />
     </DrawerContext.Provider>
   );
-}
+};
 
-function DrawerTrigger({ ...props }: DrawerPrimitive.Trigger.Props) {
+const DrawerTrigger = ({ ...props }: DrawerPrimitive.Trigger.Props) => {
   return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
-}
+};
 
-function DrawerPortal({ container, ...props }: DrawerPrimitive.Portal.Props) {
+const DrawerPortal = ({
+  container,
+  ...props
+}: DrawerPrimitive.Portal.Props) => {
   const context = useDrawer();
 
   return (
@@ -128,16 +131,16 @@ function DrawerPortal({ container, ...props }: DrawerPrimitive.Portal.Props) {
       {...props}
     />
   );
-}
+};
 
-function DrawerClose({ ...props }: DrawerPrimitive.Close.Props) {
+const DrawerClose = ({ ...props }: DrawerPrimitive.Close.Props) => {
   return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />;
-}
+};
 
-function DrawerOverlay({
+const DrawerOverlay = ({
   className,
   ...props
-}: DrawerPrimitive.Backdrop.Props) {
+}: DrawerPrimitive.Backdrop.Props) => {
   const { scope } = useDrawer();
 
   return (
@@ -151,12 +154,12 @@ function DrawerOverlay({
       {...props}
     />
   );
-}
+};
 
-function DrawerSwipeHandle({
+const DrawerSwipeHandle = ({
   className,
   ...props
-}: React.ComponentProps<'div'>) {
+}: React.ComponentProps<'div'>) => {
   return (
     <div
       data-slot="drawer-swipe-handle"
@@ -168,16 +171,16 @@ function DrawerSwipeHandle({
       {...props}
     />
   );
-}
+};
 
-function DrawerContent({
+const DrawerContent = ({
   className,
   children,
   showCloseButton = true,
   ...props
 }: DrawerPrimitive.Popup.Props & {
   showCloseButton?: boolean;
-}) {
+}) => {
   const {
     behavior,
     hasSnapPoints,
@@ -265,9 +268,9 @@ function DrawerContent({
       </DrawerPrimitive.Viewport>
     </DrawerPortal>
   );
-}
+};
 
-function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
+const DrawerHeader = ({ className, ...props }: React.ComponentProps<'div'>) => {
   return (
     <div
       data-slot="drawer-header"
@@ -278,9 +281,9 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
       {...props}
     />
   );
-}
+};
 
-function DrawerFooter({ className, ...props }: React.ComponentProps<'div'>) {
+const DrawerFooter = ({ className, ...props }: React.ComponentProps<'div'>) => {
   return (
     <div
       data-slot="drawer-footer"
@@ -288,9 +291,9 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<'div'>) {
       {...props}
     />
   );
-}
+};
 
-function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
+const DrawerTitle = ({ className, ...props }: DrawerPrimitive.Title.Props) => {
   return (
     <DrawerPrimitive.Title
       data-slot="drawer-title"
@@ -301,12 +304,12 @@ function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
       {...props}
     />
   );
-}
+};
 
-function DrawerDescription({
+const DrawerDescription = ({
   className,
   ...props
-}: DrawerPrimitive.Description.Props) {
+}: DrawerPrimitive.Description.Props) => {
   return (
     <DrawerPrimitive.Description
       data-slot="drawer-description"
@@ -314,7 +317,7 @@ function DrawerDescription({
       {...props}
     />
   );
-}
+};
 
 type DrawerSnapPoint = number | string;
 
@@ -347,7 +350,7 @@ type DrawerProps = OpenStateProps & {
   trigger?: React.ReactElement;
 };
 
-function Drawer({
+const Drawer = ({
   children,
   closeText,
   closeVariant = 'outline',
@@ -359,7 +362,7 @@ function Drawer({
   title,
   trigger,
   ...props
-}: DrawerProps) {
+}: DrawerProps) => {
   return (
     <DrawerRoot {...props}>
       {trigger != null ? <DrawerTrigger render={trigger} /> : null}
@@ -390,7 +393,7 @@ function Drawer({
       </DrawerContent>
     </DrawerRoot>
   );
-}
+};
 
 export {
   Drawer,

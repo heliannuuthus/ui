@@ -2,13 +2,13 @@ import { cn } from '../lib/utils';
 
 type SkeletonEffect = 'shimmer' | 'pulse' | 'none';
 
-function Skeleton({
+const Skeleton = ({
   className,
   effect = 'shimmer',
   ...props
 }: React.ComponentProps<'div'> & {
   effect?: SkeletonEffect;
-}) {
+}) => {
   return (
     <div
       data-slot="skeleton"
@@ -22,6 +22,6 @@ function Skeleton({
       {...props}
     />
   );
-}
+};
 
 export { Skeleton, type SkeletonEffect };

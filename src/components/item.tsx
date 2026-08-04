@@ -90,7 +90,7 @@ type ItemGroupProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   separator?: boolean | React.ReactNode;
 };
 
-function Item({
+const Item = ({
   actions,
   className,
   classNames,
@@ -104,7 +104,7 @@ function Item({
   title,
   variant = 'default',
   ...props
-}: ItemProps) {
+}: ItemProps) => {
   const hasContent = title != null || description != null || content != null;
 
   const children = (
@@ -208,15 +208,15 @@ function Item({
       {children}
     </div>
   );
-}
+};
 
-function Group({
+const Group = ({
   className,
   items,
   renderItem,
   separator = false,
   ...props
-}: ItemGroupProps) {
+}: ItemGroupProps) => {
   return (
     <div
       className={cn(
@@ -248,7 +248,7 @@ function Group({
       })}
     </div>
   );
-}
+};
 
 const ItemCompound = Object.assign(Item, {
   Group,

@@ -65,7 +65,7 @@ type CarouselContextValue = {
 
 const CarouselContext = React.createContext<CarouselContextValue | null>(null);
 
-function getCarouselPosition({
+const getCarouselPosition = ({
   direction,
   index,
   loop,
@@ -77,7 +77,7 @@ function getCarouselPosition({
   loop: boolean;
   selectedIndex: number;
   slideCount: number;
-}): 'active' | 'after' | 'before' {
+}): 'active' | 'after' | 'before' => {
   if (index === selectedIndex) return 'active';
   if (!loop || slideCount <= 1) {
     return index < selectedIndex ? 'before' : 'after';
@@ -91,9 +91,9 @@ function getCarouselPosition({
   }
 
   return forwardDistance < backwardDistance ? 'after' : 'before';
-}
+};
 
-function useCarouselContext() {
+const useCarouselContext = () => {
   const context = React.useContext(CarouselContext);
 
   if (!context) {
@@ -101,13 +101,13 @@ function useCarouselContext() {
   }
 
   return context;
-}
+};
 
-function useCarousel() {
+const useCarousel = () => {
   return useCarouselContext().controls;
-}
+};
 
-const Carousel = React.forwardRef<CarouselRef, CarouselProps>(function Carousel(
+const CarouselRender = (
   {
     autoplay = false,
     contentClassName,
@@ -127,9 +127,9 @@ const Carousel = React.forwardRef<CarouselRef, CarouselProps>(function Carousel(
     onMouseEnter,
     onMouseLeave,
     ...props
-  },
-  ref
-) {
+  }: CarouselProps,
+  ref: React.ForwardedRef<CarouselRef>
+) => {
   const [carouselRef, api] = useEmblaCarousel({
     align: 'start',
     axis: 'x',
@@ -385,9 +385,14 @@ const Carousel = React.forwardRef<CarouselRef, CarouselProps>(function Carousel(
       </div>
     </CarouselContext.Provider>
   );
-});
+};
 
-function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
+const Carousel = React.forwardRef<CarouselRef, CarouselProps>(CarouselRender);
+
+const CarouselContent = ({
+  className,
+  ...props
+}: React.ComponentProps<'div'>) => {
   const { autoplayEnabled, carouselRef } = useCarouselContext();
 
   return (
@@ -400,13 +405,13 @@ function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
       <div className={cn('-ml-4 flex', className)} {...props} />
     </div>
   );
-}
+};
 
-function CarouselItem({
+const CarouselItem = ({
   children,
   className,
   ...props
-}: React.ComponentProps<'div'>) {
+}: React.ComponentProps<'div'>) => {
   return (
     <div
       role="group"
@@ -426,9 +431,9 @@ function CarouselItem({
       </div>
     </div>
   );
-}
+};
 
-function CarouselPrevious({
+const CarouselPrevious = ({
   className,
   variant = 'outline',
   size = 'icon-sm',
@@ -437,7 +442,7 @@ function CarouselPrevious({
   onClick,
   'aria-label': ariaLabel = 'Previous slide',
   ...props
-}: ButtonNativeProps) {
+}: ButtonNativeProps) => {
   const { scrollPrev, canScrollPrev } = useCarousel();
 
   return (
@@ -460,9 +465,9 @@ function CarouselPrevious({
       {children ?? <ChevronLeftIcon aria-hidden />}
     </Button>
   );
-}
+};
 
-function CarouselNext({
+const CarouselNext = ({
   className,
   variant = 'outline',
   size = 'icon-sm',
@@ -471,7 +476,7 @@ function CarouselNext({
   onClick,
   'aria-label': ariaLabel = 'Next slide',
   ...props
-}: ButtonNativeProps) {
+}: ButtonNativeProps) => {
   const { scrollNext, canScrollNext } = useCarousel();
 
   return (
@@ -494,14 +499,14 @@ function CarouselNext({
       {children ?? <ChevronRightIcon aria-hidden />}
     </Button>
   );
-}
+};
 
 type CarouselDotsProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   children?:
     React.ReactNode | ((props: CarouselDotRenderProps) => React.ReactNode);
 };
 
-function CarouselDots({ className, children, ...props }: CarouselDotsProps) {
+const CarouselDots = ({ className, children, ...props }: CarouselDotsProps) => {
   const { scrollSnaps, selectedIndex, scrollTo } = useCarousel();
   const customDot = typeof children === 'function';
 
@@ -544,14 +549,17 @@ function CarouselDots({ className, children, ...props }: CarouselDotsProps) {
       })}
     </div>
   );
-}
+};
 
 type CarouselPaginationProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   children?:
     React.ReactNode | ((controls: CarouselControls) => React.ReactNode);
 };
 
-function CarouselPagination({ children, ...props }: CarouselPaginationProps) {
+const CarouselPagination = ({
+  children,
+  ...props
+}: CarouselPaginationProps) => {
   const controls = useCarousel();
 
   if (children == null) return null;
@@ -561,7 +569,7 @@ function CarouselPagination({ children, ...props }: CarouselPaginationProps) {
       {typeof children === 'function' ? children(controls) : children}
     </div>
   );
-}
+};
 
 export {
   type CarouselAutoplay,

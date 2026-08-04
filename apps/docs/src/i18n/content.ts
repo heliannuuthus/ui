@@ -6,11 +6,11 @@ const sourcePhrases = Object.keys(englishContentTranslations).sort(
   (left, right) => right.length - left.length
 );
 
-function isEnglish() {
+const isEnglish = () => {
   return (i18n.resolvedLanguage ?? i18n.language).startsWith('en');
-}
+};
 
-export function docsCopy(source: string): string {
+export const docsCopy = (source: string): string => {
   if (!isEnglish() || !chinesePattern.test(source)) return source;
 
   const exact = englishContentTranslations[source];
@@ -25,4 +25,4 @@ export function docsCopy(source: string): string {
     }
   }
   return localized;
-}
+};

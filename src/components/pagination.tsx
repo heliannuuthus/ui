@@ -24,11 +24,11 @@ type PaginationProps = Omit<React.ComponentProps<'nav'>, 'onChange'> & {
   siblingCount?: number;
 };
 
-function getVisiblePages(
+const getVisiblePages = (
   current: number,
   pageCount: number,
   siblingCount: number
-) {
+) => {
   if (pageCount <= siblingCount * 2 + 5) {
     return Array.from({ length: pageCount }, (_, index) => index + 1);
   }
@@ -42,9 +42,9 @@ function getVisiblePages(
   if (end < pageCount - 1) pages.push('ellipsis-end');
   pages.push(pageCount);
   return pages;
-}
+};
 
-function Pagination({
+const Pagination = ({
   'aria-label': ariaLabel,
   ariaLabels,
   className,
@@ -56,7 +56,7 @@ function Pagination({
   previousText = '上一页',
   siblingCount = 1,
   ...props
-}: PaginationProps) {
+}: PaginationProps) => {
   const normalizedPageCount = Math.max(1, Math.trunc(pageCount));
   const normalizedCurrent = Math.min(
     normalizedPageCount,
@@ -175,6 +175,6 @@ function Pagination({
       </ul>
     </nav>
   );
-}
+};
 
 export { Pagination, type PaginationProps };

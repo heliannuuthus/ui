@@ -41,12 +41,12 @@ const justifications: Record<StackJustify, string> = {
   evenly: 'justify-evenly',
 };
 
-function resolveGap(gap: StackGap) {
+const resolveGap = (gap: StackGap) => {
   if (typeof gap === 'number') return [gap, gap] as const;
   return gap;
-}
+};
 
-function StackRoot({
+const StackRoot = ({
   align = 'stretch',
   block = false,
   children,
@@ -58,7 +58,7 @@ function StackRoot({
   style,
   wrap = false,
   ...props
-}: StackProps) {
+}: StackProps) => {
   const items = React.Children.toArray(children);
   const [columnGap, rowGap] = resolveGap(gap);
 
@@ -94,7 +94,7 @@ function StackRoot({
       ))}
     </div>
   );
-}
+};
 
 const compactOrientations: Record<StackOrientation, string> = {
   horizontal:
@@ -103,14 +103,14 @@ const compactOrientations: Record<StackOrientation, string> = {
     'flex-col *:data-slot:rounded-b-none [&>[data-slot]:first-child]:rounded-t-4xl! [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-4xl! [&>[data-slot]~[data-slot]]:-mt-px [&>[data-slot]~[data-slot]]:rounded-t-none',
 };
 
-function StackCompact({
+const StackCompact = ({
   block = false,
   children,
   className,
   orientation = 'horizontal',
   role = 'group',
   ...props
-}: StackCompactProps) {
+}: StackCompactProps) => {
   return (
     <StackRoot
       align="stretch"
@@ -130,7 +130,7 @@ function StackCompact({
       {children}
     </StackRoot>
   );
-}
+};
 
 const Stack = Object.assign(StackRoot, {
   Compact: StackCompact,

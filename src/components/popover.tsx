@@ -35,12 +35,12 @@ type PopoverTriggerContextValue = {
 const PopoverTriggerContext =
   React.createContext<PopoverTriggerContextValue | null>(null);
 
-function PopoverRoot({
+const PopoverRoot = ({
   trigger = 'click',
   delay = 300,
   closeDelay = 150,
   ...props
-}: PopoverRootProps) {
+}: PopoverRootProps) => {
   const context = { trigger, delay, closeDelay };
 
   if (trigger === 'hover') {
@@ -62,13 +62,13 @@ function PopoverRoot({
       />
     </PopoverTriggerContext.Provider>
   );
-}
+};
 
 type PopoverTriggerProps =
   | Omit<PopoverPrimitive.Trigger.Props, 'openOnHover' | 'delay' | 'closeDelay'>
   | Omit<PreviewCardPrimitive.Trigger.Props, 'delay' | 'closeDelay'>;
 
-function PopoverTrigger({ ...props }: PopoverTriggerProps) {
+const PopoverTrigger = ({ ...props }: PopoverTriggerProps) => {
   const context = React.useContext(PopoverTriggerContext);
 
   if (context?.trigger === 'hover') {
@@ -88,7 +88,7 @@ function PopoverTrigger({ ...props }: PopoverTriggerProps) {
       {...(props as PopoverPrimitive.Trigger.Props)}
     />
   );
-}
+};
 
 type PopoverContentProps = PopoverPrimitive.Popup.Props &
   Pick<
@@ -99,14 +99,14 @@ type PopoverContentProps = PopoverPrimitive.Popup.Props &
 const popoverContentClassName =
   'z-50 flex w-72 origin-(--transform-origin) flex-col gap-4 rounded-3xl bg-popover p-4 text-sm text-popover-foreground shadow-lg ring-1 ring-foreground/5 outline-hidden duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95';
 
-function PopoverContent({
+const PopoverContent = ({
   className,
   align = 'center',
   alignOffset = 0,
   side = 'bottom',
   sideOffset = 4,
   ...props
-}: PopoverContentProps) {
+}: PopoverContentProps) => {
   const context = React.useContext(PopoverTriggerContext);
 
   if (context?.trigger === 'hover') {
@@ -146,9 +146,12 @@ function PopoverContent({
       </PopoverPrimitive.Positioner>
     </PopoverPrimitive.Portal>
   );
-}
+};
 
-function PopoverHeader({ className, ...props }: React.ComponentProps<'div'>) {
+const PopoverHeader = ({
+  className,
+  ...props
+}: React.ComponentProps<'div'>) => {
   return (
     <div
       data-slot="popover-header"
@@ -156,13 +159,13 @@ function PopoverHeader({ className, ...props }: React.ComponentProps<'div'>) {
       {...props}
     />
   );
-}
+};
 
-function HoverPopoverTitle({
+const HoverPopoverTitle = ({
   className,
   render,
   ...props
-}: PopoverPrimitive.Title.Props) {
+}: PopoverPrimitive.Title.Props) => {
   return useRender({
     defaultTagName: 'h2',
     render,
@@ -172,9 +175,12 @@ function HoverPopoverTitle({
       className: cn('text-base font-medium', className),
     },
   });
-}
+};
 
-function PopoverTitle({ className, ...props }: PopoverPrimitive.Title.Props) {
+const PopoverTitle = ({
+  className,
+  ...props
+}: PopoverPrimitive.Title.Props) => {
   const context = React.useContext(PopoverTriggerContext);
 
   if (context?.trigger === 'hover') {
@@ -188,13 +194,13 @@ function PopoverTitle({ className, ...props }: PopoverPrimitive.Title.Props) {
       {...props}
     />
   );
-}
+};
 
-function HoverPopoverDescription({
+const HoverPopoverDescription = ({
   className,
   render,
   ...props
-}: PopoverPrimitive.Description.Props) {
+}: PopoverPrimitive.Description.Props) => {
   return useRender({
     defaultTagName: 'p',
     render,
@@ -204,12 +210,12 @@ function HoverPopoverDescription({
       className: cn('text-muted-foreground', className),
     },
   });
-}
+};
 
-function PopoverDescription({
+const PopoverDescription = ({
   className,
   ...props
-}: PopoverPrimitive.Description.Props) {
+}: PopoverPrimitive.Description.Props) => {
   const context = React.useContext(PopoverTriggerContext);
 
   if (context?.trigger === 'hover') {
@@ -223,7 +229,7 @@ function PopoverDescription({
       {...props}
     />
   );
-}
+};
 
 type PopoverProps = OpenStateProps & {
   align?: PopupAlign;
@@ -241,7 +247,7 @@ type PopoverProps = OpenStateProps & {
   triggerMode?: PopoverTriggerMode;
 };
 
-function Popover({
+const Popover = ({
   align,
   alignOffset,
   closeDelay,
@@ -255,7 +261,7 @@ function Popover({
   trigger,
   triggerMode = 'click',
   ...props
-}: PopoverProps) {
+}: PopoverProps) => {
   const rootProps = {
     closeDelay,
     delay,
@@ -285,7 +291,7 @@ function Popover({
       </PopoverContent>
     </PopoverRoot>
   );
-}
+};
 
 export { Popover };
 export type { PopoverProps, PopoverTriggerMode };

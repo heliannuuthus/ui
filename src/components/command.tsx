@@ -49,7 +49,7 @@ type CommandProps = Omit<
   vimBindings?: boolean;
 };
 
-function Command({
+const Command = ({
   className,
   dialog,
   emptyText = '没有找到命令',
@@ -58,7 +58,7 @@ function Command({
   onChange,
   placeholder = '搜索命令…',
   ...props
-}: CommandProps) {
+}: CommandProps) => {
   const {
     className: inputClassName,
     onChange: onInputChange,
@@ -146,7 +146,7 @@ function Command({
   );
 
   return dialog ? <Dialog {...dialog}>{command}</Dialog> : command;
-}
+};
 
 export {
   Command,

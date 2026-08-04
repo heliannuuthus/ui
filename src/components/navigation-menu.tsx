@@ -41,13 +41,13 @@ type NavigationMenuProps = Omit<
   value?: string | null;
 };
 
-function NavigationMenu({
+const NavigationMenu = ({
   align = 'start',
   className,
   items,
   onChange,
   ...props
-}: NavigationMenuProps) {
+}: NavigationMenuProps) => {
   return (
     <NavigationMenuPrimitive.Root
       data-slot="navigation-menu"
@@ -87,12 +87,12 @@ function NavigationMenu({
       <NavigationMenuPositioner align={align} />
     </NavigationMenuPrimitive.Root>
   );
-}
+};
 
-function NavigationMenuList({
+const NavigationMenuList = ({
   className,
   ...props
-}: React.ComponentPropsWithRef<typeof NavigationMenuPrimitive.List>) {
+}: React.ComponentPropsWithRef<typeof NavigationMenuPrimitive.List>) => {
   return (
     <NavigationMenuPrimitive.List
       data-slot="navigation-menu-list"
@@ -103,12 +103,12 @@ function NavigationMenuList({
       {...props}
     />
   );
-}
+};
 
-function NavigationMenuItem({
+const NavigationMenuItem = ({
   className,
   ...props
-}: React.ComponentPropsWithRef<typeof NavigationMenuPrimitive.Item>) {
+}: React.ComponentPropsWithRef<typeof NavigationMenuPrimitive.Item>) => {
   return (
     <NavigationMenuPrimitive.Item
       data-slot="navigation-menu-item"
@@ -116,17 +116,17 @@ function NavigationMenuItem({
       {...props}
     />
   );
-}
+};
 
 const navigationMenuTriggerStyle = cva(
   'group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center rounded-3xl px-4.5 py-2.5 text-sm font-medium transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-popup-open:bg-accent data-popup-open:text-primary data-popup-open:hover:bg-accent data-open:bg-accent data-open:text-primary data-open:hover:bg-accent data-open:focus:bg-accent'
 );
 
-function NavigationMenuTrigger({
+const NavigationMenuTrigger = ({
   className,
   children,
   ...props
-}: NavigationMenuPrimitive.Trigger.Props) {
+}: NavigationMenuPrimitive.Trigger.Props) => {
   return (
     <NavigationMenuPrimitive.Trigger
       data-slot="navigation-menu-trigger"
@@ -140,12 +140,12 @@ function NavigationMenuTrigger({
       />
     </NavigationMenuPrimitive.Trigger>
   );
-}
+};
 
-function NavigationMenuContent({
+const NavigationMenuContent = ({
   className,
   ...props
-}: NavigationMenuPrimitive.Content.Props) {
+}: NavigationMenuPrimitive.Content.Props) => {
   return (
     <NavigationMenuPrimitive.Content
       data-slot="navigation-menu-content"
@@ -156,16 +156,16 @@ function NavigationMenuContent({
       {...props}
     />
   );
-}
+};
 
-function NavigationMenuPositioner({
+const NavigationMenuPositioner = ({
   className,
   side = 'bottom',
   sideOffset = 8,
   align = 'start',
   alignOffset = 0,
   ...props
-}: NavigationMenuPrimitive.Positioner.Props) {
+}: NavigationMenuPrimitive.Positioner.Props) => {
   return (
     <NavigationMenuPrimitive.Portal>
       <NavigationMenuPrimitive.Positioner
@@ -185,9 +185,12 @@ function NavigationMenuPositioner({
       </NavigationMenuPrimitive.Positioner>
     </NavigationMenuPrimitive.Portal>
   );
-}
+};
 
-function NavigationMenuLink({ className, ...props }: NavigationMenuLinkProps) {
+const NavigationMenuLink = ({
+  className,
+  ...props
+}: NavigationMenuLinkProps) => {
   return (
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
@@ -198,7 +201,7 @@ function NavigationMenuLink({ className, ...props }: NavigationMenuLinkProps) {
       {...props}
     />
   );
-}
+};
 
 export {
   NavigationMenu,

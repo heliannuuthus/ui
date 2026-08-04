@@ -62,7 +62,7 @@ const alignmentCases: Array<{
   },
 ];
 
-export function StackGapDemo() {
+export const StackGapDemo = () => {
   const [gap, setGap] = useState(6);
 
   return (
@@ -112,9 +112,9 @@ export function StackGapDemo() {
       </Stack>
     </div>
   );
-}
+};
 
-export function StackAlignmentDemo() {
+export const StackAlignmentDemo = () => {
   return (
     <div className="stack-alignment-grid">
       {alignmentCases.map((item) => (
@@ -144,9 +144,9 @@ export function StackAlignmentDemo() {
       ))}
     </div>
   );
-}
+};
 
-function CompactCase({
+const CompactCase = ({
   children,
   description,
   title,
@@ -154,7 +154,7 @@ function CompactCase({
   children: ReactNode;
   description: string;
   title: string;
-}) {
+}) => {
   return (
     <Stack block gap={8}>
       <Stack block gap={2}>
@@ -164,9 +164,9 @@ function CompactCase({
       {children}
     </Stack>
   );
-}
+};
 
-function StringSelect({
+const StringSelect = ({
   ariaLabel,
   className,
   defaultValue,
@@ -176,7 +176,7 @@ function StringSelect({
   className: string;
   defaultValue: string;
   items: string[];
-}) {
+}) => {
   return (
     <Select
       defaultValue={defaultValue}
@@ -185,17 +185,17 @@ function StringSelect({
       triggerProps={{ 'aria-label': ariaLabel }}
     />
   );
-}
+};
 
-export function StackCompactVariantsDemo() {
+export const StackCompactVariantsDemo = () => {
   const [quality, setQuality] = useState(68);
 
-  function updateQuality(value: string) {
+  const updateQuality = (value: string) => {
     const nextValue = Number(value);
 
     if (Number.isNaN(nextValue)) return;
     setQuality(Math.min(100, Math.max(0, nextValue)));
-  }
+  };
 
   return (
     <Stack block className="max-w-xl" gap={16}>
@@ -296,4 +296,4 @@ export function StackCompactVariantsDemo() {
       </CompactCase>
     </Stack>
   );
-}
+};

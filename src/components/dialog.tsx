@@ -25,7 +25,7 @@ type DialogProps = OpenStateProps & {
   trigger?: React.ReactElement;
 };
 
-function Dialog({
+const Dialog = ({
   cancelText,
   children,
   confirmText,
@@ -38,7 +38,7 @@ function Dialog({
   title,
   trigger,
   ...props
-}: DialogProps) {
+}: DialogProps) => {
   const hasHeader = title != null || description != null;
   const hasFooter = footer != null || cancelText != null || confirmText != null;
 
@@ -118,6 +118,6 @@ function Dialog({
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>
   );
-}
+};
 
 export { Dialog, type DialogProps };

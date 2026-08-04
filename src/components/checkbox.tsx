@@ -76,7 +76,7 @@ const CheckboxGroupNameContext = React.createContext<string | undefined>(
   undefined
 );
 
-function CheckboxRoot({
+const CheckboxRoot = ({
   checked,
   children,
   className,
@@ -93,7 +93,7 @@ function CheckboxRoot({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   ...props
-}: CheckboxProps) {
+}: CheckboxProps) => {
   const formControl = useFormControl<boolean>();
   const groupName = React.useContext(CheckboxGroupNameContext);
   const [particleBurst, setParticleBurst] = React.useState(0);
@@ -181,9 +181,9 @@ function CheckboxRoot({
       )}
     </CheckboxPrimitive.Root>
   );
-}
+};
 
-function CheckboxGroup({
+const CheckboxGroup = ({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   'aria-labelledby': ariaLabelledBy,
@@ -202,7 +202,7 @@ function CheckboxGroup({
   value,
   variant = 'default',
   ...props
-}: CheckboxGroupProps) {
+}: CheckboxGroupProps) => {
   const formControl = useFormControl<string[]>();
 
   return (
@@ -256,7 +256,7 @@ function CheckboxGroup({
       </CheckboxGroupNameContext.Provider>
     </CheckboxGroupPrimitive>
   );
-}
+};
 
 const Checkbox = Object.assign(CheckboxRoot, {
   Group: CheckboxGroup,

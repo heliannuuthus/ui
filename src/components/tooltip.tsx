@@ -25,7 +25,7 @@ type TooltipProps = OpenStateProps & {
   trigger: React.ReactElement;
 };
 
-function Tooltip({
+const Tooltip = ({
   align = 'center',
   alignOffset = 0,
   content,
@@ -36,7 +36,7 @@ function Tooltip({
   sideOffset = 4,
   trigger,
   ...props
-}: TooltipProps) {
+}: TooltipProps) => {
   return (
     <TooltipPrimitive.Provider delay={delay}>
       <TooltipPrimitive.Root data-slot="tooltip" {...props}>
@@ -69,6 +69,6 @@ function Tooltip({
       </TooltipPrimitive.Root>
     </TooltipPrimitive.Provider>
   );
-}
+};
 
 export { Tooltip, type TooltipProps };

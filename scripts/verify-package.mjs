@@ -71,7 +71,7 @@ if (
   throw new Error('Published CSS must be marked as a package side effect.');
 }
 
-async function bundleSource(source, exposedName = 'Button') {
+const bundleSource = async (source, exposedName = 'Button') => {
   const result = await build({
     absWorkingDir: packageRoot,
     bundle: true,
@@ -97,7 +97,7 @@ async function bundleSource(source, exposedName = 'Button') {
       output.contents.byteLength,
     ])
   );
-}
+};
 
 const indexSource = await readFile(
   resolve(packageRoot, 'src/index.ts'),

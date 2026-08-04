@@ -23,20 +23,20 @@ type MasonryProps = Omit<React.ComponentProps<'div'>, 'children' | 'ref'> & {
   ref?: React.Ref<HTMLDivElement>;
 };
 
-function toCssLength(value: MasonryLength) {
+const toCssLength = (value: MasonryLength) => {
   return typeof value === 'number' ? `${value}px` : value;
-}
+};
 
-function resolveGap(gap: MasonryGap) {
+const resolveGap = (gap: MasonryGap) => {
   const [columnGap, rowGap] = Array.isArray(gap) ? gap : [gap, gap];
   return [toCssLength(columnGap), toCssLength(rowGap)] as const;
-}
+};
 
-function createColumnTemplate(
+const createColumnTemplate = (
   columns: number,
   minColumnWidth: MasonryLength,
   columnGap: string
-) {
+) => {
   const gapCount = Math.max(0, columns - 1);
   const totalGap =
     gapCount === 0
@@ -45,9 +45,9 @@ function createColumnTemplate(
   const columnFloor = `max(${toCssLength(minColumnWidth)}, calc((100% - (${totalGap})) / ${columns}))`;
 
   return `repeat(auto-fit, minmax(min(100%, ${columnFloor}), 1fr))`;
-}
+};
 
-function assignRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
+const assignRef = <T,>(ref: React.Ref<T> | undefined, value: T | null) => {
   if (typeof ref === 'function') {
     ref(value);
     return;
@@ -56,9 +56,9 @@ function assignRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
   if (ref != null) {
     ref.current = value;
   }
-}
+};
 
-function createLengthProbe(container: HTMLElement, value: string) {
+const createLengthProbe = (container: HTMLElement, value: string) => {
   const probe = document.createElement('span');
   probe.dataset.masonryProbe = '';
   probe.style.position = 'absolute';
@@ -68,13 +68,13 @@ function createLengthProbe(container: HTMLElement, value: string) {
   probe.style.blockSize = '0';
   container.appendChild(probe);
   return probe;
-}
+};
 
-function useMasonryLayout(
+const useMasonryLayout = (
   containerRef: React.RefObject<HTMLElement | null>,
   columns: number,
   minColumnWidth: string
-) {
+) => {
   React.useLayoutEffect(() => {
     const container = containerRef.current;
     if (container == null || typeof ResizeObserver === 'undefined') return;
@@ -210,9 +210,9 @@ function useMasonryLayout(
       lengthProbe.remove();
     };
   }, [columns, containerRef, minColumnWidth]);
-}
+};
 
-function Masonry({
+const Masonry = ({
   className,
   columns = 3,
   gap = 16,
@@ -221,7 +221,7 @@ function Masonry({
   ref,
   style,
   ...props
-}: MasonryProps) {
+}: MasonryProps) => {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const columnCount = Number.isFinite(columns)
     ? Math.max(1, Math.floor(columns))
@@ -282,7 +282,7 @@ function Masonry({
       )}
     </div>
   );
-}
+};
 
 export { Masonry };
 export type {

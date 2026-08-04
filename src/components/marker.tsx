@@ -40,14 +40,14 @@ type MarkerLinkProps = Omit<React.ComponentProps<'a'>, 'children' | 'href'> &
 
 type MarkerProps = MarkerDivProps | MarkerLinkProps;
 
-function Marker({
+const Marker = ({
   className,
   classNames,
   content,
   icon,
   variant = 'default',
   ...props
-}: MarkerProps) {
+}: MarkerProps) => {
   const children = (
     <>
       {icon != null ? (
@@ -92,7 +92,7 @@ function Marker({
       {children}
     </div>
   );
-}
+};
 
 export {
   Marker,

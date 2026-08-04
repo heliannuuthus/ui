@@ -282,7 +282,7 @@ export const componentSearchMetadata = {
   ]
 >;
 
-function collectDocumentationText(documentation: ComponentDocumentation) {
+const collectDocumentationText = (documentation: ComponentDocumentation) => {
   return [
     documentation.summary,
     ...documentation.whenToUse,
@@ -307,13 +307,13 @@ function collectDocumentationText(documentation: ComponentDocumentation) {
     ...documentation.accessibility,
     ...documentation.pitfalls,
   ].filter(Boolean);
-}
+};
 
-export function localizedComponentMetadata(
+export const localizedComponentMetadata = (
   slug: string,
   locale: DocsLocale,
   documentation: ComponentDocumentation | undefined
-) {
+) => {
   const entry =
     componentSearchMetadata[slug as keyof typeof componentSearchMetadata];
   const summary =
@@ -331,4 +331,4 @@ export function localizedComponentMetadata(
     searchText,
     summary,
   };
-}
+};

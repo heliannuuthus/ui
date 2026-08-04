@@ -60,16 +60,16 @@ type RadioGroupProps<Value = string> = Omit<
   value?: Value;
 };
 
-function toCssLength(value: RadioLength) {
+const toCssLength = (value: RadioLength) => {
   return typeof value === 'number' ? `${value}px` : value;
-}
+};
 
-function resolveGap(gap: RadioGap) {
+const resolveGap = (gap: RadioGap) => {
   const [columnGap, rowGap] = Array.isArray(gap) ? gap : [gap, gap];
   return [toCssLength(columnGap), toCssLength(rowGap)] as const;
-}
+};
 
-function RadioRoot<Value = string>({
+const RadioRoot = <Value = string,>({
   children,
   className,
   classNames,
@@ -77,7 +77,7 @@ function RadioRoot<Value = string>({
   onClick,
   readOnly,
   ...props
-}: RadioProps<Value>) {
+}: RadioProps<Value>) => {
   const [particleBurst, setParticleBurst] = React.useState(0);
 
   const handleClick: NonNullable<
@@ -147,9 +147,9 @@ function RadioRoot<Value = string>({
       )}
     </RadioPrimitive.Root>
   );
-}
+};
 
-function RadioGroup<Value = string>({
+const RadioGroup = <Value = string,>({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   'aria-labelledby': ariaLabelledBy,
@@ -169,7 +169,7 @@ function RadioGroup<Value = string>({
   required,
   value,
   ...props
-}: RadioGroupProps<Value>) {
+}: RadioGroupProps<Value>) => {
   const formControl = useFormControl<Value>();
   const controlRef = useMergedRefs(
     inputRef,
@@ -242,7 +242,7 @@ function RadioGroup<Value = string>({
       ))}
     </RadioGroupPrimitive>
   );
-}
+};
 
 const Radio = Object.assign(RadioRoot, {
   Group: RadioGroup,

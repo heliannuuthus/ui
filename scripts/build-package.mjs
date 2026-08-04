@@ -11,7 +11,7 @@ const distributionDirectory = resolve(packageRoot, 'dist');
 const globalStylesSource = resolve(packageRoot, 'src/styles/globals.css');
 const tailwindBinary = resolve(packageRoot, 'node_modules/.bin/tailwindcss');
 
-async function buildStyles() {
+const buildStyles = async () => {
   await execute(tailwindBinary, [
     '-i',
     globalStylesSource,
@@ -19,9 +19,9 @@ async function buildStyles() {
     resolve(distributionDirectory, 'global.css'),
     '--minify',
   ]);
-}
+};
 
-async function rewriteRootEntry() {
+const rewriteRootEntry = async () => {
   const source = await readFile(resolve(packageRoot, 'src/index.ts'), 'utf8');
   const rewrittenSource = source
     .replaceAll(/from '\.\/components\/([^']+)'/g, "from './$1.js'")
@@ -35,7 +35,7 @@ async function rewriteRootEntry() {
   });
 
   await writeFile(resolve(distributionDirectory, 'index.js'), result.code);
-}
+};
 
 await Promise.all([buildStyles(), rewriteRootEntry()]);
 

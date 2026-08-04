@@ -63,7 +63,7 @@ const workspaceGroups: { label: string; items: WorkspaceItem[] }[] = [
   },
 ];
 
-export function DatePickerInlineDemo() {
+export const DatePickerInlineDemo = () => {
   const locale = useDocsLocale();
   const [date, setDate] = useState<Date | undefined>(new Date(2026, 6, 20));
 
@@ -93,9 +93,9 @@ export function DatePickerInlineDemo() {
       </aside>
     </div>
   );
-}
+};
 
-export function CheckboxPermissionsDemo() {
+export const CheckboxPermissionsDemo = () => {
   const [selected, setSelected] = useState(['read', 'comment']);
   const permissions = [
     ['read', docsCopy('查看项目'), docsCopy('浏览页面、文件与活动记录')],
@@ -136,9 +136,9 @@ export function CheckboxPermissionsDemo() {
       />
     </div>
   );
-}
+};
 
-export function CheckboxTasksDemo() {
+export const CheckboxTasksDemo = () => {
   const tasks = [
     ['tokens', docsCopy('确认设计令牌'), docsCopy('核对颜色、圆角与间距变量')],
     ['docs', docsCopy('更新组件文档'), docsCopy('补充示例与 API 说明')],
@@ -180,9 +180,9 @@ export function CheckboxTasksDemo() {
       />
     </div>
   );
-}
+};
 
-export function SelectMemberSearchDemo() {
+export const SelectMemberSearchDemo = () => {
   const [value, setValue] = useState<string | null>(members[0]);
 
   return (
@@ -206,9 +206,9 @@ export function SelectMemberSearchDemo() {
       </p>
     </div>
   );
-}
+};
 
-export function DatePickerReleaseDemo() {
+export const DatePickerReleaseDemo = () => {
   const locale = useDocsLocale();
   const [date, setDate] = useState<Date | undefined>(new Date(2026, 6, 24));
 
@@ -229,9 +229,9 @@ export function DatePickerReleaseDemo() {
       </Button>
     </div>
   );
-}
+};
 
-export function FieldProfileDemo() {
+export const FieldProfileDemo = () => {
   return (
     <div className="data-form-shell">
       <Field.Set>
@@ -268,7 +268,7 @@ export function FieldProfileDemo() {
       </Field.Set>
     </div>
   );
-}
+};
 
 type FormShowcaseValues = {
   confirmation: boolean;
@@ -286,7 +286,7 @@ type FormShowcaseValues = {
   workspace: string | null;
 };
 
-export function FormIntegrationDemo() {
+export const FormIntegrationDemo = () => {
   const locale = useDocsLocale();
   const [submitted, setSubmitted] = useState<FormShowcaseValues | null>(null);
   const form = Form.useForm<FormShowcaseValues>({
@@ -503,7 +503,7 @@ export function FormIntegrationDemo() {
       </Form>
     </div>
   );
-}
+};
 
 type Priority = '' | 'routine' | 'important' | 'urgent';
 
@@ -561,7 +561,7 @@ type CustomControlValues = {
   priority: Priority;
 };
 
-export function FormCustomControlDemo() {
+export const FormCustomControlDemo = () => {
   const [submitted, setSubmitted] = useState<Priority>('');
   const form = Form.useForm<CustomControlValues>({
     defaultValues: { priority: '' },
@@ -609,9 +609,9 @@ export function FormCustomControlDemo() {
       </Form>
     </div>
   );
-}
+};
 
-export function InputStatesDemo() {
+export const InputStatesDemo = () => {
   return (
     <div className="data-input-grid">
       <div className="minimal-field">
@@ -635,9 +635,9 @@ export function InputStatesDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function InputAffixDemo() {
+export const InputAffixDemo = () => {
   const [copied, setCopied] = useState(false);
   const [note, setNote] = useState(
     docsCopy('本次发布包含导航与数据录入组件。')
@@ -680,13 +680,13 @@ export function InputAffixDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function InputOtpVerificationDemo({
+export const InputOtpVerificationDemo = ({
   variant = 'connected',
 }: {
   variant?: 'connected' | 'separated';
-}) {
+}) => {
   const [value, setValue] = useState('');
 
   return (
@@ -730,9 +730,9 @@ export function InputOtpVerificationDemo({
       </span>
     </div>
   );
-}
+};
 
-export function FieldLabelPairingDemo() {
+export const FieldLabelPairingDemo = () => {
   return (
     <div className="data-input-grid">
       <div className="minimal-field">
@@ -755,9 +755,9 @@ export function FieldLabelPairingDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function RadioDeliveryDemo() {
+export const RadioDeliveryDemo = () => {
   const [delivery, setDelivery] = useState('email');
 
   return (
@@ -773,13 +773,13 @@ export function RadioDeliveryDemo() {
       value={delivery}
     />
   );
-}
+};
 
-export function RadioPlanDemo({
+export const RadioPlanDemo = ({
   orientation = 'vertical',
 }: {
   orientation?: 'horizontal' | 'vertical';
-}) {
+}) => {
   const [plan, setPlan] = useState('team');
   const plans = [
     ['free', docsCopy('个人版'), docsCopy('1 位成员'), docsCopy('免费')],
@@ -819,9 +819,9 @@ export function RadioPlanDemo({
       }))}
     />
   );
-}
+};
 
-export function SelectWorkspaceDemo() {
+export const SelectWorkspaceDemo = () => {
   const [value, setValue] = useState<WorkspaceItem | null>(
     workspaceGroups[0]?.items[0] ?? null
   );
@@ -859,9 +859,9 @@ export function SelectWorkspaceDemo() {
       </p>
     </div>
   );
-}
+};
 
-export function SliderBudgetDemo() {
+export const SliderBudgetDemo = () => {
   const [range, setRange] = useState([20, 72]);
 
   return (
@@ -890,9 +890,9 @@ export function SliderBudgetDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function SliderElasticDemo() {
+export const SliderElasticDemo = () => {
   const [volume, setVolume] = useState(64);
 
   return (
@@ -921,16 +921,16 @@ export function SliderElasticDemo() {
       />
     </div>
   );
-}
+};
 
-export function SliderVerticalDemo() {
+export const SliderVerticalDemo = () => {
   const [levels, setLevels] = useState([76, 52, 34]);
 
-  function updateLevel(index: number, value: number) {
+  const updateLevel = (index: number, value: number) => {
     setLevels((current) =>
       current.map((level, levelIndex) => (levelIndex === index ? value : level))
     );
-  }
+  };
 
   return (
     <div className="data-slider-card data-vertical-slider-card">
@@ -960,9 +960,9 @@ export function SliderVerticalDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function SwitchSettingsDemo() {
+export const SwitchSettingsDemo = () => {
   const [settings, setSettings] = useState({ digest: true, product: false });
 
   return (
@@ -1004,9 +1004,9 @@ export function SwitchSettingsDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function ToggleControlledDemo() {
+export const ToggleControlledDemo = () => {
   const [value, setValue] = useState(true);
 
   return (
@@ -1031,9 +1031,9 @@ export function ToggleControlledDemo() {
       </div>
     </div>
   );
-}
+};
 
-export function TextAreaCounterDemo() {
+export const TextAreaCounterDemo = () => {
   const [value, setValue] = useState(
     docsCopy('补充这次发布的背景、影响范围和回滚方式。')
   );
@@ -1066,4 +1066,4 @@ export function TextAreaCounterDemo() {
       </div>
     </div>
   );
-}
+};

@@ -24,7 +24,7 @@ type CollapsibleProps = Omit<
       VariantProps<typeof buttonVariants>;
   };
 
-function Collapsible({
+const Collapsible = ({
   className,
   content,
   contentClassName,
@@ -36,7 +36,7 @@ function Collapsible({
   triggerIcon,
   triggerProps,
   ...props
-}: CollapsibleProps) {
+}: CollapsibleProps) => {
   const {
     size = 'default',
     variant = 'outline',
@@ -109,6 +109,6 @@ function Collapsible({
       ) : null}
     </CollapsiblePrimitive.Root>
   );
-}
+};
 
 export { Collapsible, type CollapsibleProps };

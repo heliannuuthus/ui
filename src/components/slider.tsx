@@ -58,7 +58,7 @@ const elasticTransition = {
   mass: 0.7,
 } as const;
 
-function Slider<Value extends number | readonly number[]>({
+const Slider = <Value extends number | readonly number[]>({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   'aria-labelledby': ariaLabelledBy,
@@ -81,7 +81,7 @@ function Slider<Value extends number | readonly number[]>({
   startLabel,
   value,
   ...props
-}: SliderProps<Value>) {
+}: SliderProps<Value>) => {
   const formControl = useFormControl<Value>();
   const formInputRef = useMergedRefs(
     inputRef,
@@ -165,26 +165,26 @@ function Slider<Value extends number | readonly number[]>({
     }
   }, [elasticEnabled, resetElastic, shellOpacity, shellScale]);
 
-  function handlePointerEnter() {
+  const handlePointerEnter = () => {
     if (!elasticEnabled) return;
     setInteractionActive(true);
-  }
+  };
 
-  function handlePointerLeave() {
+  const handlePointerLeave = () => {
     if (!elasticEnabled || pointerActiveRef.current) return;
 
     const focusWithin = shellRef.current?.matches(':focus-within') ?? false;
     setInteractionActive(focusWithin);
-  }
+  };
 
-  function handlePointerDown() {
+  const handlePointerDown = () => {
     if (!elasticEnabled) return;
 
     pointerActiveRef.current = true;
     setInteractionActive(true);
-  }
+  };
 
-  function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
     const control = controlRef.current;
 
     if (!elasticEnabled || event.buttons === 0 || !control) return;
@@ -212,9 +212,9 @@ function Slider<Value extends number | readonly number[]>({
     endIconOffset.jump(nextEdge === 'end' ? iconOffset / shellRatio : 0);
     startIconScale.jump(nextEdge === 'start' ? iconScale : 1);
     endIconScale.jump(nextEdge === 'end' ? iconScale : 1);
-  }
+  };
 
-  function handlePointerEnd() {
+  const handlePointerEnd = () => {
     if (!elasticEnabled) return;
 
     pointerActiveRef.current = false;
@@ -223,14 +223,14 @@ function Slider<Value extends number | readonly number[]>({
       (shellRef.current?.matches(':focus-within') ?? false);
     setInteractionActive(interactionActive);
     resetElastic();
-  }
+  };
 
-  function handleFocus() {
+  const handleFocus = () => {
     if (!elasticEnabled) return;
     setInteractionActive(true);
-  }
+  };
 
-  function handleBlur(event: React.FocusEvent<HTMLDivElement>) {
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     onBlur?.(event);
     formControl?.onBlur();
 
@@ -244,7 +244,7 @@ function Slider<Value extends number | readonly number[]>({
 
     const hovered = event.currentTarget.matches(':hover');
     setInteractionActive(hovered);
-  }
+  };
 
   return (
     <SliderPrimitive.Root
@@ -384,15 +384,15 @@ function Slider<Value extends number | readonly number[]>({
       </motion.div>
     </SliderPrimitive.Root>
   );
-}
+};
 
-function decay(value: number, max: number) {
+const decay = (value: number, max: number) => {
   if (max === 0) return 0;
 
   const entry = value / max;
   const sigmoid = 2 * (1 / (1 + Math.exp(-entry)) - 0.5);
 
   return sigmoid * max;
-}
+};
 
 export { Slider, type SliderEffect, type SliderProps };

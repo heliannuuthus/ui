@@ -7,7 +7,7 @@ const options = [
   { label: 'Member', value: 'member' },
 ] as const;
 
-export function ChangeCallbackTypeTest() {
+export const ChangeCallbackTypeTest = () => {
   return (
     <>
       <Select options={options} onChange={(value) => value?.toUpperCase()} />
@@ -26,4 +26,4 @@ export function ChangeCallbackTypeTest() {
       <Slider onValueChange={() => undefined} />
     </>
   );
-}
+};

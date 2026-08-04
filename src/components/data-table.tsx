@@ -145,9 +145,9 @@ export interface DataTableActionsProps extends React.ComponentProps<'div'> {
   align?: TableCellAlign;
 }
 
-function resolveColumns<TData, TValue>(
+const resolveColumns = <TData, TValue>(
   columns: ColumnDef<TData, TValue>[]
-): TanStackColumnDef<TData, TValue>[] {
+): TanStackColumnDef<TData, TValue>[] => {
   return columns.map((column) => {
     const {
       columns: childColumns,
@@ -172,14 +172,14 @@ function resolveColumns<TData, TValue>(
         : undefined),
     } as TanStackColumnDef<TData, TValue>;
   });
-}
+};
 
-function DataTableColumnHeader<TData, TValue>({
+const DataTableColumnHeader = <TData, TValue>({
   column,
   children,
   className,
   ...props
-}: DataTableColumnHeaderProps<TData, TValue>) {
+}: DataTableColumnHeaderProps<TData, TValue>) => {
   return (
     <Button
       type="button"
@@ -195,13 +195,13 @@ function DataTableColumnHeader<TData, TValue>({
       <ArrowUpDown aria-hidden="true" />
     </Button>
   );
-}
+};
 
-function DataTableActions({
+const DataTableActions = ({
   align = 'center',
   className,
   ...props
-}: DataTableActionsProps) {
+}: DataTableActionsProps) => {
   return (
     <div
       data-slot="data-table-actions"
@@ -217,9 +217,9 @@ function DataTableActions({
       {...props}
     />
   );
-}
+};
 
-function DataTable<TData, TValue>({
+const DataTable = <TData, TValue>({
   caption,
   columns,
   data,
@@ -236,7 +236,7 @@ function DataTable<TData, TValue>({
   virtual,
   className,
   ...props
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const paginationOptions = React.useMemo(
     () => (pagination === false ? null : (pagination ?? {})),
@@ -580,7 +580,7 @@ function DataTable<TData, TValue>({
       ) : null}
     </div>
   );
-}
+};
 
 const DataTableCompound = Object.assign(DataTable, {
   Actions: DataTableActions,

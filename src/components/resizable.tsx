@@ -51,14 +51,14 @@ type ResizableProps = Omit<ResizablePrimitive.GroupProps, 'children'> & {
   separator?: ResizableSeparator;
 };
 
-function Resizable({
+const Resizable = ({
   className,
   classNames,
   items,
   orientation = 'horizontal',
   separator: defaultSeparator,
   ...props
-}: ResizableProps) {
+}: ResizableProps) => {
   const renderSeparator = (
     separator: ResizableSeparator | undefined,
     index: number,
@@ -120,7 +120,7 @@ function Resizable({
       )}
     </ResizablePrimitive.Group>
   );
-}
+};
 
 export {
   Resizable,

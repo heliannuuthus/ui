@@ -16,10 +16,10 @@ type PackageManagerIconProps = Omit<
   name: PackageManagerName;
 };
 
-export function PackageManagerIcon({
+export const PackageManagerIcon = ({
   name,
   ...props
-}: PackageManagerIconProps) {
+}: PackageManagerIconProps) => {
   return (
     <svg
       aria-hidden="true"
@@ -32,4 +32,4 @@ export function PackageManagerIcon({
       <path d={packageManagerIconPaths[name]} />
     </svg>
   );
-}
+};

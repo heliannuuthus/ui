@@ -6,11 +6,11 @@ type SeparatorProps = React.ComponentProps<'div'> & {
   orientation?: 'horizontal' | 'vertical';
 };
 
-function Separator({
+const Separator = ({
   className,
   orientation = 'horizontal',
   ...props
-}: SeparatorProps) {
+}: SeparatorProps) => {
   return (
     <SeparatorPrimitive
       data-slot="separator"
@@ -22,6 +22,6 @@ function Separator({
       {...props}
     />
   );
-}
+};
 
 export { Separator, type SeparatorProps };
