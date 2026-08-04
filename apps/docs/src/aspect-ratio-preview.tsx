@@ -1,3 +1,4 @@
+import { docsCopy } from './i18n/content';
 import { useState } from 'react';
 import { AspectRatio } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
@@ -9,19 +10,19 @@ const coverRatios = [
     id: 'landscape',
     label: '16:9',
     ratio: 16 / 9,
-    description: '横向文章封面',
+    description: docsCopy('横向文章封面'),
   },
   {
     id: 'standard',
     label: '4:3',
     ratio: 4 / 3,
-    description: '内容卡片封面',
+    description: docsCopy('内容卡片封面'),
   },
   {
     id: 'square',
     label: '1:1',
     ratio: 1,
-    description: '社交媒体封面',
+    description: docsCopy('社交媒体封面'),
   },
 ] as const;
 
@@ -40,10 +41,13 @@ export function AspectRatioCoverDemo() {
         data-cover-ratio={activeRatio.id}
         ratio={activeRatio.ratio}
       >
-        <img src={`${docsBasePath}/heliannuuthus.jpg`} alt="冰块中的向日葵" />
+        <img
+          src={`${docsBasePath}/heliannuuthus.jpg`}
+          alt={docsCopy('冰块中的向日葵')}
+        />
         <div className="aspect-cover-copy">
           <span>HELIANNUUTHUS / NOTES</span>
-          <strong>让内容拥有稳定的画面</strong>
+          <strong>{docsCopy('让内容拥有稳定的画面')}</strong>
         </div>
         <span className="aspect-cover-ratio">{activeRatio.label}</span>
       </AspectRatio>
@@ -53,15 +57,18 @@ export function AspectRatioCoverDemo() {
         onSubmit={(event) => event.preventDefault()}
       >
         <div>
-          <span className="aspect-cover-eyebrow">封面设置</span>
-          <strong>新建内容封面</strong>
+          <span className="aspect-cover-eyebrow">{docsCopy('封面设置')}</span>
+          <strong>{docsCopy('新建内容封面')}</strong>
         </div>
         <div className="aspect-cover-field">
-          <Label htmlFor="aspect-cover-title">文章标题</Label>
-          <Input id="aspect-cover-title" defaultValue="向日葵的夏天" />
+          <Label htmlFor="aspect-cover-title">{docsCopy('文章标题')}</Label>
+          <Input
+            id="aspect-cover-title"
+            defaultValue={docsCopy('向日葵的夏天')}
+          />
         </div>
         <div className="aspect-cover-field">
-          <span id="aspect-cover-ratio-label">展示比例</span>
+          <span id="aspect-cover-ratio-label">{docsCopy('展示比例')}</span>
           <div
             className="aspect-cover-options"
             role="group"
@@ -83,9 +90,13 @@ export function AspectRatioCoverDemo() {
             ))}
           </div>
         </div>
-        <p>当前用于{activeRatio.description}，图片会自动填满容器并保持比例。</p>
+        <p>
+          {docsCopy('当前用于')}
+          {activeRatio.description}
+          {docsCopy('，图片会自动填满容器并保持比例。')}
+        </p>
         <Button size="sm" type="submit">
-          保存封面
+          {docsCopy('保存封面')}
         </Button>
       </form>
     </div>

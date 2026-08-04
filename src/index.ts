@@ -77,6 +77,7 @@ export {
   type CheckboxGroupProps,
   type CheckboxOption,
   type CheckboxProps,
+  type CheckboxVariant,
 } from './components/checkbox';
 export { Collapsible, type CollapsibleProps } from './components/collapsible';
 export {
@@ -277,6 +278,7 @@ export {
   type TabsAnimation,
   type TabsItem,
   type TabsProps,
+  type TabsScrollButtonLabels,
 } from './components/tabs';
 export {
   Toast,

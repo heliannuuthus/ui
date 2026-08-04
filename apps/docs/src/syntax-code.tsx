@@ -1,3 +1,4 @@
+import { docsCopy } from './i18n/content';
 import type { ReactNode } from 'react';
 import { Card, type CardProps } from '@heliannuuthus/ui';
 import { Stack } from '@heliannuuthus/ui';
@@ -116,7 +117,10 @@ export function SyntaxCode({
             separator={<i />}
           >
             <span>{language.toUpperCase()}</span>
-            <span>{lineCount} 行</span>
+            <span>
+              {lineCount}
+              {docsCopy('行')}
+            </span>
           </Stack>
         </Stack>
       }

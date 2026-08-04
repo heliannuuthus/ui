@@ -1,5 +1,4 @@
-'use client';
-
+import { docsCopy } from './i18n/content';
 import { Fragment, useState, type ReactNode } from 'react';
 import { Accordion } from '@heliannuuthus/ui';
 import { Attachment } from '@heliannuuthus/ui';
@@ -64,9 +63,9 @@ export function AccordionReleaseDemo({
       <div className="display-panel-heading">
         <div>
           <span className="display-eyebrow">v0.12.0</span>
-          <strong>生产发布检查</strong>
+          <strong>{docsCopy('生产发布检查')}</strong>
         </div>
-        <Badge variant="secondary">3 / 3 就绪</Badge>
+        <Badge variant="secondary">{docsCopy('3 / 3 就绪')}</Badge>
       </div>
       <Accordion
         key={mode}
@@ -75,18 +74,20 @@ export function AccordionReleaseDemo({
         items={[
           {
             value: 'preflight',
-            title: '预检结果',
-            content: '构建、类型检查和 42 项端到端用例均已通过。',
+            title: docsCopy('预检结果'),
+            content: docsCopy('构建、类型检查和 42 项端到端用例均已通过。'),
           },
           {
             value: 'owners',
-            title: '值班负责人',
-            content: '林默负责发布，周一负责回滚与告警确认。',
+            title: docsCopy('值班负责人'),
+            content: docsCopy('林默负责发布，周一负责回滚与告警确认。'),
           },
           {
             value: 'rollback',
-            title: '回滚方案',
-            content: '保留上一版本镜像，异常时可在 90 秒内切回 v0.11.4。',
+            title: docsCopy('回滚方案'),
+            content: docsCopy(
+              '保留上一版本镜像，异常时可在 90 秒内切回 v0.11.4。'
+            ),
           },
         ]}
       />
@@ -100,29 +101,29 @@ export function CounterBuildDemo() {
   return (
     <div className="display-counter-card">
       <div>
-        <span>本周构建</span>
-        <small>CI 完成的有效构建次数</small>
+        <span>{docsCopy('本周构建')}</span>
+        <small>{docsCopy('CI 完成的有效构建次数')}</small>
       </div>
       <Counter
         fontSize={60}
         fontWeight={600}
         places={[1000, 100, 10, 1]}
-        suffix={<small>次</small>}
+        suffix={<small>{docsCopy('次')}</small>}
         value={count}
-        valueText={`${count} 次构建`}
+        valueText={docsCopy(`${count} 次构建`)}
       />
       <div className="display-counter-actions">
         <Button onClick={() => setCount((value) => Math.max(0, value - 18))}>
           <Minus />
-          减少 18
+          {docsCopy('减少 18')}
         </Button>
         <Button onClick={() => setCount((value) => value + 24)}>
           <Plus />
-          增加 24
+          {docsCopy('增加 24')}
         </Button>
         <Button onClick={() => setCount(1284)} variant="ghost">
           <RotateCcw />
-          重置
+          {docsCopy('重置')}
         </Button>
       </div>
     </div>
@@ -134,15 +135,15 @@ export function AccordionModesDemo() {
     <div className="accordion-modes-demo">
       <section className="accordion-mode-example">
         <div className="accordion-mode-heading">
-          <strong>单项展开</strong>
-          <span>一次只保留一个面板</span>
+          <strong>{docsCopy('单项展开')}</strong>
+          <span>{docsCopy('一次只保留一个面板')}</span>
         </div>
         <AccordionReleaseDemo mode="single" />
       </section>
       <section className="accordion-mode-example">
         <div className="accordion-mode-heading">
-          <strong>多项展开</strong>
-          <span>允许同时核对多个面板</span>
+          <strong>{docsCopy('多项展开')}</strong>
+          <span>{docsCopy('允许同时核对多个面板')}</span>
         </div>
         <AccordionReleaseDemo mode="multiple" />
       </section>
@@ -179,13 +180,13 @@ function AccordionIndicatorSample({
         items={[
           {
             value: 'deployment',
-            title: '部署策略',
-            content: '先灰度 10%，观察十分钟后全量发布。',
+            title: docsCopy('部署策略'),
+            content: docsCopy('先灰度 10%，观察十分钟后全量发布。'),
           },
           {
             value: 'cache',
-            title: '缓存刷新',
-            content: '发布完成后刷新边缘节点缓存。',
+            title: docsCopy('缓存刷新'),
+            content: docsCopy('发布完成后刷新边缘节点缓存。'),
           },
         ]}
       />
@@ -197,22 +198,22 @@ export function AccordionIndicatorDemo() {
   return (
     <div className="accordion-indicator-demo">
       <AccordionIndicatorSample
-        description="默认位置"
+        description={docsCopy('默认位置')}
         kind="end"
-        title="末端箭头"
+        title={docsCopy('末端箭头')}
       />
       <AccordionIndicatorSample
-        description="靠近标题"
+        description={docsCopy('靠近标题')}
         indicatorPosition="start"
         kind="start"
-        title="起始箭头"
+        title={docsCopy('起始箭头')}
       />
       <AccordionIndicatorSample
-        description="展开状态可替换"
+        description={docsCopy('展开状态可替换')}
         expandedIndicator={<Minus />}
         indicator={<Plus />}
         kind="custom"
-        title="自定义指示器"
+        title={docsCopy('自定义指示器')}
       />
     </div>
   );
@@ -228,19 +229,19 @@ const releaseFiles: Array<{
 }> = [
   {
     name: 'release-notes.md',
-    description: '24 KB · 已同步',
+    description: docsCopy('24 KB · 已同步'),
     icon: FileText,
     state: 'done',
   },
   {
     name: 'web-console.tgz',
-    description: '8.4 MB · 正在校验',
+    description: docsCopy('8.4 MB · 正在校验'),
     icon: FileArchive,
     state: 'processing',
   },
   {
     name: 'source-map.zip',
-    description: '12.1 MB · 上传失败',
+    description: docsCopy('12.1 MB · 上传失败'),
     icon: FileCode2,
     state: 'error',
   },
@@ -254,7 +255,9 @@ export function AttachmentReleaseDemo({
   return (
     <div className="display-attachments">
       <div className="display-section-label">
-        {orientation === 'vertical' ? '纵向缩略卡' : '横向文件行'}
+        {orientation === 'vertical'
+          ? docsCopy('纵向缩略卡')
+          : docsCopy('横向文件行')}
       </div>
       <Attachment.Group
         items={releaseFiles.map((file) => {
@@ -268,7 +271,7 @@ export function AttachmentReleaseDemo({
             state: file.state,
             actions: (
               <Button
-                aria-label={`下载 ${file.name}`}
+                aria-label={docsCopy(`下载 ${file.name}`)}
                 size="icon-xs"
                 variant="ghost"
               >
@@ -283,19 +286,19 @@ export function AttachmentReleaseDemo({
 }
 
 const avatarPeople = [
-  { initials: '林', tone: 'blue' },
-  { initials: '周', tone: 'amber' },
-  { initials: '陈', tone: 'green' },
-  { initials: '许', tone: 'rose' },
-  { initials: '吴', tone: 'violet' },
-  { initials: '宋', tone: 'slate' },
+  { initials: docsCopy('林'), tone: 'blue' },
+  { initials: docsCopy('周'), tone: 'amber' },
+  { initials: docsCopy('陈'), tone: 'green' },
+  { initials: docsCopy('许'), tone: 'rose' },
+  { initials: docsCopy('吴'), tone: 'violet' },
+  { initials: docsCopy('宋'), tone: 'slate' },
 ] as const;
 
 export function AvatarShapeDemo() {
   const sizes = [
-    { label: '小', meta: '24 px', value: 'sm' },
-    { label: '中', meta: '32 px', value: 'default' },
-    { label: '大', meta: '40 px', value: 'lg' },
+    { label: docsCopy('小'), meta: '24 px', value: 'sm' },
+    { label: docsCopy('中'), meta: '32 px', value: 'default' },
+    { label: docsCopy('大'), meta: '40 px', value: 'lg' },
   ] as const;
 
   return (
@@ -303,7 +306,9 @@ export function AvatarShapeDemo() {
       {(['circle', 'square'] as const).map((shape) => (
         <section className="display-avatar-shape-card" key={shape}>
           <div className="display-avatar-case-heading">
-            <strong>{shape === 'circle' ? '圆形' : '圆角方形'}</strong>
+            <strong>
+              {shape === 'circle' ? docsCopy('圆形') : docsCopy('圆角方形')}
+            </strong>
             <code>{`shape="${shape}"`}</code>
           </div>
           <div className="display-avatar-size-row">
@@ -338,11 +343,17 @@ export function AvatarGroupDemo() {
     <div className="display-avatar-group-demo">
       <div className="display-avatar-group-stage">
         <div>
-          <span>发布协作者</span>
-          <strong>当前展示 {Math.min(max, avatarPeople.length)} 人</strong>
+          <span>{docsCopy('发布协作者')}</span>
+          <strong>
+            {docsCopy('当前展示')}
+            {Math.min(max, avatarPeople.length)}
+            {docsCopy('人')}
+          </strong>
         </div>
         <Avatar.Group
-          aria-label={`展示 ${Math.min(max, avatarPeople.length)} 位协作者，其余自动汇总`}
+          aria-label={docsCopy(
+            `展示 ${Math.min(max, avatarPeople.length)} 位协作者，其余自动汇总`
+          )}
           items={avatarPeople.map((person) => ({
             alt: person.initials,
             fallback: person.initials,
@@ -358,11 +369,11 @@ export function AvatarGroupDemo() {
       <div className="display-avatar-group-controls">
         <label>
           <span>
-            最多展示
+            {docsCopy('最多展示')}
             <output>{max}</output>
           </span>
           <Slider
-            aria-label="最多展示的头像数量"
+            aria-label={docsCopy('最多展示的头像数量')}
             effect="none"
             max={6}
             min={1}
@@ -375,11 +386,11 @@ export function AvatarGroupDemo() {
         </label>
         <label>
           <span>
-            重叠程度
+            {docsCopy('重叠程度')}
             <output>{overlap}px</output>
           </span>
           <Slider
-            aria-label="头像重叠程度"
+            aria-label={docsCopy('头像重叠程度')}
             effect="none"
             max={12}
             min={0}
@@ -398,47 +409,47 @@ export function AvatarGroupDemo() {
 export function AvatarBadgeDemo() {
   const cases = [
     {
-      title: '在线状态',
-      description: '无内容时显示状态圆点',
+      title: docsCopy('在线状态'),
+      description: docsCopy('无内容时显示状态圆点'),
       avatar: (
         <Avatar
-          alt="林"
+          alt={docsCopy('林')}
           badge={<span />}
-          fallback="林"
+          fallback={docsCopy('林')}
           fallbackProps={{ className: 'display-avatar-tone-green' }}
           size="lg"
         />
       ),
-      badge: <Badge variant="secondary">在线</Badge>,
+      badge: <Badge variant="secondary">{docsCopy('在线')}</Badge>,
     },
     {
-      title: '认证状态',
-      description: '图标随头像尺寸缩放',
+      title: docsCopy('认证状态'),
+      description: docsCopy('图标随头像尺寸缩放'),
       avatar: (
         <Avatar
-          alt="周"
+          alt={docsCopy('周')}
           badge={<Check />}
-          fallback="周"
+          fallback={docsCopy('周')}
           fallbackProps={{ className: 'display-avatar-tone-blue' }}
           shape="square"
           size="lg"
         />
       ),
-      badge: <Badge variant="outline">已认证</Badge>,
+      badge: <Badge variant="outline">{docsCopy('已认证')}</Badge>,
     },
     {
-      title: '未读提醒',
-      description: '将 Badge 渲染到头像锚点',
+      title: docsCopy('未读提醒'),
+      description: docsCopy('将 Badge 渲染到头像锚点'),
       avatar: (
         <Avatar
-          alt="陈"
+          alt={docsCopy('陈')}
           badge={<Badge variant="destructive">8</Badge>}
-          fallback="陈"
+          fallback={docsCopy('陈')}
           fallbackProps={{ className: 'display-avatar-tone-rose' }}
           size="lg"
         />
       ),
-      badge: <Badge variant="destructive">需要处理</Badge>,
+      badge: <Badge variant="destructive">{docsCopy('需要处理')}</Badge>,
     },
   ];
 
@@ -460,10 +471,10 @@ export function AvatarBadgeDemo() {
 
 export function BubbleVariantsDemo() {
   const replies = [
-    { label: '强调', token: 'default', variant: 'default' },
-    { label: '浮起', token: 'elevated', variant: 'elevated' },
-    { label: '柔和', token: 'tinted', variant: 'tinted' },
-    { label: '描边', token: 'outline', variant: 'outline' },
+    { label: docsCopy('强调'), token: 'default', variant: 'default' },
+    { label: docsCopy('浮起'), token: 'elevated', variant: 'elevated' },
+    { label: docsCopy('柔和'), token: 'tinted', variant: 'tinted' },
+    { label: docsCopy('描边'), token: 'outline', variant: 'outline' },
   ] as const;
 
   return (
@@ -477,7 +488,7 @@ export function BubbleVariantsDemo() {
           <Bubble.Group>
             <Bubble
               align="end"
-              content="已经补充完成，可以重新评审。"
+              content={docsCopy('已经补充完成，可以重新评审。')}
               reactions="✓ 2"
               variant={reply.variant}
             />
@@ -501,48 +512,48 @@ const conversationMessages: ReadonlyArray<{
 }> = [
   {
     time: '21:40',
-    author: '系统',
-    avatar: '系',
-    content: '预检任务已开始。',
+    author: docsCopy('系统'),
+    avatar: docsCopy('系'),
+    content: docsCopy('预检任务已开始。'),
   },
   {
     time: '21:41',
-    author: '许澄',
-    avatar: '许',
-    content: '迁移脚本已在预览环境验证。',
+    author: docsCopy('许澄'),
+    avatar: docsCopy('许'),
+    content: docsCopy('迁移脚本已在预览环境验证。'),
   },
   {
     time: '21:42',
-    author: '系统',
-    avatar: '系',
-    content: '构建 #1842 已通过。',
+    author: docsCopy('系统'),
+    avatar: docsCopy('系'),
+    content: docsCopy('构建 #1842 已通过。'),
   },
   {
     time: '21:44',
-    author: '周一',
-    avatar: '周',
-    content: '回滚镜像已确认可用。',
+    author: docsCopy('周一'),
+    avatar: docsCopy('周'),
+    content: docsCopy('回滚镜像已确认可用。'),
   },
   {
     time: '21:46',
-    author: '林默',
-    avatar: '林',
-    content: '开始切换 10% 生产流量。',
+    author: docsCopy('林默'),
+    avatar: docsCopy('林'),
+    content: docsCopy('开始切换 10% 生产流量。'),
     align: 'end',
   },
   {
     time: '21:47',
-    author: '系统',
-    avatar: '系',
-    content: '错误率维持在 0.04%。',
+    author: docsCopy('系统'),
+    avatar: docsCopy('系'),
+    content: docsCopy('错误率维持在 0.04%。'),
   },
   {
     time: '21:48',
-    author: '林默',
-    avatar: '林',
-    content: '全量切换完成。',
+    author: docsCopy('林默'),
+    avatar: docsCopy('林'),
+    content: docsCopy('全量切换完成。'),
     align: 'end',
-    status: '已读',
+    status: docsCopy('已读'),
   },
 ];
 
@@ -551,10 +562,10 @@ export function BubbleConversationDemo() {
     <div className="display-scroller-shell">
       <div className="display-scroller-header">
         <div>
-          <strong>发布协作记录</strong>
-          <span>7 条消息 · Bubble + Avatar</span>
+          <strong>{docsCopy('发布协作记录')}</strong>
+          <span>{docsCopy('7 条消息 · Bubble + Avatar')}</span>
         </div>
-        <Badge variant="secondary">已完成</Badge>
+        <Badge variant="secondary">{docsCopy('已完成')}</Badge>
       </div>
       <ScrollArea
         className="display-conversation-scroll"
@@ -562,7 +573,7 @@ export function BubbleConversationDemo() {
         fadeSize={28}
         overflowEdgeThreshold={2}
         viewportProps={{
-          'aria-label': '发布协作消息',
+          'aria-label': docsCopy('发布协作消息'),
           role: 'list',
           tabIndex: 0,
         }}
@@ -614,21 +625,21 @@ export function BubbleConversationDemo() {
 const releaseHighlights = [
   {
     icon: Sparkles,
-    kicker: '体验',
-    title: '筛选器响应更快',
-    description: '大型列表的输入响应时间降低 42%。',
+    kicker: docsCopy('体验'),
+    title: docsCopy('筛选器响应更快'),
+    description: docsCopy('大型列表的输入响应时间降低 42%。'),
   },
   {
     icon: ShieldCheck,
-    kicker: '可靠性',
-    title: '发布前自动预检',
-    description: '缺失变量会在进入生产阶段前被拦截。',
+    kicker: docsCopy('可靠性'),
+    title: docsCopy('发布前自动预检'),
+    description: docsCopy('缺失变量会在进入生产阶段前被拦截。'),
   },
   {
     icon: PackageCheck,
-    kicker: '组件',
-    title: '数据展示案例补齐',
-    description: '16 个组件现在都有真实交互场景。',
+    kicker: docsCopy('组件'),
+    title: docsCopy('数据展示案例补齐'),
+    description: docsCopy('16 个组件现在都有真实交互场景。'),
   },
 ];
 
@@ -645,7 +656,7 @@ export function CarouselHighlightsDemo({
 }) {
   return (
     <Carousel
-      aria-label="版本亮点"
+      aria-label={docsCopy('版本亮点')}
       autoplay={autoplay}
       className={`display-carousel${autoplay !== false ? ' display-carousel-autoplay' : ''}`}
       items={releaseHighlights.map((highlight, index) => {
@@ -675,7 +686,7 @@ export function CarouselHighlightsDemo({
 export function CarouselCustomPaginationDemo() {
   return (
     <Carousel
-      aria-label="带自定义翻页器的版本亮点"
+      aria-label={docsCopy('带自定义翻页器的版本亮点')}
       className="display-carousel"
       controls={false}
       items={releaseHighlights.map((highlight, index) => {
@@ -703,12 +714,12 @@ export function CarouselCustomPaginationDemo() {
         scrollTo,
       }) => (
         <div
-          aria-label="轮播分页"
+          aria-label={docsCopy('轮播分页')}
           className="display-carousel-pagination"
           role="group"
         >
           <Button
-            aria-label="上一页"
+            aria-label={docsCopy('上一页')}
             className="display-carousel-pagination-button"
             disabled={!canScrollPrev}
             onClick={scrollPrev}
@@ -724,7 +735,7 @@ export function CarouselCustomPaginationDemo() {
               <small>{String(Math.max(pageCount, 1)).padStart(2, '0')}</small>
             </span>
             <div
-              aria-label="选择轮播页面"
+              aria-label={docsCopy('选择轮播页面')}
               className="display-carousel-page-track"
               role="group"
             >
@@ -734,7 +745,7 @@ export function CarouselCustomPaginationDemo() {
                 return (
                   <button
                     aria-current={selected ? 'page' : undefined}
-                    aria-label={`前往第 ${index + 1} 页`}
+                    aria-label={docsCopy(`前往第 ${index + 1} 页`)}
                     data-selected={selected || undefined}
                     key={index}
                     onClick={() => scrollTo(index)}
@@ -747,7 +758,7 @@ export function CarouselCustomPaginationDemo() {
             </div>
           </div>
           <Button
-            aria-label="下一页"
+            aria-label={docsCopy('下一页')}
             className="display-carousel-pagination-button"
             disabled={!canScrollNext}
             onClick={scrollNext}
@@ -766,9 +777,9 @@ export function CarouselAutoplayDemo() {
   return (
     <div className="display-carousel-autoplay-stage">
       <div className="display-carousel-autoplay-heading">
-        <span>默认景深动效</span>
-        <strong>自动播放，悬停即暂停</strong>
-        <small>自动播放 · 首尾循环 · 3D 景深</small>
+        <span>{docsCopy('默认景深动效')}</span>
+        <strong>{docsCopy('自动播放，悬停即暂停')}</strong>
+        <small>{docsCopy('自动播放 · 首尾循环 · 3D 景深')}</small>
       </div>
       <CarouselHighlightsDemo autoplay={2.2} loop />
     </div>
@@ -782,16 +793,19 @@ const deploymentData = [
   { day: '07.24', success: 96.2 },
   { day: '07.25', success: 95.7 },
   { day: '07.26', success: 98.1 },
-  { day: '今天', success: 97.4 },
+  { day: docsCopy('今天'), success: 97.4 },
 ];
 
 const deploymentChartConfig = {
-  success: { label: '发布成功率', color: 'var(--primary)' },
+  success: { label: docsCopy('发布成功率'), color: 'var(--primary)' },
 } satisfies ChartConfig;
 
 export function ChartDeploymentDemo() {
   return (
-    <section aria-label="发布健康度趋势" className="display-chart-story">
+    <section
+      aria-label={docsCopy('发布健康度趋势')}
+      className="display-chart-story"
+    >
       <header className="display-chart-story-header">
         <div className="display-chart-story-title">
           <span className="display-chart-story-mark" aria-hidden="true">
@@ -799,35 +813,35 @@ export function ChartDeploymentDemo() {
           </span>
           <div>
             <span>RELEASE PULSE · 7 DAYS</span>
-            <strong>发布健康度</strong>
+            <strong>{docsCopy('发布健康度')}</strong>
           </div>
         </div>
         <Badge variant="secondary">
           <span className="display-chart-live-dot" aria-hidden="true" />
-          系统稳定
+          {docsCopy('系统稳定')}
         </Badge>
       </header>
 
       <div className="display-chart-story-summary">
         <div className="display-chart-story-primary">
-          <span>生产发布成功率</span>
+          <span>{docsCopy('生产发布成功率')}</span>
           <strong>97.4%</strong>
           <small>
             <ArrowUpRight aria-hidden="true" />
-            较上周提升 2.6%
+            {docsCopy('较上周提升 2.6%')}
           </small>
         </div>
         <dl>
           <div>
-            <dt>发布次数</dt>
+            <dt>{docsCopy('发布次数')}</dt>
             <dd>128</dd>
           </div>
           <div>
-            <dt>平均耗时</dt>
+            <dt>{docsCopy('平均耗时')}</dt>
             <dd>6m 48s</dd>
           </div>
           <div>
-            <dt>需要回滚</dt>
+            <dt>{docsCopy('需要回滚')}</dt>
             <dd>4</dd>
           </div>
         </dl>
@@ -836,10 +850,10 @@ export function ChartDeploymentDemo() {
       <div className="display-chart-story-plot">
         <div className="display-chart-story-plot-heading">
           <div>
-            <strong>成功率趋势</strong>
-            <span>目标线 95%</span>
+            <strong>{docsCopy('成功率趋势')}</strong>
+            <span>{docsCopy('目标线 95%')}</span>
           </div>
-          <span>近七日</span>
+          <span>{docsCopy('近七日')}</span>
         </div>
         <Chart
           className="display-chart"
@@ -904,9 +918,9 @@ export function ChartDeploymentDemo() {
       <footer className="display-chart-story-footer">
         <div>
           <span className="display-chart-story-legend" aria-hidden="true" />
-          发布成功率
+          {docsCopy('发布成功率')}
         </div>
-        <span>每 5 分钟刷新 · UTC+8</span>
+        <span>{docsCopy('每 5 分钟刷新 · UTC+8')}</span>
       </footer>
     </section>
   );
@@ -917,14 +931,18 @@ export function CollapsibleBasicDemo() {
     <Collapsible
       className="display-collapsible-basic"
       content={
-        <p>优化筛选器响应速度，并修复轮播从最后一项回到第一项时的切换动效。</p>
+        <p>
+          {docsCopy(
+            '优化筛选器响应速度，并修复轮播从最后一项回到第一项时的切换动效。'
+          )}
+        </p>
       }
       contentClassName="display-collapsible-basic-content"
       defaultOpen
       header={
         <div className="display-collapsible-summary">
-          <strong>本次发布包含 6 项变更</strong>
-          <span>点击 Header 收起内容</span>
+          <strong>{docsCopy('本次发布包含 6 项变更')}</strong>
+          <span>{docsCopy('点击 Header 收起内容')}</span>
         </div>
       }
     />
@@ -942,10 +960,10 @@ function CollapsibleBuildDemo() {
             <CheckCircle2 />
           </div>
           <div>
-            <strong>构建 #1842 已完成</strong>
+            <strong>{docsCopy('构建 #1842 已完成')}</strong>
             <span>1m 48s · commit 7f92c1a</span>
           </div>
-          <Badge variant="secondary">成功</Badge>
+          <Badge variant="secondary">{docsCopy('成功')}</Badge>
         </>
       }
       headerClassName="display-build-summary"
@@ -962,9 +980,9 @@ function CollapsibleBuildDemo() {
       contentClassName="display-build-content"
       footer={
         <>
-          <span>日志保留 30 天</span>
+          <span>{docsCopy('日志保留 30 天')}</span>
           <Button size="xs" variant="ghost">
-            查看构建产物
+            {docsCopy('查看构建产物')}
           </Button>
         </>
       }
@@ -976,7 +994,7 @@ function CollapsiblePolicyDemo() {
   return (
     <Collapsible
       className="display-build-log display-policy"
-      trigger="配置"
+      trigger={docsCopy('配置')}
       triggerIcon={<ChevronRight />}
       triggerProps={{ size: 'sm', variant: 'outline' }}
       headerClassName="display-build-summary"
@@ -986,32 +1004,32 @@ function CollapsiblePolicyDemo() {
             <ShieldCheck />
           </div>
           <div>
-            <strong>灰度发布策略</strong>
-            <span>先发布到 10% 的生产实例</span>
+            <strong>{docsCopy('灰度发布策略')}</strong>
+            <span>{docsCopy('先发布到 10% 的生产实例')}</span>
           </div>
         </div>
       }
       content={
         <div className="display-policy-grid">
           <div>
-            <span>首批流量</span>
+            <span>{docsCopy('首批流量')}</span>
             <strong>10%</strong>
           </div>
           <div>
-            <span>观察窗口</span>
-            <strong>10 分钟</strong>
+            <span>{docsCopy('观察窗口')}</span>
+            <strong>{docsCopy('10 分钟')}</strong>
           </div>
           <div>
-            <span>自动回滚</span>
-            <strong>错误率 &gt; 2%</strong>
+            <span>{docsCopy('自动回滚')}</span>
+            <strong>{docsCopy('错误率 > 2%')}</strong>
           </div>
         </div>
       }
       contentClassName="display-policy-content"
       footer={
         <>
-          <span>仅影响下一次生产发布</span>
-          <Button size="xs">应用策略</Button>
+          <span>{docsCopy('仅影响下一次生产发布')}</span>
+          <Button size="xs">{docsCopy('应用策略')}</Button>
         </>
       }
     />
@@ -1023,15 +1041,15 @@ export function CollapsibleTriggerModesDemo() {
     <div className="display-collapsible-modes">
       <section>
         <div className="display-collapsible-mode-label">
-          <span>Header 触发</span>
-          <small>整个摘要区域都可点击</small>
+          <span>{docsCopy('Header 触发')}</span>
+          <small>{docsCopy('整个摘要区域都可点击')}</small>
         </div>
         <CollapsibleBuildDemo />
       </section>
       <section>
         <div className="display-collapsible-mode-label">
-          <span>按钮触发</span>
-          <small>Header 静态，仅按钮切换状态</small>
+          <span>{docsCopy('按钮触发')}</span>
+          <small>{docsCopy('Header 静态，仅按钮切换状态')}</small>
         </div>
         <CollapsiblePolicyDemo />
       </section>
@@ -1043,24 +1061,26 @@ export function CollapsibleHeaderIconDemo() {
   return (
     <div className="display-collapsible-icon-demo">
       <section>
-        <span>默认图标</span>
+        <span>{docsCopy('默认图标')}</span>
         <Collapsible
           className="display-collapsible-compact"
-          content={<p>使用组件内置的方向图标反馈展开状态。</p>}
+          content={<p>{docsCopy('使用组件内置的方向图标反馈展开状态。')}</p>}
           contentClassName="display-collapsible-compact-content"
           header={
             <div className="display-collapsible-summary">
-              <strong>部署记录</strong>
-              <small>生产环境 · 3 分钟前</small>
+              <strong>{docsCopy('部署记录')}</strong>
+              <small>{docsCopy('生产环境 · 3 分钟前')}</small>
             </div>
           }
         />
       </section>
       <section>
-        <span>自定义图标</span>
+        <span>{docsCopy('自定义图标')}</span>
         <Collapsible
           className="display-collapsible-compact"
-          content={<p>通过 icon 替换默认图标，Header 内容保持不变。</p>}
+          content={
+            <p>{docsCopy('通过 icon 替换默认图标，Header 内容保持不变。')}</p>
+          }
           contentClassName="display-collapsible-compact-content"
           header={
             <>
@@ -1068,8 +1088,8 @@ export function CollapsibleHeaderIconDemo() {
                 <PackageCheck />
               </span>
               <div className="display-collapsible-summary">
-                <strong>构建产物已就绪</strong>
-                <small>12 个文件 · 2.4 MB</small>
+                <strong>{docsCopy('构建产物已就绪')}</strong>
+                <small>{docsCopy('12 个文件 · 2.4 MB')}</small>
               </div>
             </>
           }
@@ -1077,17 +1097,21 @@ export function CollapsibleHeaderIconDemo() {
         />
       </section>
       <section>
-        <span>隐藏图标</span>
+        <span>{docsCopy('隐藏图标')}</span>
         <Collapsible
           className="display-collapsible-compact"
           content={
-            <p>传入 icon=null，保留 Header 触发能力但不显示指示图标。</p>
+            <p>
+              {docsCopy(
+                '传入 icon=null，保留 Header 触发能力但不显示指示图标。'
+              )}
+            </p>
           }
           contentClassName="display-collapsible-compact-content"
           header={
             <div className="display-collapsible-summary">
-              <strong>纯文本摘要</strong>
-              <small>适合界面已提供其他状态反馈的场景</small>
+              <strong>{docsCopy('纯文本摘要')}</strong>
+              <small>{docsCopy('适合界面已提供其他状态反馈的场景')}</small>
             </div>
           }
           icon={null}
@@ -1100,16 +1124,41 @@ export function CollapsibleHeaderIconDemo() {
 type ReleaseRecord = {
   environment: string;
   owner: string;
-  status: '成功' | '回滚' | '运行中';
+  status: string;
   version: string;
 };
 
 const releaseRecords: ReleaseRecord[] = [
-  { version: 'v0.12.0', environment: '生产', owner: '林默', status: '成功' },
-  { version: 'v0.11.4', environment: '生产', owner: '周一', status: '成功' },
-  { version: 'v0.11.3', environment: '预览', owner: '许澄', status: '运行中' },
-  { version: 'v0.11.2', environment: '生产', owner: '林默', status: '回滚' },
-  { version: 'v0.11.1', environment: '预览', owner: '周一', status: '成功' },
+  {
+    version: 'v0.12.0',
+    environment: docsCopy('生产'),
+    owner: docsCopy('林默'),
+    status: docsCopy('成功'),
+  },
+  {
+    version: 'v0.11.4',
+    environment: docsCopy('生产'),
+    owner: docsCopy('周一'),
+    status: docsCopy('成功'),
+  },
+  {
+    version: 'v0.11.3',
+    environment: docsCopy('预览'),
+    owner: docsCopy('许澄'),
+    status: docsCopy('运行中'),
+  },
+  {
+    version: 'v0.11.2',
+    environment: docsCopy('生产'),
+    owner: docsCopy('林默'),
+    status: docsCopy('回滚'),
+  },
+  {
+    version: 'v0.11.1',
+    environment: docsCopy('预览'),
+    owner: docsCopy('周一'),
+    status: docsCopy('成功'),
+  },
 ];
 
 type VirtualDataTableRecord = {
@@ -1126,7 +1175,12 @@ const virtualDataTableRecords: VirtualDataTableRecord[] = Array.from(
     service: ['Web Console', 'Auth API', 'Event Worker', 'Search Indexer'][
       index % 4
     ],
-    region: ['华东', '华北', '新加坡', '法兰克福'][index % 4],
+    region: [
+      docsCopy('华东'),
+      docsCopy('华北'),
+      docsCopy('新加坡'),
+      docsCopy('法兰克福'),
+    ][index % 4],
     latency: `${32 + ((index * 17) % 180)} ms`,
   })
 );
@@ -1135,7 +1189,9 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
   {
     accessorKey: 'version',
     header: ({ column }) => (
-      <DataTable.ColumnHeader column={column}>版本</DataTable.ColumnHeader>
+      <DataTable.ColumnHeader column={column}>
+        {docsCopy('版本')}
+      </DataTable.ColumnHeader>
     ),
     meta: {
       cellClassName: 'font-medium',
@@ -1143,16 +1199,22 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
       headerClassName: 'w-28',
     },
   },
-  { accessorKey: 'environment', header: '环境', enableSorting: false },
-  { accessorKey: 'owner', header: '负责人', enableSorting: false },
+  {
+    accessorKey: 'environment',
+    header: docsCopy('环境'),
+    enableSorting: false,
+  },
+  { accessorKey: 'owner', header: docsCopy('负责人'), enableSorting: false },
   {
     accessorKey: 'status',
-    header: '状态',
+    header: docsCopy('状态'),
     enableSorting: false,
     render: (_, row) => {
       const status = row.status;
       return (
-        <Badge variant={status === '回滚' ? 'destructive' : 'secondary'}>
+        <Badge
+          variant={status === docsCopy('回滚') ? 'destructive' : 'secondary'}
+        >
           {status}
         </Badge>
       );
@@ -1160,23 +1222,23 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
   },
   {
     id: 'actions',
-    header: '操作',
+    header: docsCopy('操作'),
     meta: {
       align: 'center',
       fixed: 'end',
       headerClassName: 'w-36',
     },
     render: (_, row) => (
-      <DataTable.Actions aria-label={`${row.version} 操作`}>
+      <DataTable.Actions aria-label={docsCopy(`${row.version} 操作`)}>
         <Button size="xs" variant="ghost">
-          查看
+          {docsCopy('查看')}
         </Button>
         <DropdownMenu
           align="end"
           contentClassName="w-44"
           trigger={
             <Button
-              aria-label={`${row.version} 更多操作`}
+              aria-label={docsCopy(`${row.version} 更多操作`)}
               size="icon-xs"
               variant="ghost"
             >
@@ -1184,10 +1246,14 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
             </Button>
           }
           items={[
-            { label: '下载日志', icon: <Download /> },
-            { label: '归档记录', icon: <Archive /> },
+            { label: docsCopy('下载日志'), icon: <Download /> },
+            { label: docsCopy('归档记录'), icon: <Archive /> },
             { type: 'separator' },
-            { label: '删除记录', icon: <Trash2 />, destructive: true },
+            {
+              label: docsCopy('删除记录'),
+              icon: <Trash2 />,
+              destructive: true,
+            },
           ]}
         />
       </DataTable.Actions>
@@ -1198,30 +1264,44 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
 const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
   {
     id: 'release',
-    header: '发布信息',
+    header: docsCopy('发布信息'),
     columns: [
       {
         accessorKey: 'version',
         header: ({ column }) => (
-          <DataTable.ColumnHeader column={column}>版本</DataTable.ColumnHeader>
+          <DataTable.ColumnHeader column={column}>
+            {docsCopy('版本')}
+          </DataTable.ColumnHeader>
         ),
       },
-      { accessorKey: 'environment', header: '环境', enableSorting: false },
+      {
+        accessorKey: 'environment',
+        header: docsCopy('环境'),
+        enableSorting: false,
+      },
     ],
   },
   {
     id: 'execution',
-    header: '执行情况',
+    header: docsCopy('执行情况'),
     columns: [
-      { accessorKey: 'owner', header: '负责人', enableSorting: false },
+      {
+        accessorKey: 'owner',
+        header: docsCopy('负责人'),
+        enableSorting: false,
+      },
       {
         accessorKey: 'status',
-        header: '状态',
+        header: docsCopy('状态'),
         enableSorting: false,
         render: (_, row) => {
           const status = row.status;
           return (
-            <Badge variant={status === '回滚' ? 'destructive' : 'secondary'}>
+            <Badge
+              variant={
+                status === docsCopy('回滚') ? 'destructive' : 'secondary'
+              }
+            >
               {status}
             </Badge>
           );
@@ -1231,17 +1311,19 @@ const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
   },
   {
     id: 'operation',
-    header: '操作',
+    header: docsCopy('操作'),
     meta: { align: 'center' },
     columns: [
       {
         id: 'detail',
-        header: '记录',
+        header: docsCopy('记录'),
         meta: { align: 'center' },
         render: (_, row) => (
-          <DataTable.Actions aria-label={`${row.version} 操作`}>
+          <DataTable.Actions aria-label={docsCopy(`${row.version} 操作`)}>
             <Button size="xs" variant="outline">
-              {row.status === '运行中' ? '监控' : '详情'}
+              {row.status === docsCopy('运行中')
+                ? docsCopy('监控')
+                : docsCopy('详情')}
             </Button>
           </DataTable.Actions>
         ),
@@ -1253,7 +1335,7 @@ const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
 const virtualDataTableColumns: ColumnDef<VirtualDataTableRecord>[] = [
   {
     accessorKey: 'id',
-    header: '事件',
+    header: docsCopy('事件'),
     meta: {
       fixed: 'start',
       headerClassName: 'w-32',
@@ -1262,7 +1344,7 @@ const virtualDataTableColumns: ColumnDef<VirtualDataTableRecord>[] = [
   },
   {
     accessorKey: 'service',
-    header: '服务',
+    header: docsCopy('服务'),
     meta: {
       ellipsis: true,
       headerClassName: 'w-64',
@@ -1270,12 +1352,12 @@ const virtualDataTableColumns: ColumnDef<VirtualDataTableRecord>[] = [
   },
   {
     accessorKey: 'region',
-    header: '区域',
+    header: docsCopy('区域'),
     meta: { headerClassName: 'w-32' },
   },
   {
     accessorKey: 'latency',
-    header: '延迟',
+    header: docsCopy('延迟'),
     meta: {
       align: 'end',
       headerClassName: 'w-32',
@@ -1283,16 +1365,16 @@ const virtualDataTableColumns: ColumnDef<VirtualDataTableRecord>[] = [
   },
   {
     id: 'actions',
-    header: '操作',
+    header: docsCopy('操作'),
     meta: {
       align: 'center',
       fixed: 'end',
       headerClassName: 'w-28',
     },
     render: (_, row) => (
-      <DataTable.Actions aria-label={`${row.id} 操作`}>
+      <DataTable.Actions aria-label={docsCopy(`${row.id} 操作`)}>
         <Button size="xs" variant="ghost">
-          查看
+          {docsCopy('查看')}
         </Button>
       </DataTable.Actions>
     ),
@@ -1303,15 +1385,27 @@ export function DataTableReleaseDemo() {
   return (
     <div className="display-data-table">
       <DataTable
-        caption="最近五次生产与预览环境发布。"
+        caption={docsCopy('最近五次生产与预览环境发布。')}
         columns={releaseColumns}
         data={releaseRecords}
         filterColumn="version"
-        filterPlaceholder="筛选版本…"
-        emptyMessage="没有匹配的发布记录"
-        footer={(rows) => `当前页 ${rows.length} 条发布记录`}
+        filterPlaceholder={docsCopy('筛选版本…')}
+        emptyMessage={docsCopy('没有匹配的发布记录')}
+        footer={(rows) => docsCopy(`当前页 ${rows.length} 条发布记录`)}
         getRowKey={(row) => row.version}
-        pagination={{ pageSize: 3 }}
+        pagination={{
+          ariaLabels: {
+            more: docsCopy('更多页面'),
+            navigation: docsCopy('分页'),
+            next: docsCopy('前往下一页'),
+            previous: docsCopy('前往上一页'),
+          },
+          nextText: docsCopy('下一页'),
+          pageSize: 3,
+          previousText: docsCopy('上一页'),
+          renderSummary: (total, current, pageCount) =>
+            docsCopy(`共 ${total} 项 · 第 ${current} / ${pageCount} 页`),
+        }}
         tableProps={{ className: 'min-w-[820px] table-fixed' }}
       />
     </div>
@@ -1325,12 +1419,22 @@ export function DataTableExpandableDemo() {
         columns={releaseColumns.slice(0, 4)}
         data={releaseRecords}
         expandable={{
+          columnHeader: <span className="sr-only">{docsCopy('展开行')}</span>,
           defaultExpandedRowKeys: ['v0.12.0'],
+          getCollapseLabel: (row) => `${docsCopy('收起')} ${row.version}`,
+          getExpandLabel: (row) => `${docsCopy('展开')} ${row.version}`,
           render: (row) => (
             <div className="display-data-table-expanded">
-              <strong>{row.version} 部署详情</strong>
+              <strong>
+                {row.version}
+                {docsCopy('部署详情')}
+              </strong>
               <span>
-                {row.environment}环境由{row.owner}负责，当前状态为{row.status}。
+                {row.environment}
+                {docsCopy('环境由')}
+                {row.owner}
+                {docsCopy('负责，当前状态为')}
+                {row.status}。
               </span>
             </div>
           ),
@@ -1349,7 +1453,7 @@ export function DataTableGroupedHeaderDemo() {
       <DataTable
         columns={groupedReleaseColumns}
         data={releaseRecords}
-        emptyMessage="暂无发布记录"
+        emptyMessage={docsCopy('暂无发布记录')}
         tableProps={{ className: 'min-w-[660px] table-fixed' }}
       />
     </div>
@@ -1387,16 +1491,18 @@ export function EmptyReleaseDemo({
     <Empty
       className="display-empty"
       icon={filtered ? <Inbox /> : <Cloud />}
-      title={filtered ? '没有匹配的发布记录' : '还没有生产发布'}
+      title={
+        filtered ? docsCopy('没有匹配的发布记录') : docsCopy('还没有生产发布')
+      }
       description={
         filtered
-          ? '试试缩短版本关键词，或清除当前环境筛选。'
-          : '完成预检后，可以从这里安排第一次生产发布。'
+          ? docsCopy('试试缩短版本关键词，或清除当前环境筛选。')
+          : docsCopy('完成预检后，可以从这里安排第一次生产发布。')
       }
       actions={
         <Button size="sm" variant={filtered ? 'outline' : 'default'}>
           {filtered ? <RotateCcw /> : <Plus />}
-          {filtered ? '清除筛选' : '安排发布'}
+          {filtered ? docsCopy('清除筛选') : docsCopy('安排发布')}
         </Button>
       }
     />
@@ -1404,7 +1510,7 @@ export function EmptyReleaseDemo({
 }
 
 export function EmptyDefaultDemo() {
-  return <Empty className="display-empty" />;
+  return <Empty className="display-empty" title={docsCopy('暂无内容')} />;
 }
 
 export function EmptyCompositionDemo() {
@@ -1413,18 +1519,18 @@ export function EmptyCompositionDemo() {
       actions={
         <>
           <div className="display-empty-custom-meta">
-            <span>12 项规则</span>
-            <span>预计 4 分钟</span>
+            <span>{docsCopy('12 项规则')}</span>
+            <span>{docsCopy('预计 4 分钟')}</span>
           </div>
           <Button size="sm" variant="outline">
-            查看审计进度
+            {docsCopy('查看审计进度')}
           </Button>
         </>
       }
       className="display-empty display-empty-custom"
-      description="审计通过前，生产环境不会显示可发布版本。"
+      description={docsCopy('审计通过前，生产环境不会显示可发布版本。')}
       icon={<ShieldCheck />}
-      title="等待安全审计"
+      title={docsCopy('等待安全审计')}
     />
   );
 }
@@ -1439,25 +1545,29 @@ export function ItemActivityDemo({
       className="display-activity-list"
       items={[
         {
-          actions: <Badge variant="outline">2 分钟前</Badge>,
-          description: '补充数据库迁移影响与回滚入口。',
+          actions: <Badge variant="outline">{docsCopy('2 分钟前')}</Badge>,
+          description: docsCopy('补充数据库迁移影响与回滚入口。'),
           key: 'release-notes',
           media: <GitCommitHorizontal />,
           mediaVariant: 'icon',
-          title: '许澄提交了发布说明',
+          title: docsCopy('许澄提交了发布说明'),
           variant,
         },
         {
           actions: (
-            <Button aria-label="更多操作" size="icon-sm" variant="ghost">
+            <Button
+              aria-label={docsCopy('更多操作')}
+              size="icon-sm"
+              variant="ghost"
+            >
               <MoreHorizontal />
             </Button>
           ),
-          description: '确认索引变更不会锁定生产表。',
+          description: docsCopy('确认索引变更不会锁定生产表。'),
           key: 'review-reply',
           media: <MessageCircle />,
           mediaVariant: 'icon',
-          title: '林默回复了检查项',
+          title: docsCopy('林默回复了检查项'),
           variant,
         },
       ]}
@@ -1474,38 +1584,40 @@ export function MarkerTimelineDemo({
     <div className="display-timeline">
       <div className="display-timeline-event">
         <span>21:42</span>
-        <strong>构建通过</strong>
+        <strong>{docsCopy('构建通过')}</strong>
       </div>
       <Marker
-        content="生产发布开始 · 21:46"
+        content={docsCopy('生产发布开始 · 21:46')}
         icon={<CircleDot />}
         variant={variant}
       />
       <div className="display-timeline-event">
         <span>21:48</span>
-        <strong>流量切换完成</strong>
+        <strong>{docsCopy('流量切换完成')}</strong>
       </div>
     </div>
   );
 }
 
 const tableRows = [
-  ['Web Console', 'v0.12.0', '生产', '查看'],
-  ['Auth API', 'v1.8.2', '生产', '查看'],
-  ['Worker', 'v0.9.7', '预览', '确认'],
+  ['Web Console', 'v0.12.0', docsCopy('生产'), docsCopy('查看')],
+  ['Auth API', 'v1.8.2', docsCopy('生产'), docsCopy('查看')],
+  ['Worker', 'v0.9.7', docsCopy('预览'), docsCopy('确认')],
 ];
 
 export function TableReleaseDemo() {
   return (
     <div className="display-table-shell">
       <Table>
-        <Table.Caption>今晚 22:00 发布窗口中的服务。</Table.Caption>
+        <Table.Caption>
+          {docsCopy('今晚 22:00 发布窗口中的服务。')}
+        </Table.Caption>
         <Table.Header>
           <Table.Row>
-            <Table.Head>服务</Table.Head>
-            <Table.Head>版本</Table.Head>
-            <Table.Head>环境</Table.Head>
-            <Table.Head align="center">操作</Table.Head>
+            <Table.Head>{docsCopy('服务')}</Table.Head>
+            <Table.Head>{docsCopy('版本')}</Table.Head>
+            <Table.Head>{docsCopy('环境')}</Table.Head>
+            <Table.Head align="center">{docsCopy('操作')}</Table.Head>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -1522,7 +1634,7 @@ export function TableReleaseDemo() {
                   aria-label={`${action} ${service}`}
                   size="xs"
                   type="button"
-                  variant={action === '确认' ? 'outline' : 'ghost'}
+                  variant={action === docsCopy('确认') ? 'outline' : 'ghost'}
                 >
                   {action}
                 </Button>
@@ -1532,7 +1644,7 @@ export function TableReleaseDemo() {
         </Table.Body>
         <Table.Footer>
           <Table.Row>
-            <Table.Cell colSpan={3}>已就绪服务</Table.Cell>
+            <Table.Cell colSpan={3}>{docsCopy('已就绪服务')}</Table.Cell>
             <Table.Cell>2 / 3</Table.Cell>
           </Table.Row>
         </Table.Footer>
@@ -1544,73 +1656,73 @@ export function TableReleaseDemo() {
 const fixedTableRows = [
   [
     'Web Console',
-    '体验团队',
+    docsCopy('体验团队'),
     'v0.12.0',
-    '生产',
+    docsCopy('生产'),
     '42.8k',
-    '华东',
-    '今天 21:48',
-    '健康',
+    docsCopy('华东'),
+    docsCopy('今天 21:48'),
+    docsCopy('健康'),
   ],
   [
     'Auth API',
-    '身份团队',
+    docsCopy('身份团队'),
     'v1.8.2',
-    '生产',
+    docsCopy('生产'),
     '128.6k',
-    '华北',
-    '今天 20:36',
-    '健康',
+    docsCopy('华北'),
+    docsCopy('今天 20:36'),
+    docsCopy('健康'),
   ],
   [
     'Event Worker',
-    '平台团队',
+    docsCopy('平台团队'),
     'v0.9.7',
-    '预览',
+    docsCopy('预览'),
     '18.4k',
-    '新加坡',
-    '昨天 23:12',
-    '观察',
+    docsCopy('新加坡'),
+    docsCopy('昨天 23:12'),
+    docsCopy('观察'),
   ],
   [
     'Billing API',
-    '商业团队',
+    docsCopy('商业团队'),
     'v2.4.1',
-    '生产',
+    docsCopy('生产'),
     '76.2k',
-    '法兰克福',
-    '昨天 18:04',
-    '健康',
+    docsCopy('法兰克福'),
+    docsCopy('昨天 18:04'),
+    docsCopy('健康'),
   ],
   [
     'Search Indexer',
-    '数据团队',
+    docsCopy('数据团队'),
     'v1.3.0',
-    '生产',
+    docsCopy('生产'),
     '31.7k',
-    '华东',
-    '周一 16:22',
-    '健康',
+    docsCopy('华东'),
+    docsCopy('周一 16:22'),
+    docsCopy('健康'),
   ],
   [
     'Audit Stream',
-    '安全团队',
+    docsCopy('安全团队'),
     'v0.8.6',
-    '预览',
+    docsCopy('预览'),
     '12.1k',
-    '华北',
-    '周一 14:08',
-    '观察',
+    docsCopy('华北'),
+    docsCopy('周一 14:08'),
+    docsCopy('观察'),
   ],
   [
     'Notification',
-    '增长团队',
+    docsCopy('增长团队'),
     'v3.1.4',
-    '生产',
+    docsCopy('生产'),
     '54.9k',
-    '新加坡',
-    '周日 22:45',
-    '健康',
+    docsCopy('新加坡'),
+    docsCopy('周日 22:45'),
+    docsCopy('健康'),
   ],
 ];
 
@@ -1621,18 +1733,18 @@ export function TableFixedDemo() {
         <Table.Header>
           <Table.Row>
             <Table.Head fixed="start" className="w-40">
-              服务
+              {docsCopy('服务')}
             </Table.Head>
-            <Table.Head className="w-32">负责团队</Table.Head>
-            <Table.Head className="w-28">版本</Table.Head>
-            <Table.Head className="w-20">环境</Table.Head>
+            <Table.Head className="w-32">{docsCopy('负责团队')}</Table.Head>
+            <Table.Head className="w-28">{docsCopy('版本')}</Table.Head>
+            <Table.Head className="w-20">{docsCopy('环境')}</Table.Head>
             <Table.Head align="end" className="w-36">
-              每分钟请求
+              {docsCopy('每分钟请求')}
             </Table.Head>
-            <Table.Head className="w-28">区域</Table.Head>
-            <Table.Head className="w-32">最近部署</Table.Head>
+            <Table.Head className="w-28">{docsCopy('区域')}</Table.Head>
+            <Table.Head className="w-32">{docsCopy('最近部署')}</Table.Head>
             <Table.Head fixed="end" align="center" className="w-24">
-              操作
+              {docsCopy('操作')}
             </Table.Head>
           </Table.Row>
         </Table.Header>
@@ -1660,12 +1772,14 @@ export function TableFixedDemo() {
                 <Table.Cell>{deployedAt}</Table.Cell>
                 <Table.Cell fixed="end" align="center">
                   <Button
-                    aria-label={`${status === '健康' ? '监控' : '排查'} ${service}`}
+                    aria-label={`${status === docsCopy('健康') ? docsCopy('监控') : docsCopy('排查')} ${service}`}
                     size="xs"
                     type="button"
                     variant="ghost"
                   >
-                    {status === '健康' ? '监控' : '排查'}
+                    {status === docsCopy('健康')
+                      ? docsCopy('监控')
+                      : docsCopy('排查')}
                   </Button>
                 </Table.Cell>
               </Table.Row>
@@ -1682,10 +1796,15 @@ const virtualTableRows = Array.from({ length: 1000 }, (_, index) => ({
   service: ['Web Console', 'Auth API', 'Event Worker', 'Search Indexer'][
     index % 4
   ],
-  region: ['华东', '华北', '新加坡', '法兰克福'][index % 4],
+  region: [
+    docsCopy('华东'),
+    docsCopy('华北'),
+    docsCopy('新加坡'),
+    docsCopy('法兰克福'),
+  ][index % 4],
   latency: `${32 + ((index * 17) % 180)} ms`,
   requests: `${(18.4 + ((index * 13) % 720) / 10).toFixed(1)}k`,
-  status: index % 9 === 0 ? '观察' : '健康',
+  status: index % 9 === 0 ? docsCopy('观察') : docsCopy('健康'),
 }));
 
 function getVirtualTableRowKey(row: (typeof virtualTableRows)[number]) {
@@ -1696,8 +1815,8 @@ export function TableVirtualScrollDemo() {
   return (
     <div className="display-table-shell display-table-wide">
       <div className="display-table-virtual-meta">
-        <span>1,000 条单行数据</span>
-        <small>当前仅渲染可视区域附近的行</small>
+        <span>{docsCopy('1,000 条单行数据')}</span>
+        <small>{docsCopy('当前仅渲染可视区域附近的行')}</small>
       </div>
       <Table
         aria-rowcount={virtualTableRows.length + 1}
@@ -1707,18 +1826,18 @@ export function TableVirtualScrollDemo() {
         <Table.Header>
           <Table.Row>
             <Table.Head fixed="start" className="w-32">
-              事件
+              {docsCopy('事件')}
             </Table.Head>
-            <Table.Head className="w-52">服务</Table.Head>
-            <Table.Head className="w-32">区域</Table.Head>
+            <Table.Head className="w-52">{docsCopy('服务')}</Table.Head>
+            <Table.Head className="w-32">{docsCopy('区域')}</Table.Head>
             <Table.Head align="end" className="w-32">
-              延迟
+              {docsCopy('延迟')}
             </Table.Head>
             <Table.Head align="end" className="w-36">
-              每分钟请求
+              {docsCopy('每分钟请求')}
             </Table.Head>
             <Table.Head fixed="end" align="center" className="w-28">
-              操作
+              {docsCopy('操作')}
             </Table.Head>
           </Table.Row>
         </Table.Header>
@@ -1740,12 +1859,14 @@ export function TableVirtualScrollDemo() {
               <Table.Cell align="end">{row.requests}</Table.Cell>
               <Table.Cell fixed="end" align="center" className="py-2">
                 <Button
-                  aria-label={`${row.status === '健康' ? '查看' : '排查'} ${row.id}`}
+                  aria-label={`${row.status === docsCopy('健康') ? docsCopy('查看') : docsCopy('排查')} ${row.id}`}
                   size="xs"
                   type="button"
                   variant="ghost"
                 >
-                  {row.status === '健康' ? '查看' : '排查'}
+                  {row.status === docsCopy('健康')
+                    ? docsCopy('查看')
+                    : docsCopy('排查')}
                 </Button>
               </Table.Cell>
             </Table.Row>
@@ -1757,13 +1878,13 @@ export function TableVirtualScrollDemo() {
 }
 
 const paginatedTableRows = [
-  ['REL-1842', 'Web Console', '林默', '已完成'],
-  ['REL-1841', 'Auth API', '周一', '已完成'],
-  ['REL-1840', 'Event Worker', '许澄', '进行中'],
-  ['REL-1839', 'Billing API', '林默', '待审批'],
-  ['REL-1838', 'Search Indexer', '周一', '已完成'],
-  ['REL-1837', 'Audit Stream', '许澄', '已回滚'],
-  ['REL-1836', 'Notification', '林默', '已完成'],
+  ['REL-1842', 'Web Console', docsCopy('林默'), docsCopy('已完成')],
+  ['REL-1841', 'Auth API', docsCopy('周一'), docsCopy('已完成')],
+  ['REL-1840', 'Event Worker', docsCopy('许澄'), docsCopy('进行中')],
+  ['REL-1839', 'Billing API', docsCopy('林默'), docsCopy('待审批')],
+  ['REL-1838', 'Search Indexer', docsCopy('周一'), docsCopy('已完成')],
+  ['REL-1837', 'Audit Stream', docsCopy('许澄'), docsCopy('已回滚')],
+  ['REL-1836', 'Notification', docsCopy('林默'), docsCopy('已完成')],
 ];
 
 export function TablePaginationDemo() {
@@ -1778,10 +1899,10 @@ export function TablePaginationDemo() {
         <Table>
           <Table.Header>
             <Table.Row>
-              <Table.Head>发布单</Table.Head>
-              <Table.Head>服务</Table.Head>
-              <Table.Head>负责人</Table.Head>
-              <Table.Head align="center">操作</Table.Head>
+              <Table.Head>{docsCopy('发布单')}</Table.Head>
+              <Table.Head>{docsCopy('服务')}</Table.Head>
+              <Table.Head>{docsCopy('负责人')}</Table.Head>
+              <Table.Head align="center">{docsCopy('操作')}</Table.Head>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -1793,21 +1914,21 @@ export function TablePaginationDemo() {
                 <Table.Cell align="center">
                   <Button
                     aria-label={`${
-                      status === '待审批'
-                        ? '审批'
-                        : status === '进行中'
-                          ? '跟进'
-                          : '查看'
+                      status === docsCopy('待审批')
+                        ? docsCopy('审批')
+                        : status === docsCopy('进行中')
+                          ? docsCopy('跟进')
+                          : docsCopy('查看')
                     } ${release}`}
                     size="xs"
                     type="button"
                     variant="ghost"
                   >
-                    {status === '待审批'
-                      ? '审批'
-                      : status === '进行中'
-                        ? '跟进'
-                        : '查看'}
+                    {status === docsCopy('待审批')
+                      ? docsCopy('审批')
+                      : status === docsCopy('进行中')
+                        ? docsCopy('跟进')
+                        : docsCopy('查看')}
                   </Button>
                 </Table.Cell>
               </Table.Row>
@@ -1817,14 +1938,24 @@ export function TablePaginationDemo() {
       </div>
       <div className="display-table-pagination">
         <span>
-          共 {paginatedTableRows.length} 项 · 第 {page} / {pageCount} 页
+          {docsCopy('共')}
+          {paginatedTableRows.length}
+          {docsCopy('项 · 第')}
+          {page} / {pageCount}
+          {docsCopy('页')}
         </span>
         <Pagination
+          ariaLabels={{
+            more: docsCopy('更多页面'),
+            navigation: docsCopy('分页'),
+            next: docsCopy('前往下一页'),
+            previous: docsCopy('前往上一页'),
+          }}
           current={page}
           onChange={setPage}
           pageCount={pageCount}
-          previousText="上一页"
-          nextText="下一页"
+          previousText={docsCopy('上一页')}
+          nextText={docsCopy('下一页')}
         />
       </div>
     </div>
@@ -1835,23 +1966,29 @@ const expandableTableRows = [
   {
     id: 'REL-1842',
     service: 'Web Console',
-    status: '成功',
+    status: docsCopy('成功'),
     duration: '1m 48s',
-    detail: '流量已分四批切换完成，错误率维持在 0.03%，无需人工干预。',
+    detail: docsCopy(
+      '流量已分四批切换完成，错误率维持在 0.03%，无需人工干预。'
+    ),
   },
   {
     id: 'REL-1841',
     service: 'Auth API',
-    status: '观察中',
+    status: docsCopy('观察中'),
     duration: '2m 16s',
-    detail: '新实例已全部就绪，当前继续观察登录成功率与令牌刷新延迟。',
+    detail: docsCopy(
+      '新实例已全部就绪，当前继续观察登录成功率与令牌刷新延迟。'
+    ),
   },
   {
     id: 'REL-1840',
     service: 'Event Worker',
-    status: '待执行',
+    status: docsCopy('待执行'),
     duration: '—',
-    detail: '等待 Auth API 观察窗口结束后开始部署，预计占用 3 个执行实例。',
+    detail: docsCopy(
+      '等待 Auth API 观察窗口结束后开始部署，预计占用 3 个执行实例。'
+    ),
   },
 ];
 
@@ -1864,11 +2001,11 @@ export function TableExpandableDemo() {
         <Table.Header>
           <Table.Row>
             <Table.Head className="w-12">
-              <span className="sr-only">展开</span>
+              <span className="sr-only">{docsCopy('展开')}</span>
             </Table.Head>
-            <Table.Head>发布单</Table.Head>
-            <Table.Head>服务</Table.Head>
-            <Table.Head align="end">耗时</Table.Head>
+            <Table.Head>{docsCopy('发布单')}</Table.Head>
+            <Table.Head>{docsCopy('服务')}</Table.Head>
+            <Table.Head align="end">{docsCopy('耗时')}</Table.Head>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -1880,7 +2017,7 @@ export function TableExpandableDemo() {
                 <Table.Row>
                   <Table.Cell>
                     <Table.ExpandButton
-                      aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}
+                      aria-label={`${expanded ? docsCopy('收起') : docsCopy('展开')} ${row.id}`}
                       expanded={expanded}
                       onExpandedChange={(nextExpanded) =>
                         setExpandedId(nextExpanded ? row.id : null)
@@ -1898,7 +2035,7 @@ export function TableExpandableDemo() {
                 </Table.Row>
                 {expanded ? (
                   <Table.ExpandedRow colSpan={4}>
-                    <strong>部署详情</strong>
+                    <strong>{docsCopy('部署详情')}</strong>
                     <p>{row.detail}</p>
                   </Table.ExpandedRow>
                 ) : null}
@@ -1914,15 +2051,17 @@ export function TableExpandableDemo() {
 const cellTableRows = [
   {
     service: 'Realtime Collaboration Gateway',
-    description: '承载多人编辑光标、文档增量同步以及离线重连后的冲突合并。',
+    description: docsCopy(
+      '承载多人编辑光标、文档增量同步以及离线重连后的冲突合并。'
+    ),
     successRate: '99.98%',
-    action: '配置',
+    action: docsCopy('配置'),
   },
   {
     service: 'Notification',
-    description: '推送发布通知。',
+    description: docsCopy('推送发布通知。'),
     successRate: '98.62%',
-    action: '查看',
+    action: docsCopy('查看'),
   },
 ];
 
@@ -1952,19 +2091,21 @@ export function TableCellDemo() {
       <Table className="min-w-[680px] table-fixed">
         <Table.Header>
           <Table.Row>
-            <Table.Head className="w-52">服务（靠左）</Table.Head>
+            <Table.Head className="w-52">{docsCopy('服务（靠左）')}</Table.Head>
             <Table.Head
               ellipsis
               className="w-64"
-              ellipsisTooltip="服务说明、最近一次生产部署上下文与异常原因"
+              ellipsisTooltip={docsCopy(
+                '服务说明、最近一次生产部署上下文与异常原因'
+              )}
             >
-              服务说明、最近一次生产部署上下文与异常原因
+              {docsCopy('服务说明、最近一次生产部署上下文与异常原因')}
             </Table.Head>
             <Table.Head align="end" className="w-28">
-              成功率（靠右）
+              {docsCopy('成功率（靠右）')}
             </Table.Head>
             <Table.Head align="center" className="w-28">
-              操作（居中）
+              {docsCopy('操作（居中）')}
             </Table.Head>
           </Table.Row>
         </Table.Header>
@@ -1986,20 +2127,35 @@ export function TableCellDemo() {
 }
 
 const tooltipPlacements = [
-  { label: '左上', placement: 'top-start', side: 'top', align: 'start' },
-  { label: '上方', placement: 'top', side: 'top', align: 'center' },
-  { label: '右上', placement: 'top-end', side: 'top', align: 'end' },
-  { label: '左侧', placement: 'left', side: 'left', align: 'center' },
-  { label: '右侧', placement: 'right', side: 'right', align: 'center' },
   {
-    label: '左下',
+    label: docsCopy('左上'),
+    placement: 'top-start',
+    side: 'top',
+    align: 'start',
+  },
+  { label: docsCopy('上方'), placement: 'top', side: 'top', align: 'center' },
+  { label: docsCopy('右上'), placement: 'top-end', side: 'top', align: 'end' },
+  { label: docsCopy('左侧'), placement: 'left', side: 'left', align: 'center' },
+  {
+    label: docsCopy('右侧'),
+    placement: 'right',
+    side: 'right',
+    align: 'center',
+  },
+  {
+    label: docsCopy('左下'),
     placement: 'bottom-start',
     side: 'bottom',
     align: 'start',
   },
-  { label: '下方', placement: 'bottom', side: 'bottom', align: 'center' },
   {
-    label: '右下',
+    label: docsCopy('下方'),
+    placement: 'bottom',
+    side: 'bottom',
+    align: 'center',
+  },
+  {
+    label: docsCopy('右下'),
     placement: 'bottom-end',
     side: 'bottom',
     align: 'end',
@@ -2008,7 +2164,10 @@ const tooltipPlacements = [
 
 export function TooltipPlacementsDemo() {
   return (
-    <div className="display-tooltip-placements" aria-label="Tooltip 八个方位">
+    <div
+      className="display-tooltip-placements"
+      aria-label={docsCopy('Tooltip 八个方位')}
+    >
       {tooltipPlacements.map((placement) => (
         <div
           className="display-tooltip-placement"
@@ -2017,12 +2176,12 @@ export function TooltipPlacementsDemo() {
         >
           <Tooltip
             align={placement.align}
-            content={`${placement.label}提示`}
+            content={docsCopy(`${placement.label}提示`)}
             delay={100}
             side={placement.side}
             trigger={
               <Button
-                aria-label={`在${placement.label}显示 Tooltip`}
+                aria-label={docsCopy(`在${placement.label}显示 Tooltip`)}
                 size="sm"
                 variant="outline"
               >
@@ -2034,7 +2193,7 @@ export function TooltipPlacementsDemo() {
       ))}
       <div className="display-tooltip-reference" aria-hidden="true">
         <span>Tooltip</span>
-        <small>悬停外围按钮</small>
+        <small>{docsCopy('悬停外围按钮')}</small>
       </div>
     </div>
   );

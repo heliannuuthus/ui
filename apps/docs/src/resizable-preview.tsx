@@ -1,3 +1,4 @@
+import { docsCopy } from './i18n/content';
 import { useState } from 'react';
 import { Resizable } from '@heliannuuthus/ui';
 import {
@@ -32,13 +33,13 @@ export function ResizableWorkspaceDemo() {
               <aside className="resizable-file-panel">
                 <div className="resizable-panel-heading">
                   <span>items[0]</span>
-                  <small>文件</small>
+                  <small>{docsCopy('文件')}</small>
                 </div>
                 <div className="resizable-folder">
                   <FolderOpen />
                   <strong>components</strong>
                 </div>
-                <nav aria-label="示例文件">
+                <nav aria-label={docsCopy('示例文件')}>
                   {files.map((file) => (
                     <button
                       className={file === 'resizable.tsx' ? 'active' : ''}
@@ -60,7 +61,7 @@ export function ResizableWorkspaceDemo() {
               <article className="resizable-editor-panel">
                 <div className="resizable-panel-heading">
                   <span>items[1]</span>
-                  <small>预览</small>
+                  <small>{docsCopy('预览')}</small>
                 </div>
                 <div className="resizable-editor-tab">
                   <FileCode2 />
@@ -70,15 +71,17 @@ export function ResizableWorkspaceDemo() {
                   <span>LAYOUT PRIMITIVE</span>
                   <h4>Resizable</h4>
                   <p>
-                    拖动中间分隔线，按当前任务调整文件区和内容区的可用空间。
+                    {docsCopy(
+                      '拖动中间分隔线，按当前任务调整文件区和内容区的可用空间。'
+                    )}
                   </p>
                   <dl>
                     <div>
-                      <dt>方向</dt>
-                      <dd>水平</dd>
+                      <dt>{docsCopy('方向')}</dt>
+                      <dd>{docsCopy('水平')}</dd>
                     </div>
                     <div>
-                      <dt>初始比例</dt>
+                      <dt>{docsCopy('初始比例')}</dt>
                       <dd>34 / 66</dd>
                     </div>
                   </dl>
@@ -88,7 +91,9 @@ export function ResizableWorkspaceDemo() {
           },
         ]}
       />
-      <div className="resizable-handle-hint">← 拖动或使用方向键调整 →</div>
+      <div className="resizable-handle-hint">
+        {docsCopy('← 拖动或使用方向键调整 →')}
+      </div>
     </div>
   );
 }
@@ -118,7 +123,7 @@ export function ResizableVerticalDemo() {
                   <FileCode2 aria-hidden="true" />
                   <span>resizable.tsx</span>
                 </header>
-                <pre aria-label="Resizable 示例代码">
+                <pre aria-label={docsCopy('Resizable 示例代码')}>
                   <code>
                     <span>const</span> workspace = {'{'}
                     {'\n  '}orientation: <em>&apos;vertical&apos;</em>,{'\n  '}
@@ -150,7 +155,9 @@ export function ResizableVerticalDemo() {
           },
         ]}
       />
-      <div className="resizable-handle-hint">上下拖动分隔线调整终端高度</div>
+      <div className="resizable-handle-hint">
+        {docsCopy('上下拖动分隔线调整终端高度')}
+      </div>
     </div>
   );
 }
@@ -192,7 +199,7 @@ export function ResizableAdvancedDemo() {
             ),
             panel: (
               <aside className="resizable-advanced-navigation">
-                <strong>导航</strong>
+                <strong>{docsCopy('导航')}</strong>
                 <span>Overview</span>
                 <span className="active">Components</span>
                 <span>Tokens</span>
@@ -205,8 +212,8 @@ export function ResizableAdvancedDemo() {
             panel: (
               <main className="resizable-advanced-canvas">
                 <span>CANVAS</span>
-                <strong>拖动两侧分隔线</strong>
-                <p>左侧可折叠，并限制在 18%–34% 之间。</p>
+                <strong>{docsCopy('拖动两侧分隔线')}</strong>
+                <p>{docsCopy('左侧可折叠，并限制在 18%–34% 之间。')}</p>
               </main>
             ),
           },
@@ -217,7 +224,7 @@ export function ResizableAdvancedDemo() {
             collapsedSize: 0,
             panel: (
               <aside className="resizable-advanced-inspector">
-                <strong>属性</strong>
+                <strong>{docsCopy('属性')}</strong>
                 <dl>
                   <div>
                     <dt>Width</dt>
@@ -234,7 +241,7 @@ export function ResizableAdvancedDemo() {
         ]}
       />
       <div className="resizable-handle-hint">
-        第一个 item 覆盖分隔线；第二个使用全局默认内容
+        {docsCopy('第一个 item 覆盖分隔线；第二个使用全局默认内容')}
       </div>
     </div>
   );

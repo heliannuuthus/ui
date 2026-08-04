@@ -13,6 +13,8 @@ type CheckboxClassNames = {
   label?: string;
 };
 
+type CheckboxVariant = 'default' | 'task';
+
 type CheckboxProps = Omit<
   React.ComponentProps<'label'>,
   'children' | 'defaultChecked' | 'onChange'
@@ -33,6 +35,7 @@ type CheckboxProps = Omit<
   required?: boolean;
   uncheckedValue?: string;
   value?: string;
+  variant?: CheckboxVariant;
 };
 
 type CheckboxOption = {
@@ -40,6 +43,7 @@ type CheckboxOption = {
   disabled?: boolean;
   label: React.ReactNode;
   value: string;
+  variant?: CheckboxVariant;
 };
 
 type CheckboxGroupProps = Omit<
@@ -57,6 +61,7 @@ type CheckboxGroupProps = Omit<
   options: readonly CheckboxOption[];
   orientation?: 'horizontal' | 'vertical';
   value?: string[];
+  variant?: CheckboxVariant;
 };
 
 const CheckboxGroupNameContext = React.createContext<string | undefined>(
@@ -70,6 +75,7 @@ function CheckboxRoot({
   disabled,
   name,
   onChange,
+  variant = 'default',
   ...props
 }: CheckboxProps) {
   const groupName = React.useContext(CheckboxGroupNameContext);
@@ -86,6 +92,7 @@ function CheckboxRoot({
     <CheckboxPrimitive.Root
       render={<label />}
       data-slot="checkbox"
+      data-variant={variant}
       className={cn(
         'group/checkbox inline-flex w-fit cursor-pointer items-start gap-2 text-sm leading-5 outline-none focus-visible:[&>[data-slot=checkbox-control]]:border-ring focus-visible:[&>[data-slot=checkbox-control]]:ring-3 focus-visible:[&>[data-slot=checkbox-control]]:ring-ring/30 data-disabled:cursor-not-allowed data-disabled:opacity-50',
         className
@@ -125,7 +132,12 @@ function CheckboxRoot({
       {children != null && (
         <span
           data-slot="checkbox-label"
-          className={cn('contents', classNames?.label)}
+          className={cn(
+            'contents',
+            variant === 'task' &&
+              'block min-w-0 flex-1 transition-colors duration-150 group-data-checked/checkbox:text-muted-foreground group-data-checked/checkbox:line-through group-data-checked/checkbox:decoration-muted-foreground/70 group-data-checked/checkbox:decoration-1 motion-reduce:transition-none',
+            classNames?.label
+          )}
         >
           {children}
         </span>
@@ -143,6 +155,7 @@ function CheckboxGroup({
   onChange,
   options,
   orientation = 'horizontal',
+  variant = 'default',
   ...props
 }: CheckboxGroupProps) {
   return (
@@ -164,6 +177,7 @@ function CheckboxGroup({
                 className={option.className}
                 disabled={option.disabled}
                 value={option.value}
+                variant={option.variant ?? variant}
               >
                 {option.label}
               </CheckboxRoot>
@@ -187,4 +201,5 @@ export type {
   CheckboxGroupProps,
   CheckboxOption,
   CheckboxProps,
+  CheckboxVariant,
 };

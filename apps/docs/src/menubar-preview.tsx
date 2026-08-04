@@ -1,3 +1,4 @@
+import { docsCopy } from './i18n/content';
 import { useState, type ReactNode } from 'react';
 import { Menubar } from '@heliannuuthus/ui';
 import {
@@ -36,82 +37,82 @@ function DemoWindow({
       {children}
       <div className="menubar-demo-status">
         <span>{status}</span>
-        <span>组件文档 · 本地预览</span>
+        <span>{docsCopy('组件文档 · 本地预览')}</span>
       </div>
     </div>
   );
 }
 
 export function MenubarCommandsDemo() {
-  const [status, setStatus] = useState('文档已保存');
+  const [status, setStatus] = useState(docsCopy('文档已保存'));
 
   return (
-    <DemoWindow title="Menubar 组件文档" status={status}>
+    <DemoWindow title={docsCopy('Menubar 组件文档')} status={status}>
       <Menubar
         className="menubar-demo-control"
         menus={[
           {
-            label: '文件',
+            label: docsCopy('文件'),
             items: [
-              { type: 'label', label: '文档' },
+              { type: 'label', label: docsCopy('文档') },
               {
-                label: '新建文档',
+                label: docsCopy('新建文档'),
                 icon: <FilePlus2 />,
                 shortcut: '⌘N',
-                onSelect: () => setStatus('已新建空白文档'),
+                onSelect: () => setStatus(docsCopy('已新建空白文档')),
               },
               {
-                label: '打开文件',
+                label: docsCopy('打开文件'),
                 icon: <FolderOpen />,
                 shortcut: '⌘O',
-                onSelect: () => setStatus('正在打开文件'),
+                onSelect: () => setStatus(docsCopy('正在打开文件')),
               },
               {
-                label: '保存',
+                label: docsCopy('保存'),
                 icon: <Save />,
                 shortcut: '⌘S',
-                onSelect: () => setStatus('文档已保存'),
+                onSelect: () => setStatus(docsCopy('文档已保存')),
               },
               { type: 'separator' },
               {
-                label: '移至废纸篓',
+                label: docsCopy('移至废纸篓'),
                 icon: <Trash2 />,
                 destructive: true,
-                onSelect: () => setStatus('已移至废纸篓'),
+                onSelect: () => setStatus(docsCopy('已移至废纸篓')),
               },
             ],
           },
           {
-            label: '编辑',
+            label: docsCopy('编辑'),
             items: [
               {
-                label: '撤销',
+                label: docsCopy('撤销'),
                 icon: <RotateCcw />,
                 shortcut: '⌘Z',
-                onSelect: () => setStatus('已撤销上一步'),
+                onSelect: () => setStatus(docsCopy('已撤销上一步')),
               },
-              { label: '重做', shortcut: '⇧⌘Z', disabled: true },
+              { label: docsCopy('重做'), shortcut: '⇧⌘Z', disabled: true },
             ],
           },
           {
-            label: '视图',
+            label: docsCopy('视图'),
             items: [
-              { label: '显示侧栏', shortcut: '⌘B' },
-              { label: '进入全屏', shortcut: '⌃⌘F' },
+              { label: docsCopy('显示侧栏'), shortcut: '⌘B' },
+              { label: docsCopy('进入全屏'), shortcut: '⌃⌘F' },
             ],
           },
           {
-            label: '帮助',
+            label: docsCopy('帮助'),
             items: [
-              { label: '命令面板', shortcut: '⇧⌘P' },
-              { label: '键盘快捷键', shortcut: '⌘K ⌘S' },
+              { label: docsCopy('命令面板'), shortcut: '⇧⌘P' },
+              { label: docsCopy('键盘快捷键'), shortcut: '⌘K ⌘S' },
             ],
           },
         ]}
       />
       <div className="menubar-demo-workspace">
         <aside className="menubar-demo-sidebar">
-          <span>资源管理器</span>
+          <span>{docsCopy('资源管理器')}</span>
           <strong>HELIANNUUTHUS UI</strong>
           <div className="active">
             <FileText />
@@ -135,7 +136,9 @@ export function MenubarCommandsDemo() {
             <span>COMPONENT GUIDELINE</span>
             <h4>Menubar</h4>
             <p>
-              将跨内容生效的应用命令放在稳定的顶层位置，并为高频命令提供快捷键。
+              {docsCopy(
+                '将跨内容生效的应用命令放在稳定的顶层位置，并为高频命令提供快捷键。'
+              )}
             </p>
           </article>
         </main>
@@ -151,38 +154,38 @@ export function MenubarViewDemo() {
 
   return (
     <DemoWindow
-      title="界面偏好设置"
-      status={`${sidebar ? '侧栏开启' : '侧栏关闭'} · ${theme === 'system' ? '跟随系统' : theme === 'light' ? '浅色' : '深色'}`}
+      title={docsCopy('界面偏好设置')}
+      status={`${sidebar ? docsCopy('侧栏开启') : docsCopy('侧栏关闭')} · ${theme === 'system' ? docsCopy('跟随系统') : theme === 'light' ? docsCopy('浅色') : docsCopy('深色')}`}
     >
       <Menubar
         className="menubar-demo-control"
         menus={[
           {
-            label: '视图',
+            label: docsCopy('视图'),
             items: [
-              { type: 'label', label: '布局' },
+              { type: 'label', label: docsCopy('布局') },
               {
                 type: 'checkbox',
-                label: '显示侧栏',
+                label: docsCopy('显示侧栏'),
                 checked: sidebar,
                 onCheckedChange: setSidebar,
               },
               {
                 type: 'checkbox',
-                label: '显示行号',
+                label: docsCopy('显示行号'),
                 checked: lineNumbers,
                 onCheckedChange: setLineNumbers,
               },
               { type: 'separator' },
-              { type: 'label', label: '主题' },
+              { type: 'label', label: docsCopy('主题') },
               {
                 type: 'radio',
                 value: theme,
                 onValueChange: setTheme,
                 items: [
-                  { label: '跟随系统', value: 'system' },
-                  { label: '浅色', value: 'light' },
-                  { label: '深色', value: 'dark' },
+                  { label: docsCopy('跟随系统'), value: 'system' },
+                  { label: docsCopy('浅色'), value: 'light' },
+                  { label: docsCopy('深色'), value: 'dark' },
                 ],
               },
             ],
@@ -192,10 +195,10 @@ export function MenubarViewDemo() {
       <div className="menubar-demo-workspace">
         {sidebar && (
           <aside className="menubar-demo-sidebar menubar-demo-outline">
-            <span>文档大纲</span>
-            <div className="active">设计目标</div>
-            <div>组件结构</div>
-            <div>无障碍</div>
+            <span>{docsCopy('文档大纲')}</span>
+            <div className="active">{docsCopy('设计目标')}</div>
+            <div>{docsCopy('组件结构')}</div>
+            <div>{docsCopy('无障碍')}</div>
           </aside>
         )}
         <main className="menubar-demo-editor">
@@ -224,66 +227,67 @@ export function MenubarViewDemo() {
 }
 
 export function MenubarNestedDemo() {
-  const [status, setStatus] = useState('选择组件文档或导出格式');
+  const [status, setStatus] = useState(docsCopy('选择组件文档或导出格式'));
 
   return (
-    <DemoWindow title="组件发布工作台" status={status}>
+    <DemoWindow title={docsCopy('组件发布工作台')} status={status}>
       <Menubar
         size="lg"
         className="menubar-demo-control"
         menus={[
           {
-            label: '组件',
+            label: docsCopy('组件'),
             items: [
               {
-                label: '最近编辑',
+                label: docsCopy('最近编辑'),
                 icon: <FolderOpen />,
                 children: [
                   {
                     label: 'Menubar',
                     icon: <FileCode2 />,
-                    onSelect: () => setStatus('已打开 Menubar 文档'),
+                    onSelect: () => setStatus(docsCopy('已打开 Menubar 文档')),
                   },
                   {
                     label: 'Navigation Menu',
                     icon: <FileText />,
-                    onSelect: () => setStatus('已打开 Navigation Menu 文档'),
+                    onSelect: () =>
+                      setStatus(docsCopy('已打开 Navigation Menu 文档')),
                   },
                 ],
               },
               {
-                label: '归档草稿',
+                label: docsCopy('归档草稿'),
                 icon: <Archive />,
-                onSelect: () => setStatus('文档草稿已归档'),
+                onSelect: () => setStatus(docsCopy('文档草稿已归档')),
               },
             ],
           },
           {
-            label: '导出',
+            label: docsCopy('导出'),
             items: [
               {
-                label: '导出为',
+                label: docsCopy('导出为'),
                 children: [
                   {
-                    label: 'PDF 文档',
+                    label: docsCopy('PDF 文档'),
                     icon: <FileText />,
-                    onSelect: () => setStatus('已导出 PDF'),
+                    onSelect: () => setStatus(docsCopy('已导出 PDF')),
                   },
                   {
-                    label: 'PNG 图片',
+                    label: docsCopy('PNG 图片'),
                     icon: <Image />,
-                    onSelect: () => setStatus('已导出 PNG'),
+                    onSelect: () => setStatus(docsCopy('已导出 PNG')),
                   },
                 ],
               },
             ],
           },
-          { label: '发布', disabled: true, items: [] },
+          { label: docsCopy('发布'), disabled: true, items: [] },
         ]}
       />
       <div className="menubar-demo-workspace menubar-demo-project">
         <aside className="menubar-demo-sidebar">
-          <span>最近组件</span>
+          <span>{docsCopy('最近组件')}</span>
           <div className="active">
             <FileCode2 />
             Menubar
@@ -297,15 +301,19 @@ export function MenubarNestedDemo() {
           <div className="menubar-demo-project-card">
             <Archive />
             <div>
-              <span>当前组件</span>
+              <span>{docsCopy('当前组件')}</span>
               <strong>Menubar</strong>
-              <p>通过二级菜单切换组件文档，或导出当前组件的规范说明。</p>
+              <p>
+                {docsCopy(
+                  '通过二级菜单切换组件文档，或导出当前组件的规范说明。'
+                )}
+              </p>
             </div>
           </div>
           <div className="menubar-demo-project-meta">
-            <span>3 个示例</span>
-            <span>文档草稿</span>
-            <span>发布暂不可用</span>
+            <span>{docsCopy('3 个示例')}</span>
+            <span>{docsCopy('文档草稿')}</span>
+            <span>{docsCopy('发布暂不可用')}</span>
           </div>
         </main>
       </div>
