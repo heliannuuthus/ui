@@ -67,8 +67,6 @@ const zh = {
       accessibility: '无障碍',
       pitfalls: '避免这样使用',
       draftSummary: '该组件的完整使用场景正在按组件目录顺序整理。',
-      translationFallback:
-        '以下详细参考暂时使用中文，英文内容会按组件逐步补齐。',
     },
     docs: {
       onThisPage: '本页目录',
@@ -227,8 +225,6 @@ const en = {
       pitfalls: 'Avoid these patterns',
       draftSummary:
         'Complete guidance for this component is being prepared in catalog order.',
-      translationFallback:
-        'The detailed reference below currently falls back to Chinese while its English translation is being prepared.',
     },
     docs: {
       onThisPage: 'On this page',

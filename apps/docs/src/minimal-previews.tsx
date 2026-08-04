@@ -1,3 +1,4 @@
+import { docsCopy } from './i18n/content';
 import type { ReactNode } from 'react';
 import { Alert } from '@heliannuuthus/ui';
 import { Avatar } from '@heliannuuthus/ui';
@@ -41,48 +42,53 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
     <ScrollArea className="minimal-scroll">
       <div>
         {Array.from({ length: 12 }, (_, index) => (
-          <p key={index}>可滚动内容 {index + 1}</p>
+          <p key={index}>
+            {docsCopy('可滚动内容')}
+            {index + 1}
+          </p>
         ))}
       </div>
     </ScrollArea>
   ),
   input: (
     <div className="minimal-field">
-      <Label htmlFor="preview-email">邮箱地址</Label>
+      <Label htmlFor="preview-email">{docsCopy('邮箱地址')}</Label>
       <Input id="preview-email" type="email" placeholder="name@example.com" />
     </div>
   ),
-  checkbox: <Checkbox className="minimal-control">接收产品更新</Checkbox>,
+  checkbox: (
+    <Checkbox className="minimal-control">{docsCopy('接收产品更新')}</Checkbox>
+  ),
   counter: <Counter fontSize={52} fontWeight={600} value={7.4} />,
   slider: (
     <div className="minimal-slider">
-      <span>音量</span>
+      <span>{docsCopy('音量')}</span>
       <Slider defaultValue={[64]} max={100} />
     </div>
   ),
   switch: (
     <label className="minimal-control">
       <Switch defaultChecked />
-      启用通知
+      {docsCopy('启用通知')}
     </label>
   ),
   toggle: (
-    <Toggle aria-label="切换粗体" defaultValue>
+    <Toggle aria-label={docsCopy('切换粗体')} defaultValue>
       <Bold />
-      粗体
+      {docsCopy('粗体')}
     </Toggle>
   ),
   alert: (
     <Alert
       className="minimal-alert"
-      description="新的主题设置已经应用到当前工作区。"
-      title="配置已保存"
+      description={docsCopy('新的主题设置已经应用到当前工作区。')}
+      title={docsCopy('配置已保存')}
     />
   ),
   progress: (
     <Progress
       className="minimal-progress"
-      label="文档覆盖率"
+      label={docsCopy('文档覆盖率')}
       showValue
       value={68}
     />
@@ -99,7 +105,7 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
   spinner: (
     <div className="minimal-control">
       <Spinner />
-      正在加载组件……
+      {docsCopy('正在加载组件……')}
     </div>
   ),
   empty: (
@@ -107,50 +113,55 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
       actions={
         <Button size="sm">
           <Plus />
-          新建项目
+          {docsCopy('新建项目')}
         </Button>
       }
       className="minimal-empty"
-      description="创建第一个项目开始使用组件库。"
-      title="还没有项目"
+      description={docsCopy('创建第一个项目开始使用组件库。')}
+      title={docsCopy('还没有项目')}
     />
   ),
   avatar: (
     <Avatar.Group
-      items={['HN', 'UI', '林', '周', '陈'].map((fallback) => ({
-        alt: fallback,
-        fallback,
-      }))}
+      items={['HN', 'UI', docsCopy('林'), docsCopy('周'), docsCopy('陈')].map(
+        (fallback) => ({
+          alt: fallback,
+          fallback,
+        })
+      )}
       max={2}
     />
   ),
   breadcrumb: (
     <Breadcrumb
-      items={[{ label: '组件', href: '#' }, { label: 'Breadcrumb' }]}
+      items={[{ label: docsCopy('组件'), href: '#' }, { label: 'Breadcrumb' }]}
     />
   ),
   menubar: (
     <Menubar
       menus={[
         {
-          label: '文件',
+          label: docsCopy('文件'),
           items: [
-            { label: '新建窗口', shortcut: '⌘N' },
-            { label: '打开文件', shortcut: '⌘O' },
+            { label: docsCopy('新建窗口'), shortcut: '⌘N' },
+            { label: docsCopy('打开文件'), shortcut: '⌘O' },
             { type: 'separator' },
-            { label: '退出' },
+            { label: docsCopy('退出') },
           ],
         },
         {
-          label: '编辑',
+          label: docsCopy('编辑'),
           items: [
-            { label: '撤销', shortcut: '⌘Z' },
-            { label: '重做', shortcut: '⇧⌘Z' },
+            { label: docsCopy('撤销'), shortcut: '⌘Z' },
+            { label: docsCopy('重做'), shortcut: '⇧⌘Z' },
           ],
         },
         {
-          label: '帮助',
-          items: [{ label: '组件文档' }, { label: '快捷键' }],
+          label: docsCopy('帮助'),
+          items: [
+            { label: docsCopy('组件文档') },
+            { label: docsCopy('快捷键') },
+          ],
         },
       ]}
     />
@@ -160,38 +171,38 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
       className="minimal-command"
       groups={[
         {
-          heading: '常用命令',
+          heading: docsCopy('常用命令'),
           options: [
             {
               icon: <FilePlus2 />,
-              label: '新建文件',
+              label: docsCopy('新建文件'),
               shortcut: '⌘N',
               value: 'new-file',
             },
             {
               icon: <Settings2 />,
-              label: '打开设置',
+              label: docsCopy('打开设置'),
               shortcut: '⌘,',
               value: 'settings',
             },
           ],
         },
       ]}
-      placeholder="搜索命令…"
+      placeholder={docsCopy('搜索命令…')}
     />
   ),
   'context-menu': (
     <ContextMenu
       items={[
-        { icon: <Copy />, label: '复制链接', shortcut: '⌘C' },
-        { icon: <Settings2 />, label: '项目设置' },
+        { icon: <Copy />, label: docsCopy('复制链接'), shortcut: '⌘C' },
+        { icon: <Settings2 />, label: docsCopy('项目设置') },
         { type: 'separator' },
-        { destructive: true, icon: <Trash2 />, label: '删除项目' },
+        { destructive: true, icon: <Trash2 />, label: docsCopy('删除项目') },
       ]}
       trigger={
         <button className="minimal-context-menu-trigger" type="button">
-          <span>组件文档</span>
-          <small>在这里单击右键</small>
+          <span>{docsCopy('组件文档')}</span>
+          <small>{docsCopy('在这里单击右键')}</small>
         </button>
       }
     />
@@ -201,10 +212,10 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
       <div className="minimal-direction" dir="rtl">
         <div>
           <strong>واجهة عربية</strong>
-          <span>组件布局会跟随阅读方向排列</span>
+          <span>{docsCopy('组件布局会跟随阅读方向排列')}</span>
         </div>
         <Button variant="outline">
-          下一步
+          {docsCopy('下一步')}
           <ArrowLeft />
         </Button>
       </div>
@@ -214,18 +225,18 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
     <Table className="minimal-table">
       <Table.Header>
         <Table.Row>
-          <Table.Head>组件</Table.Head>
-          <Table.Head>状态</Table.Head>
+          <Table.Head>{docsCopy('组件')}</Table.Head>
+          <Table.Head>{docsCopy('状态')}</Table.Head>
         </Table.Row>
       </Table.Header>
       <Table.Body>
         <Table.Row>
           <Table.Cell>Button</Table.Cell>
-          <Table.Cell>稳定</Table.Cell>
+          <Table.Cell>{docsCopy('稳定')}</Table.Cell>
         </Table.Row>
         <Table.Row>
           <Table.Cell>Dialog</Table.Cell>
-          <Table.Cell>稳定</Table.Cell>
+          <Table.Cell>{docsCopy('稳定')}</Table.Cell>
         </Table.Row>
       </Table.Body>
     </Table>

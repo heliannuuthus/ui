@@ -1,3 +1,4 @@
+import { docsCopy } from './i18n/content';
 import type { CSSProperties, ReactNode } from 'react';
 import { Badge } from '@heliannuuthus/ui';
 
@@ -121,7 +122,7 @@ export function ComponentHarness(props: ComponentHarnessProps) {
                 ) : null}
               </div>
               {harnessCase.isDefault ? (
-                <Badge variant="secondary">默认</Badge>
+                <Badge variant="secondary">{docsCopy('默认')}</Badge>
               ) : null}
             </header>
             <div className="component-harness-case-stage">

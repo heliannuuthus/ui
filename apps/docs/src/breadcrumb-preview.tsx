@@ -1,33 +1,40 @@
-'use client';
-
+import { docsCopy } from './i18n/content';
 import { Breadcrumb } from '@heliannuuthus/ui';
 import { Box, Component, Folder, LayoutGrid, Settings2 } from 'lucide-react';
 
 const pageItems = [
-  { label: '首页', href: '/' },
-  { label: '组件', href: '/components' },
-  { label: '导航', href: '/components/navigation-menu' },
+  { label: docsCopy('首页'), href: '/' },
+  { label: docsCopy('组件'), href: '/components' },
+  { label: docsCopy('导航'), href: '/components/navigation-menu' },
   { label: 'Breadcrumb' },
 ];
 
 const deepPathItems = [
-  { label: '工作台', href: '#' },
-  { label: '研发项目', href: '#' },
+  { label: docsCopy('工作台'), href: '#' },
+  { label: docsCopy('研发项目'), href: '#' },
   { label: 'Helios', href: '#' },
-  { label: '发布管理', href: '#' },
-  { label: '生产环境', href: '#' },
+  { label: docsCopy('发布管理'), href: '#' },
+  { label: docsCopy('生产环境'), href: '#' },
   { label: 'v0.12.0' },
 ];
 
 const menuItems = [
-  { label: '首页', href: '#' },
+  { label: docsCopy('首页'), href: '#' },
   {
-    label: '组件',
+    label: docsCopy('组件'),
     icon: <LayoutGrid />,
     menu: [
-      { label: '数据展示', icon: <Box />, onSelect: () => undefined },
-      { label: '表单组件', icon: <Component />, onSelect: () => undefined },
-      { label: '组件设置', icon: <Settings2 />, onSelect: () => undefined },
+      { label: docsCopy('数据展示'), icon: <Box />, onSelect: () => undefined },
+      {
+        label: docsCopy('表单组件'),
+        icon: <Component />,
+        onSelect: () => undefined,
+      },
+      {
+        label: docsCopy('组件设置'),
+        icon: <Settings2 />,
+        onSelect: () => undefined,
+      },
     ],
   },
   { label: 'Breadcrumb' },
@@ -39,13 +46,15 @@ export function BreadcrumbBasicDemo() {
       <Breadcrumb items={pageItems} homeIcon />
       <header>
         <div>
-          <span>导航组件</span>
+          <span>{docsCopy('导航组件')}</span>
           <h3>Breadcrumb</h3>
-          <p>帮助用户确认当前位置，并沿着稳定的页面层级向上返回。</p>
+          <p>
+            {docsCopy('帮助用户确认当前位置，并沿着稳定的页面层级向上返回。')}
+          </p>
         </div>
         <div className="breadcrumb-page-demo-status">
           <i />
-          文档已同步
+          {docsCopy('文档已同步')}
         </div>
       </header>
       <div className="breadcrumb-page-demo-content" aria-hidden="true">
@@ -61,17 +70,22 @@ export function BreadcrumbCollapsedDemo() {
   return (
     <section className="breadcrumb-collapse-demo">
       <div className="breadcrumb-demo-caption">
-        <span>当前位置</span>
-        <strong>v0.12.0 发布详情</strong>
+        <span>{docsCopy('当前位置')}</span>
+        <strong>{docsCopy('v0.12.0 发布详情')}</strong>
       </div>
       <Breadcrumb
+        collapseLabel={docsCopy('显示完整路径')}
         items={deepPathItems}
         homeIcon
         maxItems={4}
         itemsBeforeCollapse={1}
         itemsAfterCollapse={2}
       />
-      <p>中间的三个层级收进省略菜单，起点、直接父级和当前页面保持可见。</p>
+      <p>
+        {docsCopy(
+          '中间的三个层级收进省略菜单，起点、直接父级和当前页面保持可见。'
+        )}
+      </p>
     </section>
   );
 }
@@ -81,28 +95,28 @@ export function BreadcrumbVariantsDemo() {
     <div className="breadcrumb-variants-demo">
       <section>
         <div className="breadcrumb-demo-caption">
-          <span>层级菜单</span>
-          <small>路径节点可以展开同级入口</small>
+          <span>{docsCopy('层级菜单')}</span>
+          <small>{docsCopy('路径节点可以展开同级入口')}</small>
         </div>
         <Breadcrumb items={menuItems} />
       </section>
       <section>
         <div className="breadcrumb-demo-caption">
-          <span>下划线链接</span>
-          <small>适合链接感需要更明确的内容页</small>
+          <span>{docsCopy('下划线链接')}</span>
+          <small>{docsCopy('适合链接感需要更明确的内容页')}</small>
         </div>
         <Breadcrumb items={pageItems} separator="slash" variant="underline" />
       </section>
       <section>
         <div className="breadcrumb-demo-caption">
-          <span>紧凑标签</span>
-          <small>用于工具栏或密度较高的工作区</small>
+          <span>{docsCopy('紧凑标签')}</span>
+          <small>{docsCopy('用于工具栏或密度较高的工作区')}</small>
         </div>
         <Breadcrumb
           items={[
-            { label: '资源', href: '#', icon: <Folder /> },
-            { label: '图片', href: '#' },
-            { label: '封面图' },
+            { label: docsCopy('资源'), href: '#', icon: <Folder /> },
+            { label: docsCopy('图片'), href: '#' },
+            { label: docsCopy('封面图') },
           ]}
           separator="dot"
           size="sm"

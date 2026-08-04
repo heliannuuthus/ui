@@ -10,6 +10,11 @@ import {
 
 const storageKey = 'heliannuuthus-ui-locale';
 
+function routeLocale(): DocsLocale | undefined {
+  const value = window.location.pathname.split('/').filter(Boolean)[0];
+  return isDocsLocale(value) ? value : undefined;
+}
+
 function storedLocale(): DocsLocale | undefined {
   try {
     const value = window.localStorage.getItem(storageKey) ?? undefined;
@@ -43,7 +48,7 @@ void i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
-  lng: defaultLocale,
+  lng: routeLocale() ?? preferredLocale(),
   resources,
   returnEmptyString: false,
   supportedLngs: ['zh', 'en'],

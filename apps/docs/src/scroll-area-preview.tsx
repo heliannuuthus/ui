@@ -1,5 +1,4 @@
-'use client';
-
+import { docsCopy } from './i18n/content';
 import { useRef, useState } from 'react';
 import {
   ScrollArea,
@@ -26,59 +25,59 @@ type ReleaseEvent = {
 const releaseEvents: ReleaseEvent[] = [
   {
     id: 'commit',
-    title: '提交进入发布队列',
+    title: docsCopy('提交进入发布队列'),
     description: 'style/docs-visual-refinement · 8f2a7e1',
     status: 'complete',
     time: '09:42',
   },
   {
     id: 'types',
-    title: '类型检查通过',
-    description: '应用与组件包均未发现类型错误',
+    title: docsCopy('类型检查通过'),
+    description: docsCopy('应用与组件包均未发现类型错误'),
     status: 'complete',
     time: '09:44',
   },
   {
     id: 'lint',
-    title: '代码规范检查通过',
-    description: 'ESLint 与 Prettier 已完成',
+    title: docsCopy('代码规范检查通过'),
+    description: docsCopy('ESLint 与 Prettier 已完成'),
     status: 'complete',
     time: '09:45',
   },
   {
     id: 'build',
-    title: '生产构建完成',
-    description: '文档站资源已生成并压缩',
+    title: docsCopy('生产构建完成'),
+    description: docsCopy('文档站资源已生成并压缩'),
     status: 'complete',
     time: '09:48',
   },
   {
     id: 'preview',
-    title: '预览环境部署中',
-    description: '正在同步静态资源与边缘缓存',
+    title: docsCopy('预览环境部署中'),
+    description: docsCopy('正在同步静态资源与边缘缓存'),
     status: 'current',
-    time: '现在',
+    time: docsCopy('现在'),
   },
   {
     id: 'visual',
-    title: '等待视觉回归',
-    description: '桌面与窄屏截图即将开始比对',
+    title: docsCopy('等待视觉回归'),
+    description: docsCopy('桌面与窄屏截图即将开始比对'),
     status: 'queued',
-    time: '下一步',
+    time: docsCopy('下一步'),
   },
   {
     id: 'approval',
-    title: '等待发布确认',
-    description: '由值班负责人确认本次变更',
+    title: docsCopy('等待发布确认'),
+    description: docsCopy('由值班负责人确认本次变更'),
     status: 'queued',
-    time: '待定',
+    time: docsCopy('待定'),
   },
   {
     id: 'production',
-    title: '推送生产环境',
-    description: '完成后将逐步刷新全球节点',
+    title: docsCopy('推送生产环境'),
+    description: docsCopy('完成后将逐步刷新全球节点'),
     status: 'queued',
-    time: '待定',
+    time: docsCopy('待定'),
   },
 ];
 
@@ -200,11 +199,11 @@ export function ScrollAreaAnimatedListDemo({
         </span>
         <div>
           <span>Release stream</span>
-          <h3>组件库发布动态</h3>
+          <h3>{docsCopy('组件库发布动态')}</h3>
         </div>
         <span className="scroll-area-release-live">
           <i />
-          进行中
+          {docsCopy('进行中')}
         </span>
       </header>
 
@@ -216,7 +215,9 @@ export function ScrollAreaAnimatedListDemo({
         scrollbarVisibility={scrollbarVisibility}
         viewportProps={{
           'aria-activedescendant': `release-event-${releaseEvents[activeIndex].id}`,
-          'aria-label': '组件库发布动态，使用上下方向键浏览，按 Enter 选择',
+          'aria-label': docsCopy(
+            '组件库发布动态，使用上下方向键浏览，按 Enter 选择'
+          ),
           onKeyDown: handleKeyDown,
           ref: viewportRef,
           role: 'listbox',
@@ -244,7 +245,7 @@ export function ScrollAreaAnimatedListDemo({
       <footer>
         <span>
           <GitCommitHorizontal />
-          当前选择
+          {docsCopy('当前选择')}
         </span>
         <strong aria-live="polite">{selectedEvent.title}</strong>
         <kbd>↑↓</kbd>

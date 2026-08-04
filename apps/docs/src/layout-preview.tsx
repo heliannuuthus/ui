@@ -1,3 +1,4 @@
+import { docsCopy } from './i18n/content';
 import { Layout } from '@heliannuuthus/ui';
 import {
   Bell,
@@ -12,10 +13,10 @@ import {
 } from 'lucide-react';
 
 const navigationItems = [
-  { label: '概览', icon: LayoutDashboard, active: true },
-  { label: '项目', icon: FolderKanban },
-  { label: '组件', icon: Blocks },
-  { label: '报告', icon: FileText },
+  { label: docsCopy('概览'), icon: LayoutDashboard, active: true },
+  { label: docsCopy('项目'), icon: FolderKanban },
+  { label: docsCopy('组件'), icon: Blocks },
+  { label: docsCopy('报告'), icon: FileText },
 ];
 
 function PreviewHeader({ compact = false }: { compact?: boolean }) {
@@ -32,7 +33,7 @@ function PreviewHeader({ compact = false }: { compact?: boolean }) {
 }
 
 function PreviewSidebar({
-  label = '工作区',
+  label = docsCopy('工作区'),
   width = 112,
 }: {
   label?: string;
@@ -45,7 +46,7 @@ function PreviewSidebar({
       width={width}
     >
       <small>{label}</small>
-      <nav aria-label={`${label}导航`}>
+      <nav aria-label={docsCopy(`${label}导航`)}>
         {navigationItems.map((item) => (
           <a
             className={item.active ? 'is-active' : undefined}
@@ -59,7 +60,7 @@ function PreviewSidebar({
       </nav>
       <a href="#">
         <Settings />
-        <span>设置</span>
+        <span>{docsCopy('设置')}</span>
       </a>
     </Layout.Sidebar>
   );
@@ -69,21 +70,23 @@ function PreviewContent({ detailed = false }: { detailed?: boolean }) {
   return (
     <Layout.Content className="layout-demo-content">
       <div className="layout-demo-heading">
-        <span>工作台</span>
-        <strong>{detailed ? '项目进度' : '欢迎回来'}</strong>
+        <span>{docsCopy('工作台')}</span>
+        <strong>
+          {detailed ? docsCopy('项目进度') : docsCopy('欢迎回来')}
+        </strong>
       </div>
       <div className="layout-demo-metrics">
         <article>
-          <span>进行中</span>
+          <span>{docsCopy('进行中')}</span>
           <strong>08</strong>
         </article>
         <article>
-          <span>本周发布</span>
+          <span>{docsCopy('本周发布')}</span>
           <strong>24</strong>
         </article>
         {detailed && (
           <article>
-            <span>完成率</span>
+            <span>{docsCopy('完成率')}</span>
             <strong>92%</strong>
           </article>
         )}
@@ -108,7 +111,7 @@ export function LayoutPageDemo() {
         <PreviewContent />
         <Layout.Footer className="layout-demo-footer">
           <span>© 2026 Heliannuuthus</span>
-          <span>状态正常</span>
+          <span>{docsCopy('状态正常')}</span>
         </Layout.Footer>
       </Layout>
     </div>
@@ -137,26 +140,26 @@ export function LayoutRightSidebarDemo() {
           <PreviewHeader compact />
           <PreviewContent />
           <Layout.Footer className="layout-demo-footer">
-            <span>最后更新于 14:32</span>
+            <span>{docsCopy('最后更新于 14:32')}</span>
           </Layout.Footer>
         </Layout>
         <Layout.Sidebar
-          aria-label="详情面板"
+          aria-label={docsCopy('详情面板')}
           className="layout-demo-sidebar layout-demo-sidebar-detail"
           width={104}
         >
-          <small>项目详情</small>
+          <small>{docsCopy('项目详情')}</small>
           <dl>
             <div>
-              <dt>负责人</dt>
+              <dt>{docsCopy('负责人')}</dt>
               <dd>Lin</dd>
             </div>
             <div>
-              <dt>状态</dt>
-              <dd>进行中</dd>
+              <dt>{docsCopy('状态')}</dt>
+              <dd>{docsCopy('进行中')}</dd>
             </div>
             <div>
-              <dt>版本</dt>
+              <dt>{docsCopy('版本')}</dt>
               <dd>v0.12</dd>
             </div>
           </dl>
@@ -176,8 +179,8 @@ export function LayoutApplicationDemo() {
           <PreviewContent detailed />
         </Layout>
         <Layout.Footer className="layout-demo-footer">
-          <span>生产环境</span>
-          <span>所有系统运行正常</span>
+          <span>{docsCopy('生产环境')}</span>
+          <span>{docsCopy('所有系统运行正常')}</span>
         </Layout.Footer>
       </Layout>
     </div>

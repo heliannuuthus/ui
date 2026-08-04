@@ -9,6 +9,12 @@ import { cn } from '../lib/utils';
 import { buttonVariants } from './button';
 
 type PaginationProps = Omit<React.ComponentProps<'nav'>, 'onChange'> & {
+  ariaLabels?: {
+    more?: string;
+    navigation?: string;
+    next?: string;
+    previous?: string;
+  };
   current: number;
   getItemHref?: (page: number) => string;
   nextText?: React.ReactNode;
@@ -39,6 +45,8 @@ function getVisiblePages(
 }
 
 function Pagination({
+  'aria-label': ariaLabel,
+  ariaLabels,
   className,
   current,
   getItemHref,
@@ -59,6 +67,13 @@ function Pagination({
     normalizedPageCount,
     Math.max(0, Math.trunc(siblingCount))
   );
+  const resolvedAriaLabels = {
+    more: '更多页面',
+    navigation: '分页',
+    next: '前往下一页',
+    previous: '前往上一页',
+    ...ariaLabels,
+  };
 
   const renderControl = (
     page: number,
@@ -109,7 +124,7 @@ function Pagination({
 
   return (
     <nav
-      aria-label="分页"
+      aria-label={ariaLabel ?? resolvedAriaLabels.navigation}
       data-slot="pagination"
       className={cn('mx-auto flex w-full justify-center', className)}
       {...props}
@@ -124,7 +139,7 @@ function Pagination({
             </>,
             {
               disabled: normalizedCurrent === 1,
-              ariaLabel: '前往上一页',
+              ariaLabel: resolvedAriaLabels.previous,
             }
           )}
         </li>
@@ -139,7 +154,7 @@ function Pagination({
                 className="flex size-9 items-center justify-center [&_svg:not([class*='size-'])]:size-4"
               >
                 <MoreHorizontalIcon />
-                <span className="sr-only">更多页面</span>
+                <span className="sr-only">{resolvedAriaLabels.more}</span>
               </span>
             )}
           </li>
@@ -153,7 +168,7 @@ function Pagination({
             </>,
             {
               disabled: normalizedCurrent === normalizedPageCount,
-              ariaLabel: '前往下一页',
+              ariaLabel: resolvedAriaLabels.next,
             }
           )}
         </li>

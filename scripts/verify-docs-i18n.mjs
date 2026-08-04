@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import { Buffer } from 'node:buffer';
+import { readdir, readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parse } from '@babel/parser';
 import { build } from 'esbuild';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -32,6 +34,9 @@ async function loadHarnessModule() {
           resources,
           supportedLocales,
         } from './apps/docs/src/i18n/resources.ts'
+        export {
+          englishContentTranslations,
+        } from './apps/docs/src/i18n/content-translations.ts'
       `,
       loader: 'ts',
       resolveDir: packageRoot,
@@ -71,6 +76,7 @@ const {
   componentSearchMetadata,
   componentSlug,
   defaultLocale,
+  englishContentTranslations,
   htmlLanguage,
   isDocsLocale,
   localizedComponentMetadata,
@@ -78,6 +84,117 @@ const {
   resources,
   supportedLocales,
 } = await loadHarnessModule();
+
+const chinesePattern = /[\u3400-\u9fff]/u;
+const contentEntries = Object.entries(englishContentTranslations);
+
+assert.ok(
+  contentEntries.length > 0,
+  'The documentation content translation catalog must not be empty.'
+);
+for (const [source, translation] of contentEntries) {
+  assert.ok(
+    chinesePattern.test(source),
+    `Content source "${source}" must contain Chinese copy.`
+  );
+  assert.ok(
+    translation.trim(),
+    `English content translation for "${source}" must not be empty.`
+  );
+  assert.equal(
+    chinesePattern.test(translation),
+    false,
+    `English content translation for "${source}" must not retain Chinese copy.`
+  );
+}
+
+const docsSourceRoot = resolve(packageRoot, 'apps/docs/src');
+const sourceFiles = (await readdir(docsSourceRoot)).filter((file) =>
+  /\.(?:ts|tsx)$/.test(file)
+);
+const contentSourceExclusions = new Set([
+  'component-catalog.ts',
+  'component-metadata.ts',
+]);
+const intentionalSourceCopy = new Set(['中文', '导航', '布局']);
+const untranslatedNodes = [];
+const uncoveredSourceCopy = [];
+
+function normalizeJsxText(value) {
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+function isInsideDocsCopy(ancestors) {
+  return ancestors.some(
+    (node) =>
+      node.type === 'CallExpression' &&
+      node.callee.type === 'Identifier' &&
+      node.callee.name === 'docsCopy'
+  );
+}
+
+function inspectContentNode(node, ancestors, file) {
+  if (!node || typeof node !== 'object') return;
+
+  const localized = isInsideDocsCopy(ancestors);
+  const values = [];
+
+  if (node.type === 'StringLiteral' && chinesePattern.test(node.value)) {
+    values.push(node.value);
+  }
+  if (node.type === 'JSXText' && chinesePattern.test(node.value)) {
+    values.push(normalizeJsxText(node.value));
+  }
+  if (node.type === 'TemplateLiteral') {
+    for (const quasi of node.quasis) {
+      const value = (quasi.value.cooked ?? quasi.value.raw).trim();
+      if (chinesePattern.test(value)) values.push(value);
+    }
+  }
+
+  for (const value of values) {
+    if (!value || intentionalSourceCopy.has(value)) continue;
+    if (!localized) untranslatedNodes.push(`${file}: ${value}`);
+    if (!englishContentTranslations[value]) {
+      uncoveredSourceCopy.push(`${file}: ${value}`);
+    }
+  }
+
+  const nextAncestors = [...ancestors, node];
+  for (const [key, value] of Object.entries(node)) {
+    if (['end', 'extra', 'loc', 'start'].includes(key)) continue;
+    if (Array.isArray(value)) {
+      value.forEach((child) => inspectContentNode(child, nextAncestors, file));
+    } else if (value && typeof value === 'object') {
+      inspectContentNode(value, nextAncestors, file);
+    }
+  }
+}
+
+for (const file of sourceFiles) {
+  if (contentSourceExclusions.has(file)) continue;
+  const source = await readFile(resolve(docsSourceRoot, file), 'utf8');
+  const ast = parse(source, {
+    plugins: ['jsx', 'typescript'],
+    sourceType: 'module',
+  });
+  inspectContentNode(ast, [], file);
+}
+
+assert.deepEqual(
+  untranslatedNodes,
+  [],
+  `User-facing Chinese source copy must use docsCopy:\n${untranslatedNodes.join(
+    '\n'
+  )}`
+);
+assert.deepEqual(
+  uncoveredSourceCopy,
+  [],
+  `Localized source copy must have an English translation:\n${uncoveredSourceCopy.join(
+    '\n'
+  )}`
+);
 
 const zhStrings = flattenStrings(resources.zh.common);
 const enStrings = flattenStrings(resources.en.common);
@@ -232,5 +349,6 @@ for (const searchableText of [
 
 globalThis.console.log(
   `Verified ${supportedLocales.length} locales, ${zhKeys.length} translation ` +
-    `keys, ${catalogSlugs.length} component search entries, and localized paths.`
+    `keys, ${contentEntries.length} content translations, ` +
+    `${catalogSlugs.length} component search entries, and localized paths.`
 );

@@ -65,6 +65,7 @@ import {
 } from './component-catalog';
 import { localizedComponentMetadata } from './component-metadata';
 import { ComponentHarness } from './component-harness';
+import { docsCopy } from './i18n/content';
 import { useDocsLocale, useLocalizedPath } from './i18n/routing';
 import {
   PackageManagerIcon,
@@ -254,7 +255,7 @@ const spaciousComponentSlugs = new Set<string>(
     .flatMap((group) => group.items.map(componentSlug))
 );
 
-const demoCode = `import { Button } from '@heliannuuthus/ui'
+const demoCode = docsCopy(`import { Button } from '@heliannuuthus/ui'
 
 export function ButtonDemo() {
   return (
@@ -263,7 +264,7 @@ export function ButtonDemo() {
       <Button variant="outline">查看文档</Button>
     </div>
   )
-}`;
+}`);
 const styleImportCode = `import '@heliannuuthus/ui/styles.css'
 import './app.css'`;
 
@@ -307,7 +308,6 @@ function SiteHeader({
   const { t } = useTranslation();
   const locale = useDocsLocale();
   const location = useLocation();
-  const navigate = useNavigate();
   const path = useLocalizedPath();
   const searchShortcut =
     typeof navigator !== 'undefined' &&
@@ -320,7 +320,7 @@ function SiteHeader({
       /^\/(?:zh|en)(?=\/|$)/,
       `/${nextLocale}`
     );
-    navigate(`${nextPath}${location.search}${location.hash}`);
+    window.location.assign(`${nextPath}${location.search}${location.hash}`);
   };
 
   return (
@@ -1143,18 +1143,15 @@ function ComponentPage() {
             <Github /> {t('actions.viewSource')}
           </a>
         </div>
-        {locale === 'en' && documentation ? (
-          <p className="component-translation-fallback" role="status">
-            {t('components.translationFallback')}
-          </p>
-        ) : null}
         {documentation ? (
           <>
             {documentation.relatedComponents &&
               documentation.relatedComponents.length > 0 && (
                 <nav
                   className="component-related"
-                  aria-label={`${documentation.name} 相关组件`}
+                  aria-label={`${documentation.name} ${t(
+                    'components.related'
+                  )}`}
                 >
                   <span>{t('components.related')}</span>
                   {documentation.relatedComponents.map((related) => (

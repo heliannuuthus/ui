@@ -80,6 +80,8 @@ export interface DataTableExpandableProps<TData> {
   columnHeader?: React.ReactNode;
   defaultExpandedRowKeys?: React.Key[];
   expandedRowKeys?: React.Key[];
+  getCollapseLabel?: (row: TData, index: number) => string;
+  getExpandLabel?: (row: TData, index: number) => string;
   onExpandedRowKeysChange?: (keys: React.Key[]) => void;
   render: (row: TData, index: number) => React.ReactNode;
   rowExpandable?: (row: TData, index: number) => boolean;
@@ -87,13 +89,18 @@ export interface DataTableExpandableProps<TData> {
 
 export interface DataTablePaginationProps extends Pick<
   PaginationProps,
-  'className' | 'nextText' | 'previousText' | 'siblingCount'
+  'ariaLabels' | 'className' | 'nextText' | 'previousText' | 'siblingCount'
 > {
   containerClassName?: string;
   current?: number;
   defaultCurrent?: number;
   onChange?: (page: number, pageSize: number) => void;
   pageSize?: number;
+  renderSummary?: (
+    total: number,
+    current: number,
+    pageCount: number
+  ) => React.ReactNode;
   showSummary?: boolean;
 }
 
@@ -359,7 +366,11 @@ function DataTable<TData, TValue>({
             {expandable.rowExpandable?.(row.original, row.index) !== false ? (
               <Table.ExpandButton
                 aria-label={`${
-                  expandedRowKeySet.has(resolveRowKey(row)) ? '收起' : '展开'
+                  expandedRowKeySet.has(resolveRowKey(row))
+                    ? (expandable.getCollapseLabel?.(row.original, row.index) ??
+                      '收起')
+                    : (expandable.getExpandLabel?.(row.original, row.index) ??
+                      '展开')
                 } ${String(resolveRowKey(row))}`}
                 expanded={expandedRowKeySet.has(resolveRowKey(row))}
                 onExpandedChange={(expanded) => setRowExpanded(row, expanded)}
@@ -543,12 +554,21 @@ function DataTable<TData, TValue>({
         >
           {paginationOptions.showSummary !== false ? (
             <span className="text-sm text-muted-foreground">
-              共 {table.getFilteredRowModel().rows.length} 项 · 第 {currentPage}{' '}
-              / {table.getPageCount()} 页
+              {paginationOptions.renderSummary?.(
+                table.getFilteredRowModel().rows.length,
+                currentPage,
+                table.getPageCount()
+              ) ?? (
+                <>
+                  共 {table.getFilteredRowModel().rows.length} 项 · 第{' '}
+                  {currentPage} / {table.getPageCount()} 页
+                </>
+              )}
             </span>
           ) : null}
           <Pagination
             className={cn('mx-0 w-auto', paginationOptions.className)}
+            ariaLabels={paginationOptions.ariaLabels}
             current={currentPage}
             nextText={paginationOptions.nextText}
             onChange={(page) => table.setPageIndex(page - 1)}

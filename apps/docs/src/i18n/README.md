@@ -22,11 +22,16 @@ Chinese and English search aliases used by the component overview and command
 palette. Adding a component without this metadata fails type checking.
 
 Detailed component guidance and demo copy remain part of the documentation
-content. Update their translations when their meaning changes. Pure
-implementation refactors, styles, and test-only changes do not require locale
-updates unless they change visible behavior or search terminology.
+content. Wrap canonical Chinese copy in `docsCopy()` and add the corresponding
+English value to `content-translations.ts`. This applies to rendered examples,
+API descriptions, accessibility guidance, code samples, placeholders, and
+accessible names. Pure implementation refactors, styles, and test-only changes
+do not require locale updates unless they change visible behavior or search
+terminology.
 
 Run `pnpm --filter @heliannuuthus/ui-docs verify:i18n` to execute the
-project-local documentation i18n verifier directly. It also runs automatically
-before every documentation production build. The reusable Agent workflow lives
-in the root workspace `ui-docs-harness` skill.
+project-local documentation i18n verifier directly. It rejects missing locale
+keys, untranslated content values, uncovered `docsCopy()` source, and
+user-facing Chinese literals that bypass localization. It also runs
+automatically before every documentation production build. The reusable Agent
+workflow lives in the root workspace `ui-docs-harness` skill.

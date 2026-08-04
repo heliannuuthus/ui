@@ -1,3 +1,4 @@
+import { docsCopy } from './i18n/content';
 import { useState, type ReactNode } from 'react';
 import { Button } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
@@ -9,7 +10,11 @@ import { Search } from 'lucide-react';
 
 const protocols = ['https://', 'http://'];
 const storageUnits = ['GB', 'MB', 'KB'];
-const scopes = ['全部组件', '数据录入', '数据展示'];
+const scopes = [
+  docsCopy('全部组件'),
+  docsCopy('数据录入'),
+  docsCopy('数据展示'),
+];
 const gapBlocks = Array.from({ length: 24 }, (_, index) => index + 1);
 
 const alignmentCases: Array<{
@@ -21,39 +26,39 @@ const alignmentCases: Array<{
 }> = [
   {
     align: 'start',
-    description: 'align 控制交叉轴，元素沿顶部对齐。',
+    description: docsCopy('align 控制交叉轴，元素沿顶部对齐。'),
     label: 'align="start"',
-    title: '交叉轴起点',
+    title: docsCopy('交叉轴起点'),
   },
   {
     align: 'center',
-    description: 'align 控制交叉轴，元素按中心线对齐。',
+    description: docsCopy('align 控制交叉轴，元素按中心线对齐。'),
     label: 'align="center"',
-    title: '交叉轴居中',
+    title: docsCopy('交叉轴居中'),
   },
   {
     align: 'end',
-    description: 'align 控制交叉轴，元素沿底部对齐。',
+    description: docsCopy('align 控制交叉轴，元素沿底部对齐。'),
     label: 'align="end"',
-    title: '交叉轴终点',
+    title: docsCopy('交叉轴终点'),
   },
   {
     justify: 'start',
-    description: 'justify 控制主轴，内容从左侧开始排列。',
+    description: docsCopy('justify 控制主轴，内容从左侧开始排列。'),
     label: 'justify="start"',
-    title: '主轴起点',
+    title: docsCopy('主轴起点'),
   },
   {
     justify: 'center',
-    description: 'justify 控制主轴，整组内容在中间聚合。',
+    description: docsCopy('justify 控制主轴，整组内容在中间聚合。'),
     label: 'justify="center"',
-    title: '主轴居中',
+    title: docsCopy('主轴居中'),
   },
   {
     justify: 'between',
-    description: 'justify 控制主轴，把剩余空间放到元素之间。',
+    description: docsCopy('justify 控制主轴，把剩余空间放到元素之间。'),
     label: 'justify="between"',
-    title: '两端分布',
+    title: docsCopy('两端分布'),
   },
 ];
 
@@ -68,7 +73,7 @@ export function StackGapDemo() {
           <strong>
             <code>gap=&#123;{gap}&#125;</code>
           </strong>
-          <p>gap 直接接收数值，同时设置水平与垂直间距。</p>
+          <p>{docsCopy('gap 直接接收数值，同时设置水平与垂直间距。')}</p>
         </div>
         <output aria-live="polite">
           <strong>{gap}</strong>
@@ -77,7 +82,7 @@ export function StackGapDemo() {
       </div>
       <div className="stack-gap-slider">
         <Slider
-          aria-label="Stack 间距"
+          aria-label={docsCopy('Stack 间距')}
           max={12}
           min={0}
           onValueChange={setGap}
@@ -195,28 +200,35 @@ export function StackCompactVariantsDemo() {
   return (
     <Stack block className="max-w-xl" gap={16}>
       <CompactCase
-        description="独立 Select 作为输入协议前缀。"
-        title="前置选择控件"
+        description={docsCopy('独立 Select 作为输入协议前缀。')}
+        title={docsCopy('前置选择控件')}
       >
-        <Stack.Compact aria-label="项目地址" block>
+        <Stack.Compact aria-label={docsCopy('项目地址')} block>
           <StringSelect
-            ariaLabel="协议"
+            ariaLabel={docsCopy('协议')}
             className="w-28 shrink-0"
             defaultValue={protocols[0]}
             items={protocols}
           />
-          <Input aria-label="项目域名" defaultValue="ui.heliannuuthus.com" />
+          <Input
+            aria-label={docsCopy('项目域名')}
+            defaultValue="ui.heliannuuthus.com"
+          />
         </Stack.Compact>
       </CompactCase>
 
       <CompactCase
-        description="Select 作为数值输入的单位后缀。"
-        title="后置选择控件"
+        description={docsCopy('Select 作为数值输入的单位后缀。')}
+        title={docsCopy('后置选择控件')}
       >
-        <Stack.Compact aria-label="存储配额" block>
-          <Input aria-label="存储配额数值" defaultValue="100" type="number" />
+        <Stack.Compact aria-label={docsCopy('存储配额')} block>
+          <Input
+            aria-label={docsCopy('存储配额数值')}
+            defaultValue="100"
+            type="number"
+          />
           <StringSelect
-            ariaLabel="存储单位"
+            ariaLabel={docsCopy('存储单位')}
             className="w-28 shrink-0"
             defaultValue={storageUnits[0]}
             items={storageUnits}
@@ -225,36 +237,38 @@ export function StackCompactVariantsDemo() {
       </CompactCase>
 
       <CompactCase
-        description="Select、带内部前缀的 Input 与操作按钮共同拼接。"
-        title="混合控件组合"
+        description={docsCopy(
+          'Select、带内部前缀的 Input 与操作按钮共同拼接。'
+        )}
+        title={docsCopy('混合控件组合')}
       >
-        <Stack.Compact aria-label="组件搜索" block>
+        <Stack.Compact aria-label={docsCopy('组件搜索')} block>
           <StringSelect
-            ariaLabel="组件范围"
+            ariaLabel={docsCopy('组件范围')}
             className="w-32 shrink-0"
             defaultValue={scopes[0]}
             items={scopes}
           />
           <Input
-            aria-label="组件名称"
-            placeholder="搜索组件"
+            aria-label={docsCopy('组件名称')}
+            placeholder={docsCopy('搜索组件')}
             prefix={<Search />}
           />
           <Button className="shrink-0" variant="outline">
-            查询
+            {docsCopy('查询')}
           </Button>
         </Stack.Compact>
       </CompactCase>
 
       <CompactCase
-        description="拖动 Slider 或修改数值，两个控件会保持同步。"
-        title="Slider 数值联动"
+        description={docsCopy('拖动 Slider 或修改数值，两个控件会保持同步。')}
+        title={docsCopy('Slider 数值联动')}
       >
         <Stack block gap={8}>
-          <Stack.Compact aria-label="压缩质量" block>
+          <Stack.Compact aria-label={docsCopy('压缩质量')} block>
             <div className="flex min-h-9 flex-1 items-center border border-input px-4 focus-within:border-primary">
               <Slider
-                aria-label="压缩质量滑块"
+                aria-label={docsCopy('压缩质量滑块')}
                 max={100}
                 min={0}
                 onValueChange={setQuality}
@@ -263,7 +277,7 @@ export function StackCompactVariantsDemo() {
               />
             </div>
             <Input
-              aria-label="压缩质量数值"
+              aria-label={docsCopy('压缩质量数值')}
               className="w-24 shrink-0"
               inputMode="numeric"
               max={100}
@@ -275,7 +289,8 @@ export function StackCompactVariantsDemo() {
             />
           </Stack.Compact>
           <Typography.Muted aria-live="polite">
-            当前压缩质量：{quality}%
+            {docsCopy('当前压缩质量：')}
+            {quality}%
           </Typography.Muted>
         </Stack>
       </CompactCase>
