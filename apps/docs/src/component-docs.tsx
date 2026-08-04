@@ -3373,7 +3373,7 @@ const dataEntryExamples: Record<string, ComponentExample[]> = {
   onChange={setDate}
   placeholder="选择发布日期"
 />`),
-      previewHeight: 300,
+      previewHeight: 500,
     },
   ],
   form: [
