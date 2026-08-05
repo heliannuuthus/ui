@@ -13,6 +13,7 @@ import {
 } from './internal/input-group';
 import {
   mergeIds,
+  registerFormControl,
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
@@ -452,6 +453,8 @@ const Select = <Value, Multiple extends boolean | undefined = false>({
     </SelectRoot>
   );
 };
+
+registerFormControl(Select);
 
 export { Select, useSelectAnchor };
 export type {

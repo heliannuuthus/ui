@@ -12,6 +12,7 @@ import {
 import { cn } from '../lib/utils';
 import {
   mergeIds,
+  registerFormControl,
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
@@ -394,5 +395,7 @@ const decay = (value: number, max: number) => {
 
   return sigmoid * max;
 };
+
+registerFormControl(Slider);
 
 export { Slider, type SliderEffect, type SliderProps };

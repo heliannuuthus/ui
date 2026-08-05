@@ -3519,86 +3519,90 @@ const form = Form.useForm({
     {
       title: docsCopy('自定义控件接入'),
       description: docsCopy(
-        '通过稳定的 render contract 将业务自制或第三方控件接入同一套值、校验、焦点和无障碍管理。'
+        '对比只实现值绑定的最小控件，以及额外支持错误聚焦和完整字段属性的控件。'
       ),
       preview: <FormCustomControlDemo />,
-      code: `import {
-  forwardRef,
-  type ComponentPropsWithoutRef,
-  type Ref,
-} from 'react'
-import { Button, Form } from '@heliannuuthus/ui'
+      code: `import { forwardRef } from 'react'
+import {
+  Button,
+  Form,
+  Radio,
+  type FormFieldInjectedControlProps,
+} from '@heliannuuthus/ui'
 
 type Priority = '' | 'routine' | 'important' | 'urgent'
 
-type PriorityControlProps = Omit<
-  ComponentPropsWithoutRef<'div'>,
-  'onBlur' | 'onChange'
-> & {
-  disabled?: boolean
-  onBlur?: () => void
-  onChange: (value: Priority) => void
-  value: Priority
-}
+type PriorityControlProps = FormFieldInjectedControlProps<Priority>
 
-const PriorityControl = forwardRef<HTMLButtonElement, PriorityControlProps>(
-  ({ disabled, onBlur, onChange, value, ...groupProps }, ref) => {
-    const options = [
-      { label: t('priority.routine'), value: 'routine' },
-      { label: t('priority.important'), value: 'important' },
-      { label: t('priority.urgent'), value: 'urgent' },
-    ] as const
+const options = [
+  { label: t('priority.routine'), value: 'routine' },
+  { label: t('priority.important'), value: 'important' },
+  { label: t('priority.urgent'), value: 'urgent' },
+] as const
 
-    return (
-      <div
-        {...groupProps}
-        role="radiogroup"
-        onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) onBlur?.()
-        }}
-      >
-        {options.map((option, index) => (
-          <button
-            key={option.value}
-            ref={index === 0 ? ref : undefined}
-            type="button"
-            role="radio"
-            aria-checked={value === option.value}
-            disabled={disabled}
-            onClick={() => onChange(option.value)}
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
-    )
-  }
+// Minimum: value binding with a regular function component
+const MinimalPriorityControl = ({
+  onChange,
+  ...props
+}: PriorityControlProps) => (
+  <Radio.Group
+    {...props}
+    columns={3}
+    minColumnWidth={0}
+    onChange={onChange}
+    options={options}
+  />
 )
 
-const form = Form.useForm<{ priority: Priority }>({
-  defaultValues: { priority: '' },
+// Complete: forward the ref to enable validation-error focus
+const CompletePriorityControl = forwardRef<
+  HTMLInputElement,
+  PriorityControlProps
+>(
+  ({ onChange, ...props }, ref) => (
+    <Radio.Group
+      {...props}
+      columns={3}
+      inputRef={ref}
+      minColumnWidth={0}
+      onChange={onChange}
+      options={options}
+    />
+  )
+)
+
+type Values = {
+  completePriority: Priority
+  minimalPriority: Priority
+}
+
+const form = Form.useForm<Values>({
+  defaultValues: {
+    completePriority: '',
+    minimalPriority: 'routine',
+  },
 })
 
 <Form form={form} onSubmit={onSubmit}>
-  <Form.Field<{ priority: Priority }, 'priority'>
-    name="priority"
-    label={t('priority.label')}
+  <Form.Field<Values, 'minimalPriority'>
+    name="minimalPriority"
+    label={t('priority.minimal')}
+  >
+    <MinimalPriorityControl />
+  </Form.Field>
+
+  <Form.Field<Values, 'completePriority'>
+    name="completePriority"
+    label={t('priority.complete')}
     description={t('priority.description')}
     rules={{ required: t('priority.required') }}
   >
-    {({ field, groupProps }) => (
-      <PriorityControl
-        {...groupProps}
-        ref={field.ref as Ref<HTMLButtonElement>}
-        value={field.value}
-        onBlur={field.onBlur}
-        onChange={field.onChange}
-      />
-    )}
+    <CompletePriorityControl />
   </Form.Field>
+
   <Button type="submit">{t('actions.save')}</Button>
 </Form>`,
-      previewHeight: 410,
+      previewHeight: 500,
     },
   ],
   input: [
@@ -6667,41 +6671,17 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       component: 'Form.Field',
       name: 'children',
       description: docsCopy(
-        '直接绑定内置控件，或使用 render 函数接入自制、第三方和复合控件。'
+        '接收一个控件元素；内置控件自动绑定，自定义控件自动获得标准受控属性。'
       ),
-      type: 'ReactNode | (props: FormFieldRenderProps<Value>) => ReactNode',
+      type: 'ReactElement',
     },
     {
-      component: 'Form.Field render',
-      name: 'field',
+      component: docsCopy('自定义控件'),
+      name: docsCopy('注入属性'),
       description: docsCopy(
-        '提供当前字段的 name、value、onChange、onBlur 和 ref。'
+        '自动提供值、事件、字段状态和 ARIA 属性；控件支持 ref 时启用错误聚焦。'
       ),
-      type: 'FormFieldRenderField<Value>',
-    },
-    {
-      component: 'Form.Field render',
-      name: 'fieldState',
-      description: docsCopy(
-        '提供 disabled、required、invalid 和当前错误消息。'
-      ),
-      type: 'FormFieldRenderState',
-    },
-    {
-      component: 'Form.Field render',
-      name: 'controlProps',
-      description: docsCopy(
-        '用于单个交互控件，包含 id、name、required、disabled 和 ARIA 属性。'
-      ),
-      type: 'FormFieldControlProps',
-    },
-    {
-      component: 'Form.Field render',
-      name: 'groupProps',
-      description: docsCopy(
-        '用于复合控件，将字段标签、说明、错误和禁用状态传递给控件组。'
-      ),
-      type: 'FormFieldGroupProps',
+      type: 'FormFieldInjectedControlProps<Value>',
     },
     {
       component: 'Field',

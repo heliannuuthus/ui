@@ -4,6 +4,7 @@ import { cn } from '../lib/utils';
 import { ChevronDownIcon } from 'lucide-react';
 import {
   mergeIds,
+  registerFormControl,
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
@@ -128,5 +129,7 @@ const NativeSelect = ({
     </div>
   );
 };
+
+registerFormControl(NativeSelect);
 
 export { NativeSelect, type NativeSelectOption, type NativeSelectProps };

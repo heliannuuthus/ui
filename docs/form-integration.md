@@ -16,7 +16,8 @@ form, import `Controller`, or manually adapt controls such as `Switch`.
 - Preserve the natural public semantics of each control.
 - Centralize labels, descriptions, errors, required state and accessible
   relationships.
-- Retain a typed escape hatch for third-party and composite controls.
+- Let custom controls participate through one small, standard controlled
+  component contract.
 - Support nested field paths, array values and controlled or uncontrolled form
   initialization without turning the component API into a schema-driven UI
   generator.
@@ -88,8 +89,9 @@ The integration follows these rules:
 - a child's explicit `onChange` still runs before the form field is updated;
 - group controls isolate their internal items so only the group binds to the
   form field;
-- unsupported controls use the render prop and receive stable,
-  engine-independent field members.
+- user-authored controls receive the standard controlled props directly;
+- third-party event or value conventions are normalized inside a small adapter
+  component rather than configured on `Form.Field`.
 
 ## Usage
 
@@ -171,112 +173,117 @@ form binding, tests and this matrix in the same change.
 
 ## Third-party and composite controls
 
-Unsupported controls use a typed render prop:
-
-```tsx
-<Form.Field name="location" label="位置">
-  {({ controlProps, field }) => (
-    <ThirdPartyMap
-      {...controlProps}
-      ref={field.ref}
-      location={field.value}
-      onBlur={field.onBlur}
-      onLocationChange={field.onChange}
-    />
-  )}
-</Form.Field>
-```
-
-The same contract supports reusable user-authored controls. Keep the custom
-component controlled through its natural value and event props, then adapt
-those props at the `Form.Field` boundary:
+User-authored controls use a conventional controlled-component contract.
+`Form.Field` injects `value`, `onChange`, `onBlur`, `id`, `name`, `disabled`,
+`required` and the generated ARIA relationships into its single direct child.
+It also injects `ref` when the child can receive one:
 
 ```tsx
 type Priority = 'routine' | 'important' | 'urgent'
+type PriorityControlProps = FormFieldInjectedControlProps<Priority>
 
-const PriorityControl = React.forwardRef<
-  HTMLButtonElement,
-  {
-    disabled?: boolean
-    value?: Priority
-    onChange: (value: Priority) => void
-    onBlur?: () => void
-  } & FormFieldGroupProps
->(({ disabled, value, onChange, onBlur, ...groupProps }, ref) => (
-  <div
-    {...groupProps}
-    role="radiogroup"
-    onBlur={(event) => {
-      if (!event.currentTarget.contains(event.relatedTarget)) onBlur?.()
-    }}
-  >
-    {priorities.map((priority, index) => (
-      <button
-        key={priority}
-        ref={index === 0 ? ref : undefined}
-        type="button"
-        role="radio"
-        aria-checked={value === priority}
-        disabled={disabled}
-        onClick={() => onChange(priority)}
-      >
-        {priority}
-      </button>
-    ))}
-  </div>
+const options = [
+  { label: 'Routine', value: 'routine' },
+  { label: 'Important', value: 'important' },
+  { label: 'Urgent', value: 'urgent' },
+] as const
+
+// Minimum viable: value binding does not require ref forwarding.
+const MinimalPriorityControl = ({
+  onChange,
+  ...props
+}: PriorityControlProps) => (
+  <Radio.Group
+    {...props}
+    columns={3}
+    minColumnWidth={0}
+    onChange={onChange}
+    options={options}
+  />
+)
+
+// Complete: forwarding the ref enables automatic focus after validation fails.
+const CompletePriorityControl = React.forwardRef<
+  HTMLInputElement,
+  PriorityControlProps
+>(({ onChange, ...props }, ref) => (
+  <Radio.Group
+    {...props}
+    columns={3}
+    inputRef={ref}
+    minColumnWidth={0}
+    onChange={onChange}
+    options={options}
+  />
 ))
 
-<Form.Field<Values, 'priority'> name="priority" label="Priority">
-  {({ field, groupProps }) => (
-    <PriorityControl
-      {...groupProps}
-      ref={field.ref as React.Ref<HTMLButtonElement>}
-      value={field.value}
-      onBlur={field.onBlur}
-      onChange={field.onChange}
-    />
-  )}
+<Form.Field<Values, 'minimalPriority'>
+  name="minimalPriority"
+  label="Minimum viable"
+>
+  <MinimalPriorityControl />
+</Form.Field>
+
+<Form.Field<Values, 'completePriority'>
+  name="completePriority"
+  label="Complete capabilities"
+  rules={{ required: 'Choose a priority.' }}
+>
+  <CompletePriorityControl />
 </Form.Field>
 ```
 
 This keeps custom controls independent of the internal form engine. The
 component remains a normal controlled React component, while `Form.Field`
-continues to own registration, validation, focus and accessible relationships.
-
-`controlProps` is ready to spread onto a single interactive control. It
-contains the generated `id`, field `name`, disabled and required semantics,
-plus `aria-describedby`, `aria-errormessage`, `aria-invalid` and
-`aria-required`. Composite controls use `groupProps` instead; it replaces the
-native field name with `aria-labelledby` so a radio, checkbox or custom widget
-group receives its accessible name from the field label.
-
-The render contract exposes only stable, engine-independent members:
+continues to own registration, validation and accessible relationships.
+Forwarding the ref is optional; it adds focus management without becoming a
+value-binding requirement. React 18 only receives the injected ref through a
+DOM element or `forwardRef`; React 19 function components can receive it as a
+regular prop.
 
 ```ts
-type FormFieldRenderField<Value> = {
-  name: string;
-  value: Value;
-  onChange: (value: Value) => void;
-  onBlur: () => void;
-  ref: React.Ref<unknown>;
-};
-
-type FormFieldRenderState = {
-  disabled: boolean;
-  invalid: boolean;
-  required: boolean;
-  error?: string;
-};
-
-type FormFieldRenderProps<Value> = {
-  field: FormFieldRenderField<Value>;
-  fieldState: FormFieldRenderState;
-  controlProps: FormFieldControlProps;
-  groupProps: FormFieldGroupProps;
+type FormFieldInjectedControlProps<Value> = {
+  value?: Value;
+  onChange?: (value: Value) => void;
+  onBlur?: () => void;
+  id?: string;
+  name?: string;
+  disabled?: boolean;
+  required?: boolean;
+  'aria-describedby'?: string;
+  'aria-errormessage'?: string;
+  'aria-invalid'?: boolean;
+  'aria-labelledby'?: string;
+  'aria-required'?: boolean;
 };
 ```
 
-Do not expose a raw `react-hook-form` controller field through this contract.
+When a third-party component uses different property names, wrap it once and
+normalize that difference inside the adapter:
+
+```tsx
+const MapControl = React.forwardRef<
+  MapHandle,
+  FormFieldInjectedControlProps<Location>
+>(({ value, onChange, ...props }, ref) => (
+  <ThirdPartyMap
+    {...props}
+    ref={ref}
+    location={value}
+    onLocationChange={onChange}
+  />
+))
+
+<Form.Field name="location" label="位置">
+  <MapControl />
+</Form.Field>
+```
+
+Product code does not configure event names, value-property names or
+transformers on `Form.Field`. A composite control follows the same contract and
+owns the semantics of its internal elements. The legacy render-function child
+remains temporarily available for source compatibility, but it is not the
+recommended integration model and receives no new capabilities.
 
 `Form.Item` remains a deprecated alias of `Form.Field` for compatibility. New
 code and documentation use `Form.Field`.
@@ -386,7 +393,8 @@ The unified API remains complete only while:
 - nested paths and array values are type checked;
 - field and form-level errors are tested;
 - labels, descriptions and errors pass accessibility checks;
-- third-party render-prop integration is documented and tested;
+- automatic custom-control injection and adapter composition are documented and
+  tested;
 - no public signature exposes the selected form engine;
 - the legacy migration and release strategy is documented;
 - type-check, lint, formatting, build and package verification pass.

@@ -1,10 +1,18 @@
 // English translations keyed by the canonical Chinese documentation copy.
 export const englishContentTranslations: Readonly<Record<string, string>> = {
   自定义控件接入: 'Custom control integration',
-  '通过稳定的 render contract 将业务自制或第三方控件接入同一套值、校验、焦点和无障碍管理。':
-    'Connect user-authored or third-party controls to the same value, validation, focus, and accessibility management through the stable render contract.',
-  '自制组件只依赖稳定的值、事件与无障碍属性。':
-    'User-authored controls depend only on stable values, events, and accessibility attributes.',
+  自定义控件: 'Custom control',
+  注入属性: 'Injected props',
+  '对比只实现值绑定的最小控件，以及额外支持错误聚焦和完整字段属性的控件。':
+    'Compare a minimal value-bound control with one that also supports error focus and the complete field contract.',
+  '先完成值绑定；需要错误聚焦时，再转发 ref 获取完整能力。':
+    'Start with value binding, then forward the ref when error focus is required.',
+  最小可用: 'Minimum viable',
+  '普通函数组件即可完成 value 和 onChange 的值绑定。':
+    'A regular function component is enough to bind value and onChange.',
+  完整能力: 'Complete capabilities',
+  '转发 ref 后支持校验失败自动聚焦，并保留完整字段属性。':
+    'Forwarding the ref enables automatic focus after validation fails while preserving the complete field contract.',
   优先级: 'Priority',
   常规: 'Routine',
   重要: 'Important',
@@ -14,16 +22,10 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '请选择优先级。': 'Choose a priority.',
   已保存优先级: 'Saved priority',
   保存优先级: 'Save priority',
-  '直接绑定内置控件，或使用 render 函数接入自制、第三方和复合控件。':
-    'Bind built-in controls directly, or use a render function to integrate user-authored, third-party, and composite controls.',
-  '提供当前字段的 name、value、onChange、onBlur 和 ref。':
-    'Provides the current field name, value, onChange, onBlur, and ref.',
-  '提供 disabled、required、invalid 和当前错误消息。':
-    'Provides disabled, required, invalid, and the current error message.',
-  '用于单个交互控件，包含 id、name、required、disabled 和 ARIA 属性。':
-    'For a single interactive control; includes id, name, required, disabled, and ARIA attributes.',
-  '用于复合控件，将字段标签、说明、错误和禁用状态传递给控件组。':
-    'For composite controls; passes the field label, description, error, and disabled state to the control group.',
+  '接收一个控件元素；内置控件自动绑定，自定义控件自动获得标准受控属性。':
+    'Accepts one control element; built-in controls bind automatically, while custom controls receive the standard controlled props.',
+  '自动提供值、事件、字段状态和 ARIA 属性；控件支持 ref 时启用错误聚焦。':
+    'Automatically provides values, events, field state, and ARIA attributes; error focus is enabled when the control supports refs.',
   完整组件表单: 'Complete component form',
   '在一个表单中验证全部受支持控件的值绑定、校验状态与无障碍关系。':
     'Validate value binding, validation state, and accessible relationships for every supported control in one form.',

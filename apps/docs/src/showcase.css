@@ -4396,48 +4396,6 @@ a {
   margin-right: auto;
 }
 
-.data-priority-control {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.data-priority-control > button {
-  min-height: 42px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  color: var(--muted-foreground);
-  background: var(--background);
-  font-size: 13px;
-  font-weight: 650;
-  transition:
-    border-color 150ms ease,
-    box-shadow 150ms ease,
-    color 150ms ease,
-    background-color 150ms ease;
-}
-
-.data-priority-control > button:hover:not(:disabled) {
-  border-color: color-mix(in srgb, var(--primary) 40%, var(--border));
-  color: var(--foreground);
-}
-
-.data-priority-control > button[aria-checked='true'] {
-  border-color: var(--primary);
-  color: var(--primary-foreground);
-  background: var(--primary);
-}
-
-.data-priority-control > button:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 22%, transparent);
-}
-
-.data-priority-control > button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
 .data-input-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

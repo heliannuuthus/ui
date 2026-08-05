@@ -7,6 +7,7 @@ import { cn } from '../lib/utils';
 import { InputGroup } from './internal/input-group';
 import {
   mergeIds,
+  registerFormControl,
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
@@ -360,6 +361,10 @@ const Input = Object.assign(InputRoot, {
   OTP: OTPField,
   TextArea,
 });
+
+registerFormControl(InputRoot);
+registerFormControl(OTPField);
+registerFormControl(TextArea);
 
 export { Input };
 export type {

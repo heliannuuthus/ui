@@ -8,6 +8,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/utils';
 import {
   mergeIds,
+  registerFormControl,
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
@@ -189,6 +190,9 @@ const ToggleGroup = <Value extends string = string>({
 const Toggle = Object.assign(ToggleRoot, {
   Group: ToggleGroup,
 });
+
+registerFormControl(ToggleRoot);
+registerFormControl(ToggleGroup);
 
 export { Toggle, toggleVariants };
 export type { ToggleGroupOption, ToggleGroupProps, ToggleProps };

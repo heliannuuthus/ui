@@ -8,6 +8,7 @@ import { Popover } from './popover';
 import { cn } from '../lib/utils';
 import {
   mergeIds,
+  registerFormControl,
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
@@ -126,5 +127,7 @@ const DatePicker = ({
     />
   );
 };
+
+registerFormControl(DatePicker);
 
 export { DatePicker, type DatePickerProps };

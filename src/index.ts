@@ -130,7 +130,9 @@ export { Field } from './components/field';
 export {
   Form,
   type FormFieldControlProps,
+  type FormFieldFocusTarget,
   type FormFieldGroupProps,
+  type FormFieldInjectedControlProps,
   type FormFieldProps,
   type FormFieldRenderField,
   type FormFieldRenderProps,
