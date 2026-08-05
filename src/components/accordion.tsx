@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Accordion as AccordionPrimitive } from '@base-ui/react/accordion';
-import { ChevronDownIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
 
@@ -44,12 +44,9 @@ const AccordionIndicator = ({
   const collapsedIndicator =
     indicator === undefined ? (
       position === 'start' ? (
-        <span
-          data-slot="accordion-disclosure-triangle"
-          className="size-0 border-y-4 border-l-[6px] border-y-transparent border-l-current"
-        />
+        <ChevronRightIcon />
       ) : (
-        <ChevronDownIcon />
+        <ChevronLeftIcon />
       )
     ) : (
       indicator
