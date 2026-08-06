@@ -242,7 +242,11 @@ const Group = ({
                 separator
               )
             ) : null}
-            {renderItem ? renderItem(item, index) : <Item {...itemProps} />}
+            {renderItem ? (
+              renderItem(item, index)
+            ) : (
+              <Item role="listitem" {...itemProps} />
+            )}
           </React.Fragment>
         );
       })}

@@ -9,7 +9,7 @@ import { Carousel } from '@heliannuuthus/ui';
 import { Chart, type ChartConfig } from '@heliannuuthus/ui';
 import { Collapsible } from '@heliannuuthus/ui';
 import { Counter } from '@heliannuuthus/ui';
-import { DataTable, type ColumnDef } from '@heliannuuthus/ui';
+import { Table, type ColumnDef } from '@heliannuuthus/ui';
 import { DropdownMenu } from '@heliannuuthus/ui';
 import { Empty } from '@heliannuuthus/ui';
 import { Item } from '@heliannuuthus/ui';
@@ -19,7 +19,7 @@ import { Pagination } from '@heliannuuthus/ui';
 import { ScrollArea } from '@heliannuuthus/ui';
 import { Slider } from '@heliannuuthus/ui';
 import { Separator } from '@heliannuuthus/ui';
-import { Table } from '@heliannuuthus/ui';
+import { Switch } from '@heliannuuthus/ui';
 import { Tooltip } from '@heliannuuthus/ui';
 import {
   Activity,
@@ -1161,14 +1161,14 @@ const releaseRecords: ReleaseRecord[] = [
   },
 ];
 
-type VirtualDataTableRecord = {
+type VirtualTableRecord = {
   id: string;
   latency: string;
   region: string;
   service: string;
 };
 
-const virtualDataTableRecords: VirtualDataTableRecord[] = Array.from(
+const virtualTableRecords: VirtualTableRecord[] = Array.from(
   { length: 1000 },
   (_, index) => ({
     id: `EVT-${String(index + 1).padStart(4, '0')}`,
@@ -1189,9 +1189,9 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
   {
     accessorKey: 'version',
     header: ({ column }) => (
-      <DataTable.ColumnHeader column={column}>
+      <Table.ColumnHeader column={column}>
         {docsCopy('版本')}
-      </DataTable.ColumnHeader>
+      </Table.ColumnHeader>
     ),
     meta: {
       cellClassName: 'font-medium',
@@ -1229,7 +1229,7 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
       headerClassName: 'w-36',
     },
     render: (_, row) => (
-      <DataTable.Actions aria-label={docsCopy(`${row.version} 操作`)}>
+      <Table.Actions aria-label={docsCopy(`${row.version} 操作`)}>
         <Button size="xs" variant="ghost">
           {docsCopy('查看')}
         </Button>
@@ -1256,7 +1256,7 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
             },
           ]}
         />
-      </DataTable.Actions>
+      </Table.Actions>
     ),
   },
 ];
@@ -1269,9 +1269,9 @@ const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
       {
         accessorKey: 'version',
         header: ({ column }) => (
-          <DataTable.ColumnHeader column={column}>
+          <Table.ColumnHeader column={column}>
             {docsCopy('版本')}
-          </DataTable.ColumnHeader>
+          </Table.ColumnHeader>
         ),
       },
       {
@@ -1319,20 +1319,20 @@ const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
         header: docsCopy('记录'),
         meta: { align: 'center' },
         render: (_, row) => (
-          <DataTable.Actions aria-label={docsCopy(`${row.version} 操作`)}>
+          <Table.Actions aria-label={docsCopy(`${row.version} 操作`)}>
             <Button size="xs" variant="outline">
               {row.status === docsCopy('运行中')
                 ? docsCopy('监控')
                 : docsCopy('详情')}
             </Button>
-          </DataTable.Actions>
+          </Table.Actions>
         ),
       },
     ],
   },
 ];
 
-const virtualDataTableColumns: ColumnDef<VirtualDataTableRecord>[] = [
+const virtualTableColumns: ColumnDef<VirtualTableRecord>[] = [
   {
     accessorKey: 'id',
     header: docsCopy('事件'),
@@ -1372,19 +1372,19 @@ const virtualDataTableColumns: ColumnDef<VirtualDataTableRecord>[] = [
       headerClassName: 'w-28',
     },
     render: (_, row) => (
-      <DataTable.Actions aria-label={docsCopy(`${row.id} 操作`)}>
+      <Table.Actions aria-label={docsCopy(`${row.id} 操作`)}>
         <Button size="xs" variant="ghost">
           {docsCopy('查看')}
         </Button>
-      </DataTable.Actions>
+      </Table.Actions>
     ),
   },
 ];
 
-export const DataTableReleaseDemo = () => {
+export const TableManagedDemo = () => {
   return (
-    <div className="display-data-table">
-      <DataTable
+    <div className="display-table-managed">
+      <Table
         caption={docsCopy('最近五次生产与预览环境发布。')}
         columns={releaseColumns}
         data={releaseRecords}
@@ -1412,10 +1412,10 @@ export const DataTableReleaseDemo = () => {
   );
 };
 
-export const DataTableExpandableDemo = () => {
+export const TableManagedExpandableDemo = () => {
   return (
-    <div className="display-data-table">
-      <DataTable
+    <div className="display-table-managed">
+      <Table
         columns={releaseColumns.slice(0, 4)}
         data={releaseRecords}
         expandable={{
@@ -1424,7 +1424,7 @@ export const DataTableExpandableDemo = () => {
           getCollapseLabel: (row) => `${docsCopy('收起')} ${row.version}`,
           getExpandLabel: (row) => `${docsCopy('展开')} ${row.version}`,
           render: (row) => (
-            <div className="display-data-table-expanded">
+            <div className="display-table-managed-expanded">
               <strong>
                 {row.version}
                 {docsCopy('部署详情')}
@@ -1447,10 +1447,10 @@ export const DataTableExpandableDemo = () => {
   );
 };
 
-export const DataTableGroupedHeaderDemo = () => {
+export const TableGroupedHeaderDemo = () => {
   return (
-    <div className="display-data-table display-data-table-grouped">
-      <DataTable
+    <div className="display-table-managed display-table-managed-grouped">
+      <Table
         columns={groupedReleaseColumns}
         data={releaseRecords}
         emptyMessage={docsCopy('暂无发布记录')}
@@ -1460,12 +1460,12 @@ export const DataTableGroupedHeaderDemo = () => {
   );
 };
 
-export const DataTableVirtualScrollDemo = () => {
+export const TableManagedVirtualDemo = () => {
   return (
-    <div className="display-data-table">
-      <DataTable
-        columns={virtualDataTableColumns}
-        data={virtualDataTableRecords}
+    <div className="display-table-managed">
+      <Table
+        columns={virtualTableColumns}
+        data={virtualTableRecords}
         getRowKey={(row) => row.id}
         pagination={false}
         tableProps={{ className: 'min-w-[900px] table-fixed' }}
@@ -1535,14 +1535,10 @@ export const EmptyCompositionDemo = () => {
   );
 };
 
-export const ItemActivityDemo = ({
-  variant = 'outline',
-}: {
-  variant?: 'default' | 'outline' | 'muted';
-}) => {
+export const ItemActivityDemo = () => {
   return (
     <Item.Group
-      className="display-activity-list"
+      className="display-activity-list item-demo-list"
       items={[
         {
           actions: <Badge variant="outline">{docsCopy('2 分钟前')}</Badge>,
@@ -1551,7 +1547,6 @@ export const ItemActivityDemo = ({
           media: <GitCommitHorizontal />,
           mediaVariant: 'icon',
           title: docsCopy('许澄提交了发布说明'),
-          variant,
         },
         {
           actions: (
@@ -1568,33 +1563,205 @@ export const ItemActivityDemo = ({
           media: <MessageCircle />,
           mediaVariant: 'icon',
           title: docsCopy('林默回复了检查项'),
-          variant,
+        },
+      ]}
+      separator
+    />
+  );
+};
+
+export const ItemMemberDirectoryDemo = () => {
+  return (
+    <Item.Group
+      aria-label={docsCopy('发布成员')}
+      className="item-demo-list"
+      items={[
+        {
+          actions: <Badge variant="secondary">{docsCopy('在线')}</Badge>,
+          description: docsCopy('平台工程 · 发布管理员'),
+          key: 'lin-mo',
+          media: (
+            <Avatar
+              alt={docsCopy('林默')}
+              fallback={docsCopy('林')}
+              fallbackProps={{ className: 'display-avatar-tone-green' }}
+            />
+          ),
+          title: docsCopy('林默'),
+          variant: 'outline',
+        },
+        {
+          actions: <Badge variant="outline">{docsCopy('组件维护者')}</Badge>,
+          description: docsCopy('产品设计 · 设计系统'),
+          key: 'xu-cheng',
+          media: (
+            <Avatar
+              alt={docsCopy('许澄')}
+              fallback={docsCopy('许')}
+              fallbackProps={{ className: 'display-avatar-tone-rose' }}
+            />
+          ),
+          title: docsCopy('许澄'),
+          variant: 'outline',
         },
       ]}
     />
   );
 };
 
-export const MarkerTimelineDemo = ({
-  variant = 'separator',
-}: {
-  variant?: 'default' | 'separator' | 'border';
-}) => {
+export const ItemSettingsDemo = () => {
   return (
-    <div className="display-timeline">
-      <div className="display-timeline-event">
-        <span>21:42</span>
-        <strong>{docsCopy('构建通过')}</strong>
+    <Item.Group
+      aria-label={docsCopy('发布设置')}
+      className="display-activity-list item-demo-list"
+      items={[
+        {
+          actions: (
+            <Switch aria-label={docsCopy('自动部署预览环境')} defaultChecked />
+          ),
+          description: docsCopy('合并到 main 后自动更新预览环境。'),
+          key: 'preview-deployment',
+          media: <Cloud />,
+          mediaVariant: 'icon',
+          title: docsCopy('自动部署预览环境'),
+          variant: 'muted',
+        },
+        {
+          actions: (
+            <Switch
+              aria-label={docsCopy('发布前安全审计')}
+              defaultChecked
+              disabled
+            />
+          ),
+          description: docsCopy('生产发布必须通过全部安全检查。'),
+          key: 'security-audit',
+          media: <ShieldCheck />,
+          mediaVariant: 'icon',
+          title: docsCopy('发布前安全审计'),
+          variant: 'muted',
+        },
+      ]}
+    />
+  );
+};
+
+export const ItemResourceDemo = () => {
+  return (
+    <Item
+      actions={<ChevronRight aria-hidden="true" />}
+      className="item-demo-resource"
+      classNames={{
+        footer: 'item-demo-resource-footer',
+        header: 'item-demo-resource-header',
+      }}
+      description={docsCopy('Markdown · 18 KB')}
+      footer={
+        <>
+          <span>{docsCopy('许澄维护')}</span>
+          <Badge variant="secondary">{docsCopy('评审通过')}</Badge>
+        </>
+      }
+      header={
+        <>
+          <Badge variant="outline">{docsCopy('发布说明')}</Badge>
+          <span>{docsCopy('8 分钟前更新')}</span>
+        </>
+      }
+      href="#item-release-note"
+      id="item-release-note"
+      media={<FileText />}
+      mediaVariant="icon"
+      title="v0.12.0-release-notes.md"
+      variant="outline"
+    />
+  );
+};
+
+export const MarkerDateSectionDemo = () => {
+  return (
+    <div className="marker-demo">
+      <article className="marker-demo-entry">
+        <span>{docsCopy('昨天')}</span>
+        <strong>{docsCopy('发布说明已完成评审')}</strong>
+        <p>{docsCopy('数据库迁移和回滚入口已经补充完整。')}</p>
+      </article>
+      <Marker content={docsCopy('今天 · 8 月 6 日')} variant="separator" />
+      <article className="marker-demo-entry">
+        <span>09:24</span>
+        <strong>{docsCopy('发布窗口已经确认')}</strong>
+        <p>{docsCopy('生产变更将在今晚 22:00 开始。')}</p>
+      </article>
+    </div>
+  );
+};
+
+export const MarkerUnreadDemo = () => {
+  return (
+    <div className="marker-demo">
+      <article className="marker-demo-entry marker-demo-entry-muted">
+        <span>10:16</span>
+        <strong>{docsCopy('预检结果已更新')}</strong>
+        <p>{docsCopy('构建、类型检查和安全扫描均已通过。')}</p>
+      </article>
+      <Marker
+        className="marker-demo-unread"
+        content={docsCopy('2 条未读消息')}
+        icon={<CircleDot />}
+        variant="border"
+      />
+      <article className="marker-demo-entry">
+        <span>10:24</span>
+        <strong>{docsCopy('周一补充了观察指标')}</strong>
+        <p>{docsCopy('重点关注错误率和数据库连接数。')}</p>
+      </article>
+    </div>
+  );
+};
+
+export const MarkerStatusDemo = () => {
+  return (
+    <div className="marker-demo marker-demo-settings">
+      <div className="marker-demo-setting">
+        <span>{docsCopy('发布区域')}</span>
+        <strong>{docsCopy('亚太地区')}</strong>
       </div>
       <Marker
-        content={docsCopy('生产发布开始 · 21:46')}
-        icon={<CircleDot />}
-        variant={variant}
+        className="marker-demo-success"
+        content={docsCopy('以下设置已同步到生产环境')}
+        icon={<CheckCircle2 />}
       />
-      <div className="display-timeline-event">
-        <span>21:48</span>
-        <strong>{docsCopy('流量切换完成')}</strong>
+      <div className="marker-demo-setting">
+        <span>{docsCopy('流量策略')}</span>
+        <strong>{docsCopy('灰度 10%')}</strong>
       </div>
+      <div className="marker-demo-setting">
+        <span>{docsCopy('观察窗口')}</span>
+        <strong>{docsCopy('15 分钟')}</strong>
+      </div>
+    </div>
+  );
+};
+
+export const MarkerLinkDemo = () => {
+  return (
+    <div className="marker-demo" id="archived-release-notes">
+      <header className="marker-demo-heading">
+        <div>
+          <span className="display-eyebrow">v0.11.4</span>
+          <strong>{docsCopy('历史发布说明')}</strong>
+        </div>
+        <Badge variant="secondary">{docsCopy('已归档')}</Badge>
+      </header>
+      <p className="marker-demo-summary">
+        {docsCopy('归档内容保持只读，可通过标记链接快速返回这一位置。')}
+      </p>
+      <Marker
+        content={docsCopy('定位到归档说明')}
+        href="#archived-release-notes"
+        icon={<Archive />}
+        variant="separator"
+      />
     </div>
   );
 };

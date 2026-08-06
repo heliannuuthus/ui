@@ -33,7 +33,7 @@ the packaged component modules, and a gzip size budget for the static CSS.
 
 The package is intentionally domain-neutral. Authentication flows, API calls, routing and product copy stay in Pallas.
 
-The package implements the complete shadcn/ui component catalog for the Radix foundation, including Heliannuuthus-owned recipe exports for Data Table, Date Picker, Form, and Typography.
+The package implements the complete shadcn/ui component catalog for the Radix foundation, including Heliannuuthus-owned recipe exports for Table, Date Picker, Form, and Typography.
 
 ## Workspace policy
 
