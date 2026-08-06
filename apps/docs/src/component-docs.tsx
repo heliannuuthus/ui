@@ -5146,12 +5146,7 @@ for (const [slug, examples] of Object.entries(feedbackExamples)) {
 const dataDisplayApi: Record<string, ApiProperty[]> = {
   accordion: [
     {
-      name: 'value',
-      description: docsCopy('使用受控或非受控方式指定展开项。'),
-      type: 'string[]',
-    },
-    {
-      name: 'defaultValue',
+      name: 'value / defaultValue',
       description: docsCopy('使用受控或非受控方式指定展开项。'),
       type: 'string[]',
     },
@@ -5175,7 +5170,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       name: 'indicator',
       description: docsCopy(
-        '自定义折叠态指示器；默认在起始侧由向右旋转至向下，在末端侧由向左旋转至向下。'
+        '自定义折叠态指示器；默认在末端使用向下箭头，在起始侧使用由向右旋转至向下的三角形。'
       ),
       type: 'ReactNode',
       defaultValue: docsCopy('根据 indicatorPosition'),
@@ -5193,15 +5188,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: 'false',
     },
     {
-      name: 'keepMounted',
-      description: docsCopy(
-        '控制关闭面板是否保留在 DOM，或允许浏览器页内查找展开。'
-      ),
-      type: 'boolean',
-      defaultValue: 'false',
-    },
-    {
-      name: 'hiddenUntilFound',
+      name: 'keepMounted / hiddenUntilFound',
       description: docsCopy(
         '控制关闭面板是否保留在 DOM，或允许浏览器页内查找展开。'
       ),
@@ -8158,15 +8145,10 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy(
         '配置每个面板的 value、title、content 与禁用状态。'
       ),
-      type: 'readonly AccordionItem[]',
+      type: 'AccordionItem[]',
     },
     {
-      name: 'value',
-      description: docsCopy('以受控或非受控方式指定当前展开项。'),
-      type: 'string[]',
-    },
-    {
-      name: 'defaultValue',
+      name: 'value / defaultValue',
       description: docsCopy('以受控或非受控方式指定当前展开项。'),
       type: 'string[]',
     },
@@ -8176,52 +8158,15 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       type: '(value: string[]) => void',
     },
     {
-      name: 'multiple',
-      description: docsCopy('允许同时展开多个条目。'),
-      type: 'boolean',
-      defaultValue: 'false',
+      name: 'multiple / disabled',
+      description: docsCopy('允许同时展开多个面板，或禁用整个 Accordion。'),
+      type: 'boolean / boolean',
+      defaultValue: 'false / false',
     },
     {
-      name: 'disabled',
-      description: docsCopy('禁用整个 Accordion 或单个 AccordionItem。'),
-      type: 'boolean',
-      defaultValue: 'false',
-    },
-    {
-      name: 'indicator',
-      description: docsCopy(
-        '自定义折叠态指示器；默认在起始侧由向右旋转至向下，在末端侧由向左旋转至向下。'
-      ),
-      type: 'ReactNode',
-      defaultValue: docsCopy('根据 indicatorPosition'),
-    },
-    {
-      name: 'expandedIndicator',
-      description: docsCopy('可选的展开态指示器，适合加号/减号等两态图标。'),
-      type: 'ReactNode',
-      defaultValue: '—',
-    },
-    {
-      name: 'indicatorPosition',
-      description: docsCopy('将展开指示器放在标题起始侧或末端。'),
-      type: "'start' | 'end'",
-      defaultValue: "'end'",
-    },
-    {
-      name: 'keepMounted',
-      description: docsCopy(
-        '控制关闭面板是否保留在 DOM，或允许浏览器页内查找展开。'
-      ),
-      type: 'boolean',
-      defaultValue: 'false',
-    },
-    {
-      name: 'hiddenUntilFound',
-      description: docsCopy(
-        '控制关闭面板是否保留在 DOM，或允许浏览器页内查找展开。'
-      ),
-      type: 'boolean',
-      defaultValue: 'false',
+      name: 'indicator / expandedIndicator / indicatorPosition',
+      description: docsCopy('设置折叠态、展开态图标及图标所在一侧。'),
+      type: "ReactNode / ReactNode / 'start' | 'end'",
     },
   ],
   alert: [

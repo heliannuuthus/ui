@@ -2980,8 +2980,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   自定义图标: 'Custom icon',
   '自定义溢出数量的呈现方式。':
     'Customize the presentation of overflow quantities.',
-  '自定义折叠态指示器；默认在起始侧由向右旋转至向下，在末端侧由向左旋转至向下。':
-    'Customize the collapsed-state indicator; by default, the leading arrow rotates from right to down and the trailing arrow rotates from left to down.',
+  '自定义折叠态指示器；默认在末端使用向下箭头，在起始侧使用由向右旋转至向下的三角形。':
+    'Custom folded state indicator; defaults to a down arrow at the end and a right-to-down triangle at the start.',
   自定义指示器: 'Custom indicator',
   自动播放: 'Autoplay',
   '自动播放 · 首尾循环 · 3D 景深':

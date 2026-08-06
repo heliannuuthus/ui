@@ -328,11 +328,11 @@
   }
 
   [data-slot='accordion']
-    [data-slot='accordion-trigger'][data-indicator-position='end'][aria-expanded='true']
+    [data-slot='accordion-trigger'][aria-expanded='true']
     [data-slot='accordion-indicator']:not(
       [data-has-expanded-indicator='true']
     ) {
-    transform: rotate(-90deg);
+    transform: rotate(180deg);
   }
 
   [data-slot='accordion']
