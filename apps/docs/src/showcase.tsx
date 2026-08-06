@@ -1111,6 +1111,9 @@ const ComponentPage = () => {
   if (component === 'sidebar') {
     return <Navigate to={path('/components/layout')} replace />;
   }
+  if (component === 'data-table') {
+    return <Navigate to={path('/components/table')} replace />;
+  }
   const canonicalName =
     componentCatalog.find((item) => componentSlug(item) === component) ??
     'Button';

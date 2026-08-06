@@ -1,5 +1,18 @@
 // English translations keyed by the canonical Chinese documentation copy.
 export const englishContentTranslations: Readonly<Record<string, string>> = {
+  '展示、操作并自定义结构化数据集合。':
+    'Display, operate on, and customize structured data sets.',
+  自定义表格: 'Custom table',
+  '数据已经完成加工，或需要完全控制结构时，直接组合 Header、Body、Footer 和 Caption。':
+    'When data is already prepared or the structure needs full control, compose Header, Body, Footer, and Caption directly.',
+  'Table 默认由 data 与 ColumnDef 驱动筛选、排序、分页等完整数据交互；需要完全控制结构时，也可以直接组合语义表格原语。':
+    'Table uses data and ColumnDef by default to drive filtering, sorting, pagination, and other complete data interactions; compose its semantic table primitives directly when full structural control is needed.',
+  '常规业务数据列表使用 data 与 ColumnDef，快速获得筛选、排序、分页、展开和虚拟滚动。':
+    'Use data and ColumnDef for regular business data lists to quickly add filtering, sorting, pagination, expansion, and virtual scrolling.',
+  '数据已经完成加工，或结构无法由列模型表达时，直接组合 Table.Header、Table.Body、Table.Row 与 Table.Cell。':
+    'When data is already prepared or the structure cannot be expressed by a column model, compose Table.Header, Table.Body, Table.Row, and Table.Cell directly.',
+  '既希望沿用统一的表格视觉与无障碍语义，又需要针对业务定制固定列、汇总、操作和详情。':
+    'Use Table when you want consistent table visuals and accessible semantics while tailoring fixed columns, summaries, actions, and details to the business.',
   自定义控件接入: 'Custom control integration',
   自定义控件: 'Custom control',
   注入属性: 'Injected props',
@@ -405,10 +418,10 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Don’t use autoplay for content that must be read or acted upon; users should still be able to actively navigate through arrows and page points.',
   '不要在 ChartConfig 中处理数据请求、聚合或业务计算，它只描述系列的展示信息。':
     'Do not handle data requests, aggregations or business calculations in ChartConfig, it only describes the display information of the series.',
-  '不要在 DataTable 内硬编码业务操作；通过 ColumnDef.render 读取当前 row 后组合业务按钮。':
-    'Do not hardcode business operations in the DataTable; read the current row through ColumnDef.render and then combine the business buttons.',
-  '不要在 DataTable 外再包一套表格滚动与圆角容器；通过 tableProps 复用基础 Table 的容器。':
-    'Do not wrap a set of table scrolling and rounded corners outside the DataTable; use tableProps to reuse the container of the basic Table.',
+  '不要在 Table 内硬编码业务操作；通过 ColumnDef.render 读取当前 row 后组合业务按钮。':
+    'Do not hardcode business operations in the Table; read the current row through ColumnDef.render and then combine the business buttons.',
+  '不要在 Table 外再包一套表格滚动与圆角容器；通过 tableProps 复用基础 Table 的容器。':
+    'Do not wrap a set of table scrolling and rounded corners outside the Table; use tableProps to reuse the container of the basic Table.',
   '不要在 Header、Content 和 Footer 中重复同一组主要操作。':
     "Don't repeat the same set of main operations in Header, Content, and Footer.",
   '不要在 hover 浮层中放置必须完成的操作，触摸设备和键盘用户需要更稳定的点击入口。':
@@ -498,12 +511,12 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   产品级大菜单: 'Product level menu',
   '产品具有文件、编辑、视图等跨页面或跨内容的全局命令。':
     'The product has global commands for file, edit, view, etc. that span pages or content.',
-  '常规数据列表优先使用组装好的 DataTable；它保留 Table 能力并补齐数据状态与默认交互。':
-    'Regular data lists preferentially use the assembled DataTable; it retains Table capabilities and completes data state and default interactions.',
+  '常规数据列表优先使用组装好的 Table；它保留 Table 能力并补齐数据状态与默认交互。':
+    'Regular data lists preferentially use the assembled Table; it retains Table capabilities and completes data state and default interactions.',
   '常规文本选项优先使用 options，由 Radio.Group 统一生成标签与值。':
     'Conventional text options use options first, and Radio.Group generates labels and values ​​uniformly.',
-  '常规业务数据列表默认使用 DataTable，由 data 与 ColumnDef 驱动完整表格。':
-    'General business data lists use DataTable by default, with data and ColumnDef driving the complete table.',
+  '常规业务数据列表默认使用 Table，由 data 与 ColumnDef 驱动完整表格。':
+    'General business data lists use Table by default, with data and ColumnDef driving the complete table.',
   '常见空状态直接配置图标、标题、说明和操作；场景变化时只替换对应 props。':
     'Common empty states directly configure icons, titles, descriptions and operations; only the corresponding props are replaced when the scene changes.',
   常用操作: 'Common operations',
@@ -1321,7 +1334,7 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'List selection, business animation and data status should be managed by the combination layer and should not sink to the ScrollArea.',
   '列对齐、超长省略与自定义 Cell':
     'Column alignment, super long omission and custom Cell',
-  林: 'Forest',
+  林: 'L',
   林默: 'Lin Mo',
   '林默负责发布，周一负责回滚与告警确认。':
     'Lin Mo is responsible for release, and Monday is responsible for rollback and alarm confirmation.',
@@ -1668,7 +1681,7 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '设置可换行的标记文字或链接。': 'Set wrappable markup text or links.',
   '设置可视区域上下额外渲染的行数，减少快速滚动时的空白。':
     'Set the number of extra lines rendered above and below the visual area to reduce the blank space during fast scrolling.',
-  设置列表: 'settings list',
+  设置列表: 'Settings list',
   '设置列表项的默认、描边或柔和外观。':
     'Set the default, stroked, or soft appearance of list items.',
   '设置列表项内容密度。': 'Set the list item content density.',
@@ -2422,8 +2435,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Need to emphasize the changing process of statistical indicators, balances, counts or real-time readings.',
   '需要筛选、排序、分页、固定列、分组表头、行展开或虚拟滚动中的任意能力。':
     'Any ability to filter, sort, paging, fixed columns, group headers, row expansion, or virtual scrolling is required.',
-  '需要筛选、排序、列分组和复杂行模型时使用 DataTable，不要把这些状态塞进基础 Table。':
-    'Use DataTable when filtering, sorting, column grouping, and complex row models are required. Do not cram these states into the base Table.',
+  '需要筛选、排序、列分组和复杂行模型时使用 Table，不要把这些状态塞进基础 Table。':
+    'Use Table when filtering, sorting, column grouping, and complex row models are required. Do not cram these states into the base Table.',
   '需要使用边缘渐隐提示滚动方向，同时保持原生滚动和触控惯性。':
     'Edge fades need to be used to indicate scrolling direction while maintaining native scrolling and touch inertia.',
   '需要通过点击打开包含详情、表单或轻量操作的非模态浮层。':
@@ -2450,7 +2463,7 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'There is a need to combine instructions, additional actions, and status feedback in the same input task.',
   '需要在纵向内容之间建立章节边界。':
     'Chapter boundaries need to be established between vertical content.',
-  许: 'May',
+  许: 'X',
   许澄: 'Xu Cheng',
   许澄提交了发布说明: 'Xu Cheng submitted release notes',
   '悬停、聚焦或触摸时轻微放大，越过边界后柔和回弹。':
@@ -2735,8 +2748,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   运行稳定: 'Stable operation',
   运行中: 'Running',
   在: 'exist',
-  '在 ColumnDef 中嵌套 columns 即可形成多级表头；DataTable 会计算跨列、层级和空状态宽度。':
-    'Nesting columns in ColumnDef can form a multi-level header; DataTable will calculate the width across columns, levels and empty states.',
+  '在 ColumnDef 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。':
+    'Nesting columns in ColumnDef can form a multi-level header; Table will calculate the width across columns, levels and empty states.',
   '在 custom 变体中承载状态摘要和自定义操作。':
     'Host status summaries and custom actions in the custom variant.',
   '在 custom 变体中组合完全自定义的头部内容。':
@@ -2808,7 +2821,7 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Place status nodes such as online points, certification icons or Badges in the lower right corner of the avatar.',
   '在头像右下角展示在线、认证等状态节点。':
     'Online, authentication and other status nodes are displayed in the lower right corner of the avatar.',
-  在线: 'online',
+  在线: 'Online',
   在线状态: 'online status',
   '在相邻元素之间插入统一分隔内容。':
     'Insert uniformly separated content between adjacent elements.',
@@ -3135,8 +3148,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   'Counter 不管理加减或请求状态；按钮、定时器和业务数据应由外部组件组合。':
     'Counter does not manage addition, subtraction or request status; buttons, timers and business data should be composed by external components.',
   'CSV 表格': 'CSV table',
-  'DataTable 是基于 Table 组装好的默认数据表格：除筛选、排序和分页外，也完整提供固定列、省略 Tooltip、Caption、Footer、行展开与虚拟滚动。':
-    'DataTable is a default data table assembled based on Table: in addition to filtering, sorting and paging, it also fully provides fixed columns, omitted Tooltip, Caption, Footer, row expansion and virtual scrolling.',
+  'Table 是基于 Table 组装好的默认数据表格：除筛选、排序和分页外，也完整提供固定列、省略 Tooltip、Caption、Footer、行展开与虚拟滚动。':
+    'Table is a default data table assembled based on Table: in addition to filtering, sorting and paging, it also fully provides fixed columns, omitted Tooltip, Caption, Footer, row expansion and virtual scrolling.',
   'DirectionProvider 为局部组件树声明 ltr 或 rtl 阅读方向。':
     'DirectionProvider declares the ltr or rtl reading direction for the local component tree.',
   'Drawer 打开方向': 'Drawer opening direction',
@@ -3183,10 +3196,10 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'import {\n  Alert,\n  AlertAction,\n  AlertDescription,\n  AlertTitle,\n} from \'@heliannuuthus/ui\'\n\n{visible && <Alert variant="warning">\n  <TriangleAlert />\n  <AlertTitle>The rollback image will expire soon</AlertTitle>\n  <AlertDescription>Recommended to rebuild before publishing. </AlertDescription>\n  <AlertAction><Button onClick={() => setVisible(false)}>Close</Button></AlertAction>\n</Alert>}',
   'import {\n  Chart,\n  type ChartConfig,\n} from \'@heliannuuthus/ui\'\nimport { Area, AreaChart, CartesianGrid, XAxis, YAxis } from \'recharts\'\n\nconst chartConfig = {\n  success: { label: \'发布成功率\', color: \'var(--primary)\' },\n} satisfies ChartConfig\n\n<section aria-label="发布健康度趋势">\n  <header>\n    <span>生产发布成功率</span>\n    <strong>97.4%</strong>\n  </header>\n  <Chart config={chartConfig}>\n    <AreaChart accessibilityLayer data={data}>\n      <CartesianGrid strokeDasharray="4 8" vertical={false} />\n      <XAxis axisLine={false} dataKey="day" tickLine={false} />\n      <YAxis domain={[88, 100]} tickFormatter={(value) => `${value}%`} />\n      <Chart.Tooltip\n        content={<Chart.TooltipContent indicator="line" />}\n        cursor={false}\n      />\n      <Area\n        dataKey="success"\n        fill="var(--color-success)"\n        fillOpacity={0.12}\n        stroke="var(--color-success)"\n        strokeWidth={2.5}\n        type="monotone"\n      />\n    </AreaChart>\n  </Chart>\n</section>':
     'import {\n  Chart,\n  typeChartConfig,\n} from \'@heliannuuthus/ui\'\nimport { Area, AreaChart, CartesianGrid, XAxis, YAxis } from \'recharts\'\n\nconst chartConfig = {\n  success: { label: \'Publishing success rate\', color: \'var(--primary)\' },\n} satisfies ChartConfig\n\n<section aria-label="Post health trends">\n  <header>\n    <span>Production release success rate</span>\n    <strong>97.4%</strong>\n  </header>\n  <Chart config={chartConfig}>\n    <AreaChart accessibilityLayer data={data}>\n      <CartesianGrid strokeDasharray="4 8" vertical={false} />\n      <XAxis axisLine={false} dataKey="day" tickLine={false} />\n      <YAxis domain={[88, 100]} tickFormatter={(value) => `${value}%`} />\n      <Chart.Tooltip\n        content={<Chart.TooltipContent indicator="line" />}\n        cursor={false}\n      />\n      <Area\n        dataKey="success"\n        fill="var(--color-success)"\n        fillOpacity={0.12}\n        stroke="var(--color-success)"\n        strokeWidth={2.5}\n        type="monotone"\n      />\n    </AreaChart>\n  </Chart>\n</section>',
-  "import {\n  DataTable,\n  type ColumnDef,\n} from '@heliannuuthus/ui'\n\nconst columns: ColumnDef<Release>[] = [\n  {\n    header: '发布信息',\n    columns: [\n      { accessorKey: 'version', header: '版本' },\n      { accessorKey: 'environment', header: '环境' },\n    ],\n  },\n  {\n    header: '执行情况',\n    columns: [\n      { accessorKey: 'owner', header: '负责人' },\n      { accessorKey: 'status', header: '状态' },\n    ],\n  },\n  {\n    header: '操作',\n    columns: [\n      {\n        id: 'detail',\n        header: '记录',\n        meta: { align: 'center' },\n        render: (_, row) => <Button>{row.version} 详情</Button>,\n      },\n    ],\n  },\n]\n\n<DataTable columns={columns} data={releaseRecords} />":
-    "import {\n  DataTable,\n  type ColumnDef,\n} from '@heliannuuthus/ui'\n\nconst columns: ColumnDef<Release>[] = [\n  {\n    header: 'Publish information',\n    columns: [\n      { accessorKey: 'version', header: 'version' },\n      { accessorKey: 'environment', header: 'environment' },\n    ],\n  },\n  {\n    header: 'Execution status',\n    columns: [\n      { accessorKey: 'owner', header: 'person in charge' },\n      { accessorKey: 'status', header: 'status' },\n    ],\n  },\n  {\n    header: 'operation',\n    columns: [\n      {\n        id: 'detail',\n        header: 'record',\n        meta: { align: 'center' },\n        render: (_, row) => <Button>{row.version} details</Button>,\n      },\n    ],\n  },\n]\n\n<DataTable columns={columns} data={releaseRecords} />",
-  "import {\n  DataTable,\n  type ColumnDef,\n} from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { MoreHorizontal } from 'lucide-react'\n\nconst columns: ColumnDef<Release>[] = [\n  {\n    accessorKey: 'version',\n    header: ({ column }) => (\n      <DataTable.ColumnHeader column={column}>版本</DataTable.ColumnHeader>\n    ),\n  },\n  {\n    id: 'actions',\n    header: '操作',\n    meta: {\n      align: 'center',\n      fixed: 'end',\n    },\n    render: (_, row) => (\n      <DataTable.Actions aria-label={row.version + ' 操作'}>\n        <Button variant=\"ghost\">查看</Button>\n        <DropdownMenu\n          align=\"end\"\n          trigger={\n            <Button\n              aria-label={row.version + ' 更多操作'}\n              size=\"icon-sm\"\n              variant=\"ghost\"\n            >\n              <MoreHorizontal />\n            </Button>\n          }\n          items={[\n            { label: '下载日志' },\n            { label: '归档记录' },\n            { type: 'separator' },\n            { label: '删除记录', destructive: true },\n          ]}\n        />\n      </DataTable.Actions>\n    ),\n  },\n]\n\n<DataTable\n  caption=\"最近五次生产与预览环境发布。\"\n  columns={columns}\n  data={releaseRecords}\n  filterColumn=\"version\"\n  footer={(rows) => `当前页 ${rows.length} 条发布记录`}\n  getRowKey={(row) => row.version}\n  pagination={{ pageSize: 3 }}\n  tableProps={{ className: 'min-w-[820px] table-fixed' }}\n/>":
-    "import {\n  DataTable,\n  type ColumnDef,\n} from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { MoreHorizontal } from 'lucide-react'\n\nconst columns: ColumnDef<Release>[] = [\n  {\n    accessorKey: 'version',\n    header: ({ column }) => (\n      <DataTable.ColumnHeader column={column}>version</DataTable.ColumnHeader>\n    ),\n  },\n  {\n    id: 'actions',\n    header: 'operation',\n    meta: {\n      align: 'center',\n      fixed: 'end',\n    },\n    render: (_, row) => (\n      <DataTable.Actions aria-label={row.version + 'Actions'}>\n        <Button variant=\"ghost\">View</Button>\n        <DropdownMenu\n          align=\"end\"\n          trigger={\n            <Button\n              aria-label={row.version + 'More operations'}\n              size=\"icon-sm\"\n              variant=\"ghost\"\n            >\n              <MoreHorizontal />\n            </Button>\n          }\n          items={[\n            { label: 'Download log' },\n            { label: 'Archive record' },\n            { type: 'separator' },\n            { label: 'Delete record', destructive: true },\n          ]}\n        />\n      </DataTable.Actions>\n    ),\n  },\n]\n\n<DataTable\n  caption=\"The last five production and preview environment releases.\"\n  columns={columns}\n  data={releaseRecords}\n  filterColumn=\"version\"\n  footer={(rows) => `Current page ${rows.length} published records`}\n  getRowKey={(row) => row.version}\n  pagination={{ pageSize: 3 }}\n  tableProps={{ className: 'min-w-[820px] table-fixed' }}\n/>",
+  "import {\n  Table,\n  type ColumnDef,\n} from '@heliannuuthus/ui'\n\nconst columns: ColumnDef<Release>[] = [\n  {\n    header: '发布信息',\n    columns: [\n      { accessorKey: 'version', header: '版本' },\n      { accessorKey: 'environment', header: '环境' },\n    ],\n  },\n  {\n    header: '执行情况',\n    columns: [\n      { accessorKey: 'owner', header: '负责人' },\n      { accessorKey: 'status', header: '状态' },\n    ],\n  },\n  {\n    header: '操作',\n    columns: [\n      {\n        id: 'detail',\n        header: '记录',\n        meta: { align: 'center' },\n        render: (_, row) => <Button>{row.version} 详情</Button>,\n      },\n    ],\n  },\n]\n\n<Table columns={columns} data={releaseRecords} />":
+    "import {\n  Table,\n  type ColumnDef,\n} from '@heliannuuthus/ui'\n\nconst columns: ColumnDef<Release>[] = [\n  {\n    header: 'Publish information',\n    columns: [\n      { accessorKey: 'version', header: 'version' },\n      { accessorKey: 'environment', header: 'environment' },\n    ],\n  },\n  {\n    header: 'Execution status',\n    columns: [\n      { accessorKey: 'owner', header: 'person in charge' },\n      { accessorKey: 'status', header: 'status' },\n    ],\n  },\n  {\n    header: 'operation',\n    columns: [\n      {\n        id: 'detail',\n        header: 'record',\n        meta: { align: 'center' },\n        render: (_, row) => <Button>{row.version} details</Button>,\n      },\n    ],\n  },\n]\n\n<Table columns={columns} data={releaseRecords} />",
+  "import {\n  Table,\n  type ColumnDef,\n} from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { MoreHorizontal } from 'lucide-react'\n\nconst columns: ColumnDef<Release>[] = [\n  {\n    accessorKey: 'version',\n    header: ({ column }) => (\n      <Table.ColumnHeader column={column}>版本</Table.ColumnHeader>\n    ),\n  },\n  {\n    id: 'actions',\n    header: '操作',\n    meta: {\n      align: 'center',\n      fixed: 'end',\n    },\n    render: (_, row) => (\n      <Table.Actions aria-label={row.version + ' 操作'}>\n        <Button variant=\"ghost\">查看</Button>\n        <DropdownMenu\n          align=\"end\"\n          trigger={\n            <Button\n              aria-label={row.version + ' 更多操作'}\n              size=\"icon-sm\"\n              variant=\"ghost\"\n            >\n              <MoreHorizontal />\n            </Button>\n          }\n          items={[\n            { label: '下载日志' },\n            { label: '归档记录' },\n            { type: 'separator' },\n            { label: '删除记录', destructive: true },\n          ]}\n        />\n      </Table.Actions>\n    ),\n  },\n]\n\n<Table\n  caption=\"最近五次生产与预览环境发布。\"\n  columns={columns}\n  data={releaseRecords}\n  filterColumn=\"version\"\n  footer={(rows) => `当前页 ${rows.length} 条发布记录`}\n  getRowKey={(row) => row.version}\n  pagination={{ pageSize: 3 }}\n  tableProps={{ className: 'min-w-[820px] table-fixed' }}\n/>":
+    "import {\n  Table,\n  type ColumnDef,\n} from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { MoreHorizontal } from 'lucide-react'\n\nconst columns: ColumnDef<Release>[] = [\n  {\n    accessorKey: 'version',\n    header: ({ column }) => (\n      <Table.ColumnHeader column={column}>version</Table.ColumnHeader>\n    ),\n  },\n  {\n    id: 'actions',\n    header: 'operation',\n    meta: {\n      align: 'center',\n      fixed: 'end',\n    },\n    render: (_, row) => (\n      <Table.Actions aria-label={row.version + 'Actions'}>\n        <Button variant=\"ghost\">View</Button>\n        <DropdownMenu\n          align=\"end\"\n          trigger={\n            <Button\n              aria-label={row.version + 'More operations'}\n              size=\"icon-sm\"\n              variant=\"ghost\"\n            >\n              <MoreHorizontal />\n            </Button>\n          }\n          items={[\n            { label: 'Download log' },\n            { label: 'Archive record' },\n            { type: 'separator' },\n            { label: 'Delete record', destructive: true },\n          ]}\n        />\n      </Table.Actions>\n    ),\n  },\n]\n\n<Table\n  caption=\"The last five production and preview environment releases.\"\n  columns={columns}\n  data={releaseRecords}\n  filterColumn=\"version\"\n  footer={(rows) => `Current page ${rows.length} published records`}\n  getRowKey={(row) => row.version}\n  pagination={{ pageSize: 3 }}\n  tableProps={{ className: 'min-w-[820px] table-fixed' }}\n/>",
   "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight', 'rollback']}\n  multiple\n  items={[\n    {\n      value: 'preflight',\n      title: '预检结果',\n      content: '42 项检查均已通过。',\n    },\n    {\n      value: 'rollback',\n      title: '回滚方案',\n      content: '异常时切回上一版本。',\n    },\n  ]}\n/>":
     "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight', 'rollback']}\n  multiple\n  items={[\n    {\n      value: 'preflight',\n      title: 'Preflight results',\n      content: '42 checks passed. ',\n    },\n    {\n      value: 'rollback',\n      title: 'Rollback plan',\n      content: 'Switch back to the previous version in case of exception. ',\n    },\n  ]}\n/>",
   "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight']}\n  items={[\n    { value: 'preflight', title: '预检结果', content: '42 项检查均已通过。' },\n    { value: 'rollback', title: '回滚方案', content: '异常时切回上一版本。' },\n  ]}\n/>":
@@ -3486,4 +3499,107 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   'VirtualBody 只适用于固定高度的单行数据；动态高度、行展开和跨行内容继续使用普通 Body。':
     'VirtualBody only applies to single rows of fixed-height data; dynamic height, row expansion, and cross-row content continue to use ordinary Body.',
   'Web Console 发布计划': 'Web Console Release Plan',
+  日期分段: 'Date section',
+  '标记连续内容中的分段位置或状态。':
+    'Mark a boundary, position, or state within continuous content.',
+  '今天 · 8 月 6 日': 'Today · Aug 6',
+  '在消息、动态或更新记录中分隔日期，让标签成为内容边界而不是时间线节点。':
+    'Separate dates in messages, activity feeds, or update logs so the label reads as a content boundary rather than a timeline node.',
+  'import { Marker } from \'@heliannuuthus/ui\'\n\n<article>昨天的更新内容</article>\n<Marker content="今天" variant="separator" />\n<article>今天的更新内容</article>':
+    'import { Marker } from \'@heliannuuthus/ui\'\n\n<article>Yesterday’s updates</article>\n<Marker content="Today" variant="separator" />\n<article>Today’s updates</article>',
+  未读边界: 'Unread boundary',
+  '把未读数量放在已读与未读内容之间；图标强化状态，底边框保持紧凑。':
+    'Place the unread count between read and unread content; the icon reinforces status while the bottom border keeps the layout compact.',
+  'import { Marker } from \'@heliannuuthus/ui\'\nimport { CircleDot } from \'lucide-react\'\n\n<Marker\n  variant="border"\n  icon={<CircleDot />}\n  content="2 条未读消息"\n/>':
+    'import { Marker } from \'@heliannuuthus/ui\'\nimport { CircleDot } from \'lucide-react\'\n\n<Marker\n  variant="border"\n  icon={<CircleDot />}\n  content="2 unread messages"\n/>',
+  状态说明: 'Status note',
+  '在一组相关设置之间说明后续内容的共同状态，不把 Marker 当作警告或通知容器。':
+    'Describe the shared state of subsequent content within a related settings group without treating Marker as an alert or notification container.',
+  "import { Marker } from '@heliannuuthus/ui'\nimport { CheckCircle2 } from 'lucide-react'\n\n<Marker\n  icon={<CheckCircle2 />}\n  content=\"以下设置已同步到生产环境\"\n/>":
+    "import { Marker } from '@heliannuuthus/ui'\nimport { CheckCircle2 } from 'lucide-react'\n\n<Marker\n  icon={<CheckCircle2 />}\n  content=\"The following settings are synced to production\"\n/>",
+  链接标记: 'Linked marker',
+  '传入 href 后，标记可以指向文档锚点或另一段连续内容，并保留原生链接语义。':
+    'With href, a marker can point to a document anchor or another section of continuous content while preserving native link semantics.',
+  'import { Marker } from \'@heliannuuthus/ui\'\nimport { Archive } from \'lucide-react\'\n\n<Marker\n  href="#archived-release-notes"\n  icon={<Archive />}\n  content="定位到归档说明"\n  variant="separator"\n/>':
+    'import { Marker } from \'@heliannuuthus/ui\'\nimport { Archive } from \'lucide-react\'\n\n<Marker\n  href="#archived-release-notes"\n  icon={<Archive />}\n  content="Jump to archived notes"\n  variant="separator"\n/>',
+  '在连续内容中标记日期、未读边界、状态切换或可跳转位置。':
+    'Mark dates, unread boundaries, state transitions, or navigable positions within continuous content.',
+  '需要一条带文字或图标的轻量分隔规则时使用。':
+    'Use when you need a lightweight dividing rule with text or an icon.',
+  '装饰性图标会自动从辅助技术中隐藏，状态含义必须同时写入 content。':
+    'Decorative icons are hidden from assistive technology automatically; include the state meaning in content as well.',
+  '需要跳转时传入 href，让组件保留原生链接语义和键盘操作。':
+    'Pass href when navigation is needed so the component preserves native link semantics and keyboard behavior.',
+  '不要用 Marker 表达具有节点、连接线和顺序关系的完整时间线。':
+    'Do not use Marker to represent a complete timeline with nodes, connectors, and sequential relationships.',
+  '不要用颜色或图标单独表达状态，也不要把长段说明塞进标记文字。':
+    'Do not communicate status through color or icons alone, and do not put long explanations in marker text.',
+  昨天: 'Yesterday',
+  发布说明已完成评审: 'Release notes review completed',
+  '数据库迁移和回滚入口已经补充完整。':
+    'Database migration details and the rollback entry point are now complete.',
+  发布窗口已经确认: 'Release window confirmed',
+  '生产变更将在今晚 22:00 开始。':
+    'Production changes will begin tonight at 22:00.',
+  预检结果已更新: 'Preflight results updated',
+  '构建、类型检查和安全扫描均已通过。':
+    'Build, type checking, and security scanning have all passed.',
+  '2 条未读消息': '2 unread messages',
+  周一补充了观察指标: 'Zhou Yi added observation metrics',
+  '重点关注错误率和数据库连接数。':
+    'Focus on the error rate and database connection count.',
+  发布区域: 'Release region',
+  以下设置已同步到生产环境: 'The following settings are synced to production',
+  流量策略: 'Traffic strategy',
+  '灰度 10%': '10% canary',
+  '15 分钟': '15 minutes',
+  历史发布说明: 'Historical release notes',
+  已归档: 'Archived',
+  '归档内容保持只读，可通过标记链接快速返回这一位置。':
+    'Archived content remains read-only, and the marker link provides a quick way back to this location.',
+  定位到归档说明: 'Jump to archived notes',
+  '用 Item.Group 组织同类动态，并通过分隔线维持连续列表的阅读节奏。':
+    'Use Item.Group to organize related activity and separators to maintain the reading rhythm of a continuous list.',
+  "import { Badge, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: <MessageCircle />,\n      mediaVariant: 'icon',\n      title: '林默回复了检查项',\n      description: '确认索引变更不会锁表。',\n      actions: <Badge>2 分钟前</Badge>,\n    },\n  ]}\n/>":
+    "import { Badge, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: <MessageCircle />,\n      mediaVariant: 'icon',\n      title: 'Lin Mo replied to the review item',\n      description: 'Confirmed that the index change will not lock the table.',\n      actions: <Badge>2 minutes ago</Badge>,\n    },\n  ]}\n/>",
+  成员目录: 'Member directory',
+  '头像、身份说明和成员状态保持同一行对齐，描边外观明确每个成员的点击区域。':
+    'Keep avatars, role descriptions, and member status aligned on one row; the outlined appearance makes each member’s hit area explicit.',
+  'import { Avatar, Badge, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<Avatar alt="林默" fallback="林" />}\n  title="林默"\n  description="平台工程 · 发布管理员"\n  actions={<Badge variant="secondary">在线</Badge>}\n/>':
+    'import { Avatar, Badge, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<Avatar alt="Lin Mo" fallback="L" />}\n  title="Lin Mo"\n  description="Platform engineering · Release administrator"\n  actions={<Badge variant="secondary">Online</Badge>}\n/>',
+  '把开关放入 actions，让标题解释设置、描述说明影响范围，整行本身不重复承担点击行为。':
+    'Place the switch in actions so the title names the setting and the description explains its scope; the row itself does not duplicate the click behavior.',
+  'import { Item, Switch } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="muted"\n  media={<Cloud />}\n  mediaVariant="icon"\n  title="自动部署预览环境"\n  description="合并到 main 后自动更新预览环境。"\n  actions={<Switch aria-label="自动部署预览环境" />}\n/>':
+    'import { Item, Switch } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="muted"\n  media={<Cloud />}\n  mediaVariant="icon"\n  title="Automatically deploy preview environment"\n  description="Update the preview environment after merging into main."\n  actions={<Switch aria-label="Automatically deploy preview environment" />}\n/>',
+  资源入口: 'Resource entry',
+  '使用 href 把整个资源项变成原生链接；header 和 footer 承载辅助元数据。':
+    'Use href to make the entire resource item a native link; header and footer carry supporting metadata.',
+  'import { Badge, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Badge>发布说明</Badge>}\n  media={<FileText />}\n  mediaVariant="icon"\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>许澄维护 · 8 分钟前更新</span>}\n/>':
+    'import { Badge, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Badge>Release notes</Badge>}\n  media={<FileText />}\n  mediaVariant="icon"\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>Maintained by Xu Cheng · Updated 8 minutes ago</span>}\n/>',
+  '展示成员、动态、文件、设置等具有一致骨架的行级内容。':
+    'Display row-level content with a consistent structure, such as members, activity, files, and settings.',
+  '需要组合媒体、主次文字、尾部操作或跨行元数据时使用。':
+    'Use when composing media, primary and secondary text, trailing actions, or full-row metadata.',
+  'Item.Group 默认提供列表与列表项语义；使用 renderItem 时需要保留等价语义。':
+    'Item.Group provides list and list-item semantics by default; preserve equivalent semantics when using renderItem.',
+  '整行需要跳转时传入 href；行内已有按钮或开关时不要再把整行设为链接。':
+    'Pass href when the whole row navigates; do not also make the row a link when it already contains a button or switch.',
+  '不要只为比较 variant 创建脱离业务上下文的重复列表。':
+    'Do not create repetitive, context-free lists solely to compare variants.',
+  '不要在一个列表项中堆叠过多操作；保留一个主要操作，其余收进菜单。':
+    'Do not stack too many actions in one list item; keep one primary action and move the rest into a menu.',
+  发布成员: 'Release members',
+  '平台工程 · 发布管理员': 'Platform engineering · Release administrator',
+  组件维护者: 'Component maintainer',
+  '产品设计 · 设计系统': 'Product design · Design system',
+  发布设置: 'Release settings',
+  自动部署预览环境: 'Automatically deploy preview environment',
+  '合并到 main 后自动更新预览环境。':
+    'Update the preview environment after merging into main.',
+  发布前安全审计: 'Pre-release security audit',
+  '生产发布必须通过全部安全检查。':
+    'Production releases must pass every security check.',
+  许澄维护: 'Maintained by Xu Cheng',
+  评审通过: 'Review approved',
+  '8 分钟前更新': 'Updated 8 minutes ago',
 };
