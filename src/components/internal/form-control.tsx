@@ -18,6 +18,7 @@ type FormControlContextValue<Value = unknown> = {
 const FormControlContext = React.createContext<FormControlContextValue | null>(
   null
 );
+const formControlTypes = new WeakSet<object>();
 
 const FormControlProvider = <Value,>({
   children,
@@ -47,6 +48,26 @@ const useFormControl = <Value,>() => {
   return React.useContext(
     FormControlContext
   ) as FormControlContextValue<Value> | null;
+};
+
+const registerFormControl = <Component,>(component: Component) => {
+  if (
+    (typeof component === 'function' ||
+      (typeof component === 'object' && component !== null)) &&
+    !formControlTypes.has(component)
+  ) {
+    formControlTypes.add(component);
+  }
+
+  return component;
+};
+
+const isRegisteredFormControl = (component: unknown) => {
+  return (
+    (typeof component === 'function' ||
+      (typeof component === 'object' && component !== null)) &&
+    formControlTypes.has(component)
+  );
 };
 
 const assignRef = <T,>(ref: React.Ref<T> | undefined, value: T | null) => {
@@ -81,7 +102,9 @@ const mergeIds = (...ids: Array<string | undefined>) => {
 export {
   FormControlBoundary,
   FormControlProvider,
+  isRegisteredFormControl,
   mergeIds,
+  registerFormControl,
   useFormControl,
   useMergedRefs,
   type FormControlContextValue,

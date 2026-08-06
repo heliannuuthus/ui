@@ -1,15 +1,10 @@
 import { docsCopy } from './i18n/content';
-import {
-  forwardRef,
-  useState,
-  type ComponentPropsWithoutRef,
-  type Ref,
-} from 'react';
+import { forwardRef, useState } from 'react';
 import { Button } from '@heliannuuthus/ui';
 import { Checkbox } from '@heliannuuthus/ui';
 import { DatePicker } from '@heliannuuthus/ui';
 import { Field } from '@heliannuuthus/ui';
-import { Form } from '@heliannuuthus/ui';
+import { Form, type FormFieldInjectedControlProps } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
 import { Label } from '@heliannuuthus/ui';
 import { NativeSelect } from '@heliannuuthus/ui';
@@ -507,64 +502,53 @@ export const FormIntegrationDemo = () => {
 
 type Priority = '' | 'routine' | 'important' | 'urgent';
 
-type PriorityControlProps = Omit<
-  ComponentPropsWithoutRef<'div'>,
-  'onBlur' | 'onChange'
-> & {
-  disabled?: boolean;
-  onBlur?: () => void;
-  onChange: (value: Priority) => void;
-  value: Priority;
-};
+type PriorityControlProps = FormFieldInjectedControlProps<Priority>;
 
-const PriorityControl = forwardRef<HTMLButtonElement, PriorityControlProps>(
-  (
-    { className, disabled, onBlur, onChange, value, ...props },
-    forwardedRef
-  ) => {
-    const options = [
-      { label: docsCopy('常规'), value: 'routine' },
-      { label: docsCopy('重要'), value: 'important' },
-      { label: docsCopy('紧急'), value: 'urgent' },
-    ] as const;
+const priorityOptions = [
+  { label: docsCopy('常规'), value: 'routine' },
+  { label: docsCopy('重要'), value: 'important' },
+  { label: docsCopy('紧急'), value: 'urgent' },
+] as const;
 
-    return (
-      <div
-        {...props}
-        className={['data-priority-control', className]
-          .filter(Boolean)
-          .join(' ')}
-        role="radiogroup"
-        onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) onBlur?.();
-        }}
-      >
-        {options.map((option, index) => (
-          <button
-            ref={index === 0 ? forwardedRef : undefined}
-            aria-checked={value === option.value}
-            disabled={disabled}
-            key={option.value}
-            onClick={() => onChange(option.value)}
-            role="radio"
-            type="button"
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
-    );
-  }
+const MinimalPriorityControl = ({
+  onChange,
+  ...props
+}: PriorityControlProps) => (
+  <Radio.Group
+    {...props}
+    columns={3}
+    minColumnWidth={0}
+    onChange={onChange}
+    options={priorityOptions}
+  />
 );
 
+const CompletePriorityControl = forwardRef<
+  HTMLInputElement,
+  PriorityControlProps
+>(({ onChange, ...props }, ref) => (
+  <Radio.Group
+    {...props}
+    columns={3}
+    inputRef={ref}
+    minColumnWidth={0}
+    onChange={onChange}
+    options={priorityOptions}
+  />
+));
+
 type CustomControlValues = {
-  priority: Priority;
+  completePriority: Priority;
+  minimalPriority: Priority;
 };
 
 export const FormCustomControlDemo = () => {
-  const [submitted, setSubmitted] = useState<Priority>('');
+  const [submitted, setSubmitted] = useState<CustomControlValues | null>(null);
   const form = Form.useForm<CustomControlValues>({
-    defaultValues: { priority: '' },
+    defaultValues: {
+      completePriority: '',
+      minimalPriority: 'routine',
+    },
   });
 
   return (
@@ -572,36 +556,38 @@ export const FormCustomControlDemo = () => {
       <div className="data-card-heading">
         <div>
           <strong>{docsCopy('自定义控件接入')}</strong>
-          <p>{docsCopy('自制组件只依赖稳定的值、事件与无障碍属性。')}</p>
+          <p>
+            {docsCopy(
+              '先完成值绑定；需要错误聚焦时，再转发 ref 获取完整能力。'
+            )}
+          </p>
         </div>
       </div>
-      <Form
-        className="data-form-stack"
-        form={form}
-        onSubmit={(values) => setSubmitted(values.priority)}
-      >
-        <Form.Field<CustomControlValues, 'priority'>
-          name="priority"
-          label={docsCopy('优先级')}
+      <Form className="data-form-stack" form={form} onSubmit={setSubmitted}>
+        <Form.Field<CustomControlValues, 'minimalPriority'>
+          name="minimalPriority"
+          label={docsCopy('最小可用')}
           description={docsCopy(
-            'Form.Field 统一管理值、校验、焦点与错误描述。'
+            '普通函数组件即可完成 value 和 onChange 的值绑定。'
+          )}
+        >
+          <MinimalPriorityControl />
+        </Form.Field>
+        <Form.Field<CustomControlValues, 'completePriority'>
+          name="completePriority"
+          label={docsCopy('完整能力')}
+          description={docsCopy(
+            '转发 ref 后支持校验失败自动聚焦，并保留完整字段属性。'
           )}
           rules={{ required: docsCopy('请选择优先级。') }}
         >
-          {({ field, groupProps }) => (
-            <PriorityControl
-              {...groupProps}
-              ref={field.ref as Ref<HTMLButtonElement>}
-              value={field.value}
-              onBlur={field.onBlur}
-              onChange={field.onChange}
-            />
-          )}
+          <CompletePriorityControl />
         </Form.Field>
         <div className="data-form-actions">
           {submitted && (
             <span>
-              {docsCopy('已保存优先级')}：{submitted}
+              {docsCopy('已保存优先级')}：{submitted.minimalPriority} /{' '}
+              {submitted.completePriority}
             </span>
           )}
           <Button type="submit">{docsCopy('保存优先级')}</Button>

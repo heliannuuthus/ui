@@ -6,6 +6,7 @@ import { cn } from '../lib/utils';
 import { Stack } from './stack';
 import {
   mergeIds,
+  registerFormControl,
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
@@ -247,6 +248,8 @@ const RadioGroup = <Value = string,>({
 const Radio = Object.assign(RadioRoot, {
   Group: RadioGroup,
 });
+
+registerFormControl(RadioGroup);
 
 export { Radio };
 export type { RadioClassNames, RadioGroupProps, RadioOption, RadioProps };

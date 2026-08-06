@@ -17,6 +17,52 @@ const attribute = (element, name) => {
   return element.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
 };
 
+const CustomValueControl = ({ onChange, value, ...props }) =>
+  React.createElement('input', {
+    ...props,
+    'data-slot': 'custom-control',
+    onChange: (event) => onChange(event.target.value),
+    value,
+  });
+
+const CustomValueGroup = React.forwardRef(
+  (
+    {
+      'aria-required': ariaRequired,
+      disabled,
+      name,
+      onChange,
+      required,
+      value,
+      ...props
+    },
+    ref
+  ) =>
+    React.createElement(
+      'div',
+      {
+        ...props,
+        'aria-required': ariaRequired ?? required,
+        'data-field-name': name,
+        'data-slot': 'custom-group',
+        role: 'radiogroup',
+      },
+      React.createElement(
+        'button',
+        {
+          'aria-checked': value === 'urgent',
+          disabled,
+          onClick: () => onChange('urgent'),
+          ref,
+          role: 'radio',
+          tabIndex: 0,
+          type: 'button',
+        },
+        'Urgent'
+      )
+    )
+);
+
 const AccessibilityFixture = () => {
   const form = Form.useForm({
     defaultValues: {
@@ -48,15 +94,7 @@ const AccessibilityFixture = () => {
         label: 'Location',
         name: 'location',
       },
-      ({ controlProps, field }) =>
-        React.createElement('input', {
-          ...controlProps,
-          'data-slot': 'custom-control',
-          onBlur: field.onBlur,
-          onChange: (event) => field.onChange(event.target.value),
-          ref: field.ref,
-          value: field.value,
-        })
+      React.createElement(CustomValueControl)
     ),
     React.createElement(
       Form.Field,
@@ -89,25 +127,7 @@ const AccessibilityFixture = () => {
         name: 'priority',
         rules: { required: 'Choose a priority.' },
       },
-      ({ field, groupProps }) =>
-        React.createElement(
-          'div',
-          {
-            ...groupProps,
-            'data-slot': 'custom-group',
-            role: 'radiogroup',
-          },
-          React.createElement(
-            'button',
-            {
-              'aria-checked': field.value === 'urgent',
-              onClick: () => field.onChange('urgent'),
-              role: 'radio',
-              type: 'button',
-            },
-            'Urgent'
-          )
-        )
+      React.createElement(CustomValueGroup)
     )
   );
 };
@@ -171,6 +191,31 @@ assert.equal(
 );
 assert.equal(attribute(customGroup, 'aria-required'), 'true');
 
+const InvalidFieldFixture = () => {
+  const invalidForm = Form.useForm({
+    defaultValues: { name: '' },
+  });
+
+  return React.createElement(
+    Form,
+    { form: invalidForm, onSubmit() {} },
+    React.createElement(
+      Form.Field,
+      { name: 'name' },
+      React.createElement(
+        React.Fragment,
+        null,
+        React.createElement(CustomValueControl)
+      )
+    )
+  );
+};
+
+assert.throws(
+  () => renderToStaticMarkup(React.createElement(InvalidFieldFixture)),
+  /Form\.Field expects one direct, non-Fragment control element\./
+);
+
 globalThis.console.log(
-  'Verified Form.Field labels, descriptions, custom controls, custom groups, and group ARIA relationships, including Slider.'
+  'Verified Form.Field labels, descriptions, automatic custom control injection, single-child enforcement, custom groups, and group ARIA relationships, including Slider.'
 );

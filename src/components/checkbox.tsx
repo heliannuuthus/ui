@@ -10,6 +10,7 @@ import { Masonry, type MasonryGap, type MasonryLength } from './masonry';
 import {
   FormControlBoundary,
   mergeIds,
+  registerFormControl,
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
@@ -261,6 +262,9 @@ const CheckboxGroup = ({
 const Checkbox = Object.assign(CheckboxRoot, {
   Group: CheckboxGroup,
 });
+
+registerFormControl(CheckboxRoot);
+registerFormControl(CheckboxGroup);
 
 export { Checkbox };
 export type {

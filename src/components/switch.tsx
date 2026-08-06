@@ -4,6 +4,7 @@ import { Switch as SwitchPrimitive } from '@base-ui/react/switch';
 import { cn } from '../lib/utils';
 import {
   mergeIds,
+  registerFormControl,
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
@@ -85,6 +86,8 @@ const Switch = ({
     </SwitchPrimitive.Root>
   );
 };
+
+registerFormControl(Switch);
 
 export { Switch };
 export type { SwitchProps };

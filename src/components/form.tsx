@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { isForwardRef } from 'react-is';
 import {
   FormProvider,
   useController,
@@ -17,11 +18,15 @@ import { cn } from '../lib/utils';
 import { Field } from './field';
 import {
   FormControlProvider,
+  isRegisteredFormControl,
   mergeIds,
   type FormControlContextValue,
+  useMergedRefs,
 } from './internal/form-control';
 
-const INTERNAL_FORM_METHODS = Symbol('form-methods');
+const INTERNAL_FORM_METHODS: unique symbol = Symbol.for(
+  '@heliannuuthus/ui/form-methods'
+);
 
 type FormInstance<
   TFieldValues extends FieldValues = FieldValues,
@@ -59,11 +64,15 @@ type FormProps<
   onSubmit: SubmitHandler<TTransformedValues>;
 };
 
+type FormFieldFocusTarget = {
+  focus: () => unknown;
+};
+
 type FormFieldRenderField<Value> = {
   name: string;
   onBlur: () => void;
   onChange: (value: Value) => void;
-  ref: React.Ref<unknown>;
+  ref: React.RefCallback<FormFieldFocusTarget>;
   value: Value;
 };
 
@@ -89,6 +98,25 @@ type FormFieldGroupProps = Omit<FormFieldControlProps, 'name' | 'required'> & {
   'aria-labelledby'?: string;
 };
 
+type FormFieldInjectedControlProps<Value> = {
+  'aria-describedby'?: string;
+  'aria-errormessage'?: string;
+  'aria-invalid'?: boolean;
+  'aria-labelledby'?: string;
+  'aria-required'?: boolean;
+  disabled?: boolean;
+  id?: string;
+  name?: string;
+  onBlur?: () => void;
+  onChange?: (value: Value) => void;
+  required?: boolean;
+  value?: Value;
+};
+
+type FormFieldInjectableElementProps<Value> =
+  FormFieldInjectedControlProps<Value> &
+    React.RefAttributes<FormFieldFocusTarget>;
+
 type FormFieldRenderProps<Value> = {
   controlProps: FormFieldControlProps;
   field: FormFieldRenderField<Value>;
@@ -101,7 +129,7 @@ type FormFieldProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = Omit<React.ComponentProps<typeof Field>, 'children'> & {
   children:
-    | React.ReactNode
+    | React.ReactElement
     | ((
         props: FormFieldRenderProps<FieldPathValue<TFieldValues, TName>>
       ) => React.ReactNode);
@@ -182,6 +210,16 @@ const hasRequiredRule = (rule: RegisterOptions['required']) => {
   return Boolean(rule);
 };
 
+const canReceiveInjectedRef = (element: React.ReactElement) => {
+  const reactMajorVersion = Number.parseInt(React.version, 10);
+
+  return (
+    reactMajorVersion >= 19 ||
+    typeof element.type === 'string' ||
+    isForwardRef(element)
+  );
+};
+
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
@@ -213,12 +251,25 @@ const FormField = <
     shouldUnregister,
   });
   const error = fieldState.error?.message;
+  const fieldRef = field.ref;
+  const focusRef = React.useCallback<React.RefCallback<FormFieldFocusTarget>>(
+    (instance) => fieldRef(instance),
+    [fieldRef]
+  );
+  const childElement = React.isValidElement(children)
+    ? (children as React.ReactElement<
+        FormFieldInjectableElementProps<FieldPathValue<TFieldValues, TName>>
+      >)
+    : null;
+  const mergedChildRef = useMergedRefs(childElement?.props.ref, focusRef);
+  const resolvedControlId = childElement?.props.id ?? controlId;
+  const injectRef = childElement ? canReceiveInjectedRef(childElement) : false;
   const fieldValue: FormFieldRenderField<FieldPathValue<TFieldValues, TName>> =
     {
       name: field.name,
       onBlur: field.onBlur,
       onChange: field.onChange,
-      ref: field.ref,
+      ref: focusRef,
       value: field.value,
     };
   const renderState: FormFieldRenderState = {
@@ -237,7 +288,7 @@ const FormField = <
     'aria-invalid': fieldState.invalid || undefined,
     'aria-required': isRequired || undefined,
     disabled: Boolean(field.disabled),
-    id: controlId,
+    id: resolvedControlId,
     name: field.name,
     required: isRequired,
   };
@@ -248,12 +299,12 @@ const FormField = <
     'aria-labelledby': labelId,
     'aria-required': isRequired || undefined,
     disabled: Boolean(field.disabled),
-    id: controlId,
+    id: resolvedControlId,
   };
   const controlContext: FormControlContextValue<
     FieldPathValue<TFieldValues, TName>
   > = {
-    controlId,
+    controlId: resolvedControlId,
     descriptionId,
     disabled: Boolean(field.disabled),
     invalid: fieldState.invalid,
@@ -266,6 +317,60 @@ const FormField = <
     required: isRequired,
     value: field.value,
   };
+  if (
+    typeof children !== 'function' &&
+    (!childElement || childElement.type === React.Fragment)
+  ) {
+    throw new Error(
+      'Form.Field expects one direct, non-Fragment control element.'
+    );
+  }
+
+  const controlNode =
+    typeof children === 'function' ? (
+      children({
+        controlProps,
+        field: fieldValue,
+        fieldState: renderState,
+        groupProps,
+      })
+    ) : childElement && !isRegisteredFormControl(childElement.type) ? (
+      React.cloneElement(childElement, {
+        'aria-describedby': mergeIds(
+          childElement.props['aria-describedby'],
+          describedBy
+        ),
+        'aria-errormessage':
+          (fieldState.invalid ? messageId : undefined) ??
+          childElement.props['aria-errormessage'],
+        'aria-invalid':
+          fieldState.invalid || childElement.props['aria-invalid'] || undefined,
+        'aria-labelledby': mergeIds(
+          childElement.props['aria-labelledby'],
+          labelId
+        ),
+        'aria-required':
+          isRequired || childElement.props['aria-required'] || undefined,
+        disabled: Boolean(field.disabled || childElement.props.disabled),
+        id: resolvedControlId,
+        name: field.name,
+        onBlur: () => {
+          childElement.props.onBlur?.();
+          field.onBlur();
+        },
+        onChange: (value: FieldPathValue<TFieldValues, TName>) => {
+          childElement.props.onChange?.(value);
+          field.onChange(value);
+        },
+        ...(injectRef ? { ref: mergedChildRef } : {}),
+        required: Boolean(isRequired || childElement.props.required),
+        value: field.value,
+      })
+    ) : (
+      <FormControlProvider value={controlContext}>
+        {children}
+      </FormControlProvider>
+    );
 
   return (
     <Field
@@ -275,7 +380,7 @@ const FormField = <
       {...props}
     >
       {label != null ? (
-        <Field.Label htmlFor={controlId} id={labelId}>
+        <Field.Label htmlFor={resolvedControlId} id={labelId}>
           {label}
           {isRequired ? (
             <span aria-hidden="true" className="text-destructive">
@@ -284,18 +389,7 @@ const FormField = <
           ) : null}
         </Field.Label>
       ) : null}
-      {typeof children === 'function' ? (
-        children({
-          controlProps,
-          field: fieldValue,
-          fieldState: renderState,
-          groupProps,
-        })
-      ) : (
-        <FormControlProvider value={controlContext}>
-          {children}
-        </FormControlProvider>
-      )}
+      {controlNode}
       {description != null ? (
         <Field.Description id={descriptionId}>{description}</Field.Description>
       ) : null}
@@ -328,7 +422,9 @@ type FormItemRenderState = FormFieldRenderState;
 export { Form };
 export type {
   FormFieldControlProps,
+  FormFieldFocusTarget,
   FormFieldGroupProps,
+  FormFieldInjectedControlProps,
   FormFieldProps,
   FormFieldRenderField,
   FormFieldRenderProps,

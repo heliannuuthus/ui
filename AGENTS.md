@@ -52,9 +52,15 @@
 - `Form.Field` owns the field name, label, description, required marker,
   validation message and ARIA wiring. Product code must not manually repeat
   these concerns for supported Heliannuuthus UI controls.
-- Provide a typed render-prop escape hatch for third-party, composite and
-  otherwise non-standard controls. Do not infer bindings from component display
-  names, DOM inspection or undocumented child shapes.
+- `Form.Field` must inject the standard controlled-component contract into one
+  direct user-authored child. Adapt third-party property names and composite
+  internals inside a reusable control component instead of expanding
+  `Form.Field` with per-library mapping options. Do not infer bindings from
+  component display names, DOM inspection or undocumented child shapes.
+- Ref forwarding is an optional focus capability, not a value-binding
+  requirement. Do not inject a ref into a React 18 function component unless it
+  can receive one; keep the minimum custom-control contract warning-free across
+  every supported React peer version.
 - Keep the binding contract independent of `react-hook-form`. A form engine may
   be used internally, but engine-specific objects such as `Controller`,
   `control` and `UseFormReturn` are not the target product-facing API.
