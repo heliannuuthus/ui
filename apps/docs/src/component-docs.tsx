@@ -123,10 +123,10 @@ import {
   CollapsibleStateDemo,
   CollapsibleTriggerModesDemo,
   CounterBuildDemo,
-  DataTableExpandableDemo,
-  DataTableGroupedHeaderDemo,
-  DataTableReleaseDemo,
-  DataTableVirtualScrollDemo,
+  TableManagedExpandableDemo,
+  TableGroupedHeaderDemo,
+  TableManagedDemo,
+  TableManagedVirtualDemo,
   EmptyCompositionDemo,
   EmptyDefaultDemo,
   EmptyIconDemo,
@@ -139,6 +139,12 @@ import {
   ItemStructureDemo,
   MarkerLinkDemo,
   MarkerTimelineDemo,
+  ItemMemberDirectoryDemo,
+  ItemResourceDemo,
+  ItemSettingsDemo,
+  MarkerDateSectionDemo,
+  MarkerStatusDemo,
+  MarkerUnreadDemo,
   TableCellDemo,
   TableExpandableDemo,
   TableFixedDemo,
@@ -2944,11 +2950,11 @@ const remainingComponents = [
   ],
   ['Collapsible', 'collapsible', docsCopy('控制单个内容区域展开收起。')],
   ['Counter', 'counter', docsCopy('以逐位滚动动画展示变化中的数值。')],
-  ['Data Table', 'data-table', docsCopy('展示并操作结构化数据集合。')],
+  ['Table', 'data-table', docsCopy('展示并操作结构化数据集合。')],
   ['Empty', 'empty', docsCopy('解释无数据状态并提供下一步。')],
   ['Item', 'item', docsCopy('构建包含内容和操作的通用列表项。')],
-  ['Marker', 'marker', docsCopy('标记内容中的位置或状态。')],
-  ['Table', 'table', docsCopy('使用语义化行列展示数据。')],
+  ['Marker', 'marker', docsCopy('标记连续内容中的分段位置或状态。')],
+  ['Table', 'table', docsCopy('展示、操作并自定义结构化数据集合。')],
   ['Tooltip', 'tooltip', docsCopy('为控件提供简短补充说明。')],
   ['Alert', 'alert', docsCopy('持续展示重要的页面内提示。')],
   [
@@ -3627,9 +3633,9 @@ if (emptyBasicExample) {
 
 const tableBasicExample = componentDocumentation.table.examples[0];
 if (tableBasicExample) {
-  tableBasicExample.title = docsCopy('基础用法');
+  tableBasicExample.title = docsCopy('自定义表格');
   tableBasicExample.description = docsCopy(
-    '使用 Header、Body、Footer 和 Caption 组织一张语义完整的基础表格。'
+    '数据已经完成加工，或需要完全控制结构时，直接组合 Header、Body、Footer 和 Caption。'
   );
   tableBasicExample.caseAxes = undefined;
   tableBasicExample.preview = <TableReleaseDemo />;
@@ -5176,9 +5182,9 @@ import { ChevronRight } from 'lucide-react'
       description: docsCopy(
         '默认组合筛选、排序、固定列、操作列、Caption、Footer 和 Pagination；业务只需要提供 data 与 ColumnDef。'
       ),
-      preview: <DataTableReleaseDemo />,
+      preview: <TableManagedDemo />,
       code: docsCopy(`import {
-  DataTable,
+  Table,
   type ColumnDef,
 } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
@@ -5189,7 +5195,7 @@ const columns: ColumnDef<Release>[] = [
   {
     accessorKey: 'version',
     header: ({ column }) => (
-      <DataTable.ColumnHeader column={column}>版本</DataTable.ColumnHeader>
+      <Table.ColumnHeader column={column}>版本</Table.ColumnHeader>
     ),
   },
   {
@@ -5200,7 +5206,7 @@ const columns: ColumnDef<Release>[] = [
       fixed: 'end',
     },
     render: (_, row) => (
-      <DataTable.Actions aria-label={row.version + ' 操作'}>
+      <Table.Actions aria-label={row.version + ' 操作'}>
         <Button variant="ghost">查看</Button>
         <DropdownMenu
           align="end"
@@ -5220,12 +5226,12 @@ const columns: ColumnDef<Release>[] = [
             { label: '删除记录', destructive: true },
           ]}
         />
-      </DataTable.Actions>
+      </Table.Actions>
     ),
   },
 ]
 
-<DataTable
+<Table
   caption="最近五次生产与预览环境发布。"
   columns={columns}
   data={releaseRecords}
@@ -5243,10 +5249,10 @@ const columns: ColumnDef<Release>[] = [
       description: docsCopy(
         'expandable 会自动补齐展开列、键盘按钮和跨列详情行；固定在起始侧的业务列会自动避开展开按钮。'
       ),
-      preview: <DataTableExpandableDemo />,
-      code: `import { DataTable } from '@heliannuuthus/ui'
+      preview: <TableManagedExpandableDemo />,
+      code: `import { Table } from '@heliannuuthus/ui'
 
-<DataTable
+<Table
   columns={columns}
   data={releaseRecords}
   expandable={{
@@ -5262,11 +5268,11 @@ const columns: ColumnDef<Release>[] = [
     {
       title: docsCopy('分组表头'),
       description: docsCopy(
-        '在 ColumnDef 中嵌套 columns 即可形成多级表头；DataTable 会计算跨列、层级和空状态宽度。'
+        '在 ColumnDef 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。'
       ),
-      preview: <DataTableGroupedHeaderDemo />,
+      preview: <TableGroupedHeaderDemo />,
       code: docsCopy(`import {
-  DataTable,
+  Table,
   type ColumnDef,
 } from '@heliannuuthus/ui'
 
@@ -5298,7 +5304,7 @@ const columns: ColumnDef<Release>[] = [
   },
 ]
 
-<DataTable columns={columns} data={releaseRecords} />`),
+<Table columns={columns} data={releaseRecords} />`),
       wide: true,
       previewHeight: 560,
     },
@@ -5307,10 +5313,10 @@ const columns: ColumnDef<Release>[] = [
       description: docsCopy(
         'virtual 直接使用基础 Table 的虚拟表体；固定列、横向滚动和自定义 render 会继续生效。'
       ),
-      preview: <DataTableVirtualScrollDemo />,
-      code: `import { DataTable } from '@heliannuuthus/ui'
+      preview: <TableManagedVirtualDemo />,
+      code: `import { Table } from '@heliannuuthus/ui'
 
-<DataTable
+<Table
   columns={columns}
   data={records}
   getRowKey={(row) => row.id}
@@ -5401,40 +5407,79 @@ const columns: ColumnDef<Release>[] = [
     {
       title: docsCopy('协作动态'),
       description: docsCopy(
-        '通过 media、title、description 和 actions props 组织不同长度的列表项。'
+        '用 Item.Group 组织同类动态，并通过分隔线维持连续列表的阅读节奏。'
       ),
-      caseAxes: [
-        {
-          name: 'variant',
-          label: docsCopy('样式'),
-          defaultValue: 'outline',
-          options: [
-            { label: docsCopy('默认'), value: 'default' },
-            { label: docsCopy('描边'), value: 'outline' },
-            { label: docsCopy('柔和'), value: 'muted' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <ItemActivityDemo
-          variant={
-            values.variant === 'default' || values.variant === 'muted'
-              ? values.variant
-              : 'outline'
-          }
-        />
+      preview: <ItemActivityDemo />,
+      code: docsCopy(`import { Badge, Item } from '@heliannuuthus/ui'
+
+<Item.Group
+  separator
+  items={[
+    {
+      media: <MessageCircle />,
+      mediaType: 'icon',
+      title: '林默回复了检查项',
+      description: '确认索引变更不会锁表。',
+      actions: <Badge>2 分钟前</Badge>,
+    },
+  ]}
+/>`),
+      previewHeight: 340,
+    },
+    {
+      title: docsCopy('成员目录'),
+      description: docsCopy(
+        '头像、身份说明和成员状态保持同一行对齐，描边外观明确每个成员的点击区域。'
       ),
-      code: docsCopy(`import { Item } from '@heliannuuthus/ui'
+      preview: <ItemMemberDirectoryDemo />,
+      code: docsCopy(`import { Avatar, Badge, Item } from '@heliannuuthus/ui'
 
 <Item
   variant="outline"
-  media={<MessageCircle />}
-  mediaType="icon"
-  title="林默回复了检查项"
-  description="确认索引变更不会锁表。"
-  actions={<Button>查看</Button>}
+  media={<Avatar alt="林默" fallback="林" />}
+  title="林默"
+  description="平台工程 · 发布管理员"
+  actions={<Badge variant="secondary">在线</Badge>}
 />`),
-      previewHeight: 430,
+      previewHeight: 340,
+    },
+    {
+      title: docsCopy('设置列表'),
+      description: docsCopy(
+        '把开关放入 actions，让标题解释设置、描述说明影响范围，整行本身不重复承担点击行为。'
+      ),
+      preview: <ItemSettingsDemo />,
+      code: docsCopy(`import { Item, Switch } from '@heliannuuthus/ui'
+
+<Item
+  variant="muted"
+  media={<Cloud />}
+  mediaType="icon"
+  title="自动部署预览环境"
+  description="合并到 main 后自动更新预览环境。"
+  actions={<Switch aria-label="自动部署预览环境" />}
+/>`),
+      previewHeight: 340,
+    },
+    {
+      title: docsCopy('资源入口'),
+      description: docsCopy(
+        '使用 href 把整个资源项变成原生链接；header 和 footer 承载辅助元数据。'
+      ),
+      preview: <ItemResourceDemo />,
+      code: docsCopy(`import { Badge, Item } from '@heliannuuthus/ui'
+
+<Item
+  href="/release-notes/v0.12.0"
+  variant="outline"
+  header={<Badge>发布说明</Badge>}
+  media={<FileText />}
+  mediaType="icon"
+  title="v0.12.0-release-notes.md"
+  description="Markdown · 18 KB"
+  footer={<span>许澄维护 · 8 分钟前更新</span>}
+/>`),
+      previewHeight: 320,
     },
     {
       title: docsCopy('列表项尺寸'),
@@ -5593,39 +5638,65 @@ const columns: ColumnDef<Release>[] = [
   ],
   marker: [
     {
-      title: docsCopy('时间线标记'),
+      title: docsCopy('日期分段'),
       description: docsCopy(
-        '在连续内容之间标记关键时间点；分隔线和下边框适合不同密度。'
+        '在消息、动态或更新记录中分隔日期，让标签成为内容边界而不是时间线节点。'
       ),
-      caseAxes: [
-        {
-          name: 'variant',
-          label: docsCopy('样式'),
-          defaultValue: 'separator',
-          options: [
-            { label: docsCopy('默认'), value: 'default' },
-            { label: docsCopy('分隔'), value: 'separator' },
-            { label: docsCopy('下边框'), value: 'border' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <MarkerTimelineDemo
-          variant={
-            values.variant === 'default' || values.variant === 'border'
-              ? values.variant
-              : 'separator'
-          }
-        />
-      ),
+      preview: <MarkerDateSectionDemo />,
       code: docsCopy(`import { Marker } from '@heliannuuthus/ui'
 
+<article>昨天的更新内容</article>
+<Marker content="今天" variant="separator" />
+<article>今天的更新内容</article>`),
+      previewHeight: 360,
+    },
+    {
+      title: docsCopy('未读边界'),
+      description: docsCopy(
+        '把未读数量放在已读与未读内容之间；图标强化状态，底边框保持紧凑。'
+      ),
+      preview: <MarkerUnreadDemo />,
+      code: docsCopy(`import { Marker } from '@heliannuuthus/ui'
+import { CircleDot } from 'lucide-react'
+
 <Marker
-  variant="separator"
+  variant="border"
   icon={<CircleDot />}
-  content="生产发布开始 · 21:46"
+  content="2 条未读消息"
 />`),
-      previewHeight: 380,
+      previewHeight: 360,
+    },
+    {
+      title: docsCopy('状态说明'),
+      description: docsCopy(
+        '在一组相关设置之间说明后续内容的共同状态，不把 Marker 当作警告或通知容器。'
+      ),
+      preview: <MarkerStatusDemo />,
+      code: docsCopy(`import { Marker } from '@heliannuuthus/ui'
+import { CheckCircle2 } from 'lucide-react'
+
+<Marker
+  icon={<CheckCircle2 />}
+  content="以下设置已同步到生产环境"
+/>`),
+      previewHeight: 330,
+    },
+    {
+      title: docsCopy('链接标记'),
+      description: docsCopy(
+        '传入 href 后，标记可以指向文档锚点或另一段连续内容，并保留原生链接语义。'
+      ),
+      preview: <MarkerLinkDemo />,
+      code: docsCopy(`import { Marker } from '@heliannuuthus/ui'
+import { Archive } from 'lucide-react'
+
+<Marker
+  href="#archived-release-notes"
+  icon={<Archive />}
+  content="定位到归档说明"
+  variant="separator"
+/>`),
+      previewHeight: 330,
     },
     {
       title: docsCopy('链接与槽位样式'),
@@ -6711,25 +6782,25 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: '{ align?; fixed?; fixedOffset?; ellipsis?; ellipsisTooltip?; headerEllipsis?; headerEllipsisTooltip?; headerClassName?; cellClassName? }',
     },
     {
-      name: 'DataTable.ColumnHeader',
+      name: 'Table.ColumnHeader',
       description: docsCopy('组合可排序的列标题，并显示排序提示图标。'),
       type: 'component',
     },
     {
-      name: 'DataTable.Actions',
+      name: 'Table.Actions',
       description: docsCopy(
         '在操作列内组合一个或多个按钮、菜单或链接，默认居中并可通过 align 调整。'
       ),
       type: 'component',
     },
     {
-      component: 'DataTable.Actions',
+      component: 'Table.Actions',
       name: 'aria-label',
       description: docsCopy('使用当前记录标识为每一行的操作组提供唯一名称。'),
       type: 'string',
     },
     {
-      component: 'DataTable.Actions',
+      component: 'Table.Actions',
       name: 'align',
       description: docsCopy('控制整组操作在单元格内靠起始侧、居中或靠末端。'),
       type: "'start' | 'center' | 'end'",
@@ -6790,14 +6861,14 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       description: docsCopy(
         '透传基础 Table 的表格与滚动容器属性，用于设置最小宽度、表格布局和容器尺寸。'
       ),
-      type: "Omit<TableProps, 'children'>",
+      type: "Omit<TableRootProps, 'children'>",
     },
     {
       name: 'pagination',
       description: docsCopy(
         '使用标准 Pagination 管理当前页、每页数量和页码回调；传 false 时展示全部数据。'
       ),
-      type: 'false | DataTablePaginationProps',
+      type: 'false | TablePaginationProps',
       defaultValue: '{ pageSize: 10 }',
     },
     {
@@ -6810,7 +6881,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       description: docsCopy(
         '自动组装 ExpandButton 与 ExpandedRow，并支持受控或非受控的展开行 key。'
       ),
-      type: 'DataTableExpandableProps<TData>',
+      type: 'TableExpandableProps<TData>',
     },
     {
       name: 'expandable.getExpandLabel / getCollapseLabel',
@@ -6824,7 +6895,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       description: docsCopy(
         '使用基础 Table VirtualBody 只渲染可视范围附近的等高单行数据。'
       ),
-      type: 'boolean | DataTableVirtualProps<TData>',
+      type: 'boolean | TableVirtualProps<TData>',
       defaultValue: 'false',
     },
     {
@@ -7477,7 +7548,7 @@ componentDocumentation.table.relatedComponents = [
     name: 'Data Table',
     slug: 'data-table',
     description: docsCopy(
-      '常规数据列表优先使用组装好的 DataTable；它保留 Table 能力并补齐数据状态与默认交互。'
+      '常规数据列表优先使用组装好的 Table；它保留 Table 能力并补齐数据状态与默认交互。'
     ),
   },
 ];
@@ -7528,17 +7599,17 @@ componentDocumentation.table.pitfalls = [
     'VirtualBody 只适用于固定高度的单行数据；动态高度、行展开和跨行内容继续使用普通 Body。'
   ),
   docsCopy(
-    '需要筛选、排序、列分组和复杂行模型时使用 DataTable，不要把这些状态塞进基础 Table。'
+    '需要筛选、排序、列分组和复杂行模型时使用 Table，不要把这些状态塞进基础 Table。'
   ),
 ];
 
 componentDocumentation['data-table'].summary = docsCopy(
-  'DataTable 是基于 Table 组装好的默认数据表格：除筛选、排序和分页外，也完整提供固定列、省略 Tooltip、Caption、Footer、行展开与虚拟滚动。'
+  'Table 是基于 Table 组装好的默认数据表格：除筛选、排序和分页外，也完整提供固定列、省略 Tooltip、Caption、Footer、行展开与虚拟滚动。'
 );
 componentDocumentation['data-table'].typeDefinitionGroups = ['ColumnDef'];
 componentDocumentation['data-table'].whenToUse = [
   docsCopy(
-    '常规业务数据列表默认使用 DataTable，由 data 与 ColumnDef 驱动完整表格。'
+    '常规业务数据列表默认使用 Table，由 data 与 ColumnDef 驱动完整表格。'
   ),
   docsCopy(
     '需要筛选、排序、分页、固定列、分组表头、行展开或虚拟滚动中的任意能力。'
@@ -7555,7 +7626,7 @@ componentDocumentation['data-table'].relatedComponents = [
 ];
 componentDocumentation['data-table'].parts = [
   {
-    name: 'DataTable',
+    name: 'Table',
     description: docsCopy(
       '以基础 Table 为渲染层，组装数据、列模型、筛选、排序、分页、展开和虚拟滚动。'
     ),
@@ -7567,11 +7638,11 @@ componentDocumentation['data-table'].parts = [
     ),
   },
   {
-    name: 'DataTable.ColumnHeader',
+    name: 'Table.ColumnHeader',
     description: docsCopy('为可排序列提供一致的按钮、状态切换和图标。'),
   },
   {
-    name: 'DataTable.Actions',
+    name: 'Table.Actions',
     description: docsCopy('在普通 cell 中组合当前记录的按钮、菜单或链接。'),
   },
 ];
@@ -7591,13 +7662,13 @@ componentDocumentation['data-table'].accessibility = [
 ];
 componentDocumentation['data-table'].pitfalls = [
   docsCopy(
-    '不要在 DataTable 内硬编码业务操作；通过 ColumnDef.render 读取当前 row 后组合业务按钮。'
+    '不要在 Table 内硬编码业务操作；通过 ColumnDef.render 读取当前 row 后组合业务按钮。'
   ),
   docsCopy(
     '不要为了视觉分区手写两个并列表格；使用嵌套 columns 生成真正关联的数据表头。'
   ),
   docsCopy(
-    '不要在 DataTable 外再包一套表格滚动与圆角容器；通过 tableProps 复用基础 Table 的容器。'
+    '不要在 Table 外再包一套表格滚动与圆角容器；通过 tableProps 复用基础 Table 的容器。'
   ),
   docsCopy(
     '虚拟滚动只适用于固定高度的单行数据，不与 expandable 同时使用；需要动态详情高度时关闭 virtual。'
@@ -9420,6 +9491,22 @@ componentDocumentation.item.api = [
     defaultValue: 'false',
   },
 ];
+componentDocumentation.item.whenToUse = [
+  docsCopy('展示成员、动态、文件、设置等具有一致骨架的行级内容。'),
+  docsCopy('需要组合媒体、主次文字、尾部操作或跨行元数据时使用。'),
+];
+componentDocumentation.item.accessibility = [
+  docsCopy(
+    'Item.Group 默认提供列表与列表项语义；使用 renderItem 时需要保留等价语义。'
+  ),
+  docsCopy(
+    '整行需要跳转时传入 href；行内已有按钮或开关时不要再把整行设为链接。'
+  ),
+];
+componentDocumentation.item.pitfalls = [
+  docsCopy('不要只为比较 variant 创建脱离业务上下文的重复列表。'),
+  docsCopy('不要在一个列表项中堆叠过多操作；保留一个主要操作，其余收进菜单。'),
+];
 componentDocumentation.marker.parts = [
   {
     name: 'Marker',
@@ -9456,6 +9543,18 @@ componentDocumentation.marker.api = [
     description: docsCopy('分别扩展图标与内容槽位样式。'),
     type: 'MarkerClassNames',
   },
+];
+componentDocumentation.marker.whenToUse = [
+  docsCopy('在连续内容中标记日期、未读边界、状态切换或可跳转位置。'),
+  docsCopy('需要一条带文字或图标的轻量分隔规则时使用。'),
+];
+componentDocumentation.marker.accessibility = [
+  docsCopy('装饰性图标会自动从辅助技术中隐藏，状态含义必须同时写入 content。'),
+  docsCopy('需要跳转时传入 href，让组件保留原生链接语义和键盘操作。'),
+];
+componentDocumentation.marker.pitfalls = [
+  docsCopy('不要用 Marker 表达具有节点、连接线和顺序关系的完整时间线。'),
+  docsCopy('不要用颜色或图标单独表达状态，也不要把长段说明塞进标记文字。'),
 ];
 componentDocumentation.empty.api = componentDocumentation.empty.api.filter(
   (property) =>
@@ -10702,6 +10801,48 @@ componentDocumentation.command.pitfalls = [
   docsCopy('value 管理当前命令选择；搜索关键词应通过 inputProps 管理。'),
   docsCopy('shortcut 只负责展示提示，应用仍需自行注册对应的全局快捷键。'),
 ];
+
+const managedTableDocumentation = componentDocumentation['data-table'];
+const customTableDocumentation = componentDocumentation.table;
+
+customTableDocumentation.summary = docsCopy(
+  'Table 默认由 data 与 ColumnDef 驱动筛选、排序、分页等完整数据交互；需要完全控制结构时，也可以直接组合语义表格原语。'
+);
+customTableDocumentation.whenToUse = [
+  docsCopy(
+    '常规业务数据列表使用 data 与 ColumnDef，快速获得筛选、排序、分页、展开和虚拟滚动。'
+  ),
+  docsCopy(
+    '数据已经完成加工，或结构无法由列模型表达时，直接组合 Table.Header、Table.Body、Table.Row 与 Table.Cell。'
+  ),
+  docsCopy(
+    '既希望沿用统一的表格视觉与无障碍语义，又需要针对业务定制固定列、汇总、操作和详情。'
+  ),
+];
+customTableDocumentation.examples = [
+  ...managedTableDocumentation.examples,
+  ...customTableDocumentation.examples,
+];
+customTableDocumentation.typeDefinitionGroups =
+  managedTableDocumentation.typeDefinitionGroups;
+customTableDocumentation.api = [
+  ...managedTableDocumentation.api,
+  ...customTableDocumentation.api,
+];
+customTableDocumentation.parts = [
+  ...(managedTableDocumentation.parts ?? []),
+  ...(customTableDocumentation.parts ?? []),
+];
+customTableDocumentation.accessibility = [
+  ...managedTableDocumentation.accessibility,
+  ...customTableDocumentation.accessibility,
+];
+customTableDocumentation.pitfalls = [
+  ...managedTableDocumentation.pitfalls,
+  ...customTableDocumentation.pitfalls,
+];
+customTableDocumentation.relatedComponents = undefined;
+delete componentDocumentation['data-table'];
 
 const spaciousPreviewHeights: Record<string, number> = {
   'aspect-ratio': 560,

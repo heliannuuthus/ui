@@ -101,18 +101,6 @@ export {
   type CounterPlace,
   type CounterProps,
 } from './components/counter';
-export {
-  DataTable,
-  type ColumnDef,
-  type DataTableActionsProps,
-  type DataTableColumnHeaderProps,
-  type DataTableColumnMeta,
-  type DataTableExpandableProps,
-  type DataTablePaginationProps,
-  type DataTableProps,
-  type DataTableRender,
-  type DataTableVirtualProps,
-} from './components/data-table';
 export { DatePicker, type DatePickerProps } from './components/date-picker';
 export { Dialog, type DialogProps } from './components/dialog';
 export {
@@ -290,16 +278,27 @@ export {
 export { Switch, type SwitchProps } from './components/switch';
 export {
   Table,
+  type ColumnDef,
+  type TableActionsProps,
+  type TableColumnHeaderProps,
+  type TableColumnMeta,
+  type TableExpandableProps,
+  type TablePaginationProps,
+  type TableProps,
+  type TableRender,
+  type TableVirtualProps,
+} from './components/table';
+export {
   type TableCellAlign,
   type TableCellFixed,
   type TableCellProps,
   type TableExpandButtonProps,
   type TableExpandedRowProps,
   type TableHeadProps,
-  type TableProps,
+  type TableRootProps,
   type TableRowProps,
   type TableVirtualBodyProps,
-} from './components/table';
+} from './components/table-primitive';
 export {
   Tabs,
   tabsListVariants,
