@@ -8466,33 +8466,61 @@ componentDocumentation.attachment.parts = [
 ];
 componentDocumentation.attachment.api = [
   {
-    name: 'title / description',
-    description: docsCopy('设置附件名称和辅助说明。'),
+    name: 'title',
+    description: docsCopy('设置附件名称。'),
+    type: 'ReactNode',
+    required: true,
+  },
+  {
+    name: 'description',
+    description: docsCopy('设置文件大小、处理状态或错误原因等辅助说明。'),
     type: 'ReactNode',
   },
   {
-    name: 'media / mediaVariant',
-    description: docsCopy('设置附件媒体，并选择图标或图片外观。'),
-    type: "ReactNode / 'icon' | 'image'",
+    name: 'media',
+    description: docsCopy('设置文件类型图标或缩略图。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'mediaVariant',
+    description: docsCopy('选择图标或图片媒体样式。'),
+    type: "'icon' | 'image'",
     defaultValue: "'icon'",
   },
   {
-    name: 'actions / trigger',
-    description: docsCopy(
-      '设置附件操作，以及覆盖整个附件的链接或按钮触发区域。'
-    ),
-    type: 'ReactNode / ReactElement',
+    name: 'actions',
+    description: docsCopy('设置与附件直接相关的下载、重试或移除操作。'),
+    type: 'ReactNode',
   },
   {
-    name: 'orientation / size / state',
-    description: docsCopy('设置排列方向、尺寸和上传处理状态。'),
-    type: "'horizontal' | 'vertical' / 'xs' | 'sm' | 'default' / 'idle' | 'uploading' | 'processing' | 'error' | 'done'",
+    name: 'trigger',
+    description: docsCopy('传入链接或按钮元素，使整个附件成为对应触发区域。'),
+    type: 'ReactElement',
+  },
+  {
+    name: 'orientation',
+    description: docsCopy('切换行式附件或纵向缩略附件。'),
+    type: "'horizontal' | 'vertical'",
+    defaultValue: "'horizontal'",
+  },
+  {
+    name: 'size',
+    description: docsCopy('设置附件的整体密度。'),
+    type: "'xs' | 'sm' | 'default'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'state',
+    description: docsCopy('表达附件当前处理阶段并驱动状态样式。'),
+    type: "'idle' | 'uploading' | 'processing' | 'error' | 'done'",
+    defaultValue: "'done'",
   },
   {
     component: 'Attachment.Group',
     name: 'items',
     description: docsCopy('通过配置数组渲染一组 Attachment。'),
-    type: 'AttachmentProps[]',
+    type: 'readonly (AttachmentProps & { key?: React.Key })[]',
+    required: true,
   },
 ];
 componentDocumentation.bubble.parts = [
@@ -8506,31 +8534,67 @@ componentDocumentation.bubble.parts = [
 ];
 componentDocumentation.bubble.api = [
   {
-    name: 'content / contentProps',
-    description: docsCopy('设置气泡内容，并向内部内容 div 传递标准属性。'),
-    type: 'ReactNode / ComponentProps<"div">',
+    name: 'content',
+    description: docsCopy('设置气泡中的消息内容。'),
+    type: 'ReactNode',
+    required: true,
   },
   {
-    name: 'reactions / reactionsProps',
-    description: docsCopy('设置回应或已读状态，并控制其边缘位置。'),
-    type: 'ReactNode / BubbleReactionsProps',
+    name: 'contentProps',
+    description: docsCopy(
+      '向内部内容 div 传递标准 HTML、ARIA、data 属性和事件。'
+    ),
+    type: 'ComponentProps<"div"> & DataAttributes',
   },
   {
-    name: 'variant / align',
-    description: docsCopy('设置气泡外观及在消息流中的左右对齐。'),
-    type: "'default' | 'secondary' | 'muted' | 'elevated' | 'tinted' | 'outline' | 'ghost' | 'destructive' / 'start' | 'end'",
+    name: 'reactions',
+    description: docsCopy('设置回应、已读状态或其他边缘内容。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'reactionsProps',
+    description: docsCopy('控制回应内容的边缘位置并扩展容器属性。'),
+    type: 'BubbleReactionsProps',
+  },
+  {
+    name: 'variant',
+    description: docsCopy('设置消息气泡的强调与语义外观。'),
+    type: "'default' | 'secondary' | 'muted' | 'elevated' | 'tinted' | 'outline' | 'ghost' | 'destructive'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'align',
+    description: docsCopy('将气泡对齐到消息流起始侧或末尾侧。'),
+    type: "'start' | 'end'",
+    defaultValue: "'start'",
   },
 ];
 componentDocumentation.avatar.api = [
   {
-    name: 'src / alt / fallback',
-    description: docsCopy('设置头像资源、替代文本和加载失败时的回退内容。'),
-    type: 'string / string / ReactNode',
+    name: 'alt',
+    description: docsCopy('为头像图片和默认回退文字提供可访问名称。'),
+    type: 'string',
+    required: true,
   },
   {
-    name: 'shape / size',
-    description: docsCopy('设置圆形或圆角方形头像及尺寸。'),
-    type: "'circle' | 'square' / 'sm' | 'default' | 'lg'",
+    name: 'src',
+    description: docsCopy('设置头像图片资源地址。'),
+    type: 'string',
+  },
+  {
+    name: 'fallback',
+    description: docsCopy('设置图片不可用时显示的姓名缩写或图标。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'fallbackProps',
+    description: docsCopy('配置回退内容的延迟显示和原生 span 属性。'),
+    type: 'AvatarFallbackProps',
+  },
+  {
+    name: 'imageProps',
+    description: docsCopy('配置头像图片的加载状态回调和原生 img 属性。'),
+    type: 'AvatarImageProps',
   },
   {
     name: 'badge',
@@ -8538,16 +8602,54 @@ componentDocumentation.avatar.api = [
     type: 'ReactNode',
   },
   {
+    name: 'shape',
+    description: docsCopy('设置圆形头像或圆角方形头像。'),
+    type: "'circle' | 'square'",
+    defaultValue: "'circle'",
+  },
+  {
+    name: 'size',
+    description: docsCopy('设置头像尺寸，并同步 AvatarBadge 与分组计数。'),
+    type: "'sm' | 'default' | 'lg'",
+    defaultValue: "'default'",
+  },
+  {
     component: 'Avatar.Group',
-    name: 'items / max / overlap',
-    description: docsCopy('配置头像集合、最大展示数量和重叠距离。'),
-    type: 'AvatarGroupItem[] / number / number',
+    name: 'items',
+    description: docsCopy('配置头像集合及每个项目的稳定 key。'),
+    type: 'readonly AvatarGroupItem[]',
+    required: true,
+  },
+  {
+    component: 'Avatar.Group',
+    name: 'max',
+    description: docsCopy('限制可见头像数量，并自动将剩余数量显示为 +N。'),
+    type: 'number',
+  },
+  {
+    component: 'Avatar.Group',
+    name: 'overlap',
+    description: docsCopy('使用像素值控制相邻头像的重叠程度。'),
+    type: 'number',
+    defaultValue: '8',
   },
   {
     component: 'Avatar.Group',
     name: 'renderCount',
     description: docsCopy('自定义剩余数量的呈现方式。'),
     type: '(count: number) => ReactNode',
+  },
+  {
+    component: 'Avatar.Group',
+    name: 'shape',
+    description: docsCopy('为组内头像和自动计数项设置统一形状。'),
+    type: "'circle' | 'square'",
+  },
+  {
+    component: 'Avatar.Group',
+    name: 'size',
+    description: docsCopy('为组内头像和自动计数项设置统一尺寸。'),
+    type: "'sm' | 'default' | 'lg'",
   },
 ];
 componentDocumentation.checkbox.parts = [
@@ -8610,10 +8712,128 @@ componentDocumentation.item.parts = [
     ),
   },
 ];
+componentDocumentation.item.api = [
+  {
+    name: 'variant',
+    description: docsCopy('设置列表项的默认、描边或柔和外观。'),
+    type: "'default' | 'outline' | 'muted'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'size',
+    description: docsCopy('设置列表项内容密度。'),
+    type: "'xs' | 'sm' | 'default'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'href',
+    description: docsCopy(
+      '传入链接地址后使用原生 a 元素，否则渲染为普通 div。'
+    ),
+    type: 'string',
+  },
+  {
+    name: 'media',
+    description: docsCopy('设置列表项起始侧的媒体内容。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'mediaVariant',
+    description: docsCopy('选择普通、图标或图片媒体外观。'),
+    type: "'default' | 'icon' | 'image'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'title',
+    description: docsCopy('设置列表项的主要标题。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'description',
+    description: docsCopy('设置列表项的辅助说明。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'content',
+    description: docsCopy('在标题和说明之外添加自定义内容。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'actions',
+    description: docsCopy('设置列表项末尾的相关操作。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'header',
+    description: docsCopy('添加横跨整行的前置内容。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'footer',
+    description: docsCopy('添加横跨整行的后置内容。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'classNames',
+    description: docsCopy('按语义槽位扩展列表项内部样式。'),
+    type: 'ItemClassNames',
+  },
+  {
+    component: 'Item.Group',
+    name: 'items',
+    description: docsCopy('配置一组列表项及每个项目的稳定 key。'),
+    type: 'readonly ItemGroupEntry[]',
+    required: true,
+  },
+  {
+    component: 'Item.Group',
+    name: 'renderItem',
+    description: docsCopy('根据当前项目和索引完全自定义列表项渲染。'),
+    type: '(item: ItemGroupEntry, index: number) => ReactNode',
+  },
+  {
+    component: 'Item.Group',
+    name: 'separator',
+    description: docsCopy('在相邻列表项之间显示默认分隔线或自定义内容。'),
+    type: 'boolean | ReactNode',
+    defaultValue: 'false',
+  },
+];
 componentDocumentation.marker.parts = [
   {
     name: 'Marker',
     description: docsCopy('通过 icon、content 与 variant props 配置内容标记。'),
+  },
+];
+componentDocumentation.marker.api = [
+  {
+    name: 'content',
+    description: docsCopy('设置可换行的标记文字或链接。'),
+    type: 'ReactNode',
+    required: true,
+  },
+  {
+    name: 'icon',
+    description: docsCopy('设置装饰性状态图标并自动隐藏可访问语义。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'variant',
+    description: docsCopy('选择纯文本、两侧分隔线或下边框标记。'),
+    type: "'default' | 'separator' | 'border'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'href',
+    description: docsCopy(
+      '传入链接地址后使用原生 a 元素，否则渲染为普通 div。'
+    ),
+    type: 'string',
+  },
+  {
+    name: 'classNames',
+    description: docsCopy('分别扩展图标与内容槽位样式。'),
+    type: 'MarkerClassNames',
   },
 ];
 componentDocumentation.empty.api = componentDocumentation.empty.api.filter(
@@ -8841,9 +9061,15 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
   ],
   carousel: [
     {
-      name: 'items / renderItem',
-      description: docsCopy('提供轮播数据，并决定每一项的展示内容。'),
-      type: 'Item[] / (item: Item, index: number) => ReactNode',
+      name: 'items',
+      description: docsCopy('提供轮播数据或直接渲染的节点列表。'),
+      type: 'readonly Item[]',
+      required: true,
+    },
+    {
+      name: 'renderItem',
+      description: docsCopy('根据当前数据项和索引渲染轮播内容。'),
+      type: '(item: Item, index: number) => ReactNode',
     },
     {
       name: 'controls',
@@ -8852,21 +9078,153 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       defaultValue: 'true',
     },
     {
-      name: 'pagination / paginationPosition / renderDot',
+      name: 'contentClassName',
+      description: docsCopy('扩展轮播内容轨道的样式。'),
+      type: 'string',
+    },
+    {
+      name: 'itemClassName',
+      description: docsCopy('为每个轮播项设置统一样式。'),
+      type: 'string',
+    },
+    {
+      name: 'previousButtonProps',
+      description: docsCopy('配置上一页按钮的外观、可访问名称和原生属性。'),
+      type: 'ButtonNativeProps',
+    },
+    {
+      name: 'nextButtonProps',
+      description: docsCopy('配置下一页按钮的外观、可访问名称和原生属性。'),
+      type: 'ButtonNativeProps',
+    },
+    {
+      name: 'pagination',
       description: docsCopy(
         '使用默认点位、关闭分页，或通过函数自定义完整翻页器。'
       ),
-      type: "false | 'dots' | ((controls) => ReactNode)",
+      type: "false | 'dots' | ((controls: CarouselControls) => ReactNode)",
+      defaultValue: "'dots'",
     },
     {
-      name: 'autoplay / loop / pauseOnHover',
-      description: docsCopy('设置自动播放间隔、首尾循环和悬停暂停策略。'),
-      type: 'boolean | number / boolean / boolean',
+      name: 'paginationPosition',
+      description: docsCopy('将分页内容放在轮播轨道之前或之后。'),
+      type: "'before' | 'after'",
+      defaultValue: "'after'",
+    },
+    {
+      name: 'renderDot',
+      description: docsCopy('根据点位索引和选中状态自定义分页点。'),
+      type: '(props: CarouselDotRenderProps) => ReactNode',
+    },
+    {
+      name: 'autoplay',
+      description: docsCopy(
+        '传 true 以默认 3 秒间隔自动播放，或直接传入正数设置切换秒数。'
+      ),
+      type: 'boolean | number',
+      defaultValue: 'false',
+    },
+    {
+      name: 'loop',
+      description: docsCopy(
+        '让最后一项与第一项首尾相接；自动播放跨越首尾时始终沿下一页方向继续。'
+      ),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'pauseOnHover',
+      description: docsCopy('自动播放时，指针进入轮播区域即暂停，离开后继续。'),
+      type: 'boolean',
+      defaultValue: 'true',
     },
     {
       name: 'ref',
-      description: docsCopy('从外部滚动、播放或暂停轮播。'),
-      type: 'Ref<CarouselRef>',
+      description: docsCopy(
+        '从 Carousel 外部滚动、播放或暂停；底层轮播实例不会暴露。'
+      ),
+      type: 'React.Ref<CarouselRef>',
+    },
+  ],
+  collapsible: [
+    {
+      name: 'header',
+      description: docsCopy(
+        '设置始终可见的摘要内容；未传 trigger 时，整个 Header 同时作为触发器。'
+      ),
+      type: 'ReactNode',
+    },
+    {
+      name: 'content',
+      description: docsCopy('设置展开后显示的内容。'),
+      type: 'ReactNode',
+      required: true,
+    },
+    {
+      name: 'footer',
+      description: docsCopy('设置内容区域后的可选底部信息或操作。'),
+      type: 'ReactNode',
+    },
+    {
+      name: 'trigger',
+      description: docsCopy(
+        '设置独立触发按钮的内容；传入后 Header 保持静态，不再响应展开操作。'
+      ),
+      type: 'ReactNode',
+    },
+    {
+      name: 'triggerProps',
+      description: docsCopy('设置独立触发按钮的外观、尺寸和原生触发器属性。'),
+      type: 'CollapsibleTriggerProps',
+    },
+    {
+      name: 'triggerIcon',
+      description: docsCopy(
+        '设置独立触发按钮末端的状态图标；展开时会与面板使用同一节奏旋转。'
+      ),
+      type: 'ReactNode',
+    },
+    {
+      name: 'icon',
+      description: docsCopy(
+        '替换 Header 触发模式下的默认方向图标；传 null 时隐藏图标。'
+      ),
+      type: 'ReactNode',
+      defaultValue: '<ChevronDownIcon />',
+    },
+    {
+      name: 'open',
+      description: docsCopy('以受控方式设置当前展开状态。'),
+      type: 'boolean',
+    },
+    {
+      name: 'defaultOpen',
+      description: docsCopy('设置非受控模式的初始展开状态。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'onOpenChange',
+      description: docsCopy('用户展开或收起内容时调用。'),
+      type: '(open: boolean, eventDetails) => void',
+    },
+    {
+      name: 'disabled',
+      description: docsCopy('阻止触发器改变展开状态。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'headerClassName',
+      description: docsCopy(
+        '扩展 Header 或 Header 与独立触发按钮所在行的样式。'
+      ),
+      type: 'string',
+    },
+    {
+      name: 'contentClassName',
+      description: docsCopy('扩展展开内容区域的样式。'),
+      type: 'string',
     },
   ],
   command: [
@@ -9319,6 +9677,332 @@ componentDocumentation.accordion.parts = [
     description: docsCopy(
       '读取当前条目状态，并在标题起始侧或末端渲染展开指示器。'
     ),
+  },
+];
+
+componentDocumentation.attachment.typePreviews = [
+  {
+    name: 'AttachmentProps',
+    declaration: "Omit<ComponentProps<'div'>, 'children' | 'title'> & {",
+    api: componentDocumentation.attachment.api.filter(
+      (property) => property.component == null
+    ),
+  },
+];
+
+componentDocumentation.avatar.typePreviews = [
+  {
+    name: 'AvatarFallbackProps',
+    declaration: "Omit<ComponentProps<'span'>, 'children'> & {",
+    api: [
+      {
+        name: 'delay',
+        description: docsCopy('图片尚未完成加载时，延迟显示回退内容的毫秒数。'),
+        type: 'number',
+      },
+    ],
+  },
+  {
+    name: 'AvatarImageProps',
+    declaration: "Omit<ComponentProps<'img'>, 'alt' | 'children' | 'src'> & {",
+    api: [
+      {
+        name: 'onLoadingStatusChange',
+        description: docsCopy('头像图片加载状态变化时调用。'),
+        type: "(status: 'error' | 'idle' | 'loaded' | 'loading') => void",
+      },
+    ],
+  },
+  {
+    name: 'AvatarGroupItem',
+    declaration: 'AvatarProps & {',
+    api: [
+      {
+        name: 'key',
+        description: docsCopy('在头像集合中为当前项目提供稳定标识。'),
+        type: 'React.Key',
+      },
+      ...componentDocumentation.avatar.api.filter(
+        (property) => property.component == null
+      ),
+    ],
+  },
+];
+
+componentDocumentation.bubble.typePreviews = [
+  {
+    name: 'DataAttributes',
+    definition:
+      'type DataAttributes = {\n  [key: `data-${string}`]: boolean | number | string | undefined\n}',
+  },
+  {
+    name: 'BubbleReactionsProps',
+    declaration: "ComponentProps<'div'> & {",
+    api: [
+      {
+        name: 'align',
+        description: docsCopy('将回应内容对齐到气泡边缘的起始侧或末尾侧。'),
+        type: "'start' | 'end'",
+        defaultValue: "'end'",
+      },
+      {
+        name: 'side',
+        description: docsCopy('将回应内容放在气泡顶部或底部边缘。'),
+        type: "'top' | 'bottom'",
+        defaultValue: "'bottom'",
+      },
+    ],
+  },
+];
+
+componentDocumentation.carousel.typePreviews = [
+  {
+    name: 'CarouselRef',
+    declaration: '{',
+    api: [
+      {
+        name: 'pause',
+        description: docsCopy('暂停自动播放。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'play',
+        description: docsCopy('恢复自动播放。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'scrollNext',
+        description: docsCopy('滚动到下一个轮播项。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'scrollPrev',
+        description: docsCopy('滚动到上一个轮播项。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'scrollTo',
+        description: docsCopy('根据索引滚动到指定轮播项。'),
+        type: '(index: number) => void',
+        required: true,
+      },
+    ],
+  },
+  {
+    name: 'CarouselControls',
+    declaration: 'CarouselRef & {',
+    api: [
+      {
+        name: 'canScrollNext',
+        description: docsCopy('当前是否可以滚动到下一项。'),
+        type: 'boolean',
+        required: true,
+      },
+      {
+        name: 'canScrollPrev',
+        description: docsCopy('当前是否可以滚动到上一项。'),
+        type: 'boolean',
+        required: true,
+      },
+      {
+        name: 'currentPage',
+        description: docsCopy('当前页码，从 1 开始。'),
+        type: 'number',
+        required: true,
+      },
+      {
+        name: 'isPlaying',
+        description: docsCopy('自动播放当前是否正在运行。'),
+        type: 'boolean',
+        required: true,
+      },
+      {
+        name: 'pageCount',
+        description: docsCopy('轮播总页数。'),
+        type: 'number',
+        required: true,
+      },
+      {
+        name: 'selectedIndex',
+        description: docsCopy('当前轮播项的零起始索引。'),
+        type: 'number',
+        required: true,
+      },
+      {
+        name: 'scrollSnaps',
+        description: docsCopy('底层滚动对齐点集合。'),
+        type: 'number[]',
+        required: true,
+      },
+      {
+        name: 'pause',
+        description: docsCopy('暂停自动播放。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'play',
+        description: docsCopy('恢复自动播放。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'scrollNext',
+        description: docsCopy('滚动到下一个轮播项。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'scrollPrev',
+        description: docsCopy('滚动到上一个轮播项。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'scrollTo',
+        description: docsCopy('根据索引滚动到指定轮播项。'),
+        type: '(index: number) => void',
+        required: true,
+      },
+    ],
+  },
+  {
+    name: 'CarouselDotRenderProps',
+    declaration: '{',
+    api: [
+      {
+        name: 'index',
+        description: docsCopy('当前分页点对应的零起始索引。'),
+        type: 'number',
+        required: true,
+      },
+      {
+        name: 'isSelected',
+        description: docsCopy('当前分页点是否对应已选中轮播项。'),
+        type: 'boolean',
+        required: true,
+      },
+    ],
+  },
+  {
+    name: 'ButtonNativeProps',
+    declaration: "Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'color'> & {",
+    api: [
+      {
+        name: 'variant',
+        description: docsCopy('设置按钮的语义外观。'),
+        type: "'default' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link'",
+      },
+      {
+        name: 'size',
+        description: docsCopy('设置按钮尺寸。'),
+        type: "'xs' | 'sm' | 'default' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'",
+      },
+      {
+        name: 'block',
+        description: docsCopy('让按钮填满容器可用宽度。'),
+        type: 'boolean',
+      },
+      {
+        name: 'disabled',
+        description: docsCopy('禁用按钮交互。'),
+        type: 'boolean',
+      },
+    ],
+  },
+];
+
+componentDocumentation.collapsible.typePreviews = [
+  {
+    name: 'CollapsibleTriggerProps',
+    declaration:
+      "Omit<ButtonNativeProps, 'children' | 'className' | 'href'> & {",
+    api: [
+      {
+        name: 'variant',
+        description: docsCopy('设置独立触发按钮的语义外观。'),
+        type: "'default' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link'",
+      },
+      {
+        name: 'size',
+        description: docsCopy('设置独立触发按钮的尺寸。'),
+        type: "'xs' | 'sm' | 'default' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'",
+      },
+      {
+        name: 'disabled',
+        description: docsCopy('禁用触发按钮并阻止展开状态变化。'),
+        type: 'boolean',
+      },
+      {
+        name: 'aria-label',
+        description: docsCopy('为仅图标触发按钮提供可访问名称。'),
+        type: 'string',
+      },
+      {
+        name: 'onClick',
+        description: docsCopy('处理触发按钮的原生点击事件。'),
+        type: 'MouseEventHandler<HTMLButtonElement>',
+      },
+    ],
+  },
+];
+
+componentDocumentation.item.typePreviews = [
+  {
+    name: 'ItemClassNames',
+    declaration: '{',
+    api: [
+      ...[
+        'actions',
+        'content',
+        'description',
+        'footer',
+        'header',
+        'media',
+        'title',
+      ].map((name) => ({
+        name,
+        description: docsCopy('扩展对应语义槽位的 className。'),
+        type: 'string',
+      })),
+    ],
+  },
+  {
+    name: 'ItemGroupEntry',
+    declaration: 'ItemProps & {',
+    api: [
+      {
+        name: 'key',
+        description: docsCopy('在列表项集合中为当前项目提供稳定标识。'),
+        type: 'React.Key',
+      },
+      ...componentDocumentation.item.api.filter(
+        (property) => property.component == null
+      ),
+    ],
+  },
+];
+
+componentDocumentation.marker.typePreviews = [
+  {
+    name: 'MarkerClassNames',
+    declaration: '{',
+    api: [
+      {
+        name: 'content',
+        description: docsCopy('扩展标记内容槽位的 className。'),
+        type: 'string',
+      },
+      {
+        name: 'icon',
+        description: docsCopy('扩展标记图标槽位的 className。'),
+        type: 'string',
+      },
+    ],
   },
 ];
 

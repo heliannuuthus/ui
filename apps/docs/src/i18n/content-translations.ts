@@ -3752,4 +3752,118 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '禁用整个 Accordion 的所有条目。': 'Disable every item in the Accordion.',
   '描述单个条目的标识、标题、面板内容与禁用状态。':
     'Describe one item’s identifier, title, panel content, and disabled state.',
+  '设置附件名称。': 'Set the attachment name.',
+  '设置文件大小、处理状态或错误原因等辅助说明。':
+    'Set supporting details such as file size, processing state, or error reason.',
+  '设置文件类型图标或缩略图。': 'Set a file-type icon or thumbnail.',
+  '设置与附件直接相关的下载、重试或移除操作。':
+    'Set attachment actions such as download, retry, or remove.',
+  '设置气泡中的消息内容。': 'Set the message content inside the bubble.',
+  '设置回应、已读状态或其他边缘内容。':
+    'Set reactions, read status, or other edge content.',
+  '控制回应内容的边缘位置并扩展容器属性。':
+    'Control the edge position of reaction content and extend its container props.',
+  '为头像图片和默认回退文字提供可访问名称。':
+    'Provide an accessible name for the avatar image and default fallback text.',
+  '设置头像图片资源地址。': 'Set the avatar image source URL.',
+  '设置图片不可用时显示的姓名缩写或图标。':
+    'Set initials or an icon to display when the image is unavailable.',
+  '配置回退内容的延迟显示和原生 span 属性。':
+    'Configure the fallback delay and native span props.',
+  '配置头像图片的加载状态回调和原生 img 属性。':
+    'Configure the avatar image loading callback and native img props.',
+  '配置头像集合及每个项目的稳定 key。':
+    'Configure the avatar collection and a stable key for each item.',
+  '为组内头像和自动计数项设置统一形状。':
+    'Set a consistent shape for avatars and the generated count item in the group.',
+  '为组内头像和自动计数项设置统一尺寸。':
+    'Set a consistent size for avatars and the generated count item in the group.',
+  '设置列表项起始侧的媒体内容。': 'Set media content at the start of the item.',
+  '选择普通、图标或图片媒体外观。':
+    'Choose the default, icon, or image media appearance.',
+  '设置列表项的主要标题。': 'Set the primary item title.',
+  '设置列表项的辅助说明。': 'Set the supporting item description.',
+  '在标题和说明之外添加自定义内容。':
+    'Add custom content beyond the title and description.',
+  '设置列表项末尾的相关操作。': 'Set related actions at the end of the item.',
+  '添加横跨整行的前置内容。': 'Add leading content that spans the full row.',
+  '添加横跨整行的后置内容。': 'Add trailing content that spans the full row.',
+  '按语义槽位扩展列表项内部样式。':
+    'Extend internal item styles by semantic slot.',
+  '配置一组列表项及每个项目的稳定 key。':
+    'Configure a collection of items and a stable key for each entry.',
+  '根据当前项目和索引完全自定义列表项渲染。':
+    'Fully customize item rendering from the current entry and index.',
+  '在相邻列表项之间显示默认分隔线或自定义内容。':
+    'Show the default separator or custom content between adjacent items.',
+  '分别扩展图标与内容槽位样式。':
+    'Extend the icon and content slot styles independently.',
+  '提供轮播数据或直接渲染的节点列表。':
+    'Provide carousel data or a list of nodes to render directly.',
+  '根据当前数据项和索引渲染轮播内容。':
+    'Render carousel content from the current data item and index.',
+  '扩展轮播内容轨道的样式。': 'Extend the carousel content track styles.',
+  '为每个轮播项设置统一样式。': 'Set shared styles for every carousel item.',
+  '配置上一页按钮的外观、可访问名称和原生属性。':
+    'Configure the previous button appearance, accessible name, and native props.',
+  '配置下一页按钮的外观、可访问名称和原生属性。':
+    'Configure the next button appearance, accessible name, and native props.',
+  '将分页内容放在轮播轨道之前或之后。':
+    'Place pagination content before or after the carousel track.',
+  '根据点位索引和选中状态自定义分页点。':
+    'Customize a pagination dot from its index and selected state.',
+  '以受控方式设置当前展开状态。':
+    'Set the current open state in controlled mode.',
+  '设置非受控模式的初始展开状态。':
+    'Set the initial open state in uncontrolled mode.',
+  '图片尚未完成加载时，延迟显示回退内容的毫秒数。':
+    'Delay fallback content by this many milliseconds while the image is still loading.',
+  '头像图片加载状态变化时调用。':
+    'Called when the avatar image loading status changes.',
+  '在头像集合中为当前项目提供稳定标识。':
+    'Provide a stable identifier for the current avatar group item.',
+  '将回应内容对齐到气泡边缘的起始侧或末尾侧。':
+    'Align reaction content to the start or end of the bubble edge.',
+  '将回应内容放在气泡顶部或底部边缘。':
+    'Place reaction content on the top or bottom edge of the bubble.',
+  '暂停自动播放。': 'Pause autoplay.',
+  '恢复自动播放。': 'Resume autoplay.',
+  '滚动到下一个轮播项。': 'Scroll to the next carousel item.',
+  '滚动到上一个轮播项。': 'Scroll to the previous carousel item.',
+  '根据索引滚动到指定轮播项。':
+    'Scroll to the carousel item at the given index.',
+  '当前是否可以滚动到下一项。':
+    'Whether the carousel can currently scroll to the next item.',
+  '当前是否可以滚动到上一项。':
+    'Whether the carousel can currently scroll to the previous item.',
+  '当前页码，从 1 开始。': 'The current page number, starting at 1.',
+  '自动播放当前是否正在运行。': 'Whether autoplay is currently running.',
+  '轮播总页数。': 'The total number of carousel pages.',
+  '当前轮播项的零起始索引。':
+    'The zero-based index of the current carousel item.',
+  '底层滚动对齐点集合。': 'The underlying collection of scroll snap positions.',
+  '当前分页点对应的零起始索引。':
+    'The zero-based index represented by the current pagination dot.',
+  '当前分页点是否对应已选中轮播项。':
+    'Whether the current pagination dot represents the selected carousel item.',
+  '设置按钮的语义外观。': 'Set the semantic button appearance.',
+  '设置按钮尺寸。': 'Set the button size.',
+  '让按钮填满容器可用宽度。':
+    'Make the button fill the available container width.',
+  '禁用按钮交互。': 'Disable button interaction.',
+  '设置独立触发按钮的语义外观。':
+    'Set the semantic appearance of the standalone trigger button.',
+  '设置独立触发按钮的尺寸。': 'Set the size of the standalone trigger button.',
+  '禁用触发按钮并阻止展开状态变化。':
+    'Disable the trigger button and prevent the open state from changing.',
+  '为仅图标触发按钮提供可访问名称。':
+    'Provide an accessible name for an icon-only trigger button.',
+  '处理触发按钮的原生点击事件。':
+    'Handle the native click event from the trigger button.',
+  '扩展对应语义槽位的 className。':
+    'Extend the className of the corresponding semantic slot.',
+  '在列表项集合中为当前项目提供稳定标识。':
+    'Provide a stable identifier for the current item in the collection.',
+  '扩展标记内容槽位的 className。': 'Extend the marker content slot className.',
+  '扩展标记图标槽位的 className。': 'Extend the marker icon slot className.',
 };
