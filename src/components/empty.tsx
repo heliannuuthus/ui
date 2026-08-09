@@ -10,7 +10,7 @@ interface EmptyProps extends Omit<
   actions?: React.ReactNode;
   description?: React.ReactNode;
   icon?: React.ReactNode;
-  title?: React.ReactNode;
+  title: React.ReactNode;
 }
 
 const Empty = ({
@@ -18,7 +18,7 @@ const Empty = ({
   className,
   description,
   icon = <InboxIcon aria-hidden="true" />,
-  title = '暂无内容',
+  title,
   ...props
 }: EmptyProps) => {
   return (

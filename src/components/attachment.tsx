@@ -192,8 +192,12 @@ const AttachmentTrigger = ({
   });
 };
 
+type AttachmentGroupItem = AttachmentProps & {
+  key?: React.Key;
+};
+
 type AttachmentGroupProps = Omit<React.ComponentProps<'div'>, 'children'> & {
-  items: readonly (AttachmentProps & { key?: React.Key })[];
+  items: readonly AttachmentGroupItem[];
 };
 
 const AttachmentGroup = ({
@@ -226,6 +230,7 @@ const AttachmentCompound = Object.assign(Attachment, {
 
 export {
   AttachmentCompound as Attachment,
+  type AttachmentGroupItem,
   type AttachmentGroupProps,
   type AttachmentProps,
 };

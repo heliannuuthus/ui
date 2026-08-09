@@ -65,14 +65,17 @@ type ItemSharedProps = VariantProps<typeof itemVariants> & {
   title?: React.ReactNode;
 };
 
-type ItemDivProps = Omit<React.ComponentProps<'div'>, 'children' | 'title'> &
+type ItemDivProps = Omit<
+  React.ComponentProps<'div'>,
+  'children' | 'content' | 'title'
+> &
   ItemSharedProps & {
     href?: never;
   };
 
 type ItemLinkProps = Omit<
   React.ComponentProps<'a'>,
-  'children' | 'href' | 'media' | 'title'
+  'children' | 'content' | 'href' | 'media' | 'title'
 > &
   ItemSharedProps & {
     href: string;

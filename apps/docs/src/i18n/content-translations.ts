@@ -3931,4 +3931,143 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   气泡预览: 'Bubble preview',
   'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble\n  align="end"\n  content="已经补充完成，可以重新评审。"\n  reactions="✓ 2"\n  variant="elevated"\n/>':
     'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble\n  align="end"\n  content="The update is complete and ready for another review."\n  reactions="✓ 2"\n  variant="elevated"\n/>',
+  图片与回退内容: 'Image and fallback content',
+  'src 提供头像图片；加载失败时显示 fallback，并通过 imageProps 与 fallbackProps 配置加载回调和延迟。':
+    'src provides the avatar image; fallback is shown when loading fails, while imageProps and fallbackProps configure loading callbacks and delay.',
+  图片状态: 'Image status',
+  图片可用: 'Image available',
+  显示回退: 'Show fallback',
+  '<Avatar\n  alt="林默"\n  src="/avatars/lin.png"\n  fallback="林"\n  fallbackProps={{ delay: 200 }}\n  imageProps={{ onLoadingStatusChange: setStatus }}\n/>':
+    '<Avatar\n  alt="Lin Mo"\n  src="/avatars/lin.png"\n  fallback="L"\n  fallbackProps={{ delay: 200 }}\n  imageProps={{ onLoadingStatusChange: setStatus }}\n/>',
+  自定义剩余数量: 'Custom overflow count',
+  'renderCount 接收未展示数量并替换默认 +N，同时继承分组的 shape 与 size。':
+    'renderCount receives the hidden count and replaces the default +N while inheriting the group shape and size.',
+  剩余数量: 'Overflow count',
+  自定义: 'Custom',
+  '显式传入 title 说明当前为空的对象；默认图标仅提供辅助视觉，不替代状态文案。':
+    'Pass title explicitly to identify what is empty; the default icon is only a visual aid and does not replace the status text.',
+  'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty title="暂无内容" />':
+    'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty title="No content" />',
+  'value 表示当前展开条目，onChange 接收用户操作后的完整值数组。':
+    'value represents the currently expanded items, and onChange receives the complete value array after user interaction.',
+  关闭面板保留策略: 'Closed panel retention',
+  '默认关闭时卸载面板；keepMounted 保留内部状态；hiddenUntilFound 保留内容并允许浏览器页内查找定位。':
+    'Closed panels unmount by default; keepMounted preserves internal state, while hiddenUntilFound retains searchable content for the browser find feature.',
+  保留策略: 'Retention strategy',
+  默认卸载: 'Unmount by default',
+  保持挂载: 'Keep mounted',
+  支持页内查找: 'Support browser find',
+  'controls 决定是否渲染上一项和下一项按钮；按钮属性通过 previousButtonProps 与 nextButtonProps 独立扩展。':
+    'controls determines whether previous and next buttons are rendered; previousButtonProps and nextButtonProps extend each button independently.',
+  显示: 'Show',
+  隐藏: 'Hide',
+  分页点: 'Pagination dots',
+  'pagination 控制默认点位或隐藏分页，renderDot 只改写单个点位的内容。':
+    'pagination enables the default dots or hides pagination, while renderDot replaces only the content of each dot.',
+  外部控制: 'External control',
+  '通过 ref 调用 scrollPrev、scrollNext、scrollTo、play 与 pause，不暴露底层轮播实例。':
+    'Use the ref to call scrollPrev, scrollNext, scrollTo, play, and pause without exposing the underlying carousel instance.',
+  受控与禁用状态: 'Controlled and disabled states',
+  'open 与 onOpenChange 管理受控展开状态；disabled 阻止触发器改变状态。':
+    'open and onOpenChange manage controlled expansion, while disabled prevents the trigger from changing state.',
+  标题与说明: 'Title and description',
+  'title 必须明确说明当前为空的对象，description 再补充原因、筛选建议或下一步。':
+    'title must identify what is empty, while description adds a reason, filtering suggestion, or next step.',
+  '尝试缩短关键词或清除当前筛选条件。':
+    'Try shortening the keyword or clearing the current filters.',
+  'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  title="没有匹配的发布记录"\n  description="尝试缩短关键词或清除当前筛选条件。"\n/>':
+    'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  title="No matching release records"\n  description="Try shortening the keyword or clearing the current filters."\n/>',
+  'icon 默认使用通用收件箱图标，也可以替换为场景图标或传 null 隐藏。':
+    'icon uses a generic inbox by default; replace it with a contextual icon or pass null to hide it.',
+  操作区域: 'Action area',
+  列表项尺寸: 'Item sizes',
+  'size 分别提供默认、小和超小三档内容密度。':
+    'size provides default, small, and extra-small content densities.',
+  'mediaType 明确区分普通内容、图标和图片，避免调用方依赖节点形态推断样式。':
+    'mediaType explicitly distinguishes plain content, icons, and images so callers do not rely on node-shape inference.',
+  普通内容: 'Plain content',
+  内容槽位: 'Content slots',
+  'header、content、actions 与 footer 各自占据独立语义区域，不再把多个结构字段塞进同一行说明。':
+    'header, content, actions, and footer each occupy an independent semantic region instead of being compressed into one combined property row.',
+  链接列表项: 'Linked item',
+  '传入 href 时 Item 使用原生 a 元素承载整项导航，未传时保持普通 div。':
+    'When href is provided, Item uses a native anchor for whole-item navigation; otherwise it remains a regular div.',
+  列表项集合: 'Item group',
+  'Item.Group 通过 items 渲染集合，separator 独立控制无分隔、默认分隔线或自定义分隔内容。':
+    'Item.Group renders a collection from items, while separator independently selects no separator, the default divider, or custom content.',
+  分隔内容: 'Separator content',
+  无分隔: 'No separator',
+  默认分隔线: 'Default divider',
+  自定义内容: 'Custom content',
+  链接与槽位样式: 'Link and slot styles',
+  'href 让整个 Marker 使用原生链接语义，classNames 分别扩展 icon 与 content 槽位。':
+    'href gives the entire Marker native link semantics, while classNames extends the icon and content slots independently.',
+  消息对齐: 'Message alignment',
+  'align 只控制单个气泡位于消息流的起始侧或末端，不隐含发送者身份。':
+    'align only places a bubble at the start or end of the message flow and does not imply sender identity.',
+  对齐: 'Alignment',
+  起始侧: 'Start side',
+  末端: 'End side',
+  回应位置: 'Reaction position',
+  'reactionsProps 的 side 与 align 分别控制回应位于气泡上下侧和左右边缘。':
+    'The side and align fields in reactionsProps place reactions on the top or bottom and at either horizontal edge.',
+  顶部起始侧: 'Top start',
+  顶部末端: 'Top end',
+  底部起始侧: 'Bottom start',
+  底部末端: 'Bottom end',
+  '明确说明当前为空的对象或结果。':
+    'Clearly identifies the object or result that is empty.',
+  '在附件集合中为当前项目提供稳定标识。':
+    'Provides a stable identifier for the current item in an attachment group.',
+  受控展开状态: 'Controlled expansion',
+  全部关闭: 'All closed',
+  关闭面板的保留策略: 'Closed panel retention strategy',
+  图片头像: 'Image avatar',
+  回退内容: 'Fallback content',
+  加载状态: 'Loading status',
+  '这条消息靠末端对齐。': 'This message is aligned to the end.',
+  '这条消息靠起始端对齐。': 'This message is aligned to the start.',
+  '回应内容可以锚定在气泡的四个边角。':
+    'Reactions can be anchored to any of the four bubble corners.',
+  分页点示例: 'Pagination dot example',
+  外部控制的轮播: 'Externally controlled carousel',
+  '展开状态由调用方读取和更新。':
+    'The caller reads and updates the expansion state.',
+  不可展开的摘要: 'Disabled summary',
+  受控的摘要: 'Controlled summary',
+  已展开: 'Expanded',
+  已收起: 'Collapsed',
+  '图标只辅助说明状态，标题始终明确表达结果。':
+    'The icon only supports the status visually; the title always states the result explicitly.',
+  没有匹配结果: 'No matching results',
+  '不同密度不会改变内容语义。':
+    'Changing density does not change the content semantics.',
+  发布说明已更新: 'Release notes updated',
+  '媒体类型决定起始内容的尺寸和裁切方式。':
+    'The media type determines the size and cropping of leading content.',
+  发布封面: 'Release cover',
+  发布资料: 'Release material',
+  '每个结构字段都拥有独立的语义槽位。':
+    'Each structural field has its own semantic slot.',
+  '更新于 2 分钟前': 'Updated 2 minutes ago',
+  生产发布: 'Production release',
+  '传入 href 后根节点使用原生链接语义。':
+    'Providing href gives the root native link semantics.',
+  查看发布详情: 'View release details',
+  构建完成: 'Build completed',
+  进入生产阶段: 'Entering production',
+  查看完整发布记录: 'View the complete release history',
+  轨道与项目样式: 'Track and item styles',
+  'contentClassName 扩展轮播轨道，itemClassName 为每个项目设置统一宽度和间距。':
+    'contentClassName extends the carousel track, while itemClassName applies consistent width and spacing to every item.',
+  自定义列表项渲染: 'Custom item rendering',
+  'renderItem 接收当前 ItemGroupEntry 和索引，用于改写整项渲染，而不是修改 Item 的基础属性。':
+    'renderItem receives the current ItemGroupEntry and index to replace whole-item rendering without changing the base Item contract.',
+  内容节点属性: 'Content node properties',
+  'contentProps 向内部内容节点传递标准 HTML、ARIA、data 属性、事件和 className。':
+    'contentProps passes standard HTML, ARIA, data attributes, events, and className to the inner content node.',
+  '内容节点可以接收语义、事件和样式扩展。':
+    'The content node can receive semantic, event, and style extensions.',
+  自定义轨道与项目宽度: 'Custom track and item width',
+  预检完成: 'Preflight completed',
 };
