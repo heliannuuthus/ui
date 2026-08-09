@@ -1,6 +1,8 @@
 export {
   Accordion,
   type AccordionIndicatorPosition,
+  type AccordionIndicatorProps,
+  type AccordionIndicatorState,
   type AccordionItem,
   type AccordionProps,
 } from './components/accordion';

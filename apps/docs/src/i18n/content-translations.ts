@@ -3693,4 +3693,29 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   受控对象: 'Controlled object',
   禁用对象: 'Disabled object',
   非受控对象: 'Uncontrolled object',
+  '使用 Accordion.Indicator 统一设置位置；children 状态函数接收当前条目的 open、disabled 和 value，由调用方决定展示内容。':
+    'Use Accordion.Indicator to set the position in one place. Its children state function receives the current item’s open, disabled, and value state so the caller controls what is rendered.',
+  "import { Accordion } from '@heliannuuthus/ui'\nimport { Minus, Plus } from 'lucide-react'\n\n<Accordion\n  defaultValue={['deployment']}\n  indicator={\n    <Accordion.Indicator position=\"start\">\n      {({ open }) => (open ? <Minus /> : <Plus />)}\n    </Accordion.Indicator>\n  }\n  items={[\n    {\n      value: 'deployment',\n      title: '部署策略',\n      content: '先灰度 10%，观察后全量发布。',\n    },\n  ]}\n/>":
+    "import { Accordion } from '@heliannuuthus/ui'\nimport { Minus, Plus } from 'lucide-react'\n\n<Accordion\n  defaultValue={['deployment']}\n  indicator={\n    <Accordion.Indicator position=\"start\">\n      {({ open }) => (open ? <Minus /> : <Plus />)}\n    </Accordion.Indicator>\n  }\n  items={[\n    {\n      value: 'deployment',\n      title: 'Deployment strategy',\n      content: 'Roll out to 10% first, observe, then release to everyone.',\n    },\n  ]}\n/>",
+  '设置 Accordion.Indicator；省略时使用位于末端、随展开状态旋转的默认箭头，传入 null 时隐藏。':
+    'Set Accordion.Indicator. When omitted, a default arrow at the end rotates with the open state; pass null to hide it.',
+  '传入静态节点时随展开状态旋转；传入状态函数时接收 open、disabled 与 value，并完全控制展示内容。':
+    'A static node rotates with the open state. A state function receives open, disabled, and value and fully controls the rendered content.',
+  '将指示器放在标题起始侧或末端。':
+    'Place the indicator at the start or end of the title.',
+  '关闭面板后仍保留其 DOM，适合保留内部状态；不能与 hiddenUntilFound 同时使用。':
+    'Keep a closed panel in the DOM to preserve internal state; it cannot be used together with hiddenUntilFound.',
+  '通过 hidden="until-found" 保留关闭面板，使浏览器页内查找可以定位并展开内容；不能与 keepMounted 同时使用。':
+    'Keep closed panels with hidden="until-found" so the browser’s find-in-page can locate and expand their content; it cannot be used together with keepMounted.',
+  "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  indicator={\n    <Accordion.Indicator position=\"start\">\n      {({ open }) => (open ? <Minus /> : <Plus />)}\n    </Accordion.Indicator>\n  }\n  items={[\n    { value: 'deployment', title: '部署策略', content: '先灰度 10%，观察后全量发布。' },\n  ]}\n/>":
+    "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  indicator={\n    <Accordion.Indicator position=\"start\">\n      {({ open }) => (open ? <Minus /> : <Plus />)}\n    </Accordion.Indicator>\n  }\n  items={[\n    { value: 'deployment', title: 'Deployment strategy', content: 'Roll out to 10% first, observe, then release to everyone.' },\n  ]}\n/>",
+  '当前条目的面板是否已展开。': 'Whether the current item’s panel is open.',
+  '当前条目或整个 Accordion 是否已禁用。':
+    'Whether the current item or the entire Accordion is disabled.',
+  '当前条目的稳定标识。': 'The stable identifier of the current item.',
+  '管理展开值并根据 items 渲染一组关联面板。':
+    'Manage open values and render a set of related panels from items.',
+  '读取当前条目状态，并在标题起始侧或末端渲染展开指示器。':
+    'Read the current item state and render an expansion indicator at the start or end of the title.',
+  读取当前展开状态: 'Reads the current open state',
 };

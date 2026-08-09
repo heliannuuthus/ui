@@ -1,6 +1,6 @@
 import { docsCopy } from './i18n/content';
-import { Fragment, useState, type ReactNode } from 'react';
-import { Accordion } from '@heliannuuthus/ui';
+import { Fragment, useState, type ReactElement } from 'react';
+import { Accordion, type AccordionIndicatorProps } from '@heliannuuthus/ui';
 import { Attachment } from '@heliannuuthus/ui';
 import { Avatar } from '@heliannuuthus/ui';
 import { Badge } from '@heliannuuthus/ui';
@@ -153,16 +153,12 @@ export const AccordionModesDemo = () => {
 
 const AccordionIndicatorSample = ({
   description,
-  expandedIndicator,
   indicator,
-  indicatorPosition,
   kind,
   title,
 }: {
   description: string;
-  expandedIndicator?: ReactNode;
-  indicator?: ReactNode;
-  indicatorPosition?: 'start' | 'end';
+  indicator?: ReactElement<AccordionIndicatorProps> | null;
   kind: 'custom' | 'end' | 'start';
   title: string;
 }) => {
@@ -174,9 +170,7 @@ const AccordionIndicatorSample = ({
       </div>
       <Accordion
         defaultValue={['deployment']}
-        expandedIndicator={expandedIndicator}
         indicator={indicator}
-        indicatorPosition={indicatorPosition}
         items={[
           {
             value: 'deployment',
@@ -204,14 +198,17 @@ export const AccordionIndicatorDemo = () => {
       />
       <AccordionIndicatorSample
         description={docsCopy('靠近标题')}
-        indicatorPosition="start"
+        indicator={<Accordion.Indicator position="start" />}
         kind="start"
         title={docsCopy('起始箭头')}
       />
       <AccordionIndicatorSample
-        description={docsCopy('展开状态可替换')}
-        expandedIndicator={<Minus />}
-        indicator={<Plus />}
+        description={docsCopy('读取当前展开状态')}
+        indicator={
+          <Accordion.Indicator position="start">
+            {({ open }) => (open ? <Minus /> : <Plus />)}
+          </Accordion.Indicator>
+        }
         kind="custom"
         title={docsCopy('自定义指示器')}
       />

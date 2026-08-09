@@ -4312,7 +4312,7 @@ const dataDisplayExamples: Record<string, ComponentExample[]> = {
     {
       title: docsCopy('指示器'),
       description: docsCopy(
-        '统一设置指示器的位置；传入一个节点时随状态旋转，或分别定义折叠态与展开态。'
+        '使用 Accordion.Indicator 统一设置位置；children 状态函数接收当前条目的 open、disabled 和 value，由调用方决定展示内容。'
       ),
       preview: <AccordionIndicatorDemo />,
       code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
@@ -4320,9 +4320,11 @@ import { Minus, Plus } from 'lucide-react'
 
 <Accordion
   defaultValue={['deployment']}
-  indicator={<Plus />}
-  expandedIndicator={<Minus />}
-  indicatorPosition="start"
+  indicator={
+    <Accordion.Indicator position="start">
+      {({ open }) => (open ? <Minus /> : <Plus />)}
+    </Accordion.Indicator>
+  }
   items={[
     {
       value: 'deployment',
@@ -5515,24 +5517,27 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: 'false',
     },
     {
-      name: 'indicatorPosition',
-      description: docsCopy('将展开指示器放在标题起始侧或末端。'),
-      type: "'start' | 'end'",
-      defaultValue: "'end'",
-    },
-    {
       name: 'indicator',
       description: docsCopy(
-        '自定义折叠态指示器；默认在起始侧由向右旋转至向下，在末端侧由向左旋转至向下。'
+        '设置 Accordion.Indicator；省略时使用位于末端、随展开状态旋转的默认箭头，传入 null 时隐藏。'
       ),
-      type: 'ReactNode',
-      defaultValue: docsCopy('根据 indicatorPosition'),
+      type: 'ReactElement<AccordionIndicatorProps> | null',
+      defaultValue: '<Accordion.Indicator />',
     },
     {
-      name: 'expandedIndicator',
-      description: docsCopy('可选的展开态指示器，适合加号/减号等两态图标。'),
-      type: 'ReactNode',
-      defaultValue: '—',
+      component: 'Accordion.Indicator',
+      name: 'children',
+      description: docsCopy(
+        '传入静态节点时随展开状态旋转；传入状态函数时接收 open、disabled 与 value，并完全控制展示内容。'
+      ),
+      type: 'ReactNode | ((state: AccordionIndicatorState) => ReactNode)',
+    },
+    {
+      component: 'Accordion.Indicator',
+      name: 'position',
+      description: docsCopy('将指示器放在标题起始侧或末端。'),
+      type: "'start' | 'end'",
+      defaultValue: "'end'",
     },
     {
       name: 'disabled',
@@ -5543,7 +5548,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       name: 'keepMounted',
       description: docsCopy(
-        '控制关闭面板是否保留在 DOM，或允许浏览器页内查找展开。'
+        '关闭面板后仍保留其 DOM，适合保留内部状态；不能与 hiddenUntilFound 同时使用。'
       ),
       type: 'boolean',
       defaultValue: 'false',
@@ -5551,7 +5556,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       name: 'hiddenUntilFound',
       description: docsCopy(
-        '控制关闭面板是否保留在 DOM，或允许浏览器页内查找展开。'
+        '通过 hidden="until-found" 保留关闭面板，使浏览器页内查找可以定位并展开内容；不能与 keepMounted 同时使用。'
       ),
       type: 'boolean',
       defaultValue: 'false',
@@ -7946,9 +7951,11 @@ replaceExampleCodes('accordion', [
   docsCopy(`import { Accordion } from '@heliannuuthus/ui'
 
 <Accordion
-  indicatorPosition="start"
-  indicator={<Plus />}
-  expandedIndicator={<Minus />}
+  indicator={
+    <Accordion.Indicator position="start">
+      {({ open }) => (open ? <Minus /> : <Plus />)}
+    </Accordion.Indicator>
+  }
   items={[
     { value: 'deployment', title: '部署策略', content: '先灰度 10%，观察后全量发布。' },
   ]}
@@ -8653,27 +8660,30 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     {
       name: 'indicator',
       description: docsCopy(
-        '自定义折叠态指示器；默认在起始侧由向右旋转至向下，在末端侧由向左旋转至向下。'
+        '设置 Accordion.Indicator；省略时使用位于末端、随展开状态旋转的默认箭头，传入 null 时隐藏。'
       ),
-      type: 'ReactNode',
-      defaultValue: docsCopy('根据 indicatorPosition'),
+      type: 'ReactElement<AccordionIndicatorProps> | null',
+      defaultValue: '<Accordion.Indicator />',
     },
     {
-      name: 'expandedIndicator',
-      description: docsCopy('可选的展开态指示器，适合加号/减号等两态图标。'),
-      type: 'ReactNode',
-      defaultValue: '—',
+      component: 'Accordion.Indicator',
+      name: 'children',
+      description: docsCopy(
+        '传入静态节点时随展开状态旋转；传入状态函数时接收 open、disabled 与 value，并完全控制展示内容。'
+      ),
+      type: 'ReactNode | ((state: AccordionIndicatorState) => ReactNode)',
     },
     {
-      name: 'indicatorPosition',
-      description: docsCopy('将展开指示器放在标题起始侧或末端。'),
+      component: 'Accordion.Indicator',
+      name: 'position',
+      description: docsCopy('将指示器放在标题起始侧或末端。'),
       type: "'start' | 'end'",
       defaultValue: "'end'",
     },
     {
       name: 'keepMounted',
       description: docsCopy(
-        '控制关闭面板是否保留在 DOM，或允许浏览器页内查找展开。'
+        '关闭面板后仍保留其 DOM，适合保留内部状态；不能与 hiddenUntilFound 同时使用。'
       ),
       type: 'boolean',
       defaultValue: 'false',
@@ -8681,7 +8691,7 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     {
       name: 'hiddenUntilFound',
       description: docsCopy(
-        '控制关闭面板是否保留在 DOM，或允许浏览器页内查找展开。'
+        '通过 hidden="until-found" 保留关闭面板，使浏览器页内查找可以定位并展开内容；不能与 keepMounted 同时使用。'
       ),
       type: 'boolean',
       defaultValue: 'false',
@@ -9126,6 +9136,61 @@ for (const [slug, api] of Object.entries(publicWrapperApi)) {
   const documentation = componentDocumentation[slug];
   if (documentation && api) documentation.api = api;
 }
+
+componentDocumentation.accordion.typePreviews = [
+  {
+    name: 'AccordionIndicatorProps',
+    declaration: "Omit<ComponentProps<'span'>, 'children'> & {",
+    api: [
+      {
+        name: 'children',
+        description: docsCopy(
+          '传入静态节点时随展开状态旋转；传入状态函数时接收 open、disabled 与 value，并完全控制展示内容。'
+        ),
+        type: 'ReactNode | ((state: AccordionIndicatorState) => ReactNode)',
+      },
+      {
+        name: 'position',
+        description: docsCopy('将指示器放在标题起始侧或末端。'),
+        type: "'start' | 'end'",
+        defaultValue: "'end'",
+      },
+    ],
+  },
+  {
+    name: 'AccordionIndicatorState',
+    declaration: '{',
+    api: [
+      {
+        name: 'open',
+        description: docsCopy('当前条目的面板是否已展开。'),
+        type: 'boolean',
+      },
+      {
+        name: 'disabled',
+        description: docsCopy('当前条目或整个 Accordion 是否已禁用。'),
+        type: 'boolean',
+      },
+      {
+        name: 'value',
+        description: docsCopy('当前条目的稳定标识。'),
+        type: 'string',
+      },
+    ],
+  },
+];
+componentDocumentation.accordion.parts = [
+  {
+    name: 'Accordion',
+    description: docsCopy('管理展开值并根据 items 渲染一组关联面板。'),
+  },
+  {
+    name: 'Accordion.Indicator',
+    description: docsCopy(
+      '读取当前条目状态，并在标题起始侧或末端渲染展开指示器。'
+    ),
+  },
+];
 
 componentDocumentation.command.typeDefinitionGroups = [
   'CommandGroup',

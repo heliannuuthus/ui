@@ -317,32 +317,6 @@
 }
 
 @layer utilities {
-  [data-slot='accordion']
-    [data-slot='accordion-trigger'][aria-expanded='true']
-    [data-slot='accordion-indicator'][data-has-expanded-indicator='true']
-    [data-slot='accordion-indicator-collapsed'],
-  [data-slot='accordion']
-    [data-slot='accordion-trigger'][aria-expanded='false']
-    [data-slot='accordion-indicator-expanded'] {
-    display: none;
-  }
-
-  [data-slot='accordion']
-    [data-slot='accordion-trigger'][data-indicator-position='end'][aria-expanded='true']
-    [data-slot='accordion-indicator']:not(
-      [data-has-expanded-indicator='true']
-    ) {
-    transform: rotate(-90deg);
-  }
-
-  [data-slot='accordion']
-    [data-slot='accordion-trigger'][data-indicator-position='start'][aria-expanded='true']
-    [data-slot='accordion-indicator']:not(
-      [data-has-expanded-indicator='true']
-    ) {
-    transform: rotate(90deg);
-  }
-
   [data-slot='avatar-group'] > * + * {
     margin-inline-start: calc(var(--avatar-group-overlap, 8px) * -1);
   }
