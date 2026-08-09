@@ -29,8 +29,6 @@ type AttachmentProps = Omit<React.ComponentProps<'div'>, 'children' | 'title'> &
     description?: React.ReactNode;
     media?: React.ReactNode;
     mediaType?: 'icon' | 'image';
-    /** @deprecated Use `mediaType` instead. */
-    mediaVariant?: 'icon' | 'image';
     state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
     title: React.ReactNode;
     trigger?: React.ReactElement;
@@ -41,8 +39,7 @@ const Attachment = ({
   className,
   description,
   media,
-  mediaType,
-  mediaVariant,
+  mediaType = 'icon',
   title,
   trigger,
   state = 'done',
@@ -50,8 +47,6 @@ const Attachment = ({
   orientation = 'horizontal',
   ...props
 }: AttachmentProps) => {
-  const resolvedMediaType = mediaType ?? mediaVariant ?? 'icon';
-
   return (
     <div
       data-slot="attachment"
@@ -62,7 +57,7 @@ const Attachment = ({
       {...props}
     >
       {media != null ? (
-        <AttachmentMedia variant={resolvedMediaType}>{media}</AttachmentMedia>
+        <AttachmentMedia variant={mediaType}>{media}</AttachmentMedia>
       ) : null}
       <AttachmentContent>
         <AttachmentTitle>{title}</AttachmentTitle>

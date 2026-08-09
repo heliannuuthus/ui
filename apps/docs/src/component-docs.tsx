@@ -8743,11 +8743,6 @@ componentDocumentation.attachment.api = [
     defaultValue: "'icon'",
   },
   {
-    name: 'mediaVariant',
-    description: docsCopy('已废弃，仅为旧调用保留；新代码请使用 mediaType。'),
-    type: "'icon' | 'image'",
-  },
-  {
     name: 'actions',
     description: docsCopy('设置与附件直接相关的下载、重试或移除操作。'),
     type: 'ReactNode',
@@ -9002,11 +8997,6 @@ componentDocumentation.item.api = [
     description: docsCopy('声明媒体内容是普通内容、图标还是图片。'),
     type: "'default' | 'icon' | 'image'",
     defaultValue: "'default'",
-  },
-  {
-    name: 'mediaVariant',
-    description: docsCopy('已废弃，仅为旧调用保留；新代码请使用 mediaType。'),
-    type: "'default' | 'icon' | 'image'",
   },
   {
     name: 'title',

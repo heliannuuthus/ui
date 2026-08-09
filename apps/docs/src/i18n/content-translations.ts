@@ -3898,8 +3898,6 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   附件集合: 'Attachment collection',
   'Attachment.Group 通过 items 渲染一组附件，并为横向溢出提供滚动与吸附行为。':
     'Attachment.Group renders a collection from items and provides scrolling and snapping for horizontal overflow.',
-  '已废弃，仅为旧调用保留；新代码请使用 mediaType。':
-    'Deprecated and retained only for existing callers; use mediaType in new code.',
   '2.1 MB · 图片预览': '2.1 MB · Image preview',
   '8.4 MB · 压缩文件': '8.4 MB · Archive',
   附件缩略图: 'Attachment thumbnail',
