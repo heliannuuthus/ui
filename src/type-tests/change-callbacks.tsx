@@ -1,3 +1,4 @@
+import { Input } from '../components/input';
 import { Select } from '../components/select';
 import { Slider } from '../components/slider';
 import { Switch } from '../components/switch';
@@ -10,6 +11,13 @@ const options = [
 export const ChangeCallbackTypeTest = () => {
   return (
     <>
+      <Input.Number
+        onChange={(value) => value?.valueOf()}
+        onChangeComplete={(value) => value?.valueOf()}
+      />
+      {/* @ts-expect-error Primitive callback names are not public API. */}
+      <Input.Number onValueChange={() => undefined} />
+
       <Select options={options} onChange={(value) => value?.toUpperCase()} />
       {/* @ts-expect-error Primitive callback names are not public API. */}
       <Select options={options} onValueChange={() => undefined} />

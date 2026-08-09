@@ -157,6 +157,7 @@ The adapter layer preserves these component-facing conventions:
 | `Input`          | `string` or native input value | `value`, `onChange`   | input event         |
 | `Input.TextArea` | `string`                       | `value`, `onChange`   | textarea event      |
 | `Input.OTP`      | `string`                       | `value`, `onChange`   | string              |
+| `Input.Number`   | `number \| null`               | `value`, `onChange`   | number or `null`    |
 | `NativeSelect`   | `string` or string array       | `value`, `onChange`   | select event        |
 | `Select`         | item, item array or `null`     | `value`, `onChange`   | selected value      |
 | `Switch`         | `boolean`                      | `checked`, `onChange` | boolean             |

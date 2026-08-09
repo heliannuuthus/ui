@@ -1,11 +1,18 @@
 import { docsCopy } from './i18n/content';
 import type { CSSProperties, ReactNode } from 'react';
 import { Badge } from '@heliannuuthus/ui';
+import { useTranslation } from 'react-i18next';
+
+export type ComponentHarnessProperties = Record<
+  string,
+  boolean | null | number | string
+>;
 
 export type ComponentHarnessCase = {
   description?: string;
   isDefault?: boolean;
   label: string;
+  properties?: ComponentHarnessProperties;
   values: ComponentHarnessValues;
 };
 
@@ -51,6 +58,13 @@ type CaseCombination = {
   values: ComponentHarnessValues;
 };
 
+const formatPropertyValue = (
+  value: ComponentHarnessProperties[string]
+): string => {
+  if (typeof value === 'string') return JSON.stringify(value);
+  return String(value);
+};
+
 const createCasesFromAxes = (
   axes: ComponentHarnessCaseAxis[]
 ): ComponentHarnessCase[] => {
@@ -91,6 +105,7 @@ const createCasesFromAxes = (
 };
 
 export const ComponentHarness = (props: ComponentHarnessProps) => {
+  const { t } = useTranslation();
   const cases = props.cases ?? createCasesFromAxes(props.axes ?? []);
   const style = props.minCaseWidth
     ? ({
@@ -120,6 +135,19 @@ export const ComponentHarness = (props: ComponentHarnessProps) => {
                 {harnessCase.description ? (
                   <p>{harnessCase.description}</p>
                 ) : null}
+                <dl
+                  aria-label={t('components.properties')}
+                  className="component-harness-case-properties"
+                >
+                  {Object.entries(
+                    harnessCase.properties ?? harnessCase.values
+                  ).map(([name, value]) => (
+                    <div key={name}>
+                      <dt>{name}</dt>
+                      <dd>{formatPropertyValue(value)}</dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
               {harnessCase.isDefault ? (
                 <Badge variant="secondary">{docsCopy('默认')}</Badge>

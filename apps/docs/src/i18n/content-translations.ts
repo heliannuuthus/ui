@@ -1438,8 +1438,9 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   评审成员: 'Jury members',
   评审成员同步中: 'Review members are synchronizing',
   企业版: 'Enterprise Edition',
-  '启用内置过滤，或提供返回匹配分数的自定义过滤函数。':
-    'Enable built-in filtering, or provide a custom filter function that returns a match score.',
+  '省略时使用内置过滤；传 false 关闭过滤，或传入返回匹配分数的自定义过滤函数。':
+    'Omit it to use built-in filtering, pass false to disable filtering, or provide a custom filter function that returns a match score.',
+  内置过滤: 'Built-in filtering',
   '启用内置语义色；默认已经开启，可按需关闭。':
     'Enables built-in semantic colors; it is enabled by default and can be turned off as needed.',
   启用通知: 'Enable notifications',
@@ -3486,4 +3487,210 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   'VirtualBody 只适用于固定高度的单行数据；动态高度、行展开和跨行内容继续使用普通 Body。':
     'VirtualBody only applies to single rows of fixed-height data; dynamic height, row expansion, and cross-row content continue to use ordinary Body.',
   'Web Console 发布计划': 'Web Console Release Plan',
+  '不要把格式化后的字符串存入业务状态；onChange 已返回原始 number 或 null。':
+    'Do not store the formatted string in application state; onChange already returns the raw number or null.',
+  并发任务数: 'Concurrent task count',
+  '比较常用尺寸、隐藏步进按钮、只读、禁用和校验失败状态。':
+    'Compare common sizes, hidden step controls, read-only, disabled, and invalid states.',
+  本地化格式: 'Localized formatting',
+  减少数值: 'Decrease value',
+  '本地化增减按钮的可访问名称。':
+    'Localize the accessible names of the increment and decrement buttons.',
+  服务价格: 'Service price',
+  '方向键按 step 调整，Alt 和 Shift 分别使用 smallStep 与 largeStep。':
+    'Arrow keys adjust by step, while Alt and Shift use smallStep and largeStep respectively.',
+  '金额和精度要求较高的场景应明确 format 与 step，并在业务层处理十进制定点规则。':
+    'For currency and high-precision values, specify format and step and handle decimal fixed-point rules in the application layer.',
+  '扩展根节点或输入、按钮等语义插槽样式。':
+    'Extend the root or semantic slots such as the input and buttons.',
+  '配置原生输入提示、自动填充和软键盘模式。':
+    'Configure the native input placeholder, autocomplete, and virtual keyboard mode.',
+  '录入数量、金额、百分比或具有明确步长和边界的数值。':
+    'Enter quantities, currency, percentages, or values with explicit steps and boundaries.',
+  '设置不可用、只读和表单必填语义。':
+    'Set disabled, read-only, and required form semantics.',
+  '设置临时失败后的最大重试次数。':
+    'Set the maximum retry count after a transient failure.',
+  '设置普通、Alt 和 Shift 组合键对应的步进幅度。':
+    'Set the step sizes used by regular, Alt, and Shift interactions.',
+  '设置紧凑、默认或宽松控件高度。':
+    'Set a compact, default, or spacious control height.',
+  尺寸与状态: 'Sizes and states',
+  大尺寸: 'Large size',
+  增加数值: 'Increase value',
+  受控数值与边界: 'Controlled value and boundaries',
+  '使用 Intl.NumberFormat 配置显示货币，同时让 onChange 始终返回未格式化的 number 或 null。':
+    'Use Intl.NumberFormat to display currency while onChange always returns the unformatted number or null.',
+  '使用 Intl.NumberFormatOptions 和语言区域格式化显示值。':
+    'Format the displayed value with Intl.NumberFormatOptions and a locale.',
+  '使用方向键或增减按钮逐级调整。':
+    'Adjust step by step with the arrow keys or increment and decrement buttons.',
+  '输入、格式化并按步长调整数值。':
+    'Enter, format, and step through numeric values.',
+  '输入、格式化并通过键盘或步进按钮精确调整数值。':
+    'Enter, format, and precisely adjust numeric values with the keyboard or step controls.',
+  '输入失焦、步进结束或键盘提交数值时返回最终值。':
+    'Return the committed value on blur, after stepping ends, or when the keyboard commits a value.',
+  '数值变化时返回未格式化的 number 或 null。':
+    'Return the unformatted number or null when the value changes.',
+  '显示、隐藏或自定义递增和递减按钮中的图标。':
+    'Show, hide, or customize the icons in the increment and decrement buttons.',
+  未设置: 'Not set',
+  小尺寸: 'Small size',
+  无步进按钮: 'Without step controls',
+  '限制允许输入和步进到达的数值边界。':
+    'Limit the numeric boundaries that typing and stepping may reach.',
+  '选择是否允许悬停滚轮调整，以及步进时吸附到最近倍数。':
+    'Choose whether hovering wheel adjustments are allowed and whether stepping snaps to the nearest multiple.',
+  '需要保留原始 number 值，同时按语言区域格式化显示内容。':
+    'Preserve the raw number value while formatting the displayed content for a locale.',
+  只读: 'Read only',
+  '只需要范围内粗略选择时优先使用 Slider。':
+    'Prefer Slider when only an approximate choice within a range is needed.',
+  '增减按钮保持可访问名称，并在到达边界时自动禁用。':
+    'Keep accessible names on the increment and decrement buttons and disable them automatically at boundaries.',
+  '在同一输入边框内展示固定前缀或单位后缀。':
+    'Display a fixed prefix or unit suffix within the same input border.',
+  '原始数值：': 'Raw value: ',
+  存储容量: 'Storage capacity',
+  '当前容量：': 'Current capacity: ',
+  数字输入框: 'Number field',
+  禁用: 'Disabled',
+  '组合可编辑数值输入、格式化逻辑和可选的增减按钮。':
+    'Combine an editable numeric input, formatting logic, and optional increment and decrement buttons.',
+  '通过受控值、最小值、最大值和步长管理存储容量，文本输入、键盘与增减按钮共享同一数值状态。':
+    'Manage storage capacity with a controlled value, minimum, maximum, and step while text input, keyboard interactions, and step controls share one numeric state.',
+  '为独立使用的数字输入提供标签或 aria-label；Form.Field 会自动建立标签与说明关联。':
+    'Provide a label or aria-label for a standalone numeric input; Form.Field automatically associates its label and description.',
+  '以受控或非受控方式设置原始数值；空输入使用 null。':
+    'Set the raw value in controlled or uncontrolled mode; an empty input uses null.',
+  重试次数: 'Retry count',
+  文件与项目: 'Files and projects',
+  偏好设置: 'Preferences',
+  切换主题: 'Switch theme',
+  尚未执行命令: 'No command has been run',
+  '已执行：': 'Ran: ',
+  '搜索文件、设置或主题…': 'Search files, settings, or themes…',
+  不存在的命令: 'Missing command',
+  没有匹配的命令: 'No matching command',
+  '请尝试更短或不同的关键词。': 'Try a shorter or different search term.',
+  '搜索并执行当前工作区中的快捷操作。':
+    'Search and run quick actions in the current workspace.',
+  快速操作: 'Quick actions',
+  打开命令面板: 'Open command palette',
+  分组与选项: 'Groups and options',
+  '每个 group 使用 heading 标记分组标题，并通过 options 配置命令值、标签、检索关键词、图标、快捷键、禁用状态和执行回调。':
+    'Each group uses heading for its title and options to configure command values, labels, search keywords, icons, shortcuts, disabled states, and execution callbacks.',
+  搜索输入提示: 'Search input placeholder',
+  'placeholder 只描述搜索输入框尚未输入内容时的预期查询，不负责空结果反馈。':
+    'placeholder describes the expected query before anything is entered; it does not provide empty-result feedback.',
+  空结果内容: 'Empty result content',
+  'emptyText 仅在过滤后没有匹配命令时显示，可以是纯文本，也可以是包含图标、标题和建议的 ReactNode。':
+    'emptyText appears only when filtering finds no matching command and can be plain text or a ReactNode with an icon, title, and suggestion.',
+  命令弹窗: 'Command dialog',
+  'dialog 是 Command 对通用 Dialog 的组合入口，用来把同一份命令列表放入模态层；它负责触发器、标题、说明和开关状态，groups 仍负责命令内容。':
+    'dialog composes Command with the shared Dialog to place the same command list in a modal layer; it owns the trigger, title, description, and open state while groups still define the commands.',
+  '配置一组或多组命令；每组通过 heading 和 options 描述内容。':
+    'Configure one or more command groups; each group describes its content with heading and options.',
+  '传入 Dialog 配置后把命令列表放入模态层，并配置触发器、标题、说明及打开状态；省略时渲染内联列表。':
+    'Pass Dialog configuration to place the command list in a modal and configure its trigger, title, description, and open state; omit it to render an inline list.',
+  '设置搜索输入框没有内容时显示的提示。':
+    'Set the hint shown when the search input has no content.',
+  '设置过滤后没有匹配命令时显示的内容。':
+    'Set the content shown when filtering finds no matching command.',
+  没有找到命令: 'No command found',
+  '配置搜索输入框的原生属性，并通过 value 与 onChange 管理搜索关键词。':
+    'Configure native search input attributes and manage the search term through value and onChange.',
+  '管理当前选中的命令值，不表示搜索关键词。':
+    'Manage the currently selected command value, not the search term.',
+  '以受控方式设置当前搜索关键词。':
+    'Set the current search query in controlled mode.',
+  '搜索关键词变化时接收新的字符串值。':
+    'Receive the next string value when the search query changes.',
+  '设置命令列表供辅助技术读取的可访问名称。':
+    'Set an accessible name for assistive technologies to identify the command list.',
+  '控制首尾循环、Vim 导航键以及指针悬停是否改变当前命令。':
+    'Control wraparound navigation, Vim navigation keys, and whether pointer hover changes the current command.',
+  '设置当前命令分组的可选标题。':
+    'Set the optional title of the current command group.',
+  '设置当前分组内按顺序展示的命令。':
+    'Set the commands displayed in order within the current group.',
+  '设置命令的唯一值，并参与默认文本匹配。':
+    'Set the unique command value, which also participates in default text matching.',
+  '设置命令列表中显示的主要内容；纯文本标签会自动参与过滤匹配。':
+    'Set the primary content displayed in the command list; plain-text labels automatically participate in filtering.',
+  '补充不显示但可参与过滤匹配的别名；标签为复杂 ReactNode 时也可在这里提供可搜索文本。':
+    'Add hidden aliases for filtering; when the label is a complex ReactNode, searchable text can also be provided here.',
+  '设置显示在命令标签前的图标。':
+    'Set the icon displayed before the command label.',
+  '设置显示在命令右侧的快捷键提示。':
+    'Set the shortcut hint displayed on the right side of the command.',
+  '禁用命令并阻止选择。': 'Disable a command and prevent selection.',
+  '选择该命令时执行回调并接收命令值。':
+    'Run a callback with the command value when the command is selected.',
+  '渲染搜索输入、过滤结果和键盘可导航的命令列表。':
+    'Render a search input, filtered results, and a keyboard-navigable command list.',
+  '描述一个可选标题和该分组包含的命令选项。':
+    'Describe an optional title and the command options contained in the group.',
+  '描述单条命令的值、内容、搜索关键词、状态和执行行为。':
+    'Describe the value, content, search keywords, state, and execution behavior of one command.',
+  '需要从较多页面、文件、设置或操作中快速搜索并执行命令。':
+    'Use when people need to quickly search and run commands across many pages, files, settings, or actions.',
+  '需要同时支持键盘导航、快捷键提示和模糊检索。':
+    'Use when keyboard navigation, shortcut hints, and fuzzy search are all required.',
+  '需要在页面内嵌列表与模态命令面板之间复用同一组命令数据。':
+    'Use when the same command data must be shared between an inline list and a modal command palette.',
+  '使用 label 为命令列表提供明确的可访问名称。':
+    'Use label to provide a clear accessible name for the command list.',
+  '键盘用户可以输入关键词，并通过方向键移动、Enter 执行命令。':
+    'Keyboard users can enter a search term, move with the arrow keys, and run a command with Enter.',
+  '禁用命令需要使用 disabled，不要仅通过颜色表达不可用状态。':
+    'Use disabled for unavailable commands instead of communicating the state with color alone.',
+  'placeholder 描述可搜索内容，emptyText 说明搜索无结果，两者不要混用。':
+    'placeholder describes what can be searched, while emptyText explains that no results were found; do not mix their roles.',
+  'value 管理当前命令选择；搜索关键词应通过 inputProps 管理。':
+    'value manages the current command selection; manage the search term through inputProps.',
+  'shortcut 只负责展示提示，应用仍需自行注册对应的全局快捷键。':
+    'shortcut only displays a hint; the application must still register the corresponding global keyboard shortcut.',
+  'items 同时体现分组标题、图标、快捷键、禁用项、分隔线和危险操作；选择后结果会显示在触发区域下方。':
+    'items demonstrates group labels, icons, shortcuts, disabled entries, separators, and destructive actions; the selected result appears below the trigger area.',
+  勾选与单选状态: 'Checkbox and radio states',
+  'checkbox entry 管理独立布尔状态，radio entry 管理互斥选项；关闭菜单后结果仍保留在触发区域中。':
+    'A checkbox entry manages an independent boolean state, while a radio entry manages mutually exclusive options; the result remains visible in the trigger area after the menu closes.',
+  嵌套子菜单: 'Nested submenu',
+  '普通 item 提供 children 时形成子菜单，适合将同一动作的多个格式或目标收进第二层。':
+    'A regular item with children becomes a submenu, suitable for placing multiple formats or targets of the same action in a second level.',
+  开关状态与禁用: 'Open state and disabled',
+  '比较默认非受控、通过 open 与 onOpenChange 管理的受控模式，以及 disabled 阻止触发的状态。':
+    'Compare the default uncontrolled mode, controlled mode managed through open and onOpenChange, and the state where disabled prevents triggering.',
+  非受控: 'Uncontrolled',
+  受控: 'Controlled',
+  '控制指针高亮，以及键盘焦点是否在首尾循环。':
+    'Control pointer highlighting and whether keyboard focus loops between the first and last item.',
+  '设置菜单键盘导航的排列方向。':
+    'Set the orientation used for keyboard navigation in the menu.',
+  '扩展菜单浮层的样式。': 'Extend the menu popup styles.',
+  右键菜单已禁用: 'Context menu disabled',
+  单击右键或按菜单键: 'Right-click or press the Menu key',
+  页面操作: 'Page actions',
+  '已选择：复制链接': 'Selected: Copy link',
+  复制内部链接: 'Copy internal link',
+  删除页面: 'Delete page',
+  '已选择：删除页面': 'Selected: Delete page',
+  '设计系统 / 菜单规范': 'Design system / Menu guidelines',
+  显示评论: 'Show comments',
+  隐藏评论: 'Hide comments',
+  访问范围: 'Access scope',
+  页面可见性: 'Page visibility',
+  '季度复盘.pdf': 'Quarterly review.pdf',
+  文件预览: 'File preview',
+  查看详情: 'View details',
+  菜单已打开: 'Menu open',
+  菜单已关闭: 'Menu closed',
+  不可打开: 'Cannot open',
+  等待右键操作: 'Waiting for a right-click',
+  当前对象: 'Current object',
+  受控对象: 'Controlled object',
+  禁用对象: 'Disabled object',
+  非受控对象: 'Uncontrolled object',
 };

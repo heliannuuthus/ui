@@ -81,6 +81,7 @@ const zh = {
       optional: '可选字段',
       usage: '用法',
       typeAccess: '类型访问',
+      previewType: '预览 {{type}} 类型',
     },
     demo: {
       copied: '已复制',
@@ -241,6 +242,7 @@ const en = {
       optional: 'Optional field',
       usage: 'Usage',
       typeAccess: 'Type access',
+      previewType: 'Preview the {{type}} type',
     },
     demo: {
       copied: 'Copied',

@@ -13,6 +13,7 @@ import { Switch } from '../components/switch';
 type Values = {
   enabled: boolean;
   name: string;
+  retries: number | null;
   role: 'admin' | 'member' | null;
   volume: number;
 };
@@ -89,6 +90,7 @@ export const FormTypeTest = () => {
     defaultValues: {
       enabled: false,
       name: '',
+      retries: null,
       role: null,
       volume: 50,
     },
@@ -104,6 +106,9 @@ export const FormTypeTest = () => {
     >
       <Form.Field<Values> name="name" label="Name">
         <Input />
+      </Form.Field>
+      <Form.Field<Values> name="retries" label="Retries">
+        <Input.Number min={0} max={10} />
       </Form.Field>
       <Form.Field<Values> name="role" label="Role">
         <Select options={roleOptions} />

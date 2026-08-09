@@ -30,6 +30,7 @@ export const componentGroups = [
     items: [
       'Form',
       'Input',
+      'Input Number',
       'Date Picker',
       'Select',
       'Checkbox',
@@ -116,6 +117,7 @@ export const zhComponentNames = {
   'Date Picker': '日期选择器',
   Form: '表单',
   Input: '输入框',
+  'Input Number': '数字输入框',
   Radio: '单选框',
   Select: '选择器',
   Slider: '滑块',
