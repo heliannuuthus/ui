@@ -83,8 +83,12 @@ import {
   ToggleControlledDemo,
 } from './data-entry-previews';
 import {
-  AccordionIndicatorDemo,
-  AccordionModesDemo,
+  AccordionDefaultIndicatorDemo,
+  AccordionDisabledItemDemo,
+  AccordionDisabledRootDemo,
+  AccordionReleaseDemo,
+  AccordionStartIndicatorDemo,
+  AccordionStateIndicatorDemo,
   AttachmentReleaseDemo,
   AvatarBadgeDemo,
   AvatarGroupDemo,
@@ -4283,11 +4287,32 @@ for (const [slug, examples] of Object.entries(dataEntryExamples)) {
 const dataDisplayExamples: Record<string, ComponentExample[]> = {
   accordion: [
     {
-      title: docsCopy('展开模式'),
-      description: docsCopy(
-        '纵向面板支持单项或多项展开，可按内容关系选择合适模式。'
-      ),
-      preview: <AccordionModesDemo />,
+      title: docsCopy('单项展开'),
+      description: docsCopy('默认一次只展开一个条目，打开新条目时关闭前一个。'),
+      preview: <AccordionReleaseDemo mode="single" />,
+      code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
+
+<Accordion
+  defaultValue={['preflight']}
+  items={[
+    {
+      value: 'preflight',
+      title: '预检结果',
+      content: '42 项检查均已通过。',
+    },
+    {
+      value: 'rollback',
+      title: '回滚方案',
+      content: '异常时切回上一版本。',
+    },
+  ]}
+/>`),
+      previewHeight: 420,
+    },
+    {
+      title: docsCopy('多项展开'),
+      description: docsCopy('设置 multiple 后允许多个条目同时保持展开。'),
+      preview: <AccordionReleaseDemo mode="multiple" />,
       code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
 
 <Accordion
@@ -4306,15 +4331,48 @@ const dataDisplayExamples: Record<string, ComponentExample[]> = {
     },
   ]}
 />`),
-      previewHeight: 500,
-      wide: true,
+      previewHeight: 420,
     },
     {
-      title: docsCopy('指示器'),
+      title: docsCopy('默认指示器'),
+      description: docsCopy(
+        '省略 indicator 时在标题末端显示默认箭头，并随展开状态旋转。'
+      ),
+      preview: <AccordionDefaultIndicatorDemo />,
+      code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
+
+<Accordion
+  defaultValue={['deployment']}
+  items={[
+    {
+      value: 'deployment',
+      title: '部署策略',
+      content: '先灰度 10%，观察后全量发布。',
+    },
+  ]}
+/>`),
+      previewHeight: 360,
+    },
+    {
+      title: docsCopy('起始位置'),
+      description: docsCopy(
+        '通过 Accordion.Indicator 的 position 将默认箭头放到标题起始侧。'
+      ),
+      preview: <AccordionStartIndicatorDemo />,
+      code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
+
+<Accordion
+  indicator={<Accordion.Indicator position="start" />}
+  items={items}
+/>`),
+      previewHeight: 360,
+    },
+    {
+      title: docsCopy('状态函数指示器'),
       description: docsCopy(
         '使用 Accordion.Indicator 统一设置位置；children 状态函数接收当前条目的 open、disabled 和 value，由调用方决定展示内容。'
       ),
-      preview: <AccordionIndicatorDemo />,
+      preview: <AccordionStateIndicatorDemo />,
       code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
 import { Minus, Plus } from 'lucide-react'
 
@@ -4333,8 +4391,43 @@ import { Minus, Plus } from 'lucide-react'
     },
   ]}
 />`),
-      previewHeight: 420,
-      wide: true,
+      previewHeight: 360,
+    },
+    {
+      title: docsCopy('禁用单个条目'),
+      description: docsCopy(
+        '在 AccordionItem 上设置 disabled，仅阻止该条目的触发交互。'
+      ),
+      preview: <AccordionDisabledItemDemo />,
+      code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
+
+<Accordion
+  items={[
+    {
+      value: 'preflight',
+      title: '预检结果',
+      content: '42 项检查均已通过。',
+      disabled: true,
+    },
+    {
+      value: 'rollback',
+      title: '回滚方案',
+      content: '异常时切回上一版本。',
+    },
+  ]}
+/>`),
+      previewHeight: 360,
+    },
+    {
+      title: docsCopy('禁用整个组件'),
+      description: docsCopy(
+        '在 Accordion 上设置 disabled，统一阻止所有条目的展开与收起。'
+      ),
+      preview: <AccordionDisabledRootDemo />,
+      code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
+
+<Accordion disabled items={items} />`),
+      previewHeight: 360,
     },
   ],
   attachment: [
@@ -7938,30 +8031,6 @@ replaceExampleCodes('select', [
 />`),
 ]);
 
-replaceExampleCodes('accordion', [
-  docsCopy(`import { Accordion } from '@heliannuuthus/ui'
-
-<Accordion
-  defaultValue={['preflight']}
-  items={[
-    { value: 'preflight', title: '预检结果', content: '42 项检查均已通过。' },
-    { value: 'rollback', title: '回滚方案', content: '异常时切回上一版本。' },
-  ]}
-/>`),
-  docsCopy(`import { Accordion } from '@heliannuuthus/ui'
-
-<Accordion
-  indicator={
-    <Accordion.Indicator position="start">
-      {({ open }) => (open ? <Minus /> : <Plus />)}
-    </Accordion.Indicator>
-  }
-  items={[
-    { value: 'deployment', title: '部署策略', content: '先灰度 10%，观察后全量发布。' },
-  ]}
-/>`),
-]);
-
 replaceExampleCodes('attachment', [
   docsCopy(`import { Attachment } from '@heliannuuthus/ui'
 
@@ -8631,6 +8700,34 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       type: 'readonly AccordionItem[]',
     },
     {
+      component: 'AccordionItem',
+      name: 'value',
+      description: docsCopy('设置条目的唯一标识，并用于受控展开值。'),
+      type: 'string',
+      required: true,
+    },
+    {
+      component: 'AccordionItem',
+      name: 'title',
+      description: docsCopy('设置触发按钮中显示的标题内容。'),
+      type: 'ReactNode',
+      required: true,
+    },
+    {
+      component: 'AccordionItem',
+      name: 'content',
+      description: docsCopy('设置条目展开后显示的面板内容。'),
+      type: 'ReactNode',
+      required: true,
+    },
+    {
+      component: 'AccordionItem',
+      name: 'disabled',
+      description: docsCopy('仅禁用当前条目的展开与收起交互。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
       name: 'value',
       description: docsCopy('以受控或非受控方式指定当前展开项。'),
       type: 'string[]',
@@ -8653,7 +8750,7 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     },
     {
       name: 'disabled',
-      description: docsCopy('禁用整个 Accordion 或单个 AccordionItem。'),
+      description: docsCopy('禁用整个 Accordion 的所有条目。'),
       type: 'boolean',
       defaultValue: 'false',
     },
@@ -9139,6 +9236,35 @@ for (const [slug, api] of Object.entries(publicWrapperApi)) {
 
 componentDocumentation.accordion.typePreviews = [
   {
+    name: 'AccordionItem',
+    declaration: '{',
+    api: [
+      {
+        name: 'value',
+        description: docsCopy('设置条目的唯一标识，并用于受控展开值。'),
+        type: 'string',
+        required: true,
+      },
+      {
+        name: 'title',
+        description: docsCopy('设置触发按钮中显示的标题内容。'),
+        type: 'ReactNode',
+        required: true,
+      },
+      {
+        name: 'content',
+        description: docsCopy('设置条目展开后显示的面板内容。'),
+        type: 'ReactNode',
+        required: true,
+      },
+      {
+        name: 'disabled',
+        description: docsCopy('仅禁用当前条目的展开与收起交互。'),
+        type: 'boolean',
+      },
+    ],
+  },
+  {
     name: 'AccordionIndicatorProps',
     declaration: "Omit<ComponentProps<'span'>, 'children'> & {",
     api: [
@@ -9183,6 +9309,10 @@ componentDocumentation.accordion.parts = [
   {
     name: 'Accordion',
     description: docsCopy('管理展开值并根据 items 渲染一组关联面板。'),
+  },
+  {
+    name: 'AccordionItem',
+    description: docsCopy('描述单个条目的标识、标题、面板内容与禁用状态。'),
   },
   {
     name: 'Accordion.Indicator',
@@ -9285,4 +9415,9 @@ for (const documentation of Object.values(componentDocumentation)) {
   if (basicExample) {
     basicExample.title = docsCopy('基础用法');
   }
+}
+
+const accordionSingleExample = componentDocumentation.accordion.examples[0];
+if (accordionSingleExample) {
+  accordionSingleExample.title = docsCopy('单项展开');
 }

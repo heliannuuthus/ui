@@ -1,6 +1,6 @@
 import { docsCopy } from './i18n/content';
-import { Fragment, useState, type ReactElement } from 'react';
-import { Accordion, type AccordionIndicatorProps } from '@heliannuuthus/ui';
+import { Fragment, useState } from 'react';
+import { Accordion } from '@heliannuuthus/ui';
 import { Attachment } from '@heliannuuthus/ui';
 import { Avatar } from '@heliannuuthus/ui';
 import { Badge } from '@heliannuuthus/ui';
@@ -130,91 +130,79 @@ export const CounterBuildDemo = () => {
   );
 };
 
-export const AccordionModesDemo = () => {
-  return (
-    <div className="accordion-modes-demo">
-      <section className="accordion-mode-example">
-        <div className="accordion-mode-heading">
-          <strong>{docsCopy('单项展开')}</strong>
-          <span>{docsCopy('一次只保留一个面板')}</span>
-        </div>
-        <AccordionReleaseDemo mode="single" />
-      </section>
-      <section className="accordion-mode-example">
-        <div className="accordion-mode-heading">
-          <strong>{docsCopy('多项展开')}</strong>
-          <span>{docsCopy('允许同时核对多个面板')}</span>
-        </div>
-        <AccordionReleaseDemo mode="multiple" />
-      </section>
-    </div>
-  );
-};
+const accordionIndicatorItems = [
+  {
+    value: 'deployment',
+    title: docsCopy('部署策略'),
+    content: docsCopy('先灰度 10%，观察十分钟后全量发布。'),
+  },
+  {
+    value: 'cache',
+    title: docsCopy('缓存刷新'),
+    content: docsCopy('发布完成后刷新边缘节点缓存。'),
+  },
+];
 
-const AccordionIndicatorSample = ({
-  description,
-  indicator,
-  kind,
-  title,
-}: {
-  description: string;
-  indicator?: ReactElement<AccordionIndicatorProps> | null;
-  kind: 'custom' | 'end' | 'start';
-  title: string;
-}) => {
-  return (
-    <section className="accordion-indicator-example" data-example={kind}>
-      <div className="accordion-mode-heading">
-        <strong>{title}</strong>
-        <span>{description}</span>
-      </div>
-      <Accordion
-        defaultValue={['deployment']}
-        indicator={indicator}
-        items={[
-          {
-            value: 'deployment',
-            title: docsCopy('部署策略'),
-            content: docsCopy('先灰度 10%，观察十分钟后全量发布。'),
-          },
-          {
-            value: 'cache',
-            title: docsCopy('缓存刷新'),
-            content: docsCopy('发布完成后刷新边缘节点缓存。'),
-          },
-        ]}
-      />
-    </section>
-  );
-};
+export const AccordionDefaultIndicatorDemo = () => (
+  <Accordion
+    data-example="default-indicator"
+    defaultValue={['deployment']}
+    items={accordionIndicatorItems}
+  />
+);
 
-export const AccordionIndicatorDemo = () => {
-  return (
-    <div className="accordion-indicator-demo">
-      <AccordionIndicatorSample
-        description={docsCopy('默认位置')}
-        kind="end"
-        title={docsCopy('末端箭头')}
-      />
-      <AccordionIndicatorSample
-        description={docsCopy('靠近标题')}
-        indicator={<Accordion.Indicator position="start" />}
-        kind="start"
-        title={docsCopy('起始箭头')}
-      />
-      <AccordionIndicatorSample
-        description={docsCopy('读取当前展开状态')}
-        indicator={
-          <Accordion.Indicator position="start">
-            {({ open }) => (open ? <Minus /> : <Plus />)}
-          </Accordion.Indicator>
-        }
-        kind="custom"
-        title={docsCopy('自定义指示器')}
-      />
-    </div>
-  );
-};
+export const AccordionStartIndicatorDemo = () => (
+  <Accordion
+    data-example="start-indicator"
+    defaultValue={['deployment']}
+    indicator={<Accordion.Indicator position="start" />}
+    items={accordionIndicatorItems}
+  />
+);
+
+export const AccordionStateIndicatorDemo = () => (
+  <Accordion
+    data-example="state-indicator"
+    defaultValue={['deployment']}
+    indicator={
+      <Accordion.Indicator position="start">
+        {({ open }) => (open ? <Minus /> : <Plus />)}
+      </Accordion.Indicator>
+    }
+    items={accordionIndicatorItems}
+  />
+);
+
+const accordionDisabledItems = [
+  {
+    value: 'preflight',
+    title: docsCopy('预检结果'),
+    content: docsCopy('构建、类型检查和 42 项端到端用例均已通过。'),
+  },
+  {
+    value: 'rollback',
+    title: docsCopy('回滚方案'),
+    content: docsCopy('异常时切回上一版本。'),
+  },
+];
+
+export const AccordionDisabledItemDemo = () => (
+  <Accordion
+    defaultValue={['rollback']}
+    items={accordionDisabledItems.map((item) => ({
+      ...item,
+      disabled: item.value === 'preflight',
+    }))}
+  />
+);
+
+export const AccordionDisabledRootDemo = () => (
+  <Accordion
+    defaultValue={['preflight']}
+    disabled
+    items={accordionDisabledItems}
+  />
+);
 
 type AttachmentState = 'idle' | 'uploading' | 'processing' | 'error' | 'done';
 

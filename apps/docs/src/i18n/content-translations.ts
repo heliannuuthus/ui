@@ -3718,4 +3718,38 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '读取当前条目状态，并在标题起始侧或末端渲染展开指示器。':
     'Read the current item state and render an expansion indicator at the start or end of the title.',
   读取当前展开状态: 'Reads the current open state',
+  '默认一次只展开一个条目，打开新条目时关闭前一个。':
+    'By default, only one item is open at a time; opening another item closes the previous one.',
+  "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight']}\n  items={[\n    {\n      value: 'preflight',\n      title: '预检结果',\n      content: '42 项检查均已通过。',\n    },\n    {\n      value: 'rollback',\n      title: '回滚方案',\n      content: '异常时切回上一版本。',\n    },\n  ]}\n/>":
+    "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight']}\n  items={[\n    {\n      value: 'preflight',\n      title: 'Preflight results',\n      content: 'All 42 checks passed.',\n    },\n    {\n      value: 'rollback',\n      title: 'Rollback plan',\n      content: 'Switch back to the previous version if an issue occurs.',\n    },\n  ]}\n/>",
+  '设置 multiple 后允许多个条目同时保持展开。':
+    'Set multiple to allow several items to remain open at the same time.',
+  默认指示器: 'Default indicator',
+  '省略 indicator 时在标题末端显示默认箭头，并随展开状态旋转。':
+    'Omit indicator to show the default arrow at the end of the title and rotate it with the open state.',
+  "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['deployment']}\n  items={[\n    {\n      value: 'deployment',\n      title: '部署策略',\n      content: '先灰度 10%，观察后全量发布。',\n    },\n  ]}\n/>":
+    "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['deployment']}\n  items={[\n    {\n      value: 'deployment',\n      title: 'Deployment strategy',\n      content: 'Roll out to 10% first, observe, then release to everyone.',\n    },\n  ]}\n/>",
+  起始位置: 'Start position',
+  '通过 Accordion.Indicator 的 position 将默认箭头放到标题起始侧。':
+    'Use Accordion.Indicator position to place the default arrow at the start of the title.',
+  状态函数指示器: 'State function indicator',
+  禁用单个条目: 'Disable one item',
+  '在 AccordionItem 上设置 disabled，仅阻止该条目的触发交互。':
+    'Set disabled on an AccordionItem to prevent trigger interaction for that item only.',
+  "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  items={[\n    {\n      value: 'preflight',\n      title: '预检结果',\n      content: '42 项检查均已通过。',\n      disabled: true,\n    },\n    {\n      value: 'rollback',\n      title: '回滚方案',\n      content: '异常时切回上一版本。',\n    },\n  ]}\n/>":
+    "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  items={[\n    {\n      value: 'preflight',\n      title: 'Preflight results',\n      content: 'All 42 checks passed.',\n      disabled: true,\n    },\n    {\n      value: 'rollback',\n      title: 'Rollback plan',\n      content: 'Switch back to the previous version if an issue occurs.',\n    },\n  ]}\n/>",
+  禁用整个组件: 'Disable the entire component',
+  '在 Accordion 上设置 disabled，统一阻止所有条目的展开与收起。':
+    'Set disabled on Accordion to prevent every item from opening or closing.',
+  '设置条目的唯一标识，并用于受控展开值。':
+    'Set the unique item identifier used by the controlled open value.',
+  '设置触发按钮中显示的标题内容。':
+    'Set the title content displayed in the trigger button.',
+  '设置条目展开后显示的面板内容。':
+    'Set the panel content displayed when the item is open.',
+  '仅禁用当前条目的展开与收起交互。':
+    'Disable opening and closing for the current item only.',
+  '禁用整个 Accordion 的所有条目。': 'Disable every item in the Accordion.',
+  '描述单个条目的标识、标题、面板内容与禁用状态。':
+    'Describe one item’s identifier, title, panel content, and disabled state.',
 };

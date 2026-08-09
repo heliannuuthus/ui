@@ -5465,66 +5465,6 @@ a {
   border-radius: 0;
 }
 
-.accordion-modes-demo {
-  display: grid;
-  width: 100%;
-  gap: 22px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.accordion-mode-example {
-  display: grid;
-  min-width: 0;
-  gap: 10px;
-}
-
-.accordion-mode-heading {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 14px;
-  padding-inline: 4px;
-}
-
-.accordion-mode-heading strong {
-  font-size: 13px;
-}
-
-.accordion-mode-heading span {
-  color: var(--docs-muted);
-  font-size: 11px;
-}
-
-.accordion-indicator-demo {
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 18px;
-}
-
-.accordion-indicator-example {
-  display: grid;
-  min-width: 0;
-  gap: 10px;
-}
-
-.accordion-indicator-example > [data-slot='accordion'] {
-  height: 100%;
-  background: var(--background);
-}
-
-@media (max-width: 760px) {
-  .accordion-modes-demo {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .accordion-mode-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 2px;
-  }
-}
-
 .display-panel-heading {
   display: flex;
   align-items: center;
