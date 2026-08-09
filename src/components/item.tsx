@@ -61,6 +61,8 @@ type ItemSharedProps = VariantProps<typeof itemVariants> & {
   footer?: React.ReactNode;
   header?: React.ReactNode;
   media?: React.ReactNode;
+  mediaType?: NonNullable<VariantProps<typeof itemMediaVariants>['variant']>;
+  /** @deprecated Use `mediaType` instead. */
   mediaVariant?: VariantProps<typeof itemMediaVariants>['variant'];
   title?: React.ReactNode;
 };
@@ -99,13 +101,15 @@ const Item = ({
   footer,
   header,
   media,
-  mediaVariant = 'default',
+  mediaType,
+  mediaVariant,
   size = 'default',
   title,
   variant = 'default',
   ...props
 }: ItemProps) => {
   const hasContent = title != null || description != null || content != null;
+  const resolvedMediaType = mediaType ?? mediaVariant ?? 'default';
 
   const children = (
     <>
@@ -125,11 +129,11 @@ const Item = ({
           className={cn(
             itemMediaVariants({
               className: classNames?.media,
-              variant: mediaVariant,
+              variant: resolvedMediaType,
             })
           )}
           data-slot="item-media"
-          data-variant={mediaVariant}
+          data-variant={resolvedMediaType}
         >
           {media}
         </div>

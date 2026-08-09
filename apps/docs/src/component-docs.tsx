@@ -89,7 +89,14 @@ import {
   AccordionReleaseDemo,
   AccordionStartIndicatorDemo,
   AccordionStateIndicatorDemo,
-  AttachmentReleaseDemo,
+  AttachmentActionsDemo,
+  AttachmentBasicDemo,
+  AttachmentGroupDemo,
+  AttachmentMediaTypeDemo,
+  AttachmentOrientationDemo,
+  AttachmentSizeDemo,
+  AttachmentStateDemo,
+  AttachmentTriggerDemo,
   AvatarBadgeDemo,
   AvatarGroupDemo,
   AvatarShapeDemo,
@@ -3430,16 +3437,62 @@ if (scrollAreaDocumentation) {
 
 componentDocumentation.avatar.examples = [
   {
-    title: docsCopy('形状与尺寸'),
+    title: docsCopy('头像形状'),
     description: docsCopy(
-      'Avatar 支持圆形和圆角方形；小、中、大三档尺寸会同步调整文字与状态标记。'
+      'shape 在圆形和圆角方形之间切换，每种形状作为独立 case 展示。'
     ),
-    preview: <AvatarShapeDemo />,
+    caseLayout: 'stack',
+    caseAxes: [
+      {
+        name: 'shape',
+        label: docsCopy('形状'),
+        defaultValue: 'circle',
+        options: [
+          { label: docsCopy('圆形'), value: 'circle' },
+          { label: docsCopy('圆角方形'), value: 'square' },
+        ],
+      },
+    ],
+    preview: (values) => (
+      <AvatarShapeDemo
+        shape={values.shape === 'square' ? 'square' : 'circle'}
+      />
+    ),
     code: docsCopy(`import { Avatar } from '@heliannuuthus/ui'
 
 <Avatar alt="林默" fallback="林" shape="circle" size="lg" />
 <Avatar alt="周一" fallback="周" shape="square" size="lg" />`),
-    previewHeight: 440,
+    previewHeight: 'auto',
+  },
+  {
+    title: docsCopy('头像尺寸'),
+    description: docsCopy(
+      'size 提供小、中、大三档尺寸，并同步调整文字与状态标记。'
+    ),
+    caseLayout: 'stack',
+    caseAxes: [
+      {
+        name: 'size',
+        label: docsCopy('尺寸'),
+        defaultValue: 'default',
+        options: [
+          { label: docsCopy('小'), value: 'sm' },
+          { label: docsCopy('中'), value: 'default' },
+          { label: docsCopy('大'), value: 'lg' },
+        ],
+      },
+    ],
+    preview: (values) => (
+      <AvatarShapeDemo
+        size={
+          values.size === 'sm' || values.size === 'lg' ? values.size : 'default'
+        }
+      />
+    ),
+    code: docsCopy(`<Avatar size="sm" alt="林默" fallback="林" />
+<Avatar size="default" alt="林默" fallback="林" />
+<Avatar size="lg" alt="林默" fallback="林" />`),
+    previewHeight: 'auto',
   },
   {
     title: docsCopy('展示上限与重叠程度'),
@@ -4432,11 +4485,11 @@ import { Minus, Plus } from 'lucide-react'
   ],
   attachment: [
     {
-      title: docsCopy('横向附件'),
+      title: docsCopy('基础附件'),
       description: docsCopy(
-        '将文件类型、名称、处理状态和操作排在同一行，适合列表与消息附件。'
+        'title、description 与 media 分别承载文件名称、辅助信息和类型图标。'
       ),
-      preview: <AttachmentReleaseDemo orientation="horizontal" />,
+      preview: <AttachmentBasicDemo />,
       code: docsCopy(`import { Attachment } from '@heliannuuthus/ui'
 
 <Attachment
@@ -4444,25 +4497,186 @@ import { Minus, Plus } from 'lucide-react'
   description="8.4 MB · 正在校验"
   media={<FileArchive />}
   state="processing"
-  orientation="horizontal"
 />`),
-      previewHeight: 360,
+      previewHeight: 300,
     },
     {
-      title: docsCopy('纵向附件'),
+      title: docsCopy('媒体内容类型'),
       description: docsCopy(
-        '以缩略卡形式突出文件媒体，适合素材选择、上传结果和紧凑画廊。'
+        'mediaType 明确声明 media 是图标还是图片，让缩略图获得正确的尺寸、裁切与状态样式。'
       ),
-      preview: <AttachmentReleaseDemo orientation="vertical" />,
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'mediaType',
+          label: docsCopy('媒体类型'),
+          defaultValue: 'icon',
+          options: [
+            { label: docsCopy('图标'), value: 'icon' },
+            { label: docsCopy('图片'), value: 'image' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <AttachmentMediaTypeDemo
+          mediaType={values.mediaType === 'image' ? 'image' : 'icon'}
+        />
+      ),
       code: docsCopy(`import { Attachment } from '@heliannuuthus/ui'
 
 <Attachment
-  title="web-console.tgz"
-  description="8.4 MB · 正在校验"
   media={<FileArchive />}
-  state="processing"
-  orientation="vertical"
+  mediaType="icon"
+  title="web-console.tgz"
+/>
+
+<Attachment
+  media={<img alt="附件缩略图" src="/cover.jpg" />}
+  mediaType="image"
+  title="cover.jpg"
 />`),
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('处理状态'),
+      description: docsCopy(
+        'state 分别表达等待、上传、处理、失败和完成阶段；状态文案仍由 description 明确说明。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'state',
+          label: docsCopy('状态'),
+          defaultValue: 'done',
+          options: [
+            { label: docsCopy('等待上传'), value: 'idle' },
+            { label: docsCopy('正在上传'), value: 'uploading' },
+            { label: docsCopy('正在处理'), value: 'processing' },
+            { label: docsCopy('上传失败'), value: 'error' },
+            { label: docsCopy('已完成'), value: 'done' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <AttachmentStateDemo
+          state={
+            values.state === 'idle' ||
+            values.state === 'uploading' ||
+            values.state === 'processing' ||
+            values.state === 'error'
+              ? values.state
+              : 'done'
+          }
+        />
+      ),
+      code: `const states = ['idle', 'uploading', 'processing', 'error', 'done'] as const
+
+{states.map((state) => (
+  <Attachment key={state} state={state} title="web-console.tgz" />
+))}`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('附件尺寸'),
+      description: docsCopy(
+        'size 只控制单个附件的整体密度；不同尺寸作为独立 case 纵向展示。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'size',
+          label: docsCopy('尺寸'),
+          defaultValue: 'default',
+          options: [
+            { label: docsCopy('默认'), value: 'default' },
+            { label: docsCopy('小'), value: 'sm' },
+            { label: docsCopy('超小'), value: 'xs' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <AttachmentSizeDemo
+          size={
+            values.size === 'sm' || values.size === 'xs'
+              ? values.size
+              : 'default'
+          }
+        />
+      ),
+      code: `<Attachment size="default" title="web-console.tgz" />
+<Attachment size="sm" title="web-console.tgz" />
+<Attachment size="xs" title="web-console.tgz" />`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('附件方向'),
+      description: docsCopy(
+        'horizontal 适合文件列表，vertical 以缩略卡形式突出媒体内容。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'orientation',
+          label: docsCopy('方向'),
+          defaultValue: 'horizontal',
+          options: [
+            { label: docsCopy('横向'), value: 'horizontal' },
+            { label: docsCopy('纵向'), value: 'vertical' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <AttachmentOrientationDemo
+          orientation={
+            values.orientation === 'vertical' ? 'vertical' : 'horizontal'
+          }
+        />
+      ),
+      code: `<Attachment orientation="horizontal" title="web-console.tgz" />
+<Attachment orientation="vertical" title="web-console.tgz" />`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('附件操作'),
+      description: docsCopy(
+        'actions 只放置与当前附件直接相关的下载、重试或移除操作。'
+      ),
+      preview: <AttachmentActionsDemo />,
+      code: docsCopy(`<Attachment
+  actions={<Button aria-label="下载附件"><Download /></Button>}
+  title="web-console.tgz"
+/>`),
+      previewHeight: 300,
+    },
+    {
+      title: docsCopy('整卡触发'),
+      description: docsCopy(
+        'trigger 接收链接或按钮元素，在保留正确元素语义的同时让整个附件可点击。'
+      ),
+      preview: <AttachmentTriggerDemo />,
+      code: docsCopy(`<Attachment
+  title="release-notes.md"
+  trigger={<a aria-label="预览 release-notes.md" href="/files/release-notes.md" />}
+/>`),
+      previewHeight: 300,
+    },
+    {
+      title: docsCopy('附件集合'),
+      description: docsCopy(
+        'Attachment.Group 通过 items 渲染一组附件，并为横向溢出提供滚动与吸附行为。'
+      ),
+      preview: <AttachmentGroupDemo />,
+      code: `import { Attachment } from '@heliannuuthus/ui'
+
+<Attachment.Group
+  items={files.map((file) => ({
+    key: file.id,
+    title: file.name,
+    description: file.size,
+    media: <FileArchive />,
+    state: file.state,
+  }))}
+/>`,
       previewHeight: 360,
     },
   ],
@@ -4607,7 +4821,23 @@ const chartConfig = {
       description: docsCopy(
         '默认由整个 Header 触发；传入 trigger 后，Header 保持静态，只由独立按钮控制展开。'
       ),
-      preview: <CollapsibleTriggerModesDemo />,
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'triggerMode',
+          label: docsCopy('触发方式'),
+          defaultValue: 'header',
+          options: [
+            { label: docsCopy('Header 触发'), value: 'header' },
+            { label: docsCopy('按钮触发'), value: 'button' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <CollapsibleTriggerModesDemo
+          mode={values.triggerMode === 'button' ? 'button' : 'header'}
+        />
+      ),
       code: docsCopy(`import { Collapsible } from '@heliannuuthus/ui'
 import { ChevronRight } from 'lucide-react'
 
@@ -4625,14 +4855,35 @@ import { ChevronRight } from 'lucide-react'
   triggerProps={{ size: 'sm', variant: 'outline' }}
   content={<PolicySettings />}
 />`),
-      previewHeight: 620,
+      previewHeight: 'auto',
     },
     {
       title: docsCopy('Header 与图标'),
       description: docsCopy(
         'header 可以组合任意摘要内容；icon 用于替换 Header 指示图标，triggerIcon 用于独立按钮，传 null 时可隐藏图标。'
       ),
-      preview: <CollapsibleHeaderIconDemo />,
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'icon',
+          label: docsCopy('图标'),
+          defaultValue: 'default',
+          options: [
+            { label: docsCopy('默认图标'), value: 'default' },
+            { label: docsCopy('自定义图标'), value: 'custom' },
+            { label: docsCopy('隐藏图标'), value: 'hidden' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <CollapsibleHeaderIconDemo
+          iconMode={
+            values.icon === 'custom' || values.icon === 'hidden'
+              ? values.icon
+              : 'default'
+          }
+        />
+      ),
       code: `import { Collapsible } from '@heliannuuthus/ui'
 import { ChevronRight } from 'lucide-react'
 
@@ -4647,7 +4898,7 @@ import { ChevronRight } from 'lucide-react'
   content={<Details />}
   icon={null}
 />`,
-      previewHeight: 500,
+      previewHeight: 'auto',
     },
   ],
   counter: [
@@ -4908,7 +5159,7 @@ const columns: ColumnDef<Release>[] = [
 <Item
   variant="outline"
   media={<MessageCircle />}
-  mediaVariant="icon"
+  mediaType="icon"
   title="林默回复了检查项"
   description="确认索引变更不会锁表。"
   actions={<Button>查看</Button>}
@@ -4956,26 +5207,51 @@ const columns: ColumnDef<Release>[] = [
   bubble: [
     {
       title: docsCopy('气泡样式'),
-      description: docsCopy('使用 Separator 分隔强调、浮起、柔和和描边样式。'),
-      preview: <BubbleVariantsDemo />,
+      description: docsCopy(
+        'variant 的每种语义外观都作为独立 case 展示，避免在同一个预览区域混合比较。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'variant',
+          label: docsCopy('样式'),
+          defaultValue: 'default',
+          options: [
+            { label: docsCopy('默认'), value: 'default' },
+            { label: docsCopy('次要'), value: 'secondary' },
+            { label: docsCopy('弱化'), value: 'muted' },
+            { label: docsCopy('浮起'), value: 'elevated' },
+            { label: docsCopy('柔和'), value: 'tinted' },
+            { label: docsCopy('描边'), value: 'outline' },
+            { label: docsCopy('透明'), value: 'ghost' },
+            { label: docsCopy('危险'), value: 'destructive' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <BubbleVariantsDemo
+          variant={
+            values.variant === 'secondary' ||
+            values.variant === 'muted' ||
+            values.variant === 'elevated' ||
+            values.variant === 'tinted' ||
+            values.variant === 'outline' ||
+            values.variant === 'ghost' ||
+            values.variant === 'destructive'
+              ? values.variant
+              : 'default'
+          }
+        />
+      ),
       code: docsCopy(`import { Bubble } from '@heliannuuthus/ui'
-import { Separator } from '@heliannuuthus/ui'
 
-<Bubble.Group>
-  <Bubble
-    align="end"
-    content="已经补充完成，可以重新评审。"
-    reactions="✓ 2"
-    variant="default"
-  />
-  <Separator />
-  <Bubble
-    align="end"
-    content="已经补充完成，可以重新评审。"
-    variant="elevated"
-  />
-</Bubble.Group>`),
-      previewHeight: 580,
+<Bubble
+  align="end"
+  content="已经补充完成，可以重新评审。"
+  reactions="✓ 2"
+  variant="elevated"
+/>`),
+      previewHeight: 'auto',
     },
     {
       title: docsCopy('头像与可滚动会话'),
@@ -5677,7 +5953,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       component: 'AttachmentMedia',
       name: 'variant',
-      description: docsCopy('选择图标或图片媒体样式。'),
+      description: docsCopy('声明媒体内容是图标还是图片。'),
       type: "'icon' | 'image'",
       defaultValue: "'icon'",
     },
@@ -6110,7 +6386,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'string',
     },
     {
-      name: 'media / mediaVariant',
+      name: 'media / mediaType',
       description: docsCopy('设置媒体内容，并选择普通、图标或图片外观。'),
       type: "ReactNode / 'default' | 'icon' | 'image'",
       defaultValue: "'default'",
@@ -8031,27 +8307,6 @@ replaceExampleCodes('select', [
 />`),
 ]);
 
-replaceExampleCodes('attachment', [
-  docsCopy(`import { Attachment } from '@heliannuuthus/ui'
-
-<Attachment
-  title="web-console.tgz"
-  description="8.4 MB · 正在校验"
-  media={<FileArchive />}
-  state="processing"
-/>`),
-  `import { Attachment } from '@heliannuuthus/ui'
-
-<Attachment.Group
-  items={files.map((file) => ({
-    title: file.name,
-    description: file.size,
-    media: <FileArchive />,
-    orientation: 'vertical',
-  }))}
-/>`,
-]);
-
 replaceExampleCodes('carousel', [
   `import { Carousel } from '@heliannuuthus/ui'
 
@@ -8295,7 +8550,7 @@ replaceExampleCodes('item', [
 
 <Item
   media={<GitCommit />}
-  mediaVariant="icon"
+  mediaType="icon"
   title="许澄提交了发布说明"
   description="补充数据库迁移影响与回滚入口。"
   actions={<Button>查看</Button>}
@@ -8482,10 +8737,15 @@ componentDocumentation.attachment.api = [
     type: 'ReactNode',
   },
   {
-    name: 'mediaVariant',
-    description: docsCopy('选择图标或图片媒体样式。'),
+    name: 'mediaType',
+    description: docsCopy('声明媒体内容是图标还是图片。'),
     type: "'icon' | 'image'",
     defaultValue: "'icon'",
+  },
+  {
+    name: 'mediaVariant',
+    description: docsCopy('已废弃，仅为旧调用保留；新代码请使用 mediaType。'),
+    type: "'icon' | 'image'",
   },
   {
     name: 'actions',
@@ -8738,10 +8998,15 @@ componentDocumentation.item.api = [
     type: 'ReactNode',
   },
   {
-    name: 'mediaVariant',
-    description: docsCopy('选择普通、图标或图片媒体外观。'),
+    name: 'mediaType',
+    description: docsCopy('声明媒体内容是普通内容、图标还是图片。'),
     type: "'default' | 'icon' | 'image'",
     defaultValue: "'default'",
+  },
+  {
+    name: 'mediaVariant',
+    description: docsCopy('已废弃，仅为旧调用保留；新代码请使用 mediaType。'),
+    type: "'default' | 'icon' | 'image'",
   },
   {
     name: 'title',

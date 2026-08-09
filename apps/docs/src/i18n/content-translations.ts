@@ -2481,7 +2481,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '选择日期后，团队会在当天 10:00 收到发布提醒。':
     'After selecting a date, the team will receive a release reminder at 10:00 that day.',
   选择通知方式: 'Choose notification method',
-  '选择图标或图片媒体样式。': 'Choose an icon or picture media style.',
+  '声明媒体内容是图标还是图片。':
+    'Declare whether the media content is an icon or an image.',
   '选择文本、邮箱、密码等原生输入类型。':
     'Choose from native input types such as text, email, password, etc.',
   '选择新项目时调用。': 'Called when a new item is selected.',
@@ -3302,10 +3303,10 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     "import { Form } from '@heliannuuthus/ui'\n\nconst form = useForm({ defaultValues: { email: '', note: '' } })\n\n<Form {...form}>\n  <form onSubmit={form.handleSubmit(onSubmit)}>\n    <Form.Field\n      control={form.control}\n      name=\"email\"\n      rules={{ required: 'Please enter your email address. ' }}\n      render={({ field }) => (\n        <Form.Item>\n          <Form.Label>Email address</Form.Label>\n          <Form.Control><Input {...field} /></Form.Control>\n          <Form.Message />\n        </Form.Item>\n      )}\n    />\n  </form>\n</Form>",
   "import { Fragment, useState } from 'react'\nimport { Table } from '@heliannuuthus/ui'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Table.ExpandButton\n                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}\n                expanded={expanded}\n                onExpandedChange={(next) =>\n                  setExpandedId(next ? row.id : null)\n                }\n              />\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.ExpandedRow colSpan={2}>{row.detail}</Table.ExpandedRow>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>":
     "import { Fragment, useState } from 'react'\nimport { Table } from '@heliannuuthus/ui'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Table.ExpandButton\n                aria-label={`${expanded ? 'Collapse' : 'Expand'} ${row.id}`}\n                expanded={expanded}\n                onExpandedChange={(next) =>\n                  setExpandedId(next? row.id: null)\n                }\n              />\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.ExpandedRow colSpan={2}>{row.detail}</Table.ExpandedRow>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>",
-  'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaVariant="icon"\n  title="许澄提交了发布说明"\n  description="补充数据库迁移影响与回滚入口。"\n  actions={<Button>查看</Button>}\n/>':
-    'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaVariant="icon"\n  title="Xu Cheng submitted release notes"\n  description="Supplementary database migration impact and rollback entry."\n  actions={<Button>View</Button>}\n/>',
-  'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<MessageCircle />}\n  mediaVariant="icon"\n  title="林默回复了检查项"\n  description="确认索引变更不会锁表。"\n  actions={<Button>查看</Button>}\n/>':
-    'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<MessageCircle />}\n  mediaVariant="icon"\n  title="Lin Mo replied to the check item"\n  description="Confirm that index changes will not lock the table."\n  actions={<Button>View</Button>}\n/>',
+  'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaType="icon"\n  title="许澄提交了发布说明"\n  description="补充数据库迁移影响与回滚入口。"\n  actions={<Button>查看</Button>}\n/>':
+    'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaType="icon"\n  title="Xu Cheng submitted release notes"\n  description="Supplementary database migration impact and rollback entry."\n  actions={<Button>View</Button>}\n/>',
+  'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<MessageCircle />}\n  mediaType="icon"\n  title="林默回复了检查项"\n  description="确认索引变更不会锁表。"\n  actions={<Button>查看</Button>}\n/>':
+    'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<MessageCircle />}\n  mediaType="icon"\n  title="Lin Mo replied to the check item"\n  description="Confirm that index changes will not lock the table."\n  actions={<Button>View</Button>}\n/>',
   "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Content>工作区内容</Layout.Content>\n  <Layout.Sidebar width={280}>详情面板</Layout.Sidebar>\n</Layout>":
     "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Content>Workspace Content</Layout.Content>\n  <Layout.Sidebar width={280}>Details panel</Layout.Sidebar>\n</Layout>",
   "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Header>项目导航</Layout.Header>\n  <Layout.Content>页面内容</Layout.Content>\n  <Layout.Footer>页脚信息</Layout.Footer>\n</Layout>":
@@ -3779,8 +3780,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '为组内头像和自动计数项设置统一尺寸。':
     'Set a consistent size for avatars and the generated count item in the group.',
   '设置列表项起始侧的媒体内容。': 'Set media content at the start of the item.',
-  '选择普通、图标或图片媒体外观。':
-    'Choose the default, icon, or image media appearance.',
+  '声明媒体内容是普通内容、图标还是图片。':
+    'Declare whether the media content is default content, an icon, or an image.',
   '设置列表项的主要标题。': 'Set the primary item title.',
   '设置列表项的辅助说明。': 'Set the supporting item description.',
   '在标题和说明之外添加自定义内容。':
@@ -3866,4 +3867,70 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Provide a stable identifier for the current item in the collection.',
   '扩展标记内容槽位的 className。': 'Extend the marker content slot className.',
   '扩展标记图标槽位的 className。': 'Extend the marker icon slot className.',
+  基础附件: 'Basic attachment',
+  'title、description 与 media 分别承载文件名称、辅助信息和类型图标。':
+    'Use title, description, and media for the file name, supporting information, and file-type icon.',
+  媒体内容类型: 'Media content type',
+  'mediaType 明确声明 media 是图标还是图片，让缩略图获得正确的尺寸、裁切与状态样式。':
+    'mediaType declares whether media is an icon or an image so thumbnails receive the correct size, crop, and state styling.',
+  媒体类型: 'Media type',
+  图标: 'Icon',
+  处理状态: 'Processing states',
+  'state 分别表达等待、上传、处理、失败和完成阶段；状态文案仍由 description 明确说明。':
+    'state represents waiting, uploading, processing, failed, and completed phases; use description to state the status explicitly.',
+  等待上传: 'Waiting to upload',
+  正在上传: 'Uploading',
+  正在处理: 'Processing',
+  上传失败: 'Upload failed',
+  附件尺寸: 'Attachment sizes',
+  'size 只控制单个附件的整体密度；不同尺寸作为独立 case 纵向展示。':
+    'size controls the density of one attachment; each size is shown as a separate vertically stacked case.',
+  超小: 'Extra small',
+  附件方向: 'Attachment orientation',
+  'horizontal 适合文件列表，vertical 以缩略卡形式突出媒体内容。':
+    'horizontal suits file lists, while vertical emphasizes media in a thumbnail card.',
+  附件操作: 'Attachment actions',
+  'actions 只放置与当前附件直接相关的下载、重试或移除操作。':
+    'Use actions only for download, retry, or remove operations that directly affect the current attachment.',
+  整卡触发: 'Full-card trigger',
+  'trigger 接收链接或按钮元素，在保留正确元素语义的同时让整个附件可点击。':
+    'trigger accepts a link or button element and makes the whole attachment clickable while preserving the correct element semantics.',
+  附件集合: 'Attachment collection',
+  'Attachment.Group 通过 items 渲染一组附件，并为横向溢出提供滚动与吸附行为。':
+    'Attachment.Group renders a collection from items and provides scrolling and snapping for horizontal overflow.',
+  '已废弃，仅为旧调用保留；新代码请使用 mediaType。':
+    'Deprecated and retained only for existing callers; use mediaType in new code.',
+  '2.1 MB · 图片预览': '2.1 MB · Image preview',
+  '8.4 MB · 压缩文件': '8.4 MB · Archive',
+  附件缩略图: 'Attachment thumbnail',
+  '8.4 MB · 已完成': '8.4 MB · Complete',
+  '8.4 MB · 上传失败': '8.4 MB · Upload failed',
+  '8.4 MB · 等待上传': '8.4 MB · Waiting to upload',
+  '8.4 MB · 正在上传': '8.4 MB · Uploading',
+  '下载 web-console.tgz': 'Download web-console.tgz',
+  单击附件打开预览: 'Click the attachment to open a preview',
+  '预览 release-notes.md': 'Preview release-notes.md',
+  'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  media={<FileArchive />}\n  mediaType="icon"\n  title="web-console.tgz"\n/>\n\n<Attachment\n  media={<img alt="附件缩略图" src="/cover.jpg" />}\n  mediaType="image"\n  title="cover.jpg"\n/>':
+    'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  media={<FileArchive />}\n  mediaType="icon"\n  title="web-console.tgz"\n/>\n\n<Attachment\n  media={<img alt="Attachment thumbnail" src="/cover.jpg" />}\n  mediaType="image"\n  title="cover.jpg"\n/>',
+  '<Attachment\n  actions={<Button aria-label="下载附件"><Download /></Button>}\n  title="web-console.tgz"\n/>':
+    '<Attachment\n  actions={<Button aria-label="Download attachment"><Download /></Button>}\n  title="web-console.tgz"\n/>',
+  '<Attachment\n  title="release-notes.md"\n  trigger={<a aria-label="预览 release-notes.md" href="/files/release-notes.md" />}\n/>':
+    '<Attachment\n  title="release-notes.md"\n  trigger={<a aria-label="Preview release-notes.md" href="/files/release-notes.md" />}\n/>',
+  '<Avatar size="sm" alt="林默" fallback="林" />\n<Avatar size="default" alt="林默" fallback="林" />\n<Avatar size="lg" alt="林默" fallback="林" />':
+    '<Avatar size="sm" alt="Lin Mo" fallback="L" />\n<Avatar size="default" alt="Lin Mo" fallback="L" />\n<Avatar size="lg" alt="Lin Mo" fallback="L" />',
+  头像形状: 'Avatar shapes',
+  'shape 在圆形和圆角方形之间切换，每种形状作为独立 case 展示。':
+    'shape switches between circle and rounded-square avatars, with each shape shown as an independent case.',
+  形状: 'Shape',
+  头像尺寸: 'Avatar sizes',
+  'size 提供小、中、大三档尺寸，并同步调整文字与状态标记。':
+    'size provides small, medium, and large avatars while scaling text and status indicators with them.',
+  触发方式: 'Trigger mode',
+  'variant 的每种语义外观都作为独立 case 展示，避免在同一个预览区域混合比较。':
+    'Each semantic variant is shown as an independent case instead of mixing multiple appearances in one preview.',
+  透明: 'Ghost',
+  危险: 'Destructive',
+  气泡预览: 'Bubble preview',
+  'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble\n  align="end"\n  content="已经补充完成，可以重新评审。"\n  reactions="✓ 2"\n  variant="elevated"\n/>':
+    'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble\n  align="end"\n  content="The update is complete and ready for another review."\n  reactions="✓ 2"\n  variant="elevated"\n/>',
 };

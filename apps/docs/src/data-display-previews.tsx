@@ -18,7 +18,6 @@ import { Bubble } from '@heliannuuthus/ui';
 import { Pagination } from '@heliannuuthus/ui';
 import { ScrollArea } from '@heliannuuthus/ui';
 import { Slider } from '@heliannuuthus/ui';
-import { Separator } from '@heliannuuthus/ui';
 import { Table } from '@heliannuuthus/ui';
 import { Tooltip } from '@heliannuuthus/ui';
 import {
@@ -205,6 +204,9 @@ export const AccordionDisabledRootDemo = () => (
 );
 
 type AttachmentState = 'idle' | 'uploading' | 'processing' | 'error' | 'done';
+type AttachmentMediaType = 'icon' | 'image';
+type AttachmentOrientation = 'horizontal' | 'vertical';
+type AttachmentSize = 'default' | 'sm' | 'xs';
 
 const releaseFiles: Array<{
   description: string;
@@ -232,10 +234,118 @@ const releaseFiles: Array<{
   },
 ];
 
-export const AttachmentReleaseDemo = ({
+export const AttachmentBasicDemo = () => (
+  <Attachment
+    description={docsCopy('8.4 MB · 正在校验')}
+    media={<FileArchive />}
+    state="processing"
+    title="web-console.tgz"
+  />
+);
+
+export const AttachmentMediaTypeDemo = ({
+  mediaType = 'icon',
+}: {
+  mediaType?: AttachmentMediaType;
+}) => (
+  <Attachment
+    description={
+      mediaType === 'image'
+        ? docsCopy('2.1 MB · 图片预览')
+        : docsCopy('8.4 MB · 压缩文件')
+    }
+    media={
+      mediaType === 'image' ? (
+        <img alt={docsCopy('附件缩略图')} src="/heliannuuthus.jpg" />
+      ) : (
+        <FileArchive />
+      )
+    }
+    mediaType={mediaType}
+    title={mediaType === 'image' ? 'cover.jpg' : 'web-console.tgz'}
+  />
+);
+
+export const AttachmentStateDemo = ({
+  state = 'done',
+}: {
+  state?: AttachmentState;
+}) => {
+  const descriptions: Record<AttachmentState, string> = {
+    done: docsCopy('8.4 MB · 已完成'),
+    error: docsCopy('8.4 MB · 上传失败'),
+    idle: docsCopy('8.4 MB · 等待上传'),
+    processing: docsCopy('8.4 MB · 正在校验'),
+    uploading: docsCopy('8.4 MB · 正在上传'),
+  };
+
+  return (
+    <Attachment
+      description={descriptions[state]}
+      media={<FileArchive />}
+      state={state}
+      title="web-console.tgz"
+    />
+  );
+};
+
+export const AttachmentSizeDemo = ({
+  size = 'default',
+}: {
+  size?: AttachmentSize;
+}) => (
+  <Attachment
+    description={docsCopy('8.4 MB · 已完成')}
+    media={<FileArchive />}
+    size={size}
+    title="web-console.tgz"
+  />
+);
+
+export const AttachmentOrientationDemo = ({
   orientation = 'horizontal',
 }: {
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: AttachmentOrientation;
+}) => (
+  <Attachment
+    description={docsCopy('8.4 MB · 已完成')}
+    media={<FileArchive />}
+    orientation={orientation}
+    title="web-console.tgz"
+  />
+);
+
+export const AttachmentActionsDemo = () => (
+  <Attachment
+    actions={
+      <Button aria-label={docsCopy('下载 web-console.tgz')} size="icon-xs">
+        <Download />
+      </Button>
+    }
+    description={docsCopy('8.4 MB · 已完成')}
+    media={<FileArchive />}
+    title="web-console.tgz"
+  />
+);
+
+export const AttachmentTriggerDemo = () => (
+  <Attachment
+    description={docsCopy('单击附件打开预览')}
+    media={<FileText />}
+    title="release-notes.md"
+    trigger={
+      <a
+        aria-label={docsCopy('预览 release-notes.md')}
+        href="#attachment-trigger"
+      />
+    }
+  />
+);
+
+export const AttachmentGroupDemo = ({
+  orientation = 'horizontal',
+}: {
+  orientation?: AttachmentOrientation;
 }) => {
   return (
     <div className="display-attachments">
@@ -279,43 +389,46 @@ const avatarPeople = [
   { initials: docsCopy('宋'), tone: 'slate' },
 ] as const;
 
-export const AvatarShapeDemo = () => {
-  const sizes = [
-    { label: docsCopy('小'), meta: '24 px', value: 'sm' },
-    { label: docsCopy('中'), meta: '32 px', value: 'default' },
-    { label: docsCopy('大'), meta: '40 px', value: 'lg' },
-  ] as const;
+export const AvatarShapeDemo = ({
+  shape = 'circle',
+  size = 'default',
+}: {
+  shape?: 'circle' | 'square';
+  size?: 'default' | 'lg' | 'sm';
+}) => {
+  const sizeLabel = {
+    default: docsCopy('中'),
+    lg: docsCopy('大'),
+    sm: docsCopy('小'),
+  }[size];
+  const sizePixels = { default: 32, lg: 40, sm: 24 }[size];
 
   return (
     <div className="display-avatar-shapes">
-      {(['circle', 'square'] as const).map((shape) => (
-        <section className="display-avatar-shape-card" key={shape}>
-          <div className="display-avatar-case-heading">
-            <strong>
-              {shape === 'circle' ? docsCopy('圆形') : docsCopy('圆角方形')}
-            </strong>
-            <code>{`shape="${shape}"`}</code>
+      <section className="display-avatar-shape-card">
+        <div className="display-avatar-case-heading">
+          <strong>
+            {shape === 'circle' ? docsCopy('圆形') : docsCopy('圆角方形')}
+          </strong>
+          <code>{`shape="${shape}" size="${size}"`}</code>
+        </div>
+        <div className="display-avatar-size-row">
+          <div className="display-avatar-size-item">
+            <Avatar
+              alt={avatarPeople[0]?.initials ?? ''}
+              fallback={avatarPeople[0]?.initials}
+              fallbackProps={{
+                className: `display-avatar-tone-${avatarPeople[0]?.tone}`,
+              }}
+              shape={shape}
+              size={size}
+            />
+            <span>
+              {sizeLabel} · {sizePixels} px
+            </span>
           </div>
-          <div className="display-avatar-size-row">
-            {sizes.map((size, index) => (
-              <div className="display-avatar-size-item" key={size.value}>
-                <Avatar
-                  alt={avatarPeople[index]?.initials ?? ''}
-                  fallback={avatarPeople[index]?.initials}
-                  fallbackProps={{
-                    className: `display-avatar-tone-${avatarPeople[index]?.tone}`,
-                  }}
-                  shape={shape}
-                  size={size.value}
-                />
-                <span>
-                  {size.label} · {size.meta}
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
-      ))}
+        </div>
+      </section>
     </div>
   );
 };
@@ -454,38 +567,38 @@ export const AvatarBadgeDemo = () => {
   );
 };
 
-export const BubbleVariantsDemo = () => {
-  const replies = [
-    { label: docsCopy('强调'), token: 'default', variant: 'default' },
-    { label: docsCopy('浮起'), token: 'elevated', variant: 'elevated' },
-    { label: docsCopy('柔和'), token: 'tinted', variant: 'tinted' },
-    { label: docsCopy('描边'), token: 'outline', variant: 'outline' },
-  ] as const;
+type BubbleVariant =
+  | 'default'
+  | 'secondary'
+  | 'muted'
+  | 'elevated'
+  | 'tinted'
+  | 'outline'
+  | 'ghost'
+  | 'destructive';
 
-  return (
-    <div className="display-bubble-variants">
-      {replies.map((reply, index) => (
-        <div className="display-bubble-variant" key={reply.variant}>
-          <div className="display-bubble-variant-label">
-            <strong>{reply.label}</strong>
-            <span>{reply.token}</span>
-          </div>
-          <Bubble.Group>
-            <Bubble
-              align="end"
-              content={docsCopy('已经补充完成，可以重新评审。')}
-              reactions="✓ 2"
-              variant={reply.variant}
-            />
-          </Bubble.Group>
-          {index < replies.length - 1 && (
-            <Separator className="display-bubble-separator" />
-          )}
-        </div>
-      ))}
+export const BubbleVariantsDemo = ({
+  variant = 'default',
+}: {
+  variant?: BubbleVariant;
+}) => (
+  <div className="display-bubble-variants">
+    <div className="display-bubble-variant">
+      <div className="display-bubble-variant-label">
+        <strong>{docsCopy('气泡预览')}</strong>
+        <span>{variant}</span>
+      </div>
+      <Bubble.Group>
+        <Bubble
+          align="end"
+          content={docsCopy('已经补充完成，可以重新评审。')}
+          reactions="✓ 2"
+          variant={variant}
+        />
+      </Bubble.Group>
     </div>
-  );
-};
+  </div>
+);
 
 const conversationMessages: ReadonlyArray<{
   time: string;
@@ -1021,35 +1134,65 @@ const CollapsiblePolicyDemo = () => {
   );
 };
 
-export const CollapsibleTriggerModesDemo = () => {
+export const CollapsibleTriggerModesDemo = ({
+  mode = 'header',
+}: {
+  mode?: 'button' | 'header';
+}) => {
+  const usesButton = mode === 'button';
+
   return (
     <div className="display-collapsible-modes">
       <section>
         <div className="display-collapsible-mode-label">
-          <span>{docsCopy('Header 触发')}</span>
-          <small>{docsCopy('整个摘要区域都可点击')}</small>
+          <span>
+            {usesButton ? docsCopy('按钮触发') : docsCopy('Header 触发')}
+          </span>
+          <small>
+            {usesButton
+              ? docsCopy('Header 静态，仅按钮切换状态')
+              : docsCopy('整个摘要区域都可点击')}
+          </small>
         </div>
-        <CollapsibleBuildDemo />
-      </section>
-      <section>
-        <div className="display-collapsible-mode-label">
-          <span>{docsCopy('按钮触发')}</span>
-          <small>{docsCopy('Header 静态，仅按钮切换状态')}</small>
-        </div>
-        <CollapsiblePolicyDemo />
+        {usesButton ? <CollapsiblePolicyDemo /> : <CollapsibleBuildDemo />}
       </section>
     </div>
   );
 };
 
-export const CollapsibleHeaderIconDemo = () => {
+export const CollapsibleHeaderIconDemo = ({
+  iconMode = 'default',
+}: {
+  iconMode?: 'custom' | 'default' | 'hidden';
+}) => {
+  const icon =
+    iconMode === 'custom' ? (
+      <ChevronRight />
+    ) : iconMode === 'hidden' ? null : undefined;
+
   return (
     <div className="display-collapsible-icon-demo">
       <section>
-        <span>{docsCopy('默认图标')}</span>
+        <span>
+          {iconMode === 'custom'
+            ? docsCopy('自定义图标')
+            : iconMode === 'hidden'
+              ? docsCopy('隐藏图标')
+              : docsCopy('默认图标')}
+        </span>
         <Collapsible
           className="display-collapsible-compact"
-          content={<p>{docsCopy('使用组件内置的方向图标反馈展开状态。')}</p>}
+          content={
+            <p>
+              {iconMode === 'custom'
+                ? docsCopy('通过 icon 替换默认图标，Header 内容保持不变。')
+                : iconMode === 'hidden'
+                  ? docsCopy(
+                      '传入 icon=null，保留 Header 触发能力但不显示指示图标。'
+                    )
+                  : docsCopy('使用组件内置的方向图标反馈展开状态。')}
+            </p>
+          }
           contentClassName="display-collapsible-compact-content"
           header={
             <div className="display-collapsible-summary">
@@ -1057,49 +1200,7 @@ export const CollapsibleHeaderIconDemo = () => {
               <small>{docsCopy('生产环境 · 3 分钟前')}</small>
             </div>
           }
-        />
-      </section>
-      <section>
-        <span>{docsCopy('自定义图标')}</span>
-        <Collapsible
-          className="display-collapsible-compact"
-          content={
-            <p>{docsCopy('通过 icon 替换默认图标，Header 内容保持不变。')}</p>
-          }
-          contentClassName="display-collapsible-compact-content"
-          header={
-            <>
-              <span className="display-status-icon is-success">
-                <PackageCheck />
-              </span>
-              <div className="display-collapsible-summary">
-                <strong>{docsCopy('构建产物已就绪')}</strong>
-                <small>{docsCopy('12 个文件 · 2.4 MB')}</small>
-              </div>
-            </>
-          }
-          icon={<ChevronRight />}
-        />
-      </section>
-      <section>
-        <span>{docsCopy('隐藏图标')}</span>
-        <Collapsible
-          className="display-collapsible-compact"
-          content={
-            <p>
-              {docsCopy(
-                '传入 icon=null，保留 Header 触发能力但不显示指示图标。'
-              )}
-            </p>
-          }
-          contentClassName="display-collapsible-compact-content"
-          header={
-            <div className="display-collapsible-summary">
-              <strong>{docsCopy('纯文本摘要')}</strong>
-              <small>{docsCopy('适合界面已提供其他状态反馈的场景')}</small>
-            </div>
-          }
-          icon={null}
+          icon={icon}
         />
       </section>
     </div>
@@ -1534,7 +1635,7 @@ export const ItemActivityDemo = ({
           description: docsCopy('补充数据库迁移影响与回滚入口。'),
           key: 'release-notes',
           media: <GitCommitHorizontal />,
-          mediaVariant: 'icon',
+          mediaType: 'icon',
           title: docsCopy('许澄提交了发布说明'),
           variant,
         },
@@ -1551,7 +1652,7 @@ export const ItemActivityDemo = ({
           description: docsCopy('确认索引变更不会锁定生产表。'),
           key: 'review-reply',
           media: <MessageCircle />,
-          mediaVariant: 'icon',
+          mediaType: 'icon',
           title: docsCopy('林默回复了检查项'),
           variant,
         },
