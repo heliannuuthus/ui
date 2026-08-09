@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { Badge } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Checkbox } from '@heliannuuthus/ui';
+import { Input } from '@heliannuuthus/ui';
 import { Kbd } from '@heliannuuthus/ui';
 import { Separator } from '@heliannuuthus/ui';
 import { Stack } from '@heliannuuthus/ui';
@@ -29,6 +30,18 @@ import {
   CardSemanticDomDemo,
 } from './card-preview';
 import {
+  CommandDialogDemo,
+  CommandEmptyDemo,
+  CommandGroupsDemo,
+  CommandPlaceholderDemo,
+} from './command-preview';
+import {
+  ContextMenuActionsDemo,
+  ContextMenuSelectionDemo,
+  ContextMenuStateDemo,
+  ContextMenuSubmenuDemo,
+} from './context-menu-preview';
+import {
   MasonryBasicDemo,
   MasonryResponsiveDemo,
   MasonrySpanDemo,
@@ -54,6 +67,8 @@ import {
   FormCustomControlDemo,
   FormIntegrationDemo,
   InputAffixDemo,
+  InputNumberCapacityDemo,
+  InputNumberCurrencyDemo,
   InputOtpVerificationDemo,
   InputStatesDemo,
   RadioDeliveryDemo,
@@ -159,6 +174,13 @@ export type ApiProperty = {
   required?: boolean;
 };
 
+export type ApiTypePreview = {
+  api?: ApiProperty[];
+  declaration?: string;
+  definition?: string;
+  name: string;
+};
+
 export type ComponentPart = {
   name: string;
   description: string;
@@ -196,6 +218,7 @@ export type ComponentDocumentation = {
     preview: ReactNode;
   };
   typeDefinitionGroups?: string[];
+  typePreviews?: ApiTypePreview[];
   api: ApiProperty[];
   accessibility: string[];
   pitfalls: string[];
@@ -2872,6 +2895,7 @@ const remainingComponents = [
   ],
   ['Form', 'form', docsCopy('组织字段结构，并连接状态、校验与提交行为。')],
   ['Input', 'input', docsCopy('接收单行文本或特定格式内容。')],
+  ['Input Number', 'input-number', docsCopy('输入、格式化并按步长调整数值。')],
   ['Radio', 'radio', docsCopy('从互斥选项中选择一个值。')],
   ['Select', 'select', docsCopy('从弹出列表中选择预定义值。')],
   ['Slider', 'slider', docsCopy('在连续或离散范围内选择数值。')],
@@ -3082,6 +3106,208 @@ for (const [slug, preview] of Object.entries(minimalComponentPreviews)) {
     },
   ];
 }
+
+componentDocumentation.command.examples.push(
+  {
+    title: docsCopy('分组与选项'),
+    description: docsCopy(
+      '每个 group 使用 heading 标记分组标题，并通过 options 配置命令值、标签、检索关键词、图标、快捷键、禁用状态和执行回调。'
+    ),
+    preview: <CommandGroupsDemo />,
+    code: `import { Command, type CommandGroup } from '@heliannuuthus/ui'
+
+const groups: CommandGroup[] = [
+  {
+    heading: 'Files',
+    options: [
+      {
+        value: 'new-file',
+        label: 'New file',
+        keywords: ['create', 'document'],
+        shortcut: '⌘N',
+        onSelect: () => createFile(),
+      },
+      { value: 'open-file', label: 'Open file', disabled: true },
+    ],
+  },
+  {
+    heading: 'Preferences',
+    options: [{ value: 'settings', label: 'Open settings' }],
+  },
+]
+
+<Command groups={groups} />`,
+    previewHeight: 480,
+  },
+  {
+    title: docsCopy('搜索输入提示'),
+    description: docsCopy(
+      'placeholder 只描述搜索输入框尚未输入内容时的预期查询，不负责空结果反馈。'
+    ),
+    preview: <CommandPlaceholderDemo />,
+    code: `<Command
+  groups={groups}
+  placeholder="Search pages, files, or settings…"
+/>`,
+    previewHeight: 380,
+  },
+  {
+    title: docsCopy('空结果内容'),
+    description: docsCopy(
+      'emptyText 仅在过滤后没有匹配命令时显示，可以是纯文本，也可以是包含图标、标题和建议的 ReactNode。'
+    ),
+    preview: <CommandEmptyDemo />,
+    code: `const [query, setQuery] = useState('missing command')
+
+<Command
+  groups={groups}
+  inputProps={{ value: query, onChange: setQuery }}
+  emptyText="No matching command"
+/>`,
+    previewHeight: 380,
+  },
+  {
+    title: docsCopy('命令弹窗'),
+    description: docsCopy(
+      'dialog 是 Command 对通用 Dialog 的组合入口，用来把同一份命令列表放入模态层；它负责触发器、标题、说明和开关状态，groups 仍负责命令内容。'
+    ),
+    preview: <CommandDialogDemo />,
+    code: `import { Button, Command } from '@heliannuuthus/ui'
+
+<Command
+  dialog={{
+    trigger: <Button>Open command palette</Button>,
+    title: 'Quick actions',
+    description: 'Search and run a workspace action.',
+  }}
+  groups={groups}
+/>`,
+    previewHeight: 300,
+  }
+);
+
+componentDocumentation['context-menu'].examples = [
+  {
+    title: docsCopy('基础用法'),
+    description: docsCopy(
+      'items 同时体现分组标题、图标、快捷键、禁用项、分隔线和危险操作；选择后结果会显示在触发区域下方。'
+    ),
+    preview: <ContextMenuActionsDemo />,
+    code: `import { ContextMenu } from '@heliannuuthus/ui'
+
+<ContextMenu
+  trigger={<div tabIndex={0}>Right-click here</div>}
+  items={[
+    { type: 'label', label: 'Page actions' },
+    { label: 'Copy link', shortcut: '⌘C', onSelect: copyLink },
+    { label: 'Copy internal link', disabled: true },
+    { type: 'separator' },
+    { label: 'Delete page', destructive: true, onSelect: deletePage },
+  ]}
+/>`,
+    previewHeight: 420,
+  },
+  {
+    title: docsCopy('勾选与单选状态'),
+    description: docsCopy(
+      'checkbox entry 管理独立布尔状态，radio entry 管理互斥选项；关闭菜单后结果仍保留在触发区域中。'
+    ),
+    preview: <ContextMenuSelectionDemo />,
+    code: `<ContextMenu
+  trigger={<div tabIndex={0}>Page visibility</div>}
+  items={[
+    {
+      type: 'checkbox',
+      label: 'Show comments',
+      checked: showComments,
+      onChange: setShowComments,
+    },
+    {
+      type: 'radio',
+      value: access,
+      onChange: setAccess,
+      items: [
+        { label: 'Only me', value: 'private' },
+        { label: 'Team members', value: 'team' },
+      ],
+    },
+  ]}
+/>`,
+    previewHeight: 380,
+  },
+  {
+    title: docsCopy('嵌套子菜单'),
+    description: docsCopy(
+      '普通 item 提供 children 时形成子菜单，适合将同一动作的多个格式或目标收进第二层。'
+    ),
+    preview: <ContextMenuSubmenuDemo />,
+    code: `<ContextMenu
+  trigger={<div tabIndex={0}>File preview</div>}
+  items={[
+    {
+      label: 'Export as',
+      children: [
+        { label: 'PDF document', onSelect: exportPdf },
+        { label: 'PNG image', onSelect: exportPng },
+        { label: 'CSV spreadsheet', onSelect: exportCsv },
+      ],
+    },
+  ]}
+/>`,
+    previewHeight: 380,
+  },
+  {
+    title: docsCopy('开关状态与禁用'),
+    description: docsCopy(
+      '比较默认非受控、通过 open 与 onOpenChange 管理的受控模式，以及 disabled 阻止触发的状态。'
+    ),
+    caseMinWidth: 250,
+    cases: [
+      {
+        isDefault: true,
+        label: docsCopy('非受控'),
+        properties: { defaultOpen: false },
+        values: { mode: 'uncontrolled' },
+      },
+      {
+        label: docsCopy('受控'),
+        properties: { onOpenChange: 'setOpen', open: 'open' },
+        values: { mode: 'controlled' },
+      },
+      {
+        label: docsCopy('禁用'),
+        properties: { disabled: true },
+        values: { mode: 'disabled' },
+      },
+    ],
+    preview: (values) => (
+      <ContextMenuStateDemo
+        mode={
+          values.mode === 'controlled' || values.mode === 'disabled'
+            ? values.mode
+            : 'uncontrolled'
+        }
+      />
+    ),
+    code: `<ContextMenu defaultOpen={false} items={items} trigger={target} />
+<ContextMenu open={open} onOpenChange={setOpen} items={items} trigger={target} />
+<ContextMenu disabled items={items} trigger={target} />`,
+    previewHeight: 380,
+    wide: true,
+  },
+];
+
+componentDocumentation['context-menu'].typePreviews = [
+  {
+    name: 'DropdownMenuEntry',
+    definition: `type DropdownMenuEntry =
+  | { type?: 'item'; label: ReactNode; icon?: ReactNode; shortcut?: ReactNode; href?: string; disabled?: boolean; destructive?: boolean; onSelect?: () => void; children?: DropdownMenuEntry[] }
+  | { type: 'label'; label: ReactNode }
+  | { type: 'separator' }
+  | { type: 'checkbox'; label: ReactNode; checked: boolean; disabled?: boolean; onChange?: (checked: boolean) => void }
+  | { type: 'radio'; value: string; onChange?: (value: string) => void; items: Array<{ label: ReactNode; value: string; disabled?: boolean }> }`,
+  },
+];
 
 const scrollAreaDocumentation = componentDocumentation['scroll-area'];
 if (scrollAreaDocumentation) {
@@ -3445,6 +3671,7 @@ const form = Form.useForm({
     pinned: false,
     region: 'asia',
     reviewThreshold: 2,
+    retryLimit: 3,
     summary: '',
     visibility: 'team',
     workspace: null,
@@ -3501,6 +3728,10 @@ const form = Form.useForm({
 
   <Form.Field name="reviewThreshold" label={t('workspace.reviewThreshold')}>
     <Slider min={1} max={5} />
+  </Form.Field>
+
+  <Form.Field name="retryLimit" label={t('workspace.retryLimit')}>
+    <Input.Number min={0} max={10} />
   </Form.Field>
 
   <Form.Field name="pinned" label={t('workspace.pinned')}>
@@ -3677,6 +3908,123 @@ const form = Form.useForm<Values>({
   onChange={(event) => setValue(event.target.value)}
 />`,
       previewHeight: 380,
+    },
+  ],
+  'input-number': [
+    {
+      title: docsCopy('受控数值与边界'),
+      description: docsCopy(
+        '通过受控值、最小值、最大值和步长管理存储容量，文本输入、键盘与增减按钮共享同一数值状态。'
+      ),
+      preview: <InputNumberCapacityDemo />,
+      code: docsCopy(`import { Input } from '@heliannuuthus/ui'
+
+<Input.Number
+  value={capacity}
+  onChange={setCapacity}
+  min={1}
+  max={256}
+  step={1}
+  suffix="GB"
+/>`),
+      previewHeight: 380,
+    },
+    {
+      title: docsCopy('本地化格式'),
+      description: docsCopy(
+        '使用 Intl.NumberFormat 配置显示货币，同时让 onChange 始终返回未格式化的 number 或 null。'
+      ),
+      preview: <InputNumberCurrencyDemo />,
+      code: docsCopy(`import { Input } from '@heliannuuthus/ui'
+
+<Input.Number
+  value={price}
+  onChange={setPrice}
+  min={0}
+  step={10}
+  smallStep={0.01}
+  locale="zh-CN"
+  format={{
+    style: 'currency',
+    currency: 'CNY',
+    minimumFractionDigits: 2,
+  }}
+/>`),
+      previewHeight: 380,
+    },
+    {
+      title: docsCopy('尺寸与状态'),
+      description: docsCopy(
+        '比较常用尺寸、隐藏步进按钮、只读、禁用和校验失败状态。'
+      ),
+      caseMinWidth: 220,
+      cases: [
+        {
+          isDefault: true,
+          label: docsCopy('默认'),
+          properties: { size: 'default' },
+          values: { size: 'default', state: 'default' },
+        },
+        {
+          label: docsCopy('小尺寸'),
+          properties: { size: 'sm' },
+          values: { size: 'sm', state: 'default' },
+        },
+        {
+          label: docsCopy('大尺寸'),
+          properties: { size: 'lg' },
+          values: { size: 'lg', state: 'default' },
+        },
+        {
+          label: docsCopy('无步进按钮'),
+          properties: { controls: false },
+          values: { size: 'default', state: 'plain' },
+        },
+        {
+          label: docsCopy('只读'),
+          properties: { readOnly: true },
+          values: { size: 'default', state: 'readonly' },
+        },
+        {
+          label: docsCopy('禁用'),
+          properties: { disabled: true },
+          values: { size: 'default', state: 'disabled' },
+        },
+        {
+          label: docsCopy('校验失败'),
+          properties: { 'aria-invalid': true },
+          values: { size: 'default', state: 'invalid' },
+        },
+      ],
+      preview: (values) => (
+        <Input.Number
+          aria-invalid={values.state === 'invalid' || undefined}
+          aria-label={docsCopy('并发任务数')}
+          controls={values.state !== 'plain'}
+          decrementLabel={docsCopy('减少数值')}
+          defaultValue={8}
+          disabled={values.state === 'disabled'}
+          incrementLabel={docsCopy('增加数值')}
+          inputProps={{
+            'aria-roledescription': docsCopy('数字输入框'),
+          }}
+          max={64}
+          min={1}
+          readOnly={values.state === 'readonly'}
+          size={
+            values.size === 'sm' || values.size === 'lg'
+              ? values.size
+              : 'default'
+          }
+        />
+      ),
+      code: `<Input.Number size="sm" defaultValue={8} />
+<Input.Number controls={false} defaultValue={8} />
+<Input.Number value={8} readOnly />
+<Input.Number value={8} disabled />
+<Input.Number aria-invalid defaultValue={8} />`,
+      previewHeight: 360,
+      wide: true,
     },
   ],
   radio: [
@@ -6863,6 +7211,89 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'number',
     },
   ],
+  'input-number': [
+    {
+      name: 'value / defaultValue',
+      description: docsCopy(
+        '以受控或非受控方式设置原始数值；空输入使用 null。'
+      ),
+      type: 'number | null',
+    },
+    {
+      name: 'onChange',
+      description: docsCopy('数值变化时返回未格式化的 number 或 null。'),
+      type: '(value: number | null) => void',
+    },
+    {
+      name: 'onChangeComplete',
+      description: docsCopy('输入失焦、步进结束或键盘提交数值时返回最终值。'),
+      type: '(value: number | null) => void',
+    },
+    {
+      name: 'min / max',
+      description: docsCopy('限制允许输入和步进到达的数值边界。'),
+      type: 'number',
+    },
+    {
+      name: 'step / smallStep / largeStep',
+      description: docsCopy('设置普通、Alt 和 Shift 组合键对应的步进幅度。'),
+      type: "number | 'any' / number / number",
+      defaultValue: '1 / 0.1 / 10',
+    },
+    {
+      name: 'format / locale',
+      description: docsCopy(
+        '使用 Intl.NumberFormatOptions 和语言区域格式化显示值。'
+      ),
+      type: 'Intl.NumberFormatOptions / Intl.LocalesArgument',
+    },
+    {
+      name: 'controls',
+      description: docsCopy('显示、隐藏或自定义递增和递减按钮中的图标。'),
+      type: 'boolean | InputNumberControls',
+      defaultValue: 'true',
+    },
+    {
+      name: 'prefix / suffix',
+      description: docsCopy('在同一输入边框内展示固定前缀或单位后缀。'),
+      type: 'ReactNode',
+    },
+    {
+      name: 'placeholder / autoComplete / inputMode',
+      description: docsCopy('配置原生输入提示、自动填充和软键盘模式。'),
+      type: 'native input attributes',
+    },
+    {
+      name: 'incrementLabel / decrementLabel',
+      description: docsCopy('本地化增减按钮的可访问名称。'),
+      type: 'string',
+    },
+    {
+      name: 'size',
+      description: docsCopy('设置紧凑、默认或宽松控件高度。'),
+      type: "'sm' | 'default' | 'lg'",
+      defaultValue: "'default'",
+    },
+    {
+      name: 'disabled / readOnly / required',
+      description: docsCopy('设置不可用、只读和表单必填语义。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'allowWheelScrub / snapOnStep',
+      description: docsCopy(
+        '选择是否允许悬停滚轮调整，以及步进时吸附到最近倍数。'
+      ),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'className / classNames',
+      description: docsCopy('扩展根节点或输入、按钮等语义插槽样式。'),
+      type: 'string / InputNumberClassNames',
+    },
+  ],
   radio: [
     {
       component: 'Radio',
@@ -7225,6 +7656,38 @@ componentDocumentation.input.parts = [
       '接收固定长度验证码，并使用 variant 切换连接或独立方块布局。'
     ),
   },
+];
+
+componentDocumentation['input-number'].summary = docsCopy(
+  '输入、格式化并通过键盘或步进按钮精确调整数值。'
+);
+componentDocumentation['input-number'].whenToUse = [
+  docsCopy('录入数量、金额、百分比或具有明确步长和边界的数值。'),
+  docsCopy('需要保留原始 number 值，同时按语言区域格式化显示内容。'),
+];
+componentDocumentation['input-number'].parts = [
+  {
+    name: 'Input.Number',
+    description: docsCopy('组合可编辑数值输入、格式化逻辑和可选的增减按钮。'),
+  },
+];
+componentDocumentation['input-number'].accessibility = [
+  docsCopy(
+    '为独立使用的数字输入提供标签或 aria-label；Form.Field 会自动建立标签与说明关联。'
+  ),
+  docsCopy(
+    '方向键按 step 调整，Alt 和 Shift 分别使用 smallStep 与 largeStep。'
+  ),
+  docsCopy('增减按钮保持可访问名称，并在到达边界时自动禁用。'),
+];
+componentDocumentation['input-number'].pitfalls = [
+  docsCopy(
+    '不要把格式化后的字符串存入业务状态；onChange 已返回原始 number 或 null。'
+  ),
+  docsCopy(
+    '金额和精度要求较高的场景应明确 format 与 step，并在业务层处理十进制定点规则。'
+  ),
+  docsCopy('只需要范围内粗略选择时优先使用 Slider。'),
 ];
 
 componentDocumentation.form.summary = docsCopy(
@@ -8302,32 +8765,123 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
   command: [
     {
       name: 'groups',
-      description: docsCopy('配置分组标题与可搜索命令选项。'),
-      type: 'CommandGroup[]',
+      description: docsCopy(
+        '配置一组或多组命令；每组通过 heading 和 options 描述内容。'
+      ),
+      type: 'readonly CommandGroup[]',
     },
     {
       name: 'dialog',
       description: docsCopy(
-        '传入 Dialog 配置后以命令弹窗展示，否则渲染内联命令列表。'
+        '传入 Dialog 配置后把命令列表放入模态层，并配置触发器、标题、说明及打开状态；省略时渲染内联列表。'
       ),
       type: 'Omit<DialogProps, "children">',
     },
     {
-      name: 'placeholder / emptyText',
-      description: docsCopy('设置搜索提示和无匹配结果文案。'),
+      name: 'placeholder',
+      description: docsCopy('设置搜索输入框没有内容时显示的提示。'),
+      type: 'string',
+      defaultValue: docsCopy('搜索命令…'),
+    },
+    {
+      name: 'emptyText',
+      description: docsCopy('设置过滤后没有匹配命令时显示的内容。'),
       type: 'ReactNode',
+      defaultValue: docsCopy('没有找到命令'),
+    },
+    {
+      name: 'inputProps',
+      description: docsCopy(
+        '配置搜索输入框的原生属性，并通过 value 与 onChange 管理搜索关键词。'
+      ),
+      type: 'CommandInputProps',
     },
     {
       name: 'value / defaultValue / onChange',
-      description: docsCopy('管理当前搜索值。'),
+      description: docsCopy('管理当前选中的命令值，不表示搜索关键词。'),
       type: 'string / string / (value: string) => void',
     },
     {
-      name: 'shouldFilter / filter',
+      name: 'filter',
       description: docsCopy(
-        '启用内置过滤，或提供返回匹配分数的自定义过滤函数。'
+        '省略时使用内置过滤；传 false 关闭过滤，或传入返回匹配分数的自定义过滤函数。'
       ),
-      type: 'boolean / (value, search, keywords) => number',
+      type: 'false | CommandFilter',
+      defaultValue: docsCopy('内置过滤'),
+    },
+    {
+      name: 'label',
+      description: docsCopy('设置命令列表供辅助技术读取的可访问名称。'),
+      type: 'string',
+    },
+    {
+      name: 'loop / vimBindings / disablePointerSelection',
+      description: docsCopy(
+        '控制首尾循环、Vim 导航键以及指针悬停是否改变当前命令。'
+      ),
+      type: 'boolean / boolean / boolean',
+    },
+    {
+      component: 'CommandGroup',
+      name: 'heading',
+      description: docsCopy('设置当前命令分组的可选标题。'),
+      type: 'ReactNode',
+    },
+    {
+      component: 'CommandGroup',
+      name: 'options',
+      description: docsCopy('设置当前分组内按顺序展示的命令。'),
+      type: 'readonly CommandOption[]',
+      required: true,
+    },
+    {
+      component: 'CommandOption',
+      name: 'value',
+      description: docsCopy('设置命令的唯一值，并参与默认文本匹配。'),
+      type: 'string',
+      required: true,
+    },
+    {
+      component: 'CommandOption',
+      name: 'label',
+      description: docsCopy(
+        '设置命令列表中显示的主要内容；纯文本标签会自动参与过滤匹配。'
+      ),
+      type: 'ReactNode',
+      required: true,
+    },
+    {
+      component: 'CommandOption',
+      name: 'keywords',
+      description: docsCopy(
+        '补充不显示但可参与过滤匹配的别名；标签为复杂 ReactNode 时也可在这里提供可搜索文本。'
+      ),
+      type: 'string[]',
+    },
+    {
+      component: 'CommandOption',
+      name: 'icon',
+      description: docsCopy('设置显示在命令标签前的图标。'),
+      type: 'ReactNode',
+    },
+    {
+      component: 'CommandOption',
+      name: 'shortcut',
+      description: docsCopy('设置显示在命令右侧的快捷键提示。'),
+      type: 'ReactNode',
+    },
+    {
+      component: 'CommandOption',
+      name: 'disabled',
+      description: docsCopy('禁用命令并阻止选择。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      component: 'CommandOption',
+      name: 'onSelect',
+      description: docsCopy('选择该命令时执行回调并接收命令值。'),
+      type: '(value: string) => void',
     },
   ],
   'context-menu': [
@@ -8339,7 +8893,7 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     {
       name: 'items',
       description: docsCopy('配置普通操作、分隔线、选择项和子菜单。'),
-      type: 'DropdownMenuEntry[]',
+      type: 'readonly DropdownMenuEntry[]',
     },
     {
       name: 'open / defaultOpen / onOpenChange',
@@ -8351,6 +8905,23 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy('禁用上下文菜单触发。'),
       type: 'boolean',
       defaultValue: 'false',
+    },
+    {
+      name: 'highlightItemOnHover / loopFocus',
+      description: docsCopy('控制指针高亮，以及键盘焦点是否在首尾循环。'),
+      type: 'boolean / boolean',
+      defaultValue: 'true / true',
+    },
+    {
+      name: 'orientation',
+      description: docsCopy('设置菜单键盘导航的排列方向。'),
+      type: "'horizontal' | 'vertical'",
+      defaultValue: "'vertical'",
+    },
+    {
+      name: 'contentClassName',
+      description: docsCopy('扩展菜单浮层的样式。'),
+      type: 'string',
     },
   ],
   dialog: [
@@ -8555,6 +9126,63 @@ for (const [slug, api] of Object.entries(publicWrapperApi)) {
   const documentation = componentDocumentation[slug];
   if (documentation && api) documentation.api = api;
 }
+
+componentDocumentation.command.typeDefinitionGroups = [
+  'CommandGroup',
+  'CommandOption',
+];
+componentDocumentation.command.typePreviews = [
+  {
+    name: 'CommandInputProps',
+    declaration:
+      "Omit<InputHTMLAttributes<HTMLInputElement>, 'children' | 'defaultValue' | 'onChange' | 'value'> & {",
+    api: [
+      {
+        name: 'value',
+        description: docsCopy('以受控方式设置当前搜索关键词。'),
+        type: 'string',
+      },
+      {
+        name: 'onChange',
+        description: docsCopy('搜索关键词变化时接收新的字符串值。'),
+        type: '(value: string) => void',
+      },
+    ],
+  },
+];
+componentDocumentation.command.parts = [
+  {
+    name: 'Command',
+    description: docsCopy('渲染搜索输入、过滤结果和键盘可导航的命令列表。'),
+  },
+  {
+    name: 'CommandGroup',
+    description: docsCopy('描述一个可选标题和该分组包含的命令选项。'),
+  },
+  {
+    name: 'CommandOption',
+    description: docsCopy(
+      '描述单条命令的值、内容、搜索关键词、状态和执行行为。'
+    ),
+  },
+];
+componentDocumentation.command.whenToUse = [
+  docsCopy('需要从较多页面、文件、设置或操作中快速搜索并执行命令。'),
+  docsCopy('需要同时支持键盘导航、快捷键提示和模糊检索。'),
+  docsCopy('需要在页面内嵌列表与模态命令面板之间复用同一组命令数据。'),
+];
+componentDocumentation.command.accessibility = [
+  docsCopy('使用 label 为命令列表提供明确的可访问名称。'),
+  docsCopy('键盘用户可以输入关键词，并通过方向键移动、Enter 执行命令。'),
+  docsCopy('禁用命令需要使用 disabled，不要仅通过颜色表达不可用状态。'),
+];
+componentDocumentation.command.pitfalls = [
+  docsCopy(
+    'placeholder 描述可搜索内容，emptyText 说明搜索无结果，两者不要混用。'
+  ),
+  docsCopy('value 管理当前命令选择；搜索关键词应通过 inputProps 管理。'),
+  docsCopy('shortcut 只负责展示提示，应用仍需自行注册对应的全局快捷键。'),
+];
 
 const spaciousPreviewHeights: Record<string, number> = {
   'aspect-ratio': 560,

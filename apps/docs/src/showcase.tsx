@@ -15,6 +15,7 @@ import { Input } from '@heliannuuthus/ui';
 import { Item } from '@heliannuuthus/ui';
 import { Label } from '@heliannuuthus/ui';
 import { Masonry } from '@heliannuuthus/ui';
+import { Popover } from '@heliannuuthus/ui';
 import { Separator } from '@heliannuuthus/ui';
 import { Sidebar } from '@heliannuuthus/ui';
 import { Toggle } from '@heliannuuthus/ui';
@@ -105,6 +106,114 @@ const groupApiProperties = (
   }
 
   return Array.from(groups, ([component, api]) => ({ api, component }));
+};
+
+type ApiTypeDefinition = {
+  api?: ApiProperty[];
+  declaration?: string;
+  definition?: string;
+  name: string;
+};
+
+const apiTypeDefinitions = (() => {
+  const definitions = new Map<string, ApiTypeDefinition>();
+
+  for (const documentation of Object.values(componentDocumentation)) {
+    const groups = groupApiProperties(documentation.api, documentation.name);
+    const primaryGroup = groups.find(
+      (group) => group.component === documentation.name
+    );
+    const componentTypeName = documentation.name.replace(/[^A-Za-z0-9_$]/g, '');
+
+    if (primaryGroup && componentTypeName) {
+      const name = `${componentTypeName}Props`;
+      definitions.set(name, { api: primaryGroup.api, name });
+    }
+
+    for (const group of groups) {
+      if (documentation.typeDefinitionGroups?.includes(group.component)) {
+        definitions.set(group.component, {
+          api: group.api,
+          name: group.component,
+        });
+      }
+    }
+
+    for (const preview of documentation.typePreviews ?? []) {
+      definitions.set(preview.name, preview);
+    }
+  }
+
+  return definitions;
+})();
+
+const ApiTypeDefinitionPreview = ({
+  definition,
+}: {
+  definition: ApiTypeDefinition;
+}) => (
+  <div className="component-api-type-definition">
+    {definition.definition ? (
+      <pre className="component-api-type-source">
+        <code>{definition.definition}</code>
+      </pre>
+    ) : (
+      <>
+        <code className="component-api-type-declaration">
+          <span>type</span> <strong>{definition.name}</strong> ={' '}
+          {definition.declaration ?? '{'}
+        </code>
+        <div className="component-api-type-fields">
+          {definition.api?.map((property) => (
+            <div key={property.name}>
+              <code>
+                <strong>{property.name}</strong>
+                {property.required ? ':' : '?:'} {property.type}
+              </code>
+              <p>{property.description}</p>
+            </div>
+          ))}
+        </div>
+        <code className="component-api-type-declaration">{'}'}</code>
+      </>
+    )}
+  </div>
+);
+
+const ApiType = ({ type }: { type: string }) => {
+  const { t } = useTranslation();
+  const parts = type.split(/([A-Za-z_$][A-Za-z0-9_$]*)/g);
+
+  return (
+    <code className="component-api-type">
+      {parts.map((part, index) => {
+        const definition = apiTypeDefinitions.get(part);
+
+        if (!definition) return part;
+
+        return (
+          <Popover
+            align="start"
+            content={<ApiTypeDefinitionPreview definition={definition} />}
+            contentClassName="component-api-type-popover"
+            delay={180}
+            key={`${part}-${index}`}
+            side="top"
+            trigger={
+              <button
+                aria-label={t('docs.previewType', { type: part })}
+                className="component-api-type-reference"
+                type="button"
+              >
+                {part}
+              </button>
+            }
+            triggerMode="hover"
+          />
+        );
+      })}
+    </code>
+  );
 };
 
 const classNameSlotExamples: Record<string, string> = {
@@ -1251,7 +1360,7 @@ const ComponentPage = () => {
                                 <div key={property.name}>
                                   <code>{property.name}</code>
                                   <span>{property.description}</span>
-                                  <code>{property.type}</code>
+                                  <ApiType type={property.type} />
                                   <code>{property.defaultValue ?? '—'}</code>
                                 </div>
                               ))}

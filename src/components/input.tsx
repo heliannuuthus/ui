@@ -11,6 +11,7 @@ import {
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
+import { InputNumber } from './input-number';
 
 type InputOTPVariant = 'connected' | 'separated';
 
@@ -358,6 +359,7 @@ const TextArea = ({
 };
 
 const Input = Object.assign(InputRoot, {
+  Number: InputNumber,
   OTP: OTPField,
   TextArea,
 });
@@ -374,3 +376,9 @@ export type {
   InputProps,
   TextAreaProps,
 };
+export type {
+  InputNumberClassNames,
+  InputNumberControls,
+  InputNumberProps,
+  InputNumberSize,
+} from './input-number';

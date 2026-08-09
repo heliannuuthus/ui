@@ -276,6 +276,7 @@ type FormShowcaseValues = {
   pinned: boolean;
   region: string;
   reviewThreshold: number;
+  retryLimit: number | null;
   summary: string;
   visibility: string;
   workspace: string | null;
@@ -296,6 +297,7 @@ export const FormIntegrationDemo = () => {
       pinned: false,
       region: 'asia',
       reviewThreshold: 2,
+      retryLimit: 3,
       summary: '',
       visibility: 'team',
       workspace: 'design',
@@ -393,6 +395,22 @@ export const FormIntegrationDemo = () => {
             description={docsCopy('设置发布前需要的审核人数。')}
           >
             <Slider min={1} max={5} step={1} />
+          </Form.Field>
+
+          <Form.Field
+            name="retryLimit"
+            label={docsCopy('重试次数')}
+            description={docsCopy('设置临时失败后的最大重试次数。')}
+          >
+            <Input.Number
+              decrementLabel={docsCopy('减少数值')}
+              incrementLabel={docsCopy('增加数值')}
+              inputProps={{
+                'aria-roledescription': docsCopy('数字输入框'),
+              }}
+              max={10}
+              min={0}
+            />
           </Form.Field>
 
           <Form.Field
@@ -664,6 +682,77 @@ export const InputAffixDemo = () => {
         />
         <span className="data-field-hint">{note.length} / 120</span>
       </div>
+    </div>
+  );
+};
+
+export const InputNumberCapacityDemo = () => {
+  const [capacity, setCapacity] = useState<number | null>(32);
+
+  return (
+    <div className="data-form-stack">
+      <div className="minimal-field">
+        <Label htmlFor="storage-capacity">{docsCopy('存储容量')}</Label>
+        <Input.Number
+          decrementLabel={docsCopy('减少数值')}
+          id="storage-capacity"
+          incrementLabel={docsCopy('增加数值')}
+          inputProps={{
+            'aria-roledescription': docsCopy('数字输入框'),
+          }}
+          max={256}
+          min={1}
+          onChange={setCapacity}
+          step={1}
+          suffix="GB"
+          value={capacity}
+        />
+        <small className="data-field-hint">
+          {docsCopy('使用方向键或增减按钮逐级调整。')}
+        </small>
+      </div>
+      <p className="data-result" aria-live="polite">
+        {docsCopy('当前容量：')}
+        {capacity == null ? docsCopy('未设置') : `${capacity} GB`}
+      </p>
+    </div>
+  );
+};
+
+export const InputNumberCurrencyDemo = () => {
+  const locale = useDocsLocale();
+  const [price, setPrice] = useState<number | null>(1280);
+
+  return (
+    <div className="data-form-stack">
+      <div className="minimal-field">
+        <Label htmlFor="service-price">{docsCopy('服务价格')}</Label>
+        <Input.Number
+          decrementLabel={docsCopy('减少数值')}
+          format={{
+            currency: 'CNY',
+            currencyDisplay: 'symbol',
+            maximumFractionDigits: 2,
+            minimumFractionDigits: 2,
+            style: 'currency',
+          }}
+          id="service-price"
+          incrementLabel={docsCopy('增加数值')}
+          inputProps={{
+            'aria-roledescription': docsCopy('数字输入框'),
+          }}
+          locale={locale === 'en' ? 'en-US' : 'zh-CN'}
+          min={0}
+          onChange={setPrice}
+          smallStep={0.01}
+          step={10}
+          value={price}
+        />
+      </div>
+      <p className="data-result" aria-live="polite">
+        {docsCopy('原始数值：')}
+        {price ?? docsCopy('未设置')}
+      </p>
     </div>
   );
 };

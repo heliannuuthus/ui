@@ -113,6 +113,11 @@ export const componentSearchMetadata = {
     ['输入框', '文本输入'],
     ['text field', 'textbox'],
   ],
+  'input-number': [
+    'Accepts, formats, and steps through numeric values within optional boundaries.',
+    ['数字输入框', '数值', '步进器', '金额'],
+    ['number input', 'numeric field', 'stepper', 'currency'],
+  ],
   radio: [
     'Selects one value from a mutually exclusive group.',
     ['单选框', '单选'],

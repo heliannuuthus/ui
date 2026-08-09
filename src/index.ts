@@ -82,6 +82,7 @@ export {
 export { Collapsible, type CollapsibleProps } from './components/collapsible';
 export {
   Command,
+  type CommandFilter,
   type CommandGroup,
   type CommandInputProps,
   type CommandOption,
@@ -147,6 +148,10 @@ export {
 export {
   Input,
   type InputClassNames,
+  type InputNumberClassNames,
+  type InputNumberControls,
+  type InputNumberProps,
+  type InputNumberSize,
   type InputOTPProps,
   type InputOTPVariant,
   type InputProps,

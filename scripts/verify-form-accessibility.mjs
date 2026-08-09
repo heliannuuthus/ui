@@ -69,6 +69,7 @@ const AccessibilityFixture = () => {
       email: '',
       location: '',
       priority: '',
+      retries: 3,
       role: 'reader',
       threshold: 50,
     },
@@ -122,6 +123,15 @@ const AccessibilityFixture = () => {
     React.createElement(
       Form.Field,
       {
+        description: 'Limits transient failures.',
+        label: 'Retry count',
+        name: 'retries',
+      },
+      React.createElement(Input.Number, { max: 10, min: 0 })
+    ),
+    React.createElement(
+      Form.Field,
+      {
         description: 'Choose how urgently this should be handled.',
         label: 'Priority',
         name: 'priority',
@@ -143,8 +153,8 @@ const descriptions = [
   ...markup.matchAll(/<p[^>]*data-slot="field-description"[^>]*>/g),
 ].map(([element]) => element);
 
-assert.equal(labels.length, 5);
-assert.equal(descriptions.length, 5);
+assert.equal(labels.length, 6);
+assert.equal(descriptions.length, 6);
 
 const input = elementWithSlot(markup, 'input', 'input');
 assert.equal(attribute(labels[0], 'for'), attribute(input, 'id'));
@@ -180,14 +190,29 @@ assert.equal(
   attribute(descriptions[3], 'id')
 );
 
+const numberInput = elementWithSlot(markup, 'input', 'input-number-input');
+assert.equal(attribute(labels[4], 'for'), attribute(numberInput, 'id'));
+assert.equal(
+  attribute(numberInput, 'aria-describedby'),
+  attribute(descriptions[4], 'id')
+);
+const numberFormInput = markup.match(/<input[^>]*type="number"[^>]*>/)?.[0];
+assert.ok(
+  numberFormInput,
+  'Expected Input.Number to render a native form input.'
+);
+assert.equal(attribute(numberFormInput, 'aria-hidden'), 'true');
+assert.equal(attribute(numberFormInput, 'name'), 'retries');
+assert.equal(attribute(numberFormInput, 'value'), '3');
+
 const customGroup = elementWithSlot(markup, 'div', 'custom-group');
 assert.equal(
   attribute(customGroup, 'aria-labelledby'),
-  attribute(labels[4], 'id')
+  attribute(labels[5], 'id')
 );
 assert.equal(
   attribute(customGroup, 'aria-describedby'),
-  attribute(descriptions[4], 'id')
+  attribute(descriptions[5], 'id')
 );
 assert.equal(attribute(customGroup, 'aria-required'), 'true');
 
@@ -217,5 +242,5 @@ assert.throws(
 );
 
 globalThis.console.log(
-  'Verified Form.Field labels, descriptions, automatic custom control injection, single-child enforcement, custom groups, and group ARIA relationships, including Slider.'
+  'Verified Form.Field labels, descriptions, automatic custom control injection, single-child enforcement, custom groups, and group ARIA relationships, including Input.Number and Slider.'
 );
