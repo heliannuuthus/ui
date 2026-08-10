@@ -64,7 +64,6 @@ export {
   type ButtonProps,
   type ButtonRef,
 } from './components/button';
-export { Calendar } from './components/calendar';
 export {
   Card,
   type CardClassNames,
@@ -154,7 +153,6 @@ export {
   type DropdownMenuStyles,
 } from './components/dropdown-menu';
 export { Empty, type EmptyProps } from './components/empty';
-export { Field } from './components/field';
 export {
   Form,
   type FormFieldControlProps,
@@ -194,7 +192,6 @@ export {
   type ItemProps,
 } from './components/item';
 export { Kbd, type KbdProps } from './components/kbd';
-export { Label } from './components/label';
 export {
   Layout,
   type LayoutContentProps,
@@ -224,11 +221,6 @@ export {
   type MenubarMenuConfig,
   type MenubarProps,
 } from './components/menubar';
-export {
-  NativeSelect,
-  type NativeSelectOption,
-  type NativeSelectProps,
-} from './components/native-select';
 export {
   NavigationMenu,
   navigationMenuTriggerStyle,
@@ -288,8 +280,6 @@ export {
   useSelectAnchor,
 } from './components/select';
 export { Separator, type SeparatorProps } from './components/separator';
-export { Sheet, type SheetProps } from './components/sheet';
-export { Sidebar, useSidebar } from './components/sidebar';
 export { Skeleton, type SkeletonEffect } from './components/skeleton';
 export {
   Slider,

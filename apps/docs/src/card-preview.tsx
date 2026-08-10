@@ -3,7 +3,7 @@ import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { Card } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
-import { Label } from '@heliannuuthus/ui';
+import { DemoLabel } from './demo-label';
 import { MoreHorizontal } from 'lucide-react';
 
 const cardSemanticRegions = [
@@ -97,7 +97,9 @@ export const CardAnatomyDemo = () => {
     >
       <span className="card-region-label">Content</span>
       <div className="card-showcase-field">
-        <Label htmlFor="card-workspace-name">{docsCopy('工作区名称')}</Label>
+        <DemoLabel htmlFor="card-workspace-name">
+          {docsCopy('工作区名称')}
+        </DemoLabel>
         <Input id="card-workspace-name" defaultValue="Heliannuuthus UI" />
       </div>
     </Card>

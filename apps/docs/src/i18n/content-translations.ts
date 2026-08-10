@@ -4644,4 +4644,12 @@ const ActionCell = () => {
   'Table 语义区域': 'Table semantic regions',
   'import { Alert, Empty, Table } from \'@heliannuuthus/ui\'\n\nif (request.error) {\n  return <Alert variant="error" title="发布记录加载失败" />\n}\n\nif (!request.pending && records.length === 0) {\n  return <Empty title="没有匹配记录" />\n}\n\n<Table\n  columns={columns}\n  data={records}\n  loading={request.pending}\n/>':
     'import { Alert, Empty, Table } from \'@heliannuuthus/ui\'\n\nif (request.error) {\n  return <Alert variant="error" title="Failed to load release records" />\n}\n\nif (!request.pending && records.length === 0) {\n  return <Empty title="No matching records" />\n}\n\n<Table\n  columns={columns}\n  data={records}\n  loading={request.pending}\n/>',
+  'import { Form, Input } from \'@heliannuuthus/ui\'\n\n<Form.Field\n  name="handle"\n  label="个人标识"\n  description="用于生成公开资料地址。"\n  rules={{ pattern: /^[a-z0-9-]+$/ }}\n>\n  <Input />\n</Form.Field>':
+    'import { Form, Input } from \'@heliannuuthus/ui\'\n\n<Form.Field\n  name="handle"\n  label="Handle"\n  description="Used to generate the public profile URL."\n  rules={{ pattern: /^[a-z0-9-]+$/ }}\n>\n  <Input />\n</Form.Field>',
+  'Form.Field 自动关联标签与真实控件，并统一生成必填标记和辅助说明。':
+    'Form.Field automatically associates labels with controls and consistently generates required markers and supporting descriptions.',
+  'import { Form, Input } from \'@heliannuuthus/ui\'\n\n<Form.Field name="teamName" label="团队名称" required>\n  <Input />\n</Form.Field>\n\n<Form.Field name="role" label="职位" description="可选">\n  <Input />\n</Form.Field>':
+    'import { Form, Input } from \'@heliannuuthus/ui\'\n\n<Form.Field name="teamName" label="Team name" required>\n  <Input />\n</Form.Field>\n\n<Form.Field name="role" label="Role" description="Optional">\n  <Input />\n</Form.Field>',
+  '从视口或指定父容器的任意边缘打开抽屉，并根据 behavior 调整稳定面板与手势呈现。':
+    'Open a drawer from any edge of the viewport or a specified container, using behavior to choose stable panel or gesture presentation.',
 };

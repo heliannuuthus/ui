@@ -34,9 +34,10 @@ form, import `Controller`, or manually adapt controls such as `Switch`.
 
 ## Layers
 
-### `Field`: presentation
+### Internal field presentation
 
-`Field` remains independent of any form-state library. It provides:
+The private `Field` implementation remains independent of any form-state
+library. It provides:
 
 - fieldset, legend and group structure;
 - label, description and error presentation;
@@ -44,7 +45,9 @@ form, import `Controller`, or manually adapt controls such as `Switch`.
 - invalid and disabled styling hooks;
 - accessible semantic structure.
 
-`Field` does not register names, store values, run validation or submit data.
+It is not exported as a standalone public component. It does not register
+names, store values, run validation or submit data; consumers access the
+presentation contract through `Form.Field`.
 
 ### `Form`: state and submission
 
@@ -158,7 +161,6 @@ The adapter layer preserves these component-facing conventions:
 | `Input.TextArea` | `string`                       | `value`, `onChange`   | textarea event      |
 | `Input.OTP`      | `string`                       | `value`, `onChange`   | string              |
 | `Input.Number`   | `number \| null`               | `value`, `onChange`   | number or `null`    |
-| `NativeSelect`   | `string` or string array       | `value`, `onChange`   | select event        |
 | `Select`         | item, item array or `null`     | `value`, `onChange`   | selected value      |
 | `Switch`         | `boolean`                      | `checked`, `onChange` | boolean             |
 | `Checkbox`       | `boolean`                      | `checked`, `onChange` | boolean             |
@@ -294,7 +296,7 @@ code and documentation use `Form.Field`.
 - Product code owns validation schemas and domain rules.
 - `Form` may provide adapters for supported standard-schema validators, but the
   UI package does not own product schemas.
-- `Form.Field` displays field errors through `Field.Error`.
+- `Form.Field` displays field errors through its internal error presentation.
 - The default presentation shows the active field error message.
 - Server errors can be assigned to a field path with `form.setError`.
 - A description remains associated with its control when an error is present.
@@ -320,7 +322,8 @@ code and documentation use `Form.Field`.
 ## Arrays and nested fields
 
 - `name` supports typed nested paths such as `members.0.email`.
-- Array mutation belongs to the Form API rather than `Field`.
+- Array mutation belongs to the Form API rather than the internal field
+  presentation layer.
 - Reusable product subforms may receive a scoped field path or form group, but
   product-domain sections do not belong in this package.
 - A schema-driven field renderer is not required. JSX remains the primary

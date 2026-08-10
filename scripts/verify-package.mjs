@@ -126,6 +126,28 @@ if (publicExports.length === 0) {
   throw new Error('The package root must expose public components and types.');
 }
 
+const removedPublicExports = new Set([
+  'Calendar',
+  'Field',
+  'Label',
+  'NativeSelect',
+  'NativeSelectOption',
+  'NativeSelectProps',
+  'Sheet',
+  'SheetProps',
+  'Sidebar',
+  'useSidebar',
+]);
+const retainedRemovedExports = publicExports
+  .map((entry) => entry.name)
+  .filter((name) => removedPublicExports.has(name));
+
+if (retainedRemovedExports.length > 0) {
+  throw new Error(
+    `Consolidated compatibility exports must stay private: ${retainedRemovedExports.join(', ')}`
+  );
+}
+
 const genericImportSizes = await bundleSource(
   [
     "import '@heliannuuthus/ui/styles.css';",

@@ -8,7 +8,7 @@ import { Button } from '@heliannuuthus/ui';
 import { Checkbox } from '@heliannuuthus/ui';
 import { Dialog } from '@heliannuuthus/ui';
 import { Drawer } from '@heliannuuthus/ui';
-import { Label } from '@heliannuuthus/ui';
+import { DemoLabel } from './demo-label';
 import { Input } from '@heliannuuthus/ui';
 import { Popover } from '@heliannuuthus/ui';
 import { Progress } from '@heliannuuthus/ui';
@@ -165,11 +165,11 @@ export const DialogReleaseDemo = () => {
     >
       <div className="feedback-form-grid">
         <div>
-          <Label htmlFor="release-version">{docsCopy('版本')}</Label>
+          <DemoLabel htmlFor="release-version">{docsCopy('版本')}</DemoLabel>
           <Input id="release-version" defaultValue="v0.12.0" />
         </div>
         <div>
-          <Label htmlFor="release-time">{docsCopy('发布时间')}</Label>
+          <DemoLabel htmlFor="release-time">{docsCopy('发布时间')}</DemoLabel>
           <Input id="release-time" type="datetime-local" />
         </div>
       </div>

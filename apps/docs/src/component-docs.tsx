@@ -3762,33 +3762,33 @@ const dataEntryExamples: Record<string, ComponentExample[]> = {
         '同时展示标签、说明、错误信息，以及适合设置项的水平字段。'
       ),
       preview: <FieldProfileDemo />,
-      code: docsCopy(`import { Field } from '@heliannuuthus/ui'
+      code: docsCopy(`import { Form, Input } from '@heliannuuthus/ui'
 
-<Field data-invalid="true">
-  <Field.Label htmlFor="handle">个人标识</Field.Label>
-  <Input id="handle" aria-invalid />
-  <Field.Error>只能使用小写字母、数字和连字符。</Field.Error>
-</Field>`),
+<Form.Field
+  name="handle"
+  label="个人标识"
+  description="用于生成公开资料地址。"
+  rules={{ pattern: /^[a-z0-9-]+$/ }}
+>
+  <Input />
+</Form.Field>`),
       previewHeight: 500,
     },
     {
       title: docsCopy('标签关联与必要性'),
       description: docsCopy(
-        'Label 通过 htmlFor 关联真实控件；必填标记和可选提示作为 Field 的辅助信息。'
+        'Form.Field 自动关联标签与真实控件，并统一生成必填标记和辅助说明。'
       ),
       preview: <FieldLabelPairingDemo />,
-      code: docsCopy(`import { Field } from '@heliannuuthus/ui'
+      code: docsCopy(`import { Form, Input } from '@heliannuuthus/ui'
 
-<Field>
-  <Field.Label htmlFor="team-name">团队名称 *</Field.Label>
-  <Input id="team-name" required />
-</Field>
+<Form.Field name="teamName" label="团队名称" required>
+  <Input />
+</Form.Field>
 
-<Field>
-  <Field.Label htmlFor="role">职位</Field.Label>
-  <Input id="role" />
-  <Field.Description>可选</Field.Description>
-</Field>`),
+<Form.Field name="role" label="职位" description="可选">
+  <Input />
+</Form.Field>`),
       previewHeight: 340,
     },
     {
@@ -3803,7 +3803,6 @@ const dataEntryExamples: Record<string, ComponentExample[]> = {
   DatePicker,
   Form,
   Input,
-  NativeSelect,
   Radio,
   Select,
   Slider,
@@ -3848,7 +3847,7 @@ const form = Form.useForm({
   </Form.Field>
 
   <Form.Field name="region" label={t('workspace.region')}>
-    <NativeSelect options={regionOptions} />
+    <Select options={regionOptions} />
   </Form.Field>
 
   <Form.Field name="workspace" label={t('workspace.parent')}>
@@ -7631,7 +7630,7 @@ componentDocumentation.counter.pitfalls = [
 ];
 
 componentDocumentation.drawer.summary = docsCopy(
-  '统一桌面 Sheet 与移动端 Drawer：从视口或指定父容器的任意边缘打开，并根据 behavior 调整面板与手势呈现。'
+  '从视口或指定父容器的任意边缘打开抽屉，并根据 behavior 调整稳定面板与手势呈现。'
 );
 componentDocumentation.drawer.whenToUse = [
   docsCopy('需要从当前视口边缘承接筛选、详情、导航或短流程任务。'),
@@ -8205,25 +8204,11 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: 'FormFieldInjectedControlProps<Value>',
     },
     {
-      component: 'Field',
+      component: 'Form.Field',
       name: 'orientation',
       description: docsCopy('设置标签、内容与控件的排列方向。'),
       type: "'vertical' | 'horizontal' | 'responsive'",
       defaultValue: "'vertical'",
-    },
-    {
-      component: 'Field',
-      name: 'data-invalid',
-      description: docsCopy('将错误语义和颜色传递给整个字段。'),
-      type: 'boolean',
-    },
-    {
-      component: 'Field.Label',
-      name: 'htmlFor',
-      description: docsCopy(
-        '关联目标表单控件的 id，使标签可点击并提供可访问名称。'
-      ),
-      type: 'string',
     },
   ],
   input: [
@@ -9268,26 +9253,6 @@ replaceExampleCodes('chart', [
     <Area dataKey="success" />
   </AreaChart>
 </Chart>`,
-]);
-
-replaceExampleCodes('field', [
-  docsCopy(`import { Field } from '@heliannuuthus/ui'
-
-<Field data-invalid>
-  <Field.Label htmlFor="handle">个人标识</Field.Label>
-  <Input id="handle" aria-invalid />
-  <Field.Description>用于生成公开资料地址。</Field.Description>
-  <Field.Error>只能使用小写字母、数字和连字符。</Field.Error>
-</Field>`),
-  docsCopy(`import { Field } from '@heliannuuthus/ui'
-
-<Field orientation="horizontal">
-  <Field.Content>
-    <Field.Title>公开邮箱</Field.Title>
-    <Field.Description>允许其他成员联系你。</Field.Description>
-  </Field.Content>
-  <Switch />
-</Field>`),
 ]);
 
 replaceExampleCodes('checkbox', [
