@@ -53,6 +53,7 @@ import {
   StackCompactVariantsDemo,
   StackGapDemo,
 } from './stack-preview';
+import { TableSemanticDomDemo } from './table-preview';
 import {
   DropdownMenuActionsDemo,
   DropdownMenuSelectionDemo,
@@ -124,9 +125,12 @@ import {
   CollapsibleTriggerModesDemo,
   CounterBuildDemo,
   TableManagedExpandableDemo,
+  TableManualModeDemo,
+  TableControlledStateDemo,
   TableGroupedHeaderDemo,
   TableManagedDemo,
   TableManagedVirtualDemo,
+  TableStatusDemo,
   EmptyCompositionDemo,
   EmptyDefaultDemo,
   EmptyIconDemo,
@@ -138,7 +142,6 @@ import {
   ItemSizeDemo,
   ItemStructureDemo,
   MarkerLinkDemo,
-  MarkerTimelineDemo,
   ItemMemberDirectoryDemo,
   ItemResourceDemo,
   ItemSettingsDemo,
@@ -3642,12 +3645,12 @@ if (tableBasicExample) {
   tableBasicExample.code = docsCopy(`import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 
-<Table>
+<Table.Primitive>
   <Table.Caption>今晚 22:00 发布窗口中的服务。</Table.Caption>
   <Table.Header>{/* column headings */}</Table.Header>
   <Table.Body>{/* release rows */}</Table.Body>
   <Table.Footer>{/* summary */}</Table.Footer>
-</Table>`);
+</Table.Primitive>`);
   tableBasicExample.previewHeight = 460;
 }
 
@@ -5180,31 +5183,29 @@ import { ChevronRight } from 'lucide-react'
     {
       title: docsCopy('基础用法'),
       description: docsCopy(
-        '默认组合筛选、排序、固定列、操作列、Caption、Footer 和 Pagination；业务只需要提供 data 与 ColumnDef。'
+        '默认组合搜索、排序、固定列、操作列、Caption、Footer 和 Pagination；业务只需要提供 data 与 TableColumn。'
       ),
       preview: <TableManagedDemo />,
       code: docsCopy(`import {
   Table,
-  type ColumnDef,
+  type TableColumn,
 } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 import { DropdownMenu } from '@heliannuuthus/ui'
 import { MoreHorizontal } from 'lucide-react'
 
-const columns: ColumnDef<Release>[] = [
+const columns: TableColumn<Release>[] = [
   {
-    accessorKey: 'version',
-    header: ({ column }) => (
-      <Table.ColumnHeader column={column}>版本</Table.ColumnHeader>
-    ),
+    accessor: 'version',
+    header: '版本',
+    sortable: true,
   },
   {
-    id: 'actions',
+    key: 'actions',
+    align: 'center',
+    fixed: 'end',
     header: '操作',
-    meta: {
-      align: 'center',
-      fixed: 'end',
-    },
+    width: 144,
     render: (_, row) => (
       <Table.Actions aria-label={row.version + ' 操作'}>
         <Button variant="ghost">查看</Button>
@@ -5235,9 +5236,9 @@ const columns: ColumnDef<Release>[] = [
   caption="最近五次生产与预览环境发布。"
   columns={columns}
   data={releaseRecords}
-  filterColumn="version"
+  search={{ columnKeys: ['version'], placeholder: '筛选版本…' }}
   footer={(rows) => \`当前页 \${rows.length} 条发布记录\`}
-  getRowKey={(row) => row.version}
+  rowKey="version"
   pagination={{ pageSize: 3 }}
   tableProps={{ className: 'min-w-[820px] table-fixed' }}
 />`),
@@ -5250,7 +5251,7 @@ const columns: ColumnDef<Release>[] = [
         'expandable 会自动补齐展开列、键盘按钮和跨列详情行；固定在起始侧的业务列会自动避开展开按钮。'
       ),
       preview: <TableManagedExpandableDemo />,
-      code: `import { Table } from '@heliannuuthus/ui'
+      code: docsCopy(`import { Table } from '@heliannuuthus/ui'
 
 <Table
   columns={columns}
@@ -5259,45 +5260,45 @@ const columns: ColumnDef<Release>[] = [
     defaultExpandedRowKeys: ['v0.12.0'],
     render: (row) => <ReleaseDetail release={row} />,
   }}
-  getRowKey={(row) => row.version}
+  rowKey="version"
   pagination={false}
-/>`,
+/>`),
       wide: true,
       previewHeight: 560,
     },
     {
       title: docsCopy('分组表头'),
       description: docsCopy(
-        '在 ColumnDef 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。'
+        '在 TableColumn 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。'
       ),
       preview: <TableGroupedHeaderDemo />,
       code: docsCopy(`import {
   Table,
-  type ColumnDef,
+  type TableColumn,
 } from '@heliannuuthus/ui'
 
-const columns: ColumnDef<Release>[] = [
+const columns: TableColumn<Release>[] = [
   {
     header: '发布信息',
     columns: [
-      { accessorKey: 'version', header: '版本' },
-      { accessorKey: 'environment', header: '环境' },
+      { accessor: 'version', header: '版本', sortable: true },
+      { accessor: 'environment', header: '环境' },
     ],
   },
   {
     header: '执行情况',
     columns: [
-      { accessorKey: 'owner', header: '负责人' },
-      { accessorKey: 'status', header: '状态' },
+      { accessor: 'owner', header: '负责人' },
+      { accessor: 'status', header: '状态' },
     ],
   },
   {
     header: '操作',
     columns: [
       {
-        id: 'detail',
+        key: 'detail',
         header: '记录',
-        meta: { align: 'center' },
+        align: 'center',
         render: (_, row) => <Button>{row.version} 详情</Button>,
       },
     ],
@@ -5319,14 +5320,102 @@ const columns: ColumnDef<Release>[] = [
 <Table
   columns={columns}
   data={records}
-  getRowKey={(row) => row.id}
+  rowKey="id"
   pagination={false}
   tableProps={{ className: 'min-w-[900px] table-fixed' }}
   virtual={{
     containerHeight: 320,
-    getItemKey: (row) => row.id,
     overscan: 8,
     rowHeight: 48,
+  }}
+/>`,
+      wide: true,
+      previewHeight: 600,
+    },
+    {
+      title: docsCopy('受控排序、分页与行选择'),
+      description: docsCopy(
+        'sorting、pagination 和 rowSelection 都可以由业务受控；每次交互都会返回公开状态，不暴露底层表格实例。'
+      ),
+      preview: <TableControlledStateDemo />,
+      code: `import { useState, type Key } from 'react'
+import { Table, type TableSortState } from '@heliannuuthus/ui'
+
+const [sort, setSort] = useState<TableSortState | null>(null)
+const [page, setPage] = useState(1)
+const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
+
+<Table
+  columns={columns}
+  data={records}
+  rowKey="id"
+  sorting={{ value: sort, onChange: setSort }}
+  pagination={{ current: page, onChange: setPage, pageSize: 20 }}
+  rowSelection={{ selectedRowKeys, onChange: setSelectedRowKeys }}
+/>`,
+      wide: true,
+      previewHeight: 600,
+    },
+    {
+      title: docsCopy('加载、空结果与错误'),
+      description: docsCopy(
+        '三种数据状态使用同一个跨列区域，表头和表格宽度保持稳定。'
+      ),
+      caseAxes: [
+        {
+          name: 'state',
+          label: docsCopy('状态'),
+          defaultValue: 'loading',
+          options: [
+            { label: docsCopy('加载中'), value: 'loading' },
+            { label: docsCopy('空结果'), value: 'empty' },
+            { label: docsCopy('错误'), value: 'error' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <TableStatusDemo
+          state={
+            values.state === 'error'
+              ? 'error'
+              : values.state === 'empty'
+                ? 'empty'
+                : 'loading'
+          }
+        />
+      ),
+      code: docsCopy(`import { Table } from '@heliannuuthus/ui'
+
+<Table
+  columns={columns}
+  data={records}
+  loading={request.pending}
+  empty="没有匹配记录"
+  error={request.error ? <RetryState /> : undefined}
+/>`),
+      wide: true,
+      previewHeight: 740,
+    },
+    {
+      title: docsCopy('服务端数据模式'),
+      description: docsCopy(
+        'search、sorting 与 pagination 的 manual 模式只管理公开状态，不在客户端二次处理服务端返回的数据。'
+      ),
+      preview: <TableManualModeDemo />,
+      code: `import { Table } from '@heliannuuthus/ui'
+
+<Table
+  columns={columns}
+  data={request.pageRows}
+  rowKey="id"
+  search={{ mode: 'manual', value: query, onChange: setQuery }}
+  sorting={{ mode: 'manual', value: sort, onChange: setSort }}
+  pagination={{
+    mode: 'manual',
+    current: page,
+    pageSize: 20,
+    total: request.total,
+    onChange: setPage,
   }}
 />`,
       wide: true,
@@ -5875,7 +5964,7 @@ import { ScrollArea } from '@heliannuuthus/ui'
           {docsCopy('同时设置')} <code>fixed=&quot;start&quot;</code>
           {docsCopy('固定起始列，或设置')} <code>fixed=&quot;end&quot;</code>
           {docsCopy('固定末尾列；再给')}
-          <code>Table</code> {docsCopy('设置')}
+          <code>Table.Primitive</code> {docsCopy('设置')}
           <code>className=&quot;min-w-[960px]&quot;</code>{' '}
           {docsCopy('等大于容器的最小宽度，中间列即可横向滚动。')}
         </>
@@ -5884,7 +5973,7 @@ import { ScrollArea } from '@heliannuuthus/ui'
       code: docsCopy(`import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 
-<Table className="min-w-[960px] table-fixed">
+<Table.Primitive className="min-w-[960px] table-fixed">
   <Table.Header>
     <Table.Row>
       <Table.Head fixed="start" className="w-40">服务</Table.Head>
@@ -5909,7 +5998,7 @@ import { Button } from '@heliannuuthus/ui'
       </Table.Cell>
     </Table.Row>
   </Table.Body>
-</Table>`),
+</Table.Primitive>`),
       previewHeight: 500,
       wide: true,
     },
@@ -5930,7 +6019,7 @@ import { Button } from '@heliannuuthus/ui'
       code: docsCopy(`import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 
-<Table
+<Table.Primitive
   aria-rowcount={rows.length + 1}
   className="min-w-[820px] table-fixed"
   containerClassName="max-h-80"
@@ -5965,7 +6054,7 @@ import { Button } from '@heliannuuthus/ui'
       </Table.Row>
     )}
   </Table.VirtualBody>
-</Table>`),
+</Table.Primitive>`),
       previewHeight: 540,
       wide: true,
     },
@@ -5984,9 +6073,9 @@ const [page, setPage] = useState(1)
 const visibleRows = rows.slice((page - 1) * 10, page * 10)
 
 <>
-  <Table>
+  <Table.Primitive>
     {/* render visibleRows，并在末列提供查看、审批等操作 Button */}
-  </Table>
+  </Table.Primitive>
   <Pagination
     current={page}
     pageCount={Math.ceil(rows.length / 10)}
@@ -5997,7 +6086,7 @@ const visibleRows = rows.slice((page - 1) * 10, page * 10)
       wide: true,
     },
     {
-      title: docsCopy('行展开'),
+      title: docsCopy('Primitive 行展开'),
       description: docsCopy(
         'ExpandButton 提供键盘可用的展开状态与图标，ExpandedRow 使用真实表格行承载跨列详情。'
       ),
@@ -6007,7 +6096,7 @@ import { Table } from '@heliannuuthus/ui'
 
 const [expandedId, setExpandedId] = useState<string | null>(null)
 
-<Table>
+<Table.Primitive>
   <Table.Body>
     {rows.map((row) => {
       const expanded = row.id === expandedId
@@ -6032,7 +6121,7 @@ const [expandedId, setExpandedId] = useState<string | null>(null)
       )
     })}
   </Table.Body>
-</Table>`),
+</Table.Primitive>`),
       previewHeight: 520,
       wide: true,
     },
@@ -6058,7 +6147,7 @@ const ActionCell = () => {
   )
 }
 
-<Table className="table-fixed">
+<Table.Primitive className="table-fixed">
   <Table.Header>
     <Table.Row>
       <Table.Head align="start">服务</Table.Head>
@@ -6075,7 +6164,7 @@ const ActionCell = () => {
       <Table.Cell align="center"><ActionCell /></Table.Cell>
     </Table.Row>
   </Table.Body>
-</Table>`),
+</Table.Primitive>`),
       previewHeight: 430,
       wide: true,
     },
@@ -6756,35 +6845,42 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
   'data-table': [
     {
       name: 'columns',
-      description: docsCopy('定义访问键、表头、单元格和嵌套列组。'),
-      type: 'ColumnDef<TData, TValue>[]',
-    },
-    {
-      component: 'ColumnDef',
-      name: 'render',
       description: docsCopy(
-        '根据当前值、原始数据行和行索引渲染自定义内容或操作。'
+        '使用库自有的列模型定义访问器、表头、单元格和嵌套列组。'
       ),
-      type: '(value: TValue, row: TData, index: number) => ReactNode',
+      type: 'TableColumn<TData>[]',
     },
     {
-      component: 'ColumnDef',
-      name: 'columns',
-      description: docsCopy('嵌套子列并生成多级分组表头。'),
-      type: 'ColumnDef<TData>[]',
-    },
-    {
-      component: 'ColumnDef',
-      name: 'meta',
+      component: 'TableColumn',
+      name: 'key / accessor / header',
       description: docsCopy(
-        '把列对齐、固定位置、省略和 Tooltip 映射到同一组 Table Head / Cell 属性，并允许扩展表头与单元格类名。'
+        'key 标识列；accessor 读取字段或计算值；header 定义自动生成的列标题。'
       ),
-      type: '{ align?; fixed?; fixedOffset?; ellipsis?; ellipsisTooltip?; headerEllipsis?; headerEllipsisTooltip?; headerClassName?; cellClassName? }',
+      type: 'string / keyof TData | (row) => unknown / ReactNode',
     },
     {
-      name: 'Table.ColumnHeader',
-      description: docsCopy('组合可排序的列标题，并显示排序提示图标。'),
-      type: 'component',
+      component: 'TableColumn',
+      name: 'render / columns / sortable',
+      description: docsCopy(
+        '自定义单元格、嵌套分组列，并选择默认排序或业务比较函数。'
+      ),
+      type: 'TableRender<TData> / TableColumn<TData>[] / boolean | compare',
+    },
+    {
+      component: 'TableColumn',
+      name: 'align / fixed / width / ellipsis',
+      description: docsCopy(
+        '列布局属性直接映射到 Head 与 Cell；固定列通过数字 width 自动计算偏移。'
+      ),
+      type: "'start' | 'center' | 'end' / 'start' | 'end' / number / boolean",
+    },
+    {
+      component: 'TableColumn',
+      name: 'headerClassName / cellClassName / ellipsisTooltip / headerEllipsis',
+      description: docsCopy(
+        '分别定制表头与单元格类名，并为超长表头或单元格提供可访问的完整内容。'
+      ),
+      type: 'string / string | (row, index) => string / ReactNode | render / boolean',
     },
     {
       name: 'Table.Actions',
@@ -6809,7 +6905,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       name: 'data',
       description: docsCopy('提供表格数据记录。'),
-      type: 'TData[]',
+      type: 'readonly TData[]',
     },
     {
       name: 'caption',
@@ -6832,11 +6928,11 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: 'true',
     },
     {
-      name: 'getRowKey',
+      name: 'rowKey',
       description: docsCopy(
-        '为展开状态、虚拟滚动和 React 渲染提供稳定的业务行标识。'
+        '统一为渲染、选择、展开和虚拟滚动提供稳定的业务行标识。'
       ),
-      type: '(row: TData, index: number) => React.Key',
+      type: 'keyof TData | (row: TData, index: number) => React.Key',
     },
     {
       name: 'rowProps',
@@ -6846,27 +6942,24 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: '(row: TData, index: number) => TableRowProps',
     },
     {
-      name: 'filterColumn',
-      description: docsCopy('指定由顶部输入框筛选的列 id。'),
-      type: 'string',
-    },
-    {
-      name: 'filterPlaceholder',
-      description: docsCopy('设置筛选输入框提示与可访问名称。'),
-      type: 'string',
-      defaultValue: docsCopy("'筛选…'"),
-    },
-    {
-      name: 'tableProps',
+      name: 'search',
       description: docsCopy(
-        '透传基础 Table 的表格与滚动容器属性，用于设置最小宽度、表格布局和容器尺寸。'
+        '配置搜索字段、自定义 predicate、受控值和 client/manual 数据处理模式。'
       ),
-      type: "Omit<TableRootProps, 'children'>",
+      type: 'false | TableSearchProps<TData>',
+    },
+    {
+      name: 'sorting',
+      description: docsCopy(
+        '关闭排序，或配置受控/非受控排序状态与 client/manual 模式。'
+      ),
+      type: 'false | TableSortingProps',
+      defaultValue: '{}',
     },
     {
       name: 'pagination',
       description: docsCopy(
-        '使用标准 Pagination 管理当前页、每页数量和页码回调；传 false 时展示全部数据。'
+        '使用标准 Pagination 管理当前页；manual 模式必须提供服务端 total。'
       ),
       type: 'false | TablePaginationProps',
       defaultValue: '{ pageSize: 10 }',
@@ -6875,6 +6968,13 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       name: 'pagination.ariaLabels / renderSummary',
       description: docsCopy('本地化分页控件的无障碍名称和总数、当前页摘要。'),
       type: 'PaginationAriaLabels / (total, current, pageCount) => ReactNode',
+    },
+    {
+      name: 'rowSelection',
+      description: docsCopy(
+        '自动生成选择列，支持受控/非受控 key、禁用行、全选标签和变更回调。'
+      ),
+      type: 'TableRowSelectionProps<TData>',
     },
     {
       name: 'expandable',
@@ -6893,16 +6993,30 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       name: 'virtual',
       description: docsCopy(
-        '使用基础 Table VirtualBody 只渲染可视范围附近的等高单行数据。'
+        '只渲染可视范围附近的等高单行数据；类型上与 expandable 互斥。'
       ),
-      type: 'boolean | TableVirtualProps<TData>',
+      type: 'boolean | TableVirtualProps',
       defaultValue: 'false',
     },
     {
-      name: 'emptyMessage',
-      description: docsCopy('无匹配行时跨列展示的说明。'),
-      type: 'string',
+      name: 'loading / empty / error',
+      description: docsCopy('在同一跨列状态区域闭环展示加载、空结果和错误。'),
+      type: 'boolean | ReactNode / ReactNode / ReactNode',
       defaultValue: docsCopy("'暂无数据'"),
+    },
+    {
+      name: 'classNames',
+      description: docsCopy(
+        '按 root、toolbar、container、table、caption、header、body、footer、state 与 pagination 定制语义区域。'
+      ),
+      type: 'TableClassNames',
+    },
+    {
+      name: 'tableProps',
+      description: docsCopy(
+        '向内部 Table.Primitive 传递原生 table 与容器引用、样式。'
+      ),
+      type: "Omit<TablePrimitiveProps, 'children' | 'containerClassName'>",
     },
   ],
   empty: [
@@ -7040,7 +7154,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
   ],
   table: [
     {
-      component: 'Table',
+      component: 'Table.Primitive',
       name: 'containerClassName / containerStyle / containerRef',
       description: docsCopy(
         '配置内置滚动容器的尺寸、样式和引用，用于横向、纵向滚动或外部滚动控制。'
@@ -7099,8 +7213,10 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: '2',
     },
     {
-      name: 'Table.Caption',
-      description: docsCopy('提供整张表格的语义标题或补充说明。'),
+      name: 'Table.Primitive / Table.Caption',
+      description: docsCopy(
+        'Table.Primitive 创建原生 table 与滚动容器，Caption 提供整张表格的语义标题。'
+      ),
       type: 'component',
     },
     {
@@ -7534,10 +7650,10 @@ componentDocumentation.collapsible.pitfalls = [
 ];
 
 componentDocumentation.table.summary = docsCopy(
-  'Table 是不管理数据状态的表格布局原语：业务直接组合表头、行和单元格，并精确控制固定列、滚动、行展开与自定义内容。'
+  'Table.Primitive 是不管理数据状态的语义表格根：业务直接组合 Table.Header、Table.Row 和 Table.Cell，精确控制原生结构。'
 );
 componentDocumentation.table.whenToUse = [
-  docsCopy('数据已经是可直接渲染的行列结构，不需要列模型、筛选或排序状态。'),
+  docsCopy('数据已经是可直接渲染的行列结构，不需要 Table 的列模型和数据状态。'),
   docsCopy(
     '需要精确控制表头、汇总、固定列、展开详情或与 Pagination 的组合方式。'
   ),
@@ -7554,8 +7670,10 @@ componentDocumentation.table.relatedComponents = [
 ];
 componentDocumentation.table.parts = [
   {
-    name: 'Table / Table.Header / Table.Body / Table.Footer',
-    description: docsCopy('建立表格、滚动容器和表头、表体、汇总等语义区域。'),
+    name: 'Table.Primitive / Table.Header / Table.Body / Table.Footer',
+    description: docsCopy(
+      '从 Primitive 根建立原生表格、滚动容器和表头、表体、汇总区域。'
+    ),
   },
   {
     name: 'Table.Row / Table.Head / Table.Cell',
@@ -7593,23 +7711,23 @@ componentDocumentation.table.pitfalls = [
     '固定列需要明确列宽；多列同时固定时使用 fixedOffset 声明前面固定列的累计宽度。'
   ),
   docsCopy(
-    '分页时只把当前页数据传给 Table，由 Pagination 或服务端请求管理页码。'
+    '手动分页时只把当前页数据传给 Table.Primitive，由 Pagination 或服务端请求管理页码。'
   ),
   docsCopy(
     'VirtualBody 只适用于固定高度的单行数据；动态高度、行展开和跨行内容继续使用普通 Body。'
   ),
   docsCopy(
-    '需要筛选、排序、列分组和复杂行模型时使用 Table，不要把这些状态塞进基础 Table。'
+    '需要搜索、排序、选择或自动分页时使用数据驱动的 Table，不要把这些状态塞进 Table.Primitive。'
   ),
 ];
 
 componentDocumentation['data-table'].summary = docsCopy(
-  'Table 是基于 Table 组装好的默认数据表格：除筛选、排序和分页外，也完整提供固定列、省略 Tooltip、Caption、Footer、行展开与虚拟滚动。'
+  'Table 是数据驱动的完整表格：搜索、排序、分页、选择和展开都有受控与非受控闭环，并提供固定列、状态与虚拟滚动。'
 );
-componentDocumentation['data-table'].typeDefinitionGroups = ['ColumnDef'];
+componentDocumentation['data-table'].typeDefinitionGroups = ['TableColumn'];
 componentDocumentation['data-table'].whenToUse = [
   docsCopy(
-    '常规业务数据列表默认使用 Table，由 data 与 ColumnDef 驱动完整表格。'
+    '常规业务数据列表默认使用 Table，由 data 与 TableColumn 驱动完整表格。'
   ),
   docsCopy(
     '需要筛选、排序、分页、固定列、分组表头、行展开或虚拟滚动中的任意能力。'
@@ -7632,14 +7750,10 @@ componentDocumentation['data-table'].parts = [
     ),
   },
   {
-    name: 'ColumnDef',
+    name: 'TableColumn',
     description: docsCopy(
-      '通过 header、render、columns 和 meta 声明数据访问、列结构与 Table 布局属性。'
+      '通过 accessor、header、render、columns 和直接列属性声明数据访问、结构与布局。'
     ),
-  },
-  {
-    name: 'Table.ColumnHeader',
-    description: docsCopy('为可排序列提供一致的按钮、状态切换和图标。'),
   },
   {
     name: 'Table.Actions',
@@ -7654,7 +7768,7 @@ componentDocumentation['data-table'].accessibility = [
     '只有图标的行操作必须包含当前记录，例如“v0.12.0 更多操作”，不能让每行都只有“更多”。'
   ),
   docsCopy(
-    '展开按钮自动同步 aria-expanded；getRowKey 应返回可以辨认且稳定的业务标识。'
+    '展开按钮自动同步 aria-expanded；rowKey 应返回可以辨认且稳定的业务标识。'
   ),
   docsCopy(
     '虚拟滚动会提供 aria-rowcount 和真实 aria-rowindex，业务仍需保证每一行高度固定。'
@@ -7662,7 +7776,7 @@ componentDocumentation['data-table'].accessibility = [
 ];
 componentDocumentation['data-table'].pitfalls = [
   docsCopy(
-    '不要在 Table 内硬编码业务操作；通过 ColumnDef.render 读取当前 row 后组合业务按钮。'
+    '不要在 Table 内硬编码业务操作；通过 TableColumn.render 读取当前 row 后组合业务按钮。'
   ),
   docsCopy(
     '不要为了视觉分区手写两个并列表格；使用嵌套 columns 生成真正关联的数据表头。'
@@ -8976,7 +9090,7 @@ replaceExampleCodes('table', [
   docsCopy(`import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 
-<Table>
+<Table.Primitive>
   <Table.Caption>今晚发布窗口中的服务。</Table.Caption>
   <Table.Header>
     <Table.Row>
@@ -9001,7 +9115,7 @@ import { Button } from '@heliannuuthus/ui'
   <Table.Footer>
     <Table.Row><Table.Cell colSpan={2}>共 1 项</Table.Cell></Table.Row>
   </Table.Footer>
-</Table>`),
+</Table.Primitive>`),
 ]);
 
 replaceExampleCodes('chart', [
@@ -10806,14 +10920,14 @@ const managedTableDocumentation = componentDocumentation['data-table'];
 const customTableDocumentation = componentDocumentation.table;
 
 customTableDocumentation.summary = docsCopy(
-  'Table 默认由 data 与 ColumnDef 驱动筛选、排序、分页等完整数据交互；需要完全控制结构时，也可以直接组合语义表格原语。'
+  'Table 只负责数据驱动的完整交互；需要完全控制原生表格结构时，从 Table.Primitive 开始并组合 Table.Header、Table.Row 与 Table.Cell。'
 );
 customTableDocumentation.whenToUse = [
   docsCopy(
-    '常规业务数据列表使用 data 与 ColumnDef，快速获得筛选、排序、分页、展开和虚拟滚动。'
+    '常规业务数据列表使用 data 与 TableColumn，快速获得搜索、排序、分页、选择、展开和虚拟滚动。'
   ),
   docsCopy(
-    '数据已经完成加工，或结构无法由列模型表达时，直接组合 Table.Header、Table.Body、Table.Row 与 Table.Cell。'
+    '数据已经完成加工，或结构无法由列模型表达时，使用 Table.Primitive 作为根并组合 Table.Header、Table.Body、Table.Row 与 Table.Cell。'
   ),
   docsCopy(
     '既希望沿用统一的表格视觉与无障碍语义，又需要针对业务定制固定列、汇总、操作和详情。'
@@ -10825,6 +10939,12 @@ customTableDocumentation.examples = [
 ];
 customTableDocumentation.typeDefinitionGroups =
   managedTableDocumentation.typeDefinitionGroups;
+customTableDocumentation.semanticDom = {
+  description: docsCopy(
+    '悬停、聚焦或点击右侧属性行，查看 className 与 TableClassNames 各字段对应的真实数据表区域。'
+  ),
+  preview: <TableSemanticDomDemo />,
+};
 customTableDocumentation.api = [
   ...managedTableDocumentation.api,
   ...customTableDocumentation.api,

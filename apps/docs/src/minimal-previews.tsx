@@ -222,7 +222,7 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
     </DirectionProvider>
   ),
   table: (
-    <Table className="minimal-table">
+    <Table.Primitive className="minimal-table">
       <Table.Header>
         <Table.Row>
           <Table.Head>{docsCopy('组件')}</Table.Head>
@@ -239,6 +239,6 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
           <Table.Cell>{docsCopy('稳定')}</Table.Cell>
         </Table.Row>
       </Table.Body>
-    </Table>
+    </Table.Primitive>
   ),
 };

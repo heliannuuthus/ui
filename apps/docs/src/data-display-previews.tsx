@@ -1,5 +1,5 @@
 import { docsCopy } from './i18n/content';
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useRef, useState, type Key } from 'react';
 import { Accordion } from '@heliannuuthus/ui';
 import { Attachment } from '@heliannuuthus/ui';
 import { Avatar } from '@heliannuuthus/ui';
@@ -9,7 +9,11 @@ import { Carousel, type CarouselRef } from '@heliannuuthus/ui';
 import { Chart, type ChartConfig } from '@heliannuuthus/ui';
 import { Collapsible } from '@heliannuuthus/ui';
 import { Counter } from '@heliannuuthus/ui';
-import { Table, type ColumnDef } from '@heliannuuthus/ui';
+import {
+  Table,
+  type TableColumn,
+  type TableSortState,
+} from '@heliannuuthus/ui';
 import { DropdownMenu } from '@heliannuuthus/ui';
 import { Empty } from '@heliannuuthus/ui';
 import { Item } from '@heliannuuthus/ui';
@@ -18,7 +22,6 @@ import { Bubble } from '@heliannuuthus/ui';
 import { Pagination } from '@heliannuuthus/ui';
 import { ScrollArea } from '@heliannuuthus/ui';
 import { Slider } from '@heliannuuthus/ui';
-import { Separator } from '@heliannuuthus/ui';
 import { Switch } from '@heliannuuthus/ui';
 import { Tooltip } from '@heliannuuthus/ui';
 import {
@@ -1544,30 +1547,23 @@ const virtualTableRecords: VirtualTableRecord[] = Array.from(
   })
 );
 
-const releaseColumns: ColumnDef<ReleaseRecord>[] = [
+const releaseColumns: TableColumn<ReleaseRecord>[] = [
   {
-    accessorKey: 'version',
-    header: ({ column }) => (
-      <Table.ColumnHeader column={column}>
-        {docsCopy('版本')}
-      </Table.ColumnHeader>
-    ),
-    meta: {
-      cellClassName: 'font-medium',
-      fixed: 'start',
-      headerClassName: 'w-28',
-    },
+    accessor: 'version',
+    cellClassName: 'font-medium',
+    fixed: 'start',
+    header: docsCopy('版本'),
+    sortable: true,
+    width: 128,
   },
   {
-    accessorKey: 'environment',
+    accessor: 'environment',
     header: docsCopy('环境'),
-    enableSorting: false,
   },
-  { accessorKey: 'owner', header: docsCopy('负责人'), enableSorting: false },
+  { accessor: 'owner', header: docsCopy('负责人') },
   {
-    accessorKey: 'status',
+    accessor: 'status',
     header: docsCopy('状态'),
-    enableSorting: false,
     render: (_, row) => {
       const status = row.status;
       return (
@@ -1580,13 +1576,11 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
     },
   },
   {
-    id: 'actions',
+    key: 'actions',
+    align: 'center',
+    fixed: 'end',
     header: docsCopy('操作'),
-    meta: {
-      align: 'center',
-      fixed: 'end',
-      headerClassName: 'w-36',
-    },
+    width: 144,
     render: (_, row) => (
       <Table.Actions aria-label={docsCopy(`${row.version} 操作`)}>
         <Button size="xs" variant="ghost">
@@ -1620,39 +1614,33 @@ const releaseColumns: ColumnDef<ReleaseRecord>[] = [
   },
 ];
 
-const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
+const groupedReleaseColumns: TableColumn<ReleaseRecord>[] = [
   {
-    id: 'release',
+    key: 'release',
     header: docsCopy('发布信息'),
     columns: [
       {
-        accessorKey: 'version',
-        header: ({ column }) => (
-          <Table.ColumnHeader column={column}>
-            {docsCopy('版本')}
-          </Table.ColumnHeader>
-        ),
+        accessor: 'version',
+        header: docsCopy('版本'),
+        sortable: true,
       },
       {
-        accessorKey: 'environment',
+        accessor: 'environment',
         header: docsCopy('环境'),
-        enableSorting: false,
       },
     ],
   },
   {
-    id: 'execution',
+    key: 'execution',
     header: docsCopy('执行情况'),
     columns: [
       {
-        accessorKey: 'owner',
+        accessor: 'owner',
         header: docsCopy('负责人'),
-        enableSorting: false,
       },
       {
-        accessorKey: 'status',
+        accessor: 'status',
         header: docsCopy('状态'),
-        enableSorting: false,
         render: (_, row) => {
           const status = row.status;
           return (
@@ -1669,14 +1657,14 @@ const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
     ],
   },
   {
-    id: 'operation',
+    key: 'operation',
+    align: 'center',
     header: docsCopy('操作'),
-    meta: { align: 'center' },
     columns: [
       {
-        id: 'detail',
+        key: 'detail',
+        align: 'center',
         header: docsCopy('记录'),
-        meta: { align: 'center' },
         render: (_, row) => (
           <Table.Actions aria-label={docsCopy(`${row.version} 操作`)}>
             <Button size="xs" variant="outline">
@@ -1691,45 +1679,40 @@ const groupedReleaseColumns: ColumnDef<ReleaseRecord>[] = [
   },
 ];
 
-const virtualTableColumns: ColumnDef<VirtualTableRecord>[] = [
+const virtualTableColumns: TableColumn<VirtualTableRecord>[] = [
   {
-    accessorKey: 'id',
+    accessor: 'id',
+    cellClassName: 'font-medium',
+    fixed: 'start',
     header: docsCopy('事件'),
-    meta: {
-      fixed: 'start',
-      headerClassName: 'w-32',
-      cellClassName: 'font-medium',
-    },
+    width: 128,
   },
   {
-    accessorKey: 'service',
+    accessor: 'service',
+    ellipsis: true,
+    ellipsisTooltip: (value) => docsCopy(`服务：${String(value)}`),
     header: docsCopy('服务'),
-    meta: {
-      ellipsis: true,
-      headerClassName: 'w-64',
-    },
+    headerClassName: 'font-semibold',
+    headerEllipsis: true,
+    width: 256,
   },
   {
-    accessorKey: 'region',
+    accessor: 'region',
     header: docsCopy('区域'),
-    meta: { headerClassName: 'w-32' },
+    width: 128,
   },
   {
-    accessorKey: 'latency',
+    accessor: 'latency',
+    align: 'end',
     header: docsCopy('延迟'),
-    meta: {
-      align: 'end',
-      headerClassName: 'w-32',
-    },
+    width: 128,
   },
   {
-    id: 'actions',
+    key: 'actions',
+    align: 'center',
+    fixed: 'end',
     header: docsCopy('操作'),
-    meta: {
-      align: 'center',
-      fixed: 'end',
-      headerClassName: 'w-28',
-    },
+    width: 112,
     render: (_, row) => (
       <Table.Actions aria-label={docsCopy(`${row.id} 操作`)}>
         <Button size="xs" variant="ghost">
@@ -1747,11 +1730,13 @@ export const TableManagedDemo = () => {
         caption={docsCopy('最近五次生产与预览环境发布。')}
         columns={releaseColumns}
         data={releaseRecords}
-        filterColumn="version"
-        filterPlaceholder={docsCopy('筛选版本…')}
-        emptyMessage={docsCopy('没有匹配的发布记录')}
+        empty={docsCopy('没有匹配的发布记录')}
         footer={(rows) => docsCopy(`当前页 ${rows.length} 条发布记录`)}
-        getRowKey={(row) => row.version}
+        rowKey="version"
+        search={{
+          columnKeys: ['version'],
+          placeholder: docsCopy('筛选版本…'),
+        }}
         pagination={{
           ariaLabels: {
             more: docsCopy('更多页面'),
@@ -1772,6 +1757,8 @@ export const TableManagedDemo = () => {
 };
 
 export const TableManagedExpandableDemo = () => {
+  const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>(['v0.12.0']);
+
   return (
     <div className="display-table-managed">
       <Table
@@ -1779,9 +1766,10 @@ export const TableManagedExpandableDemo = () => {
         data={releaseRecords}
         expandable={{
           columnHeader: <span className="sr-only">{docsCopy('展开行')}</span>,
-          defaultExpandedRowKeys: ['v0.12.0'],
+          expandedRowKeys,
           getCollapseLabel: (row) => `${docsCopy('收起')} ${row.version}`,
           getExpandLabel: (row) => `${docsCopy('展开')} ${row.version}`,
+          onExpandedRowKeysChange: setExpandedRowKeys,
           render: (row) => (
             <div className="display-table-managed-expanded">
               <strong>
@@ -1797,8 +1785,9 @@ export const TableManagedExpandableDemo = () => {
               </span>
             </div>
           ),
+          rowExpandable: (row) => row.status !== docsCopy('回滚'),
         }}
-        getRowKey={(row) => row.version}
+        rowKey="version"
         pagination={false}
         tableProps={{ className: 'min-w-[640px] table-fixed' }}
       />
@@ -1812,7 +1801,7 @@ export const TableGroupedHeaderDemo = () => {
       <Table
         columns={groupedReleaseColumns}
         data={releaseRecords}
-        emptyMessage={docsCopy('暂无发布记录')}
+        empty={docsCopy('暂无发布记录')}
         tableProps={{ className: 'min-w-[660px] table-fixed' }}
       />
     </div>
@@ -1825,17 +1814,119 @@ export const TableManagedVirtualDemo = () => {
       <Table
         columns={virtualTableColumns}
         data={virtualTableRecords}
-        getRowKey={(row) => row.id}
+        rowKey="id"
         pagination={false}
         tableProps={{ className: 'min-w-[900px] table-fixed' }}
         virtual={{
           containerHeight: 320,
-          getItemKey: (row) => row.id,
           overscan: 8,
           rowHeight: 48,
         }}
       />
     </div>
+  );
+};
+
+export const TableControlledStateDemo = () => {
+  const [sort, setSort] = useState<TableSortState | null>(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
+  const [page, setPage] = useState(1);
+
+  return (
+    <div className="display-table-managed">
+      <p className="text-sm text-muted-foreground">
+        {docsCopy(
+          `当前排序：${sort ? `${sort.columnKey} ${sort.order}` : '无'} · 已选择 ${selectedRowKeys.length} 行`
+        )}
+      </p>
+      <Table
+        columns={releaseColumns.slice(0, 4)}
+        data={releaseRecords}
+        pagination={{ current: page, onChange: setPage, pageSize: 3 }}
+        rowKey="version"
+        rowSelection={{
+          getSelectAllLabel: (rows) =>
+            docsCopy(`选择当前页 ${rows.length} 条发布记录`),
+          getSelectLabel: (row) => docsCopy(`选择 ${row.version}`),
+          isRowDisabled: (row) => row.status === docsCopy('运行中'),
+          onChange: setSelectedRowKeys,
+          selectedRowKeys,
+        }}
+        sorting={{ onChange: setSort, value: sort }}
+      />
+    </div>
+  );
+};
+
+export const TableManualModeDemo = () => {
+  const [query, setQuery] = useState('');
+  const [sort, setSort] = useState<TableSortState | null>(null);
+  const [page, setPage] = useState(1);
+  const pageSize = 2;
+  const filteredRows = releaseRecords.filter((row) =>
+    row.version.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+  );
+  const sortedRows = [...filteredRows].sort((left, right) => {
+    if (!sort) return 0;
+    const direction = sort.order === 'ascending' ? 1 : -1;
+    return left.version.localeCompare(right.version) * direction;
+  });
+  const pageRows = sortedRows.slice((page - 1) * pageSize, page * pageSize);
+
+  return (
+    <div className="display-table-managed">
+      <Table
+        columns={releaseColumns.slice(0, 4)}
+        data={pageRows}
+        pagination={{
+          current: page,
+          mode: 'manual',
+          onChange: setPage,
+          pageSize,
+          total: sortedRows.length,
+        }}
+        rowKey="version"
+        search={{
+          mode: 'manual',
+          onChange: (value) => {
+            setPage(1);
+            setQuery(value);
+          },
+          placeholder: docsCopy('搜索服务端数据…'),
+          value: query,
+        }}
+        sorting={{
+          mode: 'manual',
+          onChange: (value) => {
+            setPage(1);
+            setSort(value);
+          },
+          value: sort,
+        }}
+      />
+    </div>
+  );
+};
+
+export const TableStatusDemo = ({
+  state,
+}: {
+  state: 'empty' | 'error' | 'loading';
+}) => {
+  return (
+    <Table
+      columns={releaseColumns.slice(0, 3)}
+      data={state === 'empty' ? [] : releaseRecords.slice(0, 2)}
+      empty={docsCopy('没有匹配的发布记录')}
+      error={
+        state === 'error'
+          ? docsCopy('发布记录加载失败，请稍后重试。')
+          : undefined
+      }
+      loading={state === 'loading'}
+      pagination={false}
+      rowKey="version"
+    />
   );
 };
 
@@ -2294,7 +2385,7 @@ const tableRows = [
 export const TableReleaseDemo = () => {
   return (
     <div className="display-table-shell">
-      <Table>
+      <Table.Primitive>
         <Table.Caption>
           {docsCopy('今晚 22:00 发布窗口中的服务。')}
         </Table.Caption>
@@ -2334,7 +2425,7 @@ export const TableReleaseDemo = () => {
             <Table.Cell>2 / 3</Table.Cell>
           </Table.Row>
         </Table.Footer>
-      </Table>
+      </Table.Primitive>
     </div>
   );
 };
@@ -2415,7 +2506,7 @@ const fixedTableRows = [
 export const TableFixedDemo = () => {
   return (
     <div className="display-table-shell display-table-wide">
-      <Table className="min-w-[960px] table-fixed">
+      <Table.Primitive className="min-w-[960px] table-fixed">
         <Table.Header>
           <Table.Row>
             <Table.Head fixed="start" className="w-40">
@@ -2472,7 +2563,7 @@ export const TableFixedDemo = () => {
             )
           )}
         </Table.Body>
-      </Table>
+      </Table.Primitive>
     </div>
   );
 };
@@ -2504,7 +2595,7 @@ export const TableVirtualScrollDemo = () => {
         <span>{docsCopy('1,000 条单行数据')}</span>
         <small>{docsCopy('当前仅渲染可视区域附近的行')}</small>
       </div>
-      <Table
+      <Table.Primitive
         aria-rowcount={virtualTableRows.length + 1}
         className="min-w-[820px] table-fixed"
         containerClassName="max-h-80"
@@ -2558,7 +2649,7 @@ export const TableVirtualScrollDemo = () => {
             </Table.Row>
           )}
         </Table.VirtualBody>
-      </Table>
+      </Table.Primitive>
     </div>
   );
 };
@@ -2582,7 +2673,7 @@ export const TablePaginationDemo = () => {
   return (
     <div className="display-table-composite">
       <div className="display-table-shell">
-        <Table>
+        <Table.Primitive>
           <Table.Header>
             <Table.Row>
               <Table.Head>{docsCopy('发布单')}</Table.Head>
@@ -2620,7 +2711,7 @@ export const TablePaginationDemo = () => {
               </Table.Row>
             ))}
           </Table.Body>
-        </Table>
+        </Table.Primitive>
       </div>
       <div className="display-table-pagination">
         <span>
@@ -2683,7 +2774,7 @@ export const TableExpandableDemo = () => {
 
   return (
     <div className="display-table-shell">
-      <Table>
+      <Table.Primitive>
         <Table.Header>
           <Table.Row>
             <Table.Head className="w-12">
@@ -2729,7 +2820,7 @@ export const TableExpandableDemo = () => {
             );
           })}
         </Table.Body>
-      </Table>
+      </Table.Primitive>
     </div>
   );
 };
@@ -2774,7 +2865,7 @@ const TableActionCell = ({
 export const TableCellDemo = () => {
   return (
     <div className="display-table-shell display-table-wide">
-      <Table className="min-w-[680px] table-fixed">
+      <Table.Primitive className="min-w-[680px] table-fixed">
         <Table.Header>
           <Table.Row>
             <Table.Head className="w-52">{docsCopy('服务（靠左）')}</Table.Head>
@@ -2807,7 +2898,7 @@ export const TableCellDemo = () => {
             </Table.Row>
           ))}
         </Table.Body>
-      </Table>
+      </Table.Primitive>
     </div>
   );
 };

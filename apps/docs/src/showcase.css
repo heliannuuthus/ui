@@ -2431,6 +2431,94 @@ a {
   font-size: 11px;
   line-height: 1.55;
 }
+.table-semantic-reference {
+  min-width: 840px;
+  display: grid;
+  grid-template-columns: minmax(500px, 1.25fr) minmax(340px, 0.75fr);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--header);
+}
+.table-semantic-stage {
+  position: relative;
+  min-height: 610px;
+  display: grid;
+  align-items: center;
+  padding: 36px 28px;
+  background: color-mix(in srgb, var(--ink) 2%, var(--surface));
+}
+.table-semantic-table {
+  width: 100%;
+}
+.table-semantic-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  width: 0;
+  height: 0;
+  background: color-mix(in srgb, var(--primary) 11%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--primary) 52%, transparent),
+    0 8px 22px -16px color-mix(in srgb, var(--primary) 70%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, width, height, border-radius;
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    width 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 100ms ease-out;
+}
+.table-semantic-regions {
+  border-left: 1px solid var(--line);
+}
+.table-semantic-regions > button {
+  width: 100%;
+  display: grid;
+  gap: 5px;
+  padding: 12px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--docs-text);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.table-semantic-regions > button:last-child {
+  border-bottom: 0;
+}
+.table-semantic-regions > button:hover,
+.table-semantic-regions > button[data-active] {
+  background: color-mix(in srgb, var(--ink) 4%, var(--surface));
+}
+.table-semantic-regions > button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -3px;
+}
+.table-semantic-regions > button > span {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.table-semantic-regions strong {
+  color: var(--ink);
+  font-size: 12px;
+}
+.table-semantic-regions code {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 9px;
+}
+.table-semantic-regions small {
+  color: var(--docs-muted);
+  font-size: 10px;
+  line-height: 1.45;
+}
 .resizable-workspace-shell {
   width: min(920px, 100%);
   height: 440px;
@@ -4261,6 +4349,18 @@ a {
     padding: 32px 20px;
   }
   .card-semantic-regions {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+  .table-semantic-reference {
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .table-semantic-stage {
+    min-height: 560px;
+    padding: 28px 16px;
+  }
+  .table-semantic-regions {
     border-top: 1px solid var(--line);
     border-left: 0;
   }

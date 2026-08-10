@@ -278,14 +278,20 @@ export {
 export { Switch, type SwitchProps } from './components/switch';
 export {
   Table,
-  type ColumnDef,
   type TableActionsProps,
-  type TableColumnHeaderProps,
-  type TableColumnMeta,
+  type TableClassNames,
+  type TableColumn,
+  type TableColumnAccessor,
   type TableExpandableProps,
   type TablePaginationProps,
   type TableProps,
   type TableRender,
+  type TableRowSelectionProps,
+  type TableSearchProps,
+  type TableSemanticSlot,
+  type TableSortingProps,
+  type TableSortOrder,
+  type TableSortState,
   type TableVirtualProps,
 } from './components/table';
 export {
@@ -295,7 +301,7 @@ export {
   type TableExpandButtonProps,
   type TableExpandedRowProps,
   type TableHeadProps,
-  type TableRootProps,
+  type TablePrimitiveProps,
   type TableRowProps,
   type TableVirtualBodyProps,
 } from './components/table-primitive';

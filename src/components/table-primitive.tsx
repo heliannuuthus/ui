@@ -10,7 +10,7 @@ import { Tooltip } from './tooltip';
 type TableCellAlign = 'start' | 'center' | 'end';
 type TableCellFixed = 'start' | 'end';
 
-type TableRootProps = React.ComponentProps<'table'> & {
+type TablePrimitiveProps = React.ComponentProps<'table'> & {
   containerClassName?: string;
   containerRef?: React.Ref<HTMLDivElement>;
   containerStyle?: React.CSSProperties;
@@ -154,7 +154,7 @@ const TableRoot = ({
   containerRef,
   containerStyle,
   ...props
-}: TableRootProps) => {
+}: TablePrimitiveProps) => {
   const [containerElement, setContainerElement] =
     React.useState<HTMLDivElement | null>(null);
   const handleContainerRef = React.useCallback(
@@ -507,7 +507,7 @@ export {
   type TableExpandButtonProps,
   type TableExpandedRowProps,
   type TableHeadProps,
-  type TableRootProps,
+  type TablePrimitiveProps,
   type TableRowProps,
   type TableVirtualBodyProps,
 };
