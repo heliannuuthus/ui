@@ -1,4 +1,5 @@
 import { docsCopy } from './i18n/content';
+import { createCasesFromAxes } from './component-harness-cases';
 import type { CSSProperties, ReactNode } from 'react';
 import { Badge, Tabs } from '@heliannuuthus/ui';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +19,7 @@ export type ComponentHarnessCase = {
 
 export type ComponentHarnessCaseOption = {
   label: string;
+  properties?: ComponentHarnessProperties;
   value: string;
 };
 
@@ -26,6 +28,7 @@ export type ComponentHarnessCaseAxis = {
   label: string;
   name: string;
   options: ComponentHarnessCaseOption[];
+  property?: false | string;
 };
 
 export type ComponentHarnessValues = Record<string, string>;
@@ -51,57 +54,11 @@ type ComponentHarnessAxisProps = ComponentHarnessSharedProps & {
 type ComponentHarnessProps =
   ComponentHarnessCaseProps | ComponentHarnessAxisProps;
 
-type CaseCombination = {
-  descriptions: string[];
-  isDefault: boolean;
-  labels: string[];
-  values: ComponentHarnessValues;
-};
-
 const formatPropertyValue = (
   value: ComponentHarnessProperties[string]
 ): string => {
   if (typeof value === 'string') return JSON.stringify(value);
   return String(value);
-};
-
-const createCasesFromAxes = (
-  axes: ComponentHarnessCaseAxis[]
-): ComponentHarnessCase[] => {
-  const combinations = axes.reduce<CaseCombination[]>(
-    (currentCases, axis) =>
-      currentCases.flatMap((currentCase) => {
-        const defaultValue = axis.defaultValue ?? axis.options[0]?.value ?? '';
-
-        return axis.options.map((option) => ({
-          descriptions: [
-            ...currentCase.descriptions,
-            `${axis.label}：${option.label}`,
-          ],
-          isDefault: currentCase.isDefault && option.value === defaultValue,
-          labels: [...currentCase.labels, option.label],
-          values: {
-            ...currentCase.values,
-            [axis.name]: option.value,
-          },
-        }));
-      }),
-    [
-      {
-        descriptions: [],
-        isDefault: true,
-        labels: [],
-        values: {},
-      },
-    ]
-  );
-
-  return combinations.map((combination) => ({
-    description: combination.descriptions.join('；'),
-    isDefault: combination.isDefault,
-    label: combination.labels.join(' · '),
-    values: combination.values,
-  }));
 };
 
 export const ComponentHarness = (props: ComponentHarnessProps) => {
@@ -125,7 +82,26 @@ export const ComponentHarness = (props: ComponentHarnessProps) => {
       key={`${harnessCase.label}-${JSON.stringify(harnessCase.values)}`}
       role="group"
     >
-      {options?.compactHeader ? null : (
+      {options?.compactHeader ? (
+        <div className="component-harness-case-compact-properties">
+          <dl
+            aria-label={t('components.properties')}
+            className="component-harness-case-properties"
+          >
+            {Object.entries(harnessCase.properties ?? harnessCase.values).map(
+              ([name, value]) => (
+                <div key={name}>
+                  <dt>{name}</dt>
+                  <dd>{formatPropertyValue(value)}</dd>
+                </div>
+              )
+            )}
+          </dl>
+          {harnessCase.isDefault ? (
+            <Badge variant="secondary">{docsCopy('默认')}</Badge>
+          ) : null}
+        </div>
+      ) : (
         <header className="component-harness-case-header">
           <div className="component-harness-case-copy">
             <h4>{harnessCase.label}</h4>

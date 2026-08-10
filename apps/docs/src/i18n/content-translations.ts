@@ -2479,8 +2479,6 @@ const ActionCell = () => {
     'Set the position of the indicator uniformly; rotate with the state when a node is passed in, or define the collapsed and expanded states separately.',
   '统一颜色、间距与排版语言。':
     'Unify colors, spacing and typography language.',
-  '统一桌面 Sheet 与移动端 Drawer：从视口或指定父容器的任意边缘打开，并根据 behavior 调整面板与手势呈现。':
-    'Unify the desktop Sheet and mobile Drawer: open from any edge of the viewport or the specified parent container, and adjust the panel and gesture presentation according to the behavior.',
   '头部布局区域，容纳标题、说明与右侧操作。':
     'The header layout area accommodates titles, descriptions and operations on the right.',
   '头部右侧的辅助操作区域。':
@@ -3665,14 +3663,6 @@ const ActionCell = () => {
     'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<Cloud />}\n  title="No production release yet"\n  description="After completing preflight, you can schedule your first production release from here."\n  actions={<Button>Schedule publishing</Button>}\n/>',
   'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<ShieldCheck />}\n  title="等待安全审计"\n  description="审计通过前暂无可发布版本。"\n  actions={<AuditSummary />}\n/>':
     'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<ShieldCheck />}\n  title="Waiting for security audit"\n  description="There is no release version until the audit is passed."\n  actions={<AuditSummary />}\n/>',
-  'import { Field } from \'@heliannuuthus/ui\'\n\n<Field data-invalid="true">\n  <Field.Label htmlFor="handle">个人标识</Field.Label>\n  <Input id="handle" aria-invalid />\n  <Field.Error>只能使用小写字母、数字和连字符。</Field.Error>\n</Field>':
-    'import { Field } from \'@heliannuuthus/ui\'\n\n<Field data-invalid="true">\n  <Field.Label htmlFor="handle">Personal identification</Field.Label>\n  <Input id="handle" aria-invalid />\n  <Field.Error> can only use lowercase letters, numbers, and hyphens. </Field.Error>\n</Field>',
-  'import { Field } from \'@heliannuuthus/ui\'\n\n<Field data-invalid>\n  <Field.Label htmlFor="handle">个人标识</Field.Label>\n  <Input id="handle" aria-invalid />\n  <Field.Description>用于生成公开资料地址。</Field.Description>\n  <Field.Error>只能使用小写字母、数字和连字符。</Field.Error>\n</Field>':
-    'import { Field } from \'@heliannuuthus/ui\'\n\n<Field data-invalid>\n  <Field.Label htmlFor="handle">Personal identification</Field.Label>\n  <Input id="handle" aria-invalid />\n  <Field.Description> is used to generate public information addresses. </Field.Description>\n  <Field.Error> can only use lowercase letters, numbers, and hyphens. </Field.Error>\n</Field>',
-  'import { Field } from \'@heliannuuthus/ui\'\n\n<Field orientation="horizontal">\n  <Field.Content>\n    <Field.Title>公开邮箱</Field.Title>\n    <Field.Description>允许其他成员联系你。</Field.Description>\n  </Field.Content>\n  <Switch />\n</Field>':
-    'import { Field } from \'@heliannuuthus/ui\'\n\n<Field orientation="horizontal">\n  <Field.Content>\n    <Field.Title>Public Email</Field.Title>\n    <Field.Description>Allows other members to contact you. </Field.Description>\n  </Field.Content>\n  <Switch />\n</Field>',
-  'import { Field } from \'@heliannuuthus/ui\'\n\n<Field>\n  <Field.Label htmlFor="team-name">团队名称 *</Field.Label>\n  <Input id="team-name" required />\n</Field>\n\n<Field>\n  <Field.Label htmlFor="role">职位</Field.Label>\n  <Input id="role" />\n  <Field.Description>可选</Field.Description>\n</Field>':
-    'import { Field } from \'@heliannuuthus/ui\'\n\n<Field>\n  <Field.Label htmlFor="team-name">Team name *</Field.Label>\n  <Input id="team-name" required />\n</Field>\n\n<Field>\n  <Field.Label htmlFor="role">Position</Field.Label>\n  <Input id="role" />\n  <Field.Description>Optional</Field.Description>\n</Field>',
   "import { Form } from '@heliannuuthus/ui'\n\nconst form = useForm({ defaultValues: { email: '', note: '' } })\n\n<Form {...form}>\n  <form onSubmit={form.handleSubmit(onSubmit)}>\n    <Form.Field\n      control={form.control}\n      name=\"email\"\n      rules={{ required: '请输入邮箱地址。' }}\n      render={({ field }) => (\n        <Form.Item>\n          <Form.Label>邮箱地址</Form.Label>\n          <Form.Control><Input {...field} /></Form.Control>\n          <Form.Message />\n        </Form.Item>\n      )}\n    />\n  </form>\n</Form>":
     "import { Form } from '@heliannuuthus/ui'\n\nconst form = useForm({ defaultValues: { email: '', note: '' } })\n\n<Form {...form}>\n  <form onSubmit={form.handleSubmit(onSubmit)}>\n    <Form.Field\n      control={form.control}\n      name=\"email\"\n      rules={{ required: 'Please enter your email address. ' }}\n      render={({ field }) => (\n        <Form.Item>\n          <Form.Label>Email address</Form.Label>\n          <Form.Control><Input {...field} /></Form.Control>\n          <Form.Message />\n        </Form.Item>\n      )}\n    />\n  </form>\n</Form>",
   "import { Fragment, useState } from 'react'\nimport { Button, Table } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Button\n                aria-expanded={expanded}\n                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}\n                size=\"icon-xs\"\n                variant=\"ghost\"\n                onClick={() => setExpandedId(expanded ? null : row.id)}\n              >\n                <ChevronRight className={expanded ? 'rotate-90' : ''} />\n              </Button>\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.Row>\n              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>\n            </Table.Row>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>":
@@ -4652,4 +4642,32 @@ const ActionCell = () => {
     'import { Form, Input } from \'@heliannuuthus/ui\'\n\n<Form.Field name="teamName" label="Team name" required>\n  <Input />\n</Form.Field>\n\n<Form.Field name="role" label="Role" description="Optional">\n  <Input />\n</Form.Field>',
   '从视口或指定父容器的任意边缘打开抽屉，并根据 behavior 调整稳定面板与手势呈现。':
     'Open a drawer from any edge of the viewport or a specified container, using behavior to choose stable panel or gesture presentation.',
+  '透传标准 HTML、ARIA、data 属性和原生事件。':
+    'Pass standard HTML, ARIA, data attributes, and native events through to the input.',
+  '使用行内样式扩展分隔线。': 'Extend the separator with inline styles.',
+  '设置折叠菜单触发器供辅助技术读取的名称。':
+    'Set the accessible name announced for the collapsed breadcrumb trigger.',
+  "'显示完整路径'": "'Show full path'",
+  '声明数据键对应的标签、图标和明暗主题颜色。':
+    'Declare labels, icons, and light or dark theme colors for each data key.',
+  '传入 Recharts 图表节点并由响应式容器测量尺寸。':
+    'Pass Recharts nodes and let the responsive container measure their dimensions.',
+  '设置首次测量前用于服务端渲染的稳定初始尺寸。':
+    'Set stable initial dimensions for server rendering before the first measurement.',
+  '设置稳定图表标识，并用于限定主题 CSS 变量作用域。':
+    'Set a stable chart identifier used to scope theme CSS variables.',
+  '扩展响应式图表根容器样式。':
+    'Extend the responsive chart root container styles.',
+  '配置图表提示内容的标记、标签和数据键映射。':
+    'Configure tooltip indicators, labels, and data-key mappings.',
+  '配置图例图标显示和数据键映射。':
+    'Configure legend icon visibility and data-key mappings.',
+  '透传对应 Recharts 组件的公开属性。':
+    'Pass through the public props of the corresponding Recharts component.',
+  '配置组件的公开状态、行为或扩展点。':
+    'Configure the component public state, behavior, or extension point.',
+  '由 Form.Field 自动注入自定义控件的字段契约。':
+    'Field contract automatically injected into custom controls by Form.Field.',
+  自定义过滤: 'Custom filter',
+  受控打开态: 'Controlled open state',
 };

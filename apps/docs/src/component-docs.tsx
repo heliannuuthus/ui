@@ -197,12 +197,14 @@ import {
   ResizableVerticalDemo,
 } from './resizable-preview';
 import { minimalComponentPreviews } from './minimal-previews';
-import type {
-  ComponentHarnessCase,
-  ComponentHarnessCaseAxis,
-  ComponentHarnessLayout,
-  ComponentHarnessValues,
+import {
+  type ComponentHarnessProperties,
+  type ComponentHarnessCase,
+  type ComponentHarnessCaseAxis,
+  type ComponentHarnessLayout,
+  type ComponentHarnessValues,
 } from './component-harness';
+import { createCasesFromAxes } from './component-harness-cases';
 
 export type ApiProperty = {
   component?: string;
@@ -1062,11 +1064,16 @@ const separatorDocumentation: ComponentDocumentation = {
       type: 'string',
     },
     {
-      name: docsCopy('style / 原生属性'),
+      name: 'style',
+      description: docsCopy('使用行内样式扩展分隔线。'),
+      type: 'CSSProperties',
+    },
+    {
+      name: docsCopy('原生属性'),
       description: docsCopy(
         '通过标准 div 的行内样式、ARIA、data 属性与事件完成扩展。'
       ),
-      type: 'CSSProperties / HTMLAttributes<HTMLDivElement>',
+      type: 'HTMLAttributes<HTMLDivElement>',
     },
   ],
   accessibility: [
@@ -2006,6 +2013,17 @@ export const PageBreadcrumb = () => {
       description: docsCopy('为首项显示内置首页图标，或传入自定义图标。'),
       type: 'boolean | ReactNode',
       defaultValue: 'false',
+    },
+    {
+      name: 'collapseLabel',
+      description: docsCopy('设置折叠菜单触发器供辅助技术读取的名称。'),
+      type: 'string',
+      defaultValue: docsCopy("'显示完整路径'"),
+    },
+    {
+      name: docsCopy('原生属性'),
+      description: docsCopy('透传标准 HTML、ARIA、data 属性和原生事件。'),
+      type: 'ComponentProps<"nav">',
     },
   ],
   accessibility: [
@@ -4143,7 +4161,7 @@ const form = Form.useForm<Values>({
         },
         {
           label: docsCopy('校验失败'),
-          properties: { 'aria-invalid': true },
+          properties: { [docsCopy('原生属性')]: 'aria-invalid' },
           values: { size: 'default', state: 'invalid' },
         },
       ],
@@ -4243,7 +4261,34 @@ const form = Form.useForm<Values>({
       description: docsCopy(
         '候选项较多且用户知道关键词时，直接输入过滤、清除并重新选择。'
       ),
-      preview: <SelectMemberSearchDemo />,
+      caseLayout: 'segmented',
+      cases: [
+        {
+          isDefault: true,
+          label: docsCopy('内置过滤'),
+          properties: { filter: docsCopy('内置过滤') },
+          values: { mode: 'default' },
+        },
+        {
+          label: docsCopy('自定义过滤'),
+          properties: { filter: 'startsWith' },
+          values: { mode: 'custom-filter' },
+        },
+        {
+          label: docsCopy('受控打开态'),
+          properties: { onOpenChange: 'setOpen', open: 'open' },
+          values: { mode: 'controlled-open' },
+        },
+      ],
+      preview: (values) => (
+        <SelectMemberSearchDemo
+          mode={
+            values.mode === 'custom-filter' || values.mode === 'controlled-open'
+              ? values.mode
+              : 'default'
+          }
+        />
+      ),
       code: docsCopy(`<Select
   value={value}
   onChange={setValue}
@@ -6701,7 +6746,70 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'React.Ref<CarouselRef>',
     },
   ],
-  chart: [],
+  chart: [
+    {
+      name: 'config',
+      description: docsCopy('声明数据键对应的标签、图标和明暗主题颜色。'),
+      type: 'ChartConfig',
+      required: true,
+    },
+    {
+      name: 'children',
+      description: docsCopy('传入 Recharts 图表节点并由响应式容器测量尺寸。'),
+      type: 'ResponsiveContainerProps["children"]',
+      required: true,
+    },
+    {
+      name: 'initialDimension',
+      description: docsCopy('设置首次测量前用于服务端渲染的稳定初始尺寸。'),
+      type: '{ width: number; height: number }',
+      defaultValue: '{ width: 320, height: 200 }',
+    },
+    {
+      name: 'id',
+      description: docsCopy(
+        '设置稳定图表标识，并用于限定主题 CSS 变量作用域。'
+      ),
+      type: 'string',
+    },
+    {
+      name: 'className',
+      description: docsCopy('扩展响应式图表根容器样式。'),
+      type: 'string',
+    },
+    {
+      name: docsCopy('原生属性'),
+      description: docsCopy('透传标准 HTML、ARIA、data 属性和原生事件。'),
+      type: 'ComponentProps<"div">',
+    },
+    ...['indicator', 'hideLabel', 'hideIndicator', 'nameKey', 'labelKey'].map(
+      (name) => ({
+        component: 'Chart.TooltipContent',
+        name,
+        description: docsCopy('配置图表提示内容的标记、标签和数据键映射。'),
+        type:
+          name === 'indicator'
+            ? "'line' | 'dot' | 'dashed'"
+            : name === 'nameKey' || name === 'labelKey'
+              ? 'string'
+              : 'boolean',
+        defaultValue: name === 'indicator' ? "'dot'" : 'false',
+      })
+    ),
+    ...['hideIcon', 'nameKey'].map((name) => ({
+      component: 'Chart.LegendContent',
+      name,
+      description: docsCopy('配置图例图标显示和数据键映射。'),
+      type: name === 'nameKey' ? 'string' : 'boolean',
+      defaultValue: name === 'hideIcon' ? 'false' : undefined,
+    })),
+    ...['Tooltip', 'Legend'].map((component) => ({
+      component: `Chart.${component}`,
+      name: docsCopy('原生属性'),
+      description: docsCopy('透传对应 Recharts 组件的公开属性。'),
+      type: `ComponentProps<typeof Recharts.${component}>`,
+    })),
+  ],
   collapsible: [
     {
       name: 'header',
@@ -7996,24 +8104,25 @@ componentDocumentation.toast.api = [
     defaultValue: "'global'",
   },
   {
-    component: 'useToast()',
-    name: 'toast',
-    description: docsCopy(
-      '调用 success、info、warning、error、loading 或 promise。'
-    ),
-    type: 'Toast API',
-  },
-  {
+    component: 'Toast.Toaster',
     name: 'position',
     description: docsCopy('设置通知相对视口或局部容器的出现位置。'),
     type: "'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'",
     defaultValue: "'top-center'",
   },
   {
+    component: 'Toast.Toaster',
     name: 'richColors',
     description: docsCopy('启用内置语义色；默认已经开启，可按需关闭。'),
     type: 'boolean',
     defaultValue: 'true',
+  },
+];
+componentDocumentation.toast.typePreviews = [
+  {
+    name: 'useToast()',
+    definition:
+      'Returns the scoped toast API with success, info, warning, error, loading, promise, dismiss, and history methods.',
   },
 ];
 componentDocumentation.toast.accessibility = [
@@ -8489,6 +8598,11 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       name: 'classNames',
       description: docsCopy('扩展输入、按钮等语义插槽样式。'),
       type: 'InputNumberClassNames',
+    },
+    {
+      name: docsCopy('原生属性'),
+      description: docsCopy('透传标准 HTML、ARIA、data 属性和原生事件。'),
+      type: 'InputHTMLAttributes<HTMLInputElement>',
     },
   ],
   radio: [
@@ -9322,13 +9436,11 @@ const propsOnlySlugs = [
   'dropdown-menu',
   'empty',
   'menubar',
-  'native-select',
   'navigation-menu',
   'pagination',
   'popover',
   'progress',
   'select',
-  'sheet',
   'tabs',
   'tooltip',
 ] as const;
@@ -11118,6 +11230,476 @@ for (const [slug, contract] of Object.entries(semanticStyleContracts)) {
   ];
 }
 
+const publicPropDescription = docsCopy('配置组件的公开状态、行为或扩展点。');
+const appendMissingApi = (slug: string, properties: ApiProperty[]) => {
+  const documentation = componentDocumentation[slug];
+  if (!documentation) return;
+
+  const propertyName = (property: ApiProperty) =>
+    property.component
+      ? `${property.component}.${property.name}`
+      : property.name;
+  const existing = new Set(documentation.api.map(propertyName));
+  for (const property of properties) {
+    if (existing.has(propertyName(property))) continue;
+    documentation.api.push(property);
+    existing.add(propertyName(property));
+  }
+};
+const publicProperty = (
+  name: string,
+  type: string,
+  options: Pick<ApiProperty, 'component' | 'defaultValue' | 'required'> = {}
+): ApiProperty => ({
+  ...options,
+  name,
+  description: publicPropDescription,
+  type,
+});
+
+appendMissingApi('alert-dialog', [
+  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
+  publicProperty('size', "'default' | 'sm'", { defaultValue: "'default'" }),
+]);
+appendMissingApi('context-menu', [
+  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
+]);
+appendMissingApi('dialog', [
+  publicProperty('contentProps', 'ComponentProps<"div">'),
+  publicProperty('disablePointerDismissal', 'boolean', {
+    defaultValue: 'false',
+  }),
+  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
+  publicProperty('showCloseButton', 'boolean', { defaultValue: 'true' }),
+]);
+appendMissingApi('drawer', [
+  publicProperty('closeText', 'ReactNode'),
+  publicProperty('closeVariant', 'ButtonVariant', {
+    defaultValue: "'outline'",
+  }),
+  publicProperty('contentProps', 'ComponentProps<"div">'),
+  publicProperty('defaultSnapPoint', 'DrawerSnapPoint | null'),
+  publicProperty('disablePointerDismissal', 'boolean', {
+    defaultValue: 'false',
+  }),
+  publicProperty('modal', "boolean | 'trap-focus'"),
+  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
+  publicProperty('showCloseButton', 'boolean'),
+  publicProperty('showSwipeHandle', 'boolean'),
+  publicProperty('snapToSequentialPoints', 'boolean'),
+  publicProperty('swipeDirection', "'down' | 'left' | 'right' | 'up'"),
+]);
+appendMissingApi('dropdown-menu', [
+  publicProperty('disabled', 'boolean', { defaultValue: 'false' }),
+  publicProperty('highlightItemOnHover', 'boolean'),
+  publicProperty('loopFocus', 'boolean'),
+  publicProperty('modal', 'boolean'),
+  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
+  publicProperty('orientation', "'horizontal' | 'vertical'"),
+]);
+appendMissingApi('navigation-menu', [
+  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"nav">'),
+]);
+appendMissingApi('popover', [
+  publicProperty('modal', "boolean | 'trap-focus'"),
+  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
+]);
+appendMissingApi('tooltip', [
+  publicProperty('disableHoverablePopup', 'boolean'),
+  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
+  publicProperty('trackCursorAxis', "'both' | 'none' | 'x' | 'y'"),
+]);
+
+componentDocumentation.menubar.api = componentDocumentation.menubar.api.filter(
+  (property) => property.name !== 'loop'
+);
+appendMissingApi('menubar', [
+  publicProperty('disabled', 'boolean', { defaultValue: 'false' }),
+  publicProperty('loopFocus', 'boolean'),
+  publicProperty('modal', 'boolean'),
+  publicProperty('orientation', "'horizontal' | 'vertical'"),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">'),
+]);
+
+appendMissingApi('counter', [
+  publicProperty('borderRadius', 'number'),
+  publicProperty('gradientHeight', 'number'),
+  publicProperty('horizontalPadding', 'number'),
+  publicProperty('padding', 'number'),
+  publicProperty('textColor', 'string'),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"span">'),
+]);
+appendMissingApi('date-picker', [
+  publicProperty('defaultValue', 'Date'),
+  publicProperty('inputRef', 'React.Ref<HTMLButtonElement>'),
+  publicProperty('required', 'boolean', { defaultValue: 'false' }),
+  publicProperty(docsCopy('原生属性'), 'Pick<ComponentProps<"button">, ...>'),
+]);
+
+componentDocumentation.form.api = componentDocumentation.form.api.filter(
+  (property) => property.component !== docsCopy('自定义控件')
+);
+appendMissingApi('form', [
+  publicProperty('onInvalid', 'SubmitErrorHandler', { component: 'Form' }),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"form">', {
+    component: 'Form',
+  }),
+  publicProperty('defaultValue', 'FieldPathValue', {
+    component: 'Form.Field',
+  }),
+  publicProperty('disabled', 'boolean', { component: 'Form.Field' }),
+  publicProperty('required', 'boolean', { component: 'Form.Field' }),
+  publicProperty('shouldUnregister', 'boolean', { component: 'Form.Field' }),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
+    component: 'Form.Field',
+  }),
+]);
+componentDocumentation.form.typePreviews = [
+  ...(componentDocumentation.form.typePreviews ?? []),
+  {
+    name: 'FormFieldInjectedControlProps<Value>',
+    declaration: '{',
+    api: [
+      'value',
+      'onChange',
+      'onBlur',
+      'name',
+      'id',
+      'disabled',
+      'required',
+      'aria-describedby',
+      'aria-errormessage',
+      'aria-invalid',
+      'aria-labelledby',
+      'aria-required',
+    ].map((name) => ({
+      name,
+      description: docsCopy('由 Form.Field 自动注入自定义控件的字段契约。'),
+      type: 'control-specific',
+    })),
+  },
+];
+
+appendMissingApi('checkbox', [
+  ...['children', 'form', 'name', 'uncheckedValue', 'value'].map((name) =>
+    publicProperty(name, name === 'children' ? 'ReactNode' : 'string', {
+      component: 'Checkbox',
+    })
+  ),
+  ...['inputRef', 'parent', 'readOnly', 'required'].map((name) =>
+    publicProperty(
+      name,
+      name === 'inputRef' ? 'React.Ref<HTMLInputElement>' : 'boolean',
+      {
+        component: 'Checkbox',
+      }
+    )
+  ),
+  publicProperty('classNames', 'CheckboxClassNames', { component: 'Checkbox' }),
+  ...[
+    'allValues',
+    'columns',
+    'gap',
+    'minColumnWidth',
+    'name',
+    'onChange',
+    'orientation',
+  ].map((name) =>
+    publicProperty(
+      name,
+      name === 'allValues'
+        ? 'string[]'
+        : name === 'columns'
+          ? 'number'
+          : name === 'onChange'
+            ? '(value: string[]) => void'
+            : name === 'orientation'
+              ? "'horizontal' | 'vertical'"
+              : name === 'name'
+                ? 'string'
+                : 'MasonryLength | MasonryGap',
+      { component: 'Checkbox.Group' }
+    )
+  ),
+  publicProperty('disabled', 'boolean', { component: 'Checkbox.Group' }),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"label">', {
+    component: 'Checkbox',
+  }),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
+    component: 'Checkbox.Group',
+  }),
+]);
+
+appendMissingApi('radio', [
+  ...['children', 'classNames', 'inputRef', 'readOnly', 'required'].map(
+    (name) =>
+      publicProperty(
+        name,
+        name === 'children'
+          ? 'ReactNode'
+          : name === 'classNames'
+            ? 'RadioClassNames'
+            : name === 'inputRef'
+              ? 'React.Ref<HTMLInputElement>'
+              : 'boolean',
+        { component: 'Radio' }
+      )
+  ),
+  publicProperty('disabled', 'boolean', { component: 'Radio' }),
+  ...['form', 'inputRef', 'name', 'readOnly', 'required'].map((name) =>
+    publicProperty(
+      name,
+      name === 'inputRef'
+        ? 'React.Ref<HTMLInputElement>'
+        : name === 'readOnly' || name === 'required'
+          ? 'boolean'
+          : 'string',
+      { component: 'Radio.Group' }
+    )
+  ),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"label">', {
+    component: 'Radio',
+  }),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
+    component: 'Radio.Group',
+  }),
+]);
+
+appendMissingApi('select', [
+  publicProperty('autoComplete', "'list' | 'both' | 'inline' | 'none'"),
+  ...[
+    'autoHighlight',
+    'defaultOpen',
+    'highlightItemOnHover',
+    'loopFocus',
+    'modal',
+    'open',
+    'openOnInputClick',
+  ].map((name) => publicProperty(name, 'boolean')),
+  publicProperty('filter', 'null | ((item: Value, query: string) => boolean)'),
+  publicProperty('form', 'string'),
+  publicProperty('id', 'string'),
+  publicProperty(
+    'isItemEqualToValue',
+    '(item: Value, value: Value) => boolean'
+  ),
+  publicProperty('itemToStringLabel', '(item: Value) => string'),
+  publicProperty('itemToStringValue', '(item: Value) => string'),
+  publicProperty('limit', 'number'),
+  publicProperty('locale', 'Intl.LocalesArgument'),
+  publicProperty('name', 'string'),
+  publicProperty('onOpenChange', '(open: boolean) => void'),
+  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
+]);
+
+appendMissingApi('slider', [
+  publicProperty('disabled', 'boolean'),
+  publicProperty('form', 'string'),
+  publicProperty('format', 'Intl.NumberFormatOptions'),
+  publicProperty('inputRef', 'React.Ref<HTMLInputElement>'),
+  publicProperty('largeStep', 'number'),
+  publicProperty('locale', 'Intl.LocalesArgument'),
+  publicProperty('minStepsBetweenValues', 'number'),
+  publicProperty('name', 'string'),
+  publicProperty('thumbCollisionBehavior', "'none' | 'push' | 'swap'"),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">'),
+]);
+appendMissingApi('switch', [
+  publicProperty('form', 'string', { component: 'Switch' }),
+  publicProperty('inputRef', 'React.Ref<HTMLInputElement>', {
+    component: 'Switch',
+  }),
+  publicProperty('readOnly', 'boolean', { component: 'Switch' }),
+  publicProperty('required', 'boolean', { component: 'Switch' }),
+  publicProperty('uncheckedValue', 'string', { component: 'Switch' }),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"span">', {
+    component: 'Switch',
+  }),
+]);
+appendMissingApi('toggle', [
+  publicProperty('inputRef', 'React.Ref<HTMLButtonElement>', {
+    component: 'Toggle',
+  }),
+  publicProperty('required', 'boolean', { component: 'Toggle' }),
+  publicProperty(docsCopy('原生属性'), 'ButtonHTMLAttributes', {
+    component: 'Toggle',
+  }),
+  publicProperty('disabled', 'boolean', { component: 'Toggle.Group' }),
+  publicProperty('loopFocus', 'boolean', { component: 'Toggle.Group' }),
+  publicProperty('variant', "'default' | 'outline'", {
+    component: 'Toggle.Group',
+  }),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
+    component: 'Toggle.Group',
+  }),
+]);
+appendMissingApi('input-number', [
+  publicProperty('autoFocus', 'boolean'),
+  publicProperty('inputProps', 'ComponentProps<"input">'),
+  publicProperty('inputRef', 'React.Ref<HTMLInputElement>'),
+  publicProperty('onBlur', 'FocusEventHandler<HTMLInputElement>'),
+  publicProperty('onFocus', 'FocusEventHandler<HTMLInputElement>'),
+]);
+appendMissingApi('input', [
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"input">', {
+    component: 'Input',
+  }),
+  publicProperty(docsCopy('原生属性'), 'InputOTPProps', {
+    component: 'Input.OTP',
+  }),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"textarea">', {
+    component: 'Input.TextArea',
+  }),
+]);
+
+appendMissingApi('masonry', [
+  publicProperty('ref', 'React.Ref<HTMLDivElement>'),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">'),
+]);
+appendMissingApi('stack', [
+  publicProperty('children', 'ReactNode'),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">'),
+  ...['align', 'gap', 'justify', 'wrap'].map((name) =>
+    publicProperty(name, 'StackProps', { component: 'Stack.Compact' })
+  ),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
+    component: 'Stack.Compact',
+  }),
+]);
+appendMissingApi('scroll-area', [
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">'),
+]);
+appendMissingApi('skeleton', [
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">'),
+]);
+appendMissingApi('spinner', [
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"svg">'),
+]);
+
+componentDocumentation.direction.api = [
+  publicProperty('children', 'ReactNode'),
+  publicProperty('direction', "'ltr' | 'rtl'"),
+];
+componentDocumentation.sonner.api = [
+  publicProperty(docsCopy('原生属性'), 'SonnerProps'),
+];
+appendMissingApi('toast', [
+  publicProperty('children', 'ReactNode', { component: 'Toast.Provider' }),
+  publicProperty('id', 'string', { component: 'Toast.Provider' }),
+  publicProperty(docsCopy('原生属性'), 'ToastProviderProps', {
+    component: 'Toast.Provider',
+  }),
+  publicProperty(docsCopy('原生属性'), 'ToasterProps', {
+    component: 'Toast.Toaster',
+  }),
+]);
+
+const nativeRootContracts: Array<[string, string]> = [
+  ['accordion', 'AccordionRootProps'],
+  ['alert', 'ComponentProps<"div">'],
+  ['aspect-ratio', 'AspectRatioProps'],
+  ['attachment', 'ComponentProps<"div">'],
+  ['avatar', 'ComponentProps<"span">'],
+  ['bubble', 'ComponentProps<"div">'],
+  ['card', 'ComponentProps<"div">'],
+  ['carousel', 'ComponentProps<"div">'],
+  ['collapsible', 'CollapsibleRootProps'],
+  ['command', 'CommandPrimitiveProps'],
+  ['empty', 'ComponentProps<"div">'],
+  ['item', 'ComponentProps<"div"> | ComponentProps<"a">'],
+  ['kbd', 'ComponentProps<"kbd">'],
+  ['marker', 'ComponentProps<"div"> | ComponentProps<"a">'],
+  ['pagination', 'ComponentProps<"nav">'],
+  ['progress', 'ComponentProps<"div">'],
+  ['resizable', 'ResizablePrimitive.GroupProps'],
+  ['tabs', 'TabsRootProps'],
+  ['table', 'ComponentProps<"div">'],
+  ['typography', 'TypographyProps'],
+];
+for (const [slug, type] of nativeRootContracts) {
+  appendMissingApi(slug, [publicProperty(docsCopy('原生属性'), type)]);
+}
+appendMissingApi('avatar', [
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
+    component: 'Avatar.Group',
+  }),
+]);
+appendMissingApi('attachment', [
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
+    component: 'Attachment.Group',
+  }),
+]);
+appendMissingApi('item', [
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
+    component: 'Item.Group',
+  }),
+]);
+appendMissingApi('progress', [publicProperty('children', 'ReactNode')]);
+appendMissingApi('collapsible', [
+  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
+]);
+appendMissingApi('button', [
+  ...['align', 'gap', 'justify', 'wrap'].map((name) =>
+    publicProperty(name, 'StackCompactProps', { component: 'Button.Group' })
+  ),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
+    component: 'Button.Group',
+  }),
+]);
+appendMissingApi('accordion', [
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"span">', {
+    component: 'Accordion.Indicator',
+  }),
+]);
+appendMissingApi('chart', [
+  publicProperty('id', 'string', { component: 'Chart.Style', required: true }),
+  publicProperty('config', 'ChartConfig', {
+    component: 'Chart.Style',
+    required: true,
+  }),
+  publicProperty(docsCopy('原生属性'), 'ChartTooltipContentProps', {
+    component: 'Chart.TooltipContent',
+  }),
+  publicProperty(docsCopy('原生属性'), 'ChartLegendContentProps', {
+    component: 'Chart.LegendContent',
+  }),
+]);
+appendMissingApi('table', [
+  publicProperty(docsCopy('原生属性'), 'Table.PrimitiveProps', {
+    component: 'Table.Primitive',
+  }),
+  ...['Header', 'Body', 'Footer', 'Row'].map((component) =>
+    publicProperty(
+      docsCopy('原生属性'),
+      `ComponentProps<"${component === 'Row' ? 'tr' : component === 'Header' ? 'thead' : component === 'Body' ? 'tbody' : 'tfoot'}">`,
+      {
+        component: `Table.${component}`,
+      }
+    )
+  ),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"th">', {
+    component: 'Table.Head',
+  }),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"td">', {
+    component: 'Table.Cell',
+  }),
+]);
+componentDocumentation.layout.api = componentDocumentation.layout.api.filter(
+  (property) => property.component !== docsCopy('全部组成组件')
+);
+for (const [component, type] of [
+  ['Layout', 'ComponentProps<"div">'],
+  ['Layout.Header', 'ComponentProps<"header">'],
+  ['Layout.Content', 'ComponentProps<"main">'],
+  ['Layout.Footer', 'ComponentProps<"footer">'],
+  ['Layout.Sidebar', 'ComponentProps<"aside">'],
+] as const) {
+  appendMissingApi('layout', [
+    publicProperty(docsCopy('原生属性'), type, { component }),
+  ]);
+}
+
 componentDocumentation.command.parts = [
   {
     name: 'Command',
@@ -11244,4 +11826,124 @@ for (const documentation of Object.values(componentDocumentation)) {
 const accordionSingleExample = componentDocumentation.accordion.examples[0];
 if (accordionSingleExample) {
   accordionSingleExample.title = docsCopy('单项展开');
+}
+
+const apiCaseName = (property: ApiProperty) =>
+  property.component ? `${property.component}.${property.name}` : property.name;
+
+const apiCaseValue = (
+  property: ApiProperty
+): ComponentHarnessProperties[string] => {
+  const value = property.defaultValue?.trim();
+
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  if (value === 'null') return null;
+  if (value && /^-?\d+(?:\.\d+)?$/.test(value)) return Number(value);
+  if (
+    value &&
+    ((value.startsWith("'") && value.endsWith("'")) ||
+      (value.startsWith('"') && value.endsWith('"')))
+  ) {
+    return value.slice(1, -1);
+  }
+
+  return value || property.type;
+};
+
+const resolveApiCaseName = (name: string, apiNames: Set<string>) => {
+  if (apiNames.has(name)) return name;
+
+  const compoundMatches = [...apiNames].filter((candidate) =>
+    candidate.endsWith(`.${name}`)
+  );
+  return compoundMatches.length === 1 ? compoundMatches[0] : name;
+};
+
+for (const documentation of Object.values(componentDocumentation)) {
+  const apiNames = new Set(documentation.api.map(apiCaseName));
+
+  for (const example of documentation.examples) {
+    for (const axis of example.caseAxes ?? []) {
+      for (const option of axis.options) {
+        if (!option.properties) continue;
+        option.properties = Object.fromEntries(
+          Object.entries(option.properties).map(([name, value]) => [
+            resolveApiCaseName(name, apiNames),
+            value,
+          ])
+        );
+      }
+      if (axis.property === false) continue;
+      const resolvedName = resolveApiCaseName(
+        axis.property ?? axis.name,
+        apiNames
+      );
+      axis.property = apiNames.has(resolvedName) ? resolvedName : false;
+    }
+
+    for (const harnessCase of example.cases ?? []) {
+      if (!harnessCase.properties) continue;
+      harnessCase.properties = Object.fromEntries(
+        Object.entries(harnessCase.properties).map(([name, value]) => [
+          resolveApiCaseName(name, apiNames),
+          value,
+        ])
+      );
+    }
+  }
+
+  const coveredApiNames = new Set<string>();
+  for (const example of documentation.examples) {
+    for (const axis of example.caseAxes ?? []) {
+      if (axis.property) coveredApiNames.add(axis.property);
+      for (const option of axis.options) {
+        for (const name of Object.keys(option.properties ?? {})) {
+          coveredApiNames.add(resolveApiCaseName(name, apiNames));
+        }
+      }
+    }
+    for (const harnessCase of example.cases ?? []) {
+      for (const name of Object.keys(harnessCase.properties ?? {})) {
+        coveredApiNames.add(resolveApiCaseName(name, apiNames));
+      }
+    }
+  }
+
+  const basicExample = documentation.examples[0];
+  if (!basicExample) continue;
+
+  const baseProperties = Object.fromEntries(
+    documentation.api
+      .map(
+        (property) => [apiCaseName(property), apiCaseValue(property)] as const
+      )
+      .filter(([name]) => !coveredApiNames.has(name))
+  );
+  const basicCases = basicExample.cases
+    ? basicExample.cases
+    : basicExample.caseAxes
+      ? createCasesFromAxes(basicExample.caseAxes)
+      : [
+          {
+            isDefault: true,
+            label: docsCopy('默认'),
+            properties: {},
+            values: {},
+          },
+        ];
+  const defaultIndex = Math.max(
+    0,
+    basicCases.findIndex((harnessCase) => harnessCase.isDefault)
+  );
+
+  basicExample.caseAxes = undefined;
+  basicExample.cases = basicCases.map((harnessCase, index) => ({
+    ...harnessCase,
+    isDefault: index === defaultIndex,
+    properties:
+      index === defaultIndex
+        ? { ...baseProperties, ...harnessCase.properties }
+        : harnessCase.properties,
+  }));
 }

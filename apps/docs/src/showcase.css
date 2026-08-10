@@ -1127,6 +1127,16 @@ a {
 .component-harness-case-header [data-slot='badge'] {
   flex: 0 0 auto;
 }
+.component-harness-case-compact-properties {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 4px 16px;
+}
+.component-harness-case-compact-properties [data-slot='badge'] {
+  flex: 0 0 auto;
+}
 .component-harness-case-stage {
   min-height: 168px;
   display: flex;

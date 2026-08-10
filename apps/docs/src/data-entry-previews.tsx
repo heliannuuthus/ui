@@ -175,8 +175,13 @@ export const CheckboxTasksDemo = () => {
   );
 };
 
-export const SelectMemberSearchDemo = () => {
+export const SelectMemberSearchDemo = ({
+  mode = 'default',
+}: {
+  mode?: 'controlled-open' | 'custom-filter' | 'default';
+}) => {
   const [value, setValue] = useState<string | null>(members[0]);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="data-compact-form">
@@ -186,7 +191,15 @@ export const SelectMemberSearchDemo = () => {
       </div>
       <Select
         emptyText={docsCopy('没有找到成员')}
+        filter={
+          mode === 'custom-filter'
+            ? (member, query) =>
+                member.toLocaleLowerCase().startsWith(query.toLocaleLowerCase())
+            : undefined
+        }
         onChange={setValue}
+        onOpenChange={mode === 'controlled-open' ? setOpen : undefined}
+        open={mode === 'controlled-open' ? open : undefined}
         options={members.map((member) => ({ label: member, value: member }))}
         placeholder={docsCopy('搜索成员…')}
         showClear
