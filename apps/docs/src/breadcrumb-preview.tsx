@@ -43,7 +43,7 @@ const menuItems = [
 export const BreadcrumbBasicDemo = () => {
   return (
     <section className="breadcrumb-page-demo">
-      <Breadcrumb items={pageItems} homeIcon />
+      <Breadcrumb items={pageItems} icon />
       <header>
         <div>
           <span>{docsCopy('导航组件')}</span>
@@ -81,7 +81,7 @@ export const BreadcrumbCollapsedDemo = () => {
           label: docsCopy('显示完整路径'),
         }}
         items={deepPathItems}
-        homeIcon
+        icon
       />
       <p>
         {docsCopy(

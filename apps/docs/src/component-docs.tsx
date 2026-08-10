@@ -1927,7 +1927,7 @@ const items = [
 ]
 
 export const PageBreadcrumb = () => {
-  return <Breadcrumb items={items} homeIcon />
+  return <Breadcrumb items={items} icon />
 }`),
       wide: true,
       previewHeight: 380,
@@ -1942,7 +1942,7 @@ export const PageBreadcrumb = () => {
 
 <Breadcrumb
   items={releasePath}
-  homeIcon
+  icon
   collapse={{ maxItems: 4, before: 1, after: 2 }}
 />`,
       cases: [
@@ -2007,15 +2007,17 @@ export const PageBreadcrumb = () => {
       type: 'number | BreadcrumbCollapseOptions',
     },
     {
-      name: 'homeIcon',
+      name: 'icon',
       description: docsCopy('为首项显示内置首页图标，或传入自定义图标。'),
       type: 'boolean | ReactNode',
       defaultValue: 'false',
     },
     {
-      name: docsCopy('原生属性'),
-      description: docsCopy('透传标准 HTML、ARIA、data 属性和原生事件。'),
-      type: 'ComponentProps<"nav">',
+      name: '...navProps',
+      description: docsCopy(
+        '除 children 外，可直接传入 nav 元素支持的 id、className、style、ARIA、data 属性和原生事件。'
+      ),
+      type: 'Omit<ComponentProps<"nav">, "children">',
     },
   ],
   typePreviews: [

@@ -42,7 +42,7 @@ type BreadcrumbProps = Omit<React.ComponentProps<'nav'>, 'children'> & {
   separator?: BreadcrumbSeparator;
   size?: 'sm' | 'default' | 'lg';
   collapse?: number | BreadcrumbCollapseOptions;
-  homeIcon?: boolean | React.ReactNode;
+  icon?: boolean | React.ReactNode;
 };
 
 type BreadcrumbEntry =
@@ -167,7 +167,7 @@ const Breadcrumb = ({
   separator = 'chevron',
   size = 'default',
   collapse,
-  homeIcon = false,
+  icon = false,
   className,
   ...props
 }: BreadcrumbProps) => {
@@ -246,11 +246,11 @@ const Breadcrumb = ({
                     )}
                     onClick={entry.item.onClick}
                   >
-                    {entry.index === 0 && homeIcon ? (
-                      homeIcon === true ? (
+                    {entry.index === 0 && icon ? (
+                      icon === true ? (
                         <HomeIcon />
                       ) : (
-                        homeIcon
+                        icon
                       )
                     ) : (
                       entry.item.icon
