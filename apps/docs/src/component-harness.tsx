@@ -1,9 +1,7 @@
-import { docsCopy } from './i18n/content';
 import { createCasesFromAxes } from './component-harness-cases';
 import type { CSSProperties, ReactNode } from 'react';
-import { Badge, Tabs } from '@heliannuuthus/ui';
+import { Tabs } from '@heliannuuthus/ui';
 import { useTranslation } from 'react-i18next';
-import { orderPropertyEntries } from './api-property-order';
 
 export type ComponentHarnessProperties = Record<
   string,
@@ -40,7 +38,6 @@ type ComponentHarnessSharedProps = {
   children: (values: ComponentHarnessValues) => ReactNode;
   layout?: ComponentHarnessLayout;
   minCaseWidth?: number;
-  propertyOrder?: string[];
 };
 
 type ComponentHarnessCaseProps = ComponentHarnessSharedProps & {
@@ -56,13 +53,6 @@ type ComponentHarnessAxisProps = ComponentHarnessSharedProps & {
 type ComponentHarnessProps =
   ComponentHarnessCaseProps | ComponentHarnessAxisProps;
 
-const formatPropertyValue = (
-  value: ComponentHarnessProperties[string]
-): string => {
-  if (typeof value === 'string') return JSON.stringify(value);
-  return String(value);
-};
-
 export const ComponentHarness = (props: ComponentHarnessProps) => {
   const { t } = useTranslation();
   const cases = props.cases ?? createCasesFromAxes(props.axes ?? []);
@@ -74,61 +64,24 @@ export const ComponentHarness = (props: ComponentHarnessProps) => {
 
   const renderCase = (
     harnessCase: ComponentHarnessCase,
-    options?: { compactHeader?: boolean }
+    options?: { compactHeader?: boolean; hideHeader?: boolean }
   ) => (
     <section
       aria-label={harnessCase.label}
       className={`component-harness-case${
         options?.compactHeader ? ' component-harness-case-segmented' : ''
-      }`}
+      }${options?.hideHeader ? ' component-harness-case-standalone' : ''}`}
       key={`${harnessCase.label}-${JSON.stringify(harnessCase.values)}`}
       role="group"
     >
-      {options?.compactHeader ? (
-        <div className="component-harness-case-compact-properties">
-          <dl
-            aria-label={t('components.properties')}
-            className="component-harness-case-properties"
-          >
-            {orderPropertyEntries(
-              harnessCase.properties ?? harnessCase.values,
-              props.propertyOrder
-            ).map(([name, value]) => (
-              <div key={name}>
-                <dt>{name}</dt>
-                <dd>{formatPropertyValue(value)}</dd>
-              </div>
-            ))}
-          </dl>
-          {harnessCase.isDefault ? (
-            <Badge variant="secondary">{docsCopy('默认')}</Badge>
-          ) : null}
-        </div>
-      ) : (
+      {!options?.compactHeader && !options?.hideHeader ? (
         <header className="component-harness-case-header">
           <div className="component-harness-case-copy">
             <h4>{harnessCase.label}</h4>
             {harnessCase.description ? <p>{harnessCase.description}</p> : null}
-            <dl
-              aria-label={t('components.properties')}
-              className="component-harness-case-properties"
-            >
-              {orderPropertyEntries(
-                harnessCase.properties ?? harnessCase.values,
-                props.propertyOrder
-              ).map(([name, value]) => (
-                <div key={name}>
-                  <dt>{name}</dt>
-                  <dd>{formatPropertyValue(value)}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
-          {harnessCase.isDefault ? (
-            <Badge variant="secondary">{docsCopy('默认')}</Badge>
-          ) : null}
         </header>
-      )}
+      ) : null}
       <div className="component-harness-case-stage">
         {props.children(harnessCase.values)}
       </div>
@@ -172,7 +125,9 @@ export const ComponentHarness = (props: ComponentHarnessProps) => {
       <div
         className={`component-harness-case-grid component-harness-case-grid-${props.layout ?? 'grid'}`}
       >
-        {cases.map((harnessCase) => renderCase(harnessCase))}
+        {cases.map((harnessCase) =>
+          renderCase(harnessCase, { hideHeader: cases.length === 1 })
+        )}
       </div>
     </div>
   );

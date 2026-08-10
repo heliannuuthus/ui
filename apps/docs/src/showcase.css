@@ -1095,48 +1095,6 @@ a {
   font-size: 11px;
   line-height: 1.6;
 }
-.component-harness-case-properties {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 2px 0 0;
-}
-.component-harness-case-properties > div {
-  min-width: 0;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 3px;
-  padding: 3px 7px;
-  border: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
-  border-radius: 6px;
-  background: color-mix(in srgb, var(--surface) 72%, transparent);
-  font: 10px/1.4 var(--font-mono);
-}
-.component-harness-case-properties dt {
-  color: var(--docs-muted);
-}
-.component-harness-case-properties dt::after {
-  content: '=';
-}
-.component-harness-case-properties dd {
-  min-width: 0;
-  margin: 0;
-  color: var(--primary);
-  overflow-wrap: anywhere;
-}
-.component-harness-case-header [data-slot='badge'] {
-  flex: 0 0 auto;
-}
-.component-harness-case-compact-properties {
-  display: flex;
-  align-items: start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 4px 4px 16px;
-}
-.component-harness-case-compact-properties [data-slot='badge'] {
-  flex: 0 0 auto;
-}
 .component-harness-case-stage {
   min-height: 168px;
   display: flex;
@@ -1150,6 +1108,10 @@ a {
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--docs-muted) 28%, transparent)
     transparent;
+}
+.component-harness-case-standalone .component-harness-case-stage {
+  padding: 0;
+  border-top: 0;
 }
 .component-harness-case-segmented .component-harness-case-stage {
   min-height: 0;
