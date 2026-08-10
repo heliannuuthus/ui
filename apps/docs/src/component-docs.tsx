@@ -198,7 +198,6 @@ import {
 } from './resizable-preview';
 import { minimalComponentPreviews } from './minimal-previews';
 import {
-  type ComponentHarnessProperties,
   type ComponentHarnessCase,
   type ComponentHarnessCaseAxis,
   type ComponentHarnessLayout,
@@ -238,6 +237,7 @@ export type ComponentExample = {
   description: ReactNode;
   preview: ReactNode | ((values: ComponentHarnessValues) => ReactNode);
   code: string;
+  coveredProperties?: string[];
   caseAxes?: ComponentHarnessCaseAxis[];
   caseLayout?: ComponentHarnessLayout;
   caseMinWidth?: number;
@@ -1279,6 +1279,21 @@ const stackDocumentation: ComponentDocumentation = {
     <Block key={index}>{index + 1}</Block>
   ))}
 </Stack>`,
+      cases: [
+        {
+          isDefault: true,
+          label: docsCopy('默认'),
+          properties: {
+            align: 'center',
+            block: true,
+            gap: 6,
+            justify: 'center',
+            orientation: 'horizontal',
+            wrap: true,
+          },
+          values: {},
+        },
+      ],
       previewHeight: 460,
     },
     {
@@ -11889,26 +11904,6 @@ if (accordionSingleExample) {
 const apiCaseName = (property: ApiProperty) =>
   property.component ? `${property.component}.${property.name}` : property.name;
 
-const apiCaseValue = (
-  property: ApiProperty
-): ComponentHarnessProperties[string] => {
-  const value = property.defaultValue?.trim();
-
-  if (value === 'true') return true;
-  if (value === 'false') return false;
-  if (value === 'null') return null;
-  if (value && /^-?\d+(?:\.\d+)?$/.test(value)) return Number(value);
-  if (
-    value &&
-    ((value.startsWith("'") && value.endsWith("'")) ||
-      (value.startsWith('"') && value.endsWith('"')))
-  ) {
-    return value.slice(1, -1);
-  }
-
-  return value || property.type;
-};
-
 const resolveApiCaseName = (name: string, apiNames: Set<string>) => {
   if (apiNames.has(name)) return name;
 
@@ -11922,6 +11917,10 @@ for (const documentation of Object.values(componentDocumentation)) {
   const apiNames = new Set(documentation.api.map(apiCaseName));
 
   for (const example of documentation.examples) {
+    example.coveredProperties = example.coveredProperties?.map((name) =>
+      resolveApiCaseName(name, apiNames)
+    );
+
     for (const axis of example.caseAxes ?? []) {
       for (const option of axis.options) {
         if (!option.properties) continue;
@@ -11953,6 +11952,9 @@ for (const documentation of Object.values(componentDocumentation)) {
 
   const coveredApiNames = new Set<string>();
   for (const example of documentation.examples) {
+    for (const name of example.coveredProperties ?? []) {
+      coveredApiNames.add(resolveApiCaseName(name, apiNames));
+    }
     for (const axis of example.caseAxes ?? []) {
       if (axis.property) coveredApiNames.add(axis.property);
       for (const option of axis.options) {
@@ -11971,12 +11973,11 @@ for (const documentation of Object.values(componentDocumentation)) {
   const basicExample = documentation.examples[0];
   if (!basicExample) continue;
 
-  const baseProperties = Object.fromEntries(
-    documentation.api
-      .map(
-        (property) => [apiCaseName(property), apiCaseValue(property)] as const
-      )
-      .filter(([name]) => !coveredApiNames.has(name))
+  const missingApiNames = documentation.api
+    .map(apiCaseName)
+    .filter((name) => !coveredApiNames.has(name));
+  basicExample.coveredProperties = Array.from(
+    new Set([...(basicExample.coveredProperties ?? []), ...missingApiNames])
   );
   const basicCases = basicExample.cases
     ? basicExample.cases
@@ -11999,9 +12000,6 @@ for (const documentation of Object.values(componentDocumentation)) {
   basicExample.cases = basicCases.map((harnessCase, index) => ({
     ...harnessCase,
     isDefault: index === defaultIndex,
-    properties:
-      index === defaultIndex
-        ? { ...baseProperties, ...harnessCase.properties }
-        : harnessCase.properties,
+    properties: harnessCase.properties,
   }));
 }
