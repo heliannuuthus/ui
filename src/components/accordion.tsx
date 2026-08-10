@@ -13,80 +13,96 @@ type AccordionItem = {
   value: string;
 };
 
-type AccordionProps = Omit<
+type AccordionPresenceProps =
+  | {
+      hiddenUntilFound: true;
+      keepMounted?: never;
+    }
+  | {
+      hiddenUntilFound?: false;
+      keepMounted?: boolean;
+    };
+
+type AccordionRootProps = Omit<
   React.ComponentProps<'div'>,
   'children' | 'defaultValue' | 'onChange'
 > & {
   defaultValue?: string[];
   disabled?: boolean;
-  expandedIndicator?: React.ReactNode;
-  hiddenUntilFound?: boolean;
-  indicator?: React.ReactNode;
-  indicatorPosition?: AccordionIndicatorPosition;
+  indicator?: React.ReactElement<AccordionIndicatorProps> | null;
   items: readonly AccordionItem[];
-  keepMounted?: boolean;
   multiple?: boolean;
   onChange?: (value: string[]) => void;
   value?: string[];
 };
 
-type AccordionIndicatorProps = {
-  expandedIndicator?: React.ReactNode;
-  indicator?: React.ReactNode;
-  position: AccordionIndicatorPosition;
+type AccordionProps = AccordionRootProps & AccordionPresenceProps;
+
+type AccordionIndicatorState = {
+  disabled: boolean;
+  open: boolean;
+  value: string;
 };
 
-const AccordionIndicator = ({
-  expandedIndicator,
-  indicator,
-  position,
-}: AccordionIndicatorProps) => {
-  const collapsedIndicator =
-    indicator === undefined ? (
-      position === 'start' ? (
-        <ChevronRightIcon />
-      ) : (
-        <ChevronLeftIcon />
-      )
-    ) : (
-      indicator
-    );
-  const hasExpandedIndicator = expandedIndicator !== undefined;
+type AccordionIndicatorProps = Omit<
+  React.ComponentProps<'span'>,
+  'children'
+> & {
+  children?:
+    React.ReactNode | ((state: AccordionIndicatorState) => React.ReactNode);
+  position?: AccordionIndicatorPosition;
+};
 
-  if (
-    collapsedIndicator == null &&
-    (!hasExpandedIndicator || expandedIndicator == null)
-  ) {
-    return null;
+const AccordionIndicatorContext = React.createContext<
+  AccordionIndicatorState | undefined
+>(undefined);
+
+const AccordionIndicator = ({
+  children,
+  className,
+  position = 'end',
+  ...props
+}: AccordionIndicatorProps) => {
+  const state = React.useContext(AccordionIndicatorContext);
+
+  if (!state) {
+    throw new Error(
+      'Accordion.Indicator must be rendered through the Accordion indicator prop.'
+    );
   }
+
+  const rendersState = typeof children === 'function';
+  const content = rendersState
+    ? children(state)
+    : (children ??
+      (position === 'start' ? <ChevronRightIcon /> : <ChevronLeftIcon />));
+
+  if (content == null) return null;
 
   return (
     <span
+      {...props}
       aria-hidden="true"
-      data-has-expanded-indicator={hasExpandedIndicator ? 'true' : undefined}
+      data-disabled={state.disabled ? '' : undefined}
+      data-open={state.open ? '' : undefined}
+      data-position={position}
       data-slot="accordion-indicator"
       className={cn(
         'pointer-events-none inline-flex size-4 shrink-0 items-center justify-center text-muted-foreground transition-transform duration-200 motion-reduce:transition-none [&_svg]:size-4',
-        position === 'start' ? 'order-first' : 'ml-auto'
+        position === 'start' ? 'order-first' : 'ml-auto',
+        !rendersState && state.open && position === 'start' && 'rotate-90',
+        !rendersState && state.open && position === 'end' && '-rotate-90',
+        className
       )}
     >
-      <span data-slot="accordion-indicator-collapsed">
-        {collapsedIndicator}
-      </span>
-      {hasExpandedIndicator ? (
-        <span data-slot="accordion-indicator-expanded">
-          {expandedIndicator}
-        </span>
-      ) : null}
+      {content}
     </span>
   );
 };
 
-const Accordion = ({
+const AccordionRoot = ({
   className,
-  expandedIndicator,
   indicator,
-  indicatorPosition = 'end',
   items,
   onChange,
   ...props
@@ -116,16 +132,26 @@ const Accordion = ({
           >
             <AccordionPrimitive.Trigger
               data-slot="accordion-trigger"
-              data-indicator-position={indicatorPosition}
               className="relative flex flex-1 items-start justify-start gap-4 border border-transparent p-4 text-left text-sm font-medium transition-all outline-none hover:underline aria-disabled:pointer-events-none aria-disabled:opacity-50"
-            >
-              {item.title}
-              <AccordionIndicator
-                expandedIndicator={expandedIndicator}
-                indicator={indicator}
-                position={indicatorPosition}
-              />
-            </AccordionPrimitive.Trigger>
+              render={(triggerProps, state) => (
+                <button {...triggerProps}>
+                  {item.title}
+                  <AccordionIndicatorContext.Provider
+                    value={{
+                      disabled: state.disabled,
+                      open: state.open,
+                      value: item.value,
+                    }}
+                  >
+                    {indicator === undefined ? (
+                      <AccordionIndicator />
+                    ) : (
+                      indicator
+                    )}
+                  </AccordionIndicatorContext.Provider>
+                </button>
+              )}
+            />
           </AccordionPrimitive.Header>
           <AccordionPrimitive.Panel
             data-slot="accordion-content"
@@ -144,9 +170,15 @@ const Accordion = ({
   );
 };
 
+const Accordion = Object.assign(AccordionRoot, {
+  Indicator: AccordionIndicator,
+});
+
 export {
   Accordion,
   type AccordionIndicatorPosition,
+  type AccordionIndicatorProps,
+  type AccordionIndicatorState,
   type AccordionItem,
   type AccordionProps,
 };

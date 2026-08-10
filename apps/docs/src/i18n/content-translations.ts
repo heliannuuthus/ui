@@ -2481,7 +2481,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '选择日期后，团队会在当天 10:00 收到发布提醒。':
     'After selecting a date, the team will receive a release reminder at 10:00 that day.',
   选择通知方式: 'Choose notification method',
-  '选择图标或图片媒体样式。': 'Choose an icon or picture media style.',
+  '声明媒体内容是图标还是图片。':
+    'Declare whether the media content is an icon or an image.',
   '选择文本、邮箱、密码等原生输入类型。':
     'Choose from native input types such as text, email, password, etc.',
   '选择新项目时调用。': 'Called when a new item is selected.',
@@ -3302,10 +3303,10 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     "import { Form } from '@heliannuuthus/ui'\n\nconst form = useForm({ defaultValues: { email: '', note: '' } })\n\n<Form {...form}>\n  <form onSubmit={form.handleSubmit(onSubmit)}>\n    <Form.Field\n      control={form.control}\n      name=\"email\"\n      rules={{ required: 'Please enter your email address. ' }}\n      render={({ field }) => (\n        <Form.Item>\n          <Form.Label>Email address</Form.Label>\n          <Form.Control><Input {...field} /></Form.Control>\n          <Form.Message />\n        </Form.Item>\n      )}\n    />\n  </form>\n</Form>",
   "import { Fragment, useState } from 'react'\nimport { Table } from '@heliannuuthus/ui'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Table.ExpandButton\n                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}\n                expanded={expanded}\n                onExpandedChange={(next) =>\n                  setExpandedId(next ? row.id : null)\n                }\n              />\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.ExpandedRow colSpan={2}>{row.detail}</Table.ExpandedRow>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>":
     "import { Fragment, useState } from 'react'\nimport { Table } from '@heliannuuthus/ui'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Table.ExpandButton\n                aria-label={`${expanded ? 'Collapse' : 'Expand'} ${row.id}`}\n                expanded={expanded}\n                onExpandedChange={(next) =>\n                  setExpandedId(next? row.id: null)\n                }\n              />\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.ExpandedRow colSpan={2}>{row.detail}</Table.ExpandedRow>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>",
-  'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaVariant="icon"\n  title="许澄提交了发布说明"\n  description="补充数据库迁移影响与回滚入口。"\n  actions={<Button>查看</Button>}\n/>':
-    'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaVariant="icon"\n  title="Xu Cheng submitted release notes"\n  description="Supplementary database migration impact and rollback entry."\n  actions={<Button>View</Button>}\n/>',
-  'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<MessageCircle />}\n  mediaVariant="icon"\n  title="林默回复了检查项"\n  description="确认索引变更不会锁表。"\n  actions={<Button>查看</Button>}\n/>':
-    'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<MessageCircle />}\n  mediaVariant="icon"\n  title="Lin Mo replied to the check item"\n  description="Confirm that index changes will not lock the table."\n  actions={<Button>View</Button>}\n/>',
+  'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaType="icon"\n  title="许澄提交了发布说明"\n  description="补充数据库迁移影响与回滚入口。"\n  actions={<Button>查看</Button>}\n/>':
+    'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaType="icon"\n  title="Xu Cheng submitted release notes"\n  description="Supplementary database migration impact and rollback entry."\n  actions={<Button>View</Button>}\n/>',
+  'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<MessageCircle />}\n  mediaType="icon"\n  title="林默回复了检查项"\n  description="确认索引变更不会锁表。"\n  actions={<Button>查看</Button>}\n/>':
+    'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<MessageCircle />}\n  mediaType="icon"\n  title="Lin Mo replied to the check item"\n  description="Confirm that index changes will not lock the table."\n  actions={<Button>View</Button>}\n/>',
   "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Content>工作区内容</Layout.Content>\n  <Layout.Sidebar width={280}>详情面板</Layout.Sidebar>\n</Layout>":
     "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Content>Workspace Content</Layout.Content>\n  <Layout.Sidebar width={280}>Details panel</Layout.Sidebar>\n</Layout>",
   "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Header>项目导航</Layout.Header>\n  <Layout.Content>页面内容</Layout.Content>\n  <Layout.Footer>页脚信息</Layout.Footer>\n</Layout>":
@@ -3693,4 +3694,380 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   受控对象: 'Controlled object',
   禁用对象: 'Disabled object',
   非受控对象: 'Uncontrolled object',
+  '使用 Accordion.Indicator 统一设置位置；children 状态函数接收当前条目的 open、disabled 和 value，由调用方决定展示内容。':
+    'Use Accordion.Indicator to set the position in one place. Its children state function receives the current item’s open, disabled, and value state so the caller controls what is rendered.',
+  "import { Accordion } from '@heliannuuthus/ui'\nimport { Minus, Plus } from 'lucide-react'\n\n<Accordion\n  defaultValue={['deployment']}\n  indicator={\n    <Accordion.Indicator position=\"start\">\n      {({ open }) => (open ? <Minus /> : <Plus />)}\n    </Accordion.Indicator>\n  }\n  items={[\n    {\n      value: 'deployment',\n      title: '部署策略',\n      content: '先灰度 10%，观察后全量发布。',\n    },\n  ]}\n/>":
+    "import { Accordion } from '@heliannuuthus/ui'\nimport { Minus, Plus } from 'lucide-react'\n\n<Accordion\n  defaultValue={['deployment']}\n  indicator={\n    <Accordion.Indicator position=\"start\">\n      {({ open }) => (open ? <Minus /> : <Plus />)}\n    </Accordion.Indicator>\n  }\n  items={[\n    {\n      value: 'deployment',\n      title: 'Deployment strategy',\n      content: 'Roll out to 10% first, observe, then release to everyone.',\n    },\n  ]}\n/>",
+  '设置 Accordion.Indicator；省略时使用位于末端、随展开状态旋转的默认箭头，传入 null 时隐藏。':
+    'Set Accordion.Indicator. When omitted, a default arrow at the end rotates with the open state; pass null to hide it.',
+  '传入静态节点时随展开状态旋转；传入状态函数时接收 open、disabled 与 value，并完全控制展示内容。':
+    'A static node rotates with the open state. A state function receives open, disabled, and value and fully controls the rendered content.',
+  '将指示器放在标题起始侧或末端。':
+    'Place the indicator at the start or end of the title.',
+  '关闭面板后仍保留其 DOM，适合保留内部状态；不能与 hiddenUntilFound 同时使用。':
+    'Keep a closed panel in the DOM to preserve internal state; it cannot be used together with hiddenUntilFound.',
+  '通过 hidden="until-found" 保留关闭面板，使浏览器页内查找可以定位并展开内容；不能与 keepMounted 同时使用。':
+    'Keep closed panels with hidden="until-found" so the browser’s find-in-page can locate and expand their content; it cannot be used together with keepMounted.',
+  "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  indicator={\n    <Accordion.Indicator position=\"start\">\n      {({ open }) => (open ? <Minus /> : <Plus />)}\n    </Accordion.Indicator>\n  }\n  items={[\n    { value: 'deployment', title: '部署策略', content: '先灰度 10%，观察后全量发布。' },\n  ]}\n/>":
+    "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  indicator={\n    <Accordion.Indicator position=\"start\">\n      {({ open }) => (open ? <Minus /> : <Plus />)}\n    </Accordion.Indicator>\n  }\n  items={[\n    { value: 'deployment', title: 'Deployment strategy', content: 'Roll out to 10% first, observe, then release to everyone.' },\n  ]}\n/>",
+  '当前条目的面板是否已展开。': 'Whether the current item’s panel is open.',
+  '当前条目或整个 Accordion 是否已禁用。':
+    'Whether the current item or the entire Accordion is disabled.',
+  '当前条目的稳定标识。': 'The stable identifier of the current item.',
+  '管理展开值并根据 items 渲染一组关联面板。':
+    'Manage open values and render a set of related panels from items.',
+  '读取当前条目状态，并在标题起始侧或末端渲染展开指示器。':
+    'Read the current item state and render an expansion indicator at the start or end of the title.',
+  读取当前展开状态: 'Reads the current open state',
+  '默认一次只展开一个条目，打开新条目时关闭前一个。':
+    'By default, only one item is open at a time; opening another item closes the previous one.',
+  "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight']}\n  items={[\n    {\n      value: 'preflight',\n      title: '预检结果',\n      content: '42 项检查均已通过。',\n    },\n    {\n      value: 'rollback',\n      title: '回滚方案',\n      content: '异常时切回上一版本。',\n    },\n  ]}\n/>":
+    "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight']}\n  items={[\n    {\n      value: 'preflight',\n      title: 'Preflight results',\n      content: 'All 42 checks passed.',\n    },\n    {\n      value: 'rollback',\n      title: 'Rollback plan',\n      content: 'Switch back to the previous version if an issue occurs.',\n    },\n  ]}\n/>",
+  '设置 multiple 后允许多个条目同时保持展开。':
+    'Set multiple to allow several items to remain open at the same time.',
+  默认指示器: 'Default indicator',
+  '省略 indicator 时在标题末端显示默认箭头，并随展开状态旋转。':
+    'Omit indicator to show the default arrow at the end of the title and rotate it with the open state.',
+  "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['deployment']}\n  items={[\n    {\n      value: 'deployment',\n      title: '部署策略',\n      content: '先灰度 10%，观察后全量发布。',\n    },\n  ]}\n/>":
+    "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['deployment']}\n  items={[\n    {\n      value: 'deployment',\n      title: 'Deployment strategy',\n      content: 'Roll out to 10% first, observe, then release to everyone.',\n    },\n  ]}\n/>",
+  起始位置: 'Start position',
+  '通过 Accordion.Indicator 的 position 将默认箭头放到标题起始侧。':
+    'Use Accordion.Indicator position to place the default arrow at the start of the title.',
+  状态函数指示器: 'State function indicator',
+  禁用单个条目: 'Disable one item',
+  '在 AccordionItem 上设置 disabled，仅阻止该条目的触发交互。':
+    'Set disabled on an AccordionItem to prevent trigger interaction for that item only.',
+  "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  items={[\n    {\n      value: 'preflight',\n      title: '预检结果',\n      content: '42 项检查均已通过。',\n      disabled: true,\n    },\n    {\n      value: 'rollback',\n      title: '回滚方案',\n      content: '异常时切回上一版本。',\n    },\n  ]}\n/>":
+    "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  items={[\n    {\n      value: 'preflight',\n      title: 'Preflight results',\n      content: 'All 42 checks passed.',\n      disabled: true,\n    },\n    {\n      value: 'rollback',\n      title: 'Rollback plan',\n      content: 'Switch back to the previous version if an issue occurs.',\n    },\n  ]}\n/>",
+  禁用整个组件: 'Disable the entire component',
+  '在 Accordion 上设置 disabled，统一阻止所有条目的展开与收起。':
+    'Set disabled on Accordion to prevent every item from opening or closing.',
+  '设置条目的唯一标识，并用于受控展开值。':
+    'Set the unique item identifier used by the controlled open value.',
+  '设置触发按钮中显示的标题内容。':
+    'Set the title content displayed in the trigger button.',
+  '设置条目展开后显示的面板内容。':
+    'Set the panel content displayed when the item is open.',
+  '仅禁用当前条目的展开与收起交互。':
+    'Disable opening and closing for the current item only.',
+  '禁用整个 Accordion 的所有条目。': 'Disable every item in the Accordion.',
+  '描述单个条目的标识、标题、面板内容与禁用状态。':
+    'Describe one item’s identifier, title, panel content, and disabled state.',
+  '设置附件名称。': 'Set the attachment name.',
+  '设置文件大小、处理状态或错误原因等辅助说明。':
+    'Set supporting details such as file size, processing state, or error reason.',
+  '设置文件类型图标或缩略图。': 'Set a file-type icon or thumbnail.',
+  '设置与附件直接相关的下载、重试或移除操作。':
+    'Set attachment actions such as download, retry, or remove.',
+  '设置气泡中的消息内容。': 'Set the message content inside the bubble.',
+  '设置回应、已读状态或其他边缘内容。':
+    'Set reactions, read status, or other edge content.',
+  '控制回应内容的边缘位置并扩展容器属性。':
+    'Control the edge position of reaction content and extend its container props.',
+  '为头像图片和默认回退文字提供可访问名称。':
+    'Provide an accessible name for the avatar image and default fallback text.',
+  '设置头像图片资源地址。': 'Set the avatar image source URL.',
+  '设置图片不可用时显示的姓名缩写或图标。':
+    'Set initials or an icon to display when the image is unavailable.',
+  '配置回退内容的延迟显示和原生 span 属性。':
+    'Configure the fallback delay and native span props.',
+  '配置头像图片的加载状态回调和原生 img 属性。':
+    'Configure the avatar image loading callback and native img props.',
+  '配置头像集合及每个项目的稳定 key。':
+    'Configure the avatar collection and a stable key for each item.',
+  '为组内头像和自动计数项设置统一形状。':
+    'Set a consistent shape for avatars and the generated count item in the group.',
+  '为组内头像和自动计数项设置统一尺寸。':
+    'Set a consistent size for avatars and the generated count item in the group.',
+  '设置列表项起始侧的媒体内容。': 'Set media content at the start of the item.',
+  '声明媒体内容是普通内容、图标还是图片。':
+    'Declare whether the media content is default content, an icon, or an image.',
+  '设置列表项的主要标题。': 'Set the primary item title.',
+  '设置列表项的辅助说明。': 'Set the supporting item description.',
+  '在标题和说明之外添加自定义内容。':
+    'Add custom content beyond the title and description.',
+  '设置列表项末尾的相关操作。': 'Set related actions at the end of the item.',
+  '添加横跨整行的前置内容。': 'Add leading content that spans the full row.',
+  '添加横跨整行的后置内容。': 'Add trailing content that spans the full row.',
+  '按语义槽位扩展列表项内部样式。':
+    'Extend internal item styles by semantic slot.',
+  '配置一组列表项及每个项目的稳定 key。':
+    'Configure a collection of items and a stable key for each entry.',
+  '根据当前项目和索引完全自定义列表项渲染。':
+    'Fully customize item rendering from the current entry and index.',
+  '在相邻列表项之间显示默认分隔线或自定义内容。':
+    'Show the default separator or custom content between adjacent items.',
+  '分别扩展图标与内容槽位样式。':
+    'Extend the icon and content slot styles independently.',
+  '提供轮播数据或直接渲染的节点列表。':
+    'Provide carousel data or a list of nodes to render directly.',
+  '根据当前数据项和索引渲染轮播内容。':
+    'Render carousel content from the current data item and index.',
+  '扩展轮播内容轨道的样式。': 'Extend the carousel content track styles.',
+  '为每个轮播项设置统一样式。': 'Set shared styles for every carousel item.',
+  '配置上一页按钮的外观、可访问名称和原生属性。':
+    'Configure the previous button appearance, accessible name, and native props.',
+  '配置下一页按钮的外观、可访问名称和原生属性。':
+    'Configure the next button appearance, accessible name, and native props.',
+  '将分页内容放在轮播轨道之前或之后。':
+    'Place pagination content before or after the carousel track.',
+  '根据点位索引和选中状态自定义分页点。':
+    'Customize a pagination dot from its index and selected state.',
+  '以受控方式设置当前展开状态。':
+    'Set the current open state in controlled mode.',
+  '设置非受控模式的初始展开状态。':
+    'Set the initial open state in uncontrolled mode.',
+  '图片尚未完成加载时，延迟显示回退内容的毫秒数。':
+    'Delay fallback content by this many milliseconds while the image is still loading.',
+  '头像图片加载状态变化时调用。':
+    'Called when the avatar image loading status changes.',
+  '在头像集合中为当前项目提供稳定标识。':
+    'Provide a stable identifier for the current avatar group item.',
+  '将回应内容对齐到气泡边缘的起始侧或末尾侧。':
+    'Align reaction content to the start or end of the bubble edge.',
+  '将回应内容放在气泡顶部或底部边缘。':
+    'Place reaction content on the top or bottom edge of the bubble.',
+  '暂停自动播放。': 'Pause autoplay.',
+  '恢复自动播放。': 'Resume autoplay.',
+  '滚动到下一个轮播项。': 'Scroll to the next carousel item.',
+  '滚动到上一个轮播项。': 'Scroll to the previous carousel item.',
+  '根据索引滚动到指定轮播项。':
+    'Scroll to the carousel item at the given index.',
+  '当前是否可以滚动到下一项。':
+    'Whether the carousel can currently scroll to the next item.',
+  '当前是否可以滚动到上一项。':
+    'Whether the carousel can currently scroll to the previous item.',
+  '当前页码，从 1 开始。': 'The current page number, starting at 1.',
+  '自动播放当前是否正在运行。': 'Whether autoplay is currently running.',
+  '轮播总页数。': 'The total number of carousel pages.',
+  '当前轮播项的零起始索引。':
+    'The zero-based index of the current carousel item.',
+  '底层滚动对齐点集合。': 'The underlying collection of scroll snap positions.',
+  '当前分页点对应的零起始索引。':
+    'The zero-based index represented by the current pagination dot.',
+  '当前分页点是否对应已选中轮播项。':
+    'Whether the current pagination dot represents the selected carousel item.',
+  '设置按钮的语义外观。': 'Set the semantic button appearance.',
+  '设置按钮尺寸。': 'Set the button size.',
+  '让按钮填满容器可用宽度。':
+    'Make the button fill the available container width.',
+  '禁用按钮交互。': 'Disable button interaction.',
+  '设置独立触发按钮的语义外观。':
+    'Set the semantic appearance of the standalone trigger button.',
+  '设置独立触发按钮的尺寸。': 'Set the size of the standalone trigger button.',
+  '禁用触发按钮并阻止展开状态变化。':
+    'Disable the trigger button and prevent the open state from changing.',
+  '为仅图标触发按钮提供可访问名称。':
+    'Provide an accessible name for an icon-only trigger button.',
+  '处理触发按钮的原生点击事件。':
+    'Handle the native click event from the trigger button.',
+  '扩展对应语义槽位的 className。':
+    'Extend the className of the corresponding semantic slot.',
+  '在列表项集合中为当前项目提供稳定标识。':
+    'Provide a stable identifier for the current item in the collection.',
+  '扩展标记内容槽位的 className。': 'Extend the marker content slot className.',
+  '扩展标记图标槽位的 className。': 'Extend the marker icon slot className.',
+  基础附件: 'Basic attachment',
+  'title、description 与 media 分别承载文件名称、辅助信息和类型图标。':
+    'Use title, description, and media for the file name, supporting information, and file-type icon.',
+  媒体内容类型: 'Media content type',
+  'mediaType 明确声明 media 是图标还是图片，让缩略图获得正确的尺寸、裁切与状态样式。':
+    'mediaType declares whether media is an icon or an image so thumbnails receive the correct size, crop, and state styling.',
+  媒体类型: 'Media type',
+  图标: 'Icon',
+  处理状态: 'Processing states',
+  'state 分别表达等待、上传、处理、失败和完成阶段；状态文案仍由 description 明确说明。':
+    'state represents waiting, uploading, processing, failed, and completed phases; use description to state the status explicitly.',
+  等待上传: 'Waiting to upload',
+  正在上传: 'Uploading',
+  正在处理: 'Processing',
+  上传失败: 'Upload failed',
+  附件尺寸: 'Attachment sizes',
+  'size 只控制单个附件的整体密度；不同尺寸作为独立 case 纵向展示。':
+    'size controls the density of one attachment; each size is shown as a separate vertically stacked case.',
+  超小: 'Extra small',
+  附件方向: 'Attachment orientation',
+  'horizontal 适合文件列表，vertical 以缩略卡形式突出媒体内容。':
+    'horizontal suits file lists, while vertical emphasizes media in a thumbnail card.',
+  附件操作: 'Attachment actions',
+  'actions 只放置与当前附件直接相关的下载、重试或移除操作。':
+    'Use actions only for download, retry, or remove operations that directly affect the current attachment.',
+  整卡触发: 'Full-card trigger',
+  'trigger 接收链接或按钮元素，在保留正确元素语义的同时让整个附件可点击。':
+    'trigger accepts a link or button element and makes the whole attachment clickable while preserving the correct element semantics.',
+  附件集合: 'Attachment collection',
+  'Attachment.Group 通过 items 渲染一组附件，并为横向溢出提供滚动与吸附行为。':
+    'Attachment.Group renders a collection from items and provides scrolling and snapping for horizontal overflow.',
+  '2.1 MB · 图片预览': '2.1 MB · Image preview',
+  '8.4 MB · 压缩文件': '8.4 MB · Archive',
+  附件缩略图: 'Attachment thumbnail',
+  '8.4 MB · 已完成': '8.4 MB · Complete',
+  '8.4 MB · 上传失败': '8.4 MB · Upload failed',
+  '8.4 MB · 等待上传': '8.4 MB · Waiting to upload',
+  '8.4 MB · 正在上传': '8.4 MB · Uploading',
+  '下载 web-console.tgz': 'Download web-console.tgz',
+  单击附件打开预览: 'Click the attachment to open a preview',
+  '预览 release-notes.md': 'Preview release-notes.md',
+  'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  media={<FileArchive />}\n  mediaType="icon"\n  title="web-console.tgz"\n/>\n\n<Attachment\n  media={<img alt="附件缩略图" src="/cover.jpg" />}\n  mediaType="image"\n  title="cover.jpg"\n/>':
+    'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  media={<FileArchive />}\n  mediaType="icon"\n  title="web-console.tgz"\n/>\n\n<Attachment\n  media={<img alt="Attachment thumbnail" src="/cover.jpg" />}\n  mediaType="image"\n  title="cover.jpg"\n/>',
+  '<Attachment\n  actions={<Button aria-label="下载附件"><Download /></Button>}\n  title="web-console.tgz"\n/>':
+    '<Attachment\n  actions={<Button aria-label="Download attachment"><Download /></Button>}\n  title="web-console.tgz"\n/>',
+  '<Attachment\n  title="release-notes.md"\n  trigger={<a aria-label="预览 release-notes.md" href="/files/release-notes.md" />}\n/>':
+    '<Attachment\n  title="release-notes.md"\n  trigger={<a aria-label="Preview release-notes.md" href="/files/release-notes.md" />}\n/>',
+  '<Avatar size="sm" alt="林默" fallback="林" />\n<Avatar size="default" alt="林默" fallback="林" />\n<Avatar size="lg" alt="林默" fallback="林" />':
+    '<Avatar size="sm" alt="Lin Mo" fallback="L" />\n<Avatar size="default" alt="Lin Mo" fallback="L" />\n<Avatar size="lg" alt="Lin Mo" fallback="L" />',
+  头像形状: 'Avatar shapes',
+  'shape 在圆形和圆角方形之间切换，每种形状作为独立 case 展示。':
+    'shape switches between circle and rounded-square avatars, with each shape shown as an independent case.',
+  形状: 'Shape',
+  头像尺寸: 'Avatar sizes',
+  'size 提供小、中、大三档尺寸，并同步调整文字与状态标记。':
+    'size provides small, medium, and large avatars while scaling text and status indicators with them.',
+  触发方式: 'Trigger mode',
+  'variant 的每种语义外观都作为独立 case 展示，避免在同一个预览区域混合比较。':
+    'Each semantic variant is shown as an independent case instead of mixing multiple appearances in one preview.',
+  透明: 'Ghost',
+  危险: 'Destructive',
+  气泡预览: 'Bubble preview',
+  'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble\n  align="end"\n  content="已经补充完成，可以重新评审。"\n  reactions="✓ 2"\n  variant="elevated"\n/>':
+    'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble\n  align="end"\n  content="The update is complete and ready for another review."\n  reactions="✓ 2"\n  variant="elevated"\n/>',
+  图片与回退内容: 'Image and fallback content',
+  'src 提供头像图片；加载失败时显示 fallback，并通过 imageProps 与 fallbackProps 配置加载回调和延迟。':
+    'src provides the avatar image; fallback is shown when loading fails, while imageProps and fallbackProps configure loading callbacks and delay.',
+  图片状态: 'Image status',
+  图片可用: 'Image available',
+  显示回退: 'Show fallback',
+  '<Avatar\n  alt="林默"\n  src="/avatars/lin.png"\n  fallback="林"\n  fallbackProps={{ delay: 200 }}\n  imageProps={{ onLoadingStatusChange: setStatus }}\n/>':
+    '<Avatar\n  alt="Lin Mo"\n  src="/avatars/lin.png"\n  fallback="L"\n  fallbackProps={{ delay: 200 }}\n  imageProps={{ onLoadingStatusChange: setStatus }}\n/>',
+  自定义剩余数量: 'Custom overflow count',
+  'renderCount 接收未展示数量并替换默认 +N，同时继承分组的 shape 与 size。':
+    'renderCount receives the hidden count and replaces the default +N while inheriting the group shape and size.',
+  剩余数量: 'Overflow count',
+  自定义: 'Custom',
+  '显式传入 title 说明当前为空的对象；默认图标仅提供辅助视觉，不替代状态文案。':
+    'Pass title explicitly to identify what is empty; the default icon is only a visual aid and does not replace the status text.',
+  'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty title="暂无内容" />':
+    'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty title="No content" />',
+  'value 表示当前展开条目，onChange 接收用户操作后的完整值数组。':
+    'value represents the currently expanded items, and onChange receives the complete value array after user interaction.',
+  关闭面板保留策略: 'Closed panel retention',
+  '默认关闭时卸载面板；keepMounted 保留内部状态；hiddenUntilFound 保留内容并允许浏览器页内查找定位。':
+    'Closed panels unmount by default; keepMounted preserves internal state, while hiddenUntilFound retains searchable content for the browser find feature.',
+  保留策略: 'Retention strategy',
+  默认卸载: 'Unmount by default',
+  保持挂载: 'Keep mounted',
+  支持页内查找: 'Support browser find',
+  'controls 决定是否渲染上一项和下一项按钮；按钮属性通过 previousButtonProps 与 nextButtonProps 独立扩展。':
+    'controls determines whether previous and next buttons are rendered; previousButtonProps and nextButtonProps extend each button independently.',
+  显示: 'Show',
+  隐藏: 'Hide',
+  分页点: 'Pagination dots',
+  'pagination 控制默认点位或隐藏分页，renderDot 只改写单个点位的内容。':
+    'pagination enables the default dots or hides pagination, while renderDot replaces only the content of each dot.',
+  外部控制: 'External control',
+  '通过 ref 调用 scrollPrev、scrollNext、scrollTo、play 与 pause，不暴露底层轮播实例。':
+    'Use the ref to call scrollPrev, scrollNext, scrollTo, play, and pause without exposing the underlying carousel instance.',
+  受控与禁用状态: 'Controlled and disabled states',
+  'open 与 onOpenChange 管理受控展开状态；disabled 阻止触发器改变状态。':
+    'open and onOpenChange manage controlled expansion, while disabled prevents the trigger from changing state.',
+  标题与说明: 'Title and description',
+  'title 必须明确说明当前为空的对象，description 再补充原因、筛选建议或下一步。':
+    'title must identify what is empty, while description adds a reason, filtering suggestion, or next step.',
+  '尝试缩短关键词或清除当前筛选条件。':
+    'Try shortening the keyword or clearing the current filters.',
+  'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  title="没有匹配的发布记录"\n  description="尝试缩短关键词或清除当前筛选条件。"\n/>':
+    'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  title="No matching release records"\n  description="Try shortening the keyword or clearing the current filters."\n/>',
+  'icon 默认使用通用收件箱图标，也可以替换为场景图标或传 null 隐藏。':
+    'icon uses a generic inbox by default; replace it with a contextual icon or pass null to hide it.',
+  操作区域: 'Action area',
+  列表项尺寸: 'Item sizes',
+  'size 分别提供默认、小和超小三档内容密度。':
+    'size provides default, small, and extra-small content densities.',
+  'mediaType 明确区分普通内容、图标和图片，避免调用方依赖节点形态推断样式。':
+    'mediaType explicitly distinguishes plain content, icons, and images so callers do not rely on node-shape inference.',
+  普通内容: 'Plain content',
+  内容槽位: 'Content slots',
+  'header、content、actions 与 footer 各自占据独立语义区域，不再把多个结构字段塞进同一行说明。':
+    'header, content, actions, and footer each occupy an independent semantic region instead of being compressed into one combined property row.',
+  链接列表项: 'Linked item',
+  '传入 href 时 Item 使用原生 a 元素承载整项导航，未传时保持普通 div。':
+    'When href is provided, Item uses a native anchor for whole-item navigation; otherwise it remains a regular div.',
+  列表项集合: 'Item group',
+  'Item.Group 通过 items 渲染集合，separator 独立控制无分隔、默认分隔线或自定义分隔内容。':
+    'Item.Group renders a collection from items, while separator independently selects no separator, the default divider, or custom content.',
+  分隔内容: 'Separator content',
+  无分隔: 'No separator',
+  默认分隔线: 'Default divider',
+  自定义内容: 'Custom content',
+  链接与槽位样式: 'Link and slot styles',
+  'href 让整个 Marker 使用原生链接语义，classNames 分别扩展 icon 与 content 槽位。':
+    'href gives the entire Marker native link semantics, while classNames extends the icon and content slots independently.',
+  消息对齐: 'Message alignment',
+  'align 只控制单个气泡位于消息流的起始侧或末端，不隐含发送者身份。':
+    'align only places a bubble at the start or end of the message flow and does not imply sender identity.',
+  对齐: 'Alignment',
+  起始侧: 'Start side',
+  末端: 'End side',
+  回应位置: 'Reaction position',
+  'reactionsProps 的 side 与 align 分别控制回应位于气泡上下侧和左右边缘。':
+    'The side and align fields in reactionsProps place reactions on the top or bottom and at either horizontal edge.',
+  顶部起始侧: 'Top start',
+  顶部末端: 'Top end',
+  底部起始侧: 'Bottom start',
+  底部末端: 'Bottom end',
+  '明确说明当前为空的对象或结果。':
+    'Clearly identifies the object or result that is empty.',
+  '在附件集合中为当前项目提供稳定标识。':
+    'Provides a stable identifier for the current item in an attachment group.',
+  受控展开状态: 'Controlled expansion',
+  全部关闭: 'All closed',
+  关闭面板的保留策略: 'Closed panel retention strategy',
+  图片头像: 'Image avatar',
+  回退内容: 'Fallback content',
+  加载状态: 'Loading status',
+  '这条消息靠末端对齐。': 'This message is aligned to the end.',
+  '这条消息靠起始端对齐。': 'This message is aligned to the start.',
+  '回应内容可以锚定在气泡的四个边角。':
+    'Reactions can be anchored to any of the four bubble corners.',
+  分页点示例: 'Pagination dot example',
+  外部控制的轮播: 'Externally controlled carousel',
+  '展开状态由调用方读取和更新。':
+    'The caller reads and updates the expansion state.',
+  不可展开的摘要: 'Disabled summary',
+  受控的摘要: 'Controlled summary',
+  已展开: 'Expanded',
+  已收起: 'Collapsed',
+  '图标只辅助说明状态，标题始终明确表达结果。':
+    'The icon only supports the status visually; the title always states the result explicitly.',
+  没有匹配结果: 'No matching results',
+  '不同密度不会改变内容语义。':
+    'Changing density does not change the content semantics.',
+  发布说明已更新: 'Release notes updated',
+  '媒体类型决定起始内容的尺寸和裁切方式。':
+    'The media type determines the size and cropping of leading content.',
+  发布封面: 'Release cover',
+  发布资料: 'Release material',
+  '每个结构字段都拥有独立的语义槽位。':
+    'Each structural field has its own semantic slot.',
+  '更新于 2 分钟前': 'Updated 2 minutes ago',
+  生产发布: 'Production release',
+  '传入 href 后根节点使用原生链接语义。':
+    'Providing href gives the root native link semantics.',
+  查看发布详情: 'View release details',
+  构建完成: 'Build completed',
+  进入生产阶段: 'Entering production',
+  查看完整发布记录: 'View the complete release history',
+  轨道与项目样式: 'Track and item styles',
+  'contentClassName 扩展轮播轨道，itemClassName 为每个项目设置统一宽度和间距。':
+    'contentClassName extends the carousel track, while itemClassName applies consistent width and spacing to every item.',
+  自定义列表项渲染: 'Custom item rendering',
+  'renderItem 接收当前 ItemGroupEntry 和索引，用于改写整项渲染，而不是修改 Item 的基础属性。':
+    'renderItem receives the current ItemGroupEntry and index to replace whole-item rendering without changing the base Item contract.',
+  内容节点属性: 'Content node properties',
+  'contentProps 向内部内容节点传递标准 HTML、ARIA、data 属性、事件和 className。':
+    'contentProps passes standard HTML, ARIA, data attributes, events, and className to the inner content node.',
+  '内容节点可以接收语义、事件和样式扩展。':
+    'The content node can receive semantic, event, and style extensions.',
+  自定义轨道与项目宽度: 'Custom track and item width',
+  预检完成: 'Preflight completed',
 };

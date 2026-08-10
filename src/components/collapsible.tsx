@@ -7,6 +7,12 @@ import { cn } from '../lib/utils';
 import { buttonVariants, type ButtonNativeProps } from './button';
 import type { OpenStateProps } from './internal/public-types';
 
+type CollapsibleTriggerProps = Omit<
+  ButtonNativeProps,
+  'children' | 'className' | 'href'
+> &
+  VariantProps<typeof buttonVariants>;
+
 type CollapsibleProps = Omit<
   React.ComponentProps<'div'>,
   'children' | 'content'
@@ -14,14 +20,14 @@ type CollapsibleProps = Omit<
   OpenStateProps & {
     content: React.ReactNode;
     contentClassName?: string;
+    disabled?: boolean;
     footer?: React.ReactNode;
     header?: React.ReactNode;
     headerClassName?: string;
     icon?: React.ReactNode;
     trigger?: React.ReactNode;
     triggerIcon?: React.ReactNode;
-    triggerProps?: Omit<ButtonNativeProps, 'children' | 'className' | 'href'> &
-      VariantProps<typeof buttonVariants>;
+    triggerProps?: CollapsibleTriggerProps;
   };
 
 const Collapsible = ({
@@ -111,4 +117,4 @@ const Collapsible = ({
   );
 };
 
-export { Collapsible, type CollapsibleProps };
+export { Collapsible, type CollapsibleProps, type CollapsibleTriggerProps };

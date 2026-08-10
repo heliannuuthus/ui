@@ -1,6 +1,8 @@
 export {
   Accordion,
   type AccordionIndicatorPosition,
+  type AccordionIndicatorProps,
+  type AccordionIndicatorState,
   type AccordionItem,
   type AccordionProps,
 } from './components/accordion';
@@ -9,6 +11,7 @@ export { Alert, type AlertProps } from './components/alert';
 export { AspectRatio } from './components/aspect-ratio';
 export {
   Attachment,
+  type AttachmentGroupItem,
   type AttachmentGroupProps,
   type AttachmentProps,
 } from './components/attachment';
@@ -79,7 +82,11 @@ export {
   type CheckboxProps,
   type CheckboxVariant,
 } from './components/checkbox';
-export { Collapsible, type CollapsibleProps } from './components/collapsible';
+export {
+  Collapsible,
+  type CollapsibleProps,
+  type CollapsibleTriggerProps,
+} from './components/collapsible';
 export {
   Command,
   type CommandFilter,

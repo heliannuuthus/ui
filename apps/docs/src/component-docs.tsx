@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { Badge } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Checkbox } from '@heliannuuthus/ui';
+import { Empty } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
 import { Kbd } from '@heliannuuthus/ui';
 import { Separator } from '@heliannuuthus/ui';
@@ -83,20 +84,43 @@ import {
   ToggleControlledDemo,
 } from './data-entry-previews';
 import {
-  AccordionIndicatorDemo,
-  AccordionModesDemo,
-  AttachmentReleaseDemo,
+  AccordionDefaultIndicatorDemo,
+  AccordionControlledDemo,
+  AccordionDisabledItemDemo,
+  AccordionDisabledRootDemo,
+  AccordionPresenceDemo,
+  AccordionReleaseDemo,
+  AccordionStartIndicatorDemo,
+  AccordionStateIndicatorDemo,
+  AttachmentActionsDemo,
+  AttachmentBasicDemo,
+  AttachmentGroupDemo,
+  AttachmentMediaTypeDemo,
+  AttachmentOrientationDemo,
+  AttachmentSizeDemo,
+  AttachmentStateDemo,
+  AttachmentTriggerDemo,
   AvatarBadgeDemo,
+  AvatarCountDemo,
   AvatarGroupDemo,
   AvatarShapeDemo,
+  AvatarSourceDemo,
+  BubbleAlignmentDemo,
+  BubbleContentPropsDemo,
   BubbleConversationDemo,
+  BubbleReactionsDemo,
   BubbleVariantsDemo,
   CarouselAutoplayDemo,
+  CarouselClassNamesDemo,
+  CarouselControlsDemo,
   CarouselCustomPaginationDemo,
+  CarouselDotsDemo,
   CarouselHighlightsDemo,
+  CarouselRefDemo,
   ChartDeploymentDemo,
   CollapsibleBasicDemo,
   CollapsibleHeaderIconDemo,
+  CollapsibleStateDemo,
   CollapsibleTriggerModesDemo,
   CounterBuildDemo,
   DataTableExpandableDemo,
@@ -105,8 +129,15 @@ import {
   DataTableVirtualScrollDemo,
   EmptyCompositionDemo,
   EmptyDefaultDemo,
-  EmptyReleaseDemo,
+  EmptyIconDemo,
   ItemActivityDemo,
+  ItemGroupDemo,
+  ItemGroupRenderDemo,
+  ItemLinkDemo,
+  ItemMediaTypeDemo,
+  ItemSizeDemo,
+  ItemStructureDemo,
+  MarkerLinkDemo,
   MarkerTimelineDemo,
   TableCellDemo,
   TableExpandableDemo,
@@ -3426,16 +3457,93 @@ if (scrollAreaDocumentation) {
 
 componentDocumentation.avatar.examples = [
   {
-    title: docsCopy('形状与尺寸'),
+    title: docsCopy('头像形状'),
     description: docsCopy(
-      'Avatar 支持圆形和圆角方形；小、中、大三档尺寸会同步调整文字与状态标记。'
+      'shape 在圆形和圆角方形之间切换，每种形状作为独立 case 展示。'
     ),
-    preview: <AvatarShapeDemo />,
+    caseLayout: 'stack',
+    caseAxes: [
+      {
+        name: 'shape',
+        label: docsCopy('形状'),
+        defaultValue: 'circle',
+        options: [
+          { label: docsCopy('圆形'), value: 'circle' },
+          { label: docsCopy('圆角方形'), value: 'square' },
+        ],
+      },
+    ],
+    preview: (values) => (
+      <AvatarShapeDemo
+        shape={values.shape === 'square' ? 'square' : 'circle'}
+      />
+    ),
     code: docsCopy(`import { Avatar } from '@heliannuuthus/ui'
 
 <Avatar alt="林默" fallback="林" shape="circle" size="lg" />
 <Avatar alt="周一" fallback="周" shape="square" size="lg" />`),
-    previewHeight: 440,
+    previewHeight: 'auto',
+  },
+  {
+    title: docsCopy('头像尺寸'),
+    description: docsCopy(
+      'size 提供小、中、大三档尺寸，并同步调整文字与状态标记。'
+    ),
+    caseLayout: 'stack',
+    caseAxes: [
+      {
+        name: 'size',
+        label: docsCopy('尺寸'),
+        defaultValue: 'default',
+        options: [
+          { label: docsCopy('小'), value: 'sm' },
+          { label: docsCopy('中'), value: 'default' },
+          { label: docsCopy('大'), value: 'lg' },
+        ],
+      },
+    ],
+    preview: (values) => (
+      <AvatarShapeDemo
+        size={
+          values.size === 'sm' || values.size === 'lg' ? values.size : 'default'
+        }
+      />
+    ),
+    code: docsCopy(`<Avatar size="sm" alt="林默" fallback="林" />
+<Avatar size="default" alt="林默" fallback="林" />
+<Avatar size="lg" alt="林默" fallback="林" />`),
+    previewHeight: 'auto',
+  },
+  {
+    title: docsCopy('图片与回退内容'),
+    description: docsCopy(
+      'src 提供头像图片；加载失败时显示 fallback，并通过 imageProps 与 fallbackProps 配置加载回调和延迟。'
+    ),
+    caseLayout: 'stack',
+    caseAxes: [
+      {
+        name: 'source',
+        label: docsCopy('图片状态'),
+        defaultValue: 'image',
+        options: [
+          { label: docsCopy('图片可用'), value: 'image' },
+          { label: docsCopy('显示回退'), value: 'fallback' },
+        ],
+      },
+    ],
+    preview: (values) => (
+      <AvatarSourceDemo
+        source={values.source === 'fallback' ? 'fallback' : 'image'}
+      />
+    ),
+    code: docsCopy(`<Avatar
+  alt="林默"
+  src="/avatars/lin.png"
+  fallback="林"
+  fallbackProps={{ delay: 200 }}
+  imageProps={{ onLoadingStatusChange: setStatus }}
+/>`),
+    previewHeight: 'auto',
   },
   {
     title: docsCopy('展示上限与重叠程度'),
@@ -3456,6 +3564,33 @@ componentDocumentation.avatar.examples = [
   size="lg"
 />`,
     previewHeight: 460,
+  },
+  {
+    title: docsCopy('自定义剩余数量'),
+    description: docsCopy(
+      'renderCount 接收未展示数量并替换默认 +N，同时继承分组的 shape 与 size。'
+    ),
+    caseLayout: 'stack',
+    caseAxes: [
+      {
+        name: 'count',
+        label: docsCopy('剩余数量'),
+        defaultValue: 'default',
+        options: [
+          { label: docsCopy('默认'), value: 'default' },
+          { label: docsCopy('自定义'), value: 'custom' },
+        ],
+      },
+    ],
+    preview: (values) => <AvatarCountDemo custom={values.count === 'custom'} />,
+    code: `<Avatar.Group
+  items={members}
+  max={3}
+  renderCount={(count) => <Badge>+{count}</Badge>}
+  shape="square"
+  size="lg"
+/>`,
+    previewHeight: 'auto',
   },
   {
     title: docsCopy('与 Badge 组合'),
@@ -3480,13 +3615,13 @@ const emptyBasicExample = componentDocumentation.empty.examples[0];
 if (emptyBasicExample) {
   emptyBasicExample.title = docsCopy('默认空状态');
   emptyBasicExample.description = docsCopy(
-    '不传任何内容也会显示默认图标和“暂无内容”，适合作为安全、稳定的兜底状态。'
+    '显式传入 title 说明当前为空的对象；默认图标仅提供辅助视觉，不替代状态文案。'
   );
   emptyBasicExample.caseAxes = undefined;
   emptyBasicExample.preview = <EmptyDefaultDemo />;
-  emptyBasicExample.code = `import { Empty } from '@heliannuuthus/ui'
+  emptyBasicExample.code = docsCopy(`import { Empty } from '@heliannuuthus/ui'
 
-<Empty />`;
+<Empty title="暂无内容" />`);
   emptyBasicExample.previewHeight = 360;
 }
 
@@ -4283,11 +4418,32 @@ for (const [slug, examples] of Object.entries(dataEntryExamples)) {
 const dataDisplayExamples: Record<string, ComponentExample[]> = {
   accordion: [
     {
-      title: docsCopy('展开模式'),
-      description: docsCopy(
-        '纵向面板支持单项或多项展开，可按内容关系选择合适模式。'
-      ),
-      preview: <AccordionModesDemo />,
+      title: docsCopy('单项展开'),
+      description: docsCopy('默认一次只展开一个条目，打开新条目时关闭前一个。'),
+      preview: <AccordionReleaseDemo mode="single" />,
+      code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
+
+<Accordion
+  defaultValue={['preflight']}
+  items={[
+    {
+      value: 'preflight',
+      title: '预检结果',
+      content: '42 项检查均已通过。',
+    },
+    {
+      value: 'rollback',
+      title: '回滚方案',
+      content: '异常时切回上一版本。',
+    },
+  ]}
+/>`),
+      previewHeight: 420,
+    },
+    {
+      title: docsCopy('多项展开'),
+      description: docsCopy('设置 multiple 后允许多个条目同时保持展开。'),
+      preview: <AccordionReleaseDemo mode="multiple" />,
       code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
 
 <Accordion
@@ -4306,23 +4462,33 @@ const dataDisplayExamples: Record<string, ComponentExample[]> = {
     },
   ]}
 />`),
-      previewHeight: 500,
-      wide: true,
+      previewHeight: 420,
     },
     {
-      title: docsCopy('指示器'),
+      title: docsCopy('受控状态'),
       description: docsCopy(
-        '统一设置指示器的位置；传入一个节点时随状态旋转，或分别定义折叠态与展开态。'
+        'value 表示当前展开条目，onChange 接收用户操作后的完整值数组。'
       ),
-      preview: <AccordionIndicatorDemo />,
+      preview: <AccordionControlledDemo />,
       code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
-import { Minus, Plus } from 'lucide-react'
+
+<Accordion
+  items={items}
+  value={value}
+  onChange={setValue}
+/>`),
+      previewHeight: 420,
+    },
+    {
+      title: docsCopy('默认指示器'),
+      description: docsCopy(
+        '省略 indicator 时在标题末端显示默认箭头，并随展开状态旋转。'
+      ),
+      preview: <AccordionDefaultIndicatorDemo />,
+      code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
 
 <Accordion
   defaultValue={['deployment']}
-  indicator={<Plus />}
-  expandedIndicator={<Minus />}
-  indicatorPosition="start"
   items={[
     {
       value: 'deployment',
@@ -4331,34 +4497,124 @@ import { Minus, Plus } from 'lucide-react'
     },
   ]}
 />`),
-      previewHeight: 420,
-      wide: true,
+      previewHeight: 360,
     },
-  ],
-  attachment: [
     {
-      title: docsCopy('横向附件'),
+      title: docsCopy('起始位置'),
       description: docsCopy(
-        '将文件类型、名称、处理状态和操作排在同一行，适合列表与消息附件。'
+        '通过 Accordion.Indicator 的 position 将默认箭头放到标题起始侧。'
       ),
-      preview: <AttachmentReleaseDemo orientation="horizontal" />,
-      code: docsCopy(`import { Attachment } from '@heliannuuthus/ui'
+      preview: <AccordionStartIndicatorDemo />,
+      code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
 
-<Attachment
-  title="web-console.tgz"
-  description="8.4 MB · 正在校验"
-  media={<FileArchive />}
-  state="processing"
-  orientation="horizontal"
+<Accordion
+  indicator={<Accordion.Indicator position="start" />}
+  items={items}
 />`),
       previewHeight: 360,
     },
     {
-      title: docsCopy('纵向附件'),
+      title: docsCopy('状态函数指示器'),
       description: docsCopy(
-        '以缩略卡形式突出文件媒体，适合素材选择、上传结果和紧凑画廊。'
+        '使用 Accordion.Indicator 统一设置位置；children 状态函数接收当前条目的 open、disabled 和 value，由调用方决定展示内容。'
       ),
-      preview: <AttachmentReleaseDemo orientation="vertical" />,
+      preview: <AccordionStateIndicatorDemo />,
+      code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
+import { Minus, Plus } from 'lucide-react'
+
+<Accordion
+  defaultValue={['deployment']}
+  indicator={
+    <Accordion.Indicator position="start">
+      {({ open }) => (open ? <Minus /> : <Plus />)}
+    </Accordion.Indicator>
+  }
+  items={[
+    {
+      value: 'deployment',
+      title: '部署策略',
+      content: '先灰度 10%，观察后全量发布。',
+    },
+  ]}
+/>`),
+      previewHeight: 360,
+    },
+    {
+      title: docsCopy('禁用单个条目'),
+      description: docsCopy(
+        '在 AccordionItem 上设置 disabled，仅阻止该条目的触发交互。'
+      ),
+      preview: <AccordionDisabledItemDemo />,
+      code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
+
+<Accordion
+  items={[
+    {
+      value: 'preflight',
+      title: '预检结果',
+      content: '42 项检查均已通过。',
+      disabled: true,
+    },
+    {
+      value: 'rollback',
+      title: '回滚方案',
+      content: '异常时切回上一版本。',
+    },
+  ]}
+/>`),
+      previewHeight: 360,
+    },
+    {
+      title: docsCopy('禁用整个组件'),
+      description: docsCopy(
+        '在 Accordion 上设置 disabled，统一阻止所有条目的展开与收起。'
+      ),
+      preview: <AccordionDisabledRootDemo />,
+      code: docsCopy(`import { Accordion } from '@heliannuuthus/ui'
+
+<Accordion disabled items={items} />`),
+      previewHeight: 360,
+    },
+    {
+      title: docsCopy('关闭面板保留策略'),
+      description: docsCopy(
+        '默认关闭时卸载面板；keepMounted 保留内部状态；hiddenUntilFound 保留内容并允许浏览器页内查找定位。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'strategy',
+          label: docsCopy('保留策略'),
+          defaultValue: 'unmount',
+          options: [
+            { label: docsCopy('默认卸载'), value: 'unmount' },
+            { label: docsCopy('保持挂载'), value: 'mounted' },
+            { label: docsCopy('支持页内查找'), value: 'findable' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <AccordionPresenceDemo
+          strategy={
+            values.strategy === 'mounted' || values.strategy === 'findable'
+              ? values.strategy
+              : 'unmount'
+          }
+        />
+      ),
+      code: `<Accordion items={items} />
+<Accordion items={items} keepMounted />
+<Accordion items={items} hiddenUntilFound />`,
+      previewHeight: 'auto',
+    },
+  ],
+  attachment: [
+    {
+      title: docsCopy('基础附件'),
+      description: docsCopy(
+        'title、description 与 media 分别承载文件名称、辅助信息和类型图标。'
+      ),
+      preview: <AttachmentBasicDemo />,
       code: docsCopy(`import { Attachment } from '@heliannuuthus/ui'
 
 <Attachment
@@ -4366,8 +4622,186 @@ import { Minus, Plus } from 'lucide-react'
   description="8.4 MB · 正在校验"
   media={<FileArchive />}
   state="processing"
-  orientation="vertical"
 />`),
+      previewHeight: 300,
+    },
+    {
+      title: docsCopy('媒体内容类型'),
+      description: docsCopy(
+        'mediaType 明确声明 media 是图标还是图片，让缩略图获得正确的尺寸、裁切与状态样式。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'mediaType',
+          label: docsCopy('媒体类型'),
+          defaultValue: 'icon',
+          options: [
+            { label: docsCopy('图标'), value: 'icon' },
+            { label: docsCopy('图片'), value: 'image' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <AttachmentMediaTypeDemo
+          mediaType={values.mediaType === 'image' ? 'image' : 'icon'}
+        />
+      ),
+      code: docsCopy(`import { Attachment } from '@heliannuuthus/ui'
+
+<Attachment
+  media={<FileArchive />}
+  mediaType="icon"
+  title="web-console.tgz"
+/>
+
+<Attachment
+  media={<img alt="附件缩略图" src="/cover.jpg" />}
+  mediaType="image"
+  title="cover.jpg"
+/>`),
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('处理状态'),
+      description: docsCopy(
+        'state 分别表达等待、上传、处理、失败和完成阶段；状态文案仍由 description 明确说明。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'state',
+          label: docsCopy('状态'),
+          defaultValue: 'done',
+          options: [
+            { label: docsCopy('等待上传'), value: 'idle' },
+            { label: docsCopy('正在上传'), value: 'uploading' },
+            { label: docsCopy('正在处理'), value: 'processing' },
+            { label: docsCopy('上传失败'), value: 'error' },
+            { label: docsCopy('已完成'), value: 'done' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <AttachmentStateDemo
+          state={
+            values.state === 'idle' ||
+            values.state === 'uploading' ||
+            values.state === 'processing' ||
+            values.state === 'error'
+              ? values.state
+              : 'done'
+          }
+        />
+      ),
+      code: `const states = ['idle', 'uploading', 'processing', 'error', 'done'] as const
+
+{states.map((state) => (
+  <Attachment key={state} state={state} title="web-console.tgz" />
+))}`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('附件尺寸'),
+      description: docsCopy(
+        'size 只控制单个附件的整体密度；不同尺寸作为独立 case 纵向展示。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'size',
+          label: docsCopy('尺寸'),
+          defaultValue: 'default',
+          options: [
+            { label: docsCopy('默认'), value: 'default' },
+            { label: docsCopy('小'), value: 'sm' },
+            { label: docsCopy('超小'), value: 'xs' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <AttachmentSizeDemo
+          size={
+            values.size === 'sm' || values.size === 'xs'
+              ? values.size
+              : 'default'
+          }
+        />
+      ),
+      code: `<Attachment size="default" title="web-console.tgz" />
+<Attachment size="sm" title="web-console.tgz" />
+<Attachment size="xs" title="web-console.tgz" />`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('附件方向'),
+      description: docsCopy(
+        'horizontal 适合文件列表，vertical 以缩略卡形式突出媒体内容。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'orientation',
+          label: docsCopy('方向'),
+          defaultValue: 'horizontal',
+          options: [
+            { label: docsCopy('横向'), value: 'horizontal' },
+            { label: docsCopy('纵向'), value: 'vertical' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <AttachmentOrientationDemo
+          orientation={
+            values.orientation === 'vertical' ? 'vertical' : 'horizontal'
+          }
+        />
+      ),
+      code: `<Attachment orientation="horizontal" title="web-console.tgz" />
+<Attachment orientation="vertical" title="web-console.tgz" />`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('附件操作'),
+      description: docsCopy(
+        'actions 只放置与当前附件直接相关的下载、重试或移除操作。'
+      ),
+      preview: <AttachmentActionsDemo />,
+      code: docsCopy(`<Attachment
+  actions={<Button aria-label="下载附件"><Download /></Button>}
+  title="web-console.tgz"
+/>`),
+      previewHeight: 300,
+    },
+    {
+      title: docsCopy('整卡触发'),
+      description: docsCopy(
+        'trigger 接收链接或按钮元素，在保留正确元素语义的同时让整个附件可点击。'
+      ),
+      preview: <AttachmentTriggerDemo />,
+      code: docsCopy(`<Attachment
+  title="release-notes.md"
+  trigger={<a aria-label="预览 release-notes.md" href="/files/release-notes.md" />}
+/>`),
+      previewHeight: 300,
+    },
+    {
+      title: docsCopy('附件集合'),
+      description: docsCopy(
+        'Attachment.Group 通过 items 渲染一组附件，并为横向溢出提供滚动与吸附行为。'
+      ),
+      preview: <AttachmentGroupDemo />,
+      code: `import { Attachment } from '@heliannuuthus/ui'
+
+<Attachment.Group
+  items={files.map((file) => ({
+    key: file.id,
+    title: file.name,
+    description: file.size,
+    media: <FileArchive />,
+    state: file.state,
+  }))}
+/>`,
       previewHeight: 360,
     },
   ],
@@ -4403,6 +4837,85 @@ import { Minus, Plus } from 'lucide-react'
   renderItem={(item) => <HighlightCard item={item} />}
 />`,
       previewHeight: 440,
+    },
+    {
+      title: docsCopy('导航按钮'),
+      description: docsCopy(
+        'controls 决定是否渲染上一项和下一项按钮；按钮属性通过 previousButtonProps 与 nextButtonProps 独立扩展。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'controls',
+          label: docsCopy('导航按钮'),
+          defaultValue: 'buttons',
+          options: [
+            { label: docsCopy('显示'), value: 'buttons' },
+            { label: docsCopy('隐藏'), value: 'none' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <CarouselControlsDemo
+          mode={values.controls === 'none' ? 'none' : 'buttons'}
+        />
+      ),
+      code: `<Carousel
+  controls={false}
+  items={items}
+  previousButtonProps={{ 'aria-label': 'Previous release' }}
+  nextButtonProps={{ 'aria-label': 'Next release' }}
+/>`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('分页点'),
+      description: docsCopy(
+        'pagination 控制默认点位或隐藏分页，renderDot 只改写单个点位的内容。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'pagination',
+          label: docsCopy('分页点'),
+          defaultValue: 'default',
+          options: [
+            { label: docsCopy('默认'), value: 'default' },
+            { label: docsCopy('自定义'), value: 'custom' },
+            { label: docsCopy('隐藏'), value: 'hidden' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <CarouselDotsDemo
+          mode={
+            values.pagination === 'custom' || values.pagination === 'hidden'
+              ? values.pagination
+              : 'default'
+          }
+        />
+      ),
+      code: `<Carousel
+  items={items}
+  pagination="dots"
+  renderDot={({ index, isSelected }) =>
+    isSelected ? index + 1 : '·'
+  }
+/>`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('轨道与项目样式'),
+      description: docsCopy(
+        'contentClassName 扩展轮播轨道，itemClassName 为每个项目设置统一宽度和间距。'
+      ),
+      preview: <CarouselClassNamesDemo />,
+      code: `<Carousel
+  items={items}
+  contentClassName="gap-3"
+  itemClassName="basis-2/3 pl-3"
+/>`,
+      previewHeight: 'auto',
     },
     {
       title: docsCopy('自定义翻页器'),
@@ -4443,6 +4956,19 @@ import { Minus, Plus } from 'lucide-react'
 />`,
       previewHeight: 480,
       wide: true,
+    },
+    {
+      title: docsCopy('外部控制'),
+      description: docsCopy(
+        '通过 ref 调用 scrollPrev、scrollNext、scrollTo、play 与 pause，不暴露底层轮播实例。'
+      ),
+      preview: <CarouselRefDemo />,
+      code: `const carouselRef = useRef<CarouselRef>(null)
+
+<Carousel ref={carouselRef} items={items} />
+<Button onClick={() => carouselRef.current?.scrollPrev()}>Previous</Button>
+<Button onClick={() => carouselRef.current?.scrollNext()}>Next</Button>`,
+      previewHeight: 'auto',
     },
   ],
   chart: [
@@ -4512,7 +5038,23 @@ const chartConfig = {
       description: docsCopy(
         '默认由整个 Header 触发；传入 trigger 后，Header 保持静态，只由独立按钮控制展开。'
       ),
-      preview: <CollapsibleTriggerModesDemo />,
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'triggerMode',
+          label: docsCopy('触发方式'),
+          defaultValue: 'header',
+          options: [
+            { label: docsCopy('Header 触发'), value: 'header' },
+            { label: docsCopy('按钮触发'), value: 'button' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <CollapsibleTriggerModesDemo
+          mode={values.triggerMode === 'button' ? 'button' : 'header'}
+        />
+      ),
       code: docsCopy(`import { Collapsible } from '@heliannuuthus/ui'
 import { ChevronRight } from 'lucide-react'
 
@@ -4530,14 +5072,35 @@ import { ChevronRight } from 'lucide-react'
   triggerProps={{ size: 'sm', variant: 'outline' }}
   content={<PolicySettings />}
 />`),
-      previewHeight: 620,
+      previewHeight: 'auto',
     },
     {
       title: docsCopy('Header 与图标'),
       description: docsCopy(
         'header 可以组合任意摘要内容；icon 用于替换 Header 指示图标，triggerIcon 用于独立按钮，传 null 时可隐藏图标。'
       ),
-      preview: <CollapsibleHeaderIconDemo />,
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'icon',
+          label: docsCopy('图标'),
+          defaultValue: 'default',
+          options: [
+            { label: docsCopy('默认图标'), value: 'default' },
+            { label: docsCopy('自定义图标'), value: 'custom' },
+            { label: docsCopy('隐藏图标'), value: 'hidden' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <CollapsibleHeaderIconDemo
+          iconMode={
+            values.icon === 'custom' || values.icon === 'hidden'
+              ? values.icon
+              : 'default'
+          }
+        />
+      ),
       code: `import { Collapsible } from '@heliannuuthus/ui'
 import { ChevronRight } from 'lucide-react'
 
@@ -4552,7 +5115,39 @@ import { ChevronRight } from 'lucide-react'
   content={<Details />}
   icon={null}
 />`,
-      previewHeight: 500,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('受控与禁用状态'),
+      description: docsCopy(
+        'open 与 onOpenChange 管理受控展开状态；disabled 阻止触发器改变状态。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'mode',
+          label: docsCopy('状态'),
+          defaultValue: 'controlled',
+          options: [
+            { label: docsCopy('受控'), value: 'controlled' },
+            { label: docsCopy('禁用'), value: 'disabled' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <CollapsibleStateDemo
+          mode={values.mode === 'disabled' ? 'disabled' : 'controlled'}
+        />
+      ),
+      code: `<Collapsible
+  open={open}
+  onOpenChange={setOpen}
+  header={<Summary />}
+  content={<Details />}
+/>
+
+<Collapsible disabled header={<Summary />} content={<Details />} />`,
+      previewHeight: 'auto',
     },
   ],
   counter: [
@@ -4734,38 +5329,59 @@ const columns: ColumnDef<Release>[] = [
   ],
   empty: [
     {
-      title: docsCopy('Props 配置'),
+      title: docsCopy('标题与说明'),
       description: docsCopy(
-        '常见空状态直接配置图标、标题、说明和操作；场景变化时只替换对应 props。'
+        'title 必须明确说明当前为空的对象，description 再补充原因、筛选建议或下一步。'
       ),
-      caseAxes: [
-        {
-          name: 'context',
-          label: docsCopy('场景'),
-          defaultValue: 'new',
-          options: [
-            { label: docsCopy('首次使用'), value: 'new' },
-            { label: docsCopy('筛选无结果'), value: 'filtered' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <EmptyReleaseDemo
-          context={values.context === 'filtered' ? 'filtered' : 'new'}
+      preview: (
+        <Empty
+          className="display-empty"
+          description={docsCopy('尝试缩短关键词或清除当前筛选条件。')}
+          title={docsCopy('没有匹配的发布记录')}
         />
       ),
       code: docsCopy(`import { Empty } from '@heliannuuthus/ui'
 
 <Empty
-  icon={<Cloud />}
-  title="还没有生产发布"
-  description="完成预检后，可以从这里安排第一次生产发布。"
-  actions={<Button>安排发布</Button>}
+  title="没有匹配的发布记录"
+  description="尝试缩短关键词或清除当前筛选条件。"
 />`),
       previewHeight: 420,
     },
     {
-      title: docsCopy('扩展操作'),
+      title: docsCopy('图标'),
+      description: docsCopy(
+        'icon 默认使用通用收件箱图标，也可以替换为场景图标或传 null 隐藏。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'icon',
+          label: docsCopy('图标'),
+          defaultValue: 'default',
+          options: [
+            { label: docsCopy('默认'), value: 'default' },
+            { label: docsCopy('自定义'), value: 'custom' },
+            { label: docsCopy('隐藏'), value: 'hidden' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <EmptyIconDemo
+          mode={
+            values.icon === 'custom' || values.icon === 'hidden'
+              ? values.icon
+              : 'default'
+          }
+        />
+      ),
+      code: `<Empty title="No results" />
+<Empty icon={<SearchX />} title="No results" />
+<Empty icon={null} title="No results" />`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('操作区域'),
       description: docsCopy(
         'actions 可以承载状态摘要和操作按钮，不需要暴露内部布局组件。'
       ),
@@ -4813,12 +5429,166 @@ const columns: ColumnDef<Release>[] = [
 <Item
   variant="outline"
   media={<MessageCircle />}
-  mediaVariant="icon"
+  mediaType="icon"
   title="林默回复了检查项"
   description="确认索引变更不会锁表。"
   actions={<Button>查看</Button>}
 />`),
       previewHeight: 430,
+    },
+    {
+      title: docsCopy('列表项尺寸'),
+      description: docsCopy('size 分别提供默认、小和超小三档内容密度。'),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'size',
+          label: docsCopy('尺寸'),
+          defaultValue: 'default',
+          options: [
+            { label: docsCopy('默认'), value: 'default' },
+            { label: docsCopy('小'), value: 'sm' },
+            { label: docsCopy('超小'), value: 'xs' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <ItemSizeDemo
+          size={
+            values.size === 'sm' || values.size === 'xs'
+              ? values.size
+              : 'default'
+          }
+        />
+      ),
+      code: `<Item size="default" title="Release notes" />
+<Item size="sm" title="Release notes" />
+<Item size="xs" title="Release notes" />`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('媒体内容类型'),
+      description: docsCopy(
+        'mediaType 明确区分普通内容、图标和图片，避免调用方依赖节点形态推断样式。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'mediaType',
+          label: docsCopy('媒体类型'),
+          defaultValue: 'default',
+          options: [
+            { label: docsCopy('普通内容'), value: 'default' },
+            { label: docsCopy('图标'), value: 'icon' },
+            { label: docsCopy('图片'), value: 'image' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <ItemMediaTypeDemo
+          mediaType={
+            values.mediaType === 'icon' || values.mediaType === 'image'
+              ? values.mediaType
+              : 'default'
+          }
+        />
+      ),
+      code: `<Item media={<FileText />} mediaType="icon" title="Release notes" />
+<Item media={<img alt="Cover" src="/cover.jpg" />} mediaType="image" title="Cover" />`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('内容槽位'),
+      description: docsCopy(
+        'header、content、actions 与 footer 各自占据独立语义区域，不再把多个结构字段塞进同一行说明。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'slot',
+          label: docsCopy('内容槽位'),
+          defaultValue: 'content',
+          options: [
+            { label: 'header', value: 'header' },
+            { label: 'content', value: 'content' },
+            { label: 'actions', value: 'actions' },
+            { label: 'footer', value: 'footer' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <ItemStructureDemo
+          slot={
+            values.slot === 'header' ||
+            values.slot === 'actions' ||
+            values.slot === 'footer'
+              ? values.slot
+              : 'content'
+          }
+        />
+      ),
+      code: `<Item
+  header={<Status />}
+  title="Production release"
+  content={<Metadata />}
+  actions={<Button>View</Button>}
+  footer={<UpdatedAt />}
+/>`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('链接列表项'),
+      description: docsCopy(
+        '传入 href 时 Item 使用原生 a 元素承载整项导航，未传时保持普通 div。'
+      ),
+      preview: <ItemLinkDemo />,
+      code: `<Item href="/releases/1842" title="View release details" />`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('列表项集合'),
+      description: docsCopy(
+        'Item.Group 通过 items 渲染集合，separator 独立控制无分隔、默认分隔线或自定义分隔内容。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'separator',
+          label: docsCopy('分隔内容'),
+          defaultValue: 'default',
+          options: [
+            { label: docsCopy('无分隔'), value: 'none' },
+            { label: docsCopy('默认分隔线'), value: 'default' },
+            { label: docsCopy('自定义内容'), value: 'custom' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <ItemGroupDemo
+          separator={
+            values.separator === 'none' || values.separator === 'custom'
+              ? values.separator
+              : 'default'
+          }
+        />
+      ),
+      code: `<Item.Group items={items} separator />
+<Item.Group items={items} separator={<Marker content="Production" />} />`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('自定义列表项渲染'),
+      description: docsCopy(
+        'renderItem 接收当前 ItemGroupEntry 和索引，用于改写整项渲染，而不是修改 Item 的基础属性。'
+      ),
+      preview: <ItemGroupRenderDemo />,
+      code: `<Item.Group
+  items={items}
+  renderItem={(item, index) => (
+    <Item {...item} actions={<Badge>0{index + 1}</Badge>} />
+  )}
+/>`,
+      previewHeight: 'auto',
     },
   ],
   marker: [
@@ -4857,30 +5627,142 @@ const columns: ColumnDef<Release>[] = [
 />`),
       previewHeight: 380,
     },
+    {
+      title: docsCopy('链接与槽位样式'),
+      description: docsCopy(
+        'href 让整个 Marker 使用原生链接语义，classNames 分别扩展 icon 与 content 槽位。'
+      ),
+      preview: <MarkerLinkDemo />,
+      code: `<Marker
+  href="/releases/history"
+  icon={<ArrowUpRight />}
+  content="View release history"
+  classNames={{ icon: 'text-primary', content: 'font-medium' }}
+/>`,
+      previewHeight: 'auto',
+    },
   ],
   bubble: [
     {
       title: docsCopy('气泡样式'),
-      description: docsCopy('使用 Separator 分隔强调、浮起、柔和和描边样式。'),
-      preview: <BubbleVariantsDemo />,
+      description: docsCopy(
+        'variant 的每种语义外观都作为独立 case 展示，避免在同一个预览区域混合比较。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'variant',
+          label: docsCopy('样式'),
+          defaultValue: 'default',
+          options: [
+            { label: docsCopy('默认'), value: 'default' },
+            { label: docsCopy('次要'), value: 'secondary' },
+            { label: docsCopy('弱化'), value: 'muted' },
+            { label: docsCopy('浮起'), value: 'elevated' },
+            { label: docsCopy('柔和'), value: 'tinted' },
+            { label: docsCopy('描边'), value: 'outline' },
+            { label: docsCopy('透明'), value: 'ghost' },
+            { label: docsCopy('危险'), value: 'destructive' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <BubbleVariantsDemo
+          variant={
+            values.variant === 'secondary' ||
+            values.variant === 'muted' ||
+            values.variant === 'elevated' ||
+            values.variant === 'tinted' ||
+            values.variant === 'outline' ||
+            values.variant === 'ghost' ||
+            values.variant === 'destructive'
+              ? values.variant
+              : 'default'
+          }
+        />
+      ),
       code: docsCopy(`import { Bubble } from '@heliannuuthus/ui'
-import { Separator } from '@heliannuuthus/ui'
 
-<Bubble.Group>
-  <Bubble
-    align="end"
-    content="已经补充完成，可以重新评审。"
-    reactions="✓ 2"
-    variant="default"
-  />
-  <Separator />
-  <Bubble
-    align="end"
-    content="已经补充完成，可以重新评审。"
-    variant="elevated"
-  />
-</Bubble.Group>`),
-      previewHeight: 580,
+<Bubble
+  align="end"
+  content="已经补充完成，可以重新评审。"
+  reactions="✓ 2"
+  variant="elevated"
+/>`),
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('消息对齐'),
+      description: docsCopy(
+        'align 只控制单个气泡位于消息流的起始侧或末端，不隐含发送者身份。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'align',
+          label: docsCopy('对齐'),
+          defaultValue: 'start',
+          options: [
+            { label: docsCopy('起始侧'), value: 'start' },
+            { label: docsCopy('末端'), value: 'end' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <BubbleAlignmentDemo align={values.align === 'end' ? 'end' : 'start'} />
+      ),
+      code: `<Bubble align="start" content="Incoming message" />
+<Bubble align="end" content="Outgoing message" />`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('回应位置'),
+      description: docsCopy(
+        'reactionsProps 的 side 与 align 分别控制回应位于气泡上下侧和左右边缘。'
+      ),
+      caseLayout: 'stack',
+      caseAxes: [
+        {
+          name: 'position',
+          label: docsCopy('回应位置'),
+          defaultValue: 'bottom-end',
+          options: [
+            { label: docsCopy('顶部起始侧'), value: 'top-start' },
+            { label: docsCopy('顶部末端'), value: 'top-end' },
+            { label: docsCopy('底部起始侧'), value: 'bottom-start' },
+            { label: docsCopy('底部末端'), value: 'bottom-end' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <BubbleReactionsDemo
+          position={
+            values.position === 'top-start' ||
+            values.position === 'top-end' ||
+            values.position === 'bottom-start'
+              ? values.position
+              : 'bottom-end'
+          }
+        />
+      ),
+      code: `<Bubble
+  content="Ready for review"
+  reactions="👍 2"
+  reactionsProps={{ side: 'top', align: 'start' }}
+/>`,
+      previewHeight: 'auto',
+    },
+    {
+      title: docsCopy('内容节点属性'),
+      description: docsCopy(
+        'contentProps 向内部内容节点传递标准 HTML、ARIA、data 属性、事件和 className。'
+      ),
+      preview: <BubbleContentPropsDemo />,
+      code: `<Bubble
+  content="Build completed"
+  contentProps={{ role: 'status', 'aria-live': 'polite' }}
+/>`,
+      previewHeight: 'auto',
     },
     {
       title: docsCopy('头像与可滚动会话'),
@@ -5515,24 +6397,27 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: 'false',
     },
     {
-      name: 'indicatorPosition',
-      description: docsCopy('将展开指示器放在标题起始侧或末端。'),
-      type: "'start' | 'end'",
-      defaultValue: "'end'",
-    },
-    {
       name: 'indicator',
       description: docsCopy(
-        '自定义折叠态指示器；默认在起始侧由向右旋转至向下，在末端侧由向左旋转至向下。'
+        '设置 Accordion.Indicator；省略时使用位于末端、随展开状态旋转的默认箭头，传入 null 时隐藏。'
       ),
-      type: 'ReactNode',
-      defaultValue: docsCopy('根据 indicatorPosition'),
+      type: 'ReactElement<AccordionIndicatorProps> | null',
+      defaultValue: '<Accordion.Indicator />',
     },
     {
-      name: 'expandedIndicator',
-      description: docsCopy('可选的展开态指示器，适合加号/减号等两态图标。'),
-      type: 'ReactNode',
-      defaultValue: '—',
+      component: 'Accordion.Indicator',
+      name: 'children',
+      description: docsCopy(
+        '传入静态节点时随展开状态旋转；传入状态函数时接收 open、disabled 与 value，并完全控制展示内容。'
+      ),
+      type: 'ReactNode | ((state: AccordionIndicatorState) => ReactNode)',
+    },
+    {
+      component: 'Accordion.Indicator',
+      name: 'position',
+      description: docsCopy('将指示器放在标题起始侧或末端。'),
+      type: "'start' | 'end'",
+      defaultValue: "'end'",
     },
     {
       name: 'disabled',
@@ -5543,7 +6428,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       name: 'keepMounted',
       description: docsCopy(
-        '控制关闭面板是否保留在 DOM，或允许浏览器页内查找展开。'
+        '关闭面板后仍保留其 DOM，适合保留内部状态；不能与 hiddenUntilFound 同时使用。'
       ),
       type: 'boolean',
       defaultValue: 'false',
@@ -5551,7 +6436,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       name: 'hiddenUntilFound',
       description: docsCopy(
-        '控制关闭面板是否保留在 DOM，或允许浏览器页内查找展开。'
+        '通过 hidden="until-found" 保留关闭面板，使浏览器页内查找可以定位并展开内容；不能与 keepMounted 同时使用。'
       ),
       type: 'boolean',
       defaultValue: 'false',
@@ -5579,7 +6464,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       component: 'AttachmentMedia',
       name: 'variant',
-      description: docsCopy('选择图标或图片媒体样式。'),
+      description: docsCopy('声明媒体内容是图标还是图片。'),
       type: "'icon' | 'image'",
       defaultValue: "'icon'",
     },
@@ -5966,9 +6851,9 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     },
     {
       name: 'title',
-      description: docsCopy('说明当前为什么没有内容；传入 null 可隐藏标题。'),
+      description: docsCopy('明确说明当前为空的对象或结果。'),
       type: 'ReactNode',
-      defaultValue: docsCopy("'暂无内容'"),
+      required: true,
     },
     {
       name: 'description',
@@ -6012,7 +6897,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'string',
     },
     {
-      name: 'media / mediaVariant',
+      name: 'media / mediaType',
       description: docsCopy('设置媒体内容，并选择普通、图标或图片外观。'),
       type: "ReactNode / 'default' | 'icon' | 'image'",
       defaultValue: "'default'",
@@ -7865,34 +8750,6 @@ replaceExampleCodes('tabs', [
 />`),
 ]);
 
-replaceExampleCodes('avatar', [
-  docsCopy(`import { Avatar } from '@heliannuuthus/ui'
-
-<Avatar alt="林默" fallback="林" shape="circle" size="lg" />
-<Avatar alt="周一" fallback="周" shape="square" size="lg" />`),
-  `import { Avatar } from '@heliannuuthus/ui'
-
-<Avatar.Group
-  max={4}
-  overlap={8}
-  size="lg"
-  items={members.map((member) => ({
-    alt: member.name,
-    fallback: member.initials,
-    src: member.avatar,
-  }))}
-/>`,
-  docsCopy(`import { Avatar } from '@heliannuuthus/ui'
-import { Badge } from '@heliannuuthus/ui'
-
-<Avatar
-  alt="陈青"
-  fallback="陈"
-  size="lg"
-  badge={<Badge variant="destructive">8</Badge>}
-/>`),
-]);
-
 replaceExampleCodes('alert', [
   docsCopy(`import { Alert } from '@heliannuuthus/ui'
 
@@ -7931,144 +8788,6 @@ replaceExampleCodes('select', [
     })),
   }))}
 />`),
-]);
-
-replaceExampleCodes('accordion', [
-  docsCopy(`import { Accordion } from '@heliannuuthus/ui'
-
-<Accordion
-  defaultValue={['preflight']}
-  items={[
-    { value: 'preflight', title: '预检结果', content: '42 项检查均已通过。' },
-    { value: 'rollback', title: '回滚方案', content: '异常时切回上一版本。' },
-  ]}
-/>`),
-  docsCopy(`import { Accordion } from '@heliannuuthus/ui'
-
-<Accordion
-  indicatorPosition="start"
-  indicator={<Plus />}
-  expandedIndicator={<Minus />}
-  items={[
-    { value: 'deployment', title: '部署策略', content: '先灰度 10%，观察后全量发布。' },
-  ]}
-/>`),
-]);
-
-replaceExampleCodes('attachment', [
-  docsCopy(`import { Attachment } from '@heliannuuthus/ui'
-
-<Attachment
-  title="web-console.tgz"
-  description="8.4 MB · 正在校验"
-  media={<FileArchive />}
-  state="processing"
-/>`),
-  `import { Attachment } from '@heliannuuthus/ui'
-
-<Attachment.Group
-  items={files.map((file) => ({
-    title: file.name,
-    description: file.size,
-    media: <FileArchive />,
-    orientation: 'vertical',
-  }))}
-/>`,
-]);
-
-replaceExampleCodes('carousel', [
-  `import { Carousel } from '@heliannuuthus/ui'
-
-<Carousel
-  items={highlights.map((item) => <Highlight key={item.id} {...item} />)}
-  pagination="dots"
-  loop
-/>`,
-  `import { Carousel } from '@heliannuuthus/ui'
-
-<Carousel
-  controls={false}
-  items={highlights.map((item) => <Highlight key={item.id} {...item} />)}
-  pagination={({ currentPage, pageCount, scrollPrev, scrollNext }) => (
-    <CustomPagination
-      current={currentPage}
-      total={pageCount}
-      onPrevious={scrollPrev}
-      onNext={scrollNext}
-    />
-  )}
-/>`,
-  `import { Carousel } from '@heliannuuthus/ui'
-
-<Carousel
-  autoplay={3}
-  loop
-  items={highlights.map((item) => <Highlight key={item.id} {...item} />)}
-/>`,
-]);
-
-replaceExampleCodes('collapsible', [
-  docsCopy(`import { Collapsible } from '@heliannuuthus/ui'
-
-<Collapsible
-  defaultOpen
-  header={<BuildSummary />}
-  icon={<ChevronRight />}
-  content={<BuildOutput />}
-  footer={<BuildActions />}
-/>
-
-<Collapsible
-  trigger="配置"
-  triggerProps={{ variant: 'outline' }}
-  header={<PolicySummary />}
-  content={<PolicySettings />}
-/>`),
-]);
-
-replaceExampleCodes('empty', [
-  docsCopy(`import { Empty } from '@heliannuuthus/ui'
-
-<Empty
-  icon={<Cloud />}
-  title="还没有生产发布"
-  description="完成预检后，可以安排第一次生产发布。"
-  actions={<Button>安排发布</Button>}
-/>`),
-  docsCopy(`import { Empty } from '@heliannuuthus/ui'
-
-<Empty
-  icon={<ShieldCheck />}
-  title="等待安全审计"
-  description="审计通过前暂无可发布版本。"
-  actions={<AuditSummary />}
-/>`),
-]);
-
-replaceExampleCodes('bubble', [
-  docsCopy(`import { Bubble } from '@heliannuuthus/ui'
-
-<Bubble.Group>
-  <Bubble
-    align="end"
-    variant="default"
-    content="已经补充完成，可以重新评审。"
-    reactions="✓ 2"
-  />
-  <Bubble align="start" variant="elevated" content="收到，我现在检查。" />
-</Bubble.Group>`),
-  `import { Avatar } from '@heliannuuthus/ui'
-import { Bubble } from '@heliannuuthus/ui'
-import { ScrollArea } from '@heliannuuthus/ui'
-
-<ScrollArea>
-  {messages.map((message) => (
-    <div key={message.id}>
-      <Avatar alt={message.author} fallback={message.avatar} />
-      <Bubble align={message.align} content={message.content} />
-    </div>
-  ))}
-</ScrollArea>`,
 ]);
 
 replaceExampleCodes('tooltip', [
@@ -8212,28 +8931,6 @@ import { Button } from '@heliannuuthus/ui'
     <Table.Row><Table.Cell colSpan={2}>共 1 项</Table.Cell></Table.Row>
   </Table.Footer>
 </Table>`),
-]);
-
-replaceExampleCodes('item', [
-  docsCopy(`import { Item } from '@heliannuuthus/ui'
-
-<Item
-  media={<GitCommit />}
-  mediaVariant="icon"
-  title="许澄提交了发布说明"
-  description="补充数据库迁移影响与回滚入口。"
-  actions={<Button>查看</Button>}
-/>`),
-]);
-
-replaceExampleCodes('marker', [
-  docsCopy(`import { Marker } from '@heliannuuthus/ui'
-
-<Marker
-  variant="separator"
-  icon={<CircleDot />}
-  content="生产发布开始 · 21:46"
-/>`),
 ]);
 
 replaceExampleCodes('chart', [
@@ -8390,33 +9087,61 @@ componentDocumentation.attachment.parts = [
 ];
 componentDocumentation.attachment.api = [
   {
-    name: 'title / description',
-    description: docsCopy('设置附件名称和辅助说明。'),
+    name: 'title',
+    description: docsCopy('设置附件名称。'),
+    type: 'ReactNode',
+    required: true,
+  },
+  {
+    name: 'description',
+    description: docsCopy('设置文件大小、处理状态或错误原因等辅助说明。'),
     type: 'ReactNode',
   },
   {
-    name: 'media / mediaVariant',
-    description: docsCopy('设置附件媒体，并选择图标或图片外观。'),
-    type: "ReactNode / 'icon' | 'image'",
+    name: 'media',
+    description: docsCopy('设置文件类型图标或缩略图。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'mediaType',
+    description: docsCopy('声明媒体内容是图标还是图片。'),
+    type: "'icon' | 'image'",
     defaultValue: "'icon'",
   },
   {
-    name: 'actions / trigger',
-    description: docsCopy(
-      '设置附件操作，以及覆盖整个附件的链接或按钮触发区域。'
-    ),
-    type: 'ReactNode / ReactElement',
+    name: 'actions',
+    description: docsCopy('设置与附件直接相关的下载、重试或移除操作。'),
+    type: 'ReactNode',
   },
   {
-    name: 'orientation / size / state',
-    description: docsCopy('设置排列方向、尺寸和上传处理状态。'),
-    type: "'horizontal' | 'vertical' / 'xs' | 'sm' | 'default' / 'idle' | 'uploading' | 'processing' | 'error' | 'done'",
+    name: 'trigger',
+    description: docsCopy('传入链接或按钮元素，使整个附件成为对应触发区域。'),
+    type: 'ReactElement',
+  },
+  {
+    name: 'orientation',
+    description: docsCopy('切换行式附件或纵向缩略附件。'),
+    type: "'horizontal' | 'vertical'",
+    defaultValue: "'horizontal'",
+  },
+  {
+    name: 'size',
+    description: docsCopy('设置附件的整体密度。'),
+    type: "'xs' | 'sm' | 'default'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'state',
+    description: docsCopy('表达附件当前处理阶段并驱动状态样式。'),
+    type: "'idle' | 'uploading' | 'processing' | 'error' | 'done'",
+    defaultValue: "'done'",
   },
   {
     component: 'Attachment.Group',
     name: 'items',
     description: docsCopy('通过配置数组渲染一组 Attachment。'),
-    type: 'AttachmentProps[]',
+    type: 'readonly AttachmentGroupItem[]',
+    required: true,
   },
 ];
 componentDocumentation.bubble.parts = [
@@ -8430,31 +9155,67 @@ componentDocumentation.bubble.parts = [
 ];
 componentDocumentation.bubble.api = [
   {
-    name: 'content / contentProps',
-    description: docsCopy('设置气泡内容，并向内部内容 div 传递标准属性。'),
-    type: 'ReactNode / ComponentProps<"div">',
+    name: 'content',
+    description: docsCopy('设置气泡中的消息内容。'),
+    type: 'ReactNode',
+    required: true,
   },
   {
-    name: 'reactions / reactionsProps',
-    description: docsCopy('设置回应或已读状态，并控制其边缘位置。'),
-    type: 'ReactNode / BubbleReactionsProps',
+    name: 'contentProps',
+    description: docsCopy(
+      '向内部内容 div 传递标准 HTML、ARIA、data 属性和事件。'
+    ),
+    type: 'ComponentProps<"div"> & DataAttributes',
   },
   {
-    name: 'variant / align',
-    description: docsCopy('设置气泡外观及在消息流中的左右对齐。'),
-    type: "'default' | 'secondary' | 'muted' | 'elevated' | 'tinted' | 'outline' | 'ghost' | 'destructive' / 'start' | 'end'",
+    name: 'reactions',
+    description: docsCopy('设置回应、已读状态或其他边缘内容。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'reactionsProps',
+    description: docsCopy('控制回应内容的边缘位置并扩展容器属性。'),
+    type: 'BubbleReactionsProps',
+  },
+  {
+    name: 'variant',
+    description: docsCopy('设置消息气泡的强调与语义外观。'),
+    type: "'default' | 'secondary' | 'muted' | 'elevated' | 'tinted' | 'outline' | 'ghost' | 'destructive'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'align',
+    description: docsCopy('将气泡对齐到消息流起始侧或末尾侧。'),
+    type: "'start' | 'end'",
+    defaultValue: "'start'",
   },
 ];
 componentDocumentation.avatar.api = [
   {
-    name: 'src / alt / fallback',
-    description: docsCopy('设置头像资源、替代文本和加载失败时的回退内容。'),
-    type: 'string / string / ReactNode',
+    name: 'alt',
+    description: docsCopy('为头像图片和默认回退文字提供可访问名称。'),
+    type: 'string',
+    required: true,
   },
   {
-    name: 'shape / size',
-    description: docsCopy('设置圆形或圆角方形头像及尺寸。'),
-    type: "'circle' | 'square' / 'sm' | 'default' | 'lg'",
+    name: 'src',
+    description: docsCopy('设置头像图片资源地址。'),
+    type: 'string',
+  },
+  {
+    name: 'fallback',
+    description: docsCopy('设置图片不可用时显示的姓名缩写或图标。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'fallbackProps',
+    description: docsCopy('配置回退内容的延迟显示和原生 span 属性。'),
+    type: 'AvatarFallbackProps',
+  },
+  {
+    name: 'imageProps',
+    description: docsCopy('配置头像图片的加载状态回调和原生 img 属性。'),
+    type: 'AvatarImageProps',
   },
   {
     name: 'badge',
@@ -8462,16 +9223,54 @@ componentDocumentation.avatar.api = [
     type: 'ReactNode',
   },
   {
+    name: 'shape',
+    description: docsCopy('设置圆形头像或圆角方形头像。'),
+    type: "'circle' | 'square'",
+    defaultValue: "'circle'",
+  },
+  {
+    name: 'size',
+    description: docsCopy('设置头像尺寸，并同步 AvatarBadge 与分组计数。'),
+    type: "'sm' | 'default' | 'lg'",
+    defaultValue: "'default'",
+  },
+  {
     component: 'Avatar.Group',
-    name: 'items / max / overlap',
-    description: docsCopy('配置头像集合、最大展示数量和重叠距离。'),
-    type: 'AvatarGroupItem[] / number / number',
+    name: 'items',
+    description: docsCopy('配置头像集合及每个项目的稳定 key。'),
+    type: 'readonly AvatarGroupItem[]',
+    required: true,
+  },
+  {
+    component: 'Avatar.Group',
+    name: 'max',
+    description: docsCopy('限制可见头像数量，并自动将剩余数量显示为 +N。'),
+    type: 'number',
+  },
+  {
+    component: 'Avatar.Group',
+    name: 'overlap',
+    description: docsCopy('使用像素值控制相邻头像的重叠程度。'),
+    type: 'number',
+    defaultValue: '8',
   },
   {
     component: 'Avatar.Group',
     name: 'renderCount',
     description: docsCopy('自定义剩余数量的呈现方式。'),
     type: '(count: number) => ReactNode',
+  },
+  {
+    component: 'Avatar.Group',
+    name: 'shape',
+    description: docsCopy('为组内头像和自动计数项设置统一形状。'),
+    type: "'circle' | 'square'",
+  },
+  {
+    component: 'Avatar.Group',
+    name: 'size',
+    description: docsCopy('为组内头像和自动计数项设置统一尺寸。'),
+    type: "'sm' | 'default' | 'lg'",
   },
 ];
 componentDocumentation.checkbox.parts = [
@@ -8534,10 +9333,128 @@ componentDocumentation.item.parts = [
     ),
   },
 ];
+componentDocumentation.item.api = [
+  {
+    name: 'variant',
+    description: docsCopy('设置列表项的默认、描边或柔和外观。'),
+    type: "'default' | 'outline' | 'muted'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'size',
+    description: docsCopy('设置列表项内容密度。'),
+    type: "'xs' | 'sm' | 'default'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'href',
+    description: docsCopy(
+      '传入链接地址后使用原生 a 元素，否则渲染为普通 div。'
+    ),
+    type: 'string',
+  },
+  {
+    name: 'media',
+    description: docsCopy('设置列表项起始侧的媒体内容。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'mediaType',
+    description: docsCopy('声明媒体内容是普通内容、图标还是图片。'),
+    type: "'default' | 'icon' | 'image'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'title',
+    description: docsCopy('设置列表项的主要标题。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'description',
+    description: docsCopy('设置列表项的辅助说明。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'content',
+    description: docsCopy('在标题和说明之外添加自定义内容。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'actions',
+    description: docsCopy('设置列表项末尾的相关操作。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'header',
+    description: docsCopy('添加横跨整行的前置内容。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'footer',
+    description: docsCopy('添加横跨整行的后置内容。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'classNames',
+    description: docsCopy('按语义槽位扩展列表项内部样式。'),
+    type: 'ItemClassNames',
+  },
+  {
+    component: 'Item.Group',
+    name: 'items',
+    description: docsCopy('配置一组列表项及每个项目的稳定 key。'),
+    type: 'readonly ItemGroupEntry[]',
+    required: true,
+  },
+  {
+    component: 'Item.Group',
+    name: 'renderItem',
+    description: docsCopy('根据当前项目和索引完全自定义列表项渲染。'),
+    type: '(item: ItemGroupEntry, index: number) => ReactNode',
+  },
+  {
+    component: 'Item.Group',
+    name: 'separator',
+    description: docsCopy('在相邻列表项之间显示默认分隔线或自定义内容。'),
+    type: 'boolean | ReactNode',
+    defaultValue: 'false',
+  },
+];
 componentDocumentation.marker.parts = [
   {
     name: 'Marker',
     description: docsCopy('通过 icon、content 与 variant props 配置内容标记。'),
+  },
+];
+componentDocumentation.marker.api = [
+  {
+    name: 'content',
+    description: docsCopy('设置可换行的标记文字或链接。'),
+    type: 'ReactNode',
+    required: true,
+  },
+  {
+    name: 'icon',
+    description: docsCopy('设置装饰性状态图标并自动隐藏可访问语义。'),
+    type: 'ReactNode',
+  },
+  {
+    name: 'variant',
+    description: docsCopy('选择纯文本、两侧分隔线或下边框标记。'),
+    type: "'default' | 'separator' | 'border'",
+    defaultValue: "'default'",
+  },
+  {
+    name: 'href',
+    description: docsCopy(
+      '传入链接地址后使用原生 a 元素，否则渲染为普通 div。'
+    ),
+    type: 'string',
+  },
+  {
+    name: 'classNames',
+    description: docsCopy('分别扩展图标与内容槽位样式。'),
+    type: 'MarkerClassNames',
   },
 ];
 componentDocumentation.empty.api = componentDocumentation.empty.api.filter(
@@ -8624,6 +9541,34 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       type: 'readonly AccordionItem[]',
     },
     {
+      component: 'AccordionItem',
+      name: 'value',
+      description: docsCopy('设置条目的唯一标识，并用于受控展开值。'),
+      type: 'string',
+      required: true,
+    },
+    {
+      component: 'AccordionItem',
+      name: 'title',
+      description: docsCopy('设置触发按钮中显示的标题内容。'),
+      type: 'ReactNode',
+      required: true,
+    },
+    {
+      component: 'AccordionItem',
+      name: 'content',
+      description: docsCopy('设置条目展开后显示的面板内容。'),
+      type: 'ReactNode',
+      required: true,
+    },
+    {
+      component: 'AccordionItem',
+      name: 'disabled',
+      description: docsCopy('仅禁用当前条目的展开与收起交互。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
       name: 'value',
       description: docsCopy('以受控或非受控方式指定当前展开项。'),
       type: 'string[]',
@@ -8646,34 +9591,37 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     },
     {
       name: 'disabled',
-      description: docsCopy('禁用整个 Accordion 或单个 AccordionItem。'),
+      description: docsCopy('禁用整个 Accordion 的所有条目。'),
       type: 'boolean',
       defaultValue: 'false',
     },
     {
       name: 'indicator',
       description: docsCopy(
-        '自定义折叠态指示器；默认在起始侧由向右旋转至向下，在末端侧由向左旋转至向下。'
+        '设置 Accordion.Indicator；省略时使用位于末端、随展开状态旋转的默认箭头，传入 null 时隐藏。'
       ),
-      type: 'ReactNode',
-      defaultValue: docsCopy('根据 indicatorPosition'),
+      type: 'ReactElement<AccordionIndicatorProps> | null',
+      defaultValue: '<Accordion.Indicator />',
     },
     {
-      name: 'expandedIndicator',
-      description: docsCopy('可选的展开态指示器，适合加号/减号等两态图标。'),
-      type: 'ReactNode',
-      defaultValue: '—',
+      component: 'Accordion.Indicator',
+      name: 'children',
+      description: docsCopy(
+        '传入静态节点时随展开状态旋转；传入状态函数时接收 open、disabled 与 value，并完全控制展示内容。'
+      ),
+      type: 'ReactNode | ((state: AccordionIndicatorState) => ReactNode)',
     },
     {
-      name: 'indicatorPosition',
-      description: docsCopy('将展开指示器放在标题起始侧或末端。'),
+      component: 'Accordion.Indicator',
+      name: 'position',
+      description: docsCopy('将指示器放在标题起始侧或末端。'),
       type: "'start' | 'end'",
       defaultValue: "'end'",
     },
     {
       name: 'keepMounted',
       description: docsCopy(
-        '控制关闭面板是否保留在 DOM，或允许浏览器页内查找展开。'
+        '关闭面板后仍保留其 DOM，适合保留内部状态；不能与 hiddenUntilFound 同时使用。'
       ),
       type: 'boolean',
       defaultValue: 'false',
@@ -8681,7 +9629,7 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     {
       name: 'hiddenUntilFound',
       description: docsCopy(
-        '控制关闭面板是否保留在 DOM，或允许浏览器页内查找展开。'
+        '通过 hidden="until-found" 保留关闭面板，使浏览器页内查找可以定位并展开内容；不能与 keepMounted 同时使用。'
       ),
       type: 'boolean',
       defaultValue: 'false',
@@ -8734,9 +9682,15 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
   ],
   carousel: [
     {
-      name: 'items / renderItem',
-      description: docsCopy('提供轮播数据，并决定每一项的展示内容。'),
-      type: 'Item[] / (item: Item, index: number) => ReactNode',
+      name: 'items',
+      description: docsCopy('提供轮播数据或直接渲染的节点列表。'),
+      type: 'readonly Item[]',
+      required: true,
+    },
+    {
+      name: 'renderItem',
+      description: docsCopy('根据当前数据项和索引渲染轮播内容。'),
+      type: '(item: Item, index: number) => ReactNode',
     },
     {
       name: 'controls',
@@ -8745,21 +9699,153 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       defaultValue: 'true',
     },
     {
-      name: 'pagination / paginationPosition / renderDot',
+      name: 'contentClassName',
+      description: docsCopy('扩展轮播内容轨道的样式。'),
+      type: 'string',
+    },
+    {
+      name: 'itemClassName',
+      description: docsCopy('为每个轮播项设置统一样式。'),
+      type: 'string',
+    },
+    {
+      name: 'previousButtonProps',
+      description: docsCopy('配置上一页按钮的外观、可访问名称和原生属性。'),
+      type: 'ButtonNativeProps',
+    },
+    {
+      name: 'nextButtonProps',
+      description: docsCopy('配置下一页按钮的外观、可访问名称和原生属性。'),
+      type: 'ButtonNativeProps',
+    },
+    {
+      name: 'pagination',
       description: docsCopy(
         '使用默认点位、关闭分页，或通过函数自定义完整翻页器。'
       ),
-      type: "false | 'dots' | ((controls) => ReactNode)",
+      type: "false | 'dots' | ((controls: CarouselControls) => ReactNode)",
+      defaultValue: "'dots'",
     },
     {
-      name: 'autoplay / loop / pauseOnHover',
-      description: docsCopy('设置自动播放间隔、首尾循环和悬停暂停策略。'),
-      type: 'boolean | number / boolean / boolean',
+      name: 'paginationPosition',
+      description: docsCopy('将分页内容放在轮播轨道之前或之后。'),
+      type: "'before' | 'after'",
+      defaultValue: "'after'",
+    },
+    {
+      name: 'renderDot',
+      description: docsCopy('根据点位索引和选中状态自定义分页点。'),
+      type: '(props: CarouselDotRenderProps) => ReactNode',
+    },
+    {
+      name: 'autoplay',
+      description: docsCopy(
+        '传 true 以默认 3 秒间隔自动播放，或直接传入正数设置切换秒数。'
+      ),
+      type: 'boolean | number',
+      defaultValue: 'false',
+    },
+    {
+      name: 'loop',
+      description: docsCopy(
+        '让最后一项与第一项首尾相接；自动播放跨越首尾时始终沿下一页方向继续。'
+      ),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'pauseOnHover',
+      description: docsCopy('自动播放时，指针进入轮播区域即暂停，离开后继续。'),
+      type: 'boolean',
+      defaultValue: 'true',
     },
     {
       name: 'ref',
-      description: docsCopy('从外部滚动、播放或暂停轮播。'),
-      type: 'Ref<CarouselRef>',
+      description: docsCopy(
+        '从 Carousel 外部滚动、播放或暂停；底层轮播实例不会暴露。'
+      ),
+      type: 'React.Ref<CarouselRef>',
+    },
+  ],
+  collapsible: [
+    {
+      name: 'header',
+      description: docsCopy(
+        '设置始终可见的摘要内容；未传 trigger 时，整个 Header 同时作为触发器。'
+      ),
+      type: 'ReactNode',
+    },
+    {
+      name: 'content',
+      description: docsCopy('设置展开后显示的内容。'),
+      type: 'ReactNode',
+      required: true,
+    },
+    {
+      name: 'footer',
+      description: docsCopy('设置内容区域后的可选底部信息或操作。'),
+      type: 'ReactNode',
+    },
+    {
+      name: 'trigger',
+      description: docsCopy(
+        '设置独立触发按钮的内容；传入后 Header 保持静态，不再响应展开操作。'
+      ),
+      type: 'ReactNode',
+    },
+    {
+      name: 'triggerProps',
+      description: docsCopy('设置独立触发按钮的外观、尺寸和原生触发器属性。'),
+      type: 'CollapsibleTriggerProps',
+    },
+    {
+      name: 'triggerIcon',
+      description: docsCopy(
+        '设置独立触发按钮末端的状态图标；展开时会与面板使用同一节奏旋转。'
+      ),
+      type: 'ReactNode',
+    },
+    {
+      name: 'icon',
+      description: docsCopy(
+        '替换 Header 触发模式下的默认方向图标；传 null 时隐藏图标。'
+      ),
+      type: 'ReactNode',
+      defaultValue: '<ChevronDownIcon />',
+    },
+    {
+      name: 'open',
+      description: docsCopy('以受控方式设置当前展开状态。'),
+      type: 'boolean',
+    },
+    {
+      name: 'defaultOpen',
+      description: docsCopy('设置非受控模式的初始展开状态。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'onOpenChange',
+      description: docsCopy('用户展开或收起内容时调用。'),
+      type: '(open: boolean, eventDetails) => void',
+    },
+    {
+      name: 'disabled',
+      description: docsCopy('阻止触发器改变展开状态。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'headerClassName',
+      description: docsCopy(
+        '扩展 Header 或 Header 与独立触发按钮所在行的样式。'
+      ),
+      type: 'string',
+    },
+    {
+      name: 'contentClassName',
+      description: docsCopy('扩展展开内容区域的样式。'),
+      type: 'string',
     },
   ],
   command: [
@@ -9127,6 +10213,439 @@ for (const [slug, api] of Object.entries(publicWrapperApi)) {
   if (documentation && api) documentation.api = api;
 }
 
+componentDocumentation.accordion.typePreviews = [
+  {
+    name: 'AccordionItem',
+    declaration: '{',
+    api: [
+      {
+        name: 'value',
+        description: docsCopy('设置条目的唯一标识，并用于受控展开值。'),
+        type: 'string',
+        required: true,
+      },
+      {
+        name: 'title',
+        description: docsCopy('设置触发按钮中显示的标题内容。'),
+        type: 'ReactNode',
+        required: true,
+      },
+      {
+        name: 'content',
+        description: docsCopy('设置条目展开后显示的面板内容。'),
+        type: 'ReactNode',
+        required: true,
+      },
+      {
+        name: 'disabled',
+        description: docsCopy('仅禁用当前条目的展开与收起交互。'),
+        type: 'boolean',
+      },
+    ],
+  },
+  {
+    name: 'AccordionIndicatorProps',
+    declaration: "Omit<ComponentProps<'span'>, 'children'> & {",
+    api: [
+      {
+        name: 'children',
+        description: docsCopy(
+          '传入静态节点时随展开状态旋转；传入状态函数时接收 open、disabled 与 value，并完全控制展示内容。'
+        ),
+        type: 'ReactNode | ((state: AccordionIndicatorState) => ReactNode)',
+      },
+      {
+        name: 'position',
+        description: docsCopy('将指示器放在标题起始侧或末端。'),
+        type: "'start' | 'end'",
+        defaultValue: "'end'",
+      },
+    ],
+  },
+  {
+    name: 'AccordionIndicatorState',
+    declaration: '{',
+    api: [
+      {
+        name: 'open',
+        description: docsCopy('当前条目的面板是否已展开。'),
+        type: 'boolean',
+      },
+      {
+        name: 'disabled',
+        description: docsCopy('当前条目或整个 Accordion 是否已禁用。'),
+        type: 'boolean',
+      },
+      {
+        name: 'value',
+        description: docsCopy('当前条目的稳定标识。'),
+        type: 'string',
+      },
+    ],
+  },
+];
+componentDocumentation.accordion.parts = [
+  {
+    name: 'Accordion',
+    description: docsCopy('管理展开值并根据 items 渲染一组关联面板。'),
+  },
+  {
+    name: 'AccordionItem',
+    description: docsCopy('描述单个条目的标识、标题、面板内容与禁用状态。'),
+  },
+  {
+    name: 'Accordion.Indicator',
+    description: docsCopy(
+      '读取当前条目状态，并在标题起始侧或末端渲染展开指示器。'
+    ),
+  },
+];
+
+componentDocumentation.attachment.typePreviews = [
+  {
+    name: 'AttachmentProps',
+    declaration: "Omit<ComponentProps<'div'>, 'children' | 'title'> & {",
+    api: componentDocumentation.attachment.api.filter(
+      (property) => property.component == null
+    ),
+  },
+  {
+    name: 'AttachmentGroupItem',
+    declaration: 'AttachmentProps & {',
+    api: [
+      {
+        name: 'key',
+        description: docsCopy('在附件集合中为当前项目提供稳定标识。'),
+        type: 'React.Key',
+      },
+      ...componentDocumentation.attachment.api.filter(
+        (property) => property.component == null
+      ),
+    ],
+  },
+];
+
+componentDocumentation.avatar.typePreviews = [
+  {
+    name: 'AvatarFallbackProps',
+    declaration: "Omit<ComponentProps<'span'>, 'children'> & {",
+    api: [
+      {
+        name: 'delay',
+        description: docsCopy('图片尚未完成加载时，延迟显示回退内容的毫秒数。'),
+        type: 'number',
+      },
+    ],
+  },
+  {
+    name: 'AvatarImageProps',
+    declaration: "Omit<ComponentProps<'img'>, 'alt' | 'children' | 'src'> & {",
+    api: [
+      {
+        name: 'onLoadingStatusChange',
+        description: docsCopy('头像图片加载状态变化时调用。'),
+        type: '(status: AvatarImageLoadingStatus) => void',
+      },
+    ],
+  },
+  {
+    name: 'AvatarImageLoadingStatus',
+    definition:
+      "type AvatarImageLoadingStatus = 'error' | 'idle' | 'loaded' | 'loading'",
+  },
+  {
+    name: 'AvatarGroupItem',
+    declaration: 'AvatarProps & {',
+    api: [
+      {
+        name: 'key',
+        description: docsCopy('在头像集合中为当前项目提供稳定标识。'),
+        type: 'React.Key',
+      },
+      ...componentDocumentation.avatar.api.filter(
+        (property) => property.component == null
+      ),
+    ],
+  },
+];
+
+componentDocumentation.bubble.typePreviews = [
+  {
+    name: 'DataAttributes',
+    definition:
+      'type DataAttributes = {\n  [key: `data-${string}`]: boolean | number | string | undefined\n}',
+  },
+  {
+    name: 'BubbleReactionsProps',
+    declaration: "ComponentProps<'div'> & {",
+    api: [
+      {
+        name: 'align',
+        description: docsCopy('将回应内容对齐到气泡边缘的起始侧或末尾侧。'),
+        type: "'start' | 'end'",
+        defaultValue: "'end'",
+      },
+      {
+        name: 'side',
+        description: docsCopy('将回应内容放在气泡顶部或底部边缘。'),
+        type: "'top' | 'bottom'",
+        defaultValue: "'bottom'",
+      },
+    ],
+  },
+];
+
+componentDocumentation.carousel.typePreviews = [
+  {
+    name: 'CarouselRef',
+    declaration: '{',
+    api: [
+      {
+        name: 'pause',
+        description: docsCopy('暂停自动播放。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'play',
+        description: docsCopy('恢复自动播放。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'scrollNext',
+        description: docsCopy('滚动到下一个轮播项。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'scrollPrev',
+        description: docsCopy('滚动到上一个轮播项。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'scrollTo',
+        description: docsCopy('根据索引滚动到指定轮播项。'),
+        type: '(index: number) => void',
+        required: true,
+      },
+    ],
+  },
+  {
+    name: 'CarouselControls',
+    declaration: 'CarouselRef & {',
+    api: [
+      {
+        name: 'canScrollNext',
+        description: docsCopy('当前是否可以滚动到下一项。'),
+        type: 'boolean',
+        required: true,
+      },
+      {
+        name: 'canScrollPrev',
+        description: docsCopy('当前是否可以滚动到上一项。'),
+        type: 'boolean',
+        required: true,
+      },
+      {
+        name: 'currentPage',
+        description: docsCopy('当前页码，从 1 开始。'),
+        type: 'number',
+        required: true,
+      },
+      {
+        name: 'isPlaying',
+        description: docsCopy('自动播放当前是否正在运行。'),
+        type: 'boolean',
+        required: true,
+      },
+      {
+        name: 'pageCount',
+        description: docsCopy('轮播总页数。'),
+        type: 'number',
+        required: true,
+      },
+      {
+        name: 'selectedIndex',
+        description: docsCopy('当前轮播项的零起始索引。'),
+        type: 'number',
+        required: true,
+      },
+      {
+        name: 'scrollSnaps',
+        description: docsCopy('底层滚动对齐点集合。'),
+        type: 'number[]',
+        required: true,
+      },
+      {
+        name: 'pause',
+        description: docsCopy('暂停自动播放。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'play',
+        description: docsCopy('恢复自动播放。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'scrollNext',
+        description: docsCopy('滚动到下一个轮播项。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'scrollPrev',
+        description: docsCopy('滚动到上一个轮播项。'),
+        type: '() => void',
+        required: true,
+      },
+      {
+        name: 'scrollTo',
+        description: docsCopy('根据索引滚动到指定轮播项。'),
+        type: '(index: number) => void',
+        required: true,
+      },
+    ],
+  },
+  {
+    name: 'CarouselDotRenderProps',
+    declaration: '{',
+    api: [
+      {
+        name: 'index',
+        description: docsCopy('当前分页点对应的零起始索引。'),
+        type: 'number',
+        required: true,
+      },
+      {
+        name: 'isSelected',
+        description: docsCopy('当前分页点是否对应已选中轮播项。'),
+        type: 'boolean',
+        required: true,
+      },
+    ],
+  },
+  {
+    name: 'ButtonNativeProps',
+    declaration: "Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'color'> & {",
+    api: [
+      {
+        name: 'variant',
+        description: docsCopy('设置按钮的语义外观。'),
+        type: "'default' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link'",
+      },
+      {
+        name: 'size',
+        description: docsCopy('设置按钮尺寸。'),
+        type: "'xs' | 'sm' | 'default' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'",
+      },
+      {
+        name: 'block',
+        description: docsCopy('让按钮填满容器可用宽度。'),
+        type: 'boolean',
+      },
+      {
+        name: 'disabled',
+        description: docsCopy('禁用按钮交互。'),
+        type: 'boolean',
+      },
+    ],
+  },
+];
+
+componentDocumentation.collapsible.typePreviews = [
+  {
+    name: 'CollapsibleTriggerProps',
+    declaration:
+      "Omit<ButtonNativeProps, 'children' | 'className' | 'href'> & {",
+    api: [
+      {
+        name: 'variant',
+        description: docsCopy('设置独立触发按钮的语义外观。'),
+        type: "'default' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link'",
+      },
+      {
+        name: 'size',
+        description: docsCopy('设置独立触发按钮的尺寸。'),
+        type: "'xs' | 'sm' | 'default' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'",
+      },
+      {
+        name: 'disabled',
+        description: docsCopy('禁用触发按钮并阻止展开状态变化。'),
+        type: 'boolean',
+      },
+      {
+        name: 'aria-label',
+        description: docsCopy('为仅图标触发按钮提供可访问名称。'),
+        type: 'string',
+      },
+      {
+        name: 'onClick',
+        description: docsCopy('处理触发按钮的原生点击事件。'),
+        type: 'MouseEventHandler<HTMLButtonElement>',
+      },
+    ],
+  },
+];
+
+componentDocumentation.item.typePreviews = [
+  {
+    name: 'ItemClassNames',
+    declaration: '{',
+    api: [
+      ...[
+        'actions',
+        'content',
+        'description',
+        'footer',
+        'header',
+        'media',
+        'title',
+      ].map((name) => ({
+        name,
+        description: docsCopy('扩展对应语义槽位的 className。'),
+        type: 'string',
+      })),
+    ],
+  },
+  {
+    name: 'ItemGroupEntry',
+    declaration: 'ItemProps & {',
+    api: [
+      {
+        name: 'key',
+        description: docsCopy('在列表项集合中为当前项目提供稳定标识。'),
+        type: 'React.Key',
+      },
+      ...componentDocumentation.item.api.filter(
+        (property) => property.component == null
+      ),
+    ],
+  },
+];
+
+componentDocumentation.marker.typePreviews = [
+  {
+    name: 'MarkerClassNames',
+    declaration: '{',
+    api: [
+      {
+        name: 'content',
+        description: docsCopy('扩展标记内容槽位的 className。'),
+        type: 'string',
+      },
+      {
+        name: 'icon',
+        description: docsCopy('扩展标记图标槽位的 className。'),
+        type: 'string',
+      },
+    ],
+  },
+];
+
 componentDocumentation.command.typeDefinitionGroups = [
   'CommandGroup',
   'CommandOption',
@@ -9220,4 +10739,9 @@ for (const documentation of Object.values(componentDocumentation)) {
   if (basicExample) {
     basicExample.title = docsCopy('基础用法');
   }
+}
+
+const accordionSingleExample = componentDocumentation.accordion.examples[0];
+if (accordionSingleExample) {
+  accordionSingleExample.title = docsCopy('单项展开');
 }

@@ -61,18 +61,21 @@ type ItemSharedProps = VariantProps<typeof itemVariants> & {
   footer?: React.ReactNode;
   header?: React.ReactNode;
   media?: React.ReactNode;
-  mediaVariant?: VariantProps<typeof itemMediaVariants>['variant'];
+  mediaType?: NonNullable<VariantProps<typeof itemMediaVariants>['variant']>;
   title?: React.ReactNode;
 };
 
-type ItemDivProps = Omit<React.ComponentProps<'div'>, 'children' | 'title'> &
+type ItemDivProps = Omit<
+  React.ComponentProps<'div'>,
+  'children' | 'content' | 'title'
+> &
   ItemSharedProps & {
     href?: never;
   };
 
 type ItemLinkProps = Omit<
   React.ComponentProps<'a'>,
-  'children' | 'href' | 'media' | 'title'
+  'children' | 'content' | 'href' | 'media' | 'title'
 > &
   ItemSharedProps & {
     href: string;
@@ -99,7 +102,7 @@ const Item = ({
   footer,
   header,
   media,
-  mediaVariant = 'default',
+  mediaType = 'default',
   size = 'default',
   title,
   variant = 'default',
@@ -125,11 +128,11 @@ const Item = ({
           className={cn(
             itemMediaVariants({
               className: classNames?.media,
-              variant: mediaVariant,
+              variant: mediaType,
             })
           )}
           data-slot="item-media"
-          data-variant={mediaVariant}
+          data-variant={mediaType}
         >
           {media}
         </div>

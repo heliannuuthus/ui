@@ -28,7 +28,7 @@ type AttachmentProps = Omit<React.ComponentProps<'div'>, 'children' | 'title'> &
     actions?: React.ReactNode;
     description?: React.ReactNode;
     media?: React.ReactNode;
-    mediaVariant?: 'icon' | 'image';
+    mediaType?: 'icon' | 'image';
     state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
     title: React.ReactNode;
     trigger?: React.ReactElement;
@@ -39,7 +39,7 @@ const Attachment = ({
   className,
   description,
   media,
-  mediaVariant = 'icon',
+  mediaType = 'icon',
   title,
   trigger,
   state = 'done',
@@ -57,7 +57,7 @@ const Attachment = ({
       {...props}
     >
       {media != null ? (
-        <AttachmentMedia variant={mediaVariant}>{media}</AttachmentMedia>
+        <AttachmentMedia variant={mediaType}>{media}</AttachmentMedia>
       ) : null}
       <AttachmentContent>
         <AttachmentTitle>{title}</AttachmentTitle>
@@ -192,8 +192,12 @@ const AttachmentTrigger = ({
   });
 };
 
+type AttachmentGroupItem = AttachmentProps & {
+  key?: React.Key;
+};
+
 type AttachmentGroupProps = Omit<React.ComponentProps<'div'>, 'children'> & {
-  items: readonly (AttachmentProps & { key?: React.Key })[];
+  items: readonly AttachmentGroupItem[];
 };
 
 const AttachmentGroup = ({
@@ -226,6 +230,7 @@ const AttachmentCompound = Object.assign(Attachment, {
 
 export {
   AttachmentCompound as Attachment,
+  type AttachmentGroupItem,
   type AttachmentGroupProps,
   type AttachmentProps,
 };

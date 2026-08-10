@@ -699,7 +699,7 @@ const HomePage = () => {
                     count: group.items.length,
                   })}
                   media={<Package />}
-                  mediaVariant="icon"
+                  mediaType="icon"
                   href={path(`/components/${componentSlug(group.items[0])}`)}
                   title={t(`groups.${group.key}`)}
                   variant="outline"
@@ -780,7 +780,7 @@ const GettingStartedPage = () => {
         description={t('gettingStarted.nextDescription')}
         id="next-step"
         media={<LayoutGrid strokeWidth={2.5} />}
-        mediaVariant="icon"
+        mediaType="icon"
         href={path('/components')}
         title={
           <Stack align="center" gap={8} orientation="horizontal">
@@ -1647,7 +1647,7 @@ const DocSection = ({
           className="p-0"
           description={description}
           media={icon}
-          mediaVariant="icon"
+          mediaType="icon"
           size="sm"
           title={
             <Stack align="center" gap={8} orientation="horizontal">
