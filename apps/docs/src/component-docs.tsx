@@ -3478,7 +3478,7 @@ componentDocumentation.avatar.examples = [
     description: docsCopy(
       'shape 在圆形和圆角方形之间切换，每种形状作为独立 case 展示。'
     ),
-    caseLayout: 'stack',
+    caseLayout: 'segmented',
     caseAxes: [
       {
         name: 'shape',
@@ -3506,7 +3506,7 @@ componentDocumentation.avatar.examples = [
     description: docsCopy(
       'size 提供小、中、大三档尺寸，并同步调整文字与状态标记。'
     ),
-    caseLayout: 'stack',
+    caseLayout: 'segmented',
     caseAxes: [
       {
         name: 'size',
@@ -3536,7 +3536,7 @@ componentDocumentation.avatar.examples = [
     description: docsCopy(
       'src 提供头像图片；加载失败时显示 fallback，并通过 imageProps 与 fallbackProps 配置加载回调和延迟。'
     ),
-    caseLayout: 'stack',
+    caseLayout: 'segmented',
     caseAxes: [
       {
         name: 'source',
@@ -3587,7 +3587,7 @@ componentDocumentation.avatar.examples = [
     description: docsCopy(
       'renderCount 接收未展示数量并替换默认 +N，同时继承分组的 shape 与 size。'
     ),
-    caseLayout: 'stack',
+    caseLayout: 'segmented',
     caseAxes: [
       {
         name: 'count',
@@ -4017,9 +4017,9 @@ const form = Form.useForm<Values>({
     {
       title: docsCopy('验证码形态'),
       description: docsCopy(
-        '使用 Input 的 variant 切换连接方块与独立方块，两种形态上下独立展示。'
+        '使用 Input 的 variant 切换连接方块与独立方块，并通过分段控件逐项预览。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'variant',
@@ -4597,7 +4597,7 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         '默认关闭时卸载面板；keepMounted 保留内部状态；hiddenUntilFound 保留内容并允许浏览器页内查找定位。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'strategy',
@@ -4647,7 +4647,7 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'mediaType 明确声明 media 是图标还是图片，让缩略图获得正确的尺寸、裁切与状态样式。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'mediaType',
@@ -4684,7 +4684,7 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'state 分别表达等待、上传、处理、失败和完成阶段；状态文案仍由 description 明确说明。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'state',
@@ -4721,9 +4721,9 @@ import { Minus, Plus } from 'lucide-react'
     {
       title: docsCopy('附件尺寸'),
       description: docsCopy(
-        'size 只控制单个附件的整体密度；不同尺寸作为独立 case 纵向展示。'
+        'size 只控制单个附件的整体密度；不同尺寸通过分段控件逐项预览。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'size',
@@ -4755,7 +4755,7 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'horizontal 适合文件列表，vertical 以缩略卡形式突出媒体内容。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'orientation',
@@ -4860,7 +4860,7 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'controls 决定是否渲染上一项和下一项按钮；按钮属性通过 previousButtonProps 与 nextButtonProps 独立扩展。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'controls',
@@ -4890,7 +4890,7 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'pagination 控制默认点位或隐藏分页，renderDot 只改写单个点位的内容。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'pagination',
@@ -5054,7 +5054,7 @@ const chartConfig = {
       description: docsCopy(
         '默认由整个 Header 触发；传入 trigger 后，Header 保持静态，只由独立按钮控制展开。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'triggerMode',
@@ -5095,7 +5095,7 @@ import { ChevronRight } from 'lucide-react'
       description: docsCopy(
         'header 可以组合任意摘要内容；icon 用于替换 Header 指示图标，triggerIcon 用于独立按钮，传 null 时可隐藏图标。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'icon',
@@ -5138,7 +5138,7 @@ import { ChevronRight } from 'lucide-react'
       description: docsCopy(
         'open 与 onOpenChange 管理受控展开状态；disabled 阻止触发器改变状态。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'mode',
@@ -5456,7 +5456,7 @@ if (!request.pending && records.length === 0) {
       description: docsCopy(
         'icon 默认使用通用收件箱图标，也可以替换为场景图标或传 null 隐藏。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'icon',
@@ -5581,7 +5581,7 @@ if (!request.pending && records.length === 0) {
     {
       title: docsCopy('列表项尺寸'),
       description: docsCopy('size 分别提供默认、小和超小三档内容密度。'),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'size',
@@ -5613,7 +5613,7 @@ if (!request.pending && records.length === 0) {
       description: docsCopy(
         'mediaType 明确区分普通内容、图标和图片，避免调用方依赖节点形态推断样式。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'mediaType',
@@ -5644,7 +5644,7 @@ if (!request.pending && records.length === 0) {
       description: docsCopy(
         'header、content、actions 与 footer 各自占据独立语义区域，不再把多个结构字段塞进同一行说明。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'slot',
@@ -5692,7 +5692,7 @@ if (!request.pending && records.length === 0) {
       description: docsCopy(
         'Item.Group 通过 items 渲染集合，separator 独立控制无分隔、默认分隔线或自定义分隔内容。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'separator',
@@ -5816,7 +5816,7 @@ import { Archive } from 'lucide-react'
       description: docsCopy(
         'variant 的每种语义外观都作为独立 case 展示，避免在同一个预览区域混合比较。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'variant',
@@ -5864,7 +5864,7 @@ import { Archive } from 'lucide-react'
       description: docsCopy(
         'align 只控制单个气泡位于消息流的起始侧或末端，不隐含发送者身份。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'align',
@@ -5888,7 +5888,7 @@ import { Archive } from 'lucide-react'
       description: docsCopy(
         'reactionsProps 的 side 与 align 分别控制回应位于气泡上下侧和左右边缘。'
       ),
-      caseLayout: 'stack',
+      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'position',

@@ -30,7 +30,7 @@ export type ComponentHarnessCaseAxis = {
 
 export type ComponentHarnessValues = Record<string, string>;
 
-export type ComponentHarnessLayout = 'grid' | 'segmented' | 'stack';
+export type ComponentHarnessLayout = 'grid' | 'segmented';
 
 type ComponentHarnessSharedProps = {
   children: (values: ComponentHarnessValues) => ReactNode;

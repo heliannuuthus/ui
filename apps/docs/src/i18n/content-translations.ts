@@ -2218,8 +2218,8 @@ const ActionCell = () => {
     'Use Header, Body, and Footer to organize a semantically complete basic table.',
   '使用 Header、Content、Footer 和 Sidebar 组合页面骨架，让常见布局关系保持清晰且可嵌套。':
     'Use Header, Content, Footer, and Sidebar to combine page skeletons to keep common layout relationships clear and nestable.',
-  '使用 Input 的 variant 切换连接方块与独立方块，两种形态上下独立展示。':
-    'Use the variant of Input to switch between connected blocks and independent blocks. The two forms are displayed independently up and down.',
+  '使用 Input 的 variant 切换连接方块与独立方块，并通过分段控件逐项预览。':
+    'Use the Input variant to switch between connected and separated blocks, previewing one option at a time with the segmented control.',
   '使用 Radio 表达单个选项，并通过 Radio.Group 组织互斥选择。':
     'Use Radio to express individual options, and Radio.Group to organize mutually exclusive choices.',
   '使用 Separator 分隔强调、浮起、柔和和描边样式。':
@@ -4255,8 +4255,8 @@ const ActionCell = () => {
   正在处理: 'Processing',
   上传失败: 'Upload failed',
   附件尺寸: 'Attachment sizes',
-  'size 只控制单个附件的整体密度；不同尺寸作为独立 case 纵向展示。':
-    'size controls the density of one attachment; each size is shown as a separate vertically stacked case.',
+  'size 只控制单个附件的整体密度；不同尺寸通过分段控件逐项预览。':
+    'size controls the density of one attachment; preview each size individually with the segmented control.',
   超小: 'Extra small',
   附件方向: 'Attachment orientation',
   'horizontal 适合文件列表，vertical 以缩略卡形式突出媒体内容。':
