@@ -39,6 +39,15 @@ const loadHarnessModule = async () => {
         export {
           englishContentTranslations,
         } from './apps/docs/src/i18n/content-translations.ts'
+        export {
+          componentDocumentation,
+        } from './apps/docs/src/component-docs.tsx'
+        export {
+          comparePropertyNames,
+          orderApiProperties,
+          orderPropertyEntries,
+          qualifiedApiPropertyName,
+        } from './apps/docs/src/api-property-order.ts'
       `,
       loader: 'ts',
       resolveDir: packageRoot,
@@ -72,11 +81,43 @@ const interpolationNames = (value) => {
     .sort();
 };
 
+const createCasesFromAxes = (axes) => {
+  return axes.reduce(
+    (cases, axis) =>
+      cases.flatMap((harnessCase) => {
+        const defaultValue = axis.defaultValue ?? axis.options[0]?.value ?? '';
+        return axis.options.map((option) => ({
+          isDefault: harnessCase.isDefault && option.value === defaultValue,
+          label: [...harnessCase.labels, option.label].join(' · '),
+          labels: [...harnessCase.labels, option.label],
+          properties: {
+            ...harnessCase.properties,
+            ...(axis.property === false
+              ? {}
+              : { [axis.property ?? axis.name]: option.value }),
+            ...option.properties,
+          },
+          values: { ...harnessCase.values, [axis.name]: option.value },
+        }));
+      }),
+    [{ isDefault: true, labels: [], properties: {}, values: {} }]
+  );
+};
+
+globalThis.window = {
+  location: { pathname: '/zh' },
+  localStorage: {
+    getItem: () => null,
+    setItem: () => undefined,
+  },
+};
 const {
   componentCatalog,
   componentGroups,
+  componentDocumentation,
   componentSearchMetadata,
   componentSlug,
+  comparePropertyNames,
   defaultLocale,
   englishContentTranslations,
   htmlLanguage,
@@ -84,6 +125,9 @@ const {
   localizedComponentName,
   localizedComponentMetadata,
   localizedPath,
+  orderApiProperties,
+  orderPropertyEntries,
+  qualifiedApiPropertyName,
   resources,
   supportedLocales,
   zhComponentNames,
@@ -91,6 +135,46 @@ const {
 
 const chinesePattern = /[\u3400-\u9fff]/u;
 const contentEntries = Object.entries(englishContentTranslations);
+
+const apiOrderFixture = [
+  { component: 'Demo', name: 'style' },
+  { component: 'Demo', name: 'onChange' },
+  { component: 'Demo', name: 'defaultValue' },
+  { component: 'Demo', name: 'className' },
+  { component: 'Demo', name: 'value' },
+  { component: 'Demo', name: 'items', required: true },
+  { component: 'Demo', name: 'ref' },
+  { component: 'Demo', name: 'styles' },
+  { component: 'Demo', name: 'disabled' },
+  { component: 'Demo', name: 'classNames' },
+];
+const orderedApiFixtureNames = orderApiProperties(apiOrderFixture, 'Demo').map(
+  qualifiedApiPropertyName
+);
+
+assert.deepEqual(orderedApiFixtureNames, [
+  'Demo.items',
+  'Demo.disabled',
+  'Demo.value',
+  'Demo.defaultValue',
+  'Demo.onChange',
+  'Demo.ref',
+  'Demo.classNames',
+  'Demo.styles',
+  'Demo.className',
+  'Demo.style',
+]);
+assert.ok(comparePropertyNames('disabled', 'onChange') < 0);
+assert.deepEqual(
+  orderPropertyEntries(
+    Object.fromEntries(
+      [...orderedApiFixtureNames].reverse().map((name) => [name, true])
+    ),
+    orderedApiFixtureNames
+  ).map(([name]) => name),
+  orderedApiFixtureNames,
+  'Case properties must follow the same order as the API table.'
+);
 
 assert.ok(
   contentEntries.length > 0,
@@ -323,6 +407,88 @@ for (const componentName of componentCatalog) {
   );
 }
 
+const documentationSlugs = Object.keys(componentDocumentation);
+assert.deepEqual(
+  [...documentationSlugs].sort(),
+  [...catalogSlugs].sort(),
+  'Every catalog component must have exactly one documentation object.'
+);
+
+for (const [slug, documentation] of Object.entries(componentDocumentation)) {
+  assert.equal(
+    documentation.slug,
+    slug,
+    `Documentation key and slug must match for "${slug}".`
+  );
+  assert.ok(
+    documentation.examples.length > 0,
+    `"${slug}" must include a basic example.`
+  );
+
+  const apiNames = documentation.api.map((property) =>
+    property.component
+      ? `${property.component}.${property.name}`
+      : property.name
+  );
+  const allowedApiNames = new Set(apiNames);
+  assert.equal(
+    allowedApiNames.size,
+    apiNames.length,
+    `"${slug}" API property names must be unique after qualification.`
+  );
+  assert.deepEqual(
+    apiNames.filter(
+      (name) =>
+        name.includes('原生属性') ||
+        name.includes('Native properties') ||
+        name === '...navProps'
+    ),
+    [],
+    `"${slug}" must document className and style explicitly instead of a generic native-properties row.`
+  );
+
+  const coveredApiNames = new Set();
+  for (const [exampleIndex, example] of documentation.examples.entries()) {
+    for (const axis of example.caseAxes ?? []) {
+      assert.ok(
+        axis.options.length > 0,
+        `"${slug}" example ${exampleIndex + 1} axis "${axis.name}" needs options.`
+      );
+      assert.ok(
+        axis.property === false || allowedApiNames.has(axis.property),
+        `"${slug}" example ${exampleIndex + 1} axis "${axis.name}" must map to a documented API property or explicitly opt out.`
+      );
+    }
+
+    const cases = example.cases ?? createCasesFromAxes(example.caseAxes ?? []);
+    if (exampleIndex === 0) {
+      assert.ok(cases.length > 0, `"${slug}" basic example needs a case.`);
+    }
+    if (cases.length === 0) continue;
+
+    assert.equal(
+      cases.filter((harnessCase) => harnessCase.isDefault).length,
+      1,
+      `"${slug}" example ${exampleIndex + 1} must have exactly one default case.`
+    );
+    for (const harnessCase of cases) {
+      for (const name of Object.keys(harnessCase.properties ?? {})) {
+        assert.ok(
+          allowedApiNames.has(name),
+          `"${slug}" case "${harnessCase.label}" references unknown API property "${name}".`
+        );
+        coveredApiNames.add(name);
+      }
+    }
+  }
+
+  assert.deepEqual(
+    [...allowedApiNames].filter((name) => !coveredApiNames.has(name)),
+    [],
+    `"${slug}" must cover every API property in a basic or specialized case.`
+  );
+}
+
 const documentationFixture = {
   accessibility: ['键盘说明'],
   api: [
@@ -389,5 +555,5 @@ for (const searchableText of [
 globalThis.console.log(
   `Verified ${supportedLocales.length} locales, ${zhKeys.length} translation ` +
     `keys, ${contentEntries.length} content translations, ` +
-    `${catalogSlugs.length} component search entries, and localized paths.`
+    `${catalogSlugs.length} component docs with complete case coverage, and localized paths.`
 );

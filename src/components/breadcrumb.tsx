@@ -29,16 +29,20 @@ type BreadcrumbItem = {
 
 type BreadcrumbSeparator = 'chevron' | 'slash' | 'dot' | React.ReactNode;
 
+type BreadcrumbCollapseOptions = {
+  maxItems: number;
+  before?: number;
+  after?: number;
+  label?: string;
+};
+
 type BreadcrumbProps = Omit<React.ComponentProps<'nav'>, 'children'> & {
   items: BreadcrumbItem[];
   variant?: 'default' | 'underline' | 'pill';
   separator?: BreadcrumbSeparator;
   size?: 'sm' | 'default' | 'lg';
-  maxItems?: number;
-  itemsBeforeCollapse?: number;
-  itemsAfterCollapse?: number;
-  homeIcon?: boolean | React.ReactNode;
-  collapseLabel?: string;
+  collapse?: number | BreadcrumbCollapseOptions;
+  icon?: boolean | React.ReactNode;
 };
 
 type BreadcrumbEntry =
@@ -162,19 +166,18 @@ const Breadcrumb = ({
   variant = 'default',
   separator = 'chevron',
   size = 'default',
-  maxItems,
-  itemsBeforeCollapse = 1,
-  itemsAfterCollapse = 2,
-  homeIcon = false,
-  collapseLabel = '显示完整路径',
+  collapse,
+  icon = false,
   className,
   ...props
 }: BreadcrumbProps) => {
+  const collapseOptions =
+    typeof collapse === 'number' ? { maxItems: collapse } : collapse;
   const entries = getEntries(
     items,
-    maxItems,
-    itemsBeforeCollapse,
-    itemsAfterCollapse
+    collapseOptions?.maxItems,
+    collapseOptions?.before ?? 1,
+    collapseOptions?.after ?? 2
   );
   const itemClassName = cn(
     'inline-flex min-w-0 items-center gap-1.5 rounded-lg transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/35',
@@ -216,7 +219,7 @@ const Breadcrumb = ({
                 {entry.type === 'collapsed' ? (
                   <CollapsedItems
                     items={entry.items}
-                    label={collapseLabel}
+                    label={collapseOptions?.label ?? '显示完整路径'}
                     className={itemClassName}
                   />
                 ) : entry.item.menu?.length ? (
@@ -243,11 +246,11 @@ const Breadcrumb = ({
                     )}
                     onClick={entry.item.onClick}
                   >
-                    {entry.index === 0 && homeIcon ? (
-                      homeIcon === true ? (
+                    {entry.index === 0 && icon ? (
+                      icon === true ? (
                         <HomeIcon />
                       ) : (
-                        homeIcon
+                        icon
                       )
                     ) : (
                       entry.item.icon
@@ -266,6 +269,7 @@ const Breadcrumb = ({
 
 export {
   Breadcrumb,
+  type BreadcrumbCollapseOptions,
   type BreadcrumbItem,
   type BreadcrumbMenuItem,
   type BreadcrumbProps,

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AspectRatio } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
-import { Label } from '@heliannuuthus/ui';
+import { DemoLabel } from './demo-label';
 
 const coverRatios = [
   {
@@ -61,7 +61,9 @@ export const AspectRatioCoverDemo = () => {
           <strong>{docsCopy('新建内容封面')}</strong>
         </div>
         <div className="aspect-cover-field">
-          <Label htmlFor="aspect-cover-title">{docsCopy('文章标题')}</Label>
+          <DemoLabel htmlFor="aspect-cover-title">
+            {docsCopy('文章标题')}
+          </DemoLabel>
           <Input
             id="aspect-cover-title"
             defaultValue={docsCopy('向日葵的夏天')}

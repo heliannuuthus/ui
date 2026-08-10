@@ -13,11 +13,10 @@ import { Command } from '@heliannuuthus/ui';
 import { Empty } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
 import { Item } from '@heliannuuthus/ui';
-import { Label } from '@heliannuuthus/ui';
+import { Layout } from '@heliannuuthus/ui';
 import { Masonry } from '@heliannuuthus/ui';
 import { Popover } from '@heliannuuthus/ui';
 import { Separator } from '@heliannuuthus/ui';
-import { Sidebar } from '@heliannuuthus/ui';
 import { Toggle } from '@heliannuuthus/ui';
 import { Stack } from '@heliannuuthus/ui';
 import { Tabs } from '@heliannuuthus/ui';
@@ -47,8 +46,6 @@ import {
 import {
   Navigate,
   NavLink,
-  useHref,
-  useLinkClickHandler,
   useLocation,
   useNavigate,
   useParams,
@@ -67,6 +64,7 @@ import {
 } from './component-catalog';
 import { localizedComponentMetadata } from './component-metadata';
 import { ComponentHarness } from './component-harness';
+import { DemoLabel } from './demo-label';
 import { docsCopy } from './i18n/content';
 import { useDocsLocale, useLocalizedPath } from './i18n/routing';
 import {
@@ -74,6 +72,10 @@ import {
   type PackageManagerName,
 } from './package-manager-icon';
 import { SyntaxCode } from './syntax-code';
+import {
+  orderApiProperties,
+  qualifiedApiPropertyName,
+} from './api-property-order';
 
 const repositoryUrl = 'https://github.com/heliannuuthus/ui';
 const docsBasePath = window.location.hostname.endsWith('github.io')
@@ -94,7 +96,7 @@ const groupApiProperties = (
 ) => {
   const groups = new Map<string, ApiProperty[]>();
 
-  for (const property of properties) {
+  for (const property of orderApiProperties(properties, defaultComponent)) {
     const component = property.component ?? defaultComponent;
     const group = groups.get(component);
 
@@ -592,9 +594,9 @@ const HomePage = () => {
               <Badge variant="outline">Composable</Badge>
             </Stack>
             <Stack block gap={8}>
-              <Label htmlFor="home-workspace-name">
+              <DemoLabel htmlFor="home-workspace-name">
                 {t('home.workspaceName')}
-              </Label>
+              </DemoLabel>
               <Input defaultValue="Heliannuuthus UI" id="home-workspace-name" />
             </Stack>
             <Stack
@@ -1088,7 +1090,7 @@ const ComponentNavigation = ({ component }: { component: string }) => {
     const frame = requestAnimationFrame(() => {
       const content = contentRef.current;
       const activeItem = content?.querySelector<HTMLElement>(
-        '[data-sidebar="menu-button"][data-active]'
+        '.component-docs-sidebar-link[data-active]'
       );
 
       if (!content || !activeItem) return;
@@ -1119,48 +1121,43 @@ const ComponentNavigation = ({ component }: { component: string }) => {
   }, [component]);
 
   return (
-    <Sidebar
+    <Layout.Sidebar
       aria-label={t('components.navigation')}
       className="component-docs-sidebar"
-      collapsible="none"
+      width="clamp(240px, 16vw, 288px)"
     >
-      <Sidebar.Header className="component-docs-sidebar-header">
+      <header className="component-docs-sidebar-header">
         <NavLink to={path('/components')}>
           <span>{t('components.label')}</span>
           <small>{componentCatalog.length}</small>
         </NavLink>
-      </Sidebar.Header>
-      <Sidebar.Separator />
-      <Sidebar.Content
-        className="component-docs-sidebar-content"
-        ref={contentRef}
-      >
+      </header>
+      <Separator />
+      <div className="component-docs-sidebar-content" ref={contentRef}>
         {componentGroups.map((group) => (
-          <Sidebar.Group key={group.title}>
-            <Sidebar.GroupLabel className="component-docs-sidebar-label">
+          <section className="component-docs-sidebar-group" key={group.title}>
+            <h2 className="component-docs-sidebar-label">
               <span>{t(`groups.${group.key}`)}</span>
               <small>{group.items.length}</small>
-            </Sidebar.GroupLabel>
-            <Sidebar.GroupContent>
-              <Sidebar.Menu>
-                {group.items.map((item) => {
-                  const slug = componentSlug(item);
-                  return (
-                    <Sidebar.MenuItem key={item}>
-                      <ComponentNavigationLink
-                        isActive={slug === component}
-                        item={item}
-                        slug={slug}
-                      />
-                    </Sidebar.MenuItem>
-                  );
-                })}
-              </Sidebar.Menu>
-            </Sidebar.GroupContent>
-          </Sidebar.Group>
+            </h2>
+            <ul className="component-docs-sidebar-menu">
+              {group.items.map((item) => {
+                const slug = componentSlug(item);
+                return (
+                  <li key={item}>
+                    <ComponentNavigationLink
+                      isActive={slug === component}
+                      item={item}
+                      slug={slug}
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
         ))}
-      </Sidebar.Content>
-    </Sidebar>
+      </div>
+    </Layout.Sidebar>
   );
 };
 
@@ -1176,18 +1173,15 @@ const ComponentNavigationLink = ({
   const path = useLocalizedPath();
   const locale = useDocsLocale();
   const to = path(`/components/${slug}`);
-  const href = useHref(to);
-  const handleClick = useLinkClickHandler(to);
 
   return (
-    <Sidebar.MenuButton
-      href={href}
-      isActive={isActive}
-      onClick={handleClick}
-      size="sm"
+    <NavLink
+      className="component-docs-sidebar-link"
+      data-active={isActive || undefined}
+      to={to}
     >
       <span>{localizedComponentName(item, locale)}</span>
-    </Sidebar.MenuButton>
+    </NavLink>
   );
 };
 
@@ -1220,6 +1214,9 @@ const ComponentPage = () => {
   if (component === 'sidebar') {
     return <Navigate to={path('/components/layout')} replace />;
   }
+  if (component === 'sheet') {
+    return <Navigate to={path('/components/drawer')} replace />;
+  }
   if (component === 'data-table') {
     return <Navigate to={path('/components/table')} replace />;
   }
@@ -1230,16 +1227,9 @@ const ComponentPage = () => {
   const documentation = componentDocumentation[component];
   const metadata = localizedComponentMetadata(component, locale, documentation);
   return (
-    <Sidebar.Provider
-      className="component-detail-layout"
-      style={
-        {
-          '--sidebar-width': 'clamp(240px, 16vw, 288px)',
-        } as CSSProperties
-      }
-    >
+    <Layout className="component-detail-layout">
       <ComponentNavigation component={component} />
-      <Sidebar.Inset
+      <Layout.Content
         className={`component-detail${
           spaciousComponentSlugs.has(component)
             ? ' component-detail-spacious'
@@ -1332,6 +1322,9 @@ const ComponentPage = () => {
                 {documentation.api.length > 0 && (
                   <div className="component-reference-block">
                     <h3>{t('components.properties')}</h3>
+                    <p className="component-inherited-props-notice">
+                      {t('components.inheritedPropsNotice')}
+                    </p>
                     <div className="component-api-groups">
                       {groupApiProperties(
                         documentation.api,
@@ -1396,8 +1389,8 @@ const ComponentPage = () => {
             </div>
           </>
         ) : null}
-      </Sidebar.Inset>
-    </Sidebar.Provider>
+      </Layout.Content>
+    </Layout>
   );
 };
 
@@ -1436,6 +1429,12 @@ const ComponentExampleCard = ({
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
+  const documentation = componentDocumentation[component];
+  const propertyOrder = documentation
+    ? orderApiProperties(documentation.api, documentation.name).map(
+        qualifiedApiPropertyName
+      )
+    : [];
   const copy = async () => {
     await navigator.clipboard.writeText(example.code);
     setCopied(true);
@@ -1445,6 +1444,7 @@ const ComponentExampleCard = ({
   return (
     <Card
       className={`example-card${example.wide ? ' example-card-wide' : ''}`}
+      variant="outline"
       classNames={{
         header: 'example-card-header',
         title: 'example-card-title',
@@ -1562,6 +1562,7 @@ const ComponentExampleCard = ({
             cases={example.cases}
             layout={example.caseLayout}
             minCaseWidth={example.caseMinWidth}
+            propertyOrder={propertyOrder}
           >
             {(values) =>
               typeof example.preview === 'function'
@@ -1574,6 +1575,7 @@ const ComponentExampleCard = ({
             axes={example.caseAxes}
             layout={example.caseLayout}
             minCaseWidth={example.caseMinWidth}
+            propertyOrder={propertyOrder}
           >
             {(values) =>
               typeof example.preview === 'function'

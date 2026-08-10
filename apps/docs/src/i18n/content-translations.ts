@@ -652,8 +652,8 @@ const ActionCell = () => {
     'Avoid putting long sentences or complex operations.',
   '避免在弹层中继续嵌套第三层导航。':
     'Avoid nesting third-level navigation in the pop-up layer.',
-  '避免展示超过五个可见层级；深层路径应使用 maxItems 收起。':
-    'Avoid showing more than five visible levels; deep paths should be collapsed using maxItems.',
+  '避免展示超过五个可见层级；深层路径应使用 collapse 收起。':
+    'Avoid showing more than five visible levels; deep paths should be collapsed using collapse.',
   '边缘渐隐会跟随真实滚动距离变化；列表项进入视口时轻量出现，并支持方向键浏览与 Enter 选择。':
     'Edge fading will follow the actual scrolling distance; list items appear lightly when entering the viewport, and support arrow keys for browsing and Enter selection.',
   编辑: 'edit',
@@ -2061,6 +2061,8 @@ const ActionCell = () => {
     'Set the step size for each keyboard or pointer movement.',
   '设置每一级的名称、链接、图标、禁用状态和下拉菜单。':
     'Set the name, link, icon, disabled state, and drop-down menu for each level.',
+  '设置路径折叠阈值，或进一步配置前后保留数量和触发器名称。':
+    'Set the path collapse threshold, or further configure the number of items retained before and after it and the trigger label.',
   '设置面板进入和停靠的方向。':
     'Sets the direction in which the panel enters and docks.',
   '设置面板内容的切换动效；减少动态效果偏好下自动降级。':
@@ -2479,8 +2481,6 @@ const ActionCell = () => {
     'Set the position of the indicator uniformly; rotate with the state when a node is passed in, or define the collapsed and expanded states separately.',
   '统一颜色、间距与排版语言。':
     'Unify colors, spacing and typography language.',
-  '统一桌面 Sheet 与移动端 Drawer：从视口或指定父容器的任意边缘打开，并根据 behavior 调整面板与手势呈现。':
-    'Unify the desktop Sheet and mobile Drawer: open from any edge of the viewport or the specified parent container, and adjust the panel and gesture presentation according to the behavior.',
   '头部布局区域，容纳标题、说明与右侧操作。':
     'The header layout area accommodates titles, descriptions and operations on the right.',
   '头部右侧的辅助操作区域。':
@@ -3599,8 +3599,8 @@ const ActionCell = () => {
     "import { Badge } from '@heliannuuthus/ui'\n\nexport const BadgeBasic = () => {\n  return <Badge>Published</Badge>\n}",
   'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge count={5} indicatorLabel="5 条未读消息">\n  <Button aria-label="查看未读消息" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge count={123} overflowCount={99}>\n  <Button variant="outline">收件箱</Button>\n</Badge>\n\n<Badge dot indicatorLabel="有新的系统通知">\n  <Button variant="outline">系统通知</Button>\n</Badge>':
     'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge count={5} indicatorLabel="5 unread messages">\n  <Button aria-label="View unread messages" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge count={123} overflowCount={99}>\n  <Button variant="outline">Inbox</Button>\n</Badge>\n\n<Badge dot indicatorLabel="There is a new system notification">\n  <Button variant="outline">System notification</Button>\n</Badge>',
-  "import { Breadcrumb } from '@heliannuuthus/ui'\n\nconst items = [\n  { label: '首页', href: '/' },\n  { label: '组件', href: '/components' },\n  { label: '导航', href: '/components/navigation-menu' },\n  { label: 'Breadcrumb' },\n]\n\nexport const PageBreadcrumb = () => {\n  return <Breadcrumb items={items} homeIcon />\n}":
-    "import { Breadcrumb } from '@heliannuuthus/ui'\n\nconst items = [\n  { label: 'Home', href: '/' },\n  { label: 'component', href: '/components' },\n  { label: 'Navigation', href: '/components/navigation-menu' },\n  { label: 'Breadcrumb' },\n]\n\nexport const PageBreadcrumb = () => {\n  return <Breadcrumb items={items} homeIcon />\n}",
+  "import { Breadcrumb } from '@heliannuuthus/ui'\n\nconst items = [\n  { label: '首页', href: '/' },\n  { label: '组件', href: '/components' },\n  { label: '导航', href: '/components/navigation-menu' },\n  { label: 'Breadcrumb' },\n]\n\nexport const PageBreadcrumb = () => {\n  return <Breadcrumb items={items} icon />\n}":
+    "import { Breadcrumb } from '@heliannuuthus/ui'\n\nconst items = [\n  { label: 'Home', href: '/' },\n  { label: 'component', href: '/components' },\n  { label: 'Navigation', href: '/components/navigation-menu' },\n  { label: 'Breadcrumb' },\n]\n\nexport const PageBreadcrumb = () => {\n  return <Breadcrumb items={items} icon />\n}",
   'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    variant="default"\n    content="已经补充完成，可以重新评审。"\n    reactions="✓ 2"\n  />\n  <Bubble align="start" variant="elevated" content="收到，我现在检查。" />\n</Bubble.Group>':
     'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    variant="default"\n    content="The supplement has been completed and can be reviewed again."\n    reactions="✓ 2"\n  />\n  <Bubble align="start" variant="elevated" content="Received, I\'ll check now." />\n</Bubble.Group>',
   "import { Bubble } from '@heliannuuthus/ui'\nimport { Avatar } from '@heliannuuthus/ui'\nimport { ScrollArea } from '@heliannuuthus/ui'\n\n<ScrollArea\n  className=\"h-80\"\n  fadeEdges\n  viewportProps={{ role: 'list', 'aria-label': '协作消息' }}\n>\n  {messages.map((message) => (\n    <div className=\"flex gap-2\" role=\"listitem\">\n      <Avatar alt={message.author} fallback={message.avatar} />\n      <div className=\"flex min-w-0 flex-1 flex-col gap-2\">\n        <span>{message.author} · {message.time}</span>\n        <Bubble content={message.content} variant=\"elevated\" />\n      </div>\n    </div>\n  ))}\n</ScrollArea>":
@@ -3665,14 +3665,6 @@ const ActionCell = () => {
     'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<Cloud />}\n  title="No production release yet"\n  description="After completing preflight, you can schedule your first production release from here."\n  actions={<Button>Schedule publishing</Button>}\n/>',
   'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<ShieldCheck />}\n  title="等待安全审计"\n  description="审计通过前暂无可发布版本。"\n  actions={<AuditSummary />}\n/>':
     'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<ShieldCheck />}\n  title="Waiting for security audit"\n  description="There is no release version until the audit is passed."\n  actions={<AuditSummary />}\n/>',
-  'import { Field } from \'@heliannuuthus/ui\'\n\n<Field data-invalid="true">\n  <Field.Label htmlFor="handle">个人标识</Field.Label>\n  <Input id="handle" aria-invalid />\n  <Field.Error>只能使用小写字母、数字和连字符。</Field.Error>\n</Field>':
-    'import { Field } from \'@heliannuuthus/ui\'\n\n<Field data-invalid="true">\n  <Field.Label htmlFor="handle">Personal identification</Field.Label>\n  <Input id="handle" aria-invalid />\n  <Field.Error> can only use lowercase letters, numbers, and hyphens. </Field.Error>\n</Field>',
-  'import { Field } from \'@heliannuuthus/ui\'\n\n<Field data-invalid>\n  <Field.Label htmlFor="handle">个人标识</Field.Label>\n  <Input id="handle" aria-invalid />\n  <Field.Description>用于生成公开资料地址。</Field.Description>\n  <Field.Error>只能使用小写字母、数字和连字符。</Field.Error>\n</Field>':
-    'import { Field } from \'@heliannuuthus/ui\'\n\n<Field data-invalid>\n  <Field.Label htmlFor="handle">Personal identification</Field.Label>\n  <Input id="handle" aria-invalid />\n  <Field.Description> is used to generate public information addresses. </Field.Description>\n  <Field.Error> can only use lowercase letters, numbers, and hyphens. </Field.Error>\n</Field>',
-  'import { Field } from \'@heliannuuthus/ui\'\n\n<Field orientation="horizontal">\n  <Field.Content>\n    <Field.Title>公开邮箱</Field.Title>\n    <Field.Description>允许其他成员联系你。</Field.Description>\n  </Field.Content>\n  <Switch />\n</Field>':
-    'import { Field } from \'@heliannuuthus/ui\'\n\n<Field orientation="horizontal">\n  <Field.Content>\n    <Field.Title>Public Email</Field.Title>\n    <Field.Description>Allows other members to contact you. </Field.Description>\n  </Field.Content>\n  <Switch />\n</Field>',
-  'import { Field } from \'@heliannuuthus/ui\'\n\n<Field>\n  <Field.Label htmlFor="team-name">团队名称 *</Field.Label>\n  <Input id="team-name" required />\n</Field>\n\n<Field>\n  <Field.Label htmlFor="role">职位</Field.Label>\n  <Input id="role" />\n  <Field.Description>可选</Field.Description>\n</Field>':
-    'import { Field } from \'@heliannuuthus/ui\'\n\n<Field>\n  <Field.Label htmlFor="team-name">Team name *</Field.Label>\n  <Input id="team-name" required />\n</Field>\n\n<Field>\n  <Field.Label htmlFor="role">Position</Field.Label>\n  <Input id="role" />\n  <Field.Description>Optional</Field.Description>\n</Field>',
   "import { Form } from '@heliannuuthus/ui'\n\nconst form = useForm({ defaultValues: { email: '', note: '' } })\n\n<Form {...form}>\n  <form onSubmit={form.handleSubmit(onSubmit)}>\n    <Form.Field\n      control={form.control}\n      name=\"email\"\n      rules={{ required: '请输入邮箱地址。' }}\n      render={({ field }) => (\n        <Form.Item>\n          <Form.Label>邮箱地址</Form.Label>\n          <Form.Control><Input {...field} /></Form.Control>\n          <Form.Message />\n        </Form.Item>\n      )}\n    />\n  </form>\n</Form>":
     "import { Form } from '@heliannuuthus/ui'\n\nconst form = useForm({ defaultValues: { email: '', note: '' } })\n\n<Form {...form}>\n  <form onSubmit={form.handleSubmit(onSubmit)}>\n    <Form.Field\n      control={form.control}\n      name=\"email\"\n      rules={{ required: 'Please enter your email address. ' }}\n      render={({ field }) => (\n        <Form.Item>\n          <Form.Label>Email address</Form.Label>\n          <Form.Control><Input {...field} /></Form.Control>\n          <Form.Message />\n        </Form.Item>\n      )}\n    />\n  </form>\n</Form>",
   "import { Fragment, useState } from 'react'\nimport { Button, Table } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Button\n                aria-expanded={expanded}\n                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}\n                size=\"icon-xs\"\n                variant=\"ghost\"\n                onClick={() => setExpandedId(expanded ? null : row.id)}\n              >\n                <ChevronRight className={expanded ? 'rotate-90' : ''} />\n              </Button>\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.Row>\n              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>\n            </Table.Row>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>":
@@ -4644,4 +4636,42 @@ const ActionCell = () => {
   'Table 语义区域': 'Table semantic regions',
   'import { Alert, Empty, Table } from \'@heliannuuthus/ui\'\n\nif (request.error) {\n  return <Alert variant="error" title="发布记录加载失败" />\n}\n\nif (!request.pending && records.length === 0) {\n  return <Empty title="没有匹配记录" />\n}\n\n<Table\n  columns={columns}\n  data={records}\n  loading={request.pending}\n/>':
     'import { Alert, Empty, Table } from \'@heliannuuthus/ui\'\n\nif (request.error) {\n  return <Alert variant="error" title="Failed to load release records" />\n}\n\nif (!request.pending && records.length === 0) {\n  return <Empty title="No matching records" />\n}\n\n<Table\n  columns={columns}\n  data={records}\n  loading={request.pending}\n/>',
+  'import { Form, Input } from \'@heliannuuthus/ui\'\n\n<Form.Field\n  name="handle"\n  label="个人标识"\n  description="用于生成公开资料地址。"\n  rules={{ pattern: /^[a-z0-9-]+$/ }}\n>\n  <Input />\n</Form.Field>':
+    'import { Form, Input } from \'@heliannuuthus/ui\'\n\n<Form.Field\n  name="handle"\n  label="Handle"\n  description="Used to generate the public profile URL."\n  rules={{ pattern: /^[a-z0-9-]+$/ }}\n>\n  <Input />\n</Form.Field>',
+  'Form.Field 自动关联标签与真实控件，并统一生成必填标记和辅助说明。':
+    'Form.Field automatically associates labels with controls and consistently generates required markers and supporting descriptions.',
+  'import { Form, Input } from \'@heliannuuthus/ui\'\n\n<Form.Field name="teamName" label="团队名称" required>\n  <Input />\n</Form.Field>\n\n<Form.Field name="role" label="职位" description="可选">\n  <Input />\n</Form.Field>':
+    'import { Form, Input } from \'@heliannuuthus/ui\'\n\n<Form.Field name="teamName" label="Team name" required>\n  <Input />\n</Form.Field>\n\n<Form.Field name="role" label="Role" description="Optional">\n  <Input />\n</Form.Field>',
+  '从视口或指定父容器的任意边缘打开抽屉，并根据 behavior 调整稳定面板与手势呈现。':
+    'Open a drawer from any edge of the viewport or a specified container, using behavior to choose stable panel or gesture presentation.',
+  '透传标准 HTML、ARIA、data 属性和原生事件。':
+    'Pass standard HTML, ARIA, data attributes, and native events through to the input.',
+  '除 children 外，可直接传入 nav 元素支持的 id、className、style、ARIA、data 属性和原生事件。':
+    'Apart from children, accepts id, className, style, ARIA and data attributes, and native events supported by the nav element.',
+  '使用行内样式扩展分隔线。': 'Extend the separator with inline styles.',
+  '设置折叠菜单触发器供辅助技术读取的名称。':
+    'Set the accessible name announced for the collapsed breadcrumb trigger.',
+  "'显示完整路径'": "'Show full path'",
+  '声明数据键对应的标签、图标和明暗主题颜色。':
+    'Declare labels, icons, and light or dark theme colors for each data key.',
+  '传入 Recharts 图表节点并由响应式容器测量尺寸。':
+    'Pass Recharts nodes and let the responsive container measure their dimensions.',
+  '设置首次测量前用于服务端渲染的稳定初始尺寸。':
+    'Set stable initial dimensions for server rendering before the first measurement.',
+  '设置稳定图表标识，并用于限定主题 CSS 变量作用域。':
+    'Set a stable chart identifier used to scope theme CSS variables.',
+  '扩展响应式图表根容器样式。':
+    'Extend the responsive chart root container styles.',
+  '配置图表提示内容的标记、标签和数据键映射。':
+    'Configure tooltip indicators, labels, and data-key mappings.',
+  '配置图例图标显示和数据键映射。':
+    'Configure legend icon visibility and data-key mappings.',
+  '透传对应 Recharts 组件的公开属性。':
+    'Pass through the public props of the corresponding Recharts component.',
+  '配置组件的公开状态、行为或扩展点。':
+    'Configure the component public state, behavior, or extension point.',
+  '由 Form.Field 自动注入自定义控件的字段契约。':
+    'Field contract automatically injected into custom controls by Form.Field.',
+  自定义过滤: 'Custom filter',
+  受控打开态: 'Controlled open state',
 };

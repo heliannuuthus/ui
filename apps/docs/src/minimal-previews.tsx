@@ -11,7 +11,6 @@ import { Counter } from '@heliannuuthus/ui';
 import { DirectionProvider } from '@heliannuuthus/ui';
 import { Empty } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
-import { Label } from '@heliannuuthus/ui';
 import { Menubar } from '@heliannuuthus/ui';
 import { Progress } from '@heliannuuthus/ui';
 import { ScrollArea } from '@heliannuuthus/ui';
@@ -33,6 +32,7 @@ import {
 import { AspectRatioCoverDemo } from './aspect-ratio-preview';
 import { CardBasicDemo } from './card-preview';
 import { ResizableWorkspaceDemo } from './resizable-preview';
+import { DemoLabel } from './demo-label';
 
 export const minimalComponentPreviews: Record<string, ReactNode> = {
   'aspect-ratio': <AspectRatioCoverDemo />,
@@ -52,7 +52,7 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
   ),
   input: (
     <div className="minimal-field">
-      <Label htmlFor="preview-email">{docsCopy('邮箱地址')}</Label>
+      <DemoLabel htmlFor="preview-email">{docsCopy('邮箱地址')}</DemoLabel>
       <Input id="preview-email" type="email" placeholder="name@example.com" />
     </div>
   ),

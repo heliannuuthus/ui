@@ -3,11 +3,8 @@ import { forwardRef, useState } from 'react';
 import { Button } from '@heliannuuthus/ui';
 import { Checkbox } from '@heliannuuthus/ui';
 import { DatePicker } from '@heliannuuthus/ui';
-import { Field } from '@heliannuuthus/ui';
 import { Form, type FormFieldInjectedControlProps } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
-import { Label } from '@heliannuuthus/ui';
-import { NativeSelect } from '@heliannuuthus/ui';
 import { Radio } from '@heliannuuthus/ui';
 import { Select } from '@heliannuuthus/ui';
 import { Slider } from '@heliannuuthus/ui';
@@ -23,6 +20,7 @@ import {
   Volume2,
 } from 'lucide-react';
 import { useDocsLocale } from './i18n/routing';
+import { DemoLabel as Label } from './demo-label';
 
 const members = [
   docsCopy('林夏 · 设计'),
@@ -177,8 +175,13 @@ export const CheckboxTasksDemo = () => {
   );
 };
 
-export const SelectMemberSearchDemo = () => {
+export const SelectMemberSearchDemo = ({
+  mode = 'default',
+}: {
+  mode?: 'controlled-open' | 'custom-filter' | 'default';
+}) => {
   const [value, setValue] = useState<string | null>(members[0]);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="data-compact-form">
@@ -188,7 +191,15 @@ export const SelectMemberSearchDemo = () => {
       </div>
       <Select
         emptyText={docsCopy('没有找到成员')}
+        filter={
+          mode === 'custom-filter'
+            ? (member, query) =>
+                member.toLocaleLowerCase().startsWith(query.toLocaleLowerCase())
+            : undefined
+        }
         onChange={setValue}
+        onOpenChange={mode === 'controlled-open' ? setOpen : undefined}
+        open={mode === 'controlled-open' ? open : undefined}
         options={members.map((member) => ({ label: member, value: member }))}
         placeholder={docsCopy('搜索成员…')}
         showClear
@@ -227,40 +238,46 @@ export const DatePickerReleaseDemo = () => {
 };
 
 export const FieldProfileDemo = () => {
+  const form = Form.useForm({
+    defaultValues: {
+      displayName: 'Heliannuuthus',
+      handle: 'hello-world',
+      publicEmail: false,
+    },
+  });
+
   return (
     <div className="data-form-shell">
-      <Field.Set>
-        <Field.Legend>{docsCopy('公开资料')}</Field.Legend>
-        <Field.Group>
-          <Field>
-            <Field.Label htmlFor="field-display-name">
-              {docsCopy('显示名称')}
-            </Field.Label>
-            <Input id="field-display-name" defaultValue="Heliannuuthus" />
-            <Field.Description>
-              {docsCopy('会显示在评论、提交记录和成员列表中。')}
-            </Field.Description>
-          </Field>
-          <Field data-invalid="true">
-            <Field.Label htmlFor="field-handle">
-              {docsCopy('个人标识')}
-            </Field.Label>
-            <Input id="field-handle" defaultValue="hello world" aria-invalid />
-            <Field.Error>
-              {docsCopy('只能使用小写字母、数字和连字符。')}
-            </Field.Error>
-          </Field>
-          <Field orientation="horizontal">
-            <Field.Content>
-              <Field.Title>{docsCopy('公开邮箱')}</Field.Title>
-              <Field.Description>
-                {docsCopy('允许其他成员通过资料页联系你。')}
-              </Field.Description>
-            </Field.Content>
-            <Switch aria-label={docsCopy('公开邮箱')} />
-          </Field>
-        </Field.Group>
-      </Field.Set>
+      <strong>{docsCopy('公开资料')}</strong>
+      <Form className="data-form-stack" form={form} onSubmit={() => undefined}>
+        <Form.Field
+          description={docsCopy('会显示在评论、提交记录和成员列表中。')}
+          label={docsCopy('显示名称')}
+          name="displayName"
+        >
+          <Input />
+        </Form.Field>
+        <Form.Field
+          label={docsCopy('个人标识')}
+          name="handle"
+          rules={{
+            pattern: {
+              value: /^[a-z0-9-]+$/,
+              message: docsCopy('只能使用小写字母、数字和连字符。'),
+            },
+          }}
+        >
+          <Input />
+        </Form.Field>
+        <Form.Field
+          description={docsCopy('允许其他成员通过资料页联系你。')}
+          label={docsCopy('公开邮箱')}
+          name="publicEmail"
+          orientation="horizontal"
+        >
+          <Switch />
+        </Form.Field>
+      </Form>
     </div>
   );
 };
@@ -341,8 +358,8 @@ export const FormIntegrationDemo = () => {
           </Form.Field>
 
           <Form.Field name="region" label={docsCopy('部署区域')}>
-            <NativeSelect
-              className="data-wide-control"
+            <Select
+              classNames={{ trigger: 'data-wide-control' }}
               options={[
                 { label: docsCopy('中国大陆'), value: 'china' },
                 { label: docsCopy('亚太地区'), value: 'asia' },

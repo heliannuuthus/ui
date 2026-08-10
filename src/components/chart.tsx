@@ -120,6 +120,7 @@ const ChartTooltipContent = ({
   active,
   payload,
   className,
+  style,
   indicator = 'dot',
   hideLabel = false,
   hideIndicator = false,
@@ -194,6 +195,7 @@ const ChartTooltipContent = ({
         'grid min-w-32 items-start gap-1.5 rounded-xl bg-popover px-2.5 py-1.5 text-xs text-popover-foreground shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10',
         className
       )}
+      style={style}
     >
       {!nestLabel ? tooltipLabel : null}
       <div className="grid gap-1.5">
@@ -274,6 +276,7 @@ const ChartLegend = RechartsPrimitive.Legend;
 
 const ChartLegendContent = ({
   className,
+  style,
   hideIcon = false,
   payload,
   verticalAlign = 'bottom',
@@ -295,6 +298,7 @@ const ChartLegendContent = ({
         verticalAlign === 'top' ? 'pb-3' : 'pt-3',
         className
       )}
+      style={style}
     >
       {payload
         .filter((item) => item.type !== 'none')
