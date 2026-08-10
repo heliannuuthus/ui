@@ -1431,6 +1431,7 @@ const ComponentExampleCard = ({
   return (
     <Card
       className={`example-card${example.wide ? ' example-card-wide' : ''}`}
+      variant="outline"
       classNames={{
         header: 'example-card-header',
         title: 'example-card-title',
