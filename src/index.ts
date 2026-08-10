@@ -45,6 +45,7 @@ export {
 } from './components/badge';
 export {
   Breadcrumb,
+  type BreadcrumbCollapseOptions,
   type BreadcrumbItem,
   type BreadcrumbMenuItem,
   type BreadcrumbProps,

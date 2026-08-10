@@ -74,12 +74,14 @@ export const BreadcrumbCollapsedDemo = () => {
         <strong>{docsCopy('v0.12.0 发布详情')}</strong>
       </div>
       <Breadcrumb
-        collapseLabel={docsCopy('显示完整路径')}
+        collapse={{
+          maxItems: 4,
+          before: 1,
+          after: 2,
+          label: docsCopy('显示完整路径'),
+        }}
         items={deepPathItems}
         homeIcon
-        maxItems={4}
-        itemsBeforeCollapse={1}
-        itemsAfterCollapse={2}
       />
       <p>
         {docsCopy(

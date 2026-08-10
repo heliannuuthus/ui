@@ -1943,10 +1943,18 @@ export const PageBreadcrumb = () => {
 <Breadcrumb
   items={releasePath}
   homeIcon
-  maxItems={4}
-  itemsBeforeCollapse={1}
-  itemsAfterCollapse={2}
+  collapse={{ maxItems: 4, before: 1, after: 2 }}
 />`,
+      cases: [
+        {
+          label: docsCopy('默认'),
+          values: {},
+          properties: {
+            collapse: '{ maxItems: 4, before: 1, after: 2 }',
+          },
+          isDefault: true,
+        },
+      ],
       wide: true,
       previewHeight: 300,
     },
@@ -1992,21 +2000,11 @@ export const PageBreadcrumb = () => {
       defaultValue: "'default'",
     },
     {
-      name: 'maxItems',
-      description: docsCopy('超过数量后将中间路径收进可操作的省略菜单。'),
-      type: 'number',
-    },
-    {
-      name: 'itemsBeforeCollapse',
-      description: docsCopy('控制折叠区域前保留的路径项数量。'),
-      type: 'number',
-      defaultValue: '1',
-    },
-    {
-      name: 'itemsAfterCollapse',
-      description: docsCopy('控制折叠区域后保留的路径项数量。'),
-      type: 'number',
-      defaultValue: '2',
+      name: 'collapse',
+      description: docsCopy(
+        '设置路径折叠阈值，或进一步配置前后保留数量和触发器名称。'
+      ),
+      type: 'number | BreadcrumbCollapseOptions',
     },
     {
       name: 'homeIcon',
@@ -2015,15 +2013,20 @@ export const PageBreadcrumb = () => {
       defaultValue: 'false',
     },
     {
-      name: 'collapseLabel',
-      description: docsCopy('设置折叠菜单触发器供辅助技术读取的名称。'),
-      type: 'string',
-      defaultValue: docsCopy("'显示完整路径'"),
-    },
-    {
       name: docsCopy('原生属性'),
       description: docsCopy('透传标准 HTML、ARIA、data 属性和原生事件。'),
       type: 'ComponentProps<"nav">',
+    },
+  ],
+  typePreviews: [
+    {
+      name: 'BreadcrumbCollapseOptions',
+      definition: `type BreadcrumbCollapseOptions = {
+  maxItems: number
+  before?: number // default: 1
+  after?: number // default: 2
+  label?: string
+}`,
     },
   ],
   accessibility: [
@@ -2033,7 +2036,7 @@ export const PageBreadcrumb = () => {
   ],
   pitfalls: [
     docsCopy('不要在只有一到两层页面时增加没有导航价值的 Breadcrumb。'),
-    docsCopy('避免展示超过五个可见层级；深层路径应使用 maxItems 收起。'),
+    docsCopy('避免展示超过五个可见层级；深层路径应使用 collapse 收起。'),
   ],
 };
 

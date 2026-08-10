@@ -652,8 +652,8 @@ const ActionCell = () => {
     'Avoid putting long sentences or complex operations.',
   '避免在弹层中继续嵌套第三层导航。':
     'Avoid nesting third-level navigation in the pop-up layer.',
-  '避免展示超过五个可见层级；深层路径应使用 maxItems 收起。':
-    'Avoid showing more than five visible levels; deep paths should be collapsed using maxItems.',
+  '避免展示超过五个可见层级；深层路径应使用 collapse 收起。':
+    'Avoid showing more than five visible levels; deep paths should be collapsed using collapse.',
   '边缘渐隐会跟随真实滚动距离变化；列表项进入视口时轻量出现，并支持方向键浏览与 Enter 选择。':
     'Edge fading will follow the actual scrolling distance; list items appear lightly when entering the viewport, and support arrow keys for browsing and Enter selection.',
   编辑: 'edit',
@@ -2061,6 +2061,8 @@ const ActionCell = () => {
     'Set the step size for each keyboard or pointer movement.',
   '设置每一级的名称、链接、图标、禁用状态和下拉菜单。':
     'Set the name, link, icon, disabled state, and drop-down menu for each level.',
+  '设置路径折叠阈值，或进一步配置前后保留数量和触发器名称。':
+    'Set the path collapse threshold, or further configure the number of items retained before and after it and the trigger label.',
   '设置面板进入和停靠的方向。':
     'Sets the direction in which the panel enters and docks.',
   '设置面板内容的切换动效；减少动态效果偏好下自动降级。':
