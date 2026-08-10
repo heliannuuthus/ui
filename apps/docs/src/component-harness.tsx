@@ -125,28 +125,30 @@ export const ComponentHarness = (props: ComponentHarnessProps) => {
       key={`${harnessCase.label}-${JSON.stringify(harnessCase.values)}`}
       role="group"
     >
-      <header className="component-harness-case-header">
-        <div className="component-harness-case-copy">
-          {options?.compactHeader ? null : <h4>{harnessCase.label}</h4>}
-          {harnessCase.description ? <p>{harnessCase.description}</p> : null}
-          <dl
-            aria-label={t('components.properties')}
-            className="component-harness-case-properties"
-          >
-            {Object.entries(harnessCase.properties ?? harnessCase.values).map(
-              ([name, value]) => (
-                <div key={name}>
-                  <dt>{name}</dt>
-                  <dd>{formatPropertyValue(value)}</dd>
-                </div>
-              )
-            )}
-          </dl>
-        </div>
-        {harnessCase.isDefault ? (
-          <Badge variant="secondary">{docsCopy('默认')}</Badge>
-        ) : null}
-      </header>
+      {options?.compactHeader ? null : (
+        <header className="component-harness-case-header">
+          <div className="component-harness-case-copy">
+            <h4>{harnessCase.label}</h4>
+            {harnessCase.description ? <p>{harnessCase.description}</p> : null}
+            <dl
+              aria-label={t('components.properties')}
+              className="component-harness-case-properties"
+            >
+              {Object.entries(harnessCase.properties ?? harnessCase.values).map(
+                ([name, value]) => (
+                  <div key={name}>
+                    <dt>{name}</dt>
+                    <dd>{formatPropertyValue(value)}</dd>
+                  </div>
+                )
+              )}
+            </dl>
+          </div>
+          {harnessCase.isDefault ? (
+            <Badge variant="secondary">{docsCopy('默认')}</Badge>
+          ) : null}
+        </header>
+      )}
       <div className="component-harness-case-stage">
         {props.children(harnessCase.values)}
       </div>
@@ -174,7 +176,7 @@ export const ComponentHarness = (props: ComponentHarnessProps) => {
             label: harnessCase.label,
             value: `case-${index}`,
           }))}
-          panelClassName="component-harness-segmented-panel"
+          classNames={{ panel: 'component-harness-segmented-panel' }}
           variant="outline"
         />
       </div>

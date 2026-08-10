@@ -262,9 +262,17 @@ type DropdownMenuEntry =
       }>;
     };
 
+type DropdownMenuClassNames = {
+  content?: string;
+};
+
+type DropdownMenuStyles = {
+  content?: React.CSSProperties;
+};
+
 type DropdownMenuProps = OpenStateProps & {
   align?: PopupAlign;
-  contentClassName?: string;
+  classNames?: DropdownMenuClassNames;
   disabled?: boolean;
   highlightItemOnHover?: boolean;
   items: DropdownMenuEntry[];
@@ -273,6 +281,7 @@ type DropdownMenuProps = OpenStateProps & {
   orientation?: 'horizontal' | 'vertical';
   side?: PopupSide;
   size?: 'default' | 'lg' | 'sm';
+  styles?: DropdownMenuStyles;
   trigger: React.ReactElement;
 };
 
@@ -365,7 +374,8 @@ const DropdownMenu = ({
   align = 'start',
   side = 'bottom',
   size = 'default',
-  contentClassName,
+  classNames,
+  styles,
   ...props
 }: DropdownMenuProps) => {
   return (
@@ -380,8 +390,9 @@ const DropdownMenu = ({
             'min-w-40 **:data-[slot$=-item]:px-2.5 **:data-[slot$=-item]:py-1.5 **:data-[slot$=-item]:text-xs',
           size === 'lg' &&
             'min-w-56 **:data-[slot$=-item]:px-3.5 **:data-[slot$=-item]:py-2.5',
-          contentClassName
+          classNames?.content
         )}
+        style={styles?.content}
       >
         {renderEntries(items)}
       </DropdownMenuContent>
@@ -389,4 +400,10 @@ const DropdownMenu = ({
   );
 };
 
-export { DropdownMenu, type DropdownMenuEntry, type DropdownMenuProps };
+export {
+  DropdownMenu,
+  type DropdownMenuClassNames,
+  type DropdownMenuEntry,
+  type DropdownMenuProps,
+  type DropdownMenuStyles,
+};

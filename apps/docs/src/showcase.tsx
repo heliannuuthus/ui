@@ -194,8 +194,8 @@ const ApiType = ({ type }: { type: string }) => {
         return (
           <Popover
             align="start"
+            classNames={{ content: 'component-api-type-popover' }}
             content={<ApiTypeDefinitionPreview definition={definition} />}
-            contentClassName="component-api-type-popover"
             delay={180}
             key={`${part}-${index}`}
             side="top"
@@ -1001,7 +1001,7 @@ const ComponentSearchDialog = ({
     <Command
       className="component-command"
       dialog={{
-        contentClassName: 'component-command-dialog',
+        classNames: { content: 'component-command-dialog' },
         description: t('search.description'),
         footer: (
           <div className="component-command-footer">
@@ -1543,7 +1543,7 @@ const ComponentExampleCard = ({
       title={<h3>{example.title}</h3>}
     >
       <div
-        className={`demo-preview${
+        className={`demo-preview demo-preview-${component}${
           example.cases || example.caseAxes ? ' demo-preview-harness' : ''
         }`}
         style={

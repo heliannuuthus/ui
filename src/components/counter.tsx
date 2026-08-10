@@ -14,13 +14,19 @@ import { cn } from '../lib/utils';
 
 type CounterPlace = number | '.';
 
+type CounterClassNames = {
+  digit?: string;
+  visual?: string;
+};
+
+type CounterStyles = {
+  digit?: React.CSSProperties;
+  visual?: React.CSSProperties;
+};
+
 type CounterProps = Omit<React.ComponentProps<'span'>, 'children'> & {
   borderRadius?: number;
-  containerStyle?: React.CSSProperties;
-  counterClassName?: string;
-  counterStyle?: React.CSSProperties;
-  digitClassName?: string;
-  digitStyle?: React.CSSProperties;
+  classNames?: CounterClassNames;
   fontSize?: number;
   fontWeight?: React.CSSProperties['fontWeight'];
   gap?: number;
@@ -30,6 +36,7 @@ type CounterProps = Omit<React.ComponentProps<'span'>, 'children'> & {
   places?: readonly CounterPlace[];
   prefix?: React.ReactNode;
   springOptions?: SpringOptions;
+  styles?: CounterStyles;
   suffix?: React.ReactNode;
   textColor?: string;
   value: number;
@@ -119,11 +126,7 @@ const Counter = ({
   'aria-live': ariaLive = 'off',
   borderRadius = 8,
   className,
-  containerStyle,
-  counterClassName,
-  counterStyle,
-  digitClassName,
-  digitStyle,
+  classNames,
   fontSize = 64,
   fontWeight = 700,
   gap = 4,
@@ -134,6 +137,7 @@ const Counter = ({
   prefix,
   springOptions = defaultSpringOptions,
   style,
+  styles,
   suffix,
   textColor = 'inherit',
   value,
@@ -154,7 +158,7 @@ const Counter = ({
     <span
       data-slot="counter"
       className={cn('relative inline-flex max-w-full align-middle', className)}
-      style={{ ...containerStyle, ...style }}
+      style={style}
       {...props}
     >
       <span className="sr-only" aria-live={ariaLive}>
@@ -165,7 +169,7 @@ const Counter = ({
         aria-hidden="true"
         className={cn(
           'relative flex max-w-full items-center overflow-hidden font-heading leading-none tabular-nums select-none',
-          counterClassName
+          classNames?.visual
         )}
         style={{
           borderRadius,
@@ -177,7 +181,7 @@ const Counter = ({
           paddingInline: horizontalPadding,
           WebkitMaskImage: maskImage,
           maskImage,
-          ...counterStyle,
+          ...styles?.visual,
         }}
       >
         {prefix != null && (
@@ -200,17 +204,17 @@ const Counter = ({
                 data-slot="counter-separator"
                 className={cn(
                   'flex w-[0.42em] shrink-0 items-center justify-center',
-                  digitClassName
+                  classNames?.digit
                 )}
                 key={`separator-${index}`}
-                style={{ height, ...digitStyle }}
+                style={{ height, ...styles?.digit }}
               >
                 .
               </span>
             ) : (
               <RollingDigit
-                className={digitClassName}
-                digitStyle={digitStyle}
+                className={classNames?.digit}
+                digitStyle={styles?.digit}
                 height={height}
                 key={`${place}-${index}`}
                 place={place}
@@ -274,4 +278,10 @@ const getAutomaticPlaces = (value: number): CounterPlace[] => {
   ];
 };
 
-export { Counter, type CounterPlace, type CounterProps };
+export {
+  Counter,
+  type CounterClassNames,
+  type CounterPlace,
+  type CounterProps,
+  type CounterStyles,
+};

@@ -153,7 +153,6 @@ import {
   TableFixedDemo,
   TablePaginationDemo,
   TableReleaseDemo,
-  TableVirtualScrollDemo,
   TooltipPlacementsDemo,
 } from './data-display-previews';
 import {
@@ -645,18 +644,18 @@ export const TypographyStory = () => {
       name: 'Typography.P',
       description: docsCopy('正文段落。'),
     },
-    {
-      name: 'Typography.Lead / Typography.Muted',
+    ...['Typography.Lead', 'Typography.Muted'].map((name) => ({
+      name,
       description: docsCopy('导语与辅助正文。'),
-    },
-    {
-      name: 'Typography.Large / Typography.Small',
+    })),
+    ...['Typography.Large', 'Typography.Small'].map((name) => ({
+      name,
       description: docsCopy('强调文字和较小标签。'),
-    },
-    {
-      name: 'Typography.Blockquote / Typography.Code',
+    })),
+    ...['Typography.Blockquote', 'Typography.Code'].map((name) => ({
+      name,
       description: docsCopy('引用和行内代码。'),
-    },
+    })),
   ],
   api: [
     {
@@ -843,11 +842,6 @@ import { Mail } from 'lucide-react'
     {
       name: 'indicatorLabel',
       description: docsCopy('通知数字或红点的无障碍说明，红点场景应明确提供。'),
-      type: 'string',
-    },
-    {
-      name: 'indicatorClassName',
-      description: docsCopy('扩展数字或红点标记本身的样式。'),
       type: 'string',
     },
     {
@@ -1119,7 +1113,7 @@ const items = cards.map((card) => ({
   items={items}
 />`,
       wide: true,
-      previewHeight: 460,
+      previewHeight: 560,
     },
     {
       title: docsCopy('自适应列数'),
@@ -1996,10 +1990,16 @@ export const PageBreadcrumb = () => {
       type: 'number',
     },
     {
-      name: 'itemsBeforeCollapse / itemsAfterCollapse',
-      description: docsCopy('控制折叠前后保留的路径项数量。'),
+      name: 'itemsBeforeCollapse',
+      description: docsCopy('控制折叠区域前保留的路径项数量。'),
       type: 'number',
-      defaultValue: '1 / 2',
+      defaultValue: '1',
+    },
+    {
+      name: 'itemsAfterCollapse',
+      description: docsCopy('控制折叠区域后保留的路径项数量。'),
+      type: 'number',
+      defaultValue: '2',
     },
     {
       name: 'homeIcon',
@@ -2150,9 +2150,20 @@ import { DropdownMenu } from '@heliannuuthus/ui'
       defaultValue: "'bottom'",
     },
     {
-      name: 'open / defaultOpen / onOpenChange',
-      description: docsCopy('以受控或非受控方式管理菜单开关状态。'),
-      type: 'boolean / boolean / (open: boolean) => void',
+      name: 'open',
+      description: docsCopy('以受控方式管理菜单开关状态。'),
+      type: 'boolean',
+    },
+    {
+      name: 'defaultOpen',
+      description: docsCopy('设置菜单非受控模式下的初始开关状态。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'onOpenChange',
+      description: docsCopy('菜单开关状态变化时调用。'),
+      type: '(open: boolean) => void',
     },
   ],
   accessibility: [
@@ -2470,9 +2481,15 @@ const paginationDocumentation: ComponentDocumentation = {
   ],
   api: [
     {
-      name: 'current / pageCount',
-      description: docsCopy('设置当前页和总页数。'),
-      type: 'number / number',
+      name: 'current',
+      description: docsCopy('设置当前页。'),
+      type: 'number',
+    },
+    {
+      name: 'pageCount',
+      description: docsCopy('设置总页数。'),
+      type: 'number',
+      required: true,
     },
     {
       name: 'onChange',
@@ -2480,10 +2497,16 @@ const paginationDocumentation: ComponentDocumentation = {
       type: '(page: number) => void',
     },
     {
-      name: 'previousText / nextText',
-      description: docsCopy('自定义上一页和下一页的可见文字。'),
+      name: 'previousText',
+      description: docsCopy('自定义上一页按钮的可见文字。'),
       type: 'ReactNode',
-      defaultValue: docsCopy("'上一页' / '下一页'"),
+      defaultValue: docsCopy("'上一页'"),
+    },
+    {
+      name: 'nextText',
+      description: docsCopy('自定义下一页按钮的可见文字。'),
+      type: 'ReactNode',
+      defaultValue: docsCopy("'下一页'"),
     },
     {
       name: 'ariaLabels',
@@ -2593,10 +2616,12 @@ const tabsDocumentation: ComponentDocumentation = {
       code: docsCopy(`<Tabs
   animation="slide"
   centered
+  classNames={{
+    panel: 'p-8',
+    viewport: 'mt-4 min-h-48 rounded-xl border',
+  }}
   defaultValue="design"
-  panelClassName="p-8"
   variant="soft"
-  viewportClassName="mt-4 min-h-48 rounded-xl border"
   items={[
     { value: 'design', label: '设计', content: '整理组件视觉规范' },
     { value: 'code', label: '开发', content: '连接组件与业务状态' },
@@ -2607,7 +2632,12 @@ const tabsDocumentation: ComponentDocumentation = {
       previewHeight: 520,
     },
   ],
-  typeDefinitionGroups: ['TabsItem', 'TabsScrollButtonLabels'],
+  typeDefinitionGroups: [
+    'TabsItem',
+    'TabsScrollButtonLabels',
+    'TabsClassNames',
+    'TabsStyles',
+  ],
   api: [
     {
       name: 'items',
@@ -2674,33 +2704,6 @@ const tabsDocumentation: ComponentDocumentation = {
     {
       name: 'className',
       description: docsCopy('扩展 Tabs 根容器样式。'),
-      type: 'string',
-    },
-    {
-      name: 'listClassName',
-      description: docsCopy('扩展标签列表样式。'),
-      type: 'string',
-    },
-    {
-      name: 'tabClassName',
-      description: docsCopy('为每个标签触发器扩展样式。'),
-      type: 'string',
-    },
-    {
-      name: 'indicatorClassName',
-      description: docsCopy('扩展当前激活标签指示器样式。'),
-      type: 'string',
-    },
-    {
-      name: 'viewportClassName',
-      description: docsCopy(
-        '为包裹所有面板的稳定视口添加样式，适合固定内容区尺寸、边框和背景。'
-      ),
-      type: 'string',
-    },
-    {
-      name: 'panelClassName',
-      description: docsCopy('为每个内容面板扩展样式；切换动效会作用于该节点。'),
       type: 'string',
     },
     {
@@ -3006,8 +3009,13 @@ for (const [name, slug, summary] of remainingComponents) {
         defaultValue: 'false',
       },
       {
-        name: 'value / defaultValue',
-        description: docsCopy('在支持状态时选择受控或非受控模式。'),
+        name: 'value',
+        description: docsCopy('在支持状态时设置受控值。'),
+        type: 'component-specific',
+      },
+      {
+        name: 'defaultValue',
+        description: docsCopy('在支持状态时设置非受控初始值。'),
         type: 'component-specific',
       },
     ],
@@ -3638,7 +3646,7 @@ const tableBasicExample = componentDocumentation.table.examples[0];
 if (tableBasicExample) {
   tableBasicExample.title = docsCopy('自定义表格');
   tableBasicExample.description = docsCopy(
-    '数据已经完成加工，或需要完全控制结构时，直接组合 Header、Body、Footer 和 Caption。'
+    '数据已经完成加工，或需要完全控制结构时，直接组合 Header、Body 和 Footer；Footer 承载列汇总。'
   );
   tableBasicExample.caseAxes = undefined;
   tableBasicExample.preview = <TableReleaseDemo />;
@@ -3646,11 +3654,11 @@ if (tableBasicExample) {
 import { Button } from '@heliannuuthus/ui'
 
 <Table.Primitive>
-  <Table.Caption>今晚 22:00 发布窗口中的服务。</Table.Caption>
-  <Table.Header>{/* column headings */}</Table.Header>
-  <Table.Body>{/* release rows */}</Table.Body>
-  <Table.Footer>{/* summary */}</Table.Footer>
+  <Table.Header>{/* 列标题 */}</Table.Header>
+  <Table.Body>{/* 数据行 */}</Table.Body>
+  <Table.Footer>{/* 汇总行 */}</Table.Footer>
 </Table.Primitive>`);
+  tableBasicExample.wide = true;
   tableBasicExample.previewHeight = 460;
 }
 
@@ -4916,13 +4924,12 @@ import { Minus, Plus } from 'lucide-react'
     {
       title: docsCopy('轨道与项目样式'),
       description: docsCopy(
-        'contentClassName 扩展轮播轨道，itemClassName 为每个项目设置统一宽度和间距。'
+        'classNames 按 content 与 item 语义槽位扩展轮播轨道和项目样式。'
       ),
       preview: <CarouselClassNamesDemo />,
       code: `<Carousel
   items={items}
-  contentClassName="gap-3"
-  itemClassName="basis-2/3 pl-3"
+  classNames={{ content: 'gap-3', item: 'basis-2/3 pl-3' }}
 />`,
       previewHeight: 'auto',
     },
@@ -5183,18 +5190,16 @@ import { ChevronRight } from 'lucide-react'
     {
       title: docsCopy('基础用法'),
       description: docsCopy(
-        '默认组合搜索、排序、固定列、操作列、Caption、Footer 和 Pagination；业务只需要提供 data 与 TableColumn。'
+        '默认组合搜索、排序、固定列、操作列、Footer 和 Pagination；业务只需要提供 data 与 Table.Column。'
       ),
       preview: <TableManagedDemo />,
-      code: docsCopy(`import {
-  Table,
-  type TableColumn,
-} from '@heliannuuthus/ui'
+      code: docsCopy(`import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 import { DropdownMenu } from '@heliannuuthus/ui'
+import { Stack } from '@heliannuuthus/ui'
 import { MoreHorizontal } from 'lucide-react'
 
-const columns: TableColumn<Release>[] = [
+const columns: Table.Column<Release>[] = [
   {
     accessor: 'version',
     header: '版本',
@@ -5207,7 +5212,7 @@ const columns: TableColumn<Release>[] = [
     header: '操作',
     width: 144,
     render: (_, row) => (
-      <Table.Actions aria-label={row.version + ' 操作'}>
+      <Stack align="center" aria-label={row.version + ' 操作'} gap={4} justify="center" orientation="horizontal" role="group">
         <Button variant="ghost">查看</Button>
         <DropdownMenu
           align="end"
@@ -5227,20 +5232,19 @@ const columns: TableColumn<Release>[] = [
             { label: '删除记录', destructive: true },
           ]}
         />
-      </Table.Actions>
+      </Stack>
     ),
   },
 ]
 
 <Table
-  caption="最近五次生产与预览环境发布。"
   columns={columns}
   data={releaseRecords}
   search={{ columnKeys: ['version'], placeholder: '筛选版本…' }}
   footer={(rows) => \`当前页 \${rows.length} 条发布记录\`}
   rowKey="version"
   pagination={{ pageSize: 3 }}
-  tableProps={{ className: 'min-w-[820px] table-fixed' }}
+  classNames={{ table: 'min-w-[820px]' }}
 />`),
       wide: true,
       previewHeight: 580,
@@ -5269,15 +5273,12 @@ const columns: TableColumn<Release>[] = [
     {
       title: docsCopy('分组表头'),
       description: docsCopy(
-        '在 TableColumn 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。'
+        '在 Table.Column 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。'
       ),
       preview: <TableGroupedHeaderDemo />,
-      code: docsCopy(`import {
-  Table,
-  type TableColumn,
-} from '@heliannuuthus/ui'
+      code: docsCopy(`import { Table } from '@heliannuuthus/ui'
 
-const columns: TableColumn<Release>[] = [
+const columns: Table.Column<Release>[] = [
   {
     header: '发布信息',
     columns: [
@@ -5312,7 +5313,7 @@ const columns: TableColumn<Release>[] = [
     {
       title: docsCopy('虚拟滚动'),
       description: docsCopy(
-        'virtual 直接使用基础 Table 的虚拟表体；固定列、横向滚动和自定义 render 会继续生效。'
+        'virtual 只滚动并虚拟化表体；Header 固定在容器顶部，固定列、横向滚动和自定义 render 会继续生效。'
       ),
       preview: <TableManagedVirtualDemo />,
       code: `import { Table } from '@heliannuuthus/ui'
@@ -5322,7 +5323,7 @@ const columns: TableColumn<Release>[] = [
   data={records}
   rowKey="id"
   pagination={false}
-  tableProps={{ className: 'min-w-[900px] table-fixed' }}
+  classNames={{ table: 'min-w-[900px]' }}
   virtual={{
     containerHeight: 320,
     overscan: 8,
@@ -5339,9 +5340,9 @@ const columns: TableColumn<Release>[] = [
       ),
       preview: <TableControlledStateDemo />,
       code: `import { useState, type Key } from 'react'
-import { Table, type TableSortState } from '@heliannuuthus/ui'
+import { Table } from '@heliannuuthus/ui'
 
-const [sort, setSort] = useState<TableSortState | null>(null)
+const [sort, setSort] = useState<Table.SortState | null>(null)
 const [page, setPage] = useState(1)
 const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
 
@@ -5357,9 +5358,9 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
       previewHeight: 600,
     },
     {
-      title: docsCopy('加载、空结果与错误'),
+      title: docsCopy('加载与外部状态组合'),
       description: docsCopy(
-        '三种数据状态使用同一个跨列区域，表头和表格宽度保持稳定。'
+        'Table 只内置布尔 loading；定制空结果和请求错误分别组合 Empty 与 Alert。'
       ),
       caseAxes: [
         {
@@ -5385,14 +5386,20 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
           }
         />
       ),
-      code: docsCopy(`import { Table } from '@heliannuuthus/ui'
+      code: docsCopy(`import { Alert, Empty, Table } from '@heliannuuthus/ui'
+
+if (request.error) {
+  return <Alert variant="error" title="发布记录加载失败" />
+}
+
+if (!request.pending && records.length === 0) {
+  return <Empty title="没有匹配记录" />
+}
 
 <Table
   columns={columns}
   data={records}
   loading={request.pending}
-  empty="没有匹配记录"
-  error={request.error ? <RetryState /> : undefined}
 />`),
       wide: true,
       previewHeight: 460,
@@ -5974,7 +5981,7 @@ import { ScrollArea } from '@heliannuuthus/ui'
       code: docsCopy(`import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 
-<Table.Primitive className="min-w-[960px] table-fixed">
+<Table.Primitive classNames={{ table: 'min-w-[960px] table-fixed' }}>
   <Table.Header>
     <Table.Row>
       <Table.Head fixed="start" className="w-40">服务</Table.Head>
@@ -6001,62 +6008,6 @@ import { Button } from '@heliannuuthus/ui'
   </Table.Body>
 </Table.Primitive>`),
       previewHeight: 500,
-      wide: true,
-    },
-    {
-      title: docsCopy('单行虚拟滚动与固定列'),
-      description: (
-        <>
-          <code>VirtualBody</code>
-          {docsCopy('只渲染可视区域附近的单行数据；对应的')} <code>Head</code>
-          {docsCopy('与')}
-          <code>Cell</code>
-          {docsCopy('设置')} <code>fixed=&quot;start&quot;</code>
-          {docsCopy('或')} <code>fixed=&quot;end&quot;</code>
-          {docsCopy('，即可同时使用纵向虚拟滚动、横向滚动和首末固定列。')}
-        </>
-      ),
-      preview: <TableVirtualScrollDemo />,
-      code: docsCopy(`import { Table } from '@heliannuuthus/ui'
-import { Button } from '@heliannuuthus/ui'
-
-<Table.Primitive
-  aria-rowcount={rows.length + 1}
-  className="min-w-[820px] table-fixed"
-  containerClassName="max-h-80"
->
-  <Table.Header>
-    <Table.Row>
-      <Table.Head fixed="start">事件</Table.Head>
-      <Table.Head>服务</Table.Head>
-      <Table.Head fixed="end" align="center">操作</Table.Head>
-    </Table.Row>
-  </Table.Header>
-  <Table.VirtualBody
-    colSpan={3}
-    items={rows}
-    getItemKey={(row) => row.id}
-    rowHeight={48}
-    overscan={8}
-  >
-    {(row) => (
-      <Table.Row>
-        <Table.Cell fixed="start">{row.id}</Table.Cell>
-        <Table.Cell>{row.service}</Table.Cell>
-        <Table.Cell fixed="end" align="center">
-          <Button
-            aria-label={\`查看 \${row.id}\`}
-            size="xs"
-            variant="ghost"
-          >
-            查看
-          </Button>
-        </Table.Cell>
-      </Table.Row>
-    )}
-  </Table.VirtualBody>
-</Table.Primitive>`),
-      previewHeight: 540,
       wide: true,
     },
     {
@@ -6089,11 +6040,12 @@ const visibleRows = rows.slice((page - 1) * 10, page * 10)
     {
       title: docsCopy('Primitive 行展开'),
       description: docsCopy(
-        'ExpandButton 提供键盘可用的展开状态与图标，ExpandedRow 使用真实表格行承载跨列详情。'
+        '使用普通 Button 控制 aria-expanded，并通过 Row 与跨列 Cell 承载详情，不需要额外的表格专用组件。'
       ),
       preview: <TableExpandableDemo />,
       code: docsCopy(`import { Fragment, useState } from 'react'
-import { Table } from '@heliannuuthus/ui'
+import { Button, Table } from '@heliannuuthus/ui'
+import { ChevronRight } from 'lucide-react'
 
 const [expandedId, setExpandedId] = useState<string | null>(null)
 
@@ -6105,18 +6057,22 @@ const [expandedId, setExpandedId] = useState<string | null>(null)
         <Fragment key={row.id}>
           <Table.Row>
             <Table.Cell>
-              <Table.ExpandButton
+              <Button
+                aria-expanded={expanded}
                 aria-label={\`\${expanded ? '收起' : '展开'} \${row.id}\`}
-                expanded={expanded}
-                onExpandedChange={(next) =>
-                  setExpandedId(next ? row.id : null)
-                }
-              />
+                size="icon-xs"
+                variant="ghost"
+                onClick={() => setExpandedId(expanded ? null : row.id)}
+              >
+                <ChevronRight className={expanded ? 'rotate-90' : ''} />
+              </Button>
             </Table.Cell>
             <Table.Cell>{row.name}</Table.Cell>
           </Table.Row>
           {expanded && (
-            <Table.ExpandedRow colSpan={2}>{row.detail}</Table.ExpandedRow>
+            <Table.Row>
+              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>
+            </Table.Row>
           )}
         </Fragment>
       )
@@ -6148,11 +6104,11 @@ const ActionCell = () => {
   )
 }
 
-<Table.Primitive className="table-fixed">
+<Table.Primitive classNames={{ table: 'table-fixed' }}>
   <Table.Header>
     <Table.Row>
       <Table.Head align="start">服务</Table.Head>
-      <Table.Head ellipsis>服务说明、最近一次生产部署上下文与异常原因</Table.Head>
+      <Table.Head ellipsis="服务说明、最近一次生产部署上下文与异常原因">服务说明、最近一次生产部署上下文与异常原因</Table.Head>
       <Table.Head align="end">成功率</Table.Head>
       <Table.Head align="center">操作</Table.Head>
     </Table.Row>
@@ -6650,8 +6606,14 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     },
     {
       component: 'AvatarImage',
-      name: 'src / alt',
-      description: docsCopy('提供头像资源和替代文本。'),
+      name: 'src',
+      description: docsCopy('提供头像图片资源。'),
+      type: 'string',
+    },
+    {
+      component: 'AvatarImage',
+      name: 'alt',
+      description: docsCopy('提供头像图片的替代文本。'),
       type: 'string',
     },
     {
@@ -6682,10 +6644,17 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     },
     {
       component: 'Avatar.Group',
-      name: 'size / shape',
-      description: docsCopy('为组内头像和自动生成的计数项提供统一尺寸与形状。'),
-      type: 'AvatarSize / AvatarShape',
-      defaultValue: "'default' / 'circle'",
+      name: 'size',
+      description: docsCopy('为组内头像和自动生成的计数项设置统一尺寸。'),
+      type: 'AvatarSize',
+      defaultValue: "'default'",
+    },
+    {
+      component: 'Avatar.Group',
+      name: 'shape',
+      description: docsCopy('为组内头像和自动生成的计数项设置统一形状。'),
+      type: 'AvatarShape',
+      defaultValue: "'circle'",
     },
     {
       component: 'Avatar.Group',
@@ -6780,9 +6749,15 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: '<ChevronDownIcon />',
     },
     {
-      name: 'open / defaultOpen',
-      description: docsCopy('使用受控或非受控方式管理内容展开状态。'),
+      name: 'open',
+      description: docsCopy('以受控方式管理内容展开状态。'),
       type: 'boolean',
+    },
+    {
+      name: 'defaultOpen',
+      description: docsCopy('设置非受控模式的初始展开状态。'),
+      type: 'boolean',
+      defaultValue: 'false',
     },
     {
       name: 'onOpenChange',
@@ -6794,18 +6769,6 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       description: docsCopy('阻止触发器改变展开状态。'),
       type: 'boolean',
       defaultValue: 'false',
-    },
-    {
-      name: 'headerClassName',
-      description: docsCopy(
-        '扩展 Header 或 Header 与独立触发按钮所在行的样式。'
-      ),
-      type: 'string',
-    },
-    {
-      name: 'contentClassName',
-      description: docsCopy('扩展展开内容区域的样式。'),
-      type: 'string',
     },
   ],
   counter: [
@@ -6822,14 +6785,31 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: "readonly (number | '.')[]",
     },
     {
-      name: 'fontSize / fontWeight / gap',
-      description: docsCopy('设置数字字号、字重和数位间距。'),
-      type: 'number | CSS font weight',
-      defaultValue: '64 / 700 / 4',
+      name: 'fontSize',
+      description: docsCopy('设置数字字号。'),
+      type: 'number',
+      defaultValue: '64',
     },
     {
-      name: 'prefix / suffix',
-      description: docsCopy('在滚动数值前后组合货币、单位或其他视觉内容。'),
+      name: 'fontWeight',
+      description: docsCopy('设置数字字重。'),
+      type: 'CSSProperties["fontWeight"]',
+      defaultValue: '700',
+    },
+    {
+      name: 'gap',
+      description: docsCopy('设置数字数位间距。'),
+      type: 'number',
+      defaultValue: '4',
+    },
+    {
+      name: 'prefix',
+      description: docsCopy('在滚动数值前组合货币或其他视觉内容。'),
+      type: 'ReactNode',
+    },
+    {
+      name: 'suffix',
+      description: docsCopy('在滚动数值后组合单位或其他视觉内容。'),
       type: 'ReactNode',
     },
     {
@@ -6849,175 +6829,308 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       description: docsCopy(
         '使用库自有的列模型定义访问器、表头、单元格和嵌套列组。'
       ),
-      type: 'TableColumn<TData>[]',
+      type: 'Table.Column<TData>[]',
+      required: true,
     },
     {
-      component: 'TableColumn',
-      name: 'key / accessor / header',
-      description: docsCopy(
-        'key 标识列；accessor 读取字段或计算值；header 定义自动生成的列标题。'
-      ),
-      type: 'string / keyof TData | (row) => unknown / ReactNode',
-    },
-    {
-      component: 'TableColumn',
-      name: 'render / columns / sortable',
-      description: docsCopy(
-        '自定义单元格、嵌套分组列，并选择默认排序或业务比较函数。'
-      ),
-      type: 'TableRender<TData> / TableColumn<TData>[] / boolean | compare',
-    },
-    {
-      component: 'TableColumn',
-      name: 'align / fixed / width / ellipsis',
-      description: docsCopy(
-        '列布局属性直接映射到 Head 与 Cell；固定列通过数字 width 自动计算偏移。'
-      ),
-      type: "'start' | 'center' | 'end' / 'start' | 'end' / number / boolean",
-    },
-    {
-      component: 'TableColumn',
-      name: 'headerClassName / cellClassName / ellipsisTooltip / headerEllipsis',
-      description: docsCopy(
-        '分别定制表头与单元格类名，并为超长表头或单元格提供可访问的完整内容。'
-      ),
-      type: 'string / string | (row, index) => string / ReactNode | render / boolean',
-    },
-    {
-      name: 'Table.Actions',
-      description: docsCopy(
-        '在操作列内组合一个或多个按钮、菜单或链接，默认居中并可通过 align 调整。'
-      ),
-      type: 'component',
-    },
-    {
-      component: 'Table.Actions',
-      name: 'aria-label',
-      description: docsCopy('使用当前记录标识为每一行的操作组提供唯一名称。'),
+      component: 'Table.Column',
+      name: 'key',
+      description: docsCopy('设置稳定的列标识；使用字段 accessor 时可省略。'),
       type: 'string',
     },
     {
-      component: 'Table.Actions',
+      component: 'Table.Column',
+      name: 'accessor',
+      description: docsCopy('读取字段或通过函数计算当前列值。'),
+      type: 'keyof TData | (row: TData) => unknown',
+    },
+    {
+      component: 'Table.Column',
+      name: 'header',
+      description: docsCopy('设置列标题。'),
+      type: 'ReactNode',
+      required: true,
+    },
+    {
+      component: 'Table.Column',
+      name: 'render',
+      description: docsCopy('根据当前值、记录和索引渲染单元格。'),
+      type: 'Table.Render<TData>',
+    },
+    {
+      component: 'Table.Column',
+      name: 'columns',
+      description: docsCopy('嵌套子列并生成分组表头。'),
+      type: 'Table.Column<TData>[]',
+    },
+    {
+      component: 'Table.Column',
+      name: 'sortable',
+      description: docsCopy('启用默认排序，或提供业务比较函数。'),
+      type: 'boolean | ((a: TData, b: TData) => number)',
+    },
+    {
+      component: 'Table.Column',
       name: 'align',
-      description: docsCopy('控制整组操作在单元格内靠起始侧、居中或靠末端。'),
+      description: docsCopy('设置表头与单元格内容对齐方式。'),
       type: "'start' | 'center' | 'end'",
-      defaultValue: "'center'",
+      defaultValue: "'start'",
+    },
+    {
+      component: 'Table.Column',
+      name: 'fixed',
+      description: docsCopy('将列固定在表格起始侧或末端。'),
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Table.Column',
+      name: 'width',
+      description: docsCopy('设置列宽，并参与固定列偏移计算。'),
+      type: 'number',
+    },
+    {
+      component: 'Table.Column',
+      name: 'ellipsis',
+      description: docsCopy(
+        '控制整列的文本截断与 Tooltip；设置为 true 时使用当前表头或单元格内容，传入 ReactNode 时使用该节点作为 Tooltip 内容。'
+      ),
+      type: 'boolean | ReactNode',
+      defaultValue: 'false',
+    },
+    {
+      component: 'Table.Column',
+      name: 'classNames',
+      description: docsCopy('按 header 与 cell 扩展当前列的类名。'),
+      type: 'Table.ColumnClassNames<TData>',
+    },
+    {
+      component: 'Table.Column',
+      name: 'styles',
+      description: docsCopy('按 header 与 cell 设置当前列的行内样式。'),
+      type: 'Table.ColumnStyles<TData>',
+    },
+    {
+      component: 'Table.ColumnClassNames',
+      name: 'header',
+      description: docsCopy('扩展当前列所有表头单元格的类名。'),
+      type: 'string',
+    },
+    {
+      component: 'Table.ColumnClassNames',
+      name: 'cell',
+      description: docsCopy('按列或当前记录扩展数据单元格的类名。'),
+      type: 'string | ((row: TData, index: number) => string)',
+    },
+    {
+      component: 'Table.ColumnStyles',
+      name: 'header',
+      description: docsCopy('设置当前列所有表头单元格的行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.ColumnStyles',
+      name: 'cell',
+      description: docsCopy('按列或当前记录设置数据单元格的行内样式。'),
+      type: 'CSSProperties | ((row: TData, index: number) => CSSProperties)',
+    },
+    {
+      component: 'Table.ClassNames',
+      name: 'root',
+      description: docsCopy('扩展数据表最外层根区域的类名。'),
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      name: 'toolbar',
+      description: docsCopy('扩展搜索等表格级操作区域的类名。'),
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      name: 'container',
+      description: docsCopy('扩展滚动、边框与圆角容器的类名。'),
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      name: 'table',
+      description: docsCopy('扩展原生 table 节点的类名。'),
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      name: 'header',
+      description: docsCopy('扩展表头区域的类名。'),
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      name: 'body',
+      description: docsCopy('扩展表体区域的类名。'),
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      name: 'footer',
+      description: docsCopy('扩展表尾汇总区域的类名。'),
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      name: 'state',
+      description: docsCopy('扩展内置加载与空数据状态单元格的类名。'),
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      name: 'pagination',
+      description: docsCopy('扩展分页摘要与翻页控件容器的类名。'),
+      type: 'string',
+    },
+    {
+      component: 'Table.Styles',
+      name: 'root',
+      description: docsCopy('设置数据表最外层根区域的行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      name: 'toolbar',
+      description: docsCopy('设置搜索等表格级操作区域的行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      name: 'container',
+      description: docsCopy('设置滚动、边框与圆角容器的行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      name: 'table',
+      description: docsCopy('设置原生 table 节点的行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      name: 'header',
+      description: docsCopy('设置表头区域的行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      name: 'body',
+      description: docsCopy('设置表体区域的行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      name: 'footer',
+      description: docsCopy('设置表尾汇总区域的行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      name: 'state',
+      description: docsCopy('设置内置加载与空数据状态单元格的行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      name: 'pagination',
+      description: docsCopy('设置分页摘要与翻页控件容器的行内样式。'),
+      type: 'CSSProperties',
     },
     {
       name: 'data',
       description: docsCopy('提供表格数据记录。'),
       type: 'readonly TData[]',
-    },
-    {
-      name: 'caption',
-      description: docsCopy(
-        '使用基础 Table Caption 为整张数据表提供标题或摘要。'
-      ),
-      type: 'ReactNode',
+      required: true,
     },
     {
       name: 'footer',
-      description: docsCopy(
-        '使用基础 Table Footer 展示当前可见行的汇总内容；函数形式会收到当前页数据。'
-      ),
-      type: 'ReactNode | (visibleRows: readonly TData[]) => ReactNode',
+      description: docsCopy('渲染表尾汇总；传入函数时会收到当前页可见数据。'),
+      type: 'ReactNode | ((visibleRows: readonly TData[]) => ReactNode)',
     },
     {
       name: 'showHeader',
-      description: docsCopy('显示或隐藏自动生成的 Table Header。'),
+      description: docsCopy('控制是否渲染表头。'),
       type: 'boolean',
       defaultValue: 'true',
     },
     {
       name: 'rowKey',
       description: docsCopy(
-        '统一为渲染、选择、展开和虚拟滚动提供稳定的业务行标识。'
+        '提供稳定的业务行标识；省略时依次回退到记录的 key 和当前索引。'
       ),
-      type: 'keyof TData | (row: TData, index: number) => React.Key',
+      type: 'keyof TData | ((row: TData, index: number) => Key)',
     },
     {
       name: 'rowProps',
       description: docsCopy(
-        '根据当前记录扩展基础 Table Row 的类名、事件和原生属性。'
+        '根据当前记录与索引扩展 Row 的类名、事件和原生属性。'
       ),
-      type: '(row: TData, index: number) => TableRowProps',
+      type: "(row: TData, index: number) => Omit<ComponentProps<'tr'>, 'children'>",
     },
     {
       name: 'search',
       description: docsCopy(
-        '配置搜索字段、自定义 predicate、受控值和 client/manual 数据处理模式。'
+        '配置搜索状态、字段范围与客户端或 manual 服务端模式。'
       ),
-      type: 'false | TableSearchProps<TData>',
+      type: 'false | Table.SearchProps<TData>',
+      defaultValue: 'false',
     },
     {
       name: 'sorting',
       description: docsCopy(
-        '关闭排序，或配置受控/非受控排序状态与 client/manual 模式。'
+        '配置排序的受控状态，以及客户端或 manual 服务端模式。'
       ),
-      type: 'false | TableSortingProps',
+      type: 'false | Table.SortingProps',
       defaultValue: '{}',
     },
     {
       name: 'pagination',
-      description: docsCopy(
-        '使用标准 Pagination 管理当前页；manual 模式必须提供服务端 total。'
-      ),
-      type: 'false | TablePaginationProps',
+      description: docsCopy('配置分页状态与摘要；设置为 false 时关闭分页。'),
+      type: 'false | Table.PaginationProps',
       defaultValue: '{ pageSize: 10 }',
     },
     {
-      name: 'pagination.ariaLabels / renderSummary',
-      description: docsCopy('本地化分页控件的无障碍名称和总数、当前页摘要。'),
-      type: 'PaginationAriaLabels / (total, current, pageCount) => ReactNode',
-    },
-    {
       name: 'rowSelection',
-      description: docsCopy(
-        '自动生成选择列，支持受控/非受控 key、禁用行、全选标签和变更回调。'
-      ),
-      type: 'TableRowSelectionProps<TData>',
+      description: docsCopy('配置行选择的受控状态、禁用规则和可访问名称。'),
+      type: 'Table.RowSelectionProps<TData>',
     },
     {
       name: 'expandable',
-      description: docsCopy(
-        '自动组装 ExpandButton 与 ExpandedRow，并支持受控或非受控的展开行 key。'
-      ),
-      type: 'TableExpandableProps<TData>',
-    },
-    {
-      name: 'expandable.getExpandLabel / getCollapseLabel',
-      description: docsCopy(
-        '为每一行生成本地化的展开与收起按钮名称，并包含可辨认的记录信息。'
-      ),
-      type: '(row: TData, index: number) => string',
+      description: docsCopy('配置行展开的受控状态、可展开规则和详情内容。'),
+      type: 'Table.ExpandableProps<TData>',
     },
     {
       name: 'virtual',
       description: docsCopy(
-        '只渲染可视范围附近的等高单行数据；类型上与 expandable 互斥。'
+        '启用固定行高的虚拟表体；不能与 expandable 同时使用。'
       ),
-      type: 'boolean | TableVirtualProps',
+      type: 'boolean | Table.VirtualProps',
       defaultValue: 'false',
     },
     {
-      name: 'loading / empty / error',
-      description: docsCopy('在同一跨列状态区域闭环展示加载、空结果和错误。'),
-      type: 'boolean | ReactNode / ReactNode / ReactNode',
-      defaultValue: docsCopy("'暂无数据'"),
+      name: 'loading',
+      description: docsCopy(
+        '显示内置加载状态；空数据由 Table 自动展示默认提示。'
+      ),
+      type: 'boolean',
+      defaultValue: 'false',
     },
     {
       name: 'classNames',
       description: docsCopy(
-        '按 root、toolbar、container、table、caption、header、body、footer、state 与 pagination 定制语义区域。'
+        '按 root、toolbar、container、table、header、body、footer、state 与 pagination 定制语义区域。'
       ),
-      type: 'TableClassNames',
+      type: 'Table.ClassNames',
     },
     {
-      name: 'tableProps',
-      description: docsCopy(
-        '向内部 Table.Primitive 传递原生 table 与容器引用、样式。'
-      ),
-      type: "Omit<TablePrimitiveProps, 'children' | 'containerClassName'>",
+      name: 'styles',
+      description: docsCopy('按与 classNames 相同的语义区域设置行内样式。'),
+      type: 'Table.Styles',
     },
   ],
   empty: [
@@ -7051,11 +7164,13 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       description: docsCopy('渲染主要按钮、链接或一组相关操作。'),
       type: 'ReactNode',
     },
-    {
-      name: 'EmptyHeader / EmptyMedia / EmptyTitle / EmptyDescription',
-      description: docsCopy('在 custom 变体中组合完全自定义的头部内容。'),
-      type: 'components',
-    },
+    ...['EmptyHeader', 'EmptyMedia', 'EmptyTitle', 'EmptyDescription'].map(
+      (name) => ({
+        name,
+        description: docsCopy('在 custom 变体中组合完全自定义的头部内容。'),
+        type: 'component',
+      })
+    ),
     {
       name: 'EmptyContent',
       description: docsCopy('在 custom 变体中承载状态摘要和自定义操作。'),
@@ -7083,19 +7198,29 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       type: 'string',
     },
     {
-      name: 'media / mediaType',
-      description: docsCopy('设置媒体内容，并选择普通、图标或图片外观。'),
-      type: "ReactNode / 'default' | 'icon' | 'image'",
-      defaultValue: "'default'",
-    },
-    {
-      name: 'title / description / content / actions',
-      description: docsCopy('通过 props 配置列表项的语义内容和尾部操作。'),
+      name: 'media',
+      description: docsCopy('设置列表项的媒体内容。'),
       type: 'ReactNode',
     },
     {
-      name: 'header / footer',
-      description: docsCopy('添加横跨整行的前置或后置内容。'),
+      name: 'mediaType',
+      description: docsCopy('选择媒体内容的普通、图标或图片外观。'),
+      type: "'default' | 'icon' | 'image'",
+      defaultValue: "'default'",
+    },
+    ...['title', 'description', 'content', 'actions'].map((name) => ({
+      name,
+      description: docsCopy('配置列表项对应的语义内容或尾部操作。'),
+      type: 'ReactNode',
+    })),
+    {
+      name: 'header',
+      description: docsCopy('添加横跨整行的前置内容。'),
+      type: 'ReactNode',
+    },
+    {
+      name: 'footer',
+      description: docsCopy('添加横跨整行的后置内容。'),
       type: 'ReactNode',
     },
   ],
@@ -7148,146 +7273,91 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     },
     {
       component: 'Bubble',
-      name: 'side / align',
-      description: docsCopy('定位气泡边缘的回应或状态。'),
-      type: "'top' | 'bottom' / 'start' | 'end'",
+      name: 'side',
+      description: docsCopy('设置气泡边缘回应或状态的纵向位置。'),
+      type: "'top' | 'bottom'",
+    },
+    {
+      component: 'Bubble',
+      name: 'align',
+      description: docsCopy('设置气泡边缘回应或状态的横向对齐。'),
+      type: "'start' | 'end'",
     },
   ],
   table: [
     {
       component: 'Table.Primitive',
-      name: 'containerClassName / containerStyle / containerRef',
-      description: docsCopy(
-        '配置内置滚动容器的尺寸、样式和引用，用于横向、纵向滚动或外部滚动控制。'
-      ),
-      type: 'string / CSSProperties / Ref<HTMLDivElement>',
+      name: 'classNames',
+      description: docsCopy('分别扩展滚动容器与原生 table 节点的类名。'),
+      type: 'Table.PrimitiveClassNames',
     },
     {
-      component: 'Table.VirtualBody',
-      name: 'items / children',
-      description: docsCopy(
-        '接收完整数据集合，并通过渲染函数只创建当前可视区域与缓冲范围内的 Row。'
-      ),
-      type: 'readonly T[] / (item: T, index: number) => ReactElement<RowProps>',
+      component: 'Table.Primitive',
+      name: 'styles',
+      description: docsCopy('分别设置滚动容器与原生 table 节点的行内样式。'),
+      type: 'Table.PrimitiveStyles',
     },
     {
-      component: 'Table.VirtualBody',
-      name: 'colSpan',
-      description: docsCopy(
-        '声明当前 Table 的叶子列数量，使虚拟滚动占位行跨越整张表格并保持列宽。'
-      ),
-      type: 'number',
+      component: 'Table.Primitive',
+      name: 'containerRef',
+      description: docsCopy('引用内置滚动容器，用于外部滚动控制或尺寸观测。'),
+      type: 'Ref<HTMLDivElement>',
     },
     {
-      component: 'Table.VirtualBody',
-      name: 'rowHeight',
-      description: docsCopy(
-        '设置单行的固定像素高度；虚拟 Table 当前面向等高单行数据，展开行和动态高度内容应使用普通 Body。'
-      ),
-      type: 'number',
-      defaultValue: '48',
-    },
-    {
-      component: 'Table.VirtualBody',
-      name: 'overscan',
-      description: docsCopy(
-        '设置可视区域上下额外渲染的行数，减少快速滚动时的空白。'
-      ),
-      type: 'number',
-      defaultValue: '8',
-    },
-    {
-      component: 'Table.VirtualBody',
-      name: 'getItemKey',
-      description: docsCopy(
-        '为虚拟行提供跨滚动稳定的业务主键；大型数据集不应使用数组索引。'
-      ),
-      type: '(item: T, index: number) => Key',
-    },
-    {
-      component: 'Table.VirtualBody',
-      name: 'rowIndexOffset',
-      description: docsCopy(
-        '设置第一条虚拟数据行的 aria-rowindex；默认值会为 Header 预留一行。'
-      ),
-      type: 'number',
-      defaultValue: '2',
-    },
-    {
-      name: 'Table.Primitive / Table.Caption',
-      description: docsCopy(
-        'Table.Primitive 创建原生 table 与滚动容器，Caption 提供整张表格的语义标题。'
-      ),
-      type: 'component',
-    },
-    {
-      name: 'Table.Header / Table.Head',
-      description: docsCopy(
-        '定义列标题和表头语义；标题过长时通过 Head 的 ellipsis 提供截断与全文 Tooltip。'
-      ),
-      type: 'component',
-    },
-    {
-      name: 'Table.Body / Table.Row / Table.Cell',
-      description: docsCopy('组织数据行与单元格，并支持选中状态。'),
-      type: 'component',
-    },
-    {
-      component: 'Table.Head / Table.Cell',
-      name: 'align',
-      description: docsCopy('按文字书写方向设置列内容靠起始侧、居中或靠末端。'),
-      type: "'start' | 'center' | 'end'",
-      defaultValue: "'start'",
-    },
-    {
-      component: 'Table.Head / Table.Cell',
-      name: 'fixed / fixedOffset',
-      description: docsCopy(
-        '对应的 Head 与 Cell 设置 fixed="start" 可固定在起始侧，设置 fixed="end" 可固定在末端；多固定列通过 fixedOffset 声明累计偏移。'
-      ),
-      type: "'start' | 'end' / number | string",
-    },
-    {
-      component: 'Table.Head / Table.Cell',
-      name: 'ellipsis',
-      description: docsCopy(
-        '省略单个超长列标题或 Cell，并在内容真实溢出时自动通过 Tooltip 提供全文；应配合列宽或 table-fixed。'
-      ),
-      type: 'boolean',
-      defaultValue: 'false',
-    },
-    {
-      component: 'Table.Head / Table.Cell',
-      name: 'ellipsisTooltip',
-      description: docsCopy(
-        '自定义省略内容的 Tooltip；未设置时使用 Head 或 Cell 子节点，已有 title 会兼容作为 Tooltip 内容。'
-      ),
-      type: 'ReactNode',
-    },
-    {
-      component: 'Table.ExpandButton',
-      name: 'expanded / onExpandedChange',
-      description: docsCopy(
-        '以受控方式切换一行的展开状态，并同步 aria-expanded 与箭头方向。'
-      ),
-      type: 'boolean / (expanded: boolean) => void',
-    },
-    {
-      component: 'Table.ExpandedRow',
-      name: 'colSpan',
-      description: docsCopy('渲染跨越指定列数的详情行，并保留合法的表格语义。'),
-      type: 'number',
-    },
-    {
-      name: 'Table.Footer',
-      description: docsCopy('展示汇总、总计或表尾说明。'),
-      type: 'component',
-    },
-    {
-      name: 'className',
-      description: docsCopy('扩展 table 或各语义分区的样式。'),
+      component: 'Table.PrimitiveClassNames',
+      name: 'container',
+      description: docsCopy('扩展 Table.Primitive 滚动容器的类名。'),
       type: 'string',
     },
+    {
+      component: 'Table.PrimitiveClassNames',
+      name: 'table',
+      description: docsCopy('扩展 Table.Primitive 原生 table 节点的类名。'),
+      type: 'string',
+    },
+    {
+      component: 'Table.PrimitiveStyles',
+      name: 'container',
+      description: docsCopy('设置 Table.Primitive 滚动容器的行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.PrimitiveStyles',
+      name: 'table',
+      description: docsCopy('设置 Table.Primitive 原生 table 节点的行内样式。'),
+      type: 'CSSProperties',
+    },
+    ...(['Table.Head', 'Table.Cell'] as const).flatMap((component) => [
+      {
+        component,
+        name: 'align',
+        description: docsCopy('按文字书写方向设置内容靠起始侧、居中或靠末端。'),
+        type: "'start' | 'center' | 'end'",
+        defaultValue: "'start'",
+      },
+      {
+        component,
+        name: 'fixed',
+        description: docsCopy('将当前单元格固定在表格起始侧或末端。'),
+        type: "'start' | 'end'",
+      },
+      {
+        component,
+        name: 'fixedOffset',
+        description: docsCopy('设置当前固定单元格前方同侧固定列的累计偏移。'),
+        type: 'number | string',
+        defaultValue: '0',
+      },
+      {
+        component,
+        name: 'ellipsis',
+        description: docsCopy(
+          '传入 true 时在内容真实溢出后自动显示完整内容 Tooltip；传入 ReactNode 时以该节点作为 Tooltip 内容。'
+        ),
+        type: 'boolean | ReactNode',
+        defaultValue: 'false',
+      },
+    ]),
   ],
   tooltip: [
     {
@@ -7298,9 +7368,15 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: '0',
     },
     {
-      name: 'open / defaultOpen',
-      description: docsCopy('使用受控或非受控方式管理 Tooltip。'),
+      name: 'open',
+      description: docsCopy('以受控方式管理 Tooltip。'),
       type: 'boolean',
+    },
+    {
+      name: 'defaultOpen',
+      description: docsCopy('设置 Tooltip 非受控模式下的初始状态。'),
+      type: 'boolean',
+      defaultValue: 'false',
     },
     {
       name: 'onOpenChange',
@@ -7315,9 +7391,19 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: "'top'",
     },
     {
-      name: 'align / sideOffset / alignOffset',
-      description: docsCopy('微调浮层对齐和与触发器的间距。'),
-      type: 'Positioner props',
+      name: 'align',
+      description: docsCopy('设置浮层相对触发器的对齐方式。'),
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      name: 'sideOffset',
+      description: docsCopy('设置浮层沿首选方向与触发器的间距。'),
+      type: 'number',
+    },
+    {
+      name: 'alignOffset',
+      description: docsCopy('设置浮层沿对齐轴的偏移。'),
+      type: 'number',
     },
   ],
   alert: [
@@ -7382,17 +7468,27 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: "'click'",
     },
     {
-      name: 'delay / closeDelay',
-      description: docsCopy(
-        '设置 hover 模式打开与关闭前的等待时间，单位为毫秒。'
-      ),
+      name: 'delay',
+      description: docsCopy('设置 hover 模式打开前的等待时间，单位为毫秒。'),
       type: 'number',
-      defaultValue: '300 / 150',
+      defaultValue: '300',
     },
     {
-      name: 'open / defaultOpen',
-      description: docsCopy('使用受控或非受控方式管理浮层。'),
+      name: 'closeDelay',
+      description: docsCopy('设置 hover 模式关闭前的等待时间，单位为毫秒。'),
+      type: 'number',
+      defaultValue: '150',
+    },
+    {
+      name: 'open',
+      description: docsCopy('以受控方式管理浮层。'),
       type: 'boolean',
+    },
+    {
+      name: 'defaultOpen',
+      description: docsCopy('设置浮层非受控模式下的初始状态。'),
+      type: 'boolean',
+      defaultValue: 'false',
     },
     {
       name: 'onOpenChange',
@@ -7407,9 +7503,19 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: "'bottom'",
     },
     {
-      name: 'align / sideOffset / alignOffset',
-      description: docsCopy('微调浮层对齐方式与触发器间距。'),
-      type: 'Positioner props',
+      name: 'align',
+      description: docsCopy('设置浮层相对触发器的对齐方式。'),
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      name: 'sideOffset',
+      description: docsCopy('设置浮层沿首选方向与触发器的间距。'),
+      type: 'number',
+    },
+    {
+      name: 'alignOffset',
+      description: docsCopy('设置浮层沿对齐轴的偏移。'),
+      type: 'number',
     },
   ],
   progress: [
@@ -7426,10 +7532,16 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       defaultValue: "'none'",
     },
     {
-      name: 'min / max',
-      description: docsCopy('设置进度范围，并同步无障碍数值。'),
+      name: 'min',
+      description: docsCopy('设置进度范围的最小值，并同步无障碍数值。'),
       type: 'number',
-      defaultValue: '0 / 100',
+      defaultValue: '0',
+    },
+    {
+      name: 'max',
+      description: docsCopy('设置进度范围的最大值，并同步无障碍数值。'),
+      type: 'number',
+      defaultValue: '100',
     },
   ],
   skeleton: [
@@ -7452,16 +7564,16 @@ componentDocumentation.carousel.summary = docsCopy(
   '横向浏览同级内容，始终提供景深动效，并支持点位插槽、自动播放、首尾循环和自定义翻页器。'
 );
 componentDocumentation.carousel.parts = [
-  {
-    name: 'Carousel / CarouselContent / CarouselItem',
+  ...['Carousel', 'CarouselContent', 'CarouselItem'].map((name) => ({
+    name,
     description: docsCopy('建立轮播上下文、可滚动容器与单个景深内容项。'),
-  },
-  {
-    name: 'CarouselPrevious / CarouselNext / CarouselDots',
+  })),
+  ...['CarouselPrevious', 'CarouselNext', 'CarouselDots'].map((name) => ({
+    name,
     description: docsCopy(
       '提供开箱即用的前后导航与页码点；支持替换图标、点位内容和组合位置。'
     ),
-  },
+  })),
   {
     name: 'CarouselPagination',
     description: docsCopy(
@@ -7530,18 +7642,18 @@ componentDocumentation.drawer.parts = [
     name: 'Drawer',
     description: docsCopy('管理方向、自适应行为、父容器、开关状态与手势参数。'),
   },
-  {
-    name: 'DrawerTrigger / DrawerClose',
+  ...['DrawerTrigger', 'DrawerClose'].map((name) => ({
+    name,
     description: docsCopy('连接打开与关闭操作，并保留焦点返回关系。'),
-  },
+  })),
   {
     name: 'DrawerContent',
     description: docsCopy('渲染面板、遮罩、视口、滑动手柄和标准关闭按钮。'),
   },
-  {
-    name: 'DrawerHeader / DrawerFooter',
+  ...['DrawerHeader', 'DrawerFooter'].map((name) => ({
+    name,
     description: docsCopy('组合标题说明、正文与底部操作。'),
-  },
+  })),
 ];
 componentDocumentation.drawer.pitfalls = [
   docsCopy(
@@ -7578,10 +7690,10 @@ componentDocumentation.popover.parts = [
     name: 'PopoverContent',
     description: docsCopy('在 Portal 中渲染定位后的浮层内容。'),
   },
-  {
-    name: 'PopoverHeader / PopoverTitle / PopoverDescription',
+  ...['PopoverHeader', 'PopoverTitle', 'PopoverDescription'].map((name) => ({
+    name,
     description: docsCopy('组织浮层的标题与辅助说明。'),
-  },
+  })),
 ];
 componentDocumentation.popover.accessibility = [
   docsCopy('hover 模式也会在触发器获得键盘焦点时打开，不能只依赖鼠标操作。'),
@@ -7658,7 +7770,6 @@ componentDocumentation.table.whenToUse = [
   docsCopy(
     '需要精确控制表头、汇总、固定列、展开详情或与 Pagination 的组合方式。'
   ),
-  docsCopy('等高单行数据量较大，需要用 VirtualBody 限制真实 DOM 行数。'),
 ];
 componentDocumentation.table.relatedComponents = [
   {
@@ -7671,40 +7782,30 @@ componentDocumentation.table.relatedComponents = [
 ];
 componentDocumentation.table.parts = [
   {
-    name: 'Table.Primitive / Table.Header / Table.Body / Table.Footer',
-    description: docsCopy(
-      '从 Primitive 根建立原生表格、滚动容器和表头、表体、汇总区域。'
-    ),
+    name: 'Table.Primitive',
+    description: docsCopy('建立不管理数据状态的原生 table 与滚动容器。'),
   },
-  {
-    name: 'Table.Row / Table.Head / Table.Cell',
-    description: docsCopy('组织行列，并控制单元格对齐、固定位置和超长省略。'),
-  },
-  {
-    name: 'Table.ExpandButton / Table.ExpandedRow',
-    description: docsCopy(
-      '以受控状态展开一行，并使用合法的跨列详情行承载内容。'
-    ),
-  },
-  {
-    name: 'Table.VirtualBody',
-    description: docsCopy(
-      '为等高单行数据建立纵向虚拟窗口，并继续支持 Table 的横向滚动和 fixed 列。'
-    ),
-  },
+  ...[
+    'Table.Header',
+    'Table.Body',
+    'Table.Footer',
+    'Table.Row',
+    'Table.Head',
+    'Table.Cell',
+  ].map((name) => ({
+    name,
+    description: docsCopy('对应原生表格的表头、表体、表尾、行和单元格语义。'),
+  })),
 ];
 componentDocumentation.table.accessibility = [
   docsCopy(
     '使用 Header 与 Head 明确每列的数据含义；列标题过长时通过 ellipsis 保留可聚焦查看的全文 Tooltip。'
   ),
   docsCopy(
-    'ExpandButton 默认同步 aria-expanded，并提供展开或收起标签；业务应在 label 中加入当前行名称。'
+    '行展开按钮使用 aria-expanded 表达状态，并在可访问名称中包含当前记录。'
   ),
   docsCopy(
-    'Head 与 Cell 的 ellipsis 只在文本真实溢出时启用 Tooltip，并允许键盘聚焦查看全文；复杂内容可通过 ellipsisTooltip 提供更合适的说明。'
-  ),
-  docsCopy(
-    '虚拟滚动时在 Table 上提供 aria-rowcount，并通过 rowIndexOffset 保持每条可视行的真实 aria-rowindex。'
+    'Head 与 Cell 的 ellipsis 只在文本真实溢出时启用 Tooltip，并允许键盘聚焦查看全文；传入 ReactNode 可直接替换 Tooltip 内容。'
   ),
 ];
 componentDocumentation.table.pitfalls = [
@@ -7715,9 +7816,6 @@ componentDocumentation.table.pitfalls = [
     '手动分页时只把当前页数据传给 Table.Primitive，由 Pagination 或服务端请求管理页码。'
   ),
   docsCopy(
-    'VirtualBody 只适用于固定高度的单行数据；动态高度、行展开和跨行内容继续使用普通 Body。'
-  ),
-  docsCopy(
     '需要搜索、排序、选择或自动分页时使用数据驱动的 Table，不要把这些状态塞进 Table.Primitive。'
   ),
 ];
@@ -7725,10 +7823,16 @@ componentDocumentation.table.pitfalls = [
 componentDocumentation['data-table'].summary = docsCopy(
   'Table 是数据驱动的完整表格：搜索、排序、分页、选择和展开都有受控与非受控闭环，并提供固定列、状态与虚拟滚动。'
 );
-componentDocumentation['data-table'].typeDefinitionGroups = ['TableColumn'];
+componentDocumentation['data-table'].typeDefinitionGroups = [
+  'Table.Column',
+  'Table.ColumnClassNames',
+  'Table.ColumnStyles',
+  'Table.ClassNames',
+  'Table.Styles',
+];
 componentDocumentation['data-table'].whenToUse = [
   docsCopy(
-    '常规业务数据列表默认使用 Table，由 data 与 TableColumn 驱动完整表格。'
+    '常规业务数据列表默认使用 Table，由 data 与 Table.Column 驱动完整表格。'
   ),
   docsCopy(
     '需要筛选、排序、分页、固定列、分组表头、行展开或虚拟滚动中的任意能力。'
@@ -7747,18 +7851,8 @@ componentDocumentation['data-table'].parts = [
   {
     name: 'Table',
     description: docsCopy(
-      '以基础 Table 为渲染层，组装数据、列模型、筛选、排序、分页、展开和虚拟滚动。'
+      '通过 data、columns 和功能配置组装搜索、排序、分页、选择、展开与虚拟滚动。'
     ),
-  },
-  {
-    name: 'TableColumn',
-    description: docsCopy(
-      '通过 accessor、header、render、columns 和直接列属性声明数据访问、结构与布局。'
-    ),
-  },
-  {
-    name: 'Table.Actions',
-    description: docsCopy('在普通 cell 中组合当前记录的按钮、菜单或链接。'),
   },
 ];
 componentDocumentation['data-table'].accessibility = [
@@ -7777,13 +7871,13 @@ componentDocumentation['data-table'].accessibility = [
 ];
 componentDocumentation['data-table'].pitfalls = [
   docsCopy(
-    '不要在 Table 内硬编码业务操作；通过 TableColumn.render 读取当前 row 后组合业务按钮。'
+    '不要在 Table 内硬编码业务操作；通过 Table.Column.render 读取当前 row 后组合业务按钮。'
   ),
   docsCopy(
     '不要为了视觉分区手写两个并列表格；使用嵌套 columns 生成真正关联的数据表头。'
   ),
   docsCopy(
-    '不要在 Table 外再包一套表格滚动与圆角容器；通过 tableProps 复用基础 Table 的容器。'
+    '不要在 Table 外再包一套表格滚动与圆角容器；通过 classNames 定制现有语义区域。'
   ),
   docsCopy(
     '虚拟滚动只适用于固定高度的单行数据，不与 expandable 同时使用；需要动态详情高度时关闭 virtual。'
@@ -8056,11 +8150,6 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: "'zh' | 'en'",
       defaultValue: "'zh'",
     },
-    {
-      name: 'calendarClassName',
-      description: docsCopy('扩展内层日历样式。'),
-      type: 'string',
-    },
   ],
   form: [
     {
@@ -8284,10 +8373,13 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
   ],
   'input-number': [
     {
-      name: 'value / defaultValue',
-      description: docsCopy(
-        '以受控或非受控方式设置原始数值；空输入使用 null。'
-      ),
+      name: 'value',
+      description: docsCopy('设置受控原始数值；空输入使用 null。'),
+      type: 'number | null',
+    },
+    {
+      name: 'defaultValue',
+      description: docsCopy('设置非受控模式的初始数值；空输入使用 null。'),
       type: 'number | null',
     },
     {
@@ -8301,22 +8393,42 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: '(value: number | null) => void',
     },
     {
-      name: 'min / max',
-      description: docsCopy('限制允许输入和步进到达的数值边界。'),
+      name: 'min',
+      description: docsCopy('限制允许输入和步进到达的最小值。'),
       type: 'number',
     },
     {
-      name: 'step / smallStep / largeStep',
-      description: docsCopy('设置普通、Alt 和 Shift 组合键对应的步进幅度。'),
-      type: "number | 'any' / number / number",
-      defaultValue: '1 / 0.1 / 10',
+      name: 'max',
+      description: docsCopy('限制允许输入和步进到达的最大值。'),
+      type: 'number',
     },
     {
-      name: 'format / locale',
-      description: docsCopy(
-        '使用 Intl.NumberFormatOptions 和语言区域格式化显示值。'
-      ),
-      type: 'Intl.NumberFormatOptions / Intl.LocalesArgument',
+      name: 'step',
+      description: docsCopy('设置普通步进幅度。'),
+      type: "number | 'any'",
+      defaultValue: '1',
+    },
+    {
+      name: 'smallStep',
+      description: docsCopy('设置 Alt 组合键对应的步进幅度。'),
+      type: 'number',
+      defaultValue: '0.1',
+    },
+    {
+      name: 'largeStep',
+      description: docsCopy('设置 Shift 组合键对应的步进幅度。'),
+      type: 'number',
+      defaultValue: '10',
+    },
+    {
+      name: 'format',
+      description: docsCopy('使用 Intl.NumberFormatOptions 格式化显示值。'),
+      type: 'Intl.NumberFormatOptions',
+    },
+    {
+      name: 'locale',
+      description: docsCopy('设置格式化显示值使用的语言区域。'),
+      type: 'Intl.LocalesArgument',
     },
     {
       name: 'controls',
@@ -8325,18 +8437,38 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       defaultValue: 'true',
     },
     {
-      name: 'prefix / suffix',
-      description: docsCopy('在同一输入边框内展示固定前缀或单位后缀。'),
+      name: 'prefix',
+      description: docsCopy('在同一输入边框内展示固定前缀。'),
       type: 'ReactNode',
     },
     {
-      name: 'placeholder / autoComplete / inputMode',
-      description: docsCopy('配置原生输入提示、自动填充和软键盘模式。'),
-      type: 'native input attributes',
+      name: 'suffix',
+      description: docsCopy('在同一输入边框内展示固定单位后缀。'),
+      type: 'ReactNode',
     },
     {
-      name: 'incrementLabel / decrementLabel',
-      description: docsCopy('本地化增减按钮的可访问名称。'),
+      name: 'placeholder',
+      description: docsCopy('配置原生输入提示。'),
+      type: 'string',
+    },
+    {
+      name: 'autoComplete',
+      description: docsCopy('配置原生自动填充提示。'),
+      type: 'string',
+    },
+    {
+      name: 'inputMode',
+      description: docsCopy('配置软键盘输入模式。'),
+      type: 'HTMLAttributes<HTMLInputElement>["inputMode"]',
+    },
+    {
+      name: 'incrementLabel',
+      description: docsCopy('本地化递增按钮的可访问名称。'),
+      type: 'string',
+    },
+    {
+      name: 'decrementLabel',
+      description: docsCopy('本地化递减按钮的可访问名称。'),
       type: 'string',
     },
     {
@@ -8345,24 +8477,33 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
       type: "'sm' | 'default' | 'lg'",
       defaultValue: "'default'",
     },
+    ...['disabled', 'readOnly', 'required'].map((name) => ({
+      name,
+      description: docsCopy('设置对应的原生表单语义。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    })),
     {
-      name: 'disabled / readOnly / required',
-      description: docsCopy('设置不可用、只读和表单必填语义。'),
+      name: 'allowWheelScrub',
+      description: docsCopy('选择是否允许悬停滚轮调整数值。'),
       type: 'boolean',
       defaultValue: 'false',
     },
     {
-      name: 'allowWheelScrub / snapOnStep',
-      description: docsCopy(
-        '选择是否允许悬停滚轮调整，以及步进时吸附到最近倍数。'
-      ),
+      name: 'snapOnStep',
+      description: docsCopy('选择步进时是否吸附到最近倍数。'),
       type: 'boolean',
       defaultValue: 'false',
     },
     {
-      name: 'className / classNames',
-      description: docsCopy('扩展根节点或输入、按钮等语义插槽样式。'),
-      type: 'string / InputNumberClassNames',
+      name: 'className',
+      description: docsCopy('扩展根节点样式。'),
+      type: 'string',
+    },
+    {
+      name: 'classNames',
+      description: docsCopy('扩展输入、按钮等语义插槽样式。'),
+      type: 'InputNumberClassNames',
     },
   ],
   radio: [
@@ -9092,7 +9233,6 @@ replaceExampleCodes('table', [
 import { Button } from '@heliannuuthus/ui'
 
 <Table.Primitive>
-  <Table.Caption>今晚发布窗口中的服务。</Table.Caption>
   <Table.Header>
     <Table.Row>
       <Table.Head>服务</Table.Head>
@@ -9850,11 +9990,11 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     },
   ],
   alert: [
-    {
-      name: 'title / description / icon',
+    ...['title', 'description', 'icon'].map((name) => ({
+      name,
       description: docsCopy('设置提示标题、补充说明和语义图标。'),
       type: 'ReactNode',
-    },
+    })),
     {
       name: 'action',
       description: docsCopy('放置与当前提示直接相关的查看、重试或关闭操作。'),
@@ -9873,26 +10013,32 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy('打开确认对话框的按钮或其他交互元素。'),
       type: 'ReactElement',
     },
-    {
-      name: 'title / description / media',
+    ...['title', 'description', 'media'].map((name) => ({
+      name,
       description: docsCopy('设置确认事项、后果说明和辅助图标。'),
       type: 'ReactNode',
-    },
-    {
-      name: 'confirmText / cancelText / confirmVariant',
+    })),
+    ...[
+      { name: 'confirmText', type: 'ReactNode' },
+      { name: 'cancelText', type: 'ReactNode' },
+      { name: 'confirmVariant', type: 'ButtonVariant' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('设置确认与取消操作的文字和确认按钮样式。'),
-      type: 'ReactNode / ReactNode / ButtonVariant',
-    },
+    })),
     {
       name: 'onConfirm',
       description: docsCopy('用户确认操作时调用。'),
       type: '() => void',
     },
-    {
-      name: 'open / defaultOpen / onOpenChange',
+    ...[
+      { name: 'open', type: 'boolean' },
+      { name: 'defaultOpen', type: 'boolean', defaultValue: 'false' },
+      { name: 'onOpenChange', type: '(open: boolean) => void' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('以受控或非受控方式管理打开状态。'),
-      type: 'boolean / boolean / (open: boolean) => void',
-    },
+    })),
   ],
   carousel: [
     {
@@ -9911,16 +10057,6 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy('是否显示上一页与下一页按钮。'),
       type: 'boolean',
       defaultValue: 'true',
-    },
-    {
-      name: 'contentClassName',
-      description: docsCopy('扩展轮播内容轨道的样式。'),
-      type: 'string',
-    },
-    {
-      name: 'itemClassName',
-      description: docsCopy('为每个轮播项设置统一样式。'),
-      type: 'string',
     },
     {
       name: 'previousButtonProps',
@@ -10049,18 +10185,6 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       type: 'boolean',
       defaultValue: 'false',
     },
-    {
-      name: 'headerClassName',
-      description: docsCopy(
-        '扩展 Header 或 Header 与独立触发按钮所在行的样式。'
-      ),
-      type: 'string',
-    },
-    {
-      name: 'contentClassName',
-      description: docsCopy('扩展展开内容区域的样式。'),
-      type: 'string',
-    },
   ],
   command: [
     {
@@ -10096,11 +10220,14 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       ),
       type: 'CommandInputProps',
     },
-    {
-      name: 'value / defaultValue / onChange',
+    ...[
+      { name: 'value', type: 'string' },
+      { name: 'defaultValue', type: 'string' },
+      { name: 'onChange', type: '(value: string) => void' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('管理当前选中的命令值，不表示搜索关键词。'),
-      type: 'string / string / (value: string) => void',
-    },
+    })),
     {
       name: 'filter',
       description: docsCopy(
@@ -10114,13 +10241,13 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy('设置命令列表供辅助技术读取的可访问名称。'),
       type: 'string',
     },
-    {
-      name: 'loop / vimBindings / disablePointerSelection',
+    ...['loop', 'vimBindings', 'disablePointerSelection'].map((name) => ({
+      name,
       description: docsCopy(
         '控制首尾循环、Vim 导航键以及指针悬停是否改变当前命令。'
       ),
-      type: 'boolean / boolean / boolean',
-    },
+      type: 'boolean',
+    })),
     {
       component: 'CommandGroup',
       name: 'heading',
@@ -10195,33 +10322,31 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy('配置普通操作、分隔线、选择项和子菜单。'),
       type: 'readonly DropdownMenuEntry[]',
     },
-    {
-      name: 'open / defaultOpen / onOpenChange',
+    ...[
+      { name: 'open', type: 'boolean' },
+      { name: 'defaultOpen', type: 'boolean', defaultValue: 'false' },
+      { name: 'onOpenChange', type: '(open: boolean) => void' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('以受控或非受控方式管理菜单状态。'),
-      type: 'boolean / boolean / (open: boolean) => void',
-    },
+    })),
     {
       name: 'disabled',
       description: docsCopy('禁用上下文菜单触发。'),
       type: 'boolean',
       defaultValue: 'false',
     },
-    {
-      name: 'highlightItemOnHover / loopFocus',
+    ...['highlightItemOnHover', 'loopFocus'].map((name) => ({
+      name,
       description: docsCopy('控制指针高亮，以及键盘焦点是否在首尾循环。'),
-      type: 'boolean / boolean',
-      defaultValue: 'true / true',
-    },
+      type: 'boolean',
+      defaultValue: 'true',
+    })),
     {
       name: 'orientation',
       description: docsCopy('设置菜单键盘导航的排列方向。'),
       type: "'horizontal' | 'vertical'",
       defaultValue: "'vertical'",
-    },
-    {
-      name: 'contentClassName',
-      description: docsCopy('扩展菜单浮层的样式。'),
-      type: 'string',
     },
   ],
   dialog: [
@@ -10230,11 +10355,11 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy('可选的对话框触发元素；受控场景可省略。'),
       type: 'ReactElement',
     },
-    {
-      name: 'title / description / children',
+    ...['title', 'description', 'children'].map((name) => ({
+      name,
       description: docsCopy('设置任务标题、辅助说明和主体内容。'),
       type: 'ReactNode',
-    },
+    })),
     {
       name: 'footer',
       description: docsCopy(
@@ -10242,16 +10367,22 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       ),
       type: 'ReactNode',
     },
-    {
-      name: 'confirmText / cancelText / onConfirm',
+    ...[
+      { name: 'confirmText', type: 'ReactNode' },
+      { name: 'cancelText', type: 'ReactNode' },
+      { name: 'onConfirm', type: '() => void' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('配置默认底部操作及确认回调。'),
-      type: 'ReactNode / ReactNode / (() => void)',
-    },
-    {
-      name: 'open / defaultOpen / onOpenChange',
+    })),
+    ...[
+      { name: 'open', type: 'boolean' },
+      { name: 'defaultOpen', type: 'boolean', defaultValue: 'false' },
+      { name: 'onOpenChange', type: '(open: boolean) => void' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('以受控或非受控方式管理打开状态。'),
-      type: 'boolean / boolean / (open: boolean) => void',
-    },
+    })),
   ],
   drawer: [
     {
@@ -10259,31 +10390,42 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy('可选的抽屉触发元素；受控场景可省略。'),
       type: 'ReactElement',
     },
-    {
-      name: 'title / description / children / footer',
+    ...['title', 'description', 'children', 'footer'].map((name) => ({
+      name,
       description: docsCopy('配置抽屉头部、主体内容和底部操作。'),
       type: 'ReactNode',
-    },
-    {
-      name: 'side / behavior',
+    })),
+    ...[
+      { name: 'side', type: "'top' | 'right' | 'bottom' | 'left'" },
+      { name: 'behavior', type: "'adaptive' | 'gesture' | 'panel'" },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('设置进入方向以及自适应、手势或稳定面板行为。'),
-      type: "'top' | 'right' | 'bottom' | 'left' / 'adaptive' | 'gesture' | 'panel'",
-    },
+    })),
     {
       name: 'container',
       description: docsCopy('把抽屉约束在指定父容器内。'),
       type: 'HTMLElement | RefObject<HTMLElement | null>',
     },
-    {
-      name: 'snapPoints / snapPoint / onSnapPointChange',
+    ...[
+      { name: 'snapPoints', type: '(number | string)[]' },
+      { name: 'snapPoint', type: 'number | string | null' },
+      {
+        name: 'onSnapPointChange',
+        type: '(value: number | string | null) => void',
+      },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('配置并控制手势抽屉的分段展开位置。'),
-      type: '(number | string)[] / number | string | null / callback',
-    },
-    {
-      name: 'open / defaultOpen / onOpenChange',
+    })),
+    ...[
+      { name: 'open', type: 'boolean' },
+      { name: 'defaultOpen', type: 'boolean', defaultValue: 'false' },
+      { name: 'onOpenChange', type: '(open: boolean) => void' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('以受控或非受控方式管理打开状态。'),
-      type: 'boolean / boolean / (open: boolean) => void',
-    },
+    })),
   ],
   'navigation-menu': [
     {
@@ -10291,61 +10433,83 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy('配置直接链接或带弹层内容的顶级导航入口。'),
       type: 'NavigationMenuItemConfig[]',
     },
-    {
-      name: 'align / orientation',
+    ...[
+      { name: 'align', type: "'start' | 'center' | 'end'" },
+      { name: 'orientation', type: "'horizontal' | 'vertical'" },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('设置弹层对齐方式与导航方向。'),
-      type: "'start' | 'center' | 'end' / 'horizontal' | 'vertical'",
-    },
-    {
-      name: 'value / defaultValue / onChange',
+    })),
+    ...[
+      { name: 'value', type: 'string | null' },
+      { name: 'defaultValue', type: 'string | null' },
+      { name: 'onChange', type: '(value: string | null) => void' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('以受控或非受控方式管理当前展开入口。'),
-      type: 'string | null / string | null / (value: string | null) => void',
-    },
-    {
-      name: 'delay / closeDelay',
+    })),
+    ...['delay', 'closeDelay'].map((name) => ({
+      name,
       description: docsCopy('设置打开与关闭富导航面板的延迟。'),
-      type: 'number / number',
-    },
+      type: 'number',
+    })),
   ],
   popover: [
-    {
-      name: 'trigger / triggerMode',
+    ...[
+      { name: 'trigger', type: 'ReactElement' },
+      { name: 'triggerMode', type: "'click' | 'hover'" },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('设置触发元素，以及点击或悬停预览模式。'),
-      type: "ReactElement / 'click' | 'hover'",
-    },
-    {
-      name: 'content / title / description',
+    })),
+    ...['content', 'title', 'description'].map((name) => ({
+      name,
       description: docsCopy('配置浮层主体和可选标题说明。'),
       type: 'ReactNode',
-    },
-    {
-      name: 'side / align / sideOffset / alignOffset',
+    })),
+    ...[
+      { name: 'side', type: 'PopupPosition["side"]' },
+      { name: 'align', type: 'PopupPosition["align"]' },
+      { name: 'sideOffset', type: 'number' },
+      { name: 'alignOffset', type: 'number' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('设置浮层方向、对齐方式和间距。'),
-      type: 'PopupPosition',
-    },
-    {
-      name: 'delay / closeDelay',
+    })),
+    ...['delay', 'closeDelay'].map((name) => ({
+      name,
       description: docsCopy('设置悬停模式打开与关闭前的等待时间。'),
-      type: 'number / number',
-    },
-    {
-      name: 'open / defaultOpen / onOpenChange',
+      type: 'number',
+    })),
+    ...[
+      { name: 'open', type: 'boolean' },
+      { name: 'defaultOpen', type: 'boolean', defaultValue: 'false' },
+      { name: 'onOpenChange', type: '(open: boolean) => void' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('以受控或非受控方式管理打开状态。'),
-      type: 'boolean / boolean / (open: boolean) => void',
-    },
+    })),
   ],
   progress: [
-    {
-      name: 'value / min / max',
+    ...[
+      { name: 'value', type: 'number | null' },
+      { name: 'min', type: 'number' },
+      { name: 'max', type: 'number' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy(
         '设置当前进度与数值范围；value 为 null 时表示进度未知。'
       ),
-      type: 'number | null / number / number',
+    })),
+    {
+      name: 'label',
+      description: docsCopy('设置进度名称，并决定是否或如何展示格式化数值。'),
+      type: 'ReactNode',
     },
     {
-      name: 'label / showValue',
+      name: 'showValue',
       description: docsCopy('设置进度名称，并决定是否或如何展示格式化数值。'),
-      type: 'ReactNode / boolean | ((value) => ReactNode)',
+      type: 'boolean | ((value: number | null) => ReactNode)',
     },
     {
       name: 'effect',
@@ -10353,11 +10517,17 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       type: "'none' | 'sparkle'",
       defaultValue: "'none'",
     },
-    {
-      name: 'locale / format / getAriaValueText',
+    ...[
+      { name: 'locale', type: 'Intl.LocalesArgument' },
+      { name: 'format', type: 'Intl.NumberFormatOptions' },
+      {
+        name: 'getAriaValueText',
+        type: '(value: number, min: number, max: number) => string',
+      },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('配置数值格式和辅助技术读取的完整进度文本。'),
-      type: 'Intl options / callback',
-    },
+    })),
   ],
   select: [
     {
@@ -10365,26 +10535,38 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy('提供平铺或分组候选项。'),
       type: '(SelectOption<Value> | SelectOptionGroup<Value>)[]',
     },
-    {
-      name: 'value / defaultValue / onChange',
+    ...[
+      { name: 'value', type: 'Value | Value[] | null' },
+      { name: 'defaultValue', type: 'Value | Value[] | null' },
+      {
+        name: 'onChange',
+        type: '(value: Value | Value[] | null) => void',
+      },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('以受控或非受控方式管理当前选择。'),
-      type: 'Value | Value[] | null / callback',
-    },
-    {
-      name: 'searchValue / defaultSearchValue / onSearch',
+    })),
+    ...[
+      { name: 'searchValue', type: 'string' },
+      { name: 'defaultSearchValue', type: 'string' },
+      { name: 'onSearch', type: '(query: string) => void' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('以受控或非受控方式管理搜索关键词。'),
-      type: 'string / string / (query: string) => void',
-    },
-    {
-      name: 'placeholder / emptyText / showClear',
+    })),
+    ...[
+      { name: 'placeholder', type: 'ReactNode' },
+      { name: 'emptyText', type: 'ReactNode' },
+      { name: 'showClear', type: 'boolean' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('设置输入提示、空结果文案和清除操作。'),
-      type: 'ReactNode / ReactNode / boolean',
-    },
-    {
-      name: 'multiple / disabled / readOnly / required',
+    })),
+    ...['multiple', 'disabled', 'readOnly', 'required'].map((name) => ({
+      name,
       description: docsCopy('设置多选、禁用、只读和表单必填状态。'),
       type: 'boolean',
-    },
+    })),
     {
       name: 'triggerProps',
       description: docsCopy('配置输入框的标准属性，以及是否显示尾部展开按钮。'),
@@ -10392,26 +10574,37 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     },
   ],
   tooltip: [
-    {
-      name: 'trigger / content',
+    ...[
+      { name: 'trigger', type: 'ReactElement' },
+      { name: 'content', type: 'ReactNode' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('设置需要补充说明的交互元素和简短提示内容。'),
-      type: 'ReactElement / ReactNode',
-    },
-    {
-      name: 'side / align / sideOffset / alignOffset',
+    })),
+    ...[
+      { name: 'side', type: 'PopupPosition["side"]' },
+      { name: 'align', type: 'PopupPosition["align"]' },
+      { name: 'sideOffset', type: 'number' },
+      { name: 'alignOffset', type: 'number' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('设置 Tooltip 方向、对齐和间距。'),
-      type: 'PopupPosition',
-    },
-    {
-      name: 'delay / disabled',
+    })),
+    ...[
+      { name: 'delay', type: 'number' },
+      { name: 'disabled', type: 'boolean' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('设置打开延迟，或临时禁用提示。'),
-      type: 'number / boolean',
-    },
-    {
-      name: 'open / defaultOpen / onOpenChange',
+    })),
+    ...[
+      { name: 'open', type: 'boolean' },
+      { name: 'defaultOpen', type: 'boolean', defaultValue: 'false' },
+      { name: 'onOpenChange', type: '(open: boolean) => void' },
+    ].map((property) => ({
+      ...property,
       description: docsCopy('以受控或非受控方式管理打开状态。'),
-      type: 'boolean / boolean / (open: boolean) => void',
-    },
+    })),
     {
       name: 'contentProps',
       description: docsCopy(
@@ -10883,6 +11076,83 @@ componentDocumentation.command.typePreviews = [
     ],
   },
 ];
+
+const semanticStyleContracts = {
+  'alert-dialog': {
+    componentName: 'AlertDialog',
+    slots: ['content'],
+  },
+  badge: { componentName: 'Badge', slots: ['indicator'] },
+  carousel: { componentName: 'Carousel', slots: ['content', 'item'] },
+  collapsible: {
+    componentName: 'Collapsible',
+    slots: ['content', 'header'],
+  },
+  'context-menu': { componentName: 'ContextMenu', slots: ['content'] },
+  counter: { componentName: 'Counter', slots: ['digit', 'visual'] },
+  'date-picker': {
+    componentName: 'DatePicker',
+    slots: ['calendar', 'trigger'],
+  },
+  dialog: { componentName: 'Dialog', slots: ['content'] },
+  drawer: { componentName: 'Drawer', slots: ['content'] },
+  'dropdown-menu': { componentName: 'DropdownMenu', slots: ['content'] },
+  popover: { componentName: 'Popover', slots: ['content'] },
+  select: { componentName: 'Select', slots: ['trigger'] },
+  tabs: {
+    componentName: 'Tabs',
+    slots: ['indicator', 'list', 'panel', 'tab', 'viewport'],
+  },
+  tooltip: { componentName: 'Tooltip', slots: ['content'] },
+} as const;
+
+for (const [slug, contract] of Object.entries(semanticStyleContracts)) {
+  const documentation = componentDocumentation[slug];
+  const classNamesType = `${contract.componentName}ClassNames`;
+  const stylesType = `${contract.componentName}Styles`;
+
+  documentation.api.push(
+    {
+      name: 'classNames',
+      description: docsCopy('扩展对应语义槽位的 className。'),
+      type: classNamesType,
+    },
+    {
+      name: 'styles',
+      description: docsCopy('按与 classNames 相同的语义区域设置行内样式。'),
+      type: stylesType,
+    }
+  );
+  documentation.typeDefinitionGroups = [
+    ...new Set([
+      ...(documentation.typeDefinitionGroups ?? []),
+      classNamesType,
+      stylesType,
+    ]),
+  ];
+  documentation.typePreviews = [
+    ...(documentation.typePreviews ?? []),
+    {
+      name: classNamesType,
+      declaration: '{',
+      api: contract.slots.map((name) => ({
+        name,
+        description: docsCopy('扩展对应语义槽位的 className。'),
+        type: 'string',
+      })),
+    },
+    {
+      name: stylesType,
+      declaration: '{',
+      api: contract.slots.map((name) => ({
+        name,
+        description: docsCopy('设置对应语义槽位的行内样式。'),
+        type: 'React.CSSProperties',
+      })),
+    },
+  ];
+}
+
 componentDocumentation.command.parts = [
   {
     name: 'Command',
@@ -10925,7 +11195,7 @@ customTableDocumentation.summary = docsCopy(
 );
 customTableDocumentation.whenToUse = [
   docsCopy(
-    '常规业务数据列表使用 data 与 TableColumn，快速获得搜索、排序、分页、选择、展开和虚拟滚动。'
+    '常规业务数据列表使用 data 与 Table.Column，快速获得搜索、排序、分页、选择、展开和虚拟滚动。'
   ),
   docsCopy(
     '数据已经完成加工，或结构无法由列模型表达时，使用 Table.Primitive 作为根并组合 Table.Header、Table.Body、Table.Row 与 Table.Cell。'
@@ -10938,11 +11208,14 @@ customTableDocumentation.examples = [
   ...managedTableDocumentation.examples,
   ...customTableDocumentation.examples,
 ];
-customTableDocumentation.typeDefinitionGroups =
-  managedTableDocumentation.typeDefinitionGroups;
+customTableDocumentation.typeDefinitionGroups = [
+  ...(managedTableDocumentation.typeDefinitionGroups ?? []),
+  'Table.PrimitiveClassNames',
+  'Table.PrimitiveStyles',
+];
 customTableDocumentation.semanticDom = {
   description: docsCopy(
-    '悬停、聚焦或点击右侧属性行，查看 className 与 TableClassNames 各字段对应的真实数据表区域。'
+    '悬停、聚焦或点击右侧属性行，查看 classNames 与 styles 各字段对应的真实数据表区域。'
   ),
   preview: <TableSemanticDomDemo />,
 };

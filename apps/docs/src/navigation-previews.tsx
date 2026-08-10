@@ -324,7 +324,7 @@ export const TabsVariantsDemo = () => {
             },
           ]}
           variant={variant}
-          viewportClassName="tabs-variants-viewport"
+          classNames={{ viewport: 'tabs-variants-viewport' }}
         />
       </div>
     </div>
@@ -467,8 +467,8 @@ export const TabsMotionDemo = () => {
           animation={animation}
           centered
           defaultValue="design"
+          classNames={{ viewport: 'tabs-motion-viewport' }}
           variant="soft"
-          viewportClassName="tabs-motion-viewport"
           items={[
             {
               value: 'design',

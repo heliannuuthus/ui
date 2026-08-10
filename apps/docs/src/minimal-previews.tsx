@@ -222,7 +222,7 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
     </DirectionProvider>
   ),
   table: (
-    <Table.Primitive className="minimal-table">
+    <Table.Primitive classNames={{ table: 'minimal-table' }}>
       <Table.Header>
         <Table.Row>
           <Table.Head>{docsCopy('组件')}</Table.Head>

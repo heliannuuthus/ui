@@ -6,14 +6,22 @@ import { cn } from '../lib/utils';
 import { Button } from './button';
 import type { DataAttributes, OpenStateProps } from './internal/public-types';
 
+type DialogClassNames = {
+  content?: string;
+};
+
+type DialogStyles = {
+  content?: React.CSSProperties;
+};
+
 type DialogProps = OpenStateProps & {
   cancelText?: React.ReactNode;
   children?: React.ReactNode;
   confirmText?: React.ReactNode;
-  contentClassName?: string;
+  classNames?: DialogClassNames;
   contentProps?: Omit<
     React.HTMLAttributes<HTMLDivElement>,
-    'children' | 'className'
+    'children' | 'className' | 'style'
   > &
     DataAttributes;
   disablePointerDismissal?: boolean;
@@ -21,6 +29,7 @@ type DialogProps = OpenStateProps & {
   footer?: React.ReactNode;
   onConfirm?: () => void;
   showCloseButton?: boolean;
+  styles?: DialogStyles;
   title?: React.ReactNode;
   trigger?: React.ReactElement;
 };
@@ -29,12 +38,13 @@ const Dialog = ({
   cancelText,
   children,
   confirmText,
-  contentClassName,
+  classNames,
   contentProps,
   description,
   footer,
   onConfirm,
   showCloseButton = true,
+  styles,
   title,
   trigger,
   ...props
@@ -57,8 +67,9 @@ const Dialog = ({
           {...contentProps}
           className={cn(
             'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-6 rounded-4xl bg-popover p-6 text-sm text-popover-foreground shadow-xl ring-1 ring-foreground/5 duration-100 outline-none sm:max-w-md dark:ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
-            contentClassName
+            classNames?.content
           )}
+          style={styles?.content}
         >
           {hasHeader ? (
             <div data-slot="dialog-header" className="flex flex-col gap-1.5">
@@ -120,4 +131,4 @@ const Dialog = ({
   );
 };
 
-export { Dialog, type DialogProps };
+export { Dialog, type DialogClassNames, type DialogProps, type DialogStyles };

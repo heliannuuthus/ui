@@ -2,51 +2,52 @@
 
 import * as React from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { ChevronRightIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
 import { Tooltip } from './tooltip';
 
 type TableCellAlign = 'start' | 'center' | 'end';
 type TableCellFixed = 'start' | 'end';
+type TableEllipsis = boolean | React.ReactNode;
 
-type TablePrimitiveProps = React.ComponentProps<'table'> & {
-  containerClassName?: string;
+type TablePrimitiveSemanticSlot = 'container' | 'table';
+
+interface TablePrimitiveClassNames {
+  container?: string;
+  table?: string;
+}
+
+interface TablePrimitiveStyles {
+  container?: React.CSSProperties;
+  table?: React.CSSProperties;
+}
+
+type TablePrimitiveProps = Omit<
+  React.ComponentProps<'table'>,
+  'className' | 'style'
+> & {
+  classNames?: TablePrimitiveClassNames;
   containerRef?: React.Ref<HTMLDivElement>;
-  containerStyle?: React.CSSProperties;
+  styles?: TablePrimitiveStyles;
 };
 
 type TableHeadProps = Omit<React.ComponentProps<'th'>, 'align'> & {
   align?: TableCellAlign;
-  ellipsis?: boolean;
-  ellipsisTooltip?: React.ReactNode;
+  ellipsis?: TableEllipsis;
   fixed?: TableCellFixed;
   fixedOffset?: number | string;
 };
 
 type TableCellProps = Omit<React.ComponentProps<'td'>, 'align'> & {
   align?: TableCellAlign;
-  ellipsis?: boolean;
-  ellipsisTooltip?: React.ReactNode;
+  ellipsis?: TableEllipsis;
   fixed?: TableCellFixed;
   fixedOffset?: number | string;
 };
 
-type TableExpandButtonProps = Omit<
-  React.ComponentProps<'button'>,
-  'aria-expanded'
-> & {
-  expanded: boolean;
-  onExpandedChange?: (expanded: boolean) => void;
-};
+type TableRowProps = React.ComponentProps<'tr'>;
 
-type TableExpandedRowProps = Omit<React.ComponentProps<'tr'>, 'children'> & {
-  cellClassName?: string;
-  children: React.ReactNode;
-  colSpan: number;
-};
-
-type TableRowProps = React.ComponentProps<'tr'> & {
+type TableVirtualRowProps = TableRowProps & {
   'data-virtual-index'?: number;
 };
 
@@ -54,7 +55,10 @@ type TableVirtualBodyProps<TItem> = Omit<
   React.ComponentProps<'tbody'>,
   'children'
 > & {
-  children: (item: TItem, index: number) => React.ReactElement<TableRowProps>;
+  children: (
+    item: TItem,
+    index: number
+  ) => React.ReactElement<TableVirtualRowProps>;
   colSpan: number;
   getItemKey?: (item: TItem, index: number) => React.Key;
   items: readonly TItem[];
@@ -149,10 +153,9 @@ const TableEllipsisContent = ({
 };
 
 const TableRoot = ({
-  className,
-  containerClassName,
+  classNames,
   containerRef,
-  containerStyle,
+  styles,
   ...props
 }: TablePrimitiveProps) => {
   const [containerElement, setContainerElement] =
@@ -174,12 +177,13 @@ const TableRoot = ({
       <div
         ref={handleContainerRef}
         data-slot="table-container"
-        className={cn('relative w-full overflow-auto', containerClassName)}
-        style={containerStyle}
+        className={cn('relative w-full overflow-auto', classNames?.container)}
+        style={styles?.container}
       >
         <table
           data-slot="table"
-          className={cn('w-full caption-bottom text-sm', className)}
+          className={cn('w-full text-sm', classNames?.table)}
+          style={styles?.table}
           {...props}
         />
       </div>
@@ -194,7 +198,10 @@ const TableHeader = ({
   return (
     <thead
       data-slot="table-header"
-      className={cn('[&_tr]:border-b', className)}
+      className={cn(
+        'sticky top-0 z-20 bg-background [&_tr]:border-b',
+        className
+      )}
       {...props}
     />
   );
@@ -328,18 +335,19 @@ const TableHead = ({
   children,
   className,
   ellipsis = false,
-  ellipsisTooltip,
   fixed,
   fixedOffset = 0,
   style,
   title,
   ...props
 }: TableHeadProps) => {
+  const ellipsisEnabled = ellipsis != null && ellipsis !== false;
+
   return (
     <th
       data-slot="table-head"
       data-align={align}
-      data-ellipsis={ellipsis || undefined}
+      data-ellipsis={ellipsisEnabled || undefined}
       data-fixed={fixed}
       className={cn(
         'h-12 bg-inherit px-3 align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0',
@@ -349,12 +357,12 @@ const TableHead = ({
         className
       )}
       style={getFixedCellStyle(fixed, fixedOffset, style)}
-      title={ellipsis ? undefined : title}
+      title={ellipsisEnabled ? undefined : title}
       {...props}
     >
-      {ellipsis ? (
+      {ellipsisEnabled ? (
         <TableEllipsisContent
-          tooltipContent={ellipsisTooltip ?? title ?? children}
+          tooltipContent={ellipsis === true ? (title ?? children) : ellipsis}
         >
           {children}
         </TableEllipsisContent>
@@ -370,18 +378,19 @@ const TableCell = ({
   children,
   className,
   ellipsis = false,
-  ellipsisTooltip,
   fixed,
   fixedOffset = 0,
   style,
   title,
   ...props
 }: TableCellProps) => {
+  const ellipsisEnabled = ellipsis != null && ellipsis !== false;
+
   return (
     <td
       data-slot="table-cell"
       data-align={align}
-      data-ellipsis={ellipsis || undefined}
+      data-ellipsis={ellipsisEnabled || undefined}
       data-fixed={fixed}
       className={cn(
         'bg-inherit p-3 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0',
@@ -391,12 +400,12 @@ const TableCell = ({
         className
       )}
       style={getFixedCellStyle(fixed, fixedOffset, style)}
-      title={ellipsis ? undefined : title}
+      title={ellipsisEnabled ? undefined : title}
       {...props}
     >
-      {ellipsis ? (
+      {ellipsisEnabled ? (
         <TableEllipsisContent
-          tooltipContent={ellipsisTooltip ?? title ?? children}
+          tooltipContent={ellipsis === true ? (title ?? children) : ellipsis}
         >
           {children}
         </TableEllipsisContent>
@@ -407,107 +416,25 @@ const TableCell = ({
   );
 };
 
-const TableExpandButton = ({
-  'aria-label': ariaLabel,
-  children,
-  className,
-  expanded,
-  onClick,
-  onExpandedChange,
-  ...props
-}: TableExpandButtonProps) => {
-  return (
-    <button
-      type="button"
-      aria-expanded={expanded}
-      aria-label={ariaLabel ?? (expanded ? '收起行' : '展开行')}
-      data-slot="table-expand-button"
-      data-state={expanded ? 'expanded' : 'collapsed'}
-      className={cn(
-        'inline-flex size-7 items-center justify-center rounded-full text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/30',
-        className
-      )}
-      onClick={(event) => {
-        onClick?.(event);
-        if (!event.defaultPrevented) onExpandedChange?.(!expanded);
-      }}
-      {...props}
-    >
-      {children ?? (
-        <ChevronRightIcon
-          aria-hidden="true"
-          className={cn(
-            'size-4 transition-transform duration-200 motion-reduce:transition-none',
-            expanded && 'rotate-90'
-          )}
-        />
-      )}
-    </button>
-  );
-};
-
-const TableExpandedRow = ({
-  cellClassName,
-  children,
-  className,
-  colSpan,
-  ...props
-}: TableExpandedRowProps) => {
-  return (
-    <tr
-      data-slot="table-expanded-row"
-      className={cn('border-b', className)}
-      {...props}
-    >
-      <td
-        colSpan={colSpan}
-        data-slot="table-expanded-cell"
-        className={cn(
-          'bg-muted/35 p-4 whitespace-normal text-muted-foreground',
-          cellClassName
-        )}
-      >
-        {children}
-      </td>
-    </tr>
-  );
-};
-
-const TableCaption = ({
-  className,
-  ...props
-}: React.ComponentProps<'caption'>) => {
-  return (
-    <caption
-      data-slot="table-caption"
-      className={cn('mt-4 text-sm text-muted-foreground', className)}
-      {...props}
-    />
-  );
-};
-
-const TablePrimitive = Object.assign(TableRoot, {
-  Body: TableBody,
-  Caption: TableCaption,
-  Cell: TableCell,
-  ExpandedRow: TableExpandedRow,
-  ExpandButton: TableExpandButton,
-  Footer: TableFooter,
-  Head: TableHead,
-  Header: TableHeader,
-  Row: TableRow,
-  VirtualBody: TableVirtualBody,
-});
+const TablePrimitive = TableRoot;
 
 export {
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
   TablePrimitive,
+  TableRow,
+  TableVirtualBody,
   type TableCellAlign,
   type TableCellFixed,
   type TableCellProps,
-  type TableExpandButtonProps,
-  type TableExpandedRowProps,
+  type TableEllipsis,
   type TableHeadProps,
+  type TablePrimitiveClassNames,
   type TablePrimitiveProps,
-  type TableRowProps,
+  type TablePrimitiveSemanticSlot,
+  type TablePrimitiveStyles,
   type TableVirtualBodyProps,
 };

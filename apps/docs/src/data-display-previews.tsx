@@ -1,6 +1,7 @@
 import { docsCopy } from './i18n/content';
 import { Fragment, useRef, useState, type Key } from 'react';
 import { Accordion } from '@heliannuuthus/ui';
+import { Alert } from '@heliannuuthus/ui';
 import { Attachment } from '@heliannuuthus/ui';
 import { Avatar } from '@heliannuuthus/ui';
 import { Badge } from '@heliannuuthus/ui';
@@ -9,11 +10,7 @@ import { Carousel, type CarouselRef } from '@heliannuuthus/ui';
 import { Chart, type ChartConfig } from '@heliannuuthus/ui';
 import { Collapsible } from '@heliannuuthus/ui';
 import { Counter } from '@heliannuuthus/ui';
-import {
-  Table,
-  type TableColumn,
-  type TableSortState,
-} from '@heliannuuthus/ui';
+import { Table } from '@heliannuuthus/ui';
 import { DropdownMenu } from '@heliannuuthus/ui';
 import { Empty } from '@heliannuuthus/ui';
 import { Item } from '@heliannuuthus/ui';
@@ -22,6 +19,7 @@ import { Bubble } from '@heliannuuthus/ui';
 import { Pagination } from '@heliannuuthus/ui';
 import { ScrollArea } from '@heliannuuthus/ui';
 import { Slider } from '@heliannuuthus/ui';
+import { Stack } from '@heliannuuthus/ui';
 import { Switch } from '@heliannuuthus/ui';
 import { Tooltip } from '@heliannuuthus/ui';
 import {
@@ -33,6 +31,7 @@ import {
   Check,
   CheckCircle2,
   ChevronRight,
+  CircleAlert,
   CircleDot,
   Cloud,
   Download,
@@ -1087,9 +1086,8 @@ export const CarouselClassNamesDemo = () => (
   <Carousel
     aria-label={docsCopy('自定义轨道与项目宽度')}
     className="display-carousel"
-    contentClassName="gap-3"
+    classNames={{ content: 'gap-3', item: 'basis-2/3 pl-3' }}
     controls={false}
-    itemClassName="basis-2/3 pl-3"
     items={releaseHighlights.map((highlight) => (
       <div className="rounded-3xl border p-6" key={highlight.title}>
         <strong>{highlight.title}</strong>
@@ -1275,6 +1273,7 @@ export const CollapsibleBasicDemo = () => {
   return (
     <Collapsible
       className="display-collapsible-basic"
+      classNames={{ content: 'display-collapsible-basic-content' }}
       content={
         <p>
           {docsCopy(
@@ -1282,7 +1281,6 @@ export const CollapsibleBasicDemo = () => {
           )}
         </p>
       }
-      contentClassName="display-collapsible-basic-content"
       defaultOpen
       header={
         <div className="display-collapsible-summary">
@@ -1298,6 +1296,10 @@ const CollapsibleBuildDemo = () => {
   return (
     <Collapsible
       className="display-build-log"
+      classNames={{
+        content: 'display-build-content',
+        header: 'display-build-summary',
+      }}
       defaultOpen
       header={
         <>
@@ -1311,7 +1313,6 @@ const CollapsibleBuildDemo = () => {
           <Badge variant="secondary">{docsCopy('成功')}</Badge>
         </>
       }
-      headerClassName="display-build-summary"
       icon={<ChevronRight />}
       content={
         <code>
@@ -1322,7 +1323,6 @@ const CollapsibleBuildDemo = () => {
           <span>21:43:02</span> 42 browser checks passed
         </code>
       }
-      contentClassName="display-build-content"
       footer={
         <>
           <span>{docsCopy('日志保留 30 天')}</span>
@@ -1339,10 +1339,13 @@ const CollapsiblePolicyDemo = () => {
   return (
     <Collapsible
       className="display-build-log display-policy"
+      classNames={{
+        content: 'display-policy-content',
+        header: 'display-build-summary',
+      }}
       trigger={docsCopy('配置')}
       triggerIcon={<ChevronRight />}
       triggerProps={{ size: 'sm', variant: 'outline' }}
-      headerClassName="display-build-summary"
       header={
         <div className="display-build-summary">
           <div className="display-status-icon">
@@ -1370,7 +1373,6 @@ const CollapsiblePolicyDemo = () => {
           </div>
         </div>
       }
-      contentClassName="display-policy-content"
       footer={
         <>
           <span>{docsCopy('仅影响下一次生产发布')}</span>
@@ -1440,7 +1442,7 @@ export const CollapsibleHeaderIconDemo = ({
                   : docsCopy('使用组件内置的方向图标反馈展开状态。')}
             </p>
           }
-          contentClassName="display-collapsible-compact-content"
+          classNames={{ content: 'display-collapsible-compact-content' }}
           header={
             <div className="display-collapsible-summary">
               <strong>{docsCopy('部署记录')}</strong>
@@ -1464,8 +1466,8 @@ export const CollapsibleStateDemo = ({
   return (
     <Collapsible
       className="display-collapsible-basic"
+      classNames={{ content: 'display-collapsible-basic-content' }}
       content={<p>{docsCopy('展开状态由调用方读取和更新。')}</p>}
-      contentClassName="display-collapsible-basic-content"
       disabled={mode === 'disabled'}
       header={
         <div className="display-collapsible-summary">
@@ -1523,6 +1525,23 @@ const releaseRecords: ReleaseRecord[] = [
   },
 ];
 
+const manualReleaseRecords: ReleaseRecord[] = Array.from(
+  { length: 20 },
+  (_, index) => ({
+    version: `v0.${12 - Math.floor(index / 4)}.${3 - (index % 4)}`,
+    environment: docsCopy(
+      index % 4 === 0 ? '生产' : index % 4 === 1 ? '预览' : '测试'
+    ),
+    owner: [docsCopy('林默'), docsCopy('周一'), docsCopy('许澄')][index % 3],
+    status:
+      index % 11 === 0
+        ? docsCopy('回滚')
+        : index % 5 === 0
+          ? docsCopy('运行中')
+          : docsCopy('成功'),
+  })
+);
+
 type VirtualTableRecord = {
   id: string;
   latency: string;
@@ -1547,10 +1566,10 @@ const virtualTableRecords: VirtualTableRecord[] = Array.from(
   })
 );
 
-const releaseColumns: TableColumn<ReleaseRecord>[] = [
+const releaseColumns: Table.Column<ReleaseRecord>[] = [
   {
     accessor: 'version',
-    cellClassName: 'font-medium',
+    classNames: { cell: 'font-medium' },
     fixed: 'start',
     header: docsCopy('版本'),
     sortable: true,
@@ -1582,13 +1601,20 @@ const releaseColumns: TableColumn<ReleaseRecord>[] = [
     header: docsCopy('操作'),
     width: 144,
     render: (_, row) => (
-      <Table.Actions aria-label={docsCopy(`${row.version} 操作`)}>
+      <Stack
+        align="center"
+        aria-label={docsCopy(`${row.version} 操作`)}
+        gap={4}
+        justify="center"
+        orientation="horizontal"
+        role="group"
+      >
         <Button size="xs" variant="ghost">
           {docsCopy('查看')}
         </Button>
         <DropdownMenu
           align="end"
-          contentClassName="w-44"
+          classNames={{ content: 'w-44' }}
           trigger={
             <Button
               aria-label={docsCopy(`${row.version} 更多操作`)}
@@ -1609,12 +1635,12 @@ const releaseColumns: TableColumn<ReleaseRecord>[] = [
             },
           ]}
         />
-      </Table.Actions>
+      </Stack>
     ),
   },
 ];
 
-const groupedReleaseColumns: TableColumn<ReleaseRecord>[] = [
+const groupedReleaseColumns: Table.Column<ReleaseRecord>[] = [
   {
     key: 'release',
     header: docsCopy('发布信息'),
@@ -1666,34 +1692,39 @@ const groupedReleaseColumns: TableColumn<ReleaseRecord>[] = [
         align: 'center',
         header: docsCopy('记录'),
         render: (_, row) => (
-          <Table.Actions aria-label={docsCopy(`${row.version} 操作`)}>
+          <Stack
+            align="center"
+            aria-label={docsCopy(`${row.version} 操作`)}
+            gap={4}
+            justify="center"
+            orientation="horizontal"
+            role="group"
+          >
             <Button size="xs" variant="outline">
               {row.status === docsCopy('运行中')
                 ? docsCopy('监控')
                 : docsCopy('详情')}
             </Button>
-          </Table.Actions>
+          </Stack>
         ),
       },
     ],
   },
 ];
 
-const virtualTableColumns: TableColumn<VirtualTableRecord>[] = [
+const virtualTableColumns: Table.Column<VirtualTableRecord>[] = [
   {
     accessor: 'id',
-    cellClassName: 'font-medium',
+    classNames: { cell: 'font-medium' },
     fixed: 'start',
     header: docsCopy('事件'),
     width: 128,
   },
   {
     accessor: 'service',
+    classNames: { header: 'font-semibold' },
     ellipsis: true,
-    ellipsisTooltip: (value) => docsCopy(`服务：${String(value)}`),
     header: docsCopy('服务'),
-    headerClassName: 'font-semibold',
-    headerEllipsis: true,
     width: 256,
   },
   {
@@ -1705,6 +1736,7 @@ const virtualTableColumns: TableColumn<VirtualTableRecord>[] = [
     accessor: 'latency',
     align: 'end',
     header: docsCopy('延迟'),
+    styles: { cell: { fontVariantNumeric: 'tabular-nums' } },
     width: 128,
   },
   {
@@ -1714,11 +1746,18 @@ const virtualTableColumns: TableColumn<VirtualTableRecord>[] = [
     header: docsCopy('操作'),
     width: 112,
     render: (_, row) => (
-      <Table.Actions aria-label={docsCopy(`${row.id} 操作`)}>
+      <Stack
+        align="center"
+        aria-label={docsCopy(`${row.id} 操作`)}
+        gap={4}
+        justify="center"
+        orientation="horizontal"
+        role="group"
+      >
         <Button size="xs" variant="ghost">
           {docsCopy('查看')}
         </Button>
-      </Table.Actions>
+      </Stack>
     ),
   },
 ];
@@ -1727,10 +1766,8 @@ export const TableManagedDemo = () => {
   return (
     <div className="display-table-managed">
       <Table
-        caption={docsCopy('最近五次生产与预览环境发布。')}
         columns={releaseColumns}
         data={releaseRecords}
-        empty={docsCopy('没有匹配的发布记录')}
         footer={(rows) => docsCopy(`当前页 ${rows.length} 条发布记录`)}
         rowKey="version"
         search={{
@@ -1750,7 +1787,7 @@ export const TableManagedDemo = () => {
           renderSummary: (total, current, pageCount) =>
             docsCopy(`共 ${total} 项 · 第 ${current} / ${pageCount} 页`),
         }}
-        tableProps={{ className: 'min-w-[820px] table-fixed' }}
+        classNames={{ table: 'min-w-[820px]' }}
       />
     </div>
   );
@@ -1789,7 +1826,7 @@ export const TableManagedExpandableDemo = () => {
         }}
         rowKey="version"
         pagination={false}
-        tableProps={{ className: 'min-w-[640px] table-fixed' }}
+        classNames={{ table: 'min-w-[640px]' }}
       />
     </div>
   );
@@ -1801,8 +1838,7 @@ export const TableGroupedHeaderDemo = () => {
       <Table
         columns={groupedReleaseColumns}
         data={releaseRecords}
-        empty={docsCopy('暂无发布记录')}
-        tableProps={{ className: 'min-w-[660px] table-fixed' }}
+        classNames={{ table: 'min-w-[660px]' }}
       />
     </div>
   );
@@ -1816,7 +1852,7 @@ export const TableManagedVirtualDemo = () => {
         data={virtualTableRecords}
         rowKey="id"
         pagination={false}
-        tableProps={{ className: 'min-w-[900px] table-fixed' }}
+        classNames={{ table: 'min-w-[900px]' }}
         virtual={{
           containerHeight: 320,
           overscan: 8,
@@ -1828,7 +1864,7 @@ export const TableManagedVirtualDemo = () => {
 };
 
 export const TableControlledStateDemo = () => {
-  const [sort, setSort] = useState<TableSortState | null>(null);
+  const [sort, setSort] = useState<Table.SortState | null>(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [page, setPage] = useState(1);
 
@@ -1860,10 +1896,10 @@ export const TableControlledStateDemo = () => {
 
 export const TableManualModeDemo = () => {
   const [query, setQuery] = useState('');
-  const [sort, setSort] = useState<TableSortState | null>(null);
+  const [sort, setSort] = useState<Table.SortState | null>(null);
   const [page, setPage] = useState(1);
-  const pageSize = 2;
-  const filteredRows = releaseRecords.filter((row) =>
+  const pageSize = 6;
+  const filteredRows = manualReleaseRecords.filter((row) =>
     row.version.toLocaleLowerCase().includes(query.toLocaleLowerCase())
   );
   const sortedRows = [...filteredRows].sort((left, right) => {
@@ -1913,17 +1949,52 @@ export const TableStatusDemo = ({
 }: {
   state: 'empty' | 'error' | 'loading';
 }) => {
+  if (state === 'error') {
+    return (
+      <div className="display-table-status-standalone">
+        <Alert
+          action={
+            <Button size="xs" variant="outline">
+              <RotateCcw />
+              {docsCopy('重试')}
+            </Button>
+          }
+          className="display-table-status-alert"
+          description={docsCopy('请求未完成，请检查网络后重新加载。')}
+          icon={<CircleAlert />}
+          title={docsCopy('发布记录加载失败')}
+          variant="error"
+        />
+      </div>
+    );
+  }
+
+  if (state === 'empty') {
+    return (
+      <div className="display-table-status-standalone">
+        <Empty
+          actions={
+            <Button size="sm" variant="outline">
+              <RotateCcw />
+              {docsCopy('清除筛选')}
+            </Button>
+          }
+          className="display-table-status-empty"
+          description={docsCopy('尝试缩短关键词或清除当前筛选条件。')}
+          icon={<Inbox />}
+          title={docsCopy('没有匹配的发布记录')}
+        />
+      </div>
+    );
+  }
+
   return (
     <Table
+      className="display-table-status"
+      classNames={{ state: 'display-table-status-cell' }}
       columns={releaseColumns.slice(0, 3)}
-      data={state === 'empty' ? [] : releaseRecords.slice(0, 2)}
-      empty={docsCopy('没有匹配的发布记录')}
-      error={
-        state === 'error'
-          ? docsCopy('发布记录加载失败，请稍后重试。')
-          : undefined
-      }
-      loading={state === 'loading'}
+      data={releaseRecords.slice(0, 2)}
+      loading
       pagination={false}
       rowKey="version"
     />
@@ -2386,9 +2457,6 @@ export const TableReleaseDemo = () => {
   return (
     <div className="display-table-shell">
       <Table.Primitive>
-        <Table.Caption>
-          {docsCopy('今晚 22:00 发布窗口中的服务。')}
-        </Table.Caption>
         <Table.Header>
           <Table.Row>
             <Table.Head>{docsCopy('服务')}</Table.Head>
@@ -2422,7 +2490,7 @@ export const TableReleaseDemo = () => {
         <Table.Footer>
           <Table.Row>
             <Table.Cell colSpan={3}>{docsCopy('已就绪服务')}</Table.Cell>
-            <Table.Cell>2 / 3</Table.Cell>
+            <Table.Cell align="center">2 / 3</Table.Cell>
           </Table.Row>
         </Table.Footer>
       </Table.Primitive>
@@ -2506,7 +2574,7 @@ const fixedTableRows = [
 export const TableFixedDemo = () => {
   return (
     <div className="display-table-shell display-table-wide">
-      <Table.Primitive className="min-w-[960px] table-fixed">
+      <Table.Primitive classNames={{ table: 'min-w-[960px] table-fixed' }}>
         <Table.Header>
           <Table.Row>
             <Table.Head fixed="start" className="w-40">
@@ -2563,92 +2631,6 @@ export const TableFixedDemo = () => {
             )
           )}
         </Table.Body>
-      </Table.Primitive>
-    </div>
-  );
-};
-
-const virtualTableRows = Array.from({ length: 1000 }, (_, index) => ({
-  id: `EVT-${String(index + 1).padStart(4, '0')}`,
-  service: ['Web Console', 'Auth API', 'Event Worker', 'Search Indexer'][
-    index % 4
-  ],
-  region: [
-    docsCopy('华东'),
-    docsCopy('华北'),
-    docsCopy('新加坡'),
-    docsCopy('法兰克福'),
-  ][index % 4],
-  latency: `${32 + ((index * 17) % 180)} ms`,
-  requests: `${(18.4 + ((index * 13) % 720) / 10).toFixed(1)}k`,
-  status: index % 9 === 0 ? docsCopy('观察') : docsCopy('健康'),
-}));
-
-const getVirtualTableRowKey = (row: (typeof virtualTableRows)[number]) => {
-  return row.id;
-};
-
-export const TableVirtualScrollDemo = () => {
-  return (
-    <div className="display-table-shell display-table-wide">
-      <div className="display-table-virtual-meta">
-        <span>{docsCopy('1,000 条单行数据')}</span>
-        <small>{docsCopy('当前仅渲染可视区域附近的行')}</small>
-      </div>
-      <Table.Primitive
-        aria-rowcount={virtualTableRows.length + 1}
-        className="min-w-[820px] table-fixed"
-        containerClassName="max-h-80"
-      >
-        <Table.Header>
-          <Table.Row>
-            <Table.Head fixed="start" className="w-32">
-              {docsCopy('事件')}
-            </Table.Head>
-            <Table.Head className="w-52">{docsCopy('服务')}</Table.Head>
-            <Table.Head className="w-32">{docsCopy('区域')}</Table.Head>
-            <Table.Head align="end" className="w-32">
-              {docsCopy('延迟')}
-            </Table.Head>
-            <Table.Head align="end" className="w-36">
-              {docsCopy('每分钟请求')}
-            </Table.Head>
-            <Table.Head fixed="end" align="center" className="w-28">
-              {docsCopy('操作')}
-            </Table.Head>
-          </Table.Row>
-        </Table.Header>
-        <Table.VirtualBody
-          colSpan={6}
-          items={virtualTableRows}
-          getItemKey={getVirtualTableRowKey}
-          rowHeight={48}
-          overscan={8}
-        >
-          {(row) => (
-            <Table.Row>
-              <Table.Cell fixed="start" className="font-medium">
-                {row.id}
-              </Table.Cell>
-              <Table.Cell>{row.service}</Table.Cell>
-              <Table.Cell>{row.region}</Table.Cell>
-              <Table.Cell align="end">{row.latency}</Table.Cell>
-              <Table.Cell align="end">{row.requests}</Table.Cell>
-              <Table.Cell fixed="end" align="center" className="py-2">
-                <Button
-                  aria-label={`${row.status === docsCopy('健康') ? docsCopy('查看') : docsCopy('排查')} ${row.id}`}
-                  size="xs"
-                  type="button"
-                  variant="ghost"
-                >
-                  {row.status === docsCopy('健康')
-                    ? docsCopy('查看')
-                    : docsCopy('排查')}
-                </Button>
-              </Table.Cell>
-            </Table.Row>
-          )}
-        </Table.VirtualBody>
       </Table.Primitive>
     </div>
   );
@@ -2793,13 +2775,18 @@ export const TableExpandableDemo = () => {
               <Fragment key={row.id}>
                 <Table.Row>
                   <Table.Cell>
-                    <Table.ExpandButton
+                    <Button
+                      aria-expanded={expanded}
                       aria-label={`${expanded ? docsCopy('收起') : docsCopy('展开')} ${row.id}`}
-                      expanded={expanded}
-                      onExpandedChange={(nextExpanded) =>
-                        setExpandedId(nextExpanded ? row.id : null)
-                      }
-                    />
+                      size="icon-xs"
+                      variant="ghost"
+                      onClick={() => setExpandedId(expanded ? null : row.id)}
+                    >
+                      <ChevronRight
+                        aria-hidden="true"
+                        className={expanded ? 'rotate-90' : undefined}
+                      />
+                    </Button>
                   </Table.Cell>
                   <Table.Cell className="font-medium">{row.id}</Table.Cell>
                   <Table.Cell>
@@ -2811,10 +2798,15 @@ export const TableExpandableDemo = () => {
                   <Table.Cell align="end">{row.duration}</Table.Cell>
                 </Table.Row>
                 {expanded ? (
-                  <Table.ExpandedRow colSpan={4}>
-                    <strong>{docsCopy('部署详情')}</strong>
-                    <p>{row.detail}</p>
-                  </Table.ExpandedRow>
+                  <Table.Row>
+                    <Table.Cell
+                      className="bg-muted/35 p-4 whitespace-normal text-muted-foreground"
+                      colSpan={4}
+                    >
+                      <strong>{docsCopy('部署详情')}</strong>
+                      <p>{row.detail}</p>
+                    </Table.Cell>
+                  </Table.Row>
                 ) : null}
               </Fragment>
             );
@@ -2865,16 +2857,13 @@ const TableActionCell = ({
 export const TableCellDemo = () => {
   return (
     <div className="display-table-shell display-table-wide">
-      <Table.Primitive className="min-w-[680px] table-fixed">
+      <Table.Primitive classNames={{ table: 'min-w-[680px] table-fixed' }}>
         <Table.Header>
           <Table.Row>
             <Table.Head className="w-52">{docsCopy('服务（靠左）')}</Table.Head>
             <Table.Head
-              ellipsis
+              ellipsis={docsCopy('服务说明、最近一次生产部署上下文与异常原因')}
               className="w-64"
-              ellipsisTooltip={docsCopy(
-                '服务说明、最近一次生产部署上下文与异常原因'
-              )}
             >
               {docsCopy('服务说明、最近一次生产部署上下文与异常原因')}
             </Table.Head>

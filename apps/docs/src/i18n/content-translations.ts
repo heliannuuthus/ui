@@ -1,10 +1,382 @@
 // English translations keyed by the canonical Chinese documentation copy.
 export const englishContentTranslations: Readonly<Record<string, string>> = {
+  '控制折叠区域前保留的路径项数量。':
+    'Control how many path items remain before the collapsed region.',
+  '控制折叠区域后保留的路径项数量。':
+    'Control how many path items remain after the collapsed region.',
+  '以受控方式管理菜单开关状态。':
+    'Manage the menu open state in controlled mode.',
+  '设置菜单非受控模式下的初始开关状态。':
+    'Set the initial menu open state in uncontrolled mode.',
+  '菜单开关状态变化时调用。': 'Called when the menu open state changes.',
+  '设置当前页。': 'Set the current page.',
+  '设置总页数。': 'Set the total page count.',
+  '自定义上一页按钮的可见文字。':
+    'Customize the visible text of the previous-page button.',
+  "'上一页'": "'Previous'",
+  '自定义下一页按钮的可见文字。':
+    'Customize the visible text of the next-page button.',
+  "'下一页'": "'Next'",
+  '在支持状态时设置受控值。': 'Set the controlled value when supported.',
+  '在支持状态时设置非受控初始值。':
+    'Set the initial uncontrolled value when supported.',
+  '提供头像图片资源。': 'Provide the avatar image source.',
+  '提供头像图片的替代文本。': 'Provide alternative text for the avatar image.',
+  '为组内头像和自动生成的计数项设置统一尺寸。':
+    'Set a consistent size for grouped avatars and generated count items.',
+  '为组内头像和自动生成的计数项设置统一形状。':
+    'Set a consistent shape for grouped avatars and generated count items.',
+  '以受控方式管理内容展开状态。':
+    'Manage the expanded content state in controlled mode.',
+  '设置数字字号。': 'Set the numeric font size.',
+  '设置数字字重。': 'Set the numeric font weight.',
+  '设置数字数位间距。': 'Set the spacing between numeric places.',
+  '在滚动数值前组合货币或其他视觉内容。':
+    'Place currency or other visual content before the rolling value.',
+  '在滚动数值后组合单位或其他视觉内容。':
+    'Place units or other visual content after the rolling value.',
+  '渲染表尾汇总；传入函数时会收到当前页可见数据。':
+    'Render a table footer summary; a function receives the visible rows on the current page.',
+  '控制是否渲染表头。': 'Control whether the table header is rendered.',
+  '提供稳定的业务行标识；省略时依次回退到记录的 key 和当前索引。':
+    'Provide a stable business row key; when omitted, fall back to the record key and then the current index.',
+  '根据当前记录与索引扩展 Row 的类名、事件和原生属性。':
+    'Extend Row classes, events, and native attributes from the current record and index.',
+  '配置搜索状态、字段范围与客户端或 manual 服务端模式。':
+    'Configure search state, field scope, and client or manual server mode.',
+  '配置排序的受控状态，以及客户端或 manual 服务端模式。':
+    'Configure controlled sorting state and client or manual server mode.',
+  '配置分页状态与摘要；设置为 false 时关闭分页。':
+    'Configure pagination state and summary; set false to disable pagination.',
+  '配置行选择的受控状态、禁用规则和可访问名称。':
+    'Configure controlled row selection, disabled rules, and accessible names.',
+  '配置行展开的受控状态、可展开规则和详情内容。':
+    'Configure controlled row expansion, expandable rules, and detail content.',
+  '启用固定行高的虚拟表体；不能与 expandable 同时使用。':
+    'Enable a fixed-row-height virtual body; it cannot be used with expandable.',
+  '设置列表项的媒体内容。': 'Set the media content of the list item.',
+  '选择媒体内容的普通、图标或图片外观。':
+    'Choose the default, icon, or image appearance for media content.',
+  '配置列表项对应的语义内容或尾部操作。':
+    'Configure the corresponding semantic content or trailing action of the list item.',
+  '设置气泡边缘回应或状态的纵向位置。':
+    'Set the vertical position of the response or status at the bubble edge.',
+  '设置气泡边缘回应或状态的横向对齐。':
+    'Set the horizontal alignment of the response or status at the bubble edge.',
+  '按文字书写方向设置内容靠起始侧、居中或靠末端。':
+    'Align content to the start, center, or end according to the writing direction.',
+  '将当前单元格固定在表格起始侧或末端。':
+    'Fix the current cell to the start or end of the table.',
+  '设置当前固定单元格前方同侧固定列的累计偏移。':
+    'Set the cumulative offset of preceding fixed columns on the same side.',
+  '传入 true 时在内容真实溢出后自动显示完整内容 Tooltip；传入 ReactNode 时以该节点作为 Tooltip 内容。':
+    'Pass true to show the full content in a Tooltip after actual overflow, or pass a ReactNode as the Tooltip content.',
+  '以受控方式管理 Tooltip。': 'Manage the Tooltip in controlled mode.',
+  '设置 Tooltip 非受控模式下的初始状态。':
+    'Set the initial Tooltip state in uncontrolled mode.',
+  '设置浮层相对触发器的对齐方式。':
+    'Set how the popup aligns relative to its trigger.',
+  '设置浮层沿首选方向与触发器的间距。':
+    'Set the popup spacing from its trigger along the preferred side.',
+  '设置浮层沿对齐轴的偏移。': 'Set the popup offset along the alignment axis.',
+  '设置 hover 模式打开前的等待时间，单位为毫秒。':
+    'Set the delay before opening in hover mode, in milliseconds.',
+  '设置 hover 模式关闭前的等待时间，单位为毫秒。':
+    'Set the delay before closing in hover mode, in milliseconds.',
+  '以受控方式管理浮层。': 'Manage the popup in controlled mode.',
+  '设置浮层非受控模式下的初始状态。':
+    'Set the initial popup state in uncontrolled mode.',
+  '设置进度范围的最小值，并同步无障碍数值。':
+    'Set the minimum progress value and synchronize its accessible value.',
+  '设置进度范围的最大值，并同步无障碍数值。':
+    'Set the maximum progress value and synchronize its accessible value.',
+  '设置受控原始数值；空输入使用 null。':
+    'Set the controlled raw value; an empty input uses null.',
+  '设置非受控模式的初始数值；空输入使用 null。':
+    'Set the initial uncontrolled value; an empty input uses null.',
+  '限制允许输入和步进到达的最小值。':
+    'Limit the minimum value accepted by input and stepping.',
+  '限制允许输入和步进到达的最大值。':
+    'Limit the maximum value accepted by input and stepping.',
+  '设置普通步进幅度。': 'Set the regular step amount.',
+  '设置 Alt 组合键对应的步进幅度。':
+    'Set the step amount used with the Alt key.',
+  '设置 Shift 组合键对应的步进幅度。':
+    'Set the step amount used with the Shift key.',
+  '使用 Intl.NumberFormatOptions 格式化显示值。':
+    'Format the displayed value with Intl.NumberFormatOptions.',
+  '设置格式化显示值使用的语言区域。':
+    'Set the locale used to format the displayed value.',
+  '在同一输入边框内展示固定前缀。':
+    'Display a fixed prefix inside the same input border.',
+  '在同一输入边框内展示固定单位后缀。':
+    'Display a fixed unit suffix inside the same input border.',
+  '配置原生输入提示。': 'Configure the native input placeholder.',
+  '配置原生自动填充提示。': 'Configure the native autocomplete hint.',
+  '配置软键盘输入模式。': 'Configure the soft-keyboard input mode.',
+  '本地化递增按钮的可访问名称。':
+    'Localize the accessible name of the increment button.',
+  '本地化递减按钮的可访问名称。':
+    'Localize the accessible name of the decrement button.',
+  '设置对应的原生表单语义。': 'Set the corresponding native form semantics.',
+  '选择是否允许悬停滚轮调整数值。':
+    'Choose whether hovering and using the mouse wheel adjusts the value.',
+  '选择步进时是否吸附到最近倍数。':
+    'Choose whether stepping snaps to the nearest multiple.',
+  '扩展输入、按钮等语义插槽样式。':
+    'Extend styles for semantic slots such as the input and buttons.',
+  '控制整列的文本截断与 Tooltip；设置为 true 时使用当前表头或单元格内容，传入 ReactNode 时使用该节点作为 Tooltip 内容。':
+    'Controls text truncation and Tooltip for the entire column; true uses the current header or cell content, while a ReactNode provides the Tooltip content.',
+  '按 header 与 cell 扩展当前列的类名。':
+    'Extend the current column class names by header and cell slots.',
+  '按 header 与 cell 设置当前列的行内样式。':
+    'Set inline styles on the current column by header and cell slots.',
+  '扩展当前列所有表头单元格的类名。':
+    'Extend the class name of every heading cell in the current column.',
+  '按列或当前记录扩展数据单元格的类名。':
+    'Extend data cell class names by column or current record.',
+  '设置当前列所有表头单元格的行内样式。':
+    'Set inline styles on every heading cell in the current column.',
+  '按列或当前记录设置数据单元格的行内样式。':
+    'Set data cell inline styles by column or current record.',
+  '传入 true 时在真实溢出后自动用完整内容作为 Tooltip；传入 ReactNode 时以该节点作为 Tooltip 内容。':
+    'Pass true to use the full content as the Tooltip after actual overflow, or pass a ReactNode to use it as the Tooltip content.',
+  'Head 与 Cell 的 ellipsis 只在文本真实溢出时启用 Tooltip，并允许键盘聚焦查看全文；传入 ReactNode 可直接替换 Tooltip 内容。':
+    'Head and Cell enable Tooltip only when ellipsis content actually overflows, allow keyboard focus to read the full text, and accept a ReactNode to replace the Tooltip content.',
+  '扩展数据表最外层根区域的类名。':
+    'Extend the class name of the outermost table root.',
+  '扩展搜索等表格级操作区域的类名。':
+    'Extend the class name of the table-level toolbar.',
+  '扩展滚动、边框与圆角容器的类名。':
+    'Extend the class name of the scrolling, bordered container.',
+  '扩展原生 table 节点的类名。':
+    'Extend the class name of the native table element.',
+  '扩展表头区域的类名。': 'Extend the class name of the table header.',
+  '扩展表体区域的类名。': 'Extend the class name of the table body.',
+  '扩展表尾汇总区域的类名。':
+    'Extend the class name of the table footer summary.',
+  '扩展内置加载与空数据状态单元格的类名。':
+    'Extend the class name of the built-in loading and empty-data state cell.',
+  '扩展分页摘要与翻页控件容器的类名。':
+    'Extend the class name of the pagination summary and controls container.',
+  '设置数据表最外层根区域的行内样式。':
+    'Set inline styles on the outermost table root.',
+  '设置搜索等表格级操作区域的行内样式。':
+    'Set inline styles on the table-level toolbar.',
+  '设置滚动、边框与圆角容器的行内样式。':
+    'Set inline styles on the scrolling, bordered container.',
+  '设置原生 table 节点的行内样式。':
+    'Set inline styles on the native table element.',
+  '设置表头区域的行内样式。': 'Set inline styles on the table header.',
+  '设置表体区域的行内样式。': 'Set inline styles on the table body.',
+  '设置表尾汇总区域的行内样式。':
+    'Set inline styles on the table footer summary.',
+  '设置内置加载与空数据状态单元格的行内样式。':
+    'Set inline styles on the built-in loading and empty-data state cell.',
+  '设置分页摘要与翻页控件容器的行内样式。':
+    'Set inline styles on the pagination summary and controls container.',
+  '按与 classNames 相同的语义区域设置行内样式。':
+    'Set inline styles using the same semantic slots as classNames.',
+  '设置对应语义槽位的行内样式。':
+    'Set inline styles on the corresponding semantic slot.',
+  '分别扩展滚动容器与原生 table 节点的类名。':
+    'Extend the class names of the scrolling container and native table element.',
+  '分别设置滚动容器与原生 table 节点的行内样式。':
+    'Set inline styles on the scrolling container and native table element.',
+  '引用内置滚动容器，用于外部滚动控制或尺寸观测。':
+    'Reference the built-in scrolling container for external scroll control or size observation.',
+  '扩展 Table.Primitive 滚动容器的类名。':
+    'Extend the class name of the Table.Primitive scrolling container.',
+  '扩展 Table.Primitive 原生 table 节点的类名。':
+    'Extend the class name of the native Table.Primitive table element.',
+  '设置 Table.Primitive 滚动容器的行内样式。':
+    'Set inline styles on the Table.Primitive scrolling container.',
+  '设置 Table.Primitive 原生 table 节点的行内样式。':
+    'Set inline styles on the native Table.Primitive table element.',
+  '悬停、聚焦或点击右侧属性行，查看 classNames 与 styles 各字段对应的真实数据表区域。':
+    'Hover, focus, or click a property row to see the actual table region mapped to each classNames and styles field.',
+  [`import { Table } from '@heliannuuthus/ui'
+import { Button } from '@heliannuuthus/ui'
+
+<Table.Primitive classNames={{ table: 'min-w-[960px] table-fixed' }}>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head fixed="start" className="w-40">服务</Table.Head>
+      <Table.Head className="w-28">版本</Table.Head>
+      <Table.Head className="w-28">区域</Table.Head>
+      <Table.Head className="w-32">最近部署</Table.Head>
+      <Table.Head fixed="end" align="center" className="w-24">操作</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell fixed="start">Web Console</Table.Cell>
+      <Table.Cell>v0.12.0</Table.Cell>
+      <Table.Cell fixed="end" align="center">
+        <Button
+          aria-label="监控 Web Console"
+          size="xs"
+          variant="ghost"
+        >
+          监控
+        </Button>
+      </Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table.Primitive>`]: `import { Table } from '@heliannuuthus/ui'
+import { Button } from '@heliannuuthus/ui'
+
+<Table.Primitive classNames={{ table: 'min-w-[960px] table-fixed' }}>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head fixed="start" className="w-40">Service</Table.Head>
+      <Table.Head className="w-28">Version</Table.Head>
+      <Table.Head className="w-28">Region</Table.Head>
+      <Table.Head className="w-32">Recently deployed</Table.Head>
+      <Table.Head fixed="end" align="center" className="w-24">Operation</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell fixed="start">Web Console</Table.Cell>
+      <Table.Cell>v0.12.0</Table.Cell>
+      <Table.Cell fixed="end" align="center">
+        <Button
+          aria-label="Monitoring Web Console"
+          size="xs"
+          variant="ghost"
+        >
+          Monitor
+        </Button>
+      </Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table.Primitive>`,
+  [`import { Table } from '@heliannuuthus/ui'
+import { Button } from '@heliannuuthus/ui'
+import { ArrowUpRight } from 'lucide-react'
+
+const ActionCell = () => {
+  return (
+    <Button
+      aria-label="配置 Realtime Gateway"
+      size="xs"
+      variant="ghost"
+    >
+      配置 <ArrowUpRight data-icon="inline-end" />
+    </Button>
+  )
+}
+
+<Table.Primitive classNames={{ table: 'table-fixed' }}>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head align="start">服务</Table.Head>
+      <Table.Head ellipsis="服务说明、最近一次生产部署上下文与异常原因">服务说明、最近一次生产部署上下文与异常原因</Table.Head>
+      <Table.Head align="end">成功率</Table.Head>
+      <Table.Head align="center">操作</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Realtime Gateway</Table.Cell>
+      <Table.Cell ellipsis>{description}</Table.Cell>
+      <Table.Cell align="end">99.98%</Table.Cell>
+      <Table.Cell align="center"><ActionCell /></Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table.Primitive>`]: `import { Table } from '@heliannuuthus/ui'
+import { Button } from '@heliannuuthus/ui'
+import { ArrowUpRight } from 'lucide-react'
+
+const ActionCell = () => {
+  return (
+    <Button
+      aria-label="Configure Realtime Gateway"
+      size="xs"
+      variant="ghost"
+    >
+      Configure <ArrowUpRight data-icon="inline-end" />
+    </Button>
+  )
+}
+
+<Table.Primitive classNames={{ table: 'table-fixed' }}>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head align="start">Service</Table.Head>
+      <Table.Head ellipsis="Service description, latest production deployment context and exception reasons">Service description, latest production deployment context and exception reasons</Table.Head>
+      <Table.Head align="end">Success rate</Table.Head>
+      <Table.Head align="center">Operation</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Realtime Gateway</Table.Cell>
+      <Table.Cell ellipsis>{description}</Table.Cell>
+      <Table.Cell align="end">99.98%</Table.Cell>
+      <Table.Cell align="center"><ActionCell /></Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table.Primitive>`,
+  '自定义省略单元格展示的完整 Tooltip 内容。':
+    'Customize the full Tooltip content shown for a truncated cell.',
+  '自定义省略列标题展示的完整 Tooltip 内容。':
+    'Customize the full Tooltip content shown for a truncated column heading.',
+  '自定义省略内容的 Tooltip；未设置时使用 Head 或 Cell 子节点，已有 title 会作为 Tooltip 内容。':
+    'Customize the Tooltip for truncated content; when omitted, the Head or Cell children are used, with title taking precedence when present.',
+  '服务：': 'Service: ',
+  '设置稳定的列标识；使用字段 accessor 时可省略。':
+    'Set a stable column identifier; it may be omitted when accessor is a field name.',
+  '读取字段或通过函数计算当前列值。':
+    'Read a field or calculate the current column value with a function.',
+  '设置列标题。': 'Set the column heading.',
+  '根据当前值、记录和索引渲染单元格。':
+    'Render a cell from its current value, record, and index.',
+  '嵌套子列并生成分组表头。':
+    'Nest child columns to generate grouped headings.',
+  '启用默认排序，或提供业务比较函数。':
+    'Enable default sorting or provide an application comparison function.',
+  '设置表头与单元格内容对齐方式。':
+    'Set the alignment of the heading and cell content.',
+  '将列固定在表格起始侧或末端。':
+    'Pin the column to the start or end of the table.',
+  '设置列宽，并参与固定列偏移计算。':
+    'Set the column width and include it in fixed-column offset calculation.',
+  '单元格溢出时省略，并自动提供完整内容 Tooltip。':
+    'Truncate overflowing cells and automatically provide the full content in a Tooltip.',
+  '列标题溢出时省略，并自动提供完整内容 Tooltip。':
+    'Truncate overflowing column headings and automatically provide the full content in a Tooltip.',
+  '扩展当前列的表头样式。': 'Extend the current column heading styles.',
+  '按列或当前记录扩展单元格样式。':
+    'Extend cell styles by column or current record.',
+  'Head 与 Cell 的 ellipsis 只在文本真实溢出时启用 Tooltip，并允许键盘聚焦查看全文。':
+    'Head and Cell enable Tooltip only when ellipsis content actually overflows, and allow keyboard focus to read the full text.',
   '展示、操作并自定义结构化数据集合。':
     'Display, operate on, and customize structured data sets.',
+  '控制表尾汇总和表头显示；footer 函数会收到当前页数据。':
+    'Control the footer summary and header visibility. A footer function receives the current page rows.',
+  '提供稳定的业务行标识，并按记录扩展 Row 的类名、事件和原生属性。':
+    'Provide a stable business row key and extend each Row with classes, events, and native attributes.',
+  '分别配置搜索、排序和分页；三项都支持内部处理或 manual 服务端模式。':
+    'Configure search, sorting, and pagination independently. Each supports internal processing or manual server mode.',
+  '按需开启行选择、行展开或虚拟表体；expandable 与 virtual 互斥。':
+    'Enable row selection, expansion, or a virtual body as needed. Expandable and virtual are mutually exclusive.',
+  '建立不管理数据状态的原生 table 与滚动容器。':
+    'Create a native table and scroll container without managing data state.',
+  '对应原生表格的表头、表体、表尾、行和单元格语义。':
+    'Map directly to native table header, body, footer, row, and cell semantics.',
+  '行展开按钮使用 aria-expanded 表达状态，并在可访问名称中包含当前记录。':
+    'Row expansion buttons expose state through aria-expanded and include the current record in their accessible name.',
+  '通过 data、columns 和功能配置组装搜索、排序、分页、选择、展开与虚拟滚动。':
+    'Use data, columns, and feature configs to compose search, sorting, pagination, selection, expansion, and virtualization.',
+  '不要在 Table 外再包一套表格滚动与圆角容器；通过 classNames 定制现有语义区域。':
+    'Do not wrap Table in another scroll and rounded container; customize its existing semantic regions through classNames.',
+  '使用普通 Button 控制 aria-expanded，并通过 Row 与跨列 Cell 承载详情，不需要额外的表格专用组件。':
+    'Use a regular Button to control aria-expanded and render details with Row and a spanning Cell; no table-specific component is needed.',
   自定义表格: 'Custom table',
-  '数据已经完成加工，或需要完全控制结构时，直接组合 Header、Body、Footer 和 Caption。':
-    'When data is already prepared or the structure needs full control, compose Header, Body, Footer, and Caption directly.',
+  '数据已经完成加工，或需要完全控制结构时，直接组合 Header、Body 和 Footer；Footer 承载列汇总。':
+    'When data is already prepared or the structure needs full control, compose Header, Body, and Footer directly. Footer contains column summaries.',
   'Table 默认由 data 与 ColumnDef 驱动筛选、排序、分页等完整数据交互；需要完全控制结构时，也可以直接组合语义表格原语。':
     'Table uses data and ColumnDef by default to drive filtering, sorting, pagination, and other complete data interactions; compose its semantic table primitives directly when full structural control is needed.',
   '常规业务数据列表使用 data 与 ColumnDef，快速获得筛选、排序、分页、展开和虚拟滚动。':
@@ -144,8 +516,6 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   展开行: 'Expand row',
   显示完整路径: 'Show the full path',
   暂无内容: 'No content yet',
-  '，即可同时使用纵向虚拟滚动、横向滚动和首末固定列。':
-    ', you can use vertical virtual scrolling, horizontal scrolling and fixed columns at the same time.',
   '，图片会自动填满容器并保持比例。':
     ', the image will automatically fill the container and maintain proportions.',
   '，悬停或聚焦名字查看详情。': ', hover or focus on the name to view details.',
@@ -174,15 +544,14 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     '<Select\n  value={value}\n  onChange={setValue}\n  options={members.map((member) => ({\n    label: member.name,\n    value: member.id,\n  }))}\n  placeholder="Search for members…"\n  showClear\n/>',
   '<Slider\n  aria-label="人声电平"\n  className="h-56"\n  orientation="vertical"\n  value={level}\n  onChange={setLevel}\n  min={0}\n  max={100}\n  step={2}\n/>':
     '<Slider\n  aria-label="Vocal level"\n  className="h-56"\n  orientation="vertical"\n  value={level}\n  onChange={setLevel}\n  min={0}\n  max={100}\n  step={2}\n/>',
-  "<Tabs\n  animation=\"slide\"\n  centered\n  defaultValue=\"design\"\n  panelClassName=\"p-8\"\n  variant=\"soft\"\n  viewportClassName=\"mt-4 min-h-48 rounded-xl border\"\n  items={[\n    { value: 'design', label: '设计', content: '整理组件视觉规范' },\n    { value: 'code', label: '开发', content: '连接组件与业务状态' },\n    { value: 'release', label: '发布', content: '完成验证并发布' },\n  ]}\n/>":
-    "<Tabs\n  animation=\"slide\"\n  centered\n  defaultValue=\"design\"\n  panelClassName=\"p-8\"\n  variant=\"soft\"\n  viewportClassName=\"mt-4 min-h-48 rounded-xl border\"\n  items={[\n    { value: 'design', label: 'Design', content: 'Organizing component visual specifications' },\n    { value: 'code', label: 'Development', content: 'Connect components and business status' },\n    { value: 'release', label: 'release', content: 'Complete verification and release' },\n  ]}\n/>",
+  "<Tabs\n  animation=\"slide\"\n  centered\n  classNames={{\n    panel: 'p-8',\n    viewport: 'mt-4 min-h-48 rounded-xl border',\n  }}\n  defaultValue=\"design\"\n  variant=\"soft\"\n  items={[\n    { value: 'design', label: '设计', content: '整理组件视觉规范' },\n    { value: 'code', label: '开发', content: '连接组件与业务状态' },\n    { value: 'release', label: '发布', content: '完成验证并发布' },\n  ]}\n/>":
+    "<Tabs\n  animation=\"slide\"\n  centered\n  classNames={{\n    panel: 'p-8',\n    viewport: 'mt-4 min-h-48 rounded-xl border',\n  }}\n  defaultValue=\"design\"\n  variant=\"soft\"\n  items={[\n    { value: 'design', label: 'Design', content: 'Organizing component visual specifications' },\n    { value: 'code', label: 'Development', content: 'Connect components and business status' },\n    { value: 'release', label: 'release', content: 'Complete verification and release' },\n  ]}\n/>",
   "<Tabs\n  centered\n  defaultValue=\"preview\"\n  variant=\"line\"\n  items={[\n    { value: 'preview', label: '预览', content: '实时预览当前组件。' },\n    { value: 'code', label: '代码', content: '查看实现代码。' },\n    { value: 'tests', label: '测试', content: '查看测试结果。' },\n  ]}\n/>":
     "<Tabs\n  centered\n  defaultValue=\"preview\"\n  variant=\"line\"\n  items={[\n    { value: 'preview', label: 'Preview', content: 'Preview the current component in real time. ' },\n    { value: 'code', label: 'code', content: 'View implementation code. ' },\n    { value: 'tests', label: 'Test', content: 'View test results. ' },\n  ]}\n/>",
   "<Tabs\n  defaultValue=\"overview\"\n  items={[\n    { value: 'overview', label: '概览', content: <Overview /> },\n    { value: 'activity', label: '动态', content: <Activity /> },\n    { value: 'members', label: '成员', content: <Members /> },\n  ]}\n/>":
     "<Tabs\n  defaultValue=\"overview\"\n  items={[\n    { value: 'overview', label: 'Overview', content: <Overview /> },\n    { value: 'activity', label: 'dynamic', content: <Activity /> },\n    { value: 'members', label: 'members', content: <Members /> },\n  ]}\n/>",
   '¥ 68 / 月': '¥68/month',
   '1 位成员': '1 member',
-  '1,000 条单行数据': '1,000 single rows of data',
   '10 分钟': '10 minutes',
   '12 个文件 · 2.4 MB': '12 files · 2.4 MB',
   '12 项规则': '12 rules',
@@ -420,8 +789,6 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Do not handle data requests, aggregations or business calculations in ChartConfig, it only describes the display information of the series.',
   '不要在 Table 内硬编码业务操作；通过 ColumnDef.render 读取当前 row 后组合业务按钮。':
     'Do not hardcode business operations in the Table; read the current row through ColumnDef.render and then combine the business buttons.',
-  '不要在 Table 外再包一套表格滚动与圆角容器；通过 tableProps 复用基础 Table 的容器。':
-    'Do not wrap a set of table scrolling and rounded corners outside the Table; use tableProps to reuse the container of the basic Table.',
   '不要在 Header、Content 和 Footer 中重复同一组主要操作。':
     "Don't repeat the same set of main operations in Header, Content, and Footer.",
   '不要在 hover 浮层中放置必须完成的操作，触摸设备和键盘用户需要更稳定的点击入口。':
@@ -677,7 +1044,6 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '单屏塞入过多文字会让轮播难以扫读，内容较长时改用列表或分页。':
     'Cramming too much text into a single screen will make the carousel difficult to scan. Use lists or paging instead when the content is longer.',
   单项展开: 'Single item expansion',
-  单行虚拟滚动与固定列: 'Single row virtual scrolling with fixed columns',
   弹性反馈: 'Elastic feedback',
   淡入: 'fade in',
   当前: 'current',
@@ -690,8 +1056,6 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'There are currently 12 members in the workspace.',
   '当前界面没有足够空间直接展示一组次要操作。':
     'The current interface does not have enough space to directly display a set of secondary operations.',
-  当前仅渲染可视区域附近的行:
-    'Currently only rows near the visible area are rendered',
   '当前面板组的排列方向。':
     'The arrangement direction of the current panel group.',
   当前位置: 'Current location',
@@ -731,8 +1095,6 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Wait for all previous columns to end, and then use the entire row to display the release conclusion.',
   等待视觉回归: 'Waiting for visual return',
   等待选择: 'Waiting for selection',
-  '等高单行数据量较大，需要用 VirtualBody 限制真实 DOM 行数。':
-    'The amount of data in a single row of equal height is large, so VirtualBody needs to be used to limit the number of real DOM rows.',
   '底部操作或补充信息。': 'Bottom operation or supplementary information.',
   第: 'No.',
   '第一个 item 覆盖分隔线；第二个使用全局默认内容':
@@ -1353,6 +1715,12 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '轮播区域、幻灯片、前后按钮和页码点均保留可识别的语义与键盘操作。':
     'Carousels, slides, front and back buttons, and page points all retain recognizable semantics and keyboard operations.',
   没有匹配的发布记录: 'No matching release record',
+  正在加载发布记录: 'Loading release records',
+  '正在同步生产与预览环境的最新版本。':
+    'Syncing the latest versions in production and preview environments.',
+  发布记录加载失败: 'Failed to load release records',
+  '请求未完成，请检查网络后重新加载。':
+    'The request did not complete. Check the network and reload.',
   没有找到成员: 'No member found',
   '媒体内容仍需提供准确的替代文本或字幕。':
     'Media content must still provide accurate alternative text or subtitles.',
@@ -1394,8 +1762,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'By default, only the summary is displayed, and users can view logs, details, instructions or advanced configuration when needed.',
   '默认装饰图标会从无障碍树中隐藏，标题和说明承担状态表达。':
     'By default, the decorative icon is hidden from the accessibility tree, and the title and description assume the status expression.',
-  '默认组合筛选、排序、固定列、操作列、Caption、Footer 和 Pagination；业务只需要提供 data 与 ColumnDef。':
-    'The default combination is filtering, sorting, fixed columns, operation columns, Caption, Footer and Pagination; the business only needs to provide data and ColumnDef.',
+  '默认组合筛选、排序、固定列、操作列、Footer 和 Pagination；业务只需要提供 data 与 ColumnDef。':
+    'The default combination includes filtering, sorting, fixed columns, actions, Footer, and Pagination; applications only provide data and ColumnDef.',
   '某些总结、横幅或末尾内容需要跨越当前所有列。':
     'Some summary, banner or end content needs to span all current columns.',
   '目标：': 'Target:',
@@ -1486,6 +1854,7 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '切换一个可按下的工具状态。': 'Toggles the state of a pressable tool.',
   清除: 'Clear',
   清除筛选: 'Clear filters',
+  重试: 'Retry',
   '清晰的层级让内容更容易阅读。':
     'Clear hierarchy makes content easier to read.',
   '请输入邮箱地址。': 'Please enter your email address.',
@@ -1845,8 +2214,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Use defaultValue to provide the initial state, subsequent states are managed by Toggle itself.',
   '使用 Header 与 Head 明确每列的数据含义；列标题过长时通过 ellipsis 保留可聚焦查看的全文 Tooltip。':
     'Use Header and Head to clarify the data meaning of each column; when the column title is too long, use ellipsis to retain the full-text Tooltip that can be viewed in focus.',
-  '使用 Header、Body、Footer 和 Caption 组织一张语义完整的基础表格。':
-    'Use Header, Body, Footer and Caption to organize a semantically complete basic table.',
+  '使用 Header、Body 和 Footer 组织一张语义完整的基础表格。':
+    'Use Header, Body, and Footer to organize a semantically complete basic table.',
   '使用 Header、Content、Footer 和 Sidebar 组合页面骨架，让常见布局关系保持清晰且可嵌套。':
     'Use Header, Content, Footer, and Sidebar to combine page skeletons to keep common layout relationships clear and nestable.',
   '使用 Input 的 variant 切换连接方块与独立方块，两种形态上下独立展示。':
@@ -1871,12 +2240,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '使用当前记录标识为每一行的操作组提供唯一名称。':
     "Give each row's action group a unique name using the current record ID.",
   使用方向键浏览全部标签: 'Use the arrow keys to browse all tags',
-  '使用基础 Table Caption 为整张数据表提供标题或摘要。':
-    'Use basic Table Caption to provide a title or summary for the entire data table.',
   '使用基础 Table Footer 展示当前可见行的汇总内容；函数形式会收到当前页数据。':
     'Use the basic Table Footer to display the summary content of the currently visible row; the function form will receive the current page data.',
-  '使用基础 Table VirtualBody 只渲染可视范围附近的等高单行数据。':
-    'Use the base Table VirtualBody to render only single rows of data of equal height near the visible range.',
   '使用接近业务页面的标题、说明和操作验证组合方式，并检查长文本与窄屏边界。':
     'Use title, description, and action validation combinations that are close to your business page, and check long text against narrow screen boundaries.',
   '使用默认 props 布局，或切换到完全自定义的组合布局。':
@@ -2188,8 +2553,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Provide sensible names for triggers, icons, and states.',
   '为当前布局项扩展样式类。':
     'Extends the style class for the current layout item.',
-  '为等高单行数据建立纵向虚拟窗口，并继续支持 Table 的横向滚动和 fixed 列。':
-    'Establish a vertical virtual window for single-row data of equal height, and continue to support horizontal scrolling and fixed columns of Table.',
+  '为等高单行数据建立纵向虚拟窗口；Header 固定在滚动容器顶部，并继续支持横向滚动和 fixed 列。':
+    'Create a vertical virtual window for equal-height single-line data. Header stays pinned to the top of the scroll container, with horizontal scrolling and fixed columns still supported.',
   '为独立 Spinner 提供描述当前任务的 aria-label，例如“正在同步环境状态”。':
     'Provide standalone spinners with an aria-label describing the current task, such as "synchronizing environment state".',
   '为辅助技术提供包含单位和上下文的完整数值文本。':
@@ -2988,8 +3353,6 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   自定义分隔线: 'Custom divider',
   '自定义上一页和下一页的可见文字。':
     'Customize visible text for previous and next pages.',
-  '自定义省略内容的 Tooltip；未设置时使用 Head 或 Cell 子节点，已有 title 会兼容作为 Tooltip 内容。':
-    'Customize the Tooltip with omitted content; when not set, use the Head or Cell child node, and the existing title will be compatible as the Tooltip content.',
   '自定义剩余数量的呈现方式。':
     'Customize how the remaining quantity is presented.',
   自定义图标: 'Custom icon',
@@ -3150,8 +3513,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   'Counter 不管理加减或请求状态；按钮、定时器和业务数据应由外部组件组合。':
     'Counter does not manage addition, subtraction or request status; buttons, timers and business data should be composed by external components.',
   'CSV 表格': 'CSV table',
-  'Table 是基于 Table 组装好的默认数据表格：除筛选、排序和分页外，也完整提供固定列、省略 Tooltip、Caption、Footer、行展开与虚拟滚动。':
-    'Table is a default data table assembled based on Table: in addition to filtering, sorting and paging, it also fully provides fixed columns, omitted Tooltip, Caption, Footer, row expansion and virtual scrolling.',
+  'Table 是基于 Table 组装好的默认数据表格：除筛选、排序和分页外，也完整提供固定列、省略 Tooltip、Footer、行展开与虚拟滚动。':
+    'Table is a default data table assembled from Table primitives. It also provides fixed columns, ellipsis tooltips, Footer, row expansion, and virtual scrolling.',
   'DirectionProvider 为局部组件树声明 ltr 或 rtl 阅读方向。':
     'DirectionProvider declares the ltr or rtl reading direction for the local component tree.',
   'Drawer 打开方向': 'Drawer opening direction',
@@ -3172,8 +3535,6 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'gap accepts a numerical value; drag the slider to adjust it between 0–12px, in increments or decrements of 3px.',
   'gap 直接接收数值，同时设置水平与垂直间距。':
     'gap directly receives a value and sets the horizontal and vertical spacing at the same time.',
-  'Head 与 Cell 的 ellipsis 只在文本真实溢出时启用 Tooltip，并允许键盘聚焦查看全文；复杂内容可通过 ellipsisTooltip 提供更合适的说明。':
-    'The ellipsis of Head and Cell only enables Tooltip when the text actually overflows, and allows the keyboard to focus on viewing the full text; complex content can be provided with more appropriate instructions through ellipsisTooltip.',
   'Header 触发': 'Header trigger',
   'Header 触发和独立按钮触发都使用原生按钮语义，并通过 aria-expanded 传达展开状态。':
     'Both header triggering and independent button triggering use native button semantics and communicate the expanded state through aria-expanded.',
@@ -3198,10 +3559,10 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'import {\n  Alert,\n  AlertAction,\n  AlertDescription,\n  AlertTitle,\n} from \'@heliannuuthus/ui\'\n\n{visible && <Alert variant="warning">\n  <TriangleAlert />\n  <AlertTitle>The rollback image will expire soon</AlertTitle>\n  <AlertDescription>Recommended to rebuild before publishing. </AlertDescription>\n  <AlertAction><Button onClick={() => setVisible(false)}>Close</Button></AlertAction>\n</Alert>}',
   'import {\n  Chart,\n  type ChartConfig,\n} from \'@heliannuuthus/ui\'\nimport { Area, AreaChart, CartesianGrid, XAxis, YAxis } from \'recharts\'\n\nconst chartConfig = {\n  success: { label: \'发布成功率\', color: \'var(--primary)\' },\n} satisfies ChartConfig\n\n<section aria-label="发布健康度趋势">\n  <header>\n    <span>生产发布成功率</span>\n    <strong>97.4%</strong>\n  </header>\n  <Chart config={chartConfig}>\n    <AreaChart accessibilityLayer data={data}>\n      <CartesianGrid strokeDasharray="4 8" vertical={false} />\n      <XAxis axisLine={false} dataKey="day" tickLine={false} />\n      <YAxis domain={[88, 100]} tickFormatter={(value) => `${value}%`} />\n      <Chart.Tooltip\n        content={<Chart.TooltipContent indicator="line" />}\n        cursor={false}\n      />\n      <Area\n        dataKey="success"\n        fill="var(--color-success)"\n        fillOpacity={0.12}\n        stroke="var(--color-success)"\n        strokeWidth={2.5}\n        type="monotone"\n      />\n    </AreaChart>\n  </Chart>\n</section>':
     'import {\n  Chart,\n  typeChartConfig,\n} from \'@heliannuuthus/ui\'\nimport { Area, AreaChart, CartesianGrid, XAxis, YAxis } from \'recharts\'\n\nconst chartConfig = {\n  success: { label: \'Publishing success rate\', color: \'var(--primary)\' },\n} satisfies ChartConfig\n\n<section aria-label="Post health trends">\n  <header>\n    <span>Production release success rate</span>\n    <strong>97.4%</strong>\n  </header>\n  <Chart config={chartConfig}>\n    <AreaChart accessibilityLayer data={data}>\n      <CartesianGrid strokeDasharray="4 8" vertical={false} />\n      <XAxis axisLine={false} dataKey="day" tickLine={false} />\n      <YAxis domain={[88, 100]} tickFormatter={(value) => `${value}%`} />\n      <Chart.Tooltip\n        content={<Chart.TooltipContent indicator="line" />}\n        cursor={false}\n      />\n      <Area\n        dataKey="success"\n        fill="var(--color-success)"\n        fillOpacity={0.12}\n        stroke="var(--color-success)"\n        strokeWidth={2.5}\n        type="monotone"\n      />\n    </AreaChart>\n  </Chart>\n</section>',
-  "import {\n  Table,\n  type TableColumn,\n} from '@heliannuuthus/ui'\n\nconst columns: TableColumn<Release>[] = [\n  {\n    header: '发布信息',\n    columns: [\n      { accessor: 'version', header: '版本', sortable: true },\n      { accessor: 'environment', header: '环境' },\n    ],\n  },\n  {\n    header: '执行情况',\n    columns: [\n      { accessor: 'owner', header: '负责人' },\n      { accessor: 'status', header: '状态' },\n    ],\n  },\n  {\n    header: '操作',\n    columns: [\n      {\n        key: 'detail',\n        header: '记录',\n        align: 'center',\n        render: (_, row) => <Button>{row.version} 详情</Button>,\n      },\n    ],\n  },\n]\n\n<Table columns={columns} data={releaseRecords} />":
-    "import {\n  Table,\n  type TableColumn,\n} from '@heliannuuthus/ui'\n\nconst columns: TableColumn<Release>[] = [\n  {\n    header: 'Publish information',\n    columns: [\n      { accessor: 'version', header: 'version', sortable: true },\n      { accessor: 'environment', header: 'environment' },\n    ],\n  },\n  {\n    header: 'Execution status',\n    columns: [\n      { accessor: 'owner', header: 'person in charge' },\n      { accessor: 'status', header: 'status' },\n    ],\n  },\n  {\n    header: 'operation',\n    columns: [\n      {\n        key: 'detail',\n        header: 'record',\n        align: 'center',\n        render: (_, row) => <Button>{row.version} details</Button>,\n      },\n    ],\n  },\n]\n\n<Table columns={columns} data={releaseRecords} />",
-  "import {\n  Table,\n  type TableColumn,\n} from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { MoreHorizontal } from 'lucide-react'\n\nconst columns: TableColumn<Release>[] = [\n  {\n    accessor: 'version',\n    header: '版本',\n    sortable: true,\n  },\n  {\n    key: 'actions',\n    align: 'center',\n    fixed: 'end',\n    header: '操作',\n    width: 144,\n    render: (_, row) => (\n      <Table.Actions aria-label={row.version + ' 操作'}>\n        <Button variant=\"ghost\">查看</Button>\n        <DropdownMenu\n          align=\"end\"\n          trigger={\n            <Button\n              aria-label={row.version + ' 更多操作'}\n              size=\"icon-sm\"\n              variant=\"ghost\"\n            >\n              <MoreHorizontal />\n            </Button>\n          }\n          items={[\n            { label: '下载日志' },\n            { label: '归档记录' },\n            { type: 'separator' },\n            { label: '删除记录', destructive: true },\n          ]}\n        />\n      </Table.Actions>\n    ),\n  },\n]\n\n<Table\n  caption=\"最近五次生产与预览环境发布。\"\n  columns={columns}\n  data={releaseRecords}\n  search={{ columnKeys: ['version'], placeholder: '筛选版本…' }}\n  footer={(rows) => `当前页 ${rows.length} 条发布记录`}\n  rowKey=\"version\"\n  pagination={{ pageSize: 3 }}\n  tableProps={{ className: 'min-w-[820px] table-fixed' }}\n/>":
-    "import {\n  Table,\n  type TableColumn,\n} from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { MoreHorizontal } from 'lucide-react'\n\nconst columns: TableColumn<Release>[] = [\n  {\n    accessor: 'version',\n    header: 'version',\n    sortable: true,\n  },\n  {\n    key: 'actions',\n    align: 'center',\n    fixed: 'end',\n    header: 'operation',\n    width: 144,\n    render: (_, row) => (\n      <Table.Actions aria-label={row.version + 'Actions'}>\n        <Button variant=\"ghost\">View</Button>\n        <DropdownMenu\n          align=\"end\"\n          trigger={\n            <Button\n              aria-label={row.version + 'More operations'}\n              size=\"icon-sm\"\n              variant=\"ghost\"\n            >\n              <MoreHorizontal />\n            </Button>\n          }\n          items={[\n            { label: 'Download log' },\n            { label: 'Archive record' },\n            { type: 'separator' },\n            { label: 'Delete record', destructive: true },\n          ]}\n        />\n      </Table.Actions>\n    ),\n  },\n]\n\n<Table\n  caption=\"The last five production and preview environment releases.\"\n  columns={columns}\n  data={releaseRecords}\n  search={{ columnKeys: ['version'], placeholder: 'Filter versions…' }}\n  footer={(rows) => `Current page ${rows.length} published records`}\n  rowKey=\"version\"\n  pagination={{ pageSize: 3 }}\n  tableProps={{ className: 'min-w-[820px] table-fixed' }}\n/>",
+  "import { Table } from '@heliannuuthus/ui'\n\nconst columns: Table.Column<Release>[] = [\n  {\n    header: '发布信息',\n    columns: [\n      { accessor: 'version', header: '版本', sortable: true },\n      { accessor: 'environment', header: '环境' },\n    ],\n  },\n  {\n    header: '执行情况',\n    columns: [\n      { accessor: 'owner', header: '负责人' },\n      { accessor: 'status', header: '状态' },\n    ],\n  },\n  {\n    header: '操作',\n    columns: [\n      {\n        key: 'detail',\n        header: '记录',\n        align: 'center',\n        render: (_, row) => <Button>{row.version} 详情</Button>,\n      },\n    ],\n  },\n]\n\n<Table columns={columns} data={releaseRecords} />":
+    "import { Table } from '@heliannuuthus/ui'\n\nconst columns: Table.Column<Release>[] = [\n  {\n    header: 'Publish information',\n    columns: [\n      { accessor: 'version', header: 'version', sortable: true },\n      { accessor: 'environment', header: 'environment' },\n    ],\n  },\n  {\n    header: 'Execution status',\n    columns: [\n      { accessor: 'owner', header: 'person in charge' },\n      { accessor: 'status', header: 'status' },\n    ],\n  },\n  {\n    header: 'operation',\n    columns: [\n      {\n        key: 'detail',\n        header: 'record',\n        align: 'center',\n        render: (_, row) => <Button>{row.version} details</Button>,\n      },\n    ],\n  },\n]\n\n<Table columns={columns} data={releaseRecords} />",
+  "import { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { Stack } from '@heliannuuthus/ui'\nimport { MoreHorizontal } from 'lucide-react'\n\nconst columns: Table.Column<Release>[] = [\n  {\n    accessor: 'version',\n    header: '版本',\n    sortable: true,\n  },\n  {\n    key: 'actions',\n    align: 'center',\n    fixed: 'end',\n    header: '操作',\n    width: 144,\n    render: (_, row) => (\n      <Stack align=\"center\" aria-label={row.version + ' 操作'} gap={4} justify=\"center\" orientation=\"horizontal\" role=\"group\">\n        <Button variant=\"ghost\">查看</Button>\n        <DropdownMenu\n          align=\"end\"\n          trigger={\n            <Button\n              aria-label={row.version + ' 更多操作'}\n              size=\"icon-sm\"\n              variant=\"ghost\"\n            >\n              <MoreHorizontal />\n            </Button>\n          }\n          items={[\n            { label: '下载日志' },\n            { label: '归档记录' },\n            { type: 'separator' },\n            { label: '删除记录', destructive: true },\n          ]}\n        />\n      </Stack>\n    ),\n  },\n]\n\n<Table\n  columns={columns}\n  data={releaseRecords}\n  search={{ columnKeys: ['version'], placeholder: '筛选版本…' }}\n  footer={(rows) => `当前页 ${rows.length} 条发布记录`}\n  rowKey=\"version\"\n  pagination={{ pageSize: 3 }}\n  classNames={{ table: 'min-w-[820px]' }}\n/>":
+    "import { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { Stack } from '@heliannuuthus/ui'\nimport { MoreHorizontal } from 'lucide-react'\n\nconst columns: Table.Column<Release>[] = [\n  {\n    accessor: 'version',\n    header: 'version',\n    sortable: true,\n  },\n  {\n    key: 'actions',\n    align: 'center',\n    fixed: 'end',\n    header: 'operation',\n    width: 144,\n    render: (_, row) => (\n      <Stack align=\"center\" aria-label={row.version + 'Actions'} gap={4} justify=\"center\" orientation=\"horizontal\" role=\"group\">\n        <Button variant=\"ghost\">View</Button>\n        <DropdownMenu\n          align=\"end\"\n          trigger={\n            <Button\n              aria-label={row.version + 'More operations'}\n              size=\"icon-sm\"\n              variant=\"ghost\"\n            >\n              <MoreHorizontal />\n            </Button>\n          }\n          items={[\n            { label: 'Download log' },\n            { label: 'Archive record' },\n            { type: 'separator' },\n            { label: 'Delete record', destructive: true },\n          ]}\n        />\n      </Stack>\n    ),\n  },\n]\n\n<Table\n  columns={columns}\n  data={releaseRecords}\n  search={{ columnKeys: ['version'], placeholder: 'Filter versions…' }}\n  footer={(rows) => `Current page ${rows.length} published records`}\n  rowKey=\"version\"\n  pagination={{ pageSize: 3 }}\n  classNames={{ table: 'min-w-[820px]' }}\n/>",
   "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight', 'rollback']}\n  multiple\n  items={[\n    {\n      value: 'preflight',\n      title: '预检结果',\n      content: '42 项检查均已通过。',\n    },\n    {\n      value: 'rollback',\n      title: '回滚方案',\n      content: '异常时切回上一版本。',\n    },\n  ]}\n/>":
     "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight', 'rollback']}\n  multiple\n  items={[\n    {\n      value: 'preflight',\n      title: 'Preflight results',\n      content: '42 checks passed. ',\n    },\n    {\n      value: 'rollback',\n      title: 'Rollback plan',\n      content: 'Switch back to the previous version in case of exception. ',\n    },\n  ]}\n/>",
   "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight']}\n  items={[\n    { value: 'preflight', title: '预检结果', content: '42 项检查均已通过。' },\n    { value: 'rollback', title: '回滚方案', content: '异常时切回上一版本。' },\n  ]}\n/>":
@@ -3314,14 +3675,14 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'import { Field } from \'@heliannuuthus/ui\'\n\n<Field>\n  <Field.Label htmlFor="team-name">Team name *</Field.Label>\n  <Input id="team-name" required />\n</Field>\n\n<Field>\n  <Field.Label htmlFor="role">Position</Field.Label>\n  <Input id="role" />\n  <Field.Description>Optional</Field.Description>\n</Field>',
   "import { Form } from '@heliannuuthus/ui'\n\nconst form = useForm({ defaultValues: { email: '', note: '' } })\n\n<Form {...form}>\n  <form onSubmit={form.handleSubmit(onSubmit)}>\n    <Form.Field\n      control={form.control}\n      name=\"email\"\n      rules={{ required: '请输入邮箱地址。' }}\n      render={({ field }) => (\n        <Form.Item>\n          <Form.Label>邮箱地址</Form.Label>\n          <Form.Control><Input {...field} /></Form.Control>\n          <Form.Message />\n        </Form.Item>\n      )}\n    />\n  </form>\n</Form>":
     "import { Form } from '@heliannuuthus/ui'\n\nconst form = useForm({ defaultValues: { email: '', note: '' } })\n\n<Form {...form}>\n  <form onSubmit={form.handleSubmit(onSubmit)}>\n    <Form.Field\n      control={form.control}\n      name=\"email\"\n      rules={{ required: 'Please enter your email address. ' }}\n      render={({ field }) => (\n        <Form.Item>\n          <Form.Label>Email address</Form.Label>\n          <Form.Control><Input {...field} /></Form.Control>\n          <Form.Message />\n        </Form.Item>\n      )}\n    />\n  </form>\n</Form>",
-  "import { Fragment, useState } from 'react'\nimport { Table } from '@heliannuuthus/ui'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Table.ExpandButton\n                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}\n                expanded={expanded}\n                onExpandedChange={(next) =>\n                  setExpandedId(next ? row.id : null)\n                }\n              />\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.ExpandedRow colSpan={2}>{row.detail}</Table.ExpandedRow>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>":
-    "import { Fragment, useState } from 'react'\nimport { Table } from '@heliannuuthus/ui'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Table.ExpandButton\n                aria-label={`${expanded ? 'Collapse' : 'Expand'} ${row.id}`}\n                expanded={expanded}\n                onExpandedChange={(next) =>\n                  setExpandedId(next? row.id: null)\n                }\n              />\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.ExpandedRow colSpan={2}>{row.detail}</Table.ExpandedRow>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>",
+  "import { Fragment, useState } from 'react'\nimport { Button, Table } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Button\n                aria-expanded={expanded}\n                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}\n                size=\"icon-xs\"\n                variant=\"ghost\"\n                onClick={() => setExpandedId(expanded ? null : row.id)}\n              >\n                <ChevronRight className={expanded ? 'rotate-90' : ''} />\n              </Button>\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.Row>\n              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>\n            </Table.Row>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>":
+    "import { Fragment, useState } from 'react'\nimport { Button, Table } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Button\n                aria-expanded={expanded}\n                aria-label={`${expanded ? 'Collapse' : 'Expand'} ${row.id}`}\n                size=\"icon-xs\"\n                variant=\"ghost\"\n                onClick={() => setExpandedId(expanded ? null : row.id)}\n              >\n                <ChevronRight className={expanded ? 'rotate-90' : ''} />\n              </Button>\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.Row>\n              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>\n            </Table.Row>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>",
   'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaType="icon"\n  title="许澄提交了发布说明"\n  description="补充数据库迁移影响与回滚入口。"\n  actions={<Button>查看</Button>}\n/>':
     'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaType="icon"\n  title="Xu Cheng submitted release notes"\n  description="Supplementary database migration impact and rollback entry."\n  actions={<Button>View</Button>}\n/>',
   'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<MessageCircle />}\n  mediaType="icon"\n  title="林默回复了检查项"\n  description="确认索引变更不会锁表。"\n  actions={<Button>查看</Button>}\n/>':
     'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<MessageCircle />}\n  mediaType="icon"\n  title="Lin Mo replied to the check item"\n  description="Confirm that index changes will not lock the table."\n  actions={<Button>View</Button>}\n/>',
-  "import { Fragment, useState } from 'react'\nimport { Table } from '@heliannuuthus/ui'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table.Primitive>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Table.ExpandButton\n                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}\n                expanded={expanded}\n                onExpandedChange={(next) =>\n                  setExpandedId(next ? row.id : null)\n                }\n              />\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.ExpandedRow colSpan={2}>{row.detail}</Table.ExpandedRow>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table.Primitive>":
-    "import { Fragment, useState } from 'react'\nimport { Table } from '@heliannuuthus/ui'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table.Primitive>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Table.ExpandButton\n                aria-label={`${expanded ? 'Collapse' : 'Expand'} ${row.id}`}\n                expanded={expanded}\n                onExpandedChange={(next) =>\n                  setExpandedId(next? row.id: null)\n                }\n              />\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.ExpandedRow colSpan={2}>{row.detail}</Table.ExpandedRow>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table.Primitive>",
+  "import { Fragment, useState } from 'react'\nimport { Button, Table } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table.Primitive>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Button\n                aria-expanded={expanded}\n                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}\n                size=\"icon-xs\"\n                variant=\"ghost\"\n                onClick={() => setExpandedId(expanded ? null : row.id)}\n              >\n                <ChevronRight className={expanded ? 'rotate-90' : ''} />\n              </Button>\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.Row>\n              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>\n            </Table.Row>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table.Primitive>":
+    "import { Fragment, useState } from 'react'\nimport { Button, Table } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table.Primitive>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Button\n                aria-expanded={expanded}\n                aria-label={`${expanded ? 'Collapse' : 'Expand'} ${row.id}`}\n                size=\"icon-xs\"\n                variant=\"ghost\"\n                onClick={() => setExpandedId(expanded ? null : row.id)}\n              >\n                <ChevronRight className={expanded ? 'rotate-90' : ''} />\n              </Button>\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.Row>\n              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>\n            </Table.Row>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table.Primitive>",
   "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Content>工作区内容</Layout.Content>\n  <Layout.Sidebar width={280}>详情面板</Layout.Sidebar>\n</Layout>":
     "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Content>Workspace Content</Layout.Content>\n  <Layout.Sidebar width={280}>Details panel</Layout.Sidebar>\n</Layout>",
   "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Header>项目导航</Layout.Header>\n  <Layout.Content>页面内容</Layout.Content>\n  <Layout.Footer>页脚信息</Layout.Footer>\n</Layout>":
@@ -3384,14 +3745,12 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'import { Spinner } from \'@heliannuuthus/ui\'\n\n<Spinner aria-label="small size loading" size="sm" />\n<Spinner aria-label="Loading" />\n<Spinner aria-label="Large size loading" size="lg" />',
   "import { Switch } from '@heliannuuthus/ui'\n\n<label><Switch defaultChecked />启用通知</label>":
     "import { Switch } from '@heliannuuthus/ui'\n\n<label><Switch defaultChecked />Enable notification</label>",
-  'import { Table } from \'@heliannuuthus/ui\'\nimport { Button } from \'@heliannuuthus/ui\'\n\n<Table.Primitive\n  aria-rowcount={rows.length + 1}\n  className="min-w-[820px] table-fixed"\n  containerClassName="max-h-80"\n>\n  <Table.Header>\n    <Table.Row>\n      <Table.Head fixed="start">事件</Table.Head>\n      <Table.Head>服务</Table.Head>\n      <Table.Head fixed="end" align="center">操作</Table.Head>\n    </Table.Row>\n  </Table.Header>\n  <Table.VirtualBody\n    colSpan={3}\n    items={rows}\n    getItemKey={(row) => row.id}\n    rowHeight={48}\n    overscan={8}\n  >\n    {(row) => (\n      <Table.Row>\n        <Table.Cell fixed="start">{row.id}</Table.Cell>\n        <Table.Cell>{row.service}</Table.Cell>\n        <Table.Cell fixed="end" align="center">\n          <Button\n            aria-label={`查看 ${row.id}`}\n            size="xs"\n            variant="ghost"\n          >\n            查看\n          </Button>\n        </Table.Cell>\n      </Table.Row>\n    )}\n  </Table.VirtualBody>\n</Table.Primitive>':
-    'import { Table } from \'@heliannuuthus/ui\'\nimport { Button } from \'@heliannuuthus/ui\'\n\n<Table.Primitive\n  aria-rowcount={rows.length + 1}\n  className="min-w-[820px] table-fixed"\n  containerClassName="max-h-80"\n>\n  <Table.Header>\n    <Table.Row>\n      <Table.Head fixed="start">Event</Table.Head>\n      <Table.Head>Services</Table.Head>\n      <Table.Head fixed="end" align="center">Operation</Table.Head>\n    </Table.Row>\n  </Table.Header>\n  <Table.VirtualBody\n    colSpan={3}\n    items={rows}\n    getItemKey={(row) => row.id}\n    rowHeight={48}\n    overscan={8}\n  >\n    {(row) => (\n      <Table.Row>\n        <Table.Cell fixed="start">{row.id}</Table.Cell>\n        <Table.Cell>{row.service}</Table.Cell>\n        <Table.Cell fixed="end" align="center">\n          <Button\n            aria-label={`View ${row.id}`}\n            size="xs"\n            variant="ghost"\n          >\n            View\n          </Button>\n        </Table.Cell>\n      </Table.Row>\n    )}\n  </Table.VirtualBody>\n</Table.Primitive>',
   'import { Table } from \'@heliannuuthus/ui\'\nimport { Button } from \'@heliannuuthus/ui\'\n\n<Table.Primitive className="min-w-[960px] table-fixed">\n  <Table.Header>\n    <Table.Row>\n      <Table.Head fixed="start" className="w-40">服务</Table.Head>\n      <Table.Head className="w-28">版本</Table.Head>\n      <Table.Head className="w-28">区域</Table.Head>\n      <Table.Head className="w-32">最近部署</Table.Head>\n      <Table.Head fixed="end" align="center" className="w-24">操作</Table.Head>\n    </Table.Row>\n  </Table.Header>\n  <Table.Body>\n    <Table.Row>\n      <Table.Cell fixed="start">Web Console</Table.Cell>\n      <Table.Cell>v0.12.0</Table.Cell>\n      <Table.Cell fixed="end" align="center">\n        <Button\n          aria-label="监控 Web Console"\n          size="xs"\n          variant="ghost"\n        >\n          监控\n        </Button>\n      </Table.Cell>\n    </Table.Row>\n  </Table.Body>\n</Table.Primitive>':
     'import { Table } from \'@heliannuuthus/ui\'\nimport { Button } from \'@heliannuuthus/ui\'\n\n<Table.Primitive className="min-w-[960px] table-fixed">\n  <Table.Header>\n    <Table.Row>\n      <Table.Head fixed="start" className="w-40">Service</Table.Head>\n      <Table.Head className="w-28">Version</Table.Head>\n      <Table.Head className="w-28">Region</Table.Head>\n      <Table.Head className="w-32">Recently deployed</Table.Head>\n      <Table.Head fixed="end" align="center" className="w-24">Operation</Table.Head>\n    </Table.Row>\n  </Table.Header>\n  <Table.Body>\n    <Table.Row>\n      <Table.Cell fixed="start">Web Console</Table.Cell>\n      <Table.Cell>v0.12.0</Table.Cell>\n      <Table.Cell fixed="end" align="center">\n        <Button\n          aria-label="Monitoring Web Console"\n          size="xs"\n          variant="ghost"\n        >\n          Monitor\n        </Button>\n      </Table.Cell>\n    </Table.Row>\n  </Table.Body>\n</Table.Primitive>',
-  "import { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\n\n<Table.Primitive>\n  <Table.Caption>今晚 22:00 发布窗口中的服务。</Table.Caption>\n  <Table.Header>{/* column headings */}</Table.Header>\n  <Table.Body>{/* release rows */}</Table.Body>\n  <Table.Footer>{/* summary */}</Table.Footer>\n</Table.Primitive>":
-    "import { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\n\n<Table.Primitive>\n  <Table.Caption>Service in tonight's 22:00 release window. </Table.Caption>\n  <Table.Header>{/* column headings */}</Table.Header>\n  <Table.Body>{/* release rows */}</Table.Body>\n  <Table.Footer>{/* summary */}</Table.Footer>\n</Table.Primitive>",
-  'import { Table } from \'@heliannuuthus/ui\'\nimport { Button } from \'@heliannuuthus/ui\'\n\n<Table.Primitive>\n  <Table.Caption>今晚发布窗口中的服务。</Table.Caption>\n  <Table.Header>\n    <Table.Row>\n      <Table.Head>服务</Table.Head>\n      <Table.Head align="center">操作</Table.Head>\n    </Table.Row>\n  </Table.Header>\n  <Table.Body>\n    <Table.Row>\n      <Table.Cell>Web Console</Table.Cell>\n      <Table.Cell align="center">\n        <Button\n          aria-label="查看 Web Console"\n          size="xs"\n          variant="ghost"\n        >\n          查看\n        </Button>\n      </Table.Cell>\n    </Table.Row>\n  </Table.Body>\n  <Table.Footer>\n    <Table.Row><Table.Cell colSpan={2}>共 1 项</Table.Cell></Table.Row>\n  </Table.Footer>\n</Table.Primitive>':
-    'import { Table } from \'@heliannuuthus/ui\'\nimport { Button } from \'@heliannuuthus/ui\'\n\n<Table.Primitive>\n  <Table.Caption>Services in tonight\'s release window. </Table.Caption>\n  <Table.Header>\n    <Table.Row>\n      <Table.Head>Services</Table.Head>\n      <Table.Head align="center">Operation</Table.Head>\n    </Table.Row>\n  </Table.Header>\n  <Table.Body>\n    <Table.Row>\n      <Table.Cell>Web Console</Table.Cell>\n      <Table.Cell align="center">\n        <Button\n          aria-label="View Web Console"\n          size="xs"\n          variant="ghost"\n        >\n          View\n        </Button>\n      </Table.Cell>\n    </Table.Row>\n  </Table.Body>\n  <Table.Footer>\n    <Table.Row><Table.Cell colSpan={2}>1 item in total</Table.Cell></Table.Row>\n  </Table.Footer>\n</Table.Primitive>',
+  "import { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\n\n<Table.Primitive>\n  <Table.Header>{/* 列标题 */}</Table.Header>\n  <Table.Body>{/* 数据行 */}</Table.Body>\n  <Table.Footer>{/* 汇总行 */}</Table.Footer>\n</Table.Primitive>":
+    "import { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\n\n<Table.Primitive>\n  <Table.Header>{/* column headings */}</Table.Header>\n  <Table.Body>{/* release rows */}</Table.Body>\n  <Table.Footer>{/* summary */}</Table.Footer>\n</Table.Primitive>",
+  'import { Table } from \'@heliannuuthus/ui\'\nimport { Button } from \'@heliannuuthus/ui\'\n\n<Table.Primitive>\n  <Table.Header>\n    <Table.Row>\n      <Table.Head>服务</Table.Head>\n      <Table.Head align="center">操作</Table.Head>\n    </Table.Row>\n  </Table.Header>\n  <Table.Body>\n    <Table.Row>\n      <Table.Cell>Web Console</Table.Cell>\n      <Table.Cell align="center">\n        <Button\n          aria-label="查看 Web Console"\n          size="xs"\n          variant="ghost"\n        >\n          查看\n        </Button>\n      </Table.Cell>\n    </Table.Row>\n  </Table.Body>\n  <Table.Footer>\n    <Table.Row><Table.Cell colSpan={2}>共 1 项</Table.Cell></Table.Row>\n  </Table.Footer>\n</Table.Primitive>':
+    'import { Table } from \'@heliannuuthus/ui\'\nimport { Button } from \'@heliannuuthus/ui\'\n\n<Table.Primitive>\n  <Table.Header>\n    <Table.Row>\n      <Table.Head>Services</Table.Head>\n      <Table.Head align="center">Operation</Table.Head>\n    </Table.Row>\n  </Table.Header>\n  <Table.Body>\n    <Table.Row>\n      <Table.Cell>Web Console</Table.Cell>\n      <Table.Cell align="center">\n        <Button\n          aria-label="View Web Console"\n          size="xs"\n          variant="ghost"\n        >\n          View\n        </Button>\n      </Table.Cell>\n    </Table.Row>\n  </Table.Body>\n  <Table.Footer>\n    <Table.Row><Table.Cell colSpan={2}>1 item in total</Table.Cell></Table.Row>\n  </Table.Footer>\n</Table.Primitive>',
   'import { Table } from \'@heliannuuthus/ui\'\nimport { Button } from \'@heliannuuthus/ui\'\nimport { ArrowUpRight } from \'lucide-react\'\n\nconst ActionCell = () => {\n  return (\n    <Button\n      aria-label="配置 Realtime Gateway"\n      size="xs"\n      variant="ghost"\n    >\n      配置 <ArrowUpRight data-icon="inline-end" />\n    </Button>\n  )\n}\n\n<Table.Primitive className="table-fixed">\n  <Table.Header>\n    <Table.Row>\n      <Table.Head align="start">服务</Table.Head>\n      <Table.Head ellipsis>服务说明、最近一次生产部署上下文与异常原因</Table.Head>\n      <Table.Head align="end">成功率</Table.Head>\n      <Table.Head align="center">操作</Table.Head>\n    </Table.Row>\n  </Table.Header>\n  <Table.Body>\n    <Table.Row>\n      <Table.Cell>Realtime Gateway</Table.Cell>\n      <Table.Cell ellipsis>{description}</Table.Cell>\n      <Table.Cell align="end">99.98%</Table.Cell>\n      <Table.Cell align="center"><ActionCell /></Table.Cell>\n    </Table.Row>\n  </Table.Body>\n</Table.Primitive>':
     'import { Table } from \'@heliannuuthus/ui\'\nimport { Button } from \'@heliannuuthus/ui\'\nimport { ArrowUpRight } from \'lucide-react\'\n\nconst ActionCell = () => {\n  return (\n    <Button\n      aria-label="Configure Realtime Gateway"\n      size="xs"\n      variant="ghost"\n    >\n      Configure <ArrowUpRight data-icon="inline-end" />\n    </Button>\n  )\n}\n\n<Table.Primitive className="table-fixed">\n  <Table.Header>\n    <Table.Row>\n      <Table.Head align="start">Service</Table.Head>\n      <Table.Head ellipsis>Service description, latest production deployment context and exception reasons</Table.Head>\n      <Table.Head align="end">Success rate</Table.Head>\n      <Table.Head align="center">Operation</Table.Head>\n    </Table.Row>\n  </Table.Header>\n  <Table.Body>\n    <Table.Row>\n      <Table.Cell>Realtime Gateway</Table.Cell>\n      <Table.Cell ellipsis>{description}</Table.Cell>\n      <Table.Cell align="end">99.98%</Table.Cell>\n      <Table.Cell align="center"><ActionCell /></Table.Cell>\n    </Table.Row>\n  </Table.Body>\n</Table.Primitive>',
   "import { Tabs } from '@heliannuuthus/ui'\n\n<Tabs\n  animation=\"slide\"\n  defaultValue=\"design\"\n  items={[\n    { value: 'design', label: '设计', content: <Design /> },\n    { value: 'code', label: '开发', content: <Development /> },\n  ]}\n/>":
@@ -3498,10 +3857,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   'v0.12.0 已部署到生产环境。': 'v0.12.0 has been deployed to production.',
   'variant 只区分信息层级；同一种状态不要在页面内混用多套样式。':
     'Variant only distinguishes information levels; do not mix multiple sets of styles within the page for the same state.',
-  'virtual 直接使用基础 Table 的虚拟表体；固定列、横向滚动和自定义 render 会继续生效。':
-    'virtual directly uses the virtual table body of the base Table; fixed columns, horizontal scrolling, and custom render will continue to take effect.',
-  'VirtualBody 只适用于固定高度的单行数据；动态高度、行展开和跨行内容继续使用普通 Body。':
-    'VirtualBody only applies to single rows of fixed-height data; dynamic height, row expansion, and cross-row content continue to use ordinary Body.',
+  'virtual 只滚动并虚拟化表体；Header 固定在容器顶部，固定列、横向滚动和自定义 render 会继续生效。':
+    'virtual scrolls and virtualizes only the table body. Header stays pinned to the top of the container, while fixed columns, horizontal scrolling, and custom render continue to work.',
   'Web Console 发布计划': 'Web Console Release Plan',
   '不要把格式化后的字符串存入业务状态；onChange 已返回原始 number 或 null。':
     'Do not store the formatted string in application state; onChange already returns the raw number or null.',
@@ -4073,8 +4430,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   进入生产阶段: 'Entering production',
   查看完整发布记录: 'View the complete release history',
   轨道与项目样式: 'Track and item styles',
-  'contentClassName 扩展轮播轨道，itemClassName 为每个项目设置统一宽度和间距。':
-    'contentClassName extends the carousel track, while itemClassName applies consistent width and spacing to every item.',
+  'classNames 按 content 与 item 语义槽位扩展轮播轨道和项目样式。':
+    'classNames extends the carousel track and items through the content and item semantic slots.',
   自定义列表项渲染: 'Custom item rendering',
   'renderItem 接收当前 ItemGroupEntry 和索引，用于改写整项渲染，而不是修改 Item 的基础属性。':
     'renderItem receives the current ItemGroupEntry and index to replace whole-item rendering without changing the base Item contract.',
@@ -4188,10 +4545,10 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   许澄维护: 'Maintained by Xu Cheng',
   评审通过: 'Review approved',
   '8 分钟前更新': 'Updated 8 minutes ago',
-  '默认组合搜索、排序、固定列、操作列、Caption、Footer 和 Pagination；业务只需要提供 data 与 TableColumn。':
-    'The default composition includes search, sorting, fixed columns, actions, Caption, Footer, and Pagination; applications only provide data and TableColumn.',
-  '在 TableColumn 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。':
-    'Nest columns in TableColumn to create grouped headers; Table calculates spans, levels, and empty-state width.',
+  '默认组合搜索、排序、固定列、操作列、Footer 和 Pagination；业务只需要提供 data 与 Table.Column。':
+    'The default composition includes search, sorting, fixed columns, actions, Footer, and Pagination; applications only provide data and Table.Column.',
+  '在 Table.Column 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。':
+    'Nest columns in Table.Column to create grouped headers; Table calculates spans, levels, and empty-state width.',
   '受控排序、分页与行选择': 'Controlled sorting, pagination, and row selection',
   'Primitive 行展开': 'Primitive row expansion',
   服务端数据模式: 'Server data mode',
@@ -4203,22 +4560,13 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   ' 条发布记录': ' release records',
   'sorting、pagination 和 rowSelection 都可以由业务受控；每次交互都会返回公开状态，不暴露底层表格实例。':
     'Applications can control sorting, pagination, and rowSelection; every interaction returns public state without exposing the underlying table instance.',
-  '加载、空结果与错误': 'Loading, empty results, and errors',
-  '三种数据状态使用同一个跨列区域，表头和表格宽度保持稳定。':
-    'All three data states use the same spanning region so the header and table width remain stable.',
+  加载与外部状态组合: 'Loading and external state composition',
+  'Table 只内置布尔 loading；定制空结果和请求错误分别组合 Empty 与 Alert。':
+    'Table only provides boolean loading; compose Empty and Alert for custom empty results and request errors.',
   加载中: 'Loading',
   空结果: 'Empty result',
   '使用库自有的列模型定义访问器、表头、单元格和嵌套列组。':
     'Use the library-owned column model to define accessors, headers, cells, and nested column groups.',
-  'key 标识列；accessor 读取字段或计算值；header 定义自动生成的列标题。':
-    'key identifies the column, accessor reads or computes a value, and header defines the generated heading.',
-  '自定义单元格、嵌套分组列，并选择默认排序或业务比较函数。':
-    'Customize cells, nest grouped columns, and choose default sorting or an application comparator.',
-  '列布局属性直接映射到 Head 与 Cell；固定列通过数字 width 自动计算偏移。':
-    'Column layout properties map directly to Head and Cell; fixed-column offsets are calculated from numeric width values.',
-  '分别定制表头与单元格类名，并为超长表头或单元格提供可访问的完整内容。':
-    'Customize header and cell class names separately, and provide accessible full content for truncated headers or cells.',
-  '服务：': 'Service: ',
   '统一为渲染、选择、展开和虚拟滚动提供稳定的业务行标识。':
     'Provide one stable business row identifier for rendering, selection, expansion, and virtualization.',
   '配置搜索字段、自定义 predicate、受控值和 client/manual 数据处理模式。':
@@ -4231,14 +4579,14 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Generate the selection column with controlled or uncontrolled keys, disabled rows, select-all labels, and change callbacks.',
   '只渲染可视范围附近的等高单行数据；类型上与 expandable 互斥。':
     'Render only fixed-height rows near the viewport; the type is mutually exclusive with expandable.',
-  '在同一跨列状态区域闭环展示加载、空结果和错误。':
-    'Render loading, empty results, and errors in the same spanning state region.',
-  '按 root、toolbar、container、table、caption、header、body、footer、state 与 pagination 定制语义区域。':
-    'Customize the root, toolbar, container, table, caption, header, body, footer, state, and pagination semantic regions.',
-  '向内部 Table.Primitive 传递原生 table 与容器引用、样式。':
-    'Pass native table attributes plus container refs and styles to the internal Table.Primitive.',
-  'Table.Primitive 创建原生 table 与滚动容器，Caption 提供整张表格的语义标题。':
-    'Table.Primitive creates the native table and scroll container; Caption provides its semantic title.',
+  '显示内置加载状态；空数据由 Table 自动展示默认提示。':
+    'Show the built-in loading state; Table automatically displays the default message for empty data.',
+  '按 root、toolbar、container、table、header、body、footer、state 与 pagination 定制语义区域。':
+    'Customize the root, toolbar, container, table, header, body, footer, state, and pagination semantic regions.',
+  '向内部 Table.Primitive 传递原生 table 与容器引用、样式；Table 会自动计算内容宽度，并在翻页时保持已经得到的列宽。':
+    'Pass native table attributes plus container refs and styles to the internal Table.Primitive. Table automatically sizes content and preserves the resulting column widths across pages.',
+  'Table.Primitive 创建原生 table 与滚动容器。':
+    'Table.Primitive creates the native table and scroll container.',
   'Table.Primitive 是不管理数据状态的语义表格根：业务直接组合 Table.Header、Table.Row 和 Table.Cell，精确控制原生结构。':
     'Table.Primitive is a semantic table root without data state; compose Table.Header, Table.Row, and Table.Cell for exact native structure control.',
   '数据已经是可直接渲染的行列结构，不需要 Table 的列模型和数据状态。':
@@ -4251,22 +4599,22 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Use data-driven Table for search, sorting, selection, or automatic pagination; do not put that state into Table.Primitive.',
   'Table 是数据驱动的完整表格：搜索、排序、分页、选择和展开都有受控与非受控闭环，并提供固定列、状态与虚拟滚动。':
     'Table is a complete data-driven table with controlled and uncontrolled search, sorting, pagination, selection, and expansion plus fixed columns, states, and virtualization.',
-  '常规业务数据列表默认使用 Table，由 data 与 TableColumn 驱动完整表格。':
-    'Use Table for typical application data lists, driven by data and TableColumn.',
+  '常规业务数据列表默认使用 Table，由 data 与 Table.Column 驱动完整表格。':
+    'Use Table for typical application data lists, driven by data and Table.Column.',
   '通过 accessor、header、render、columns 和直接列属性声明数据访问、结构与布局。':
     'Declare data access, structure, and layout with accessor, header, render, columns, and direct column properties.',
   '展开按钮自动同步 aria-expanded；rowKey 应返回可以辨认且稳定的业务标识。':
     'Expand buttons synchronize aria-expanded; rowKey should return a stable, recognizable business identifier.',
-  '不要在 Table 内硬编码业务操作；通过 TableColumn.render 读取当前 row 后组合业务按钮。':
-    'Do not hardcode application actions in Table; compose them after reading the row in TableColumn.render.',
+  '不要在 Table 内硬编码业务操作；通过 Table.Column.render 读取当前 row 后组合业务按钮。':
+    'Do not hardcode application actions in Table; compose them after reading the row in Table.Column.render.',
   'Table 只负责数据驱动的完整交互；需要完全控制原生表格结构时，从 Table.Primitive 开始并组合 Table.Header、Table.Row 与 Table.Cell。':
     'Table handles complete data-driven interactions; for full native structure control, start with Table.Primitive and compose Table.Header, Table.Row, and Table.Cell.',
-  '常规业务数据列表使用 data 与 TableColumn，快速获得搜索、排序、分页、选择、展开和虚拟滚动。':
-    'Use data and TableColumn for typical data lists with search, sorting, pagination, selection, expansion, and virtualization.',
+  '常规业务数据列表使用 data 与 Table.Column，快速获得搜索、排序、分页、选择、展开和虚拟滚动。':
+    'Use data and Table.Column for typical data lists with search, sorting, pagination, selection, expansion, and virtualization.',
   '数据已经完成加工，或结构无法由列模型表达时，使用 Table.Primitive 作为根并组合 Table.Header、Table.Body、Table.Row 与 Table.Cell。':
     'When data is already processed or the structure cannot be expressed by columns, use Table.Primitive as the root and compose Table.Header, Table.Body, Table.Row, and Table.Cell.',
-  '悬停、聚焦或点击右侧属性行，查看 className 与 TableClassNames 各字段对应的真实数据表区域。':
-    'Hover, focus, or click a property row to see the actual region mapped to className and each TableClassNames field.',
+  '悬停、聚焦或点击右侧属性行，查看 className 与 Table.ClassNames 各字段对应的真实数据表区域。':
+    'Hover, focus, or click a property row to see the actual region mapped to className and each Table.ClassNames field.',
   当前排序: 'Current sorting',
   '当前排序：': 'Current sorting: ',
   '· 已选择': '· selected',
@@ -4282,8 +4630,6 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'The container that provides horizontal or vertical scrolling, borders, and rounding.',
   '原生 table 节点，可设置布局、宽度与表格样式。':
     'The native table element for layout, width, and table styling.',
-  '描述整张表格用途的 caption 区域。':
-    'The caption region describing the purpose of the entire table.',
   '由 columns 自动生成的表头区域。':
     'The header region generated from columns.',
   '数据行、展开行或状态行所在的表体区域。':
@@ -4296,6 +4642,6 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   条记录: 'records',
   '搜索发布单…': 'Search releases…',
   'Table 语义区域': 'Table semantic regions',
-  'import { Table } from \'@heliannuuthus/ui\'\n\n<Table\n  columns={columns}\n  data={records}\n  loading={request.pending}\n  empty="没有匹配记录"\n  error={request.error ? <RetryState /> : undefined}\n/>':
-    'import { Table } from \'@heliannuuthus/ui\'\n\n<Table\n  columns={columns}\n  data={records}\n  loading={request.pending}\n  empty="No matching records"\n  error={request.error ? <RetryState /> : undefined}\n/>',
+  'import { Alert, Empty, Table } from \'@heliannuuthus/ui\'\n\nif (request.error) {\n  return <Alert variant="error" title="发布记录加载失败" />\n}\n\nif (!request.pending && records.length === 0) {\n  return <Empty title="没有匹配记录" />\n}\n\n<Table\n  columns={columns}\n  data={records}\n  loading={request.pending}\n/>':
+    'import { Alert, Empty, Table } from \'@heliannuuthus/ui\'\n\nif (request.error) {\n  return <Alert variant="error" title="Failed to load release records" />\n}\n\nif (!request.pending && records.length === 0) {\n  return <Empty title="No matching records" />\n}\n\n<Table\n  columns={columns}\n  data={records}\n  loading={request.pending}\n/>',
 };

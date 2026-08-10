@@ -13,6 +13,16 @@ import {
   useFormControl,
 } from './internal/form-control';
 
+interface DatePickerClassNames {
+  calendar?: string;
+  trigger?: string;
+}
+
+interface DatePickerStyles {
+  calendar?: React.CSSProperties;
+  trigger?: React.CSSProperties;
+}
+
 interface DatePickerProps extends Pick<
   React.ComponentProps<'button'>,
   'aria-describedby' | 'aria-invalid' | 'id' | 'name' | 'onBlur'
@@ -26,12 +36,12 @@ interface DatePickerProps extends Pick<
   inputRef?: React.Ref<HTMLButtonElement>;
   required?: boolean;
   locale?: 'en' | 'zh';
-  className?: string;
-  calendarClassName?: string;
+  classNames?: DatePickerClassNames;
   calendarProps?: Omit<
     React.ComponentProps<typeof Calendar>,
-    'mode' | 'selected' | 'onSelect' | 'className'
+    'mode' | 'selected' | 'onSelect' | 'className' | 'style'
   >;
+  styles?: DatePickerStyles;
 }
 
 const DatePicker = ({
@@ -49,9 +59,9 @@ const DatePicker = ({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   locale: localeName = 'zh',
-  className,
-  calendarClassName,
+  classNames,
   calendarProps,
+  styles,
 }: DatePickerProps) => {
   const formControl = useFormControl<Date | undefined>();
   const controlRef = useMergedRefs(
@@ -83,7 +93,8 @@ const DatePicker = ({
       disabled={
         disabled || formControl?.disabled ? () => true : calendarProps?.disabled
       }
-      className={cn(display === 'inline' && className, calendarClassName)}
+      className={classNames?.calendar}
+      style={styles?.calendar}
     />
   );
 
@@ -93,7 +104,7 @@ const DatePicker = ({
     <Popover
       align="start"
       content={calendar}
-      contentClassName="w-auto p-0"
+      classNames={{ content: 'w-auto p-0' }}
       trigger={
         <Button
           aria-describedby={mergeIds(
@@ -115,8 +126,9 @@ const DatePicker = ({
           className={cn(
             'w-60 justify-start text-left font-normal',
             !selectedValue && 'text-muted-foreground',
-            className
+            classNames?.trigger
           )}
+          style={styles?.trigger}
         >
           <CalendarIcon />
           {selectedValue
@@ -130,4 +142,9 @@ const DatePicker = ({
 
 registerFormControl(DatePicker);
 
-export { DatePicker, type DatePickerProps };
+export {
+  DatePicker,
+  type DatePickerClassNames,
+  type DatePickerProps,
+  type DatePickerStyles,
+};

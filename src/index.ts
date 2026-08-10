@@ -6,7 +6,12 @@ export {
   type AccordionItem,
   type AccordionProps,
 } from './components/accordion';
-export { AlertDialog, type AlertDialogProps } from './components/alert-dialog';
+export {
+  AlertDialog,
+  type AlertDialogClassNames,
+  type AlertDialogProps,
+  type AlertDialogStyles,
+} from './components/alert-dialog';
 export { Alert, type AlertProps } from './components/alert';
 export { AspectRatio } from './components/aspect-ratio';
 export {
@@ -29,12 +34,14 @@ export {
 export {
   Badge,
   badgeVariants,
+  type BadgeClassNames,
   type BadgeCountProps,
   type BadgeDotProps,
   type BadgeLabelProps,
   type BadgeLinkProps,
   type BadgeProps,
   type BadgeRef,
+  type BadgeStyles,
 } from './components/badge';
 export {
   Breadcrumb,
@@ -67,10 +74,12 @@ export {
 export {
   Carousel,
   type CarouselAutoplay,
+  type CarouselClassNames,
   type CarouselControls,
   type CarouselDotRenderProps,
   type CarouselProps,
   type CarouselRef,
+  type CarouselStyles,
   useCarousel,
 } from './components/carousel';
 export { Chart, type ChartConfig } from './components/chart';
@@ -84,7 +93,9 @@ export {
 } from './components/checkbox';
 export {
   Collapsible,
+  type CollapsibleClassNames,
   type CollapsibleProps,
+  type CollapsibleStyles,
   type CollapsibleTriggerProps,
 } from './components/collapsible';
 export {
@@ -95,14 +106,31 @@ export {
   type CommandOption,
   type CommandProps,
 } from './components/command';
-export { ContextMenu, type ContextMenuProps } from './components/context-menu';
+export {
+  ContextMenu,
+  type ContextMenuClassNames,
+  type ContextMenuProps,
+  type ContextMenuStyles,
+} from './components/context-menu';
 export {
   Counter,
+  type CounterClassNames,
   type CounterPlace,
   type CounterProps,
+  type CounterStyles,
 } from './components/counter';
-export { DatePicker, type DatePickerProps } from './components/date-picker';
-export { Dialog, type DialogProps } from './components/dialog';
+export {
+  DatePicker,
+  type DatePickerClassNames,
+  type DatePickerProps,
+  type DatePickerStyles,
+} from './components/date-picker';
+export {
+  Dialog,
+  type DialogClassNames,
+  type DialogProps,
+  type DialogStyles,
+} from './components/dialog';
 export {
   DirectionProvider,
   useDirection,
@@ -112,14 +140,18 @@ export {
 export {
   Drawer,
   type DrawerBehavior,
+  type DrawerClassNames,
   type DrawerProps,
   type DrawerSide,
   type DrawerSnapPoint,
+  type DrawerStyles,
 } from './components/drawer';
 export {
   DropdownMenu,
+  type DropdownMenuClassNames,
   type DropdownMenuEntry,
   type DropdownMenuProps,
+  type DropdownMenuStyles,
 } from './components/dropdown-menu';
 export { Empty, type EmptyProps } from './components/empty';
 export { Field } from './components/field';
@@ -207,7 +239,9 @@ export {
 export { Pagination, type PaginationProps } from './components/pagination';
 export {
   Popover,
+  type PopoverClassNames,
   type PopoverProps,
+  type PopoverStyles,
   type PopoverTriggerMode,
 } from './components/popover';
 export {
@@ -244,9 +278,11 @@ export {
 } from './components/scroll-area';
 export {
   Select,
+  type SelectClassNames,
   type SelectOption,
   type SelectOptionGroup,
   type SelectProps,
+  type SelectStyles,
   type SelectTriggerProps,
   type SelectValue,
   useSelectAnchor,
@@ -276,42 +312,16 @@ export {
   type StackProps,
 } from './components/stack';
 export { Switch, type SwitchProps } from './components/switch';
-export {
-  Table,
-  type TableActionsProps,
-  type TableClassNames,
-  type TableColumn,
-  type TableColumnAccessor,
-  type TableExpandableProps,
-  type TablePaginationProps,
-  type TableProps,
-  type TableRender,
-  type TableRowSelectionProps,
-  type TableSearchProps,
-  type TableSemanticSlot,
-  type TableSortingProps,
-  type TableSortOrder,
-  type TableSortState,
-  type TableVirtualProps,
-} from './components/table';
-export {
-  type TableCellAlign,
-  type TableCellFixed,
-  type TableCellProps,
-  type TableExpandButtonProps,
-  type TableExpandedRowProps,
-  type TableHeadProps,
-  type TablePrimitiveProps,
-  type TableRowProps,
-  type TableVirtualBodyProps,
-} from './components/table-primitive';
+export { Table } from './components/table';
 export {
   Tabs,
   tabsListVariants,
   type TabsAnimation,
+  type TabsClassNames,
   type TabsItem,
   type TabsProps,
   type TabsScrollButtonLabels,
+  type TabsStyles,
 } from './components/tabs';
 export {
   Toast,
@@ -328,7 +338,12 @@ export {
   type ToggleGroupProps,
   type ToggleProps,
 } from './components/toggle';
-export { Tooltip, type TooltipProps } from './components/tooltip';
+export {
+  Tooltip,
+  type TooltipClassNames,
+  type TooltipProps,
+  type TooltipStyles,
+} from './components/tooltip';
 export { Typography } from './components/typography';
 export { useIsMobile } from './hooks/use-mobile';
 export { cn } from './lib/utils';

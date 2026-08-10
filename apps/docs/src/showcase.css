@@ -998,6 +998,10 @@ a {
   );
   background-size: 18px 18px;
 }
+.demo-preview-table {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
 .component-harness {
   display: flex;
   width: 100%;
@@ -1094,10 +1098,6 @@ a {
 .component-harness-case-header [data-slot='badge'] {
   flex: 0 0 auto;
 }
-.component-harness-case-segmented .component-harness-case-header {
-  min-height: 58px;
-  padding-top: 0;
-}
 .component-harness-case-stage {
   min-height: 168px;
   display: flex;
@@ -1111,6 +1111,11 @@ a {
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--docs-muted) 28%, transparent)
     transparent;
+}
+.component-harness-case-segmented .component-harness-case-stage {
+  min-height: 0;
+  padding: 0;
+  border-top: 0;
 }
 .example-card-wide .demo-preview {
   height: var(--demo-preview-height, 420px);
@@ -6589,7 +6594,7 @@ a {
 }
 
 .display-table-managed {
-  width: min(760px, 100%);
+  width: 100%;
 }
 
 .display-table-managed [data-header-group] {
@@ -6603,6 +6608,35 @@ a {
 
 .display-table-managed [data-header-group]:last-child {
   border-inline-end: 0;
+}
+
+.display-table-status {
+  width: 100%;
+}
+
+.display-table-status-cell {
+  height: 300px;
+  padding: 24px;
+  white-space: normal;
+}
+
+.display-table-status-standalone {
+  display: grid;
+  min-height: 300px;
+  place-items: center;
+  padding: 24px;
+}
+
+.display-table-status-empty {
+  max-width: 520px;
+  margin-inline: auto;
+  padding: 24px;
+  border: 0;
+}
+
+.display-table-status-alert {
+  max-width: 640px;
+  margin-inline: auto;
 }
 
 .display-table-managed-grouped [data-slot='table-header'] tr:first-child {
@@ -6928,11 +6962,12 @@ a {
 }
 
 .display-table-shell {
+  width: 100%;
   overflow: hidden;
 }
 
 .display-table-wide {
-  width: min(760px, 100%);
+  width: 100%;
 }
 
 .display-table-virtual-meta {
@@ -6955,7 +6990,7 @@ a {
 
 .display-table-composite {
   display: grid;
-  width: min(680px, 100%);
+  width: 100%;
   gap: 14px;
 }
 

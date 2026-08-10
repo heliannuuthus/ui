@@ -13,18 +13,28 @@ type CollapsibleTriggerProps = Omit<
 > &
   VariantProps<typeof buttonVariants>;
 
+type CollapsibleClassNames = {
+  content?: string;
+  header?: string;
+};
+
+type CollapsibleStyles = {
+  content?: React.CSSProperties;
+  header?: React.CSSProperties;
+};
+
 type CollapsibleProps = Omit<
   React.ComponentProps<'div'>,
   'children' | 'content'
 > &
   OpenStateProps & {
+    classNames?: CollapsibleClassNames;
     content: React.ReactNode;
-    contentClassName?: string;
     disabled?: boolean;
     footer?: React.ReactNode;
     header?: React.ReactNode;
-    headerClassName?: string;
     icon?: React.ReactNode;
+    styles?: CollapsibleStyles;
     trigger?: React.ReactNode;
     triggerIcon?: React.ReactNode;
     triggerProps?: CollapsibleTriggerProps;
@@ -32,12 +42,12 @@ type CollapsibleProps = Omit<
 
 const Collapsible = ({
   className,
+  classNames,
   content,
-  contentClassName,
   footer,
   header,
-  headerClassName,
   icon = <ChevronDownIcon className="size-4" />,
+  styles,
   trigger,
   triggerIcon,
   triggerProps,
@@ -56,7 +66,11 @@ const Collapsible = ({
       {...props}
     >
       {trigger != null ? (
-        <div className={headerClassName} data-slot="collapsible-header">
+        <div
+          className={classNames?.header}
+          data-slot="collapsible-header"
+          style={styles?.header}
+        >
           {header}
           <CollapsiblePrimitive.Trigger
             className={buttonVariants({ size, variant })}
@@ -79,9 +93,10 @@ const Collapsible = ({
         <CollapsiblePrimitive.Trigger
           className={cn(
             'group/collapsible-trigger flex w-full items-center gap-3 px-4 py-3 text-left text-sm outline-none transition-colors hover:bg-muted/60 focus-visible:ring-3 focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50',
-            headerClassName
+            classNames?.header
           )}
           data-slot="collapsible-header"
+          style={styles?.header}
           {...restTriggerProps}
         >
           {header}
@@ -99,9 +114,10 @@ const Collapsible = ({
       <CollapsiblePrimitive.Panel
         className={cn(
           "h-(--collapsible-panel-height) origin-top overflow-hidden transition-[height,opacity,transform] duration-240 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[height,opacity,transform] [&[hidden]:not([hidden='until-found'])]:hidden data-ending-style:h-0 data-ending-style:-translate-y-1.5 data-ending-style:opacity-0 data-starting-style:h-0 data-starting-style:-translate-y-1.5 data-starting-style:opacity-0 motion-reduce:transform-none motion-reduce:transition-none",
-          contentClassName
+          classNames?.content
         )}
         data-slot="collapsible-content"
+        style={styles?.content}
       >
         {content}
       </CollapsiblePrimitive.Panel>
@@ -117,4 +133,10 @@ const Collapsible = ({
   );
 };
 
-export { Collapsible, type CollapsibleProps, type CollapsibleTriggerProps };
+export {
+  Collapsible,
+  type CollapsibleClassNames,
+  type CollapsibleProps,
+  type CollapsibleStyles,
+  type CollapsibleTriggerProps,
+};
