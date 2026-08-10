@@ -42,6 +42,12 @@ const loadHarnessModule = async () => {
         export {
           componentDocumentation,
         } from './apps/docs/src/component-docs.tsx'
+        export {
+          comparePropertyNames,
+          orderApiProperties,
+          orderPropertyEntries,
+          qualifiedApiPropertyName,
+        } from './apps/docs/src/api-property-order.ts'
       `,
       loader: 'ts',
       resolveDir: packageRoot,
@@ -111,6 +117,7 @@ const {
   componentDocumentation,
   componentSearchMetadata,
   componentSlug,
+  comparePropertyNames,
   defaultLocale,
   englishContentTranslations,
   htmlLanguage,
@@ -118,6 +125,9 @@ const {
   localizedComponentName,
   localizedComponentMetadata,
   localizedPath,
+  orderApiProperties,
+  orderPropertyEntries,
+  qualifiedApiPropertyName,
   resources,
   supportedLocales,
   zhComponentNames,
@@ -125,6 +135,46 @@ const {
 
 const chinesePattern = /[\u3400-\u9fff]/u;
 const contentEntries = Object.entries(englishContentTranslations);
+
+const apiOrderFixture = [
+  { component: 'Demo', name: 'style' },
+  { component: 'Demo', name: 'onChange' },
+  { component: 'Demo', name: 'defaultValue' },
+  { component: 'Demo', name: 'className' },
+  { component: 'Demo', name: 'value' },
+  { component: 'Demo', name: 'items', required: true },
+  { component: 'Demo', name: 'ref' },
+  { component: 'Demo', name: 'styles' },
+  { component: 'Demo', name: 'disabled' },
+  { component: 'Demo', name: 'classNames' },
+];
+const orderedApiFixtureNames = orderApiProperties(apiOrderFixture, 'Demo').map(
+  qualifiedApiPropertyName
+);
+
+assert.deepEqual(orderedApiFixtureNames, [
+  'Demo.items',
+  'Demo.disabled',
+  'Demo.value',
+  'Demo.defaultValue',
+  'Demo.onChange',
+  'Demo.ref',
+  'Demo.classNames',
+  'Demo.styles',
+  'Demo.className',
+  'Demo.style',
+]);
+assert.ok(comparePropertyNames('disabled', 'onChange') < 0);
+assert.deepEqual(
+  orderPropertyEntries(
+    Object.fromEntries(
+      [...orderedApiFixtureNames].reverse().map((name) => [name, true])
+    ),
+    orderedApiFixtureNames
+  ).map(([name]) => name),
+  orderedApiFixtureNames,
+  'Case properties must follow the same order as the API table.'
+);
 
 assert.ok(
   contentEntries.length > 0,

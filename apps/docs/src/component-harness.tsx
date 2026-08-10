@@ -3,6 +3,7 @@ import { createCasesFromAxes } from './component-harness-cases';
 import type { CSSProperties, ReactNode } from 'react';
 import { Badge, Tabs } from '@heliannuuthus/ui';
 import { useTranslation } from 'react-i18next';
+import { orderPropertyEntries } from './api-property-order';
 
 export type ComponentHarnessProperties = Record<
   string,
@@ -39,6 +40,7 @@ type ComponentHarnessSharedProps = {
   children: (values: ComponentHarnessValues) => ReactNode;
   layout?: ComponentHarnessLayout;
   minCaseWidth?: number;
+  propertyOrder?: string[];
 };
 
 type ComponentHarnessCaseProps = ComponentHarnessSharedProps & {
@@ -88,14 +90,15 @@ export const ComponentHarness = (props: ComponentHarnessProps) => {
             aria-label={t('components.properties')}
             className="component-harness-case-properties"
           >
-            {Object.entries(harnessCase.properties ?? harnessCase.values).map(
-              ([name, value]) => (
-                <div key={name}>
-                  <dt>{name}</dt>
-                  <dd>{formatPropertyValue(value)}</dd>
-                </div>
-              )
-            )}
+            {orderPropertyEntries(
+              harnessCase.properties ?? harnessCase.values,
+              props.propertyOrder
+            ).map(([name, value]) => (
+              <div key={name}>
+                <dt>{name}</dt>
+                <dd>{formatPropertyValue(value)}</dd>
+              </div>
+            ))}
           </dl>
           {harnessCase.isDefault ? (
             <Badge variant="secondary">{docsCopy('默认')}</Badge>
@@ -110,14 +113,15 @@ export const ComponentHarness = (props: ComponentHarnessProps) => {
               aria-label={t('components.properties')}
               className="component-harness-case-properties"
             >
-              {Object.entries(harnessCase.properties ?? harnessCase.values).map(
-                ([name, value]) => (
-                  <div key={name}>
-                    <dt>{name}</dt>
-                    <dd>{formatPropertyValue(value)}</dd>
-                  </div>
-                )
-              )}
+              {orderPropertyEntries(
+                harnessCase.properties ?? harnessCase.values,
+                props.propertyOrder
+              ).map(([name, value]) => (
+                <div key={name}>
+                  <dt>{name}</dt>
+                  <dd>{formatPropertyValue(value)}</dd>
+                </div>
+              ))}
             </dl>
           </div>
           {harnessCase.isDefault ? (
