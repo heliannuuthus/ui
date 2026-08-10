@@ -5373,6 +5373,7 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
           ],
         },
       ],
+      caseLayout: 'segmented',
       preview: (values) => (
         <TableStatusDemo
           state={
@@ -5394,7 +5395,7 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
   error={request.error ? <RetryState /> : undefined}
 />`),
       wide: true,
-      previewHeight: 740,
+      previewHeight: 460,
     },
     {
       title: docsCopy('服务端数据模式'),

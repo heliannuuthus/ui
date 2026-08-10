@@ -1,6 +1,6 @@
 import { docsCopy } from './i18n/content';
 import type { CSSProperties, ReactNode } from 'react';
-import { Badge } from '@heliannuuthus/ui';
+import { Badge, Tabs } from '@heliannuuthus/ui';
 import { useTranslation } from 'react-i18next';
 
 export type ComponentHarnessProperties = Record<
@@ -30,7 +30,7 @@ export type ComponentHarnessCaseAxis = {
 
 export type ComponentHarnessValues = Record<string, string>;
 
-export type ComponentHarnessLayout = 'grid' | 'stack';
+export type ComponentHarnessLayout = 'grid' | 'segmented' | 'stack';
 
 type ComponentHarnessSharedProps = {
   children: (values: ComponentHarnessValues) => ReactNode;
@@ -113,6 +113,74 @@ export const ComponentHarness = (props: ComponentHarnessProps) => {
       } as CSSProperties)
     : undefined;
 
+  const renderCase = (
+    harnessCase: ComponentHarnessCase,
+    options?: { compactHeader?: boolean }
+  ) => (
+    <section
+      aria-label={harnessCase.label}
+      className={`component-harness-case${
+        options?.compactHeader ? ' component-harness-case-segmented' : ''
+      }`}
+      key={`${harnessCase.label}-${JSON.stringify(harnessCase.values)}`}
+      role="group"
+    >
+      <header className="component-harness-case-header">
+        <div className="component-harness-case-copy">
+          {options?.compactHeader ? null : <h4>{harnessCase.label}</h4>}
+          {harnessCase.description ? <p>{harnessCase.description}</p> : null}
+          <dl
+            aria-label={t('components.properties')}
+            className="component-harness-case-properties"
+          >
+            {Object.entries(harnessCase.properties ?? harnessCase.values).map(
+              ([name, value]) => (
+                <div key={name}>
+                  <dt>{name}</dt>
+                  <dd>{formatPropertyValue(value)}</dd>
+                </div>
+              )
+            )}
+          </dl>
+        </div>
+        {harnessCase.isDefault ? (
+          <Badge variant="secondary">{docsCopy('默认')}</Badge>
+        ) : null}
+      </header>
+      <div className="component-harness-case-stage">
+        {props.children(harnessCase.values)}
+      </div>
+    </section>
+  );
+
+  if (props.layout === 'segmented') {
+    const defaultIndex = Math.max(
+      0,
+      cases.findIndex((harnessCase) => harnessCase.isDefault)
+    );
+
+    return (
+      <div
+        className="component-harness component-harness-cases component-harness-segmented"
+        data-slot="component-harness"
+        style={style}
+      >
+        <Tabs
+          aria-label={t('components.properties')}
+          centered
+          defaultValue={`case-${defaultIndex}`}
+          items={cases.map((harnessCase, index) => ({
+            content: renderCase(harnessCase, { compactHeader: true }),
+            label: harnessCase.label,
+            value: `case-${index}`,
+          }))}
+          panelClassName="component-harness-segmented-panel"
+          variant="outline"
+        />
+      </div>
+    );
+  }
+
   return (
     <div
       className="component-harness component-harness-cases"
@@ -122,42 +190,7 @@ export const ComponentHarness = (props: ComponentHarnessProps) => {
       <div
         className={`component-harness-case-grid component-harness-case-grid-${props.layout ?? 'grid'}`}
       >
-        {cases.map((harnessCase) => (
-          <section
-            aria-label={harnessCase.label}
-            className="component-harness-case"
-            key={`${harnessCase.label}-${JSON.stringify(harnessCase.values)}`}
-            role="group"
-          >
-            <header className="component-harness-case-header">
-              <div className="component-harness-case-copy">
-                <h4>{harnessCase.label}</h4>
-                {harnessCase.description ? (
-                  <p>{harnessCase.description}</p>
-                ) : null}
-                <dl
-                  aria-label={t('components.properties')}
-                  className="component-harness-case-properties"
-                >
-                  {Object.entries(
-                    harnessCase.properties ?? harnessCase.values
-                  ).map(([name, value]) => (
-                    <div key={name}>
-                      <dt>{name}</dt>
-                      <dd>{formatPropertyValue(value)}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-              {harnessCase.isDefault ? (
-                <Badge variant="secondary">{docsCopy('默认')}</Badge>
-              ) : null}
-            </header>
-            <div className="component-harness-case-stage">
-              {props.children(harnessCase.values)}
-            </div>
-          </section>
-        ))}
+        {cases.map((harnessCase) => renderCase(harnessCase))}
       </div>
     </div>
   );

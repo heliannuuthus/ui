@@ -1019,6 +1019,16 @@ a {
 .component-harness-case-grid-stack {
   grid-template-columns: minmax(0, 1fr);
 }
+.component-harness-segmented [data-slot='tabs'] {
+  width: 100%;
+  gap: 20px;
+}
+.component-harness-segmented [data-slot='tabs-list-shell'] {
+  max-width: 100%;
+}
+.component-harness-segmented-panel {
+  min-width: 0;
+}
 .component-harness-case {
   min-width: 0;
   display: grid;
@@ -1083,6 +1093,10 @@ a {
 }
 .component-harness-case-header [data-slot='badge'] {
   flex: 0 0 auto;
+}
+.component-harness-case-segmented .component-harness-case-header {
+  min-height: 58px;
+  padding-top: 0;
 }
 .component-harness-case-stage {
   min-height: 168px;
