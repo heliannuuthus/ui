@@ -231,17 +231,26 @@ const PopoverDescription = ({
   );
 };
 
+type PopoverClassNames = {
+  content?: string;
+};
+
+type PopoverStyles = {
+  content?: React.CSSProperties;
+};
+
 type PopoverProps = OpenStateProps & {
   align?: PopupAlign;
   alignOffset?: number;
   closeDelay?: number;
+  classNames?: PopoverClassNames;
   content: React.ReactNode;
-  contentClassName?: string;
   delay?: number;
   description?: React.ReactNode;
   modal?: boolean | 'trap-focus';
   side?: PopupSide;
   sideOffset?: number;
+  styles?: PopoverStyles;
   title?: React.ReactNode;
   trigger: React.ReactElement;
   triggerMode?: PopoverTriggerMode;
@@ -251,12 +260,13 @@ const Popover = ({
   align,
   alignOffset,
   closeDelay,
+  classNames,
   content,
-  contentClassName,
   delay,
   description,
   side,
   sideOffset,
+  styles,
   title,
   trigger,
   triggerMode = 'click',
@@ -275,9 +285,10 @@ const Popover = ({
       <PopoverContent
         align={align}
         alignOffset={alignOffset}
-        className={contentClassName}
+        className={classNames?.content}
         side={side}
         sideOffset={sideOffset}
+        style={styles?.content}
       >
         {title != null || description != null ? (
           <PopoverHeader>
@@ -294,4 +305,9 @@ const Popover = ({
 };
 
 export { Popover };
-export type { PopoverProps, PopoverTriggerMode };
+export type {
+  PopoverClassNames,
+  PopoverProps,
+  PopoverStyles,
+  PopoverTriggerMode,
+};

@@ -252,13 +252,22 @@ const ContextMenuShortcut = ({
   );
 };
 
+type ContextMenuClassNames = {
+  content?: string;
+};
+
+type ContextMenuStyles = {
+  content?: React.CSSProperties;
+};
+
 type ContextMenuProps = OpenStateProps & {
-  contentClassName?: string;
+  classNames?: ContextMenuClassNames;
   disabled?: boolean;
   highlightItemOnHover?: boolean;
   items: readonly DropdownMenuEntry[];
   loopFocus?: boolean;
   orientation?: 'horizontal' | 'vertical';
+  styles?: ContextMenuStyles;
   trigger: React.ReactElement;
 };
 
@@ -333,19 +342,28 @@ const renderContextMenuEntries = (items: readonly DropdownMenuEntry[]) => {
 };
 
 const ContextMenu = ({
-  contentClassName,
+  classNames,
   items,
+  styles,
   trigger,
   ...props
 }: ContextMenuProps) => {
   return (
     <ContextMenuRoot {...props}>
       <ContextMenuTrigger render={trigger} />
-      <ContextMenuContent className={contentClassName}>
+      <ContextMenuContent
+        className={classNames?.content}
+        style={styles?.content}
+      >
         {renderContextMenuEntries(items)}
       </ContextMenuContent>
     </ContextMenuRoot>
   );
 };
 
-export { ContextMenu, type ContextMenuProps };
+export {
+  ContextMenu,
+  type ContextMenuClassNames,
+  type ContextMenuProps,
+  type ContextMenuStyles,
+};

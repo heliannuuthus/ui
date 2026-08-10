@@ -169,13 +169,17 @@ const Sidebar = ({
     return (
       <Drawer
         behavior="gesture"
-        contentClassName="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground"
+        classNames={{
+          content: 'w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground',
+        }}
         contentProps={{
           dir,
           'data-sidebar': 'sidebar',
           'data-slot': 'sidebar',
           'data-mobile': 'true',
-          style: {
+        }}
+        styles={{
+          content: {
             '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
           } as React.CSSProperties,
         }}

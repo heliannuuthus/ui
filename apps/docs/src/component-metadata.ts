@@ -183,11 +183,6 @@ export const componentSearchMetadata = {
     ['计数器', '数字动画'],
     ['number', 'animation'],
   ],
-  'data-table': [
-    'Displays and operates on structured data sets.',
-    ['数据表格', '排序', '筛选'],
-    ['grid', 'sorting', 'filtering'],
-  ],
   empty: [
     'Explains an empty state and offers a useful next step.',
     ['空状态', '无数据'],
@@ -195,18 +190,18 @@ export const componentSearchMetadata = {
   ],
   item: [
     'Builds general-purpose list items with content and actions.',
-    ['列表项', '条目'],
-    ['list row', 'content'],
+    ['列表项', '条目', '成员', '设置', '资源'],
+    ['list row', 'content', 'member', 'setting', 'resource'],
   ],
   marker: [
-    'Marks a position or state within content.',
-    ['标记', '位置'],
-    ['indicator', 'position'],
+    'Marks a boundary, position, or state within continuous content.',
+    ['标记', '分段', '位置'],
+    ['indicator', 'boundary', 'position'],
   ],
   table: [
-    'Displays structured data with semantic rows and columns.',
-    ['表格', '行列'],
-    ['rows', 'columns'],
+    'Displays, operates on, and customizes structured data sets.',
+    ['表格', '数据表格', '排序', '筛选', '自定义表格'],
+    ['grid', 'sorting', 'filtering', 'rows', 'columns', 'custom table'],
   ],
   tooltip: [
     'Provides short supplementary information for a control.',

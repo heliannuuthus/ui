@@ -21,6 +21,9 @@
 - Ant Design is an API-design reference only. Do not introduce `antd`, copy its implementation, or create an Ant-compatible facade.
 - Do not design a component solely around one current screen. Cover common composition, loading, empty, error and disabled states, long content, accessibility, narrow layouts, and backward-compatible evolution.
 - Prefer composable primitives and compound components over boolean-prop proliferation. Expose `className`, semantic slots, `asChild` or equivalent escape hatches only when their contract remains type-safe and predictable.
+- Use singular `className` and `style` for a component with one rendered styling target. Use plural `classNames` and `styles` maps with matching semantic slot keys when a composite component exposes multiple internal styling targets. Do not add flat slot-prefixed props such as `headerClassName`, `contentClassName`, or `itemStyle`.
+- When a boolean prop enables a behavior and a `ReactNode` only customizes that same behavior's content, combine them into one `boolean | ReactNode` prop instead of adding a parallel content prop. Use `false` or `undefined` to disable the behavior, `true` to enable its default content, and a `ReactNode` to enable it with custom content. Split the API only when the two values represent independently controllable semantics; for example, prefer `ellipsis?: boolean | ReactNode` over `ellipsis` plus `ellipsisTooltip`.
+- List every public prop and component part on its own documentation row. Do not join names, types, or default values with `/`; each row must describe one independently usable API member.
 - Every new public component must be added to the root export manifest,
   documentation/example coverage, and a changeset or release note when the
   release workflow requires one.

@@ -126,7 +126,7 @@ const ItemMenu = ({
         </button>
       }
       items={getMenuEntries(item.menu ?? [])}
-      contentClassName="w-auto min-w-40"
+      classNames={{ content: 'w-auto min-w-40' }}
     />
   );
 };
@@ -152,7 +152,7 @@ const CollapsedItems = ({
         </button>
       }
       items={getMenuEntries(items)}
-      contentClassName="w-auto min-w-40"
+      classNames={{ content: 'w-auto min-w-40' }}
     />
   );
 };

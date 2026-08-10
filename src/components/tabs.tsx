@@ -36,6 +36,22 @@ type TabsScrollButtonLabels = {
   start: string;
 };
 
+type TabsClassNames = {
+  indicator?: string;
+  list?: string;
+  panel?: string;
+  tab?: string;
+  viewport?: string;
+};
+
+type TabsStyles = {
+  indicator?: React.CSSProperties;
+  list?: React.CSSProperties;
+  panel?: React.CSSProperties;
+  tab?: React.CSSProperties;
+  viewport?: React.CSSProperties;
+};
+
 type TabsProps = Omit<
   React.ComponentProps<'div'>,
   'children' | 'defaultValue' | 'onChange'
@@ -43,33 +59,27 @@ type TabsProps = Omit<
   VariantProps<typeof tabsListVariants> & {
     animation?: TabsAnimation;
     centered?: boolean;
+    classNames?: TabsClassNames;
     defaultValue?: string | null;
-    indicatorClassName?: string;
     items: readonly TabsItem[];
-    listClassName?: string;
     onChange?: (value: string | null) => void;
     orientation?: 'horizontal' | 'vertical';
-    panelClassName?: string;
     scrollButtonLabels?: Partial<TabsScrollButtonLabels>;
-    tabClassName?: string;
+    styles?: TabsStyles;
     value?: string | null;
-    viewportClassName?: string;
   };
 
 const Tabs = ({
   animation = 'fade',
   centered = false,
   className,
-  indicatorClassName,
+  classNames,
   items,
-  listClassName,
   onChange,
   orientation = 'horizontal',
-  panelClassName,
   scrollButtonLabels,
-  tabClassName,
+  styles,
   variant = 'default',
-  viewportClassName,
   ...props
 }: TabsProps) => {
   const listRef = React.useRef<HTMLDivElement>(null);
@@ -213,14 +223,15 @@ const Tabs = ({
           data-slot="tabs-list"
           data-variant={variant}
           data-centered={centered}
-          style={{
-            scrollbarWidth: orientation === 'horizontal' ? 'none' : undefined,
-          }}
           className={cn(
             tabsListVariants({ variant }),
             overflowState.overflow && 'min-w-0 flex-1',
-            listClassName
+            classNames?.list
           )}
+          style={{
+            scrollbarWidth: orientation === 'horizontal' ? 'none' : undefined,
+            ...styles?.list,
+          }}
         >
           {items.map((item) => (
             <TabsPrimitive.Tab
@@ -232,8 +243,9 @@ const Tabs = ({
                 "relative z-1 inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-2 rounded-full border border-transparent! bg-transparent px-3 py-1 text-sm font-medium whitespace-nowrap text-foreground/60 transition-colors duration-150 group-data-horizontal/tabs-list:flex-none group-data-horizontal/tabs-list:snap-nearest group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:rounded-2xl group-data-vertical/tabs:px-3 group-data-vertical/tabs:py-1.5 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
                 'data-active:text-primary-foreground dark:data-active:text-primary-foreground',
                 'group-data-[variant=line]/tabs-list:data-active:text-primary group-data-[variant=soft]/tabs-list:data-active:text-primary group-data-[variant=outline]/tabs-list:data-active:text-foreground',
-                tabClassName
+                classNames?.tab
               )}
+              style={styles?.tab}
               onFocus={(event) => {
                 if (orientation === 'horizontal') {
                   event.currentTarget.scrollIntoView({
@@ -251,8 +263,9 @@ const Tabs = ({
             className={cn(
               'pointer-events-none absolute top-(--active-tab-top) left-(--active-tab-left) -z-1 h-(--active-tab-height) w-(--active-tab-width) transition-[top,left,width,height] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none',
               indicatorVariants[variant ?? 'default'],
-              indicatorClassName
+              classNames?.indicator
             )}
+            style={styles?.indicator}
           />
         </TabsPrimitive.List>
         {showScrollButtons ? (
@@ -272,9 +285,10 @@ const Tabs = ({
       <div
         className={cn(
           'relative grid min-w-0 flex-1 overflow-clip',
-          viewportClassName
+          classNames?.viewport
         )}
         data-slot="tabs-content-viewport"
+        style={styles?.viewport}
       >
         {items.map((item) => (
           <TabsPrimitive.Panel
@@ -283,8 +297,9 @@ const Tabs = ({
             data-slot="tabs-content"
             className={cn(
               'tabs-content-motion col-start-1 row-start-1 min-w-0 text-sm outline-none',
-              panelClassName
+              classNames?.panel
             )}
+            style={styles?.panel}
           >
             {item.content}
           </TabsPrimitive.Panel>
@@ -298,7 +313,9 @@ export {
   Tabs,
   tabsListVariants,
   type TabsAnimation,
+  type TabsClassNames,
   type TabsItem,
   type TabsProps,
   type TabsScrollButtonLabels,
+  type TabsStyles,
 };

@@ -71,17 +71,26 @@ type BadgeLinkProps = Omit<
     href: string;
   };
 
+type BadgeClassNames = {
+  indicator?: string;
+};
+
+type BadgeStyles = {
+  indicator?: React.CSSProperties;
+};
+
 type BadgeNotificationSharedProps = Omit<
   HTMLAttributes<HTMLSpanElement>,
   'children' | 'color'
 > &
   BadgeStyleProps & {
     children?: ReactNode;
-    indicatorClassName?: string;
+    classNames?: BadgeClassNames;
     indicatorLabel?: string;
     offset?: readonly [horizontal: number, vertical: number];
     overflowCount?: number;
     showZero?: boolean;
+    styles?: BadgeStyles;
   };
 
 type BadgeCountProps = BadgeNotificationSharedProps & {
@@ -122,14 +131,15 @@ const Badge = forwardRef<BadgeRef, BadgeProps>((props, ref) => {
     const {
       children,
       className,
+      classNames,
       count,
       dot = false,
-      indicatorClassName,
       indicatorLabel,
       offset = [0, 0],
       overflowCount = 99,
       showZero = false,
       style,
+      styles,
       variant = 'destructive',
       ...notificationProps
     } = props as BadgeCountProps | BadgeDotProps;
@@ -147,16 +157,17 @@ const Badge = forwardRef<BadgeRef, BadgeProps>((props, ref) => {
           badgeIndicatorVariants({ variant }),
           dot && 'size-2.5 min-w-0 p-0',
           hasAnchor && 'absolute top-0 right-0 z-10',
-          indicatorClassName
+          classNames?.indicator
         )}
         data-slot="badge-indicator"
-        style={
-          hasAnchor
+        style={{
+          ...(hasAnchor
             ? {
                 transform: `translate(calc(50% + ${horizontalOffset}px), calc(-50% + ${verticalOffset}px))`,
               }
-            : undefined
-        }
+            : undefined),
+          ...styles?.indicator,
+        }}
       >
         {dot ? null : displayCount}
       </sup>
@@ -231,10 +242,12 @@ Badge.displayName = 'Badge';
 export {
   Badge,
   badgeVariants,
+  type BadgeClassNames,
   type BadgeCountProps,
   type BadgeDotProps,
   type BadgeLabelProps,
   type BadgeLinkProps,
   type BadgeProps,
   type BadgeRef,
+  type BadgeStyles,
 };

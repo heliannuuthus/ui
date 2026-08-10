@@ -323,23 +323,33 @@ type SelectOptionGroup<Value> = {
   options: readonly SelectOption<Value>[];
 };
 
+type SelectClassNames = {
+  trigger?: string;
+};
+
+type SelectStyles = {
+  trigger?: React.CSSProperties;
+};
+
 type SelectProps<Value, Multiple extends boolean | undefined = false> = Omit<
   SelectRootProps<Value, Multiple>,
   'children' | 'items'
 > & {
+  classNames?: SelectClassNames;
   emptyText?: React.ReactNode;
   options: readonly (SelectOption<Value> | SelectOptionGroup<Value>)[];
   placeholder?: string;
   showClear?: boolean;
-  triggerClassName?: string;
+  styles?: SelectStyles;
   triggerProps?: Omit<
     React.ComponentProps<typeof SelectTrigger>,
-    'children' | 'className' | 'placeholder' | 'showClear'
+    'children' | 'className' | 'placeholder' | 'showClear' | 'style'
   >;
 };
 
 const Select = <Value, Multiple extends boolean | undefined = false>({
   defaultValue,
+  classNames,
   disabled,
   emptyText = '没有找到选项',
   id,
@@ -349,7 +359,7 @@ const Select = <Value, Multiple extends boolean | undefined = false>({
   placeholder,
   required,
   showClear,
-  triggerClassName,
+  styles,
   triggerProps,
   value,
   ...props
@@ -400,7 +410,7 @@ const Select = <Value, Multiple extends boolean | undefined = false>({
           formControl?.messageId
         )}
         aria-invalid={triggerAriaInvalid ?? formControl?.invalid}
-        className={triggerClassName}
+        className={classNames?.trigger}
         id={triggerId ?? formControl?.controlId ?? id}
         onBlur={(event) => {
           triggerOnBlur?.(event);
@@ -409,6 +419,7 @@ const Select = <Value, Multiple extends boolean | undefined = false>({
         placeholder={placeholder}
         inputRef={controlRef}
         showClear={showClear}
+        style={styles?.trigger}
       />
       <SelectContent>
         <SelectEmpty>{emptyText}</SelectEmpty>
@@ -461,6 +472,8 @@ export type {
   SelectOption,
   SelectOptionGroup,
   SelectProps,
+  SelectClassNames,
+  SelectStyles,
   SelectTriggerProps,
   SelectValue,
 };

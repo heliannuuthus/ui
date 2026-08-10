@@ -357,13 +357,13 @@ export const FormIntegrationDemo = () => {
             description={docsCopy('支持搜索、清除和分组选项。')}
           >
             <Select
+              classNames={{ trigger: 'data-wide-control' }}
               options={workspaceGroups.map((group) => ({
                 label: group.label,
                 options: group.items,
               }))}
               placeholder={docsCopy('选择工作区')}
               showClear
-              triggerClassName="data-wide-control"
             />
           </Form.Field>
 
@@ -383,7 +383,7 @@ export const FormIntegrationDemo = () => {
             description={docsCopy('选择或清除计划启用日期。')}
           >
             <DatePicker
-              className="data-wide-control"
+              classNames={{ trigger: 'data-wide-control' }}
               locale={locale}
               placeholder={docsCopy('选择启用日期')}
             />
@@ -908,6 +908,7 @@ export const SelectWorkspaceDemo = () => {
         <span>{docsCopy('列表可以分组、分隔并禁用不可选项')}</span>
       </div>
       <Select
+        classNames={{ trigger: 'data-wide-control' }}
         value={value}
         onChange={setValue}
         options={workspaceGroups.map((group) => ({
@@ -922,7 +923,6 @@ export const SelectWorkspaceDemo = () => {
         itemToStringValue={(item) => item.value}
         isItemEqualToValue={(item, selected) => item.value === selected.value}
         placeholder={docsCopy('选择工作区')}
-        triggerClassName="data-wide-control"
       />
       <p className="data-result">
         {docsCopy('目标：')}

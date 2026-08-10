@@ -321,16 +321,24 @@ const DrawerDescription = ({
 
 type DrawerSnapPoint = number | string;
 
+type DrawerClassNames = {
+  content?: string;
+};
+
+type DrawerStyles = {
+  content?: React.CSSProperties;
+};
+
 type DrawerProps = OpenStateProps & {
   behavior?: DrawerBehavior;
   children?: React.ReactNode;
+  classNames?: DrawerClassNames;
   closeText?: React.ReactNode;
   closeVariant?: React.ComponentProps<typeof Button>['variant'];
   container?: PortalContainer;
-  contentClassName?: string;
   contentProps?: Omit<
     React.HTMLAttributes<HTMLDivElement>,
-    'children' | 'className'
+    'children' | 'className' | 'style'
   > &
     DataAttributes;
   defaultSnapPoint?: DrawerSnapPoint | null;
@@ -345,6 +353,7 @@ type DrawerProps = OpenStateProps & {
   snapPoint?: DrawerSnapPoint | null;
   snapPoints?: DrawerSnapPoint[];
   snapToSequentialPoints?: boolean;
+  styles?: DrawerStyles;
   swipeDirection?: 'down' | 'left' | 'right' | 'up';
   title?: React.ReactNode;
   trigger?: React.ReactElement;
@@ -352,13 +361,14 @@ type DrawerProps = OpenStateProps & {
 
 const Drawer = ({
   children,
+  classNames,
   closeText,
   closeVariant = 'outline',
-  contentClassName,
   contentProps,
   description,
   footer,
   showCloseButton,
+  styles,
   title,
   trigger,
   ...props
@@ -368,8 +378,9 @@ const Drawer = ({
       {trigger != null ? <DrawerTrigger render={trigger} /> : null}
       <DrawerContent
         {...contentProps}
-        className={contentClassName}
+        className={classNames?.content}
         showCloseButton={showCloseButton}
+        style={styles?.content}
       >
         {title != null || description != null ? (
           <DrawerHeader>
@@ -398,7 +409,9 @@ const Drawer = ({
 export {
   Drawer,
   type DrawerBehavior,
+  type DrawerClassNames,
   type DrawerProps,
   type DrawerSide,
   type DrawerSnapPoint,
+  type DrawerStyles,
 };

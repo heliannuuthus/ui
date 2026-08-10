@@ -19,14 +19,23 @@ type CarouselDotRenderProps = {
   isSelected: boolean;
 };
 
+type CarouselClassNames = {
+  content?: string;
+  item?: string;
+};
+
+type CarouselStyles = {
+  content?: React.CSSProperties;
+  item?: React.CSSProperties;
+};
+
 type CarouselProps<Item = React.ReactNode> = Omit<
   React.ComponentProps<'div'>,
   'children'
 > & {
   autoplay?: CarouselAutoplay;
-  contentClassName?: string;
+  classNames?: CarouselClassNames;
   controls?: boolean;
-  itemClassName?: string;
   items: readonly Item[];
   loop?: boolean;
   nextButtonProps?: ButtonNativeProps;
@@ -37,6 +46,7 @@ type CarouselProps<Item = React.ReactNode> = Omit<
   previousButtonProps?: ButtonNativeProps;
   renderDot?: (props: CarouselDotRenderProps) => React.ReactNode;
   renderItem?: (item: Item, index: number) => React.ReactNode;
+  styles?: CarouselStyles;
 };
 
 type CarouselRef = {
@@ -110,9 +120,8 @@ const useCarousel = () => {
 const CarouselRender = (
   {
     autoplay = false,
-    contentClassName,
+    classNames,
     controls = true,
-    itemClassName,
     items,
     loop = false,
     nextButtonProps,
@@ -122,6 +131,7 @@ const CarouselRender = (
     previousButtonProps,
     renderDot,
     renderItem,
+    styles,
     'aria-label': ariaLabel = 'Carousel',
     className,
     onMouseEnter,
@@ -368,9 +378,16 @@ const CarouselRender = (
         {...props}
       >
         {paginationPosition === 'before' ? paginationNode : null}
-        <CarouselContent className={contentClassName}>
+        <CarouselContent
+          className={classNames?.content}
+          style={styles?.content}
+        >
           {items.map((item, index) => (
-            <CarouselItem className={itemClassName} key={index}>
+            <CarouselItem
+              className={classNames?.item}
+              key={index}
+              style={styles?.item}
+            >
               {renderItem ? renderItem(item, index) : item}
             </CarouselItem>
           ))}
@@ -573,10 +590,12 @@ const CarouselPagination = ({
 
 export {
   type CarouselAutoplay,
+  type CarouselClassNames,
   type CarouselControls,
   type CarouselDotRenderProps,
   type CarouselProps,
   type CarouselRef,
+  type CarouselStyles,
   Carousel,
   useCarousel,
 };

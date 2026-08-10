@@ -123,6 +123,7 @@ const contentSourceExclusions = new Set([
 const intentionalSourceCopy = new Set(['中文', '导航', '布局']);
 const untranslatedNodes = [];
 const uncoveredSourceCopy = [];
+const groupedDocumentationNames = [];
 
 const normalizeJsxText = (value) => {
   return value.replace(/\s+/g, ' ').trim();
@@ -139,6 +140,17 @@ const isInsideDocsCopy = (ancestors) => {
 
 const inspectContentNode = (node, ancestors, file) => {
   if (!node || typeof node !== 'object') return;
+
+  if (
+    node.type === 'ObjectProperty' &&
+    node.computed === false &&
+    node.key.type === 'Identifier' &&
+    node.key.name === 'name' &&
+    node.value.type === 'StringLiteral' &&
+    node.value.value.includes(' / ')
+  ) {
+    groupedDocumentationNames.push(`${file}: ${node.value.value}`);
+  }
 
   const localized = isInsideDocsCopy(ancestors);
   const values = [];
@@ -196,6 +208,13 @@ assert.deepEqual(
   uncoveredSourceCopy,
   [],
   `Localized source copy must have an English translation:\n${uncoveredSourceCopy.join(
+    '\n'
+  )}`
+);
+assert.deepEqual(
+  groupedDocumentationNames,
+  [],
+  `Documentation rows must describe one API member at a time:\n${groupedDocumentationNames.join(
     '\n'
   )}`
 );

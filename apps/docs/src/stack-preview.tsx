@@ -179,9 +179,9 @@ const StringSelect = ({
 }) => {
   return (
     <Select
+      classNames={{ trigger: className }}
       defaultValue={defaultValue}
       options={items.map((item) => ({ label: item, value: item }))}
-      triggerClassName={className}
       triggerProps={{ 'aria-label': ariaLabel }}
     />
   );
