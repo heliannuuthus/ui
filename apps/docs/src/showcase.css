@@ -3811,6 +3811,13 @@ a {
   font-size: 15px;
   line-height: 1.5;
 }
+.component-inherited-props-notice {
+  max-width: 780px;
+  margin: -6px 0 16px;
+  color: var(--docs-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
 .component-semantic-dom-heading {
   margin-bottom: 14px;
 }

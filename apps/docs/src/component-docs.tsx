@@ -4166,7 +4166,7 @@ const form = Form.useForm<Values>({
         },
         {
           label: docsCopy('校验失败'),
-          properties: { [docsCopy('原生属性')]: 'aria-invalid' },
+          properties: {},
           values: { size: 'default', state: 'invalid' },
         },
       ],
@@ -11789,6 +11789,59 @@ customTableDocumentation.pitfalls = [
 ];
 customTableDocumentation.relatedComponents = undefined;
 delete componentDocumentation['data-table'];
+
+const inheritedPropertyNames = new Set([docsCopy('原生属性'), '...navProps']);
+const inheritedTargetsWithoutRootStyle = new Set([
+  'Chart.Tooltip',
+  'Chart.Legend',
+]);
+
+for (const documentation of Object.values(componentDocumentation)) {
+  const inheritedProperties = documentation.api.filter((property) =>
+    inheritedPropertyNames.has(property.name)
+  );
+  if (inheritedProperties.length === 0) continue;
+
+  documentation.api = documentation.api.filter(
+    (property) => !inheritedPropertyNames.has(property.name)
+  );
+  const existing = new Set(
+    documentation.api.map((property) =>
+      property.component
+        ? `${property.component}.${property.name}`
+        : property.name
+    )
+  );
+
+  for (const property of inheritedProperties) {
+    const target = property.component ?? documentation.name;
+    if (inheritedTargetsWithoutRootStyle.has(target)) continue;
+
+    for (const rootProperty of [
+      {
+        name: 'className',
+        description: docsCopy('扩展根节点样式。'),
+        type: 'string',
+      },
+      {
+        name: 'style',
+        description: docsCopy('扩展根节点行内样式。'),
+        type: 'CSSProperties',
+      },
+    ]) {
+      const qualifiedName = property.component
+        ? `${property.component}.${rootProperty.name}`
+        : rootProperty.name;
+      if (existing.has(qualifiedName)) continue;
+
+      documentation.api.push({
+        ...rootProperty,
+        component: property.component,
+      });
+      existing.add(qualifiedName);
+    }
+  }
+}
 
 const spaciousPreviewHeights: Record<string, number> = {
   'aspect-ratio': 560,

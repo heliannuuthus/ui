@@ -63,6 +63,8 @@ const zh = {
       parts: '组成组件',
       purpose: '用途',
       properties: '属性',
+      inheritedPropsNotice:
+        'className 与 style 在表中单独列出；其余继承自根节点或底层 primitive 的 HTML、ARIA、data 属性和原生事件，以导出的 TypeScript 类型为准。',
       description: '说明',
       type: '类型',
       defaultValue: '默认值',
@@ -223,6 +225,8 @@ const en = {
       parts: 'Component parts',
       purpose: 'Purpose',
       properties: 'Properties',
+      inheritedPropsNotice:
+        'className and style are listed explicitly. Other HTML, ARIA, data attributes, and native events inherited from the root element or underlying primitive follow the exported TypeScript type.',
       description: 'Description',
       type: 'Type',
       defaultValue: 'Default',

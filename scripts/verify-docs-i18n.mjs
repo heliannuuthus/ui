@@ -386,6 +386,16 @@ for (const [slug, documentation] of Object.entries(componentDocumentation)) {
     apiNames.length,
     `"${slug}" API property names must be unique after qualification.`
   );
+  assert.deepEqual(
+    apiNames.filter(
+      (name) =>
+        name.includes('原生属性') ||
+        name.includes('Native properties') ||
+        name === '...navProps'
+    ),
+    [],
+    `"${slug}" must document className and style explicitly instead of a generic native-properties row.`
+  );
 
   const coveredApiNames = new Set();
   for (const [exampleIndex, example] of documentation.examples.entries()) {

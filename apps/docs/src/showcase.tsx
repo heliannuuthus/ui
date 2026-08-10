@@ -1318,6 +1318,9 @@ const ComponentPage = () => {
                 {documentation.api.length > 0 && (
                   <div className="component-reference-block">
                     <h3>{t('components.properties')}</h3>
+                    <p className="component-inherited-props-notice">
+                      {t('components.inheritedPropsNotice')}
+                    </p>
                     <div className="component-api-groups">
                       {groupApiProperties(
                         documentation.api,
