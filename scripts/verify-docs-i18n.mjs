@@ -431,6 +431,86 @@ for (const [slug, documentation] of Object.entries(componentDocumentation)) {
       : property.name
   );
   const allowedApiNames = new Set(apiNames);
+
+  for (const property of documentation.api) {
+    const qualifiedName = property.component
+      ? `${property.component}.${property.name}`
+      : property.name;
+    const pairedName = (name) =>
+      property.component ? `${property.component}.${name}` : name;
+
+    if (property.name === 'classNames') {
+      assert.ok(
+        allowedApiNames.has(pairedName('styles')),
+        `"${slug}" documents ${qualifiedName} without matching styles.`
+      );
+    }
+    if (property.name === 'styles') {
+      assert.ok(
+        allowedApiNames.has(pairedName('classNames')),
+        `"${slug}" documents ${qualifiedName} without matching classNames.`
+      );
+    }
+    assert.ok(
+      !(
+        property.name === 'root' &&
+        (property.component?.endsWith('ClassNames') ||
+          property.component?.endsWith('Styles'))
+      ),
+      `"${slug}" must document its root through className/style, not ${qualifiedName}.`
+    );
+  }
+
+  const documentedTypeSlots = new Map();
+  for (const property of documentation.api) {
+    if (
+      property.component?.endsWith('ClassNames') ||
+      property.component?.endsWith('Styles')
+    ) {
+      const slots = documentedTypeSlots.get(property.component) ?? [];
+      slots.push(property.name);
+      documentedTypeSlots.set(property.component, slots);
+    }
+  }
+  for (const [name, slots] of documentedTypeSlots) {
+    if (!name.endsWith('ClassNames')) continue;
+    const stylesName = name.replace(/ClassNames$/, 'Styles');
+    const stylesSlots = documentedTypeSlots.get(stylesName);
+    if (!stylesSlots) continue;
+    assert.deepEqual(
+      [...stylesSlots].sort(),
+      [...slots].sort(),
+      `"${slug}" ${stylesName} must match ${name} slots.`
+    );
+  }
+
+  const typePreviews = new Map(
+    (documentation.typePreviews ?? []).map((preview) => [preview.name, preview])
+  );
+  for (const [name, preview] of typePreviews) {
+    if (!name.endsWith('ClassNames')) continue;
+
+    const stylesName = name.replace(/ClassNames$/, 'Styles');
+    const stylesPreview = typePreviews.get(stylesName);
+    assert.ok(
+      stylesPreview,
+      `"${slug}" documents ${name} without ${stylesName}.`
+    );
+    const classNamesSlots = preview.api.map((property) => property.name).sort();
+    const stylesSlots = stylesPreview.api
+      .map((property) => property.name)
+      .sort();
+    assert.ok(
+      !classNamesSlots.includes('root'),
+      `"${slug}" ${name} must not contain a root slot.`
+    );
+    assert.deepEqual(
+      stylesSlots,
+      classNamesSlots,
+      `"${slug}" ${stylesName} must match ${name} slots.`
+    );
+  }
+
   assert.equal(
     allowedApiNames.size,
     apiNames.length,

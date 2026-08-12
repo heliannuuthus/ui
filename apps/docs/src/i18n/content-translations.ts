@@ -193,8 +193,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Set inline styles on the Table.Primitive scrolling container.',
   '设置 Table.Primitive 原生 table 节点的行内样式。':
     'Set inline styles on the native Table.Primitive table element.',
-  '悬停、聚焦或点击右侧属性行，查看 classNames 与 styles 各字段对应的真实数据表区域。':
-    'Hover, focus, or click a property row to see the actual table region mapped to each classNames and styles field.',
+  '悬停、聚焦或点击右侧属性行，查看根节点 className/style 与内部 classNames/styles 各字段对应的真实数据表区域。':
+    'Hover, focus, or click a property row to inspect the table root targeted by className/style and the internal regions targeted by classNames/styles.',
   [`import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 
@@ -1200,8 +1200,8 @@ const ActionCell = () => {
   '非受控模式下的初始标签；省略时自动选择第一个可用标签。':
     'Initial label in uncontrolled mode; automatically selects the first available label when omitted.',
   非受控状态: 'uncontrolled state',
-  '分别扩展根容器、输入控件、前后缀及块级附加区域的样式。':
-    'Expand the styles of the root container, input controls, suffixes and block-level additional areas respectively.',
+  '分别扩展输入控件、前后缀及块级附加区域的类名。':
+    'Extend the class names of the input control, prefix, suffix, and block-level addon regions.',
   分层操作: 'Hierarchical operations',
   分隔: 'separate',
   '分隔线保持可聚焦，并支持方向键调整相邻区域尺寸。':
@@ -2834,8 +2834,8 @@ const ActionCell = () => {
   许澄提交了发布说明: 'Xu Cheng submitted release notes',
   '悬停、聚焦或触摸时轻微放大，越过边界后柔和回弹。':
     'Zoom in slightly when hovering, focusing or touching, and bounce back softly when crossing boundaries.',
-  '悬停、聚焦或点击右侧属性行，查看 className 与 CardClassNames 各字段对应的真实区域。':
-    'Hover, focus, or click on the attribute row on the right to view the real areas corresponding to each field of className and CardClassNames.',
+  '悬停、聚焦或点击右侧属性行，查看根节点 className/style 与 CardClassNames/CardStyles 各字段对应的真实区域。':
+    'Hover, focus, or click a property row to inspect the root targeted by className/style and the regions targeted by CardClassNames/CardStyles.',
   悬停外围按钮: 'Hover peripheral buttons',
   悬停预览负责人: 'Hover preview manager',
   选项配置: 'Options configuration',
@@ -4561,8 +4561,8 @@ const ActionCell = () => {
     'Render only fixed-height rows near the viewport; the type is mutually exclusive with expandable.',
   '显示内置加载状态；空数据由 Table 自动展示默认提示。':
     'Show the built-in loading state; Table automatically displays the default message for empty data.',
-  '按 root、toolbar、container、table、header、body、footer、state 与 pagination 定制语义区域。':
-    'Customize the root, toolbar, container, table, header, body, footer, state, and pagination semantic regions.',
+  '按 toolbar、container、table、header、body、footer、state 与 pagination 定制内部语义区域。':
+    'Customize internal semantic regions by toolbar, container, table, header, body, footer, state, and pagination.',
   '向内部 Table.Primitive 传递原生 table 与容器引用、样式；Table 会自动计算内容宽度，并在翻页时保持已经得到的列宽。':
     'Pass native table attributes plus container refs and styles to the internal Table.Primitive. Table automatically sizes content and preserves the resulting column widths across pages.',
   'Table.Primitive 创建原生 table 与滚动容器。':

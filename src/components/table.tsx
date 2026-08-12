@@ -225,7 +225,6 @@ interface TableVirtualProps {
 }
 
 type TableSemanticSlot =
-  | 'root'
   | 'toolbar'
   | 'container'
   | 'table'
@@ -241,7 +240,6 @@ interface TableClassNames {
   footer?: string;
   header?: string;
   pagination?: string;
-  root?: string;
   state?: string;
   table?: string;
   toolbar?: string;
@@ -253,7 +251,6 @@ interface TableStyles {
   footer?: React.CSSProperties;
   header?: React.CSSProperties;
   pagination?: React.CSSProperties;
-  root?: React.CSSProperties;
   state?: React.CSSProperties;
   table?: React.CSSProperties;
   toolbar?: React.CSSProperties;
@@ -829,8 +826,8 @@ const ManagedTable = <TData,>({
   return (
     <div
       data-slot="table-root"
-      className={cn('grid gap-3', classNames?.root, className)}
-      style={{ ...styles?.root, ...style }}
+      className={cn('grid gap-3', className)}
+      style={style}
       {...props}
     >
       {searchOptions ? (
@@ -867,23 +864,16 @@ const ManagedTable = <TData,>({
         aria-rowcount={
           virtualOptions ? totalRows + (showHeader ? 1 : 0) : undefined
         }
-        classNames={{
-          container: cn(
-            'rounded-xl border border-border',
-            classNames?.container
-          ),
-          table: classNames?.table,
-        }}
+        className={cn('rounded-xl border border-border', classNames?.container)}
+        classNames={{ table: classNames?.table }}
         containerRef={setTableContainer}
-        styles={{
-          container: {
-            ...styles?.container,
-            ...(virtualOptions
-              ? { maxHeight: virtualOptions.containerHeight ?? 360 }
-              : undefined),
-          },
-          table: styles?.table,
+        style={{
+          ...styles?.container,
+          ...(virtualOptions
+            ? { maxHeight: virtualOptions.containerHeight ?? 360 }
+            : undefined),
         }}
+        styles={{ table: styles?.table }}
       >
         {showHeader ? (
           <TableHeader className={classNames?.header} style={styles?.header}>

@@ -63,6 +63,7 @@ export {
   Card,
   type CardClassNames,
   type CardProps,
+  type CardStyles,
   type CardVariant,
 } from './components/card';
 export {
@@ -83,6 +84,7 @@ export {
   type CheckboxGroupProps,
   type CheckboxOption,
   type CheckboxProps,
+  type CheckboxStyles,
   type CheckboxVariant,
 } from './components/checkbox';
 export {
@@ -172,9 +174,11 @@ export {
   type InputNumberControls,
   type InputNumberProps,
   type InputNumberSize,
+  type InputNumberStyles,
   type InputOTPProps,
   type InputOTPVariant,
   type InputProps,
+  type InputStyles,
   type TextAreaProps,
 } from './components/input';
 export {
@@ -185,6 +189,7 @@ export {
   type ItemGroupProps,
   type ItemLinkProps,
   type ItemProps,
+  type ItemStyles,
 } from './components/item';
 export { Kbd, type KbdProps } from './components/kbd';
 export {
@@ -202,6 +207,7 @@ export {
   type MarkerDivProps,
   type MarkerLinkProps,
   type MarkerProps,
+  type MarkerStyles,
 } from './components/marker';
 export {
   Masonry,
@@ -242,6 +248,7 @@ export {
   type RadioGroupProps,
   type RadioOption,
   type RadioProps,
+  type RadioStyles,
 } from './components/radio';
 export {
   Resizable,
@@ -253,6 +260,7 @@ export {
   type ResizableProps,
   type ResizableSeparator,
   type ResizableSeparatorRenderProps,
+  type ResizableStyles,
 } from './components/resizable';
 export {
   ScrollArea,

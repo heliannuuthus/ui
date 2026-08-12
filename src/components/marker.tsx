@@ -22,10 +22,15 @@ type MarkerClassNames = {
   icon?: string;
 };
 
+type MarkerStyles = {
+  [Slot in keyof MarkerClassNames]?: React.CSSProperties;
+};
+
 type MarkerSharedProps = VariantProps<typeof markerVariants> & {
   classNames?: MarkerClassNames;
   content: React.ReactNode;
   icon?: React.ReactNode;
+  styles?: MarkerStyles;
 };
 
 type MarkerDivProps = Omit<React.ComponentProps<'div'>, 'children'> &
@@ -45,6 +50,7 @@ const Marker = ({
   classNames,
   content,
   icon,
+  styles,
   variant = 'default',
   ...props
 }: MarkerProps) => {
@@ -58,6 +64,7 @@ const Marker = ({
             classNames?.icon
           )}
           data-slot="marker-icon"
+          style={styles?.icon}
         >
           {icon}
         </span>
@@ -68,6 +75,7 @@ const Marker = ({
           classNames?.content
         )}
         data-slot="marker-content"
+        style={styles?.content}
       >
         {content}
       </span>
@@ -101,4 +109,5 @@ export {
   type MarkerDivProps,
   type MarkerLinkProps,
   type MarkerProps,
+  type MarkerStyles,
 };

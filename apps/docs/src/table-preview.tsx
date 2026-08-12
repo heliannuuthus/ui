@@ -21,7 +21,7 @@ const semanticColumns: Table.Column<(typeof semanticRows)[number]>[] = [
 
 const tableSemanticRegions = [
   {
-    api: 'classNames.root / styles.root',
+    api: 'className / style',
     description: docsCopy('数据表根区域，组织工具栏、表格容器和分页。'),
     slot: 'root',
   },
@@ -106,7 +106,7 @@ export const TableSemanticDomDemo = () => {
     <div className="table-semantic-reference">
       <div className="table-semantic-stage" ref={stageRef}>
         <Table
-          classNames={{ root: 'table-semantic-table' }}
+          className="table-semantic-table"
           columns={semanticColumns}
           data={semanticRows}
           footer={(rows) => docsCopy(`当前页 ${rows.length} 条记录`)}

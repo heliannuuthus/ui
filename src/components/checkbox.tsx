@@ -20,6 +20,10 @@ type CheckboxClassNames = {
   label?: string;
 };
 
+type CheckboxStyles = {
+  [Slot in keyof CheckboxClassNames]?: React.CSSProperties;
+};
+
 type CheckboxVariant = 'default' | 'task';
 
 type CheckboxProps = Omit<
@@ -40,6 +44,7 @@ type CheckboxProps = Omit<
   parent?: boolean;
   readOnly?: boolean;
   required?: boolean;
+  styles?: CheckboxStyles;
   uncheckedValue?: string;
   value?: string;
   variant?: CheckboxVariant;
@@ -90,6 +95,7 @@ const CheckboxRoot = ({
   onBlur,
   onChange,
   required,
+  styles,
   variant = 'default',
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
@@ -146,6 +152,7 @@ const CheckboxRoot = ({
           'relative mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-[5px] border border-transparent bg-input/90 transition-[background-color,border-color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/checkbox:border-primary/40 group-hover/checkbox:bg-primary/10 group-active/checkbox:scale-90 group-data-disabled/checkbox:group-active/checkbox:scale-100 group-data-disabled/checkbox:group-hover/checkbox:border-transparent group-data-disabled/checkbox:group-hover/checkbox:bg-input/90 group-data-readonly/checkbox:group-active/checkbox:scale-100 group-aria-invalid/checkbox:border-destructive group-aria-invalid/checkbox:ring-3 group-aria-invalid/checkbox:ring-destructive/20 group-data-checked/checkbox:border-primary group-data-checked/checkbox:bg-primary group-data-checked/checkbox:text-primary-foreground group-data-checked/checkbox:group-hover/checkbox:bg-primary/90 motion-reduce:transition-none dark:group-aria-invalid/checkbox:border-destructive/50 dark:group-aria-invalid/checkbox:ring-destructive/40 dark:group-data-checked/checkbox:bg-primary',
           classNames?.control
         )}
+        style={styles?.control}
       >
         {particleBurst > 0 && (
           <span
@@ -176,6 +183,7 @@ const CheckboxRoot = ({
               'block min-w-0 flex-1 transition-colors duration-150 group-data-checked/checkbox:text-muted-foreground group-data-checked/checkbox:line-through group-data-checked/checkbox:decoration-muted-foreground/70 group-data-checked/checkbox:decoration-1 motion-reduce:transition-none',
             classNames?.label
           )}
+          style={styles?.label}
         >
           {children}
         </span>
@@ -272,5 +280,6 @@ export type {
   CheckboxGroupProps,
   CheckboxOption,
   CheckboxProps,
+  CheckboxStyles,
   CheckboxVariant,
 };

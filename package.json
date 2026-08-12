@@ -35,7 +35,7 @@
     "type-check": "tsc --noEmit && pnpm --filter @heliannuuthus/ui-docs exec tsc --noEmit",
     "prepare": "pnpm build:package",
     "prepack": "pnpm build:package",
-    "verify:package": "node scripts/verify-package.mjs && node scripts/verify-form-accessibility.mjs && node scripts/verify-typography.mjs && node scripts/verify-badge-tag.mjs"
+    "verify:package": "node scripts/verify-package.mjs && node scripts/verify-semantic-styles.mjs && node scripts/verify-form-accessibility.mjs && node scripts/verify-typography.mjs && node scripts/verify-badge-tag.mjs"
   },
   "peerDependencies": {
     "react": ">=18.3.0",

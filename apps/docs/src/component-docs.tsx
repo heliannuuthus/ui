@@ -1838,7 +1838,7 @@ export const WorkspaceCard = () => {
   ],
   semanticDom: {
     description: docsCopy(
-      '悬停、聚焦或点击右侧属性行，查看 className 与 CardClassNames 各字段对应的真实区域。'
+      '悬停、聚焦或点击右侧属性行，查看根节点 className/style 与 CardClassNames/CardStyles 各字段对应的真实区域。'
     ),
     preview: <CardSemanticDomDemo />,
   },
@@ -7329,12 +7329,6 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     },
     {
       component: 'Table.ClassNames',
-      name: 'root',
-      description: docsCopy('扩展数据表最外层根区域的类名。'),
-      type: 'string',
-    },
-    {
-      component: 'Table.ClassNames',
       name: 'toolbar',
       description: docsCopy('扩展搜索等表格级操作区域的类名。'),
       type: 'string',
@@ -7380,12 +7374,6 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       name: 'pagination',
       description: docsCopy('扩展分页摘要与翻页控件容器的类名。'),
       type: 'string',
-    },
-    {
-      component: 'Table.Styles',
-      name: 'root',
-      description: docsCopy('设置数据表最外层根区域的行内样式。'),
-      type: 'CSSProperties',
     },
     {
       component: 'Table.Styles',
@@ -7517,7 +7505,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       name: 'classNames',
       description: docsCopy(
-        '按 root、toolbar、container、table、header、body、footer、state 与 pagination 定制语义区域。'
+        '按 toolbar、container、table、header、body、footer、state 与 pagination 定制内部语义区域。'
       ),
       type: 'Table.ClassNames',
     },
@@ -7682,13 +7670,13 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       component: 'Table.Primitive',
       name: 'classNames',
-      description: docsCopy('分别扩展滚动容器与原生 table 节点的类名。'),
+      description: docsCopy('扩展原生 table 节点的类名。'),
       type: 'Table.PrimitiveClassNames',
     },
     {
       component: 'Table.Primitive',
       name: 'styles',
-      description: docsCopy('分别设置滚动容器与原生 table 节点的行内样式。'),
+      description: docsCopy('设置原生 table 节点的行内样式。'),
       type: 'Table.PrimitiveStyles',
     },
     {
@@ -7699,21 +7687,9 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     },
     {
       component: 'Table.PrimitiveClassNames',
-      name: 'container',
-      description: docsCopy('扩展 Table.Primitive 滚动容器的类名。'),
-      type: 'string',
-    },
-    {
-      component: 'Table.PrimitiveClassNames',
       name: 'table',
       description: docsCopy('扩展 Table.Primitive 原生 table 节点的类名。'),
       type: 'string',
-    },
-    {
-      component: 'Table.PrimitiveStyles',
-      name: 'container',
-      description: docsCopy('设置 Table.Primitive 滚动容器的行内样式。'),
-      type: 'CSSProperties',
     },
     {
       component: 'Table.PrimitiveStyles',
@@ -8682,9 +8658,7 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
     {
       component: 'Input',
       name: 'classNames',
-      description: docsCopy(
-        '分别扩展根容器、输入控件、前后缀及块级附加区域的样式。'
-      ),
+      description: docsCopy('分别扩展输入控件、前后缀及块级附加区域的类名。'),
       type: 'InputClassNames',
     },
     {
@@ -11447,7 +11421,16 @@ const semanticStyleContracts = {
     slots: ['content'],
   },
   badge: { componentName: 'Badge', slots: ['indicator'] },
+  card: {
+    componentName: 'Card',
+    slots: ['action', 'content', 'description', 'footer', 'header', 'title'],
+  },
   carousel: { componentName: 'Carousel', slots: ['content', 'item'] },
+  checkbox: {
+    apiComponent: 'Checkbox',
+    componentName: 'Checkbox',
+    slots: ['control', 'label'],
+  },
   collapsible: {
     componentName: 'Collapsible',
     slots: ['content', 'header'],
@@ -11461,7 +11444,46 @@ const semanticStyleContracts = {
   dialog: { componentName: 'Dialog', slots: ['content'] },
   drawer: { componentName: 'Drawer', slots: ['content'] },
   'dropdown-menu': { componentName: 'DropdownMenu', slots: ['content'] },
+  input: {
+    apiComponent: 'Input',
+    componentName: 'Input',
+    slots: ['addonAfter', 'addonBefore', 'input', 'prefix', 'suffix'],
+  },
+  'input-number': {
+    componentName: 'InputNumber',
+    slots: [
+      'controls',
+      'decrement',
+      'group',
+      'increment',
+      'input',
+      'prefix',
+      'suffix',
+    ],
+  },
+  item: {
+    componentName: 'Item',
+    slots: [
+      'actions',
+      'content',
+      'description',
+      'footer',
+      'header',
+      'media',
+      'title',
+    ],
+  },
+  marker: { componentName: 'Marker', slots: ['content', 'icon'] },
   popover: { componentName: 'Popover', slots: ['content'] },
+  radio: {
+    apiComponent: 'Radio',
+    componentName: 'Radio',
+    slots: ['control', 'label'],
+  },
+  resizable: {
+    componentName: 'Resizable',
+    slots: ['panel', 'separator'],
+  },
   select: { componentName: 'Select', slots: ['trigger'] },
   tabs: {
     componentName: 'Tabs',
@@ -11474,14 +11496,29 @@ for (const [slug, contract] of Object.entries(semanticStyleContracts)) {
   const documentation = componentDocumentation[slug];
   const classNamesType = `${contract.componentName}ClassNames`;
   const stylesType = `${contract.componentName}Styles`;
+  const apiComponent =
+    'apiComponent' in contract ? contract.apiComponent : undefined;
+
+  documentation.api = documentation.api.filter(
+    (property) =>
+      !(
+        (property.name === 'classNames' || property.name === 'styles') &&
+        property.component === apiComponent
+      )
+  );
+  documentation.typePreviews = (documentation.typePreviews ?? []).filter(
+    (preview) => preview.name !== classNamesType && preview.name !== stylesType
+  );
 
   documentation.api.push(
     {
+      component: apiComponent,
       name: 'classNames',
       description: docsCopy('扩展对应语义槽位的 className。'),
       type: classNamesType,
     },
     {
+      component: apiComponent,
       name: 'styles',
       description: docsCopy('按与 classNames 相同的语义区域设置行内样式。'),
       type: stylesType,
@@ -12048,7 +12085,7 @@ customTableDocumentation.typeDefinitionGroups = [
 ];
 customTableDocumentation.semanticDom = {
   description: docsCopy(
-    '悬停、聚焦或点击右侧属性行，查看 classNames 与 styles 各字段对应的真实数据表区域。'
+    '悬停、聚焦或点击右侧属性行，查看根节点 className/style 与内部 classNames/styles 各字段对应的真实数据表区域。'
   ),
   preview: <TableSemanticDomDemo />,
 };

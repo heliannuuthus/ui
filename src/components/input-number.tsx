@@ -27,6 +27,10 @@ type InputNumberClassNames = {
   suffix?: string;
 };
 
+type InputNumberStyles = {
+  [Slot in keyof InputNumberClassNames]?: React.CSSProperties;
+};
+
 type InputNumberProps = Omit<
   NumberField.Root.Props,
   | 'autoFocus'
@@ -77,6 +81,7 @@ type InputNumberProps = Omit<
   prefix?: React.ReactNode;
   size?: InputNumberSize;
   suffix?: React.ReactNode;
+  styles?: InputNumberStyles;
 };
 
 const InputNumber = ({
@@ -110,6 +115,7 @@ const InputNumber = ({
   required,
   size = 'default',
   suffix,
+  styles,
   value,
   ...props
 }: InputNumberProps) => {
@@ -149,6 +155,7 @@ const InputNumber = ({
           classNames?.group
         )}
         data-slot="input-number-group"
+        style={styles?.group}
       >
         {prefix != null ? (
           <span
@@ -157,6 +164,7 @@ const InputNumber = ({
               classNames?.prefix
             )}
             data-slot="input-number-prefix"
+            style={styles?.prefix}
           >
             {prefix}
           </span>
@@ -190,6 +198,7 @@ const InputNumber = ({
           }}
           onFocus={onFocus}
           placeholder={placeholder}
+          style={{ ...inputProps?.style, ...styles?.input }}
         />
         {suffix != null ? (
           <span
@@ -198,6 +207,7 @@ const InputNumber = ({
               classNames?.suffix
             )}
             data-slot="input-number-suffix"
+            style={styles?.suffix}
           >
             {suffix}
           </span>
@@ -209,6 +219,7 @@ const InputNumber = ({
               classNames?.controls
             )}
             data-slot="input-number-controls"
+            style={styles?.controls}
           >
             <NumberField.Increment
               aria-label={incrementLabel}
@@ -217,6 +228,7 @@ const InputNumber = ({
                 classNames?.increment
               )}
               data-slot="input-number-increment"
+              style={styles?.increment}
             >
               {controlIcons?.increment ?? (
                 <ChevronUpIcon aria-hidden="true" className="size-3" />
@@ -229,6 +241,7 @@ const InputNumber = ({
                 classNames?.decrement
               )}
               data-slot="input-number-decrement"
+              style={styles?.decrement}
             >
               {controlIcons?.decrement ?? (
                 <ChevronDownIcon aria-hidden="true" className="size-3" />
@@ -249,4 +262,5 @@ export type {
   InputNumberControls,
   InputNumberProps,
   InputNumberSize,
+  InputNumberStyles,
 };
