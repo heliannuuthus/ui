@@ -198,7 +198,6 @@ import {
 } from './resizable-preview';
 import { minimalComponentPreviews } from './minimal-previews';
 import {
-  type ComponentHarnessProperties,
   type ComponentHarnessCase,
   type ComponentHarnessCaseAxis,
   type ComponentHarnessLayout,
@@ -238,6 +237,7 @@ export type ComponentExample = {
   description: ReactNode;
   preview: ReactNode | ((values: ComponentHarnessValues) => ReactNode);
   code: string;
+  coveredProperties?: string[];
   caseAxes?: ComponentHarnessCaseAxis[];
   caseLayout?: ComponentHarnessLayout;
   caseMinWidth?: number;
@@ -1267,18 +1267,57 @@ const stackDocumentation: ComponentDocumentation = {
   ],
   examples: [
     {
+      title: docsCopy('基础用法'),
+      description: docsCopy(
+        '使用 orientation 和 gap 完成最基础的横向间距布局。'
+      ),
+      preview: (
+        <Stack gap={8} orientation="horizontal">
+          <Button>{docsCopy('保存')}</Button>
+          <Button variant="outline">{docsCopy('取消')}</Button>
+        </Stack>
+      ),
+      code: docsCopy(`import { Button, Stack } from '@heliannuuthus/ui'
+
+<Stack gap={8} orientation="horizontal">
+  <Button>保存</Button>
+  <Button variant="outline">取消</Button>
+</Stack>`),
+      cases: [
+        {
+          isDefault: true,
+          label: docsCopy('默认'),
+          properties: {
+            gap: 8,
+            orientation: 'horizontal',
+          },
+          values: {},
+        },
+      ],
+    },
+    {
       title: docsCopy('数值间距'),
       description: docsCopy(
         'gap 接收数值；拖动滑块在 0–12px 之间调整，每次递增或递减 3px。'
       ),
       preview: <StackGapDemo />,
-      code: `import { Stack } from '@heliannuuthus/ui'
+      code: `import { useState } from 'react'
+import { Slider, Stack } from '@heliannuuthus/ui'
 
-<Stack block orientation="horizontal" gap={6} justify="center" wrap>
-  {Array.from({ length: 24 }, (_, index) => (
-    <Block key={index}>{index + 1}</Block>
-  ))}
-</Stack>`,
+export const StackGapExample = () => {
+  const [gap, setGap] = useState(6)
+
+  return (
+    <>
+      <Slider min={0} max={12} step={3} value={gap} onChange={setGap} />
+      <Stack block gap={gap} orientation="horizontal" wrap>
+        {Array.from({ length: 24 }, (_, index) => (
+          <span key={index}>{index + 1}</span>
+        ))}
+      </Stack>
+    </>
+  )
+}`,
       previewHeight: 460,
     },
     {
@@ -1325,7 +1364,7 @@ export const SliderCompactExample = () => {
     {
       title: docsCopy('交叉轴与主轴对齐'),
       description: docsCopy(
-        'align 控制交叉轴对齐，justify 控制主轴分布；每个案例上方都直接声明使用的属性和值。'
+        'align 控制交叉轴对齐，justify 控制主轴分布；对应属性和值在示例代码中完整展示。'
       ),
       preview: <StackAlignmentDemo />,
       code: `import { Stack } from '@heliannuuthus/ui'
@@ -11889,26 +11928,6 @@ if (accordionSingleExample) {
 const apiCaseName = (property: ApiProperty) =>
   property.component ? `${property.component}.${property.name}` : property.name;
 
-const apiCaseValue = (
-  property: ApiProperty
-): ComponentHarnessProperties[string] => {
-  const value = property.defaultValue?.trim();
-
-  if (value === 'true') return true;
-  if (value === 'false') return false;
-  if (value === 'null') return null;
-  if (value && /^-?\d+(?:\.\d+)?$/.test(value)) return Number(value);
-  if (
-    value &&
-    ((value.startsWith("'") && value.endsWith("'")) ||
-      (value.startsWith('"') && value.endsWith('"')))
-  ) {
-    return value.slice(1, -1);
-  }
-
-  return value || property.type;
-};
-
 const resolveApiCaseName = (name: string, apiNames: Set<string>) => {
   if (apiNames.has(name)) return name;
 
@@ -11922,6 +11941,10 @@ for (const documentation of Object.values(componentDocumentation)) {
   const apiNames = new Set(documentation.api.map(apiCaseName));
 
   for (const example of documentation.examples) {
+    example.coveredProperties = example.coveredProperties?.map((name) =>
+      resolveApiCaseName(name, apiNames)
+    );
+
     for (const axis of example.caseAxes ?? []) {
       for (const option of axis.options) {
         if (!option.properties) continue;
@@ -11953,6 +11976,9 @@ for (const documentation of Object.values(componentDocumentation)) {
 
   const coveredApiNames = new Set<string>();
   for (const example of documentation.examples) {
+    for (const name of example.coveredProperties ?? []) {
+      coveredApiNames.add(resolveApiCaseName(name, apiNames));
+    }
     for (const axis of example.caseAxes ?? []) {
       if (axis.property) coveredApiNames.add(axis.property);
       for (const option of axis.options) {
@@ -11971,12 +11997,11 @@ for (const documentation of Object.values(componentDocumentation)) {
   const basicExample = documentation.examples[0];
   if (!basicExample) continue;
 
-  const baseProperties = Object.fromEntries(
-    documentation.api
-      .map(
-        (property) => [apiCaseName(property), apiCaseValue(property)] as const
-      )
-      .filter(([name]) => !coveredApiNames.has(name))
+  const missingApiNames = documentation.api
+    .map(apiCaseName)
+    .filter((name) => !coveredApiNames.has(name));
+  basicExample.coveredProperties = Array.from(
+    new Set([...(basicExample.coveredProperties ?? []), ...missingApiNames])
   );
   const basicCases = basicExample.cases
     ? basicExample.cases
@@ -11999,9 +12024,6 @@ for (const documentation of Object.values(componentDocumentation)) {
   basicExample.cases = basicCases.map((harnessCase, index) => ({
     ...harnessCase,
     isDefault: index === defaultIndex,
-    properties:
-      index === defaultIndex
-        ? { ...baseProperties, ...harnessCase.properties }
-        : harnessCase.properties,
+    properties: harnessCase.properties,
   }));
 }

@@ -449,6 +449,20 @@ for (const [slug, documentation] of Object.entries(componentDocumentation)) {
 
   const coveredApiNames = new Set();
   for (const [exampleIndex, example] of documentation.examples.entries()) {
+    const declaredCoverage = example.coveredProperties ?? [];
+    assert.equal(
+      new Set(declaredCoverage).size,
+      declaredCoverage.length,
+      `"${slug}" example ${exampleIndex + 1} must not repeat covered properties.`
+    );
+    for (const name of declaredCoverage) {
+      assert.ok(
+        allowedApiNames.has(name),
+        `"${slug}" example ${exampleIndex + 1} declares unknown covered property "${name}".`
+      );
+      coveredApiNames.add(name);
+    }
+
     for (const axis of example.caseAxes ?? []) {
       assert.ok(
         axis.options.length > 0,
@@ -485,7 +499,7 @@ for (const [slug, documentation] of Object.entries(componentDocumentation)) {
   assert.deepEqual(
     [...allowedApiNames].filter((name) => !coveredApiNames.has(name)),
     [],
-    `"${slug}" must cover every API property in a basic or specialized case.`
+    `"${slug}" must cover every API property in an example or its explicit coverage metadata.`
   );
 }
 

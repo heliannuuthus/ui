@@ -72,10 +72,7 @@ import {
   type PackageManagerName,
 } from './package-manager-icon';
 import { SyntaxCode } from './syntax-code';
-import {
-  orderApiProperties,
-  qualifiedApiPropertyName,
-} from './api-property-order';
+import { orderApiProperties } from './api-property-order';
 
 const repositoryUrl = 'https://github.com/heliannuuthus/ui';
 const docsBasePath = window.location.hostname.endsWith('github.io')
@@ -1429,12 +1426,6 @@ const ComponentExampleCard = ({
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
-  const documentation = componentDocumentation[component];
-  const propertyOrder = documentation
-    ? orderApiProperties(documentation.api, documentation.name).map(
-        qualifiedApiPropertyName
-      )
-    : [];
   const copy = async () => {
     await navigator.clipboard.writeText(example.code);
     setCopied(true);
@@ -1562,7 +1553,6 @@ const ComponentExampleCard = ({
             cases={example.cases}
             layout={example.caseLayout}
             minCaseWidth={example.caseMinWidth}
-            propertyOrder={propertyOrder}
           >
             {(values) =>
               typeof example.preview === 'function'
@@ -1575,7 +1565,6 @@ const ComponentExampleCard = ({
             axes={example.caseAxes}
             layout={example.caseLayout}
             minCaseWidth={example.caseMinWidth}
-            propertyOrder={propertyOrder}
           >
             {(values) =>
               typeof example.preview === 'function'

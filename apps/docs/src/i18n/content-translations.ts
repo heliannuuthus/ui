@@ -3486,8 +3486,8 @@ const ActionCell = () => {
     'align controls the cross axis, aligning elements along the bottom.',
   'align 控制交叉轴，元素沿顶部对齐。':
     'align controls the cross axis, aligning elements along the top.',
-  'align 控制交叉轴对齐，justify 控制主轴分布；每个案例上方都直接声明使用的属性和值。':
-    'align controls cross-axis alignment, and justify controls main-axis distribution; the properties and values ​​used are directly declared above each case.',
+  'align 控制交叉轴对齐，justify 控制主轴分布；对应属性和值在示例代码中完整展示。':
+    'align controls cross-axis alignment, and justify controls main-axis distribution; the example code shows the corresponding properties and values in full.',
   'align 统一控制起始、居中和末端对齐；Head 与 Cell 的 ellipsis 在溢出时提供全文 Tooltip，自定义组件直接作为 Cell 子节点。':
     'align uniformly controls the start, center and end alignment; the ellipsis of Head and Cell provides full-text Tooltip when overflowing, and the custom component directly acts as a Cell child node.',
   'autoplay 传 true 使用默认间隔，传数字直接设置秒数；loop 循环始终沿下一页方向越过首尾。':
@@ -4672,6 +4672,10 @@ const ActionCell = () => {
     'Configure the component public state, behavior, or extension point.',
   '由 Form.Field 自动注入自定义控件的字段契约。':
     'Field contract automatically injected into custom controls by Form.Field.',
+  '使用 orientation 和 gap 完成最基础的横向间距布局。':
+    'Use orientation and gap to create the simplest horizontal layout with consistent spacing.',
+  'import { Button, Stack } from \'@heliannuuthus/ui\'\n\n<Stack gap={8} orientation="horizontal">\n  <Button>保存</Button>\n  <Button variant="outline">取消</Button>\n</Stack>':
+    'import { Button, Stack } from \'@heliannuuthus/ui\'\n\n<Stack gap={8} orientation="horizontal">\n  <Button>Save</Button>\n  <Button variant="outline">Cancel</Button>\n</Stack>',
   自定义过滤: 'Custom filter',
   受控打开态: 'Controlled open state',
 };
