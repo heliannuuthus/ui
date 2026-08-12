@@ -853,6 +853,7 @@ const ActionCell = () => {
   查看: 'Check',
   '查看 5 条未读消息': 'View 5 unread messages',
   '查看 Card 文档': 'View Card documentation',
+  '在 GitHub 查看源码': 'View source on GitHub',
   '查看 Web Console': 'View Web Console',
   查看版本: 'View version',
   '查看测试结果。': 'View test results.',
@@ -1189,8 +1190,6 @@ const ActionCell = () => {
   范围选择: 'Range selection',
   方案单选卡: 'Plan radio button',
   方向: 'direction',
-  '访问实际渲染的 button 或 a 元素。':
-    'Access the actual rendered button or a element.',
   '放置查看详情、重试或关闭等与当前提示直接相关的操作。':
     'Place operations directly related to the current prompt such as viewing details, retrying, or closing.',
   '放置导航、目录或详情的侧边区域。':
@@ -1943,8 +1942,8 @@ const ActionCell = () => {
   设置: 'set up',
   '设置 hover 模式打开与关闭前的等待时间，单位为毫秒。':
     'Set the waiting time before hover mode is turned on and off, in milliseconds.',
-  '设置 href 后输出具有链接语义的 a 元素；不设置 href 时始终输出原生 button。导航不要通过点击事件手动修改地址。':
-    'After setting href, the a element with link semantics is output; when href is not set, the native button is always output. Navigation should not manually modify the address through click events.',
+  '设置 href 后输出具有链接语义的 a 元素；外部链接在新窗口打开时，应同时声明 target 和 rel。':
+    'Setting href renders an a element with link semantics. When an external link opens in a new window, declare both target and rel.',
   '设置 Provider 创建全局通知通道还是局部通知通道。':
     'Set whether the Provider creates a global notification channel or a local notification channel.',
   '设置 Radio.Group 选项之间的水平与垂直间距。':
@@ -3577,8 +3576,8 @@ const ActionCell = () => {
     'import { AlertDialog } from \'@heliannuuthus/ui\'\n\n<AlertDialog\n  trigger={<Button variant="destructive">Delete preview environment</Button>}\n  title="Delete preview-142?"\n  description="This action cannot be undone."\n  cancelText="Keep environment"\n  confirmText="Confirm deletion"\n  confirmVariant="destructive"\n/>',
   'import { AlertDialog, Button } from \'@heliannuuthus/ui\'\n\n<AlertDialog\n  trigger={<Button variant="destructive">删除预览环境</Button>}\n  title="删除 preview-142？"\n  description="此操作无法撤销。"\n  cancelText="保留环境"\n  confirmText="确认删除"\n  confirmVariant="destructive"\n  onConfirm={removePreview}\n/>':
     'import { AlertDialog, Button } from \'@heliannuuthus/ui\'\n\n<AlertDialog\n  trigger={<Button variant="destructive">Delete preview environment</Button>}\n  title="Delete preview-142?"\n  description="This action cannot be undone."\n  cancelText="Keep environment"\n  confirmText="Confirm deletion"\n  confirmVariant="destructive"\n  onConfirm={removePreview}\n/>',
-  'import { ArrowRight } from \'lucide-react\'\n\nexport const ButtonLink = () => {\n  return (\n    <>\n      <Button href="/components/card" variant="outline">\n        查看 Card 文档\n        <ArrowRight data-icon="inline-end" />\n      </Button>\n      <Button disabled href="/components/card" variant="outline">\n        暂不可用\n      </Button>\n    </>\n  )\n}':
-    'import { ArrowRight } from \'lucide-react\'\n\nexport const ButtonLink = () => {\n  return (\n    <>\n      <Button href="/components/card" variant="outline">\n        View Card documentation\n        <ArrowRight data-icon="inline-end" />\n      </Button>\n      <Button disabled href="/components/card" variant="outline">\n        Not available yet\n      </Button>\n    </>\n  )\n}',
+  'import { ArrowRight, ArrowUpRight } from \'lucide-react\'\n\nexport const ButtonLink = () => {\n  return (\n    <>\n      <Button href="/components/card" variant="outline">\n        查看 Card 文档\n        <ArrowRight data-icon="inline-end" />\n      </Button>\n      <Button\n        href="https://github.com/heliannuuthus/ui"\n        rel="noreferrer"\n        target="_blank"\n        variant="outline"\n      >\n        在 GitHub 查看源码\n        <ArrowUpRight data-icon="inline-end" />\n      </Button>\n      <Button disabled href="/components/card" variant="outline">\n        暂不可用\n      </Button>\n    </>\n  )\n}':
+    'import { ArrowRight, ArrowUpRight } from \'lucide-react\'\n\nexport const ButtonLink = () => {\n  return (\n    <>\n      <Button href="/components/card" variant="outline">\n        View Card documentation\n        <ArrowRight data-icon="inline-end" />\n      </Button>\n      <Button\n        href="https://github.com/heliannuuthus/ui"\n        rel="noreferrer"\n        target="_blank"\n        variant="outline"\n      >\n        View source on GitHub\n        <ArrowUpRight data-icon="inline-end" />\n      </Button>\n      <Button disabled href="/components/card" variant="outline">\n        Not available yet\n      </Button>\n    </>\n  )\n}',
   'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · 正在校验"\n  media={<FileArchive />}\n  state="processing"\n  orientation="horizontal"\n/>':
     'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · Verifying"\n  media={<FileArchive />}\n  state="processing"\n  orientation="horizontal"\n/>',
   'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · 正在校验"\n  media={<FileArchive />}\n  state="processing"\n  orientation="vertical"\n/>':
