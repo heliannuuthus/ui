@@ -3763,8 +3763,8 @@ const ActionCell = () => {
     "import { Toggle } from '@heliannuuthus/ui'\n\n<Toggle.Group\n  value={formats}\n  onChange={setFormats}\n  multiple\n  variant=\"outline\"\n  items={[\n    { value: 'bold', label: <Bold />, 'aria-label': 'bold' },\n    { value: 'italic', label: <Italic />, 'aria-label': 'italic' },\n    { value: 'underline', label: <Underline />, 'aria-label': 'underline' },\n  ]}\n/>",
   'import { Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  delay={100}\n  side="top"\n  align="start"\n  content="左上提示"\n  trigger={<Button>左上</Button>}\n/>':
     'import { Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  delay={100}\n  side="top"\n  align="start"\n  content="Top left tip"\n  trigger={<Button>Top left</Button>}\n/>',
-  "import { Typography } from '@heliannuuthus/ui'\n\nexport const TypographyStory = () => {\n  return (\n    <article>\n      <Typography.H2>让界面语言保持清晰</Typography.H2>\n      <Typography.Lead>稳定的排版让用户先理解内容，再自然地注意到设计。</Typography.Lead>\n      <Typography.P>一致的标题层级和正文节奏，让内容清晰、可信且易于阅读。</Typography.P>\n      <Typography.Blockquote>一致的界面，来自每一次一致的内容决策。</Typography.Blockquote>\n      <Typography.P>\n        使用 <Typography.Code>@heliannuuthus/ui</Typography.Code> 组合内容。\n      </Typography.P>\n      <Typography.Muted>设计系统札记 · 5 分钟阅读</Typography.Muted>\n    </article>\n  )\n}":
-    "import { Typography } from '@heliannuuthus/ui'\n\nexport const TypographyStory = () => {\n  return (\n    <article>\n      <Typography.H2>Keep the interface language clear</Typography.H2>\n      <Typography.Lead>Stable typography allows users to understand the content first and then naturally notice the design. </Typography.Lead>\n      <Typography.P>Consistent heading hierarchy and body rhythm make content clear, believable, and easy to read. </Typography.P>\n      <Typography.Blockquote>A consistent interface comes from consistent content decisions every time. </Typography.Blockquote>\n      <Typography.P>\n        Use <Typography.Code>@heliannuuthus/ui</Typography.Code> to combine content.\n      </Typography.P>\n      <Typography.Muted>Notes on Design Systems · 5 minutes to read</Typography.Muted>\n    </article>\n  )\n}",
+  'import { Typography } from \'@heliannuuthus/ui\'\n\nexport const TypographyStory = () => {\n  return (\n    <article>\n      <Typography.Title level={2}>让界面语言保持清晰</Typography.Title>\n      <Typography.Text as="p" size="xl" tone="muted">稳定的排版让用户先理解内容，再自然地注意到设计。</Typography.Text>\n      <Typography.Text as="p">一致的标题层级和正文节奏，让内容清晰、可信且易于阅读。</Typography.Text>\n      <Typography.Blockquote>一致的界面，来自每一次一致的内容决策。</Typography.Blockquote>\n      <Typography.Text as="p">\n        使用 <Typography.Code>@heliannuuthus/ui</Typography.Code> 组合内容。\n      </Typography.Text>\n      <Typography.Text as="p" size="sm" tone="muted">设计系统札记 · 5 分钟阅读</Typography.Text>\n    </article>\n  )\n}':
+    'import { Typography } from \'@heliannuuthus/ui\'\n\nexport const TypographyStory = () => {\n  return (\n    <article>\n      <Typography.Title level={2}>Keep the interface language clear</Typography.Title>\n      <Typography.Text as="p" size="xl" tone="muted">Stable typography allows users to understand the content first and then naturally notice the design. </Typography.Text>\n      <Typography.Text as="p">Consistent heading hierarchy and body rhythm make content clear, believable, and easy to read. </Typography.Text>\n      <Typography.Blockquote>A consistent interface comes from consistent content decisions every time. </Typography.Blockquote>\n      <Typography.Text as="p">\n        Use <Typography.Code>@heliannuuthus/ui</Typography.Code> to combine content.\n      </Typography.Text>\n      <Typography.Text as="p" size="sm" tone="muted">Notes on Design Systems · 5 minutes to read</Typography.Text>\n    </article>\n  )\n}',
   "import { useState } from 'react'\nimport { AspectRatio } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\n\nconst ratios = [\n  { label: '16:9', value: 16 / 9 },\n  { label: '4:3', value: 4 / 3 },\n  { label: '1:1', value: 1 },\n]\n\nexport const CoverEditor = () => {\n  const [ratio, setRatio] = useState(ratios[0])\n\n  return (\n    <div>\n      <AspectRatio ratio={ratio.value}>\n        <img src=\"/cover.jpg\" alt=\"内容封面\" />\n      </AspectRatio>\n      {ratios.map((option) => (\n        <Button key={option.label} onClick={() => setRatio(option)}>\n          {option.label}\n        </Button>\n      ))}\n    </div>\n  )\n}":
     "import { useState } from 'react'\nimport { AspectRatio } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\n\nconst ratios = [\n  { label: '16:9', value: 16 / 9 },\n  { label: '4:3', value: 4 / 3 },\n  { label: '1:1', value: 1 },\n]\n\nexport const CoverEditor = () => {\n  const [ratio, setRatio] = useState(ratios[0])\n\n  return (\n    <div>\n      <AspectRatio ratio={ratio.value}>\n        <img src=\"/cover.jpg\" alt=\"Content cover\" />\n      </AspectRatio>\n      {ratios.map((option) => (\n        <Button key={option.label} onClick={() => setRatio(option)}>\n          {option.label}\n        </Button>\n      ))}\n    </div>\n  )\n}",
   "import { useState } from 'react'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\n\nexport const ViewSettings = () => {\n  const [sidebar, setSidebar] = useState(true)\n  const [density, setDensity] = useState('comfortable')\n\n  return (\n    <DropdownMenu\n      trigger={<Button variant=\"outline\">视图设置</Button>}\n      items={[\n        {\n          type: 'checkbox',\n          label: '显示侧栏',\n          checked: sidebar,\n          onChange: setSidebar,\n        },\n        { type: 'separator' },\n        {\n          type: 'radio',\n          value: density,\n          onChange: setDensity,\n          items: [\n            { label: '紧凑', value: 'compact' },\n            { label: '舒适', value: 'comfortable' },\n          ],\n        },\n      ]}\n    />\n  )\n}":
@@ -4676,6 +4676,85 @@ const ActionCell = () => {
     'Use orientation and gap to create the simplest horizontal layout with consistent spacing.',
   'import { Button, Stack } from \'@heliannuuthus/ui\'\n\n<Stack gap={8} orientation="horizontal">\n  <Button>保存</Button>\n  <Button variant="outline">取消</Button>\n</Stack>':
     'import { Button, Stack } from \'@heliannuuthus/ui\'\n\n<Stack gap={8} orientation="horizontal">\n  <Button>Save</Button>\n  <Button variant="outline">Cancel</Button>\n</Stack>',
+  '提供语义明确的标题、正文、引用和行内代码，并让文本语义与视觉层级独立组合。':
+    'Provides semantic titles, text, quotations, and inline code while keeping text semantics independent from visual hierarchy.',
+  '页面需要使用连续的 h1–h6 标题层级。':
+    'The page needs a continuous h1–h6 heading hierarchy.',
+  '正文需要独立组合语义元素、字号、颜色层级与字重。':
+    'Body text needs to compose semantic elements, size, color hierarchy, and weight independently.',
+  '引用与行内代码需要保留原生 HTML 语义。':
+    'Quotations and inline code need to preserve native HTML semantics.',
+  标题层级: 'Heading levels',
+  'level 同时选择 h1–h6 语义元素和对应视觉层级，页面应从 h1 开始保持连续顺序。':
+    'level selects both the h1–h6 semantic element and its visual hierarchy. Start with h1 and keep the page order continuous.',
+  一级标题: 'Level 1 heading',
+  二级标题: 'Level 2 heading',
+  三级标题: 'Level 3 heading',
+  四级标题: 'Level 4 heading',
+  五级标题: 'Level 5 heading',
+  六级标题: 'Level 6 heading',
+  文本定制: 'Text customization',
+  'as 选择真实语义元素；size、tone 与 weight 分别控制字号、颜色层级和字重，可以按内容需要自由组合。':
+    'as selects the semantic element, while size, tone, and weight independently control font size, color hierarchy, and font weight.',
+  默认行内正文: 'Default inline text',
+  '大号次要段落适合承载页面导语。':
+    'Large muted paragraphs work well for page introductions.',
+  块级强调文字: 'Emphasized block text',
+  较小的辅助信息: 'Small supporting text',
+  引用与行内代码: 'Quotations and inline code',
+  'Blockquote 保留引用来源，Code 在正文中标记短代码；多行代码块应使用独立的 pre 与 code 结构。':
+    'Blockquote preserves the citation source, while Code marks short inline code. Use a separate pre and code structure for multiline blocks.',
+  '语义先于视觉，视觉服务于内容层级。':
+    'Semantics come before visuals, and visuals serve the content hierarchy.',
+  安装命令为: 'The installation command is',
+  '通过 level 渲染 h1–h6 语义标题和对应视觉层级。':
+    'Renders h1–h6 semantic headings and their visual hierarchy through level.',
+  '组合文本语义元素、字号、颜色层级与字重。':
+    'Composes the text element, size, color hierarchy, and weight.',
+  '使用原生 blockquote 表达带来源的引用内容。':
+    'Uses a native blockquote for cited content.',
+  '使用原生 code 标记正文中的短代码。':
+    'Uses a native code element for short inline code.',
+  '设置标题语义元素和对应视觉层级。':
+    'Sets the semantic heading element and its visual hierarchy.',
+  '标题内容。': 'Heading content.',
+  '扩展标题元素样式。': 'Extends the heading element styles.',
+  '扩展标题元素行内样式。': 'Extends the heading element inline styles.',
+  '设置真实文本元素，不改变视觉属性。':
+    'Sets the rendered text element without changing visual properties.',
+  '设置字号与匹配的行高。': 'Sets the font size and matching line height.',
+  '设置默认或次要正文颜色。': 'Sets the default or muted text color.',
+  '设置正文的字重。': 'Sets the text font weight.',
+  '文本内容。': 'Text content.',
+  '扩展文本元素样式。': 'Extends the text element styles.',
+  '扩展文本元素行内样式。': 'Extends the text element inline styles.',
+  '设置引用内容的来源 URL。': 'Sets the source URL for the quotation.',
+  '引用内容。': 'Quotation content.',
+  '扩展引用元素样式。': 'Extends the quotation element styles.',
+  '扩展引用元素行内样式。': 'Extends the quotation element inline styles.',
+  '行内代码内容。': 'Inline code content.',
+  '扩展代码元素样式。': 'Extends the code element styles.',
+  '扩展代码元素行内样式。': 'Extends the code element inline styles.',
+  '页面从 h1 开始保持标题层级连续，不要因为视觉大小跳过级别。':
+    'Start the page at h1 and keep heading levels continuous; do not skip levels for visual size.',
+  '根据内容语义选择 Text 的 as，而不是根据默认外观选择元素。':
+    'Choose Text as from content semantics instead of the default appearance.',
+  '次要文字仍需满足对比度要求，不要仅依靠颜色表达信息。':
+    'Muted text must still meet contrast requirements; do not communicate information through color alone.',
+  '不要使用 Title.level 只追求字号；标题级别首先表达文档结构。':
+    'Do not use Title.level only for font size; heading levels primarily express document structure.',
+  '不要用 Text.as 调整视觉，字号、颜色和字重分别使用对应属性。':
+    'Do not use Text.as to change appearance; use the dedicated size, tone, and weight properties.',
+  'Code 用于行内短代码；多行代码块应组合原生 pre 与 code。':
+    'Code is for short inline code; compose native pre and code elements for multiline blocks.',
+  'import { Typography } from \'@heliannuuthus/ui\'\n\nexport const TypographyStory = () => {\n  return (\n    <article className="grid gap-4">\n      <Typography.Title level={2}>让界面语言保持清晰</Typography.Title>\n      <Typography.Text as="p" size="xl" tone="muted">\n        稳定的排版让用户先理解内容，再自然地注意到设计。\n      </Typography.Text>\n      <Typography.Text as="p">\n        一致的标题层级和正文节奏，让内容清晰、可信且易于阅读。\n      </Typography.Text>\n      <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">\n        一致的界面，来自每一次一致的内容决策。\n      </Typography.Blockquote>\n      <Typography.Text as="p">\n        使用 <Typography.Code>@heliannuuthus/ui</Typography.Code> 组合内容。\n      </Typography.Text>\n      <Typography.Text as="small" size="sm" tone="muted">\n        设计系统札记 · 5 分钟阅读\n      </Typography.Text>\n    </article>\n  )\n}':
+    'import { Typography } from \'@heliannuuthus/ui\'\n\nexport const TypographyStory = () => {\n  return (\n    <article className="grid gap-4">\n      <Typography.Title level={2}>Keep interface language clear</Typography.Title>\n      <Typography.Text as="p" size="xl" tone="muted">\n        Stable typography lets users understand content before noticing design.\n      </Typography.Text>\n      <Typography.Text as="p">\n        Consistent heading hierarchy and body rhythm make content clear and readable.\n      </Typography.Text>\n      <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">\n        A consistent interface comes from consistent content decisions.\n      </Typography.Blockquote>\n      <Typography.Text as="p">\n        Compose content with <Typography.Code>@heliannuuthus/ui</Typography.Code>.\n      </Typography.Text>\n      <Typography.Text as="small" size="sm" tone="muted">\n        Design system notes · 5 min read\n      </Typography.Text>\n    </article>\n  )\n}',
+  "import { Typography } from '@heliannuuthus/ui'\n\n<Typography.Title>一级标题</Typography.Title>\n<Typography.Title level={2}>二级标题</Typography.Title>\n<Typography.Title level={3}>三级标题</Typography.Title>\n<Typography.Title level={4}>四级标题</Typography.Title>\n<Typography.Title level={5}>五级标题</Typography.Title>\n<Typography.Title level={6}>六级标题</Typography.Title>":
+    "import { Typography } from '@heliannuuthus/ui'\n\n<Typography.Title>Level 1 heading</Typography.Title>\n<Typography.Title level={2}>Level 2 heading</Typography.Title>\n<Typography.Title level={3}>Level 3 heading</Typography.Title>\n<Typography.Title level={4}>Level 4 heading</Typography.Title>\n<Typography.Title level={5}>Level 5 heading</Typography.Title>\n<Typography.Title level={6}>Level 6 heading</Typography.Title>",
+  'import { Typography } from \'@heliannuuthus/ui\'\n\n<Typography.Text>默认行内正文</Typography.Text>\n<Typography.Text as="p" size="xl" tone="muted">\n  大号次要段落适合承载页面导语。\n</Typography.Text>\n<Typography.Text as="div" size="lg" weight="semibold">\n  块级强调文字\n</Typography.Text>\n<Typography.Text as="small" size="sm" tone="muted" weight="medium">\n  较小的辅助信息\n</Typography.Text>':
+    'import { Typography } from \'@heliannuuthus/ui\'\n\n<Typography.Text>Default inline text</Typography.Text>\n<Typography.Text as="p" size="xl" tone="muted">\n  Large muted paragraphs work well for page introductions.\n</Typography.Text>\n<Typography.Text as="div" size="lg" weight="semibold">\n  Emphasized block text\n</Typography.Text>\n<Typography.Text as="small" size="sm" tone="muted" weight="medium">\n  Small supporting text\n</Typography.Text>',
+  'import { Typography } from \'@heliannuuthus/ui\'\n\n<Typography.Blockquote cite="https://ui.heliannuuthus.com/design">\n  语义先于视觉，视觉服务于内容层级。\n</Typography.Blockquote>\n<Typography.Text as="p">\n  安装命令为 <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>\n</Typography.Text>':
+    'import { Typography } from \'@heliannuuthus/ui\'\n\n<Typography.Blockquote cite="https://ui.heliannuuthus.com/design">\n  Semantics come before visuals, and visuals serve the content hierarchy.\n</Typography.Blockquote>\n<Typography.Text as="p">\n  Install with <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>\n</Typography.Text>',
   自定义过滤: 'Custom filter',
   受控打开态: 'Controlled open state',
 };

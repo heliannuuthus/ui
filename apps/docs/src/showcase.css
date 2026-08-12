@@ -2133,6 +2133,8 @@ a {
 }
 .typography-stack {
   width: min(620px, 100%);
+  display: grid;
+  gap: 16px;
 }
 .typography-stack > *:first-child {
   margin-top: 0;

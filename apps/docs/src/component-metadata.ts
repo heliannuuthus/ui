@@ -9,9 +9,17 @@ export const componentSearchMetadata = {
     ['action', 'submit', 'confirm'],
   ],
   typography: [
-    'Provides consistent content hierarchy, body rhythm, and inline text styles.',
-    ['排版', '文字', '标题', '正文'],
-    ['text', 'heading', 'paragraph'],
+    'Provides semantic headings, customizable text, quotations, and inline code.',
+    ['排版', '文字', '标题', '正文', '引用', '行内代码'],
+    [
+      'typography',
+      'title',
+      'text',
+      'heading',
+      'paragraph',
+      'blockquote',
+      'code',
+    ],
   ],
   badge: [
     'Displays status, categories, or short attributes for quick scanning.',
