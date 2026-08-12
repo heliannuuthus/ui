@@ -1,109 +1,183 @@
-import * as React from 'react';
+import { cva } from 'class-variance-authority';
+import {
+  createElement,
+  forwardRef,
+  type ComponentPropsWithoutRef,
+  type ComponentRef,
+  type ForwardedRef,
+  type ReactElement,
+  type RefAttributes,
+} from 'react';
+
 import { cn } from '../lib/utils';
 
-const H1 = ({ className, ...props }: React.ComponentProps<'h1'>) => (
-  <h1
-    className={cn(
-      'scroll-m-20 font-heading text-4xl font-extrabold tracking-tight text-balance lg:text-5xl',
-      className
-    )}
-    {...props}
-  />
+type TypographyTitleLevel = 1 | 2 | 3 | 4 | 5 | 6;
+
+type TypographyTitleProps = ComponentPropsWithoutRef<'h1'> & {
+  level?: TypographyTitleLevel;
+};
+
+const titleElements = {
+  1: 'h1',
+  2: 'h2',
+  3: 'h3',
+  4: 'h4',
+  5: 'h5',
+  6: 'h6',
+} as const satisfies Record<TypographyTitleLevel, keyof HTMLElementTagNameMap>;
+
+const titleVariants = cva('scroll-m-20 font-heading tracking-tight', {
+  variants: {
+    level: {
+      1: 'text-4xl font-extrabold text-balance lg:text-5xl',
+      2: 'border-b border-border pb-2 text-3xl font-semibold first:mt-0',
+      3: 'text-2xl font-semibold',
+      4: 'text-xl font-semibold',
+      5: 'text-lg font-semibold',
+      6: 'text-base font-semibold',
+    },
+  },
+  defaultVariants: {
+    level: 1,
+  },
+});
+
+const TypographyTitle = forwardRef<HTMLHeadingElement, TypographyTitleProps>(
+  ({ className, level = 1, ...props }, ref) => {
+    const Component = titleElements[level];
+
+    return (
+      <Component
+        ref={ref}
+        className={cn(titleVariants({ level }), className)}
+        {...props}
+      />
+    );
+  }
 );
-const H2 = ({ className, ...props }: React.ComponentProps<'h2'>) => (
-  <h2
-    className={cn(
-      'scroll-m-20 border-b border-border pb-2 font-heading text-3xl font-semibold tracking-tight first:mt-0',
-      className
-    )}
-    {...props}
-  />
-);
-const H3 = ({ className, ...props }: React.ComponentProps<'h3'>) => (
-  <h3
-    className={cn(
-      'scroll-m-20 font-heading text-2xl font-semibold tracking-tight',
-      className
-    )}
-    {...props}
-  />
-);
-const H4 = ({ className, ...props }: React.ComponentProps<'h4'>) => (
-  <h4
-    className={cn(
-      'scroll-m-20 font-heading text-xl font-semibold tracking-tight',
-      className
-    )}
-    {...props}
-  />
-);
-const TypographyP = ({ className, ...props }: React.ComponentProps<'p'>) => (
-  <p
-    className={cn('leading-7 [&:not(:first-child)]:mt-6', className)}
-    {...props}
-  />
-);
-const TypographyLead = ({ className, ...props }: React.ComponentProps<'p'>) => (
-  <p className={cn('text-xl text-muted-foreground', className)} {...props} />
-);
-const TypographyLarge = ({
-  className,
-  ...props
-}: React.ComponentProps<'div'>) => (
-  <div
-    className={cn('font-heading text-lg font-semibold', className)}
-    {...props}
-  />
-);
-const TypographySmall = ({
-  className,
-  ...props
-}: React.ComponentProps<'small'>) => (
-  <small
-    className={cn('text-sm font-medium leading-none', className)}
-    {...props}
-  />
-);
-const TypographyMuted = ({
-  className,
-  ...props
-}: React.ComponentProps<'p'>) => (
-  <p className={cn('text-sm text-muted-foreground', className)} {...props} />
-);
-const TypographyBlockquote = ({
-  className,
-  ...props
-}: React.ComponentProps<'blockquote'>) => (
+
+TypographyTitle.displayName = 'Typography.Title';
+
+type TypographyTextElement = 'div' | 'p' | 'small' | 'span';
+type TypographyTextSize = 'sm' | 'md' | 'lg' | 'xl';
+type TypographyTextTone = 'default' | 'muted';
+type TypographyTextWeight = 'normal' | 'medium' | 'semibold';
+
+type TypographyTextOwnProps<Element extends TypographyTextElement> = {
+  as?: Element;
+  size?: TypographyTextSize;
+  tone?: TypographyTextTone;
+  weight?: TypographyTextWeight;
+};
+
+type TypographyTextProps<Element extends TypographyTextElement = 'span'> =
+  TypographyTextOwnProps<Element> &
+    Omit<
+      ComponentPropsWithoutRef<Element>,
+      keyof TypographyTextOwnProps<Element>
+    >;
+
+type TypographyTextComponent = <Element extends TypographyTextElement = 'span'>(
+  props: TypographyTextProps<Element> & RefAttributes<ComponentRef<Element>>
+) => ReactElement | null;
+
+const textVariants = cva('', {
+  variants: {
+    size: {
+      sm: 'text-sm leading-5',
+      md: 'text-base leading-7',
+      lg: 'text-lg leading-7',
+      xl: 'text-xl leading-8',
+    },
+    tone: {
+      default: 'text-foreground',
+      muted: 'text-muted-foreground',
+    },
+    weight: {
+      normal: 'font-normal',
+      medium: 'font-medium',
+      semibold: 'font-semibold',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+    tone: 'default',
+    weight: 'normal',
+  },
+});
+
+const TypographyTextRender = <Element extends TypographyTextElement = 'span'>(
+  {
+    as,
+    className,
+    size = 'md',
+    tone = 'default',
+    weight = 'normal',
+    ...props
+  }: TypographyTextProps<Element>,
+  ref: ForwardedRef<ComponentRef<Element>>
+) => {
+  return createElement(as ?? 'span', {
+    ...props,
+    ref,
+    className: cn(textVariants({ size, tone, weight }), className),
+  });
+};
+
+const TypographyTextRoot = forwardRef(TypographyTextRender);
+
+TypographyTextRoot.displayName = 'Typography.Text';
+
+const TypographyText = TypographyTextRoot as TypographyTextComponent;
+
+type TypographyBlockquoteProps = ComponentPropsWithoutRef<'blockquote'>;
+
+const TypographyBlockquote = forwardRef<
+  HTMLQuoteElement,
+  TypographyBlockquoteProps
+>(({ className, ...props }, ref) => (
   <blockquote
+    ref={ref}
     className={cn('mt-6 border-s-2 border-primary ps-6 italic', className)}
     {...props}
   />
-);
-const TypographyCode = ({
-  className,
-  ...props
-}: React.ComponentProps<'code'>) => (
-  <code
-    className={cn(
-      'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
-      className
-    )}
-    {...props}
-  />
+));
+
+TypographyBlockquote.displayName = 'Typography.Blockquote';
+
+type TypographyCodeProps = ComponentPropsWithoutRef<'code'>;
+
+const TypographyCode = forwardRef<HTMLElement, TypographyCodeProps>(
+  ({ className, ...props }, ref) => (
+    <code
+      ref={ref}
+      className={cn(
+        'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
+        className
+      )}
+      {...props}
+    />
+  )
 );
 
-const Typography = Object.assign(TypographyP, {
+TypographyCode.displayName = 'Typography.Code';
+
+const Typography = {
   Blockquote: TypographyBlockquote,
   Code: TypographyCode,
-  H1,
-  H2,
-  H3,
-  H4,
-  Large: TypographyLarge,
-  Lead: TypographyLead,
-  Muted: TypographyMuted,
-  P: TypographyP,
-  Small: TypographySmall,
-});
+  Text: TypographyText,
+  Title: TypographyTitle,
+} as const;
 
-export { Typography };
+export {
+  Typography,
+  type TypographyBlockquoteProps,
+  type TypographyCodeProps,
+  type TypographyTextElement,
+  type TypographyTextProps,
+  type TypographyTextSize,
+  type TypographyTextTone,
+  type TypographyTextWeight,
+  type TypographyTitleLevel,
+  type TypographyTitleProps,
+};

@@ -529,10 +529,15 @@ const HomePage = () => {
               <Sparkles data-icon="inline-start" />
               {t('home.componentCount', { count: componentCatalog.length })}
             </Badge>
-            <Typography.H1>{t('home.title')}</Typography.H1>
-            <Typography.Lead className="hero-copy">
+            <Typography.Title>{t('home.title')}</Typography.Title>
+            <Typography.Text
+              as="p"
+              size="xl"
+              tone="muted"
+              className="hero-copy"
+            >
               {t('home.description')}
-            </Typography.Lead>
+            </Typography.Text>
           </Stack>
 
           <Stack align="center" gap={12} orientation="horizontal" wrap>
@@ -632,11 +637,20 @@ const HomePage = () => {
       <section className="home-section philosophy-section">
         <Stack block gap={48}>
           <Stack block className="section-heading" gap={16}>
-            <Typography.Small className="section-label">
+            <Typography.Text
+              as="small"
+              size="sm"
+              weight="medium"
+              className="section-label"
+            >
               DESIGN SYSTEM
-            </Typography.Small>
-            <Typography.H2>{t('home.philosophyTitle')}</Typography.H2>
-            <Typography.Lead>{t('home.philosophyDescription')}</Typography.Lead>
+            </Typography.Text>
+            <Typography.Title level={2}>
+              {t('home.philosophyTitle')}
+            </Typography.Title>
+            <Typography.Text as="p" size="xl" tone="muted">
+              {t('home.philosophyDescription')}
+            </Typography.Text>
             <Button href={path('/design')} variant="link">
               {t('home.philosophyAction')} <ArrowRight data-icon="inline-end" />
             </Button>
@@ -654,8 +668,10 @@ const HomePage = () => {
               content: (
                 <Card className="rounded-lg">
                   <Stack block gap={12}>
-                    <Typography.H3>{title}</Typography.H3>
-                    <Typography.Muted>{copy}</Typography.Muted>
+                    <Typography.Title level={3}>{title}</Typography.Title>
+                    <Typography.Text as="p" size="sm" tone="muted">
+                      {copy}
+                    </Typography.Text>
                   </Stack>
                 </Card>
               ),
@@ -677,10 +693,17 @@ const HomePage = () => {
             orientation="horizontal"
           >
             <Stack gap={16}>
-              <Typography.Small className="section-label">
+              <Typography.Text
+                as="small"
+                size="sm"
+                weight="medium"
+                className="section-label"
+              >
                 COMPONENTS
-              </Typography.Small>
-              <Typography.H2>{t('home.componentsTitle')}</Typography.H2>
+              </Typography.Text>
+              <Typography.Title level={2}>
+                {t('home.componentsTitle')}
+              </Typography.Title>
             </Stack>
             <Button href={path('/components')} variant="link">
               {t('actions.viewAllComponents')}{' '}
@@ -784,9 +807,14 @@ const GettingStartedPage = () => {
         title={
           <Stack align="center" gap={8} orientation="horizontal">
             <Badge variant="secondary">04</Badge>
-            <Typography.Large className="font-bold">
+            <Typography.Text
+              as="div"
+              size="lg"
+              weight="semibold"
+              className="font-bold"
+            >
               {t('gettingStarted.nextTitle')}
-            </Typography.Large>
+            </Typography.Text>
           </Stack>
         }
         variant="outline"
@@ -841,10 +869,14 @@ const DesignPage = () => {
       <Stack block className="design-values" gap={0} separator={<Separator />}>
         {principles.map(([number, title, copy]) => (
           <article id={`principle-${number}`} key={number}>
-            <Typography.Small>{number}</Typography.Small>
+            <Typography.Text as="small" size="sm" weight="medium">
+              {number}
+            </Typography.Text>
             <Stack block gap={8}>
-              <Typography.H3>{title}</Typography.H3>
-              <Typography.Muted>{copy}</Typography.Muted>
+              <Typography.Title level={3}>{title}</Typography.Title>
+              <Typography.Text as="p" size="sm" tone="muted">
+                {copy}
+              </Typography.Text>
             </Stack>
           </article>
         ))}
@@ -1646,9 +1678,12 @@ const DocSection = ({
           title={
             <Stack align="center" gap={8} orientation="horizontal">
               <Badge variant="secondary">{step}</Badge>
-              <Typography.H2 className="border-0 pb-0 text-2xl font-bold">
+              <Typography.Title
+                level={2}
+                className="border-0 pb-0 text-2xl font-bold"
+              >
                 {title}
-              </Typography.H2>
+              </Typography.Title>
             </Stack>
           }
         />
@@ -1684,10 +1719,15 @@ const DocLayout = ({
           <Badge className="doc-kicker" variant="outline">
             {kicker}
           </Badge>
-          <Typography.H1 id="page-title">{title}</Typography.H1>
-          <Typography.Lead className="text-lg leading-8">
+          <Typography.Title id="page-title">{title}</Typography.Title>
+          <Typography.Text
+            as="p"
+            size="xl"
+            tone="muted"
+            className="text-lg leading-8"
+          >
             {description}
-          </Typography.Lead>
+          </Typography.Text>
         </Stack>
         <Stack
           block
@@ -1702,7 +1742,9 @@ const DocLayout = ({
         <Stack align="stretch" gap={16} orientation="horizontal">
           <Separator orientation="vertical" />
           <Stack gap={8}>
-            <Typography.Small>{t('docs.onThisPage')}</Typography.Small>
+            <Typography.Text as="small" size="sm" weight="medium">
+              {t('docs.onThisPage')}
+            </Typography.Text>
             <Stack gap={2}>
               {toc.map((item, index) => (
                 <Button

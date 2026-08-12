@@ -105,9 +105,14 @@ export const SyntaxCode = ({
           orientation="horizontal"
         >
           <Stack align="center" gap={8} orientation="horizontal">
-            <Typography.Small className="font-heading font-bold">
+            <Typography.Text
+              as="small"
+              size="sm"
+              weight="medium"
+              className="font-heading font-bold"
+            >
               {fileName}
-            </Typography.Small>
+            </Typography.Text>
           </Stack>
           <Stack
             align="center"

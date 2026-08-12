@@ -335,6 +335,17 @@ export {
   type TooltipProps,
   type TooltipStyles,
 } from './components/tooltip';
-export { Typography } from './components/typography';
+export {
+  Typography,
+  type TypographyBlockquoteProps,
+  type TypographyCodeProps,
+  type TypographyTextElement,
+  type TypographyTextProps,
+  type TypographyTextSize,
+  type TypographyTextTone,
+  type TypographyTextWeight,
+  type TypographyTitleLevel,
+  type TypographyTitleProps,
+} from './components/typography';
 export { useIsMobile } from './hooks/use-mobile';
 export { cn } from './lib/utils';

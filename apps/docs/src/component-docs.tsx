@@ -583,10 +583,13 @@ export const ButtonLink = () => {
 const typographyDocumentation: ComponentDocumentation = {
   name: 'Typography',
   slug: 'typography',
-  summary: docsCopy('提供一致的内容层级、正文节奏和行内文本样式。'),
+  summary: docsCopy(
+    '提供语义明确的标题、正文、引用和行内代码，并让文本语义与视觉层级独立组合。'
+  ),
   whenToUse: [
-    docsCopy('文档、详情页和内容页面需要稳定的标题层级。'),
-    docsCopy('需要统一正文、辅助文字、引用和代码的排版节奏。'),
+    docsCopy('页面需要使用连续的 h1–h6 标题层级。'),
+    docsCopy('正文需要独立组合语义元素、字号、颜色层级与字重。'),
+    docsCopy('引用与行内代码需要保留原生 HTML 语义。'),
   ],
   examples: [
     {
@@ -597,87 +600,306 @@ const typographyDocumentation: ComponentDocumentation = {
       wide: true,
       preview: (
         <div className="typography-stack">
-          <Typography.H2>{docsCopy('让界面语言保持清晰')}</Typography.H2>
-          <Typography.Lead>
+          <Typography.Title level={2}>
+            {docsCopy('让界面语言保持清晰')}
+          </Typography.Title>
+          <Typography.Text as="p" size="xl" tone="muted">
             {docsCopy('稳定的排版让用户先理解内容，再自然地注意到设计。')}
-          </Typography.Lead>
-          <Typography.P>
+          </Typography.Text>
+          <Typography.Text as="p">
             {docsCopy(
               'Heliannuuthus UI 通过一致的标题层级、正文节奏和辅助信息，帮助产品在不同页面中保持清晰、可信且易于阅读的表达。'
             )}
-          </Typography.P>
-          <Typography.Blockquote>
+          </Typography.Text>
+          <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
             {docsCopy('一致的界面，来自每一次一致的内容决策。')}
           </Typography.Blockquote>
-          <Typography.P>
+          <Typography.Text as="p">
             {docsCopy('使用')}
             <Typography.Code>@heliannuuthus/ui</Typography.Code>{' '}
             {docsCopy('中的语义组件组合内容，并让视觉层级始终服务于阅读顺序。')}
-          </Typography.P>
-          <Typography.Muted>
+          </Typography.Text>
+          <Typography.Text as="p" size="sm" tone="muted">
             {docsCopy('设计系统札记 · 5 分钟阅读')}
-          </Typography.Muted>
+          </Typography.Text>
         </div>
       ),
       code: docsCopy(`import { Typography } from '@heliannuuthus/ui'
 
 export const TypographyStory = () => {
   return (
-    <article>
-      <Typography.H2>让界面语言保持清晰</Typography.H2>
-      <Typography.Lead>稳定的排版让用户先理解内容，再自然地注意到设计。</Typography.Lead>
-      <Typography.P>一致的标题层级和正文节奏，让内容清晰、可信且易于阅读。</Typography.P>
-      <Typography.Blockquote>一致的界面，来自每一次一致的内容决策。</Typography.Blockquote>
-      <Typography.P>
+    <article className="grid gap-4">
+      <Typography.Title level={2}>让界面语言保持清晰</Typography.Title>
+      <Typography.Text as="p" size="xl" tone="muted">
+        稳定的排版让用户先理解内容，再自然地注意到设计。
+      </Typography.Text>
+      <Typography.Text as="p">
+        一致的标题层级和正文节奏，让内容清晰、可信且易于阅读。
+      </Typography.Text>
+      <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
+        一致的界面，来自每一次一致的内容决策。
+      </Typography.Blockquote>
+      <Typography.Text as="p">
         使用 <Typography.Code>@heliannuuthus/ui</Typography.Code> 组合内容。
-      </Typography.P>
-      <Typography.Muted>设计系统札记 · 5 分钟阅读</Typography.Muted>
+      </Typography.Text>
+      <Typography.Text as="small" size="sm" tone="muted">
+        设计系统札记 · 5 分钟阅读
+      </Typography.Text>
     </article>
   )
 }`),
+      coveredProperties: [
+        'Typography.Title.children',
+        'Typography.Text.children',
+        'Typography.Blockquote.children',
+        'Typography.Code.children',
+      ],
+    },
+    {
+      title: docsCopy('标题层级'),
+      description: docsCopy(
+        'level 同时选择 h1–h6 语义元素和对应视觉层级，页面应从 h1 开始保持连续顺序。'
+      ),
+      preview: (
+        <Stack block gap={16}>
+          <Typography.Title>{docsCopy('一级标题')}</Typography.Title>
+          <Typography.Title level={2}>{docsCopy('二级标题')}</Typography.Title>
+          <Typography.Title level={3}>{docsCopy('三级标题')}</Typography.Title>
+          <Typography.Title level={4}>{docsCopy('四级标题')}</Typography.Title>
+          <Typography.Title level={5}>{docsCopy('五级标题')}</Typography.Title>
+          <Typography.Title level={6}>{docsCopy('六级标题')}</Typography.Title>
+        </Stack>
+      ),
+      code: docsCopy(`import { Typography } from '@heliannuuthus/ui'
+
+<Typography.Title>一级标题</Typography.Title>
+<Typography.Title level={2}>二级标题</Typography.Title>
+<Typography.Title level={3}>三级标题</Typography.Title>
+<Typography.Title level={4}>四级标题</Typography.Title>
+<Typography.Title level={5}>五级标题</Typography.Title>
+<Typography.Title level={6}>六级标题</Typography.Title>`),
+      coveredProperties: [
+        'Typography.Title.level',
+        'Typography.Title.className',
+        'Typography.Title.style',
+      ],
+      wide: true,
+    },
+    {
+      title: docsCopy('文本定制'),
+      description: docsCopy(
+        'as 选择真实语义元素；size、tone 与 weight 分别控制字号、颜色层级和字重，可以按内容需要自由组合。'
+      ),
+      preview: (
+        <Stack block gap={12}>
+          <Typography.Text>{docsCopy('默认行内正文')}</Typography.Text>
+          <Typography.Text as="p" size="xl" tone="muted">
+            {docsCopy('大号次要段落适合承载页面导语。')}
+          </Typography.Text>
+          <Typography.Text as="div" size="lg" weight="semibold">
+            {docsCopy('块级强调文字')}
+          </Typography.Text>
+          <Typography.Text as="small" size="sm" tone="muted" weight="medium">
+            {docsCopy('较小的辅助信息')}
+          </Typography.Text>
+        </Stack>
+      ),
+      code: docsCopy(`import { Typography } from '@heliannuuthus/ui'
+
+<Typography.Text>默认行内正文</Typography.Text>
+<Typography.Text as="p" size="xl" tone="muted">
+  大号次要段落适合承载页面导语。
+</Typography.Text>
+<Typography.Text as="div" size="lg" weight="semibold">
+  块级强调文字
+</Typography.Text>
+<Typography.Text as="small" size="sm" tone="muted" weight="medium">
+  较小的辅助信息
+</Typography.Text>`),
+      coveredProperties: [
+        'Typography.Text.as',
+        'Typography.Text.size',
+        'Typography.Text.tone',
+        'Typography.Text.weight',
+        'Typography.Text.className',
+        'Typography.Text.style',
+      ],
+    },
+    {
+      title: docsCopy('引用与行内代码'),
+      description: docsCopy(
+        'Blockquote 保留引用来源，Code 在正文中标记短代码；多行代码块应使用独立的 pre 与 code 结构。'
+      ),
+      preview: (
+        <Stack block gap={16}>
+          <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
+            {docsCopy('语义先于视觉，视觉服务于内容层级。')}
+          </Typography.Blockquote>
+          <Typography.Text as="p">
+            {docsCopy('安装命令为')}{' '}
+            <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>
+          </Typography.Text>
+        </Stack>
+      ),
+      code: docsCopy(`import { Typography } from '@heliannuuthus/ui'
+
+<Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
+  语义先于视觉，视觉服务于内容层级。
+</Typography.Blockquote>
+<Typography.Text as="p">
+  安装命令为 <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>
+</Typography.Text>`),
+      coveredProperties: [
+        'Typography.Blockquote.cite',
+        'Typography.Blockquote.className',
+        'Typography.Blockquote.style',
+        'Typography.Code.className',
+        'Typography.Code.style',
+      ],
     },
   ],
   parts: [
     {
-      name: 'Typography.H1–Typography.H4',
-      description: docsCopy('语义化的四级标题。'),
+      name: 'Typography.Title',
+      description: docsCopy('通过 level 渲染 h1–h6 语义标题和对应视觉层级。'),
     },
     {
-      name: 'Typography.P',
-      description: docsCopy('正文段落。'),
+      name: 'Typography.Text',
+      description: docsCopy('组合文本语义元素、字号、颜色层级与字重。'),
     },
-    ...['Typography.Lead', 'Typography.Muted'].map((name) => ({
-      name,
-      description: docsCopy('导语与辅助正文。'),
-    })),
-    ...['Typography.Large', 'Typography.Small'].map((name) => ({
-      name,
-      description: docsCopy('强调文字和较小标签。'),
-    })),
-    ...['Typography.Blockquote', 'Typography.Code'].map((name) => ({
-      name,
-      description: docsCopy('引用和行内代码。'),
-    })),
+    {
+      name: 'Typography.Blockquote',
+      description: docsCopy('使用原生 blockquote 表达带来源的引用内容。'),
+    },
+    {
+      name: 'Typography.Code',
+      description: docsCopy('使用原生 code 标记正文中的短代码。'),
+    },
   ],
   api: [
     {
-      name: 'children',
-      description: docsCopy('排版组件的文本或行内内容。'),
-      type: 'React.ReactNode',
+      component: 'Typography.Title',
+      name: 'level',
+      description: docsCopy('设置标题语义元素和对应视觉层级。'),
+      type: '1 | 2 | 3 | 4 | 5 | 6',
+      defaultValue: '1',
     },
     {
+      component: 'Typography.Title',
+      name: 'children',
+      description: docsCopy('标题内容。'),
+      type: 'ReactNode',
+    },
+    {
+      component: 'Typography.Title',
       name: 'className',
-      description: docsCopy('扩展对应语义元素的样式。'),
+      description: docsCopy('扩展标题元素样式。'),
       type: 'string',
+    },
+    {
+      component: 'Typography.Title',
+      name: 'style',
+      description: docsCopy('扩展标题元素行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Typography.Text',
+      name: 'as',
+      description: docsCopy('设置真实文本元素，不改变视觉属性。'),
+      type: "'span' | 'p' | 'div' | 'small'",
+      defaultValue: "'span'",
+    },
+    {
+      component: 'Typography.Text',
+      name: 'size',
+      description: docsCopy('设置字号与匹配的行高。'),
+      type: "'sm' | 'md' | 'lg' | 'xl'",
+      defaultValue: "'md'",
+    },
+    {
+      component: 'Typography.Text',
+      name: 'tone',
+      description: docsCopy('设置默认或次要正文颜色。'),
+      type: "'default' | 'muted'",
+      defaultValue: "'default'",
+    },
+    {
+      component: 'Typography.Text',
+      name: 'weight',
+      description: docsCopy('设置正文的字重。'),
+      type: "'normal' | 'medium' | 'semibold'",
+      defaultValue: "'normal'",
+    },
+    {
+      component: 'Typography.Text',
+      name: 'children',
+      description: docsCopy('文本内容。'),
+      type: 'ReactNode',
+    },
+    {
+      component: 'Typography.Text',
+      name: 'className',
+      description: docsCopy('扩展文本元素样式。'),
+      type: 'string',
+    },
+    {
+      component: 'Typography.Text',
+      name: 'style',
+      description: docsCopy('扩展文本元素行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Typography.Blockquote',
+      name: 'cite',
+      description: docsCopy('设置引用内容的来源 URL。'),
+      type: 'string',
+    },
+    {
+      component: 'Typography.Blockquote',
+      name: 'children',
+      description: docsCopy('引用内容。'),
+      type: 'ReactNode',
+    },
+    {
+      component: 'Typography.Blockquote',
+      name: 'className',
+      description: docsCopy('扩展引用元素样式。'),
+      type: 'string',
+    },
+    {
+      component: 'Typography.Blockquote',
+      name: 'style',
+      description: docsCopy('扩展引用元素行内样式。'),
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Typography.Code',
+      name: 'children',
+      description: docsCopy('行内代码内容。'),
+      type: 'ReactNode',
+    },
+    {
+      component: 'Typography.Code',
+      name: 'className',
+      description: docsCopy('扩展代码元素样式。'),
+      type: 'string',
+    },
+    {
+      component: 'Typography.Code',
+      name: 'style',
+      description: docsCopy('扩展代码元素行内样式。'),
+      type: 'CSSProperties',
     },
   ],
   accessibility: [
-    docsCopy('保持标题层级连续。'),
-    docsCopy('辅助文字仍需满足对比度要求，不要仅依靠较浅颜色表达次要信息。'),
+    docsCopy('页面从 h1 开始保持标题层级连续，不要因为视觉大小跳过级别。'),
+    docsCopy('根据内容语义选择 Text 的 as，而不是根据默认外观选择元素。'),
+    docsCopy('次要文字仍需满足对比度要求，不要仅依靠颜色表达信息。'),
   ],
   pitfalls: [
-    docsCopy('不要把排版组件当作布局容器。'),
-    docsCopy('不要为了视觉字号选择错误的标题语义。'),
+    docsCopy('不要使用 Title.level 只追求字号；标题级别首先表达文档结构。'),
+    docsCopy('不要用 Text.as 调整视觉，字号、颜色和字重分别使用对应属性。'),
+    docsCopy('Code 用于行内短代码；多行代码块应组合原生 pre 与 code。'),
   ],
 };
 
@@ -11659,7 +11881,6 @@ const nativeRootContracts: Array<[string, string]> = [
   ['resizable', 'ResizablePrimitive.GroupProps'],
   ['tabs', 'TabsRootProps'],
   ['table', 'ComponentProps<"div">'],
-  ['typography', 'TypographyProps'],
 ];
 for (const [slug, type] of nativeRootContracts) {
   appendMissingApi(slug, [publicProperty(docsCopy('原生属性'), type)]);

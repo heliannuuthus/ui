@@ -158,8 +158,17 @@ const CompactCase = ({
   return (
     <Stack block gap={8}>
       <Stack block gap={2}>
-        <Typography.Small className="font-bold">{title}</Typography.Small>
-        <Typography.Muted>{description}</Typography.Muted>
+        <Typography.Text
+          as="small"
+          size="sm"
+          weight="medium"
+          className="font-bold"
+        >
+          {title}
+        </Typography.Text>
+        <Typography.Text as="p" size="sm" tone="muted">
+          {description}
+        </Typography.Text>
       </Stack>
       {children}
     </Stack>
@@ -288,10 +297,10 @@ export const StackCompactVariantsDemo = () => {
               value={quality}
             />
           </Stack.Compact>
-          <Typography.Muted aria-live="polite">
+          <Typography.Text as="p" size="sm" tone="muted" aria-live="polite">
             {docsCopy('当前压缩质量：')}
             {quality}%
-          </Typography.Muted>
+          </Typography.Text>
         </Stack>
       </CompactCase>
     </Stack>
