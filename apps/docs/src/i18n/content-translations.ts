@@ -3587,18 +3587,6 @@ const ActionCell = () => {
     'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · Verifying"\n  media={<FileArchive />}\n  state="processing"\n/>',
   'import { Avatar } from \'@heliannuuthus/ui\'\n\n<Avatar alt="林默" fallback="林" shape="circle" size="lg" />\n<Avatar alt="周一" fallback="周" shape="square" size="lg" />':
     'import { Avatar } from \'@heliannuuthus/ui\'\n\n<Avatar alt="Lin Mo" fallback="Lin" shape="circle" size="lg" />\n<Avatar alt="Monday" fallback="Week" shape="square" size="lg" />',
-  'import { Avatar } from \'@heliannuuthus/ui\'\nimport { Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="陈青"\n  fallback="陈"\n  size="lg"\n  badge={<Badge variant="destructive">8</Badge>}\n/>':
-    'import { Avatar } from \'@heliannuuthus/ui\'\nimport { Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="Chen Qing"\n  fallback="Chen"\n  size="lg"\n  badge={<Badge variant="destructive">8</Badge>}\n/>',
-  'import { Avatar } from \'@heliannuuthus/ui\'\nimport { Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="陈序"\n  badge={<Badge variant="destructive">8</Badge>}\n  fallback="陈"\n  size="lg"\n/>':
-    'import { Avatar } from \'@heliannuuthus/ui\'\nimport { Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="Chen Xu"\n  badge={<Badge variant="destructive">8</Badge>}\n  fallback="Chen"\n  size="lg"\n/>',
-  'import { Badge } from \'@heliannuuthus/ui\'\n\n<Badge><span aria-hidden="true" />运行中</Badge>\n<Badge variant="outline">v0.1.0</Badge>\n<Badge href="/releases" variant="link">查看版本</Badge>':
-    'import { Badge } from \'@heliannuuthus/ui\'\n\n<Badge><span aria-hidden="true" />Running</Badge>\n<Badge variant="outline">v0.1.0</Badge>\n<Badge href="/releases" variant="link">View version</Badge>',
-  'import { Badge } from \'@heliannuuthus/ui\'\n\n<Badge>默认</Badge>\n<Badge variant="secondary">次要</Badge>\n<Badge variant="outline">描边</Badge>\n<Badge variant="destructive">需处理</Badge>':
-    'import { Badge } from \'@heliannuuthus/ui\'\n\n<Badge>Default</Badge>\n<Badge variant="secondary">Secondary</Badge>\n<Badge variant="outline">Stroke</Badge>\n<Badge variant="destructive">Requires processing</Badge>',
-  "import { Badge } from '@heliannuuthus/ui'\n\nexport const BadgeBasic = () => {\n  return <Badge>已发布</Badge>\n}":
-    "import { Badge } from '@heliannuuthus/ui'\n\nexport const BadgeBasic = () => {\n  return <Badge>Published</Badge>\n}",
-  'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge count={5} indicatorLabel="5 条未读消息">\n  <Button aria-label="查看未读消息" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge count={123} overflowCount={99}>\n  <Button variant="outline">收件箱</Button>\n</Badge>\n\n<Badge dot indicatorLabel="有新的系统通知">\n  <Button variant="outline">系统通知</Button>\n</Badge>':
-    'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge count={5} indicatorLabel="5 unread messages">\n  <Button aria-label="View unread messages" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge count={123} overflowCount={99}>\n  <Button variant="outline">Inbox</Button>\n</Badge>\n\n<Badge dot indicatorLabel="There is a new system notification">\n  <Button variant="outline">System notification</Button>\n</Badge>',
   "import { Breadcrumb } from '@heliannuuthus/ui'\n\nconst items = [\n  { label: '首页', href: '/' },\n  { label: '组件', href: '/components' },\n  { label: '导航', href: '/components/navigation-menu' },\n  { label: 'Breadcrumb' },\n]\n\nexport const PageBreadcrumb = () => {\n  return <Breadcrumb items={items} icon />\n}":
     "import { Breadcrumb } from '@heliannuuthus/ui'\n\nconst items = [\n  { label: 'Home', href: '/' },\n  { label: 'component', href: '/components' },\n  { label: 'Navigation', href: '/components/navigation-menu' },\n  { label: 'Breadcrumb' },\n]\n\nexport const PageBreadcrumb = () => {\n  return <Breadcrumb items={items} icon />\n}",
   'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    variant="default"\n    content="已经补充完成，可以重新评审。"\n    reactions="✓ 2"\n  />\n  <Bubble align="start" variant="elevated" content="收到，我现在检查。" />\n</Bubble.Group>':
@@ -4495,13 +4483,13 @@ const ActionCell = () => {
   定位到归档说明: 'Jump to archived notes',
   '用 Item.Group 组织同类动态，并通过分隔线维持连续列表的阅读节奏。':
     'Use Item.Group to organize related activity and separators to maintain the reading rhythm of a continuous list.',
-  "import { Badge, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: <MessageCircle />,\n      mediaType: 'icon',\n      title: '林默回复了检查项',\n      description: '确认索引变更不会锁表。',\n      actions: <Badge>2 分钟前</Badge>,\n    },\n  ]}\n/>":
-    "import { Badge, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: <MessageCircle />,\n      mediaType: 'icon',\n      title: 'Lin Mo replied to the review item',\n      description: 'Confirmed that the index change will not lock the table.',\n      actions: <Badge>2 minutes ago</Badge>,\n    },\n  ]}\n/>",
+  "import { Tag, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: <MessageCircle />,\n      mediaType: 'icon',\n      title: '林默回复了检查项',\n      description: '确认索引变更不会锁表。',\n      actions: <Tag>2 分钟前</Tag>,\n    },\n  ]}\n/>":
+    "import { Tag, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: <MessageCircle />,\n      mediaType: 'icon',\n      title: 'Lin Mo replied to the review item',\n      description: 'Confirmed that the index change will not lock the table.',\n      actions: <Tag>2 minutes ago</Tag>,\n    },\n  ]}\n/>",
   成员目录: 'Member directory',
   '头像、身份说明和成员状态保持同一行对齐，描边外观明确每个成员的点击区域。':
     'Keep avatars, role descriptions, and member status aligned on one row; the outlined appearance makes each member’s hit area explicit.',
-  'import { Avatar, Badge, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<Avatar alt="林默" fallback="林" />}\n  title="林默"\n  description="平台工程 · 发布管理员"\n  actions={<Badge variant="secondary">在线</Badge>}\n/>':
-    'import { Avatar, Badge, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<Avatar alt="Lin Mo" fallback="L" />}\n  title="Lin Mo"\n  description="Platform engineering · Release administrator"\n  actions={<Badge variant="secondary">Online</Badge>}\n/>',
+  'import { Avatar, Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<Avatar alt="林默" fallback="林" />}\n  title="林默"\n  description="平台工程 · 发布管理员"\n  actions={<Tag type="success">在线</Tag>}\n/>':
+    'import { Avatar, Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<Avatar alt="Lin Mo" fallback="L" />}\n  title="Lin Mo"\n  description="Platform engineering · Release administrator"\n  actions={<Tag type="success">Online</Tag>}\n/>',
   '把开关放入 actions，让标题解释设置、描述说明影响范围，整行本身不重复承担点击行为。':
     'Place the switch in actions so the title names the setting and the description explains its scope; the row itself does not duplicate the click behavior.',
   'import { Item, Switch } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="muted"\n  media={<Cloud />}\n  mediaType="icon"\n  title="自动部署预览环境"\n  description="合并到 main 后自动更新预览环境。"\n  actions={<Switch aria-label="自动部署预览环境" />}\n/>':
@@ -4509,8 +4497,8 @@ const ActionCell = () => {
   资源入口: 'Resource entry',
   '使用 href 把整个资源项变成原生链接；header 和 footer 承载辅助元数据。':
     'Use href to make the entire resource item a native link; header and footer carry supporting metadata.',
-  'import { Badge, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Badge>发布说明</Badge>}\n  media={<FileText />}\n  mediaType="icon"\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>许澄维护 · 8 分钟前更新</span>}\n/>':
-    'import { Badge, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Badge>Release notes</Badge>}\n  media={<FileText />}\n  mediaType="icon"\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>Maintained by Xu Cheng · Updated 8 minutes ago</span>}\n/>',
+  'import { Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Tag>发布说明</Tag>}\n  media={<FileText />}\n  mediaType="icon"\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>许澄维护 · 8 分钟前更新</span>}\n/>':
+    'import { Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Tag>Release notes</Tag>}\n  media={<FileText />}\n  mediaType="icon"\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>Maintained by Xu Cheng · Updated 8 minutes ago</span>}\n/>',
   '展示成员、动态、文件、设置等具有一致骨架的行级内容。':
     'Display row-level content with a consistent structure, such as members, activity, files, and settings.',
   '需要组合媒体、主次文字、尾部操作或跨行元数据时使用。':
@@ -4755,6 +4743,90 @@ const ActionCell = () => {
     'import { Typography } from \'@heliannuuthus/ui\'\n\n<Typography.Text>Default inline text</Typography.Text>\n<Typography.Text as="p" size="xl" tone="muted">\n  Large muted paragraphs work well for page introductions.\n</Typography.Text>\n<Typography.Text as="div" size="lg" weight="semibold">\n  Emphasized block text\n</Typography.Text>\n<Typography.Text as="small" size="sm" tone="muted" weight="medium">\n  Small supporting text\n</Typography.Text>',
   'import { Typography } from \'@heliannuuthus/ui\'\n\n<Typography.Blockquote cite="https://ui.heliannuuthus.com/design">\n  语义先于视觉，视觉服务于内容层级。\n</Typography.Blockquote>\n<Typography.Text as="p">\n  安装命令为 <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>\n</Typography.Text>':
     'import { Typography } from \'@heliannuuthus/ui\'\n\n<Typography.Blockquote cite="https://ui.heliannuuthus.com/design">\n  Semantics come before visuals, and visuals serve the content hierarchy.\n</Typography.Blockquote>\n<Typography.Text as="p">\n  Install with <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>\n</Typography.Text>',
+  '用简短文本表达对象的状态、分类或属性。':
+    'Express an object status, category, or attribute with short text.',
+  '标记对象的状态、分类或稳定属性。':
+    'Mark an object status, category, or stable attribute.',
+  '在列表、卡片和详情中提供便于扫描的短文本。':
+    'Provide scannable short text in lists, cards, and detail views.',
+  'Tag 是纯展示元素，始终渲染为 span。':
+    'Tag is presentation-only and always renders as a span.',
+  默认标签: 'Default tag',
+  "import { Tag } from '@heliannuuthus/ui'\n\n<Tag>默认标签</Tag>":
+    "import { Tag } from '@heliannuuthus/ui'\n\n<Tag>Default tag</Tag>",
+  语义类型: 'Semantic types',
+  'type 表达标签的语义，不要只为了颜色选择与内容无关的类型。':
+    'type expresses the tag semantics; do not choose an unrelated type only for its color.',
+  主要: 'Primary',
+  'import { Tag } from \'@heliannuuthus/ui\'\n\n<Tag>默认</Tag>\n<Tag type="primary">主要</Tag>\n<Tag type="info">信息</Tag>\n<Tag type="success">成功</Tag>\n<Tag type="warning">警告</Tag>\n<Tag type="error">错误</Tag>':
+    'import { Tag } from \'@heliannuuthus/ui\'\n\n<Tag>Default</Tag>\n<Tag type="primary">Primary</Tag>\n<Tag type="info">Info</Tag>\n<Tag type="success">Success</Tag>\n<Tag type="warning">Warning</Tag>\n<Tag type="error">Error</Tag>',
+  '设置标签表达的语义类型。': 'Sets the semantic type expressed by the tag.',
+  '标签中的简短文本或辅助图标。':
+    'Short text or a supporting icon inside the tag.',
+  '扩展标签样式。': 'Extends the tag styles.',
+  '扩展标签行内样式。': 'Extends the tag inline styles.',
+  '状态不能只依靠颜色表达，标签文本必须保留完整含义。':
+    'Do not communicate status through color alone; tag text must preserve the full meaning.',
+  'Tag 支持标准 span、ARIA、data 属性和事件，并转发 span ref。':
+    'Tag supports standard span, ARIA, and data attributes and events, and forwards a span ref.',
+  '不要把 Tag 用作按钮或链接；交互场景应组合 Button 或原生链接。':
+    'Do not use Tag as a button or link; compose Button or a native link for interaction.',
+  '避免在 Tag 中放入长句或复杂操作。':
+    'Avoid long sentences or complex actions inside Tag.',
+  '在对象角落或独立位置展示通知数字与状态红点。':
+    'Displays notification counts and status dots over an object or independently.',
+  '在按钮、头像或其他对象上叠加未读数量。':
+    'Overlay an unread count on a button, avatar, or other object.',
+  '只需提示存在新内容，或需要独立展示简短计数。':
+    'Use when only the presence of new content or a short standalone count is needed.',
+  独立数字: 'Standalone counts',
+  '没有 children 时独立显示通知；数字 0 会保留，超过 max 时显示封顶文案。':
+    'Without children, the notification renders independently. Zero remains visible and values above max use capped text.',
+  锚点通知: 'Anchored notifications',
+  '传入 children 后，通知会定位到对象的 inline-end 顶角；offset 可微调逻辑方向位置。':
+    'With children, the notification is positioned at the inline-end top corner; offset fine-tunes its logical position.',
+  'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge indicator={5} indicatorLabel="5 条未读消息">\n  <Button aria-label="查看消息" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge dir="rtl" indicator={12} offset={[3, -2]}>\n  <Button variant="outline">收件箱</Button>\n</Badge>':
+    'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge indicator={5} indicatorLabel="5 unread messages">\n  <Button aria-label="View messages" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge dir="rtl" indicator={12} offset={[3, -2]}>\n  <Button variant="outline">Inbox</Button>\n</Badge>',
+  状态红点: 'Status dot',
+  'indicator 为 true 时只显示红点；因为没有可见内容，必须提供 indicatorLabel。':
+    'When indicator is true, only a dot is displayed. Because it has no visible content, indicatorLabel is required.',
+  'import { Badge, Button } from \'@heliannuuthus/ui\'\n\n<Badge indicator indicatorLabel="有新的系统通知">\n  <Button variant="outline">系统通知</Button>\n</Badge>':
+    'import { Badge, Button } from \'@heliannuuthus/ui\'\n\n<Badge indicator indicatorLabel="New system notification">\n  <Button variant="outline">System notifications</Button>\n</Badge>',
+  样式扩展: 'Style extensions',
+  '根节点使用 className 与 style，通知标记使用对应的 classNames 和 styles 插槽。':
+    'Use className and style for the root, and the matching classNames and styles slot for the indicator.',
+  '设置通知内容；true 显示红点，节点显示内容，false、null 或 undefined 隐藏。':
+    'Sets notification content: true displays a dot, a node displays content, and false, null, or undefined hides it.',
+  '设置数字通知的显示上限，超出时追加加号。':
+    'Sets the numeric notification maximum and appends a plus sign above it.',
+  '微调通知相对锚点的水平与垂直位置。':
+    'Fine-tunes the horizontal and vertical position relative to the anchor.',
+  '设置通知的无障碍名称；红点模式必须提供。':
+    'Sets the accessible notification name and is required for dot mode.',
+  '设置通知标记的锚点；省略时独立显示。':
+    'Sets the notification anchor; omit it for standalone display.',
+  '扩展 indicator 语义插槽样式。':
+    'Extends the indicator semantic slot styles.',
+  '扩展 indicator 语义插槽行内样式。':
+    'Extends the indicator semantic slot inline styles.',
+  '红点没有可见文字，必须通过 indicatorLabel 说明通知含义。':
+    'A dot has no visible text, so indicatorLabel must describe the notification.',
+  '数字已有可见文本；含义不明确时仍应补充 indicatorLabel。':
+    'Counts have visible text; add indicatorLabel when their meaning is still unclear.',
+  'Badge 支持标准 span、ARIA、data 属性和事件，并转发 span ref。':
+    'Badge supports standard span, ARIA, and data attributes and events, and forwards a span ref.',
+  'Badge 只表示通知；状态、分类和简短属性应使用 Tag。':
+    'Badge only represents notifications; use Tag for status, categories, and short attributes.',
+  '不要把 Badge 本身当作交互控件，应把 Button 或链接作为 children。':
+    'Do not use Badge itself as an interactive control; pass a Button or link as children.',
+  '与 Tag 和 Badge 组合': 'Composed with Tag and Badge',
+  'badge 插槽可放置 Tag 状态标签或 Badge 通知标记，并始终锚定在头像右下角。':
+    'The badge slot accepts Tag status labels or Badge notification indicators and keeps them anchored to the avatar corner.',
+  '8 条未读消息': '8 unread messages',
+  'import { Avatar, Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="陈序"\n  badge={<Badge indicator={8} indicatorLabel="8 条未读消息" />}\n  fallback="陈"\n  size="lg"\n/>':
+    'import { Avatar, Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="Chen Xu"\n  badge={<Badge indicator={8} indicatorLabel="8 unread messages" />}\n  fallback="Chen"\n  size="lg"\n/>',
+  '在头像右下角放置在线点、认证图标或 Tag 等状态节点。':
+    'Places an online dot, verification icon, Tag, or other status node at the avatar bottom corner.',
   自定义过滤: 'Custom filter',
   受控打开态: 'Controlled open state',
 };

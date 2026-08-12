@@ -1,6 +1,6 @@
 import { docsCopy } from './i18n/content';
 import type { ReactNode } from 'react';
-import { Badge } from '@heliannuuthus/ui';
+import { Badge, Tag } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Checkbox } from '@heliannuuthus/ui';
 import { Empty } from '@heliannuuthus/ui';
@@ -903,54 +903,119 @@ export const TypographyStory = () => {
   ],
 };
 
-const badgeDocumentation: ComponentDocumentation = {
-  name: 'Badge',
-  slug: 'badge',
-  summary: docsCopy('展示状态、分类或简短属性，帮助用户快速扫描信息。'),
+const tagDocumentation: ComponentDocumentation = {
+  name: 'Tag',
+  slug: 'tag',
+  summary: docsCopy('用简短文本表达对象的状态、分类或属性。'),
   whenToUse: [
-    docsCopy('标记对象的状态或分类。'),
-    docsCopy('在有限空间内展示短小、非交互属性。'),
+    docsCopy('标记对象的状态、分类或稳定属性。'),
+    docsCopy('在列表、卡片和详情中提供便于扫描的短文本。'),
   ],
   examples: [
     {
       title: docsCopy('基础用法'),
-      description: docsCopy('用简短文本标记对象当前最重要的状态或属性。'),
-      preview: <Badge>{docsCopy('已发布')}</Badge>,
-      code: docsCopy(`import { Badge } from '@heliannuuthus/ui'
+      description: docsCopy('Tag 是纯展示元素，始终渲染为 span。'),
+      preview: <Tag>{docsCopy('默认标签')}</Tag>,
+      code: docsCopy(`import { Tag } from '@heliannuuthus/ui'
 
-export const BadgeBasic = () => {
-  return <Badge>已发布</Badge>
-}`),
+<Tag>默认标签</Tag>`),
+      coveredProperties: ['children', 'className', 'style'],
     },
     {
-      title: docsCopy('语义样式'),
+      title: docsCopy('语义类型'),
       description: docsCopy(
-        'variant 只区分信息层级；同一种状态不要在页面内混用多套样式。'
+        'type 表达标签的语义，不要只为了颜色选择与内容无关的类型。'
       ),
       preview: (
         <div className="example-row">
-          <Badge>{docsCopy('默认')}</Badge>
-          <Badge variant="secondary">{docsCopy('次要')}</Badge>
-          <Badge variant="outline">{docsCopy('描边')}</Badge>
-          <Badge variant="ghost">{docsCopy('弱化')}</Badge>
-          <Badge variant="destructive">{docsCopy('需处理')}</Badge>
+          <Tag>{docsCopy('默认')}</Tag>
+          <Tag type="primary">{docsCopy('主要')}</Tag>
+          <Tag type="info">{docsCopy('信息')}</Tag>
+          <Tag type="success">{docsCopy('成功')}</Tag>
+          <Tag type="warning">{docsCopy('警告')}</Tag>
+          <Tag type="error">{docsCopy('错误')}</Tag>
         </div>
+      ),
+      code: docsCopy(`import { Tag } from '@heliannuuthus/ui'
+
+<Tag>默认</Tag>
+<Tag type="primary">主要</Tag>
+<Tag type="info">信息</Tag>
+<Tag type="success">成功</Tag>
+<Tag type="warning">警告</Tag>
+<Tag type="error">错误</Tag>`),
+      coveredProperties: ['type'],
+    },
+  ],
+  api: [
+    {
+      name: 'type',
+      description: docsCopy('设置标签表达的语义类型。'),
+      type: "'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'",
+      defaultValue: "'default'",
+    },
+    {
+      name: 'children',
+      description: docsCopy('标签中的简短文本或辅助图标。'),
+      type: 'ReactNode',
+    },
+    {
+      name: 'className',
+      description: docsCopy('扩展标签样式。'),
+      type: 'string',
+    },
+    {
+      name: 'style',
+      description: docsCopy('扩展标签行内样式。'),
+      type: 'CSSProperties',
+    },
+  ],
+  accessibility: [
+    docsCopy('状态不能只依靠颜色表达，标签文本必须保留完整含义。'),
+    docsCopy('Tag 支持标准 span、ARIA、data 属性和事件，并转发 span ref。'),
+  ],
+  pitfalls: [
+    docsCopy('不要把 Tag 用作按钮或链接；交互场景应组合 Button 或原生链接。'),
+    docsCopy('避免在 Tag 中放入长句或复杂操作。'),
+  ],
+};
+
+const badgeDocumentation: ComponentDocumentation = {
+  name: 'Badge',
+  slug: 'badge',
+  summary: docsCopy('在对象角落或独立位置展示通知数字与状态红点。'),
+  whenToUse: [
+    docsCopy('在按钮、头像或其他对象上叠加未读数量。'),
+    docsCopy('只需提示存在新内容，或需要独立展示简短计数。'),
+  ],
+  examples: [
+    {
+      title: docsCopy('独立数字'),
+      description: docsCopy(
+        '没有 children 时独立显示通知；数字 0 会保留，超过 max 时显示封顶文案。'
+      ),
+      preview: (
+        <Stack align="center" gap={16} orientation="horizontal">
+          <Badge indicator={5} />
+          <Badge indicator={0} />
+          <Badge indicator={123} max={99} />
+        </Stack>
       ),
       code: docsCopy(`import { Badge } from '@heliannuuthus/ui'
 
-<Badge>默认</Badge>
-<Badge variant="secondary">次要</Badge>
-<Badge variant="outline">描边</Badge>
-<Badge variant="destructive">需处理</Badge>`),
+<Badge indicator={5} />
+<Badge indicator={0} />
+<Badge indicator={123} max={99} />`),
+      coveredProperties: ['indicator', 'max', 'className', 'style'],
     },
     {
-      title: docsCopy('消息提醒'),
+      title: docsCopy('锚点通知'),
       description: docsCopy(
-        '通过 count 展示未读数量，通过 dot 只提示是否有新内容；超出 overflowCount 时自动封顶。'
+        '传入 children 后，通知会定位到对象的 inline-end 顶角；offset 可微调逻辑方向位置。'
       ),
       preview: (
-        <Stack gap={24} orientation="horizontal" wrap>
-          <Badge count={5} indicatorLabel={docsCopy('5 条未读消息')}>
+        <Stack gap={28} orientation="horizontal" wrap>
+          <Badge indicator={5} indicatorLabel={docsCopy('5 条未读消息')}>
             <Button
               aria-label={docsCopy('查看 5 条未读消息')}
               size="icon"
@@ -959,126 +1024,92 @@ export const BadgeBasic = () => {
               <Mail />
             </Button>
           </Badge>
-          <Badge
-            count={123}
-            indicatorLabel={docsCopy('超过 99 条未读消息')}
-            overflowCount={99}
-          >
+          <Badge dir="rtl" indicator={12} offset={[3, -2]}>
             <Button variant="outline">{docsCopy('收件箱')}</Button>
-          </Badge>
-          <Badge dot indicatorLabel={docsCopy('有新的系统通知')}>
-            <Button variant="outline">{docsCopy('系统通知')}</Button>
-          </Badge>
-          <Badge count={0} indicatorLabel={docsCopy('暂无待办')} showZero>
-            <Button variant="outline">{docsCopy('待办')}</Button>
           </Badge>
         </Stack>
       ),
       code: docsCopy(`import { Badge, Button } from '@heliannuuthus/ui'
 import { Mail } from 'lucide-react'
 
-<Badge count={5} indicatorLabel="5 条未读消息">
-  <Button aria-label="查看未读消息" size="icon" variant="outline">
+<Badge indicator={5} indicatorLabel="5 条未读消息">
+  <Button aria-label="查看消息" size="icon" variant="outline">
     <Mail />
   </Button>
 </Badge>
 
-<Badge count={123} overflowCount={99}>
+<Badge dir="rtl" indicator={12} offset={[3, -2]}>
   <Button variant="outline">收件箱</Button>
-</Badge>
+</Badge>`),
+      coveredProperties: ['children', 'offset', 'indicatorLabel'],
+    },
+    {
+      title: docsCopy('状态红点'),
+      description: docsCopy(
+        'indicator 为 true 时只显示红点；因为没有可见内容，必须提供 indicatorLabel。'
+      ),
+      preview: (
+        <Badge indicator indicatorLabel={docsCopy('有新的系统通知')}>
+          <Button variant="outline">{docsCopy('系统通知')}</Button>
+        </Badge>
+      ),
+      code: docsCopy(`import { Badge, Button } from '@heliannuuthus/ui'
 
-<Badge dot indicatorLabel="有新的系统通知">
+<Badge indicator indicatorLabel="有新的系统通知">
   <Button variant="outline">系统通知</Button>
 </Badge>`),
     },
     {
-      title: docsCopy('状态与链接'),
+      title: docsCopy('样式扩展'),
       description: docsCopy(
-        '图标用于帮助扫描，文本仍需表达完整含义；需要导航时使用 href 获得链接语义。'
+        '根节点使用 className 与 style，通知标记使用对应的 classNames 和 styles 插槽。'
       ),
       preview: (
-        <div className="example-row">
-          <Badge>
-            <span aria-hidden="true" className="status-dot" />
-            {docsCopy('运行中')}
-          </Badge>
-          <Badge variant="outline">v0.1.0</Badge>
-          <Badge
-            href="https://www.npmjs.com/package/@heliannuuthus/ui"
-            rel="noreferrer"
-            target="_blank"
-            variant="link"
-          >
-            {docsCopy('查看版本')}
-            <ArrowRight data-icon="inline-end" />
-          </Badge>
-        </div>
+        <Badge
+          classNames={{ indicator: 'bg-primary' }}
+          indicator={8}
+          styles={{ indicator: { fontVariantNumeric: 'tabular-nums' } }}
+        />
       ),
       code: docsCopy(`import { Badge } from '@heliannuuthus/ui'
 
-<Badge><span aria-hidden="true" />运行中</Badge>
-<Badge variant="outline">v0.1.0</Badge>
-<Badge href="/releases" variant="link">查看版本</Badge>`),
+<Badge
+  classNames={{ indicator: 'bg-primary' }}
+  indicator={8}
+  styles={{ indicator: { fontVariantNumeric: 'tabular-nums' } }}
+/>`),
+      coveredProperties: ['classNames', 'styles'],
     },
   ],
   api: [
     {
-      name: 'variant',
+      name: 'indicator',
       description: docsCopy(
-        '徽标视觉样式；文本徽标默认使用 default，数字和红点通知默认使用 destructive。'
+        '设置通知内容；true 显示红点，节点显示内容，false、null 或 undefined 隐藏。'
       ),
-      type: "'default' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'link'",
-      defaultValue: "'default' / 'destructive'",
+      type: 'true | ReactNode | false | null',
     },
     {
-      name: 'count',
-      description: docsCopy(
-        '显示通知数量；传入数字时可配合 overflowCount 自动生成封顶文案。'
-      ),
-      type: 'React.ReactNode',
-    },
-    {
-      name: 'dot',
-      description: docsCopy('只显示通知红点，不展示 count 内容。'),
-      type: 'boolean',
-      defaultValue: 'false',
-    },
-    {
-      name: 'overflowCount',
-      description: docsCopy(
-        '数字通知的显示上限，例如 123 在上限 99 时显示为 99+。'
-      ),
+      name: 'max',
+      description: docsCopy('设置数字通知的显示上限，超出时追加加号。'),
       type: 'number',
       defaultValue: '99',
     },
     {
-      name: 'showZero',
-      description: docsCopy('count 为 0 时是否仍显示数字。'),
-      type: 'boolean',
-      defaultValue: 'false',
-    },
-    {
       name: 'offset',
-      description: docsCopy('微调通知标记相对锚点的水平与垂直位置。'),
+      description: docsCopy('微调通知相对锚点的水平与垂直位置。'),
       type: 'readonly [horizontal: number, vertical: number]',
       defaultValue: '[0, 0]',
     },
     {
       name: 'indicatorLabel',
-      description: docsCopy('通知数字或红点的无障碍说明，红点场景应明确提供。'),
-      type: 'string',
-    },
-    {
-      name: 'href',
-      description: docsCopy(
-        '将文本徽标渲染为原生链接；通知模式应把链接作为 children。'
-      ),
+      description: docsCopy('设置通知的无障碍名称；红点模式必须提供。'),
       type: 'string',
     },
     {
       name: 'children',
-      description: docsCopy('徽标文本或通知标记的锚点。'),
-      type: 'React.ReactNode',
+      description: docsCopy('设置通知标记的锚点；省略时独立显示。'),
+      type: 'ReactNode',
     },
     {
       name: 'className',
@@ -1088,29 +1119,19 @@ import { Mail } from 'lucide-react'
     {
       name: 'style',
       description: docsCopy('扩展根节点行内样式。'),
-      type: 'React.CSSProperties',
-    },
-    {
-      name: 'ref',
-      description: docsCopy('转发到根 span 或链接元素。'),
-      type: 'React.Ref<HTMLSpanElement | HTMLAnchorElement>',
-    },
-    {
-      name: docsCopy('原生属性'),
-      description: docsCopy(
-        '支持对应 span 或 a 的标准 HTML、ARIA、data 属性和事件。'
-      ),
-      type: 'HTMLAttributes | AnchorHTMLAttributes',
+      type: 'CSSProperties',
     },
   ],
   accessibility: [
-    docsCopy('状态不能只依靠颜色表达，必须保留文本。'),
-    docsCopy('红点没有可见文字，应通过 indicatorLabel 说明通知含义。'),
-    docsCopy('需要交互时使用 href，或把 Button、链接作为通知标记的 children。'),
+    docsCopy('红点没有可见文字，必须通过 indicatorLabel 说明通知含义。'),
+    docsCopy('数字已有可见文本；含义不明确时仍应补充 indicatorLabel。'),
+    docsCopy('Badge 支持标准 span、ARIA、data 属性和事件，并转发 span ref。'),
   ],
   pitfalls: [
-    docsCopy('避免放入长句或复杂操作。'),
-    docsCopy('不要把 Badge 用作没有键盘语义的可点击控件。'),
+    docsCopy('Badge 只表示通知；状态、分类和简短属性应使用 Tag。'),
+    docsCopy(
+      '不要把 Badge 本身当作交互控件，应把 Button 或链接作为 children。'
+    ),
   ],
 };
 
@@ -3195,6 +3216,7 @@ const layoutDocumentation: ComponentDocumentation = {
 export const componentDocumentation: Record<string, ComponentDocumentation> = {
   button: buttonDocumentation,
   typography: typographyDocumentation,
+  tag: tagDocumentation,
   badge: badgeDocumentation,
   kbd: kbdDocumentation,
   masonry: masonryDocumentation,
@@ -3887,24 +3909,23 @@ componentDocumentation.avatar.examples = [
     code: `<Avatar.Group
   items={members}
   max={3}
-  renderCount={(count) => <Badge>+{count}</Badge>}
+  renderCount={(count) => <Tag>+{count}</Tag>}
   shape="square"
   size="lg"
 />`,
     previewHeight: 'auto',
   },
   {
-    title: docsCopy('与 Badge 组合'),
+    title: docsCopy('与 Tag 和 Badge 组合'),
     description: docsCopy(
-      '通过 badge 放置在线点、认证图标或 Badge 节点，状态始终锚定在头像右下角。'
+      'badge 插槽可放置 Tag 状态标签或 Badge 通知标记，并始终锚定在头像右下角。'
     ),
     preview: <AvatarBadgeDemo />,
-    code: docsCopy(`import { Avatar } from '@heliannuuthus/ui'
-import { Badge } from '@heliannuuthus/ui'
+    code: docsCopy(`import { Avatar, Badge } from '@heliannuuthus/ui'
 
 <Avatar
   alt="陈序"
-  badge={<Badge variant="destructive">8</Badge>}
+  badge={<Badge indicator={8} indicatorLabel="8 条未读消息" />}
   fallback="陈"
   size="lg"
 />`),
@@ -5817,7 +5838,7 @@ if (!request.pending && records.length === 0) {
         '用 Item.Group 组织同类动态，并通过分隔线维持连续列表的阅读节奏。'
       ),
       preview: <ItemActivityDemo />,
-      code: docsCopy(`import { Badge, Item } from '@heliannuuthus/ui'
+      code: docsCopy(`import { Tag, Item } from '@heliannuuthus/ui'
 
 <Item.Group
   separator
@@ -5827,7 +5848,7 @@ if (!request.pending && records.length === 0) {
       mediaType: 'icon',
       title: '林默回复了检查项',
       description: '确认索引变更不会锁表。',
-      actions: <Badge>2 分钟前</Badge>,
+      actions: <Tag>2 分钟前</Tag>,
     },
   ]}
 />`),
@@ -5839,14 +5860,14 @@ if (!request.pending && records.length === 0) {
         '头像、身份说明和成员状态保持同一行对齐，描边外观明确每个成员的点击区域。'
       ),
       preview: <ItemMemberDirectoryDemo />,
-      code: docsCopy(`import { Avatar, Badge, Item } from '@heliannuuthus/ui'
+      code: docsCopy(`import { Avatar, Tag, Item } from '@heliannuuthus/ui'
 
 <Item
   variant="outline"
   media={<Avatar alt="林默" fallback="林" />}
   title="林默"
   description="平台工程 · 发布管理员"
-  actions={<Badge variant="secondary">在线</Badge>}
+  actions={<Tag type="success">在线</Tag>}
 />`),
       previewHeight: 340,
     },
@@ -5874,12 +5895,12 @@ if (!request.pending && records.length === 0) {
         '使用 href 把整个资源项变成原生链接；header 和 footer 承载辅助元数据。'
       ),
       preview: <ItemResourceDemo />,
-      code: docsCopy(`import { Badge, Item } from '@heliannuuthus/ui'
+      code: docsCopy(`import { Tag, Item } from '@heliannuuthus/ui'
 
 <Item
   href="/release-notes/v0.12.0"
   variant="outline"
-  header={<Badge>发布说明</Badge>}
+  header={<Tag>发布说明</Tag>}
   media={<FileText />}
   mediaType="icon"
   title="v0.12.0-release-notes.md"
@@ -6037,7 +6058,7 @@ if (!request.pending && records.length === 0) {
       code: `<Item.Group
   items={items}
   renderItem={(item, index) => (
-    <Item {...item} actions={<Badge>0{index + 1}</Badge>} />
+    <Item {...item} actions={<Tag>0{index + 1}</Tag>} />
   )}
 />`,
       previewHeight: 'auto',
@@ -6934,7 +6955,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       name: 'badge',
       description: docsCopy(
-        '在头像右下角放置在线点、认证图标或 Badge 等状态节点。'
+        '在头像右下角放置在线点、认证图标或 Tag 等状态节点。'
       ),
       type: 'ReactNode',
     },

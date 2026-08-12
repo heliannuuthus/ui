@@ -33,14 +33,8 @@ export {
 } from './components/avatar';
 export {
   Badge,
-  badgeVariants,
   type BadgeClassNames,
-  type BadgeCountProps,
-  type BadgeDotProps,
-  type BadgeLabelProps,
-  type BadgeLinkProps,
   type BadgeProps,
-  type BadgeRef,
   type BadgeStyles,
 } from './components/badge';
 export {
@@ -314,6 +308,7 @@ export {
   type TabsScrollButtonLabels,
   type TabsStyles,
 } from './components/tabs';
+export { Tag, type TagProps, type TagType } from './components/tag';
 export {
   Toast,
   toast,

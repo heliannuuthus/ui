@@ -5,6 +5,7 @@ import { Alert } from '@heliannuuthus/ui';
 import { Attachment } from '@heliannuuthus/ui';
 import { Avatar } from '@heliannuuthus/ui';
 import { Badge } from '@heliannuuthus/ui';
+import { Tag } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Carousel, type CarouselRef } from '@heliannuuthus/ui';
 import { Chart, type ChartConfig } from '@heliannuuthus/ui';
@@ -67,7 +68,7 @@ export const AccordionReleaseDemo = ({
           <span className="display-eyebrow">v0.12.0</span>
           <strong>{docsCopy('生产发布检查')}</strong>
         </div>
-        <Badge variant="secondary">{docsCopy('3 / 3 就绪')}</Badge>
+        <Tag type="success">{docsCopy('3 / 3 就绪')}</Tag>
       </div>
       <Accordion
         key={mode}
@@ -216,9 +217,7 @@ export const AccordionControlledDemo = () => {
           <span className="display-eyebrow">value + onChange</span>
           <strong>{docsCopy('受控展开状态')}</strong>
         </div>
-        <Badge variant="secondary">
-          {value.length > 0 ? value.join(', ') : docsCopy('全部关闭')}
-        </Badge>
+        <Tag>{value.length > 0 ? value.join(', ') : docsCopy('全部关闭')}</Tag>
       </div>
       <Accordion
         items={accordionDisabledItems}
@@ -240,13 +239,13 @@ export const AccordionPresenceDemo = ({
         <span className="display-eyebrow">{strategy}</span>
         <strong>{docsCopy('关闭面板的保留策略')}</strong>
       </div>
-      <Badge variant="outline">
+      <Tag>
         {strategy === 'findable'
           ? 'hiddenUntilFound'
           : strategy === 'mounted'
             ? 'keepMounted'
             : docsCopy('默认卸载')}
-      </Badge>
+      </Tag>
     </div>
     <Accordion
       items={accordionDisabledItems}
@@ -574,7 +573,7 @@ export const AvatarBadgeDemo = () => {
           size="lg"
         />
       ),
-      badge: <Badge variant="secondary">{docsCopy('在线')}</Badge>,
+      badge: <Tag type="success">{docsCopy('在线')}</Tag>,
     },
     {
       title: docsCopy('认证状态'),
@@ -589,7 +588,7 @@ export const AvatarBadgeDemo = () => {
           size="lg"
         />
       ),
-      badge: <Badge variant="outline">{docsCopy('已认证')}</Badge>,
+      badge: <Tag type="info">{docsCopy('已认证')}</Tag>,
     },
     {
       title: docsCopy('未读提醒'),
@@ -597,13 +596,13 @@ export const AvatarBadgeDemo = () => {
       avatar: (
         <Avatar
           alt={docsCopy('陈')}
-          badge={<Badge variant="destructive">8</Badge>}
+          badge={<Badge indicator={8} indicatorLabel={docsCopy('未读提醒')} />}
           fallback={docsCopy('陈')}
           fallbackProps={{ className: 'display-avatar-tone-rose' }}
           size="lg"
         />
       ),
-      badge: <Badge variant="destructive">{docsCopy('需要处理')}</Badge>,
+      badge: <Tag type="error">{docsCopy('需要处理')}</Tag>,
     },
   ];
 
@@ -661,11 +660,7 @@ export const AvatarCountDemo = ({ custom = false }: { custom?: boolean }) => (
         fallbackProps: { className: `display-avatar-tone-${person.tone}` },
       }))}
       max={3}
-      renderCount={
-        custom
-          ? (count) => <Badge variant="secondary">+{count}</Badge>
-          : undefined
-      }
+      renderCount={custom ? (count) => <Tag>+{count}</Tag> : undefined}
       shape="square"
       size="lg"
     />
@@ -820,7 +815,7 @@ export const BubbleConversationDemo = () => {
           <strong>{docsCopy('发布协作记录')}</strong>
           <span>{docsCopy('7 条消息 · Bubble + Avatar')}</span>
         </div>
-        <Badge variant="secondary">{docsCopy('已完成')}</Badge>
+        <Tag type="success">{docsCopy('已完成')}</Tag>
       </div>
       <ScrollArea
         className="display-conversation-scroll"
@@ -1159,10 +1154,10 @@ export const ChartDeploymentDemo = () => {
             <strong>{docsCopy('发布健康度')}</strong>
           </div>
         </div>
-        <Badge variant="secondary">
+        <Tag>
           <span className="display-chart-live-dot" aria-hidden="true" />
           {docsCopy('系统稳定')}
-        </Badge>
+        </Tag>
       </header>
 
       <div className="display-chart-story-summary">
@@ -1310,7 +1305,7 @@ const CollapsibleBuildDemo = () => {
             <strong>{docsCopy('构建 #1842 已完成')}</strong>
             <span>1m 48s · commit 7f92c1a</span>
           </div>
-          <Badge variant="secondary">{docsCopy('成功')}</Badge>
+          <Tag type="success">{docsCopy('成功')}</Tag>
         </>
       }
       icon={<ChevronRight />}
@@ -1586,11 +1581,9 @@ const releaseColumns: Table.Column<ReleaseRecord>[] = [
     render: (_, row) => {
       const status = row.status;
       return (
-        <Badge
-          variant={status === docsCopy('回滚') ? 'destructive' : 'secondary'}
-        >
+        <Tag type={status === docsCopy('回滚') ? 'error' : 'success'}>
           {status}
-        </Badge>
+        </Tag>
       );
     },
   },
@@ -1670,13 +1663,9 @@ const groupedReleaseColumns: Table.Column<ReleaseRecord>[] = [
         render: (_, row) => {
           const status = row.status;
           return (
-            <Badge
-              variant={
-                status === docsCopy('回滚') ? 'destructive' : 'secondary'
-              }
-            >
+            <Tag type={status === docsCopy('回滚') ? 'error' : 'success'}>
               {status}
-            </Badge>
+            </Tag>
           );
         },
       },
@@ -2087,7 +2076,7 @@ export const ItemActivityDemo = ({
       className="display-activity-list item-demo-list"
       items={[
         {
-          actions: <Badge variant="outline">{docsCopy('2 分钟前')}</Badge>,
+          actions: <Tag>{docsCopy('2 分钟前')}</Tag>,
           description: docsCopy('补充数据库迁移影响与回滚入口。'),
           key: 'release-notes',
           media: <GitCommitHorizontal />,
@@ -2125,7 +2114,7 @@ export const ItemMemberDirectoryDemo = () => {
       className="item-demo-list"
       items={[
         {
-          actions: <Badge variant="secondary">{docsCopy('在线')}</Badge>,
+          actions: <Tag type="success">{docsCopy('在线')}</Tag>,
           description: docsCopy('平台工程 · 发布管理员'),
           key: 'lin-mo',
           media: (
@@ -2139,7 +2128,7 @@ export const ItemMemberDirectoryDemo = () => {
           variant: 'outline',
         },
         {
-          actions: <Badge variant="outline">{docsCopy('组件维护者')}</Badge>,
+          actions: <Tag>{docsCopy('组件维护者')}</Tag>,
           description: docsCopy('产品设计 · 设计系统'),
           key: 'xu-cheng',
           media: (
@@ -2201,9 +2190,7 @@ export const ItemStructureDemo = ({
     actions={
       slot === 'actions' ? <Button size="xs">{docsCopy('查看')}</Button> : null
     }
-    content={
-      slot === 'content' ? <Badge variant="secondary">production</Badge> : null
-    }
+    content={slot === 'content' ? <Tag>production</Tag> : null}
     description={docsCopy('每个结构字段都拥有独立的语义槽位。')}
     classNames={
       slot === 'content' ? { content: 'rounded-xl bg-muted/50 p-2' } : undefined
@@ -2211,7 +2198,7 @@ export const ItemStructureDemo = ({
     footer={
       slot === 'footer' ? <small>{docsCopy('更新于 2 分钟前')}</small> : null
     }
-    header={slot === 'header' ? <Badge variant="outline">v0.12.0</Badge> : null}
+    header={slot === 'header' ? <Tag>v0.12.0</Tag> : null}
     title={docsCopy('生产发布')}
     variant="outline"
   />
@@ -2257,11 +2244,7 @@ export const ItemGroupRenderDemo = () => (
       { key: 'release', title: docsCopy('发布完成') },
     ]}
     renderItem={(item, index) => (
-      <Item
-        {...item}
-        actions={<Badge variant="outline">0{index + 1}</Badge>}
-        variant="outline"
-      />
+      <Item {...item} actions={<Tag>0{index + 1}</Tag>} variant="outline" />
     )}
   />
 );
@@ -2340,12 +2323,12 @@ export const ItemResourceDemo = () => {
       footer={
         <>
           <span>{docsCopy('许澄维护')}</span>
-          <Badge variant="secondary">{docsCopy('评审通过')}</Badge>
+          <Tag type="success">{docsCopy('评审通过')}</Tag>
         </>
       }
       header={
         <>
-          <Badge variant="outline">{docsCopy('发布说明')}</Badge>
+          <Tag>{docsCopy('发布说明')}</Tag>
           <span>{docsCopy('8 分钟前更新')}</span>
         </>
       }
@@ -2432,7 +2415,7 @@ export const MarkerLinkDemo = () => {
           <span className="display-eyebrow">v0.11.4</span>
           <strong>{docsCopy('历史发布说明')}</strong>
         </div>
-        <Badge variant="secondary">{docsCopy('已归档')}</Badge>
+        <Tag>{docsCopy('已归档')}</Tag>
       </header>
       <p className="marker-demo-summary">
         {docsCopy('归档内容保持只读，可通过标记链接快速返回这一位置。')}

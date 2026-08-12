@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
-import { Badge, Table } from '@heliannuuthus/ui';
+import { Tag, Table } from '@heliannuuthus/ui';
 
 import { docsCopy } from './i18n/content';
 
@@ -15,7 +15,7 @@ const semanticColumns: Table.Column<(typeof semanticRows)[number]>[] = [
   {
     accessor: 'status',
     header: docsCopy('状态'),
-    render: (value) => <Badge variant="secondary">{String(value)}</Badge>,
+    render: (value) => <Tag>{String(value)}</Tag>,
   },
 ];
 
