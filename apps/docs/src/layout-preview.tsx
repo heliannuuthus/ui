@@ -186,3 +186,43 @@ export const LayoutApplicationDemo = () => {
     </div>
   );
 };
+
+export const LayoutCollapsibleSidebarDemo = () => {
+  return (
+    <div className="layout-demo-frame layout-demo-frame-wide">
+      <Layout className="layout-demo-shell">
+        <Layout.Sidebar
+          aria-label={docsCopy('工作区导航')}
+          breakpoint="lg"
+          className="layout-demo-sidebar"
+          collapsedWidth={48}
+          collapsible
+          triggerLabels={{
+            collapse: docsCopy('收起侧边栏'),
+            expand: docsCopy('展开侧边栏'),
+          }}
+          width={124}
+        >
+          <small>{docsCopy('工作区')}</small>
+          <nav aria-label={docsCopy('工作区导航')}>
+            {navigationItems.map((item) => (
+              <a
+                aria-label={item.label}
+                className={item.active ? 'is-active' : undefined}
+                href="#"
+                key={item.label}
+              >
+                <item.icon />
+                <span>{item.label}</span>
+              </a>
+            ))}
+          </nav>
+        </Layout.Sidebar>
+        <Layout>
+          <PreviewHeader compact />
+          <PreviewContent detailed />
+        </Layout>
+      </Layout>
+    </div>
+  );
+};

@@ -178,6 +178,7 @@ import {
 } from './menubar-preview';
 import {
   LayoutApplicationDemo,
+  LayoutCollapsibleSidebarDemo,
   LayoutLeftSidebarDemo,
   LayoutPageDemo,
   LayoutRightSidebarDemo,
@@ -3150,6 +3151,30 @@ const layoutDocumentation: ComponentDocumentation = {
   <Layout.Footer>Footer</Layout.Footer>
 </Layout>`,
     },
+    {
+      title: docsCopy('响应式折叠'),
+      description: docsCopy(
+        'Sidebar 在 lg 以下自动折叠，也可以通过内置触发器手动切换；collapsedWidth 决定折叠后保留的宽度。'
+      ),
+      previewHeight: 370,
+      preview: <LayoutCollapsibleSidebarDemo />,
+      code: docsCopy(`import { Layout } from '@heliannuuthus/ui'
+
+<Layout>
+  <Layout.Sidebar
+    breakpoint="lg"
+    collapsible
+    collapsedWidth={64}
+    triggerLabels={{
+      collapse: '收起侧边栏',
+      expand: '展开侧边栏',
+    }}
+  >
+    Navigation
+  </Layout.Sidebar>
+  <Layout.Content>Content</Layout.Content>
+</Layout>`),
+    },
   ],
   parts: [
     {
@@ -3176,6 +3201,78 @@ const layoutDocumentation: ComponentDocumentation = {
     },
   ],
   api: [
+    {
+      component: 'Layout.Sidebar',
+      name: 'breakpoint',
+      description: docsCopy(
+        '低于指定视口断点时自动折叠；使用与 Tailwind 默认断点一致的 token。'
+      ),
+      type: "'sm' | 'md' | 'lg' | 'xl' | '2xl'",
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'collapsed',
+      description: docsCopy('受控的折叠状态。'),
+      type: 'boolean',
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'collapsedWidth',
+      description: docsCopy(
+        '折叠后的侧边栏宽度；数字按像素处理，设置为 0 时隐藏内容。'
+      ),
+      type: 'number | string',
+      defaultValue: '80',
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'collapsible',
+      description: docsCopy(
+        '启用内置折叠触发器；传入 ReactNode 可以替换默认图标。'
+      ),
+      type: 'boolean | ReactNode',
+      defaultValue: 'false',
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'defaultCollapsed',
+      description: docsCopy('非受控模式下的初始折叠状态。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'onBreakpointChange',
+      description: docsCopy('进入或离开 breakpoint 范围时调用。'),
+      type: '(below: boolean) => void',
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'onCollapsedChange',
+      description: docsCopy(
+        '折叠状态请求变化时调用，并说明变化来自断点还是触发器。'
+      ),
+      type: "(collapsed: boolean, reason: 'breakpoint' | 'trigger') => void",
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'side',
+      description: docsCopy(
+        '声明侧边栏位于逻辑起始侧或结束侧，用于调整内置触发器的位置与图标。'
+      ),
+      type: "'start' | 'end'",
+      defaultValue: "'start'",
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'triggerLabels',
+      description: docsCopy(
+        '设置内置折叠触发器在展开和折叠状态下的可访问名称。'
+      ),
+      type: '{ collapse: string; expand: string }',
+      defaultValue:
+        "{ collapse: 'Collapse sidebar', expand: 'Expand sidebar' }",
+    },
     {
       component: 'Layout.Sidebar',
       name: 'width',
@@ -3208,7 +3305,7 @@ const layoutDocumentation: ComponentDocumentation = {
       '不要把所有区域平铺在同一个 Layout；跨整页的 Header 和 Footer 应包住中间的嵌套 Layout。'
     ),
     docsCopy(
-      'Sidebar 只负责结构和宽度；需要折叠、抽屉或菜单状态时组合专用组件。'
+      '文字导航在窄屏下通常不适合压成图标栏；将 collapsedWidth 设置为 0，并组合 Drawer 提供完整导航。'
     ),
   ],
 };

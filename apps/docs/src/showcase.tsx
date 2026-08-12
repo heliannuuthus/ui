@@ -11,6 +11,7 @@ import { Button } from '@heliannuuthus/ui';
 import { Card } from '@heliannuuthus/ui';
 import { Command } from '@heliannuuthus/ui';
 import { Empty } from '@heliannuuthus/ui';
+import { Drawer } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
 import { Item } from '@heliannuuthus/ui';
 import { Layout } from '@heliannuuthus/ui';
@@ -36,6 +37,7 @@ import {
   Moon,
   Package,
   PackagePlus,
+  PanelLeft,
   Search,
   SearchX,
   Sparkles,
@@ -1110,7 +1112,13 @@ const ComponentSearchDialog = ({
   );
 };
 
-const ComponentNavigation = ({ component }: { component: string }) => {
+const ComponentNavigation = ({
+  component,
+  onNavigate,
+}: {
+  component: string;
+  onNavigate?: () => void;
+}) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const path = useLocalizedPath();
   const { t } = useTranslation();
@@ -1177,6 +1185,7 @@ const ComponentNavigation = ({ component }: { component: string }) => {
                     <ComponentNavigationLink
                       isActive={slug === component}
                       item={item}
+                      onNavigate={onNavigate}
                       slug={slug}
                     />
                   </li>
@@ -1190,13 +1199,47 @@ const ComponentNavigation = ({ component }: { component: string }) => {
   );
 };
 
+const ComponentNavigationDrawer = ({ component }: { component: string }) => {
+  const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
+
+  return (
+    <Drawer
+      behavior="panel"
+      classNames={{ content: 'component-navigation-drawer' }}
+      onOpenChange={setOpen}
+      open={open}
+      side="left"
+      showSwipeHandle={false}
+      title={t('components.navigation')}
+      trigger={
+        <Button
+          className="component-navigation-trigger"
+          size="sm"
+          variant="outline"
+        >
+          <PanelLeft aria-hidden="true" />
+          {t('components.openNavigation')}
+        </Button>
+      }
+    >
+      <ComponentNavigation
+        component={component}
+        onNavigate={() => setOpen(false)}
+      />
+    </Drawer>
+  );
+};
+
 const ComponentNavigationLink = ({
   isActive,
   item,
+  onNavigate,
   slug,
 }: {
   isActive: boolean;
   item: string;
+  onNavigate?: () => void;
   slug: string;
 }) => {
   const path = useLocalizedPath();
@@ -1207,6 +1250,7 @@ const ComponentNavigationLink = ({
     <NavLink
       className="component-docs-sidebar-link"
       data-active={isActive || undefined}
+      onClick={onNavigate}
       to={to}
     >
       <span>{localizedComponentName(item, locale)}</span>
@@ -1265,6 +1309,7 @@ const ComponentPage = () => {
             : ''
         }`}
       >
+        <ComponentNavigationDrawer component={component} />
         <div className="breadcrumb">
           <NavLink to={path('/components')}>{t('components.label')}</NavLink>
           <span>/</span>

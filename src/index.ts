@@ -194,11 +194,15 @@ export {
 export { Kbd, type KbdProps } from './components/kbd';
 export {
   Layout,
+  type LayoutBreakpoint,
   type LayoutContentProps,
   type LayoutFooterProps,
   type LayoutHeaderProps,
   type LayoutProps,
+  type LayoutSidebarCollapseReason,
   type LayoutSidebarProps,
+  type LayoutSidebarSide,
+  type LayoutSidebarTriggerLabels,
 } from './components/layout';
 export {
   Marker,

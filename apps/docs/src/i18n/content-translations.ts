@@ -4829,4 +4829,31 @@ const ActionCell = () => {
     'Places an online dot, verification icon, Tag, or other status node at the avatar bottom corner.',
   自定义过滤: 'Custom filter',
   受控打开态: 'Controlled open state',
+  工作区导航: 'Workspace navigation',
+  收起侧边栏: 'Collapse sidebar',
+  展开侧边栏: 'Expand sidebar',
+  响应式折叠: 'Responsive collapse',
+  'Sidebar 在 lg 以下自动折叠，也可以通过内置触发器手动切换；collapsedWidth 决定折叠后保留的宽度。':
+    'The Sidebar collapses automatically below lg and can also be toggled manually with its built-in trigger; collapsedWidth controls the remaining width.',
+  '低于指定视口断点时自动折叠；使用与 Tailwind 默认断点一致的 token。':
+    'Collapse automatically below the selected viewport breakpoint using tokens aligned with the default Tailwind breakpoints.',
+  '受控的折叠状态。': 'The controlled collapsed state.',
+  '折叠后的侧边栏宽度；数字按像素处理，设置为 0 时隐藏内容。':
+    'The collapsed sidebar width; numbers are treated as pixels and 0 hides its content.',
+  '启用内置折叠触发器；传入 ReactNode 可以替换默认图标。':
+    'Enable the built-in collapse trigger; pass a ReactNode to replace the default icon.',
+  '非受控模式下的初始折叠状态。':
+    'The initial collapsed state in uncontrolled mode.',
+  '进入或离开 breakpoint 范围时调用。':
+    'Called when entering or leaving the breakpoint range.',
+  '折叠状态请求变化时调用，并说明变化来自断点还是触发器。':
+    'Called when the collapsed state is requested to change, including whether the request came from the breakpoint or trigger.',
+  '声明侧边栏位于逻辑起始侧或结束侧，用于调整内置触发器的位置与图标。':
+    'Declare whether the sidebar sits on the logical start or end side so the built-in trigger uses the matching position and icon.',
+  '设置内置折叠触发器在展开和折叠状态下的可访问名称。':
+    'Set the accessible names of the built-in collapse trigger in its expanded and collapsed states.',
+  '文字导航在窄屏下通常不适合压成图标栏；将 collapsedWidth 设置为 0，并组合 Drawer 提供完整导航。':
+    'Text navigation usually should not be compressed into an icon rail on narrow screens; set collapsedWidth to 0 and compose Drawer for complete navigation.',
+  "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar\n    breakpoint=\"lg\"\n    collapsible\n    collapsedWidth={64}\n    triggerLabels={{\n      collapse: '收起侧边栏',\n      expand: '展开侧边栏',\n    }}\n  >\n    Navigation\n  </Layout.Sidebar>\n  <Layout.Content>Content</Layout.Content>\n</Layout>":
+    "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar\n    breakpoint=\"lg\"\n    collapsible\n    collapsedWidth={64}\n    triggerLabels={{\n      collapse: 'Collapse sidebar',\n      expand: 'Expand sidebar',\n    }}\n  >\n    Navigation\n  </Layout.Sidebar>\n  <Layout.Content>Content</Layout.Content>\n</Layout>",
 };

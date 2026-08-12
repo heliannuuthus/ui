@@ -58,6 +58,7 @@ const zh = {
       overviewDescription:
         '覆盖界面构建中的常见场景，并持续从真实产品中沉淀更好的实践。',
       navigation: '组件导航',
+      openNavigation: '打开组件导航',
       related: '相关组件',
       examples: '示例',
       parts: '组成组件',
@@ -220,6 +221,7 @@ const en = {
       overviewDescription:
         'Common interface building blocks refined continuously through real product work.',
       navigation: 'Component navigation',
+      openNavigation: 'Open component navigation',
       related: 'Related components',
       examples: 'Examples',
       parts: 'Component parts',
