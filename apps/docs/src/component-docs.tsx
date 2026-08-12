@@ -12,6 +12,7 @@ import { Toggle } from '@heliannuuthus/ui';
 import { Typography } from '@heliannuuthus/ui';
 import {
   ArrowRight,
+  ArrowUpRight,
   Bold,
   Download,
   Italic,
@@ -429,7 +430,7 @@ export const ButtonStates = () => {
     {
       title: docsCopy('导航按钮'),
       description: docsCopy(
-        '设置 href 后输出具有链接语义的 a 元素；不设置 href 时始终输出原生 button。导航不要通过点击事件手动修改地址。'
+        '设置 href 后输出具有链接语义的 a 元素；外部链接在新窗口打开时，应同时声明 target 和 rel。'
       ),
       preview: (
         <div className="example-row">
@@ -437,13 +438,22 @@ export const ButtonStates = () => {
             {docsCopy('查看 Card 文档')}
             <ArrowRight data-icon="inline-end" />
           </Button>
+          <Button
+            href="https://github.com/heliannuuthus/ui"
+            rel="noreferrer"
+            target="_blank"
+            variant="outline"
+          >
+            {docsCopy('在 GitHub 查看源码')}
+            <ArrowUpRight data-icon="inline-end" />
+          </Button>
           <Button disabled href="/components/card" variant="outline">
             {docsCopy('暂不可用')}
           </Button>
         </div>
       ),
       code: docsCopy(`${buttonImport}
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 
 export const ButtonLink = () => {
   return (
@@ -452,12 +462,22 @@ export const ButtonLink = () => {
         查看 Card 文档
         <ArrowRight data-icon="inline-end" />
       </Button>
+      <Button
+        href="https://github.com/heliannuuthus/ui"
+        rel="noreferrer"
+        target="_blank"
+        variant="outline"
+      >
+        在 GitHub 查看源码
+        <ArrowUpRight data-icon="inline-end" />
+      </Button>
       <Button disabled href="/components/card" variant="outline">
         暂不可用
       </Button>
     </>
   )
 }`),
+      coveredProperties: ['href', 'target', 'rel'],
     },
   ],
   parts: [
@@ -541,11 +561,6 @@ export const ButtonLink = () => {
       name: 'style',
       description: docsCopy('扩展按钮根节点的行内样式。'),
       type: 'CSSProperties',
-    },
-    {
-      name: 'ref',
-      description: docsCopy('访问实际渲染的 button 或 a 元素。'),
-      type: 'Ref<HTMLButtonElement | HTMLAnchorElement>',
     },
     {
       component: 'Button.Group',
