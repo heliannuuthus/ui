@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { Alert } from '@heliannuuthus/ui';
 import { AlertDialog } from '@heliannuuthus/ui';
 import { Avatar } from '@heliannuuthus/ui';
-import { Badge } from '@heliannuuthus/ui';
+import { Tag } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Checkbox } from '@heliannuuthus/ui';
 import { Dialog } from '@heliannuuthus/ui';
@@ -245,9 +245,9 @@ const ReleaseRow = ({
         <strong>{label}</strong>
         <small>{meta}</small>
       </div>
-      <Badge variant={ready ? 'secondary' : 'outline'}>
+      <Tag type={ready ? 'success' : 'warning'}>
         {ready ? docsCopy('就绪') : docsCopy('待确认')}
-      </Badge>
+      </Tag>
     </div>
   );
 };

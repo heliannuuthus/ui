@@ -25,20 +25,15 @@ type CounterStyles = {
 };
 
 type CounterProps = Omit<React.ComponentProps<'span'>, 'children'> & {
-  borderRadius?: number;
   classNames?: CounterClassNames;
   fontSize?: number;
   fontWeight?: React.CSSProperties['fontWeight'];
   gap?: number;
-  gradientHeight?: number;
-  horizontalPadding?: number;
-  padding?: number;
   places?: readonly CounterPlace[];
   prefix?: React.ReactNode;
   springOptions?: SpringOptions;
   styles?: CounterStyles;
   suffix?: React.ReactNode;
-  textColor?: string;
   value: number;
   valueText?: string;
 };
@@ -124,22 +119,17 @@ const RollingDigit = ({
 
 const Counter = ({
   'aria-live': ariaLive = 'off',
-  borderRadius = 8,
   className,
   classNames,
   fontSize = 64,
   fontWeight = 700,
   gap = 4,
-  gradientHeight = 12,
-  horizontalPadding = 8,
-  padding = 0,
   places,
   prefix,
   springOptions = defaultSpringOptions,
   style,
   styles,
   suffix,
-  textColor = 'inherit',
   value,
   valueText,
   ...props
@@ -149,9 +139,9 @@ const Counter = ({
   const resolvedPlaces = (places ?? getAutomaticPlaces(absoluteValue)).filter(
     (place) => place === '.' || (Number.isFinite(place) && place > 0)
   );
-  const height = fontSize + Math.max(0, padding);
+  const height = fontSize;
   const accessibleValue = valueText ?? String(value);
-  const fadeSize = Math.min(gradientHeight, height / 2);
+  const fadeSize = Math.min(12, height / 2);
   const maskImage = `linear-gradient(to bottom, transparent 0, black ${fadeSize}px, black calc(100% - ${fadeSize}px), transparent 100%)`;
 
   return (
@@ -172,13 +162,13 @@ const Counter = ({
           classNames?.visual
         )}
         style={{
-          borderRadius,
-          color: textColor,
+          borderRadius: 8,
+          color: 'inherit',
           direction: 'ltr',
           fontSize,
           fontWeight,
           gap,
-          paddingInline: horizontalPadding,
+          paddingInline: 8,
           WebkitMaskImage: maskImage,
           maskImage,
           ...styles?.visual,

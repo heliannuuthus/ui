@@ -10,15 +10,13 @@ type TableCellAlign = 'start' | 'center' | 'end';
 type TableCellFixed = 'start' | 'end';
 type TableEllipsis = boolean | React.ReactNode;
 
-type TablePrimitiveSemanticSlot = 'container' | 'table';
+type TablePrimitiveSemanticSlot = 'table';
 
 interface TablePrimitiveClassNames {
-  container?: string;
   table?: string;
 }
 
 interface TablePrimitiveStyles {
-  container?: React.CSSProperties;
   table?: React.CSSProperties;
 }
 
@@ -26,8 +24,10 @@ type TablePrimitiveProps = Omit<
   React.ComponentProps<'table'>,
   'className' | 'style'
 > & {
+  className?: string;
   classNames?: TablePrimitiveClassNames;
   containerRef?: React.Ref<HTMLDivElement>;
+  style?: React.CSSProperties;
   styles?: TablePrimitiveStyles;
 };
 
@@ -153,8 +153,10 @@ const TableEllipsisContent = ({
 };
 
 const TableRoot = ({
+  className,
   classNames,
   containerRef,
+  style,
   styles,
   ...props
 }: TablePrimitiveProps) => {
@@ -177,8 +179,8 @@ const TableRoot = ({
       <div
         ref={handleContainerRef}
         data-slot="table-container"
-        className={cn('relative w-full overflow-auto', classNames?.container)}
-        style={styles?.container}
+        className={cn('relative w-full overflow-auto', className)}
+        style={style}
       >
         <table
           data-slot="table"

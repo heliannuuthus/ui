@@ -35,7 +35,6 @@ type NavigationMenuProps = Omit<
   defaultValue?: string | null;
   delay?: number;
   items: readonly NavigationMenuItemConfig[];
-  onOpenChangeComplete?: (open: boolean) => void;
   onChange?: (value: string | null) => void;
   orientation?: 'horizontal' | 'vertical';
   value?: string | null;

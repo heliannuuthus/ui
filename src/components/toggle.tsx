@@ -58,7 +58,6 @@ type ToggleGroupProps<Value extends string = string> = Omit<
     defaultValue?: readonly Value[];
     disabled?: boolean;
     items: readonly ToggleGroupOption<Value>[];
-    loopFocus?: boolean;
     multiple?: boolean;
     onChange?: (value: Value[]) => void;
     orientation?: 'horizontal' | 'vertical';

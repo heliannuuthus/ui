@@ -53,6 +53,10 @@ type ItemClassNames = {
   title?: string;
 };
 
+type ItemStyles = {
+  [Slot in keyof ItemClassNames]?: React.CSSProperties;
+};
+
 type ItemSharedProps = VariantProps<typeof itemVariants> & {
   actions?: React.ReactNode;
   classNames?: ItemClassNames;
@@ -62,6 +66,7 @@ type ItemSharedProps = VariantProps<typeof itemVariants> & {
   header?: React.ReactNode;
   media?: React.ReactNode;
   mediaType?: NonNullable<VariantProps<typeof itemMediaVariants>['variant']>;
+  styles?: ItemStyles;
   title?: React.ReactNode;
 };
 
@@ -104,6 +109,7 @@ const Item = ({
   media,
   mediaType = 'default',
   size = 'default',
+  styles,
   title,
   variant = 'default',
   ...props
@@ -119,6 +125,7 @@ const Item = ({
             classNames?.header
           )}
           data-slot="item-header"
+          style={styles?.header}
         >
           {header}
         </div>
@@ -133,6 +140,7 @@ const Item = ({
           )}
           data-slot="item-media"
           data-variant={mediaType}
+          style={styles?.media}
         >
           {media}
         </div>
@@ -144,6 +152,7 @@ const Item = ({
             classNames?.content
           )}
           data-slot="item-content"
+          style={styles?.content}
         >
           {title != null ? (
             <div
@@ -152,6 +161,7 @@ const Item = ({
                 classNames?.title
               )}
               data-slot="item-title"
+              style={styles?.title}
             >
               {title}
             </div>
@@ -163,6 +173,7 @@ const Item = ({
                 classNames?.description
               )}
               data-slot="item-description"
+              style={styles?.description}
             >
               {description}
             </p>
@@ -174,6 +185,7 @@ const Item = ({
         <div
           className={cn('flex items-center gap-2', classNames?.actions)}
           data-slot="item-actions"
+          style={styles?.actions}
         >
           {actions}
         </div>
@@ -185,6 +197,7 @@ const Item = ({
             classNames?.footer
           )}
           data-slot="item-footer"
+          style={styles?.footer}
         >
           {footer}
         </div>
@@ -269,4 +282,5 @@ export {
   type ItemGroupProps,
   type ItemLinkProps,
   type ItemProps,
+  type ItemStyles,
 };

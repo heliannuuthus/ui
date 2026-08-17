@@ -333,7 +333,15 @@ type SelectStyles = {
 
 type SelectProps<Value, Multiple extends boolean | undefined = false> = Omit<
   SelectRootProps<Value, Multiple>,
-  'children' | 'items'
+  | 'autoHighlight'
+  | 'children'
+  | 'highlightItemOnHover'
+  | 'items'
+  | 'limit'
+  | 'loopFocus'
+  | 'modal'
+  | 'onOpenChangeComplete'
+  | 'openOnInputClick'
 > & {
   classNames?: SelectClassNames;
   emptyText?: React.ReactNode;

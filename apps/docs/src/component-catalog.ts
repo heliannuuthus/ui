@@ -2,7 +2,7 @@ export const componentGroups = [
   {
     key: 'general',
     title: '通用',
-    items: ['Button', 'Typography', 'Badge', 'Kbd'],
+    items: ['Button', 'Typography', 'Tag', 'Kbd'],
   },
   {
     key: 'layout',
@@ -62,7 +62,7 @@ export const componentGroups = [
   {
     key: 'dataDisplay',
     title: '数据展示',
-    items: ['Chart', 'Counter', 'Table'],
+    items: ['Badge', 'Chart', 'Counter', 'Table'],
   },
   {
     key: 'overlays',
@@ -97,6 +97,7 @@ export type ComponentSlug = KebabCase<ComponentName>;
 export const zhComponentNames = {
   Button: '按钮',
   Typography: '排版',
+  Tag: '标签',
   Badge: '徽标',
   Kbd: '键盘按键',
   'Aspect Ratio': '宽高比',

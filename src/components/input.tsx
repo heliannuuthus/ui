@@ -20,8 +20,11 @@ type InputClassNames = {
   addonBefore?: string;
   input?: string;
   prefix?: string;
-  root?: string;
   suffix?: string;
+};
+
+type InputStyles = {
+  [Slot in keyof InputClassNames]?: React.CSSProperties;
 };
 
 type InputProps = Omit<React.ComponentProps<'input'>, 'prefix'> & {
@@ -29,6 +32,7 @@ type InputProps = Omit<React.ComponentProps<'input'>, 'prefix'> & {
   addonBefore?: React.ReactNode;
   classNames?: InputClassNames;
   prefix?: React.ReactNode;
+  styles?: InputStyles;
   suffix?: React.ReactNode;
 };
 
@@ -216,6 +220,8 @@ const InputRoot = (inputProps: InputProps) => {
     prefix,
     ref,
     required,
+    style,
+    styles,
     suffix,
     type,
     value,
@@ -260,23 +266,36 @@ const InputRoot = (inputProps: InputProps) => {
 
   if (hasDecoration) {
     return (
-      <InputGroup className={cn(classNames?.root, className)}>
+      <InputGroup className={className} style={style}>
         {addonBefore != null ? (
           <InputGroup.Addon
             align="block-start"
             className={classNames?.addonBefore}
+            style={styles?.addonBefore}
           >
             {addonBefore}
           </InputGroup.Addon>
         ) : null}
         {prefix != null ? (
-          <InputGroup.Addon align="inline-start" className={classNames?.prefix}>
+          <InputGroup.Addon
+            align="inline-start"
+            className={classNames?.prefix}
+            style={styles?.prefix}
+          >
             {prefix}
           </InputGroup.Addon>
         ) : null}
-        <InputGroup.Input {...controlProps} className={classNames?.input} />
+        <InputGroup.Input
+          {...controlProps}
+          className={classNames?.input}
+          style={styles?.input}
+        />
         {suffix != null ? (
-          <InputGroup.Addon align="inline-end" className={classNames?.suffix}>
+          <InputGroup.Addon
+            align="inline-end"
+            className={classNames?.suffix}
+            style={styles?.suffix}
+          >
             {suffix}
           </InputGroup.Addon>
         ) : null}
@@ -284,6 +303,7 @@ const InputRoot = (inputProps: InputProps) => {
           <InputGroup.Addon
             align="block-end"
             className={classNames?.addonAfter}
+            style={styles?.addonAfter}
           >
             {addonAfter}
           </InputGroup.Addon>
@@ -300,6 +320,7 @@ const InputRoot = (inputProps: InputProps) => {
         'h-9 w-full min-w-0 rounded-3xl border border-input bg-background px-3 py-1 text-base transition-[color,box-shadow,background-color,border-color] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground hover:border-primary/35 focus-visible:border-primary focus-visible:ring-3 focus-visible:ring-primary/20 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-muted/50 disabled:opacity-60 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
         className
       )}
+      style={style}
     />
   );
 };
@@ -374,6 +395,7 @@ export type {
   InputOTPVariant,
   InputOTPProps,
   InputProps,
+  InputStyles,
   TextAreaProps,
 };
 export type {
@@ -381,4 +403,5 @@ export type {
   InputNumberControls,
   InputNumberProps,
   InputNumberSize,
+  InputNumberStyles,
 } from './input-number';

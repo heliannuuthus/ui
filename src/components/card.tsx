@@ -11,6 +11,10 @@ type CardClassNames = {
   footer?: string;
 };
 
+type CardStyles = {
+  [Slot in keyof CardClassNames]?: React.CSSProperties;
+};
+
 type CardVariant = 'elevated' | 'outline' | 'ghost';
 
 type CardProps = Omit<React.ComponentProps<'div'>, 'title'> & {
@@ -20,6 +24,7 @@ type CardProps = Omit<React.ComponentProps<'div'>, 'title'> & {
   action?: React.ReactNode;
   footer?: React.ReactNode;
   classNames?: CardClassNames;
+  styles?: CardStyles;
 };
 
 const Card = ({
@@ -30,6 +35,7 @@ const Card = ({
   action,
   footer,
   classNames,
+  styles,
   children,
   ...props
 }: CardProps) => {
@@ -52,6 +58,7 @@ const Card = ({
             'group/card-header @container/card-header grid auto-rows-min items-start gap-1.5 rounded-t-4xl border-b px-(--card-spacing) pt-(--card-spacing) pb-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto]',
             classNames?.header
           )}
+          style={styles?.header}
         >
           {title != null && (
             <div
@@ -60,6 +67,7 @@ const Card = ({
                 'font-heading text-base font-medium',
                 classNames?.title
               )}
+              style={styles?.title}
             >
               {title}
             </div>
@@ -71,6 +79,7 @@ const Card = ({
                 'text-sm text-muted-foreground',
                 classNames?.description
               )}
+              style={styles?.description}
             >
               {description}
             </div>
@@ -82,6 +91,7 @@ const Card = ({
                 'col-start-2 row-span-2 row-start-1 self-start justify-self-end',
                 classNames?.action
               )}
+              style={styles?.action}
             >
               {action}
             </div>
@@ -91,6 +101,7 @@ const Card = ({
       <div
         data-slot="card-content"
         className={cn('px-(--card-spacing)', classNames?.content)}
+        style={styles?.content}
       >
         {children}
       </div>
@@ -101,6 +112,7 @@ const Card = ({
             'flex items-center rounded-b-4xl border-t px-(--card-spacing) pt-(--card-spacing) pb-(--card-spacing)',
             classNames?.footer
           )}
+          style={styles?.footer}
         >
           {footer}
         </div>
@@ -109,4 +121,10 @@ const Card = ({
   );
 };
 
-export { Card, type CardClassNames, type CardProps, type CardVariant };
+export {
+  Card,
+  type CardClassNames,
+  type CardProps,
+  type CardStyles,
+  type CardVariant,
+};

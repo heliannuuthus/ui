@@ -862,6 +862,22 @@ a {
   color: var(--primary);
   background: var(--primary-soft);
 }
+.component-navigation-trigger {
+  display: none;
+}
+.component-navigation-drawer {
+  padding: 0;
+}
+.component-navigation-drawer
+  > [data-slot='drawer-content']
+  > .component-docs-sidebar {
+  width: 100% !important;
+  height: auto;
+  flex: 1;
+  min-height: 0;
+  position: static;
+  border: 0;
+}
 
 .demo-label {
   display: flex;
@@ -1045,6 +1061,7 @@ a {
   padding: 24px;
 }
 .component-harness-case-grid {
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(
     auto-fit,
@@ -1112,6 +1129,9 @@ a {
 .component-harness-case-standalone .component-harness-case-stage {
   padding: 0;
   border-top: 0;
+}
+.component-harness-case-standalone {
+  grid-template-rows: 1fr;
 }
 .component-harness-case-segmented .component-harness-case-stage {
   min-height: 0;
@@ -4276,6 +4296,13 @@ a {
   .component-detail {
     padding-inline: 35px;
   }
+  .component-detail-layout > .component-docs-sidebar {
+    display: none;
+  }
+  .component-navigation-trigger {
+    display: inline-flex;
+    margin-bottom: 20px;
+  }
   .doc-page {
     gap: 45px;
   }
@@ -4341,12 +4368,6 @@ a {
   }
   .component-command-copy > span {
     max-width: min(58vw, 390px);
-  }
-  .component-detail-layout {
-    display: block;
-  }
-  .component-docs-sidebar {
-    display: none;
   }
   .component-detail {
     padding: 35px 20px 90px;

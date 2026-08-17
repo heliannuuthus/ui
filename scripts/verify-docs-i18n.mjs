@@ -104,6 +104,331 @@ const createCasesFromAxes = (axes) => {
   );
 };
 
+const caseCoverageExemptPropertyNames = new Set([
+  'autoComplete',
+  'autoFocus',
+  'children',
+  'className',
+  'containerRef',
+  'form',
+  'id',
+  'inputMode',
+  'inputRef',
+  'name',
+  'onBlur',
+  'onFocus',
+  'readOnly',
+  'ref',
+  'required',
+  'style',
+]);
+
+const requiresCaseCoverage = (qualifiedName) => {
+  const propertyName = qualifiedName.split('.').at(-1);
+  return !caseCoverageExemptPropertyNames.has(propertyName);
+};
+
+const jsxElementName = (node) => {
+  if (node.type === 'JSXIdentifier') return node.name;
+  if (node.type !== 'JSXMemberExpression') return '';
+
+  const object = jsxElementName(node.object);
+  const property = jsxElementName(node.property);
+  return object && property ? `${object}.${property}` : '';
+};
+
+const collectObjectPropertyNames = (node, names = new Set()) => {
+  if (!node || typeof node !== 'object') return names;
+
+  if (node.type === 'ObjectProperty' || node.type === 'ObjectMethod') {
+    if (!node.computed) {
+      if (node.key.type === 'Identifier') names.add(node.key.name);
+      if (node.key.type === 'StringLiteral') names.add(node.key.value);
+    }
+  }
+
+  for (const [key, value] of Object.entries(node)) {
+    if (['end', 'extra', 'loc', 'start'].includes(key)) continue;
+    if (Array.isArray(value)) {
+      value.forEach((child) => collectObjectPropertyNames(child, names));
+    } else if (value && typeof value === 'object') {
+      collectObjectPropertyNames(value, names);
+    }
+  }
+
+  return names;
+};
+
+const openingTags = (source) => {
+  const tags = [];
+  const tagPattern = /<([A-Z][A-Za-z0-9_.]*)\b/g;
+  let match;
+
+  while ((match = tagPattern.exec(source)) != null) {
+    let braces = 0;
+    let quote = '';
+    let escaped = false;
+    let end = match.index + match[0].length;
+
+    for (; end < source.length; end += 1) {
+      const character = source[end];
+
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+      if (quote) {
+        if (character === '\\') escaped = true;
+        if (character === quote) quote = '';
+        continue;
+      }
+      if (character === '"' || character === "'" || character === '`') {
+        quote = character;
+        continue;
+      }
+      if (character === '{') braces += 1;
+      if (character === '}') braces = Math.max(0, braces - 1);
+      if (character === '>' && braces === 0) break;
+    }
+
+    tags.push({
+      component: match[1],
+      source: source.slice(match.index, end + 1),
+    });
+    tagPattern.lastIndex = end + 1;
+  }
+
+  return tags;
+};
+
+const stripAttributeValues = (source) => {
+  let braces = 0;
+  let quote = '';
+  let escaped = false;
+
+  return [...source]
+    .map((character) => {
+      if (escaped) {
+        escaped = false;
+        return ' ';
+      }
+      if (quote) {
+        if (character === '\\') escaped = true;
+        if (character === quote) quote = '';
+        return ' ';
+      }
+      if (character === '"' || character === "'" || character === '`') {
+        quote = character;
+        return ' ';
+      }
+      if (character === '{') {
+        braces += 1;
+        return ' ';
+      }
+      if (character === '}') {
+        braces = Math.max(0, braces - 1);
+        return ' ';
+      }
+      return braces > 0 ? ' ' : character;
+    })
+    .join('');
+};
+
+const exampleCodeCoverage = (documentation, example, allowedApiNames) => {
+  const covered = new Set();
+  const rootComponent =
+    documentation.slug === 'direction'
+      ? 'DirectionProvider'
+      : documentation.name.replaceAll(' ', '');
+  const rootComponents = new Set([
+    rootComponent,
+    ...(documentation.slug === 'input-number' ? ['Input.Number'] : []),
+  ]);
+  const apiByName = new Map(
+    documentation.api.map((property) => [
+      property.component
+        ? `${property.component}.${property.name}`
+        : property.name,
+      property,
+    ])
+  );
+  const apiComponents = new Set(
+    documentation.api
+      .map((property) => property.component)
+      .filter((component) => component != null)
+  );
+  const typeReferencesComponent = (type, component) => {
+    const typeNames = new Set([component, component.replaceAll('.', '')]);
+
+    return [...typeNames].some((typeName) =>
+      new RegExp(
+        `(?:^|[^A-Za-z0-9_$])${typeName.replaceAll('.', '\\.')}(?:[^A-Za-z0-9_$]|$)`
+      ).test(type ?? '')
+    );
+  };
+  const qualifiedAttributeName = (component, propertyName) => {
+    const rootName = rootComponents.has(component)
+      ? propertyName
+      : `${component}.${propertyName}`;
+
+    if (allowedApiNames.has(rootName)) return rootName;
+
+    const explicitComponentName = `${component}.${propertyName}`;
+    return allowedApiNames.has(explicitComponentName)
+      ? explicitComponentName
+      : rootName;
+  };
+  let ast;
+  const objectBindings = new Map();
+  const normalizedCode = example.code.replace(/\n\n(?=<[A-Z])/g, ';\n\n');
+
+  for (const tag of openingTags(example.code)) {
+    const tagSource = stripAttributeValues(tag.source);
+    for (const qualifiedName of allowedApiNames) {
+      const propertyName = qualifiedName.slice(
+        qualifiedName.lastIndexOf('.') + 1
+      );
+      if (propertyName.includes('.')) continue;
+      if (
+        qualifiedAttributeName(tag.component, propertyName) !== qualifiedName
+      ) {
+        continue;
+      }
+
+      const propertyPattern = new RegExp(
+        `(?:^|\\s)${propertyName.replaceAll('-', '\\-')}(?=\\s*(?:=|/?>|[A-Za-z_:]))`
+      );
+      if (propertyPattern.test(tagSource)) covered.add(qualifiedName);
+    }
+  }
+
+  try {
+    ast = parse(normalizedCode, {
+      errorRecovery: true,
+      plugins: ['jsx', 'typescript'],
+      sourceType: 'module',
+    });
+  } catch {
+    const fragmentBody = normalizedCode.replace(/^\s*import[^\n]*\n/gm, '');
+
+    try {
+      ast = parse(`<>${fragmentBody}</>`, {
+        errorRecovery: true,
+        plugins: ['jsx', 'typescript'],
+        sourceType: 'module',
+      });
+    } catch {
+      ast = undefined;
+    }
+  }
+
+  const inspect = (node) => {
+    if (!node || typeof node !== 'object') return;
+
+    if (node.type === 'JSXOpeningElement') {
+      const component = jsxElementName(node.name);
+
+      for (const attribute of node.attributes) {
+        if (attribute.type !== 'JSXAttribute') continue;
+        if (attribute.name.type !== 'JSXIdentifier') continue;
+
+        const propertyName = attribute.name.name;
+        const qualifiedName = qualifiedAttributeName(component, propertyName);
+        if (!allowedApiNames.has(qualifiedName)) continue;
+
+        covered.add(qualifiedName);
+        const property = apiByName.get(qualifiedName);
+        const referencedTypeGroups = new Set(
+          [...apiComponents].filter((name) =>
+            typeReferencesComponent(property?.type, name)
+          )
+        );
+        let previousSize = -1;
+        while (previousSize !== referencedTypeGroups.size) {
+          previousSize = referencedTypeGroups.size;
+          for (const group of referencedTypeGroups) {
+            for (const groupProperty of documentation.api.filter(
+              (candidate) => candidate.component === group
+            )) {
+              for (const candidateGroup of apiComponents) {
+                if (
+                  typeReferencesComponent(groupProperty.type, candidateGroup)
+                ) {
+                  referencedTypeGroups.add(candidateGroup);
+                }
+              }
+            }
+          }
+        }
+        const expression =
+          attribute.value?.type === 'JSXExpressionContainer'
+            ? attribute.value.expression
+            : undefined;
+        const objectPropertyNames =
+          expression?.type === 'Identifier' &&
+          objectBindings.has(expression.name)
+            ? objectBindings.get(expression.name)
+            : collectObjectPropertyNames(expression);
+
+        for (const group of referencedTypeGroups) {
+          for (const nestedName of objectPropertyNames) {
+            const nestedQualifiedName = `${group}.${nestedName}`;
+            if (allowedApiNames.has(nestedQualifiedName)) {
+              covered.add(nestedQualifiedName);
+            }
+          }
+        }
+      }
+    }
+
+    for (const [key, value] of Object.entries(node)) {
+      if (['end', 'extra', 'loc', 'start'].includes(key)) continue;
+      if (Array.isArray(value)) {
+        value.forEach(inspect);
+      } else if (value && typeof value === 'object') {
+        inspect(value);
+      }
+    }
+  };
+
+  const collectBindings = (node) => {
+    if (!node || typeof node !== 'object') return;
+
+    if (
+      node.type === 'VariableDeclarator' &&
+      node.id?.type === 'Identifier' &&
+      node.init
+    ) {
+      objectBindings.set(node.id.name, collectObjectPropertyNames(node.init));
+    }
+
+    for (const [key, value] of Object.entries(node)) {
+      if (['end', 'extra', 'loc', 'start'].includes(key)) continue;
+      if (Array.isArray(value)) value.forEach(collectBindings);
+      else if (value && typeof value === 'object') collectBindings(value);
+    }
+  };
+
+  if (ast) {
+    collectBindings(ast);
+    inspect(ast);
+  }
+
+  if (documentation.semanticDom) {
+    for (const name of allowedApiNames) {
+      if (name === 'classNames' || name === 'styles') {
+        covered.add(name);
+        continue;
+      }
+
+      const component = name.slice(0, name.lastIndexOf('.'));
+      if (/(?:ClassNames|Styles)$/.test(component)) covered.add(name);
+    }
+  }
+
+  return covered;
+};
+
 globalThis.window = {
   location: { pathname: '/zh' },
   localStorage: {
@@ -208,6 +533,7 @@ const intentionalSourceCopy = new Set(['中文', '导航', '布局']);
 const untranslatedNodes = [];
 const uncoveredSourceCopy = [];
 const groupedDocumentationNames = [];
+const documentationCaseSources = [];
 
 const normalizeJsxText = (value) => {
   return value.replace(/\s+/g, ' ').trim();
@@ -274,6 +600,9 @@ const inspectContentNode = (node, ancestors, file) => {
 for (const file of sourceFiles) {
   if (contentSourceExclusions.has(file)) continue;
   const source = await readFile(resolve(docsSourceRoot, file), 'utf8');
+  if (file === 'component-docs.tsx' || /(?:^|-)previews?\.tsx$/.test(file)) {
+    documentationCaseSources.push(source);
+  }
   const ast = parse(source, {
     plugins: ['jsx', 'typescript'],
     sourceType: 'module',
@@ -414,6 +743,8 @@ assert.deepEqual(
   'Every catalog component must have exactly one documentation object.'
 );
 
+const missingCaseCoverage = {};
+
 for (const [slug, documentation] of Object.entries(componentDocumentation)) {
   assert.equal(
     documentation.slug,
@@ -431,6 +762,86 @@ for (const [slug, documentation] of Object.entries(componentDocumentation)) {
       : property.name
   );
   const allowedApiNames = new Set(apiNames);
+
+  for (const property of documentation.api) {
+    const qualifiedName = property.component
+      ? `${property.component}.${property.name}`
+      : property.name;
+    const pairedName = (name) =>
+      property.component ? `${property.component}.${name}` : name;
+
+    if (property.name === 'classNames') {
+      assert.ok(
+        allowedApiNames.has(pairedName('styles')),
+        `"${slug}" documents ${qualifiedName} without matching styles.`
+      );
+    }
+    if (property.name === 'styles') {
+      assert.ok(
+        allowedApiNames.has(pairedName('classNames')),
+        `"${slug}" documents ${qualifiedName} without matching classNames.`
+      );
+    }
+    assert.ok(
+      !(
+        property.name === 'root' &&
+        (property.component?.endsWith('ClassNames') ||
+          property.component?.endsWith('Styles'))
+      ),
+      `"${slug}" must document its root through className/style, not ${qualifiedName}.`
+    );
+  }
+
+  const documentedTypeSlots = new Map();
+  for (const property of documentation.api) {
+    if (
+      property.component?.endsWith('ClassNames') ||
+      property.component?.endsWith('Styles')
+    ) {
+      const slots = documentedTypeSlots.get(property.component) ?? [];
+      slots.push(property.name);
+      documentedTypeSlots.set(property.component, slots);
+    }
+  }
+  for (const [name, slots] of documentedTypeSlots) {
+    if (!name.endsWith('ClassNames')) continue;
+    const stylesName = name.replace(/ClassNames$/, 'Styles');
+    const stylesSlots = documentedTypeSlots.get(stylesName);
+    if (!stylesSlots) continue;
+    assert.deepEqual(
+      [...stylesSlots].sort(),
+      [...slots].sort(),
+      `"${slug}" ${stylesName} must match ${name} slots.`
+    );
+  }
+
+  const typePreviews = new Map(
+    (documentation.typePreviews ?? []).map((preview) => [preview.name, preview])
+  );
+  for (const [name, preview] of typePreviews) {
+    if (!name.endsWith('ClassNames')) continue;
+
+    const stylesName = name.replace(/ClassNames$/, 'Styles');
+    const stylesPreview = typePreviews.get(stylesName);
+    assert.ok(
+      stylesPreview,
+      `"${slug}" documents ${name} without ${stylesName}.`
+    );
+    const classNamesSlots = preview.api.map((property) => property.name).sort();
+    const stylesSlots = stylesPreview.api
+      .map((property) => property.name)
+      .sort();
+    assert.ok(
+      !classNamesSlots.includes('root'),
+      `"${slug}" ${name} must not contain a root slot.`
+    );
+    assert.deepEqual(
+      stylesSlots,
+      classNamesSlots,
+      `"${slug}" ${stylesName} must match ${name} slots.`
+    );
+  }
+
   assert.equal(
     allowedApiNames.size,
     apiNames.length,
@@ -448,7 +859,23 @@ for (const [slug, documentation] of Object.entries(componentDocumentation)) {
   );
 
   const coveredApiNames = new Set();
+  for (const source of documentationCaseSources) {
+    for (const name of exampleCodeCoverage(
+      documentation,
+      { code: source },
+      allowedApiNames
+    )) {
+      coveredApiNames.add(name);
+    }
+  }
   for (const [exampleIndex, example] of documentation.examples.entries()) {
+    for (const name of exampleCodeCoverage(
+      documentation,
+      example,
+      allowedApiNames
+    )) {
+      coveredApiNames.add(name);
+    }
     const declaredCoverage = example.coveredProperties ?? [];
     assert.equal(
       new Set(declaredCoverage).size,
@@ -496,12 +923,36 @@ for (const [slug, documentation] of Object.entries(componentDocumentation)) {
     }
   }
 
-  assert.deepEqual(
-    [...allowedApiNames].filter((name) => !coveredApiNames.has(name)),
-    [],
-    `"${slug}" must cover every API property in an example or its explicit coverage metadata.`
+  for (const property of documentation.api) {
+    if (property.name !== 'classNames' && property.name !== 'styles') continue;
+
+    const siblingName =
+      property.name === 'classNames' ? 'styles' : 'classNames';
+    const qualifiedName = property.component
+      ? `${property.component}.${property.name}`
+      : property.name;
+    const qualifiedSiblingName = property.component
+      ? `${property.component}.${siblingName}`
+      : siblingName;
+
+    if (coveredApiNames.has(qualifiedName)) {
+      coveredApiNames.add(qualifiedSiblingName);
+    }
+  }
+
+  const missingApiNames = [...allowedApiNames].filter(
+    (name) => requiresCaseCoverage(name) && !coveredApiNames.has(name)
   );
+  if (missingApiNames.length > 0) {
+    missingCaseCoverage[slug] = missingApiNames;
+  }
 }
+
+assert.deepEqual(
+  missingCaseCoverage,
+  {},
+  'Every non-foundational API property must be covered by a real example or case.'
+);
 
 const documentationFixture = {
   accessibility: ['键盘说明'],

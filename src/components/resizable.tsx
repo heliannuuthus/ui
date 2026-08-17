@@ -22,6 +22,10 @@ type ResizableClassNames = {
   separator?: string;
 };
 
+type ResizableStyles = {
+  [Slot in keyof ResizableClassNames]?: React.CSSProperties;
+};
+
 type ResizableItemOnResize = (
   size: ResizablePrimitive.PanelSize,
   key: ResizableItemKey,
@@ -49,6 +53,7 @@ type ResizableProps = Omit<ResizablePrimitive.GroupProps, 'children'> & {
   classNames?: ResizableClassNames;
   items: ResizableItem[];
   separator?: ResizableSeparator;
+  styles?: ResizableStyles;
 };
 
 const Resizable = ({
@@ -57,6 +62,7 @@ const Resizable = ({
   items,
   orientation = 'horizontal',
   separator: defaultSeparator,
+  styles,
   ...props
 }: ResizableProps) => {
   const renderSeparator = (
@@ -95,6 +101,7 @@ const Resizable = ({
                   : (size, _id, previousSize) =>
                       onResize(size, key, previousSize)
               }
+              style={styles?.panel}
               {...panelProps}
             >
               {panel}
@@ -106,6 +113,7 @@ const Resizable = ({
                   'relative flex w-px items-center justify-center bg-border ring-offset-background after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden aria-[orientation=horizontal]:h-px aria-[orientation=horizontal]:w-full aria-[orientation=horizontal]:after:left-0 aria-[orientation=horizontal]:after:h-1 aria-[orientation=horizontal]:after:w-full aria-[orientation=horizontal]:after:translate-x-0 aria-[orientation=horizontal]:after:-translate-y-1/2',
                   classNames?.separator
                 )}
+                style={styles?.separator}
               >
                 {renderSeparator(
                   separator === undefined ? defaultSeparator : separator,
@@ -132,4 +140,5 @@ export {
   type ResizableProps,
   type ResizableSeparator,
   type ResizableSeparatorRenderProps,
+  type ResizableStyles,
 };

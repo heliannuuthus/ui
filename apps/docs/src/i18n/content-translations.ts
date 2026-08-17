@@ -193,8 +193,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Set inline styles on the Table.Primitive scrolling container.',
   '设置 Table.Primitive 原生 table 节点的行内样式。':
     'Set inline styles on the native Table.Primitive table element.',
-  '悬停、聚焦或点击右侧属性行，查看 classNames 与 styles 各字段对应的真实数据表区域。':
-    'Hover, focus, or click a property row to see the actual table region mapped to each classNames and styles field.',
+  '悬停、聚焦或点击右侧属性行，查看根节点 className/style 与内部 classNames/styles 各字段对应的真实数据表区域。':
+    'Hover, focus, or click a property row to inspect the table root targeted by className/style and the internal regions targeted by classNames/styles.',
   [`import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 
@@ -1200,8 +1200,8 @@ const ActionCell = () => {
   '非受控模式下的初始标签；省略时自动选择第一个可用标签。':
     'Initial label in uncontrolled mode; automatically selects the first available label when omitted.',
   非受控状态: 'uncontrolled state',
-  '分别扩展根容器、输入控件、前后缀及块级附加区域的样式。':
-    'Expand the styles of the root container, input controls, suffixes and block-level additional areas respectively.',
+  '分别扩展输入控件、前后缀及块级附加区域的类名。':
+    'Extend the class names of the input control, prefix, suffix, and block-level addon regions.',
   分层操作: 'Hierarchical operations',
   分隔: 'separate',
   '分隔线保持可聚焦，并支持方向键调整相邻区域尺寸。':
@@ -2834,8 +2834,8 @@ const ActionCell = () => {
   许澄提交了发布说明: 'Xu Cheng submitted release notes',
   '悬停、聚焦或触摸时轻微放大，越过边界后柔和回弹。':
     'Zoom in slightly when hovering, focusing or touching, and bounce back softly when crossing boundaries.',
-  '悬停、聚焦或点击右侧属性行，查看 className 与 CardClassNames 各字段对应的真实区域。':
-    'Hover, focus, or click on the attribute row on the right to view the real areas corresponding to each field of className and CardClassNames.',
+  '悬停、聚焦或点击右侧属性行，查看根节点 className/style 与 CardClassNames/CardStyles 各字段对应的真实区域。':
+    'Hover, focus, or click a property row to inspect the root targeted by className/style and the regions targeted by CardClassNames/CardStyles.',
   悬停外围按钮: 'Hover peripheral buttons',
   悬停预览负责人: 'Hover preview manager',
   选项配置: 'Options configuration',
@@ -3587,18 +3587,6 @@ const ActionCell = () => {
     'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · Verifying"\n  media={<FileArchive />}\n  state="processing"\n/>',
   'import { Avatar } from \'@heliannuuthus/ui\'\n\n<Avatar alt="林默" fallback="林" shape="circle" size="lg" />\n<Avatar alt="周一" fallback="周" shape="square" size="lg" />':
     'import { Avatar } from \'@heliannuuthus/ui\'\n\n<Avatar alt="Lin Mo" fallback="Lin" shape="circle" size="lg" />\n<Avatar alt="Monday" fallback="Week" shape="square" size="lg" />',
-  'import { Avatar } from \'@heliannuuthus/ui\'\nimport { Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="陈青"\n  fallback="陈"\n  size="lg"\n  badge={<Badge variant="destructive">8</Badge>}\n/>':
-    'import { Avatar } from \'@heliannuuthus/ui\'\nimport { Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="Chen Qing"\n  fallback="Chen"\n  size="lg"\n  badge={<Badge variant="destructive">8</Badge>}\n/>',
-  'import { Avatar } from \'@heliannuuthus/ui\'\nimport { Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="陈序"\n  badge={<Badge variant="destructive">8</Badge>}\n  fallback="陈"\n  size="lg"\n/>':
-    'import { Avatar } from \'@heliannuuthus/ui\'\nimport { Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="Chen Xu"\n  badge={<Badge variant="destructive">8</Badge>}\n  fallback="Chen"\n  size="lg"\n/>',
-  'import { Badge } from \'@heliannuuthus/ui\'\n\n<Badge><span aria-hidden="true" />运行中</Badge>\n<Badge variant="outline">v0.1.0</Badge>\n<Badge href="/releases" variant="link">查看版本</Badge>':
-    'import { Badge } from \'@heliannuuthus/ui\'\n\n<Badge><span aria-hidden="true" />Running</Badge>\n<Badge variant="outline">v0.1.0</Badge>\n<Badge href="/releases" variant="link">View version</Badge>',
-  'import { Badge } from \'@heliannuuthus/ui\'\n\n<Badge>默认</Badge>\n<Badge variant="secondary">次要</Badge>\n<Badge variant="outline">描边</Badge>\n<Badge variant="destructive">需处理</Badge>':
-    'import { Badge } from \'@heliannuuthus/ui\'\n\n<Badge>Default</Badge>\n<Badge variant="secondary">Secondary</Badge>\n<Badge variant="outline">Stroke</Badge>\n<Badge variant="destructive">Requires processing</Badge>',
-  "import { Badge } from '@heliannuuthus/ui'\n\nexport const BadgeBasic = () => {\n  return <Badge>已发布</Badge>\n}":
-    "import { Badge } from '@heliannuuthus/ui'\n\nexport const BadgeBasic = () => {\n  return <Badge>Published</Badge>\n}",
-  'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge count={5} indicatorLabel="5 条未读消息">\n  <Button aria-label="查看未读消息" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge count={123} overflowCount={99}>\n  <Button variant="outline">收件箱</Button>\n</Badge>\n\n<Badge dot indicatorLabel="有新的系统通知">\n  <Button variant="outline">系统通知</Button>\n</Badge>':
-    'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge count={5} indicatorLabel="5 unread messages">\n  <Button aria-label="View unread messages" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge count={123} overflowCount={99}>\n  <Button variant="outline">Inbox</Button>\n</Badge>\n\n<Badge dot indicatorLabel="There is a new system notification">\n  <Button variant="outline">System notification</Button>\n</Badge>',
   "import { Breadcrumb } from '@heliannuuthus/ui'\n\nconst items = [\n  { label: '首页', href: '/' },\n  { label: '组件', href: '/components' },\n  { label: '导航', href: '/components/navigation-menu' },\n  { label: 'Breadcrumb' },\n]\n\nexport const PageBreadcrumb = () => {\n  return <Breadcrumb items={items} icon />\n}":
     "import { Breadcrumb } from '@heliannuuthus/ui'\n\nconst items = [\n  { label: 'Home', href: '/' },\n  { label: 'component', href: '/components' },\n  { label: 'Navigation', href: '/components/navigation-menu' },\n  { label: 'Breadcrumb' },\n]\n\nexport const PageBreadcrumb = () => {\n  return <Breadcrumb items={items} icon />\n}",
   'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    variant="default"\n    content="已经补充完成，可以重新评审。"\n    reactions="✓ 2"\n  />\n  <Bubble align="start" variant="elevated" content="收到，我现在检查。" />\n</Bubble.Group>':
@@ -4495,13 +4483,13 @@ const ActionCell = () => {
   定位到归档说明: 'Jump to archived notes',
   '用 Item.Group 组织同类动态，并通过分隔线维持连续列表的阅读节奏。':
     'Use Item.Group to organize related activity and separators to maintain the reading rhythm of a continuous list.',
-  "import { Badge, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: <MessageCircle />,\n      mediaType: 'icon',\n      title: '林默回复了检查项',\n      description: '确认索引变更不会锁表。',\n      actions: <Badge>2 分钟前</Badge>,\n    },\n  ]}\n/>":
-    "import { Badge, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: <MessageCircle />,\n      mediaType: 'icon',\n      title: 'Lin Mo replied to the review item',\n      description: 'Confirmed that the index change will not lock the table.',\n      actions: <Badge>2 minutes ago</Badge>,\n    },\n  ]}\n/>",
+  "import { Tag, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: <MessageCircle />,\n      mediaType: 'icon',\n      title: '林默回复了检查项',\n      description: '确认索引变更不会锁表。',\n      actions: <Tag>2 分钟前</Tag>,\n    },\n  ]}\n/>":
+    "import { Tag, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: <MessageCircle />,\n      mediaType: 'icon',\n      title: 'Lin Mo replied to the review item',\n      description: 'Confirmed that the index change will not lock the table.',\n      actions: <Tag>2 minutes ago</Tag>,\n    },\n  ]}\n/>",
   成员目录: 'Member directory',
   '头像、身份说明和成员状态保持同一行对齐，描边外观明确每个成员的点击区域。':
     'Keep avatars, role descriptions, and member status aligned on one row; the outlined appearance makes each member’s hit area explicit.',
-  'import { Avatar, Badge, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<Avatar alt="林默" fallback="林" />}\n  title="林默"\n  description="平台工程 · 发布管理员"\n  actions={<Badge variant="secondary">在线</Badge>}\n/>':
-    'import { Avatar, Badge, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<Avatar alt="Lin Mo" fallback="L" />}\n  title="Lin Mo"\n  description="Platform engineering · Release administrator"\n  actions={<Badge variant="secondary">Online</Badge>}\n/>',
+  'import { Avatar, Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<Avatar alt="林默" fallback="林" />}\n  title="林默"\n  description="平台工程 · 发布管理员"\n  actions={<Tag type="success">在线</Tag>}\n/>':
+    'import { Avatar, Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<Avatar alt="Lin Mo" fallback="L" />}\n  title="Lin Mo"\n  description="Platform engineering · Release administrator"\n  actions={<Tag type="success">Online</Tag>}\n/>',
   '把开关放入 actions，让标题解释设置、描述说明影响范围，整行本身不重复承担点击行为。':
     'Place the switch in actions so the title names the setting and the description explains its scope; the row itself does not duplicate the click behavior.',
   'import { Item, Switch } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="muted"\n  media={<Cloud />}\n  mediaType="icon"\n  title="自动部署预览环境"\n  description="合并到 main 后自动更新预览环境。"\n  actions={<Switch aria-label="自动部署预览环境" />}\n/>':
@@ -4509,8 +4497,8 @@ const ActionCell = () => {
   资源入口: 'Resource entry',
   '使用 href 把整个资源项变成原生链接；header 和 footer 承载辅助元数据。':
     'Use href to make the entire resource item a native link; header and footer carry supporting metadata.',
-  'import { Badge, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Badge>发布说明</Badge>}\n  media={<FileText />}\n  mediaType="icon"\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>许澄维护 · 8 分钟前更新</span>}\n/>':
-    'import { Badge, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Badge>Release notes</Badge>}\n  media={<FileText />}\n  mediaType="icon"\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>Maintained by Xu Cheng · Updated 8 minutes ago</span>}\n/>',
+  'import { Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Tag>发布说明</Tag>}\n  media={<FileText />}\n  mediaType="icon"\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>许澄维护 · 8 分钟前更新</span>}\n/>':
+    'import { Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Tag>Release notes</Tag>}\n  media={<FileText />}\n  mediaType="icon"\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>Maintained by Xu Cheng · Updated 8 minutes ago</span>}\n/>',
   '展示成员、动态、文件、设置等具有一致骨架的行级内容。':
     'Display row-level content with a consistent structure, such as members, activity, files, and settings.',
   '需要组合媒体、主次文字、尾部操作或跨行元数据时使用。':
@@ -4573,8 +4561,8 @@ const ActionCell = () => {
     'Render only fixed-height rows near the viewport; the type is mutually exclusive with expandable.',
   '显示内置加载状态；空数据由 Table 自动展示默认提示。':
     'Show the built-in loading state; Table automatically displays the default message for empty data.',
-  '按 root、toolbar、container、table、header、body、footer、state 与 pagination 定制语义区域。':
-    'Customize the root, toolbar, container, table, header, body, footer, state, and pagination semantic regions.',
+  '按 toolbar、container、table、header、body、footer、state 与 pagination 定制内部语义区域。':
+    'Customize internal semantic regions by toolbar, container, table, header, body, footer, state, and pagination.',
   '向内部 Table.Primitive 传递原生 table 与容器引用、样式；Table 会自动计算内容宽度，并在翻页时保持已经得到的列宽。':
     'Pass native table attributes plus container refs and styles to the internal Table.Primitive. Table automatically sizes content and preserves the resulting column widths across pages.',
   'Table.Primitive 创建原生 table 与滚动容器。':
@@ -4755,6 +4743,364 @@ const ActionCell = () => {
     'import { Typography } from \'@heliannuuthus/ui\'\n\n<Typography.Text>Default inline text</Typography.Text>\n<Typography.Text as="p" size="xl" tone="muted">\n  Large muted paragraphs work well for page introductions.\n</Typography.Text>\n<Typography.Text as="div" size="lg" weight="semibold">\n  Emphasized block text\n</Typography.Text>\n<Typography.Text as="small" size="sm" tone="muted" weight="medium">\n  Small supporting text\n</Typography.Text>',
   'import { Typography } from \'@heliannuuthus/ui\'\n\n<Typography.Blockquote cite="https://ui.heliannuuthus.com/design">\n  语义先于视觉，视觉服务于内容层级。\n</Typography.Blockquote>\n<Typography.Text as="p">\n  安装命令为 <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>\n</Typography.Text>':
     'import { Typography } from \'@heliannuuthus/ui\'\n\n<Typography.Blockquote cite="https://ui.heliannuuthus.com/design">\n  Semantics come before visuals, and visuals serve the content hierarchy.\n</Typography.Blockquote>\n<Typography.Text as="p">\n  Install with <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>\n</Typography.Text>',
+  '用简短文本表达对象的状态、分类或属性。':
+    'Express an object status, category, or attribute with short text.',
+  '标记对象的状态、分类或稳定属性。':
+    'Mark an object status, category, or stable attribute.',
+  '在列表、卡片和详情中提供便于扫描的短文本。':
+    'Provide scannable short text in lists, cards, and detail views.',
+  'Tag 是纯展示元素，始终渲染为 span。':
+    'Tag is presentation-only and always renders as a span.',
+  默认标签: 'Default tag',
+  "import { Tag } from '@heliannuuthus/ui'\n\n<Tag>默认标签</Tag>":
+    "import { Tag } from '@heliannuuthus/ui'\n\n<Tag>Default tag</Tag>",
+  语义类型: 'Semantic types',
+  'type 表达标签的语义，不要只为了颜色选择与内容无关的类型。':
+    'type expresses the tag semantics; do not choose an unrelated type only for its color.',
+  主要: 'Primary',
+  'import { Tag } from \'@heliannuuthus/ui\'\n\n<Tag>默认</Tag>\n<Tag type="primary">主要</Tag>\n<Tag type="info">信息</Tag>\n<Tag type="success">成功</Tag>\n<Tag type="warning">警告</Tag>\n<Tag type="error">错误</Tag>':
+    'import { Tag } from \'@heliannuuthus/ui\'\n\n<Tag>Default</Tag>\n<Tag type="primary">Primary</Tag>\n<Tag type="info">Info</Tag>\n<Tag type="success">Success</Tag>\n<Tag type="warning">Warning</Tag>\n<Tag type="error">Error</Tag>',
+  '设置标签表达的语义类型。': 'Sets the semantic type expressed by the tag.',
+  '标签中的简短文本或辅助图标。':
+    'Short text or a supporting icon inside the tag.',
+  '扩展标签样式。': 'Extends the tag styles.',
+  '扩展标签行内样式。': 'Extends the tag inline styles.',
+  '状态不能只依靠颜色表达，标签文本必须保留完整含义。':
+    'Do not communicate status through color alone; tag text must preserve the full meaning.',
+  'Tag 支持标准 span、ARIA、data 属性和事件，并转发 span ref。':
+    'Tag supports standard span, ARIA, and data attributes and events, and forwards a span ref.',
+  '不要把 Tag 用作按钮或链接；交互场景应组合 Button 或原生链接。':
+    'Do not use Tag as a button or link; compose Button or a native link for interaction.',
+  '避免在 Tag 中放入长句或复杂操作。':
+    'Avoid long sentences or complex actions inside Tag.',
+  '在对象角落或独立位置展示通知数字与状态红点。':
+    'Displays notification counts and status dots over an object or independently.',
+  '在按钮、头像或其他对象上叠加未读数量。':
+    'Overlay an unread count on a button, avatar, or other object.',
+  '只需提示存在新内容，或需要独立展示简短计数。':
+    'Use when only the presence of new content or a short standalone count is needed.',
+  独立数字: 'Standalone counts',
+  '没有 children 时独立显示通知；数字 0 会保留，超过 max 时显示封顶文案。':
+    'Without children, the notification renders independently. Zero remains visible and values above max use capped text.',
+  锚点通知: 'Anchored notifications',
+  '传入 children 后，通知会定位到对象的 inline-end 顶角；offset 可微调逻辑方向位置。':
+    'With children, the notification is positioned at the inline-end top corner; offset fine-tunes its logical position.',
+  'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge indicator={5} indicatorLabel="5 条未读消息">\n  <Button aria-label="查看消息" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge dir="rtl" indicator={12} offset={[3, -2]}>\n  <Button variant="outline">收件箱</Button>\n</Badge>':
+    'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge indicator={5} indicatorLabel="5 unread messages">\n  <Button aria-label="View messages" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge dir="rtl" indicator={12} offset={[3, -2]}>\n  <Button variant="outline">Inbox</Button>\n</Badge>',
+  状态红点: 'Status dot',
+  'indicator 为 true 时只显示红点；因为没有可见内容，必须提供 indicatorLabel。':
+    'When indicator is true, only a dot is displayed. Because it has no visible content, indicatorLabel is required.',
+  'import { Badge, Button } from \'@heliannuuthus/ui\'\n\n<Badge indicator indicatorLabel="有新的系统通知">\n  <Button variant="outline">系统通知</Button>\n</Badge>':
+    'import { Badge, Button } from \'@heliannuuthus/ui\'\n\n<Badge indicator indicatorLabel="New system notification">\n  <Button variant="outline">System notifications</Button>\n</Badge>',
+  样式扩展: 'Style extensions',
+  '根节点使用 className 与 style，通知标记使用对应的 classNames 和 styles 插槽。':
+    'Use className and style for the root, and the matching classNames and styles slot for the indicator.',
+  '设置通知内容；true 显示红点，节点显示内容，false、null 或 undefined 隐藏。':
+    'Sets notification content: true displays a dot, a node displays content, and false, null, or undefined hides it.',
+  '设置数字通知的显示上限，超出时追加加号。':
+    'Sets the numeric notification maximum and appends a plus sign above it.',
+  '微调通知相对锚点的水平与垂直位置。':
+    'Fine-tunes the horizontal and vertical position relative to the anchor.',
+  '设置通知的无障碍名称；红点模式必须提供。':
+    'Sets the accessible notification name and is required for dot mode.',
+  '设置通知标记的锚点；省略时独立显示。':
+    'Sets the notification anchor; omit it for standalone display.',
+  '扩展 indicator 语义插槽样式。':
+    'Extends the indicator semantic slot styles.',
+  '扩展 indicator 语义插槽行内样式。':
+    'Extends the indicator semantic slot inline styles.',
+  '红点没有可见文字，必须通过 indicatorLabel 说明通知含义。':
+    'A dot has no visible text, so indicatorLabel must describe the notification.',
+  '数字已有可见文本；含义不明确时仍应补充 indicatorLabel。':
+    'Counts have visible text; add indicatorLabel when their meaning is still unclear.',
+  'Badge 支持标准 span、ARIA、data 属性和事件，并转发 span ref。':
+    'Badge supports standard span, ARIA, and data attributes and events, and forwards a span ref.',
+  'Badge 只表示通知；状态、分类和简短属性应使用 Tag。':
+    'Badge only represents notifications; use Tag for status, categories, and short attributes.',
+  '不要把 Badge 本身当作交互控件，应把 Button 或链接作为 children。':
+    'Do not use Badge itself as an interactive control; pass a Button or link as children.',
+  '与 Tag 和 Badge 组合': 'Composed with Tag and Badge',
+  'badge 插槽可放置 Tag 状态标签或 Badge 通知标记，并始终锚定在头像右下角。':
+    'The badge slot accepts Tag status labels or Badge notification indicators and keeps them anchored to the avatar corner.',
+  '8 条未读消息': '8 unread messages',
+  'import { Avatar, Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="陈序"\n  badge={<Badge indicator={8} indicatorLabel="8 条未读消息" />}\n  fallback="陈"\n  size="lg"\n/>':
+    'import { Avatar, Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="Chen Xu"\n  badge={<Badge indicator={8} indicatorLabel="8 unread messages" />}\n  fallback="Chen"\n  size="lg"\n/>',
+  '在头像右下角放置在线点、认证图标或 Tag 等状态节点。':
+    'Places an online dot, verification icon, Tag, or other status node at the avatar bottom corner.',
   自定义过滤: 'Custom filter',
   受控打开态: 'Controlled open state',
+  工作区导航: 'Workspace navigation',
+  收起侧边栏: 'Collapse sidebar',
+  展开侧边栏: 'Expand sidebar',
+  响应式折叠: 'Responsive collapse',
+  'Sidebar 在 lg 以下自动折叠，也可以通过内置触发器手动切换；collapsedWidth 决定折叠后保留的宽度。':
+    'The Sidebar collapses automatically below lg and can also be toggled manually with its built-in trigger; collapsedWidth controls the remaining width.',
+  '低于指定视口断点时自动折叠；使用与 Tailwind 默认断点一致的 token。':
+    'Collapse automatically below the selected viewport breakpoint using tokens aligned with the default Tailwind breakpoints.',
+  '受控的折叠状态。': 'The controlled collapsed state.',
+  '折叠后的侧边栏宽度；数字按像素处理，设置为 0 时隐藏内容。':
+    'The collapsed sidebar width; numbers are treated as pixels and 0 hides its content.',
+  '启用内置折叠触发器；传入 ReactNode 可以替换默认图标。':
+    'Enable the built-in collapse trigger; pass a ReactNode to replace the default icon.',
+  '非受控模式下的初始折叠状态。':
+    'The initial collapsed state in uncontrolled mode.',
+  '进入或离开 breakpoint 范围时调用。':
+    'Called when entering or leaving the breakpoint range.',
+  '折叠状态请求变化时调用，并说明变化来自断点还是触发器。':
+    'Called when the collapsed state is requested to change, including whether the request came from the breakpoint or trigger.',
+  '声明侧边栏位于逻辑起始侧或结束侧，用于调整内置触发器的位置与图标。':
+    'Declare whether the sidebar sits on the logical start or end side so the built-in trigger uses the matching position and icon.',
+  '设置内置折叠触发器在展开和折叠状态下的可访问名称。':
+    'Set the accessible names of the built-in collapse trigger in its expanded and collapsed states.',
+  '文字导航在窄屏下通常不适合压成图标栏；将 collapsedWidth 设置为 0，并组合 Drawer 提供完整导航。':
+    'Text navigation usually should not be compressed into an icon rail on narrow screens; set collapsedWidth to 0 and compose Drawer for complete navigation.',
+  "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar\n    breakpoint=\"lg\"\n    collapsible\n    collapsedWidth={64}\n    triggerLabels={{\n      collapse: '收起侧边栏',\n      expand: '展开侧边栏',\n    }}\n  >\n    Navigation\n  </Layout.Sidebar>\n  <Layout.Content>Content</Layout.Content>\n</Layout>":
+    "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar\n    breakpoint=\"lg\"\n    collapsible\n    collapsedWidth={64}\n    triggerLabels={{\n      collapse: 'Collapse sidebar',\n      expand: 'Expand sidebar',\n    }}\n  >\n    Navigation\n  </Layout.Sidebar>\n  <Layout.Content>Content</Layout.Content>\n</Layout>",
+  尚未执行操作: 'No action yet',
+  表单已提交: 'Form submitted',
+  草稿已预览: 'Draft previewed',
+  垂直: 'Vertical',
+  宽度: 'Width',
+  内容宽度: 'Content width',
+  填满容器: 'Fill container',
+  继续: 'Continue',
+  表单与点击事件: 'Form and click events',
+  '使用 block 让单个按钮占满父容器的可用宽度。':
+    'Use block to make one button fill the available width of its parent.',
+  '原生 type 保留表单语义；onClick 适合处理不依赖表单提交的即时操作。':
+    'Native type preserves form semantics; use onClick for immediate actions that do not depend on form submission.',
+  外链与下载: 'External links and downloads',
+  '新窗口外链同时声明 target 与 rel；download 用于下载同源资源并可指定文件名。':
+    'External links that open a new window declare both target and rel; download saves a same-origin resource and can specify its filename.',
+  新窗口打开: 'Open in a new window',
+  下载样式文件: 'Download stylesheet',
+  元素分隔: 'Item separators',
+  'separator 在相邻元素之间插入一致的视觉分隔，不需要为每个子元素重复编写。':
+    'separator inserts a consistent visual divider between adjacent items without repeating it on every child.',
+  活动: 'Activity',
+  外观: 'Appearance',
+  阴影: 'Elevated',
+  初始状态: 'Initial state',
+  结束侧: 'End side',
+  等待侧边栏变化: 'Waiting for a sidebar change',
+  已进入窄屏断点: 'Entered the narrow breakpoint',
+  已离开窄屏断点: 'Left the narrow breakpoint',
+  '侧边栏已收起（': 'Sidebar collapsed (',
+  '侧边栏已展开（': 'Sidebar expanded (',
+  'import { Button } from \'@heliannuuthus/ui\'\n\nexport const GroupedButtons = () => {\n  return (\n    <Button.Group aria-label="分页操作" block orientation="vertical">\n      <Button variant="outline">上一项</Button>\n      <Button>下一项</Button>\n    </Button.Group>\n  )\n}':
+    'import { Button } from \'@heliannuuthus/ui\'\n\nexport const GroupedButtons = () => {\n  return (\n    <Button.Group aria-label="Pagination actions" block orientation="vertical">\n      <Button variant="outline">Previous</Button>\n      <Button>Next</Button>\n    </Button.Group>\n  )\n}',
+  '<Button block>继续</Button>': '<Button block>Continue</Button>',
+  'import { useState } from \'react\'\n\nexport const FormActions = () => {\n  const [message, setMessage] = useState(\'尚未执行操作\')\n\n  return (\n    <form onSubmit={(event) => {\n      event.preventDefault()\n      setMessage(\'表单已提交\')\n    }}>\n      <Button type="submit">保存</Button>\n      <Button type="button" variant="outline" onClick={() => setMessage(\'草稿已预览\')}>\n        预览\n      </Button>\n      <output aria-live="polite">{message}</output>\n    </form>\n  )\n}':
+    'import { useState } from \'react\'\n\nexport const FormActions = () => {\n  const [message, setMessage] = useState(\'No action yet\')\n\n  return (\n    <form onSubmit={(event) => {\n      event.preventDefault()\n      setMessage(\'Form submitted\')\n    }}>\n      <Button type="submit">Save</Button>\n      <Button type="button" variant="outline" onClick={() => setMessage(\'Draft previewed\')}>\n        Preview\n      </Button>\n      <output aria-live="polite">{message}</output>\n    </form>\n  )\n}',
+  '<Button\n  href="https://ui.heliannuuthus.com"\n  target="_blank"\n  rel="noreferrer"\n  variant="outline"\n>\n  新窗口打开\n</Button>\n\n<Button href="/styles.css" download="heliannuuthus-ui.css">\n  下载样式文件\n</Button>':
+    '<Button\n  href="https://ui.heliannuuthus.com"\n  target="_blank"\n  rel="noreferrer"\n  variant="outline"\n>\n  Open in a new window\n</Button>\n\n<Button href="/styles.css" download="heliannuuthus-ui.css">\n  Download stylesheet\n</Button>',
+  'import { Stack } from \'@heliannuuthus/ui\'\n\n<Stack orientation="horizontal" separator={<span aria-hidden>·</span>}>\n  <span>概览</span>\n  <span>活动</span>\n  <span>设置</span>\n</Stack>':
+    'import { Stack } from \'@heliannuuthus/ui\'\n\n<Stack orientation="horizontal" separator={<span aria-hidden>·</span>}>\n  <span>Overview</span>\n  <span>Activity</span>\n  <span>Settings</span>\n</Stack>',
+  'import { Card } from \'@heliannuuthus/ui\'\n\nexport const UpdateCard = () => {\n  return (\n    <Card title="设计系统更新" variant="elevated">\n      <p>本周补充了组件示例与无障碍说明。</p>\n    </Card>\n  )\n}\n\n<Card title="描边卡片" variant="outline" />\n<Card title="透明卡片" variant="ghost" />':
+    'import { Card } from \'@heliannuuthus/ui\'\n\nexport const UpdateCard = () => {\n  return (\n    <Card title="Design system update" variant="elevated">\n      <p>This week adds component examples and accessibility guidance.</p>\n    </Card>\n  )\n}\n\n<Card title="Outlined card" variant="outline" />\n<Card title="Ghost card" variant="ghost" />',
+  "import { Layout } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nexport const ResponsiveLayout = () => {\n  const [status, setStatus] = useState('')\n\n  return (\n    <Layout>\n      <Layout.Sidebar\n        breakpoint=\"lg\"\n        collapsible\n        collapsedWidth={64}\n        defaultCollapsed={false}\n        side=\"start\"\n        triggerLabels={{\n          collapse: '收起侧边栏',\n          expand: '展开侧边栏',\n        }}\n        onBreakpointChange={(below) => setStatus(below ? '窄屏' : '宽屏')}\n        onCollapsedChange={(collapsed, reason) =>\n          setStatus(\n            (collapsed ? '已收起' : '已展开') + '：' + reason\n          )\n        }\n      >\n        Navigation\n      </Layout.Sidebar>\n      <Layout.Content>{status}</Layout.Content>\n    </Layout>\n  )\n}":
+    "import { Layout } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nexport const ResponsiveLayout = () => {\n  const [status, setStatus] = useState('')\n\n  return (\n    <Layout>\n      <Layout.Sidebar\n        breakpoint=\"lg\"\n        collapsible\n        collapsedWidth={64}\n        defaultCollapsed={false}\n        side=\"start\"\n        triggerLabels={{\n          collapse: 'Collapse sidebar',\n          expand: 'Expand sidebar',\n        }}\n        onBreakpointChange={(below) => setStatus(below ? 'Narrow' : 'Wide')}\n        onCollapsedChange={(collapsed, reason) =>\n          setStatus(\n            (collapsed ? 'Collapsed' : 'Expanded') + ': ' + reason\n          )\n        }\n      >\n        Navigation\n      </Layout.Sidebar>\n      <Layout.Content>{status}</Layout.Content>\n    </Layout>\n  )\n}",
+  尺寸与宽度: 'Sizes and width',
+  '尺寸应跟随容器密度；block 只改变按钮占用的可用宽度，不表达操作重要程度。':
+    'Size follows container density; block only changes the available width occupied by the button and does not express importance.',
+  [`export const ButtonSizesAndWidth = () => {
+  return (
+    <>
+      <div className="flex items-end gap-3">
+        <Button size="xs">超小按钮</Button>
+        <Button size="sm">小按钮</Button>
+        <Button>默认按钮</Button>
+        <Button size="lg">大按钮</Button>
+      </div>
+      <Button block>填满容器</Button>
+    </>
+  )
+}`]: `export const ButtonSizesAndWidth = () => {
+  return (
+    <>
+      <div className="flex items-end gap-3">
+        <Button size="xs">Extra small</Button>
+        <Button size="sm">Small</Button>
+        <Button>Default</Button>
+        <Button size="lg">Large</Button>
+      </div>
+      <Button block>Fill container</Button>
+    </>
+  )
+}`,
+  '导航、外链与下载': 'Navigation, external links, and downloads',
+  'href 统一承载站内导航、外链与下载；新窗口外链同时声明 target 与 rel，下载场景使用 download。':
+    'Use href consistently for internal navigation, external links, and downloads. New-window links declare target and rel, while downloads use download.',
+  [`import { ArrowRight } from 'lucide-react'
+
+export const ButtonLink = () => {
+  return (
+    <>
+      <Button href="/components/card" variant="outline">
+        查看 Card 文档
+        <ArrowRight data-icon="inline-end" />
+      </Button>
+      <Button disabled href="/components/card" variant="outline">
+        暂不可用
+      </Button>
+      <Button
+        href="https://ui.heliannuuthus.com"
+        target="_blank"
+        rel="noreferrer"
+        variant="outline"
+      >
+        新窗口打开
+      </Button>
+      <Button href="/styles.css" download="heliannuuthus-ui.css">
+        下载样式文件
+      </Button>
+    </>
+  )
+}`]: `import { ArrowRight } from 'lucide-react'
+
+export const ButtonLink = () => {
+  return (
+    <>
+      <Button href="/components/card" variant="outline">
+        View the Card docs
+        <ArrowRight data-icon="inline-end" />
+      </Button>
+      <Button disabled href="/components/card" variant="outline">
+        Unavailable
+      </Button>
+      <Button
+        href="https://ui.heliannuuthus.com"
+        target="_blank"
+        rel="noreferrer"
+        variant="outline"
+      >
+        Open in a new window
+      </Button>
+      <Button href="/styles.css" download="heliannuuthus-ui.css">
+        Download stylesheet
+      </Button>
+    </>
+  )
+}`,
+  'Tag 始终渲染为 span；type 表达标签语义，不要只为了颜色选择与内容无关的类型。':
+    'Tag always renders a span. type expresses tag semantics, so do not choose an unrelated type only for its color.',
+  [`import { Badge, Button } from '@heliannuuthus/ui'
+import { Mail } from 'lucide-react'
+
+<Badge indicator={5} indicatorLabel="5 条未读消息">
+  <Button aria-label="查看消息" size="icon" variant="outline">
+    <Mail />
+  </Button>
+</Badge>
+
+<Badge dir="rtl" indicator={12} offset={[3, -2]}>
+  <Button variant="outline">收件箱</Button>
+</Badge>
+
+<Badge indicator indicatorLabel="有新的系统通知">
+  <Button variant="outline">系统通知</Button>
+</Badge>`]: `import { Badge, Button } from '@heliannuuthus/ui'
+import { Mail } from 'lucide-react'
+
+<Badge indicator={5} indicatorLabel="5 unread messages">
+  <Button aria-label="View messages" size="icon" variant="outline">
+    <Mail />
+  </Button>
+</Badge>
+
+<Badge dir="rtl" indicator={12} offset={[3, -2]}>
+  <Button variant="outline">Inbox</Button>
+</Badge>
+
+<Badge indicator indicatorLabel="New system notification">
+  <Button variant="outline">System notifications</Button>
+</Badge>`,
+  '直接传入内容展示单个按键；通过 keys 和 separator 统一组合快捷键的间距与分隔。':
+    'Pass content directly for one key, or use keys and separator to keep shortcut spacing and separators consistent.',
+  分隔方向: 'Separator orientation',
+  '在同一案例中切换水平与垂直方向：水平线组织上下章节，垂直线分隔同一行内的元信息。':
+    'Switch horizontal and vertical orientations in one example: horizontal separators organize stacked sections, while vertical separators divide inline metadata.',
+  [`import { Separator } from '@heliannuuthus/ui'
+
+export const SectionSeparator = ({ orientation = 'horizontal' }) => {
+  return orientation === 'vertical' ? (
+    <div className="flex items-stretch gap-4">
+      <div>状态</div>
+      <Separator orientation="vertical" />
+      <div>负责人</div>
+    </div>
+  ) : (
+    <>
+      <section>上方内容</section>
+      <Separator />
+      <section>下方内容</section>
+    </>
+  )
+}`]: `import { Separator } from '@heliannuuthus/ui'
+
+export const SectionSeparator = ({ orientation = 'horizontal' }) => {
+  return orientation === 'vertical' ? (
+    <div className="flex items-stretch gap-4">
+      <div>Status</div>
+      <Separator orientation="vertical" />
+      <div>Owner</div>
+    </div>
+  ) : (
+    <>
+      <section>Content above</section>
+      <Separator />
+      <section>Content below</section>
+    </>
+  )
+}`,
+  结构与外观: 'Structure and appearance',
+  '在同一案例中切换基础或完整结构，并分别验证阴影、描边与透明外观。':
+    'Switch between basic and complete structures in one example while checking elevated, outlined, and ghost appearances.',
+  结构: 'Structure',
+  基础: 'Basic',
+  完整: 'Complete',
+  [`import { Card, type CardProps } from '@heliannuuthus/ui'
+
+export const UpdateCard = ({
+  detailed = false,
+  variant = 'elevated',
+}: {
+  detailed?: boolean
+  variant?: CardProps['variant']
+}) => {
+  return (
+    <Card
+      title="设计系统更新"
+      description={detailed ? '修改成员看到的工作区名称。' : undefined}
+      action={detailed ? <button>更多操作</button> : undefined}
+      footer={detailed ? <button>保存修改</button> : undefined}
+      variant={variant}
+    >
+      <p>{detailed ? '工作区名称：Heliannuuthus UI' : '本周补充了组件示例。'}</p>
+    </Card>
+  )
+}`]: `import { Card, type CardProps } from '@heliannuuthus/ui'
+
+export const UpdateCard = ({
+  detailed = false,
+  variant = 'elevated',
+}: {
+  detailed?: boolean
+  variant?: CardProps['variant']
+}) => {
+  return (
+    <Card
+      title="Design system update"
+      description={detailed ? 'Change the workspace name visible to members.' : undefined}
+      action={detailed ? <button>More actions</button> : undefined}
+      footer={detailed ? <button>Save changes</button> : undefined}
+      variant={variant}
+    >
+      <p>{detailed ? 'Workspace name: Heliannuuthus UI' : 'This week adds component examples.'}</p>
+    </Card>
+  )
+}`,
+  侧边区域: 'Sidebar regions',
+  '通过 side 和布局顺序在同一案例中切换起始侧导航与结束侧详情。':
+    'Use side and layout order to switch between start-side navigation and end-side details in one example.',
 };

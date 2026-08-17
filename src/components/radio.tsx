@@ -20,6 +20,10 @@ type RadioClassNames = {
   label?: string;
 };
 
+type RadioStyles = {
+  [Slot in keyof RadioClassNames]?: React.CSSProperties;
+};
+
 type RadioProps<Value = string> = Omit<
   React.ComponentProps<'label'>,
   'children' | 'onChange' | 'value'
@@ -31,6 +35,7 @@ type RadioProps<Value = string> = Omit<
   inputRef?: React.Ref<HTMLInputElement>;
   readOnly?: boolean;
   required?: boolean;
+  styles?: RadioStyles;
   value: Value;
 };
 
@@ -77,6 +82,7 @@ const RadioRoot = <Value = string,>({
   disabled,
   onClick,
   readOnly,
+  styles,
   ...props
 }: RadioProps<Value>) => {
   const [particleBurst, setParticleBurst] = React.useState(0);
@@ -116,6 +122,7 @@ const RadioRoot = <Value = string,>({
           'relative mt-0.5 flex aspect-square size-4 shrink-0 items-center justify-center rounded-full border border-transparent bg-input/90 transition-[background-color,border-color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/radio:border-primary/40 group-hover/radio:bg-primary/10 group-active/radio:scale-90 group-data-disabled/radio:group-active/radio:scale-100 group-data-disabled/radio:group-hover/radio:border-transparent group-data-disabled/radio:group-hover/radio:bg-input/90 group-data-readonly/radio:group-active/radio:scale-100 group-aria-invalid/radio:border-destructive group-aria-invalid/radio:ring-3 group-aria-invalid/radio:ring-destructive/20 group-data-checked/radio:border-primary group-data-checked/radio:bg-primary group-data-checked/radio:text-primary-foreground group-data-checked/radio:group-hover/radio:bg-primary/90 motion-reduce:transition-none dark:group-aria-invalid/radio:border-destructive/50 dark:group-aria-invalid/radio:ring-destructive/40 dark:group-data-checked/radio:bg-primary',
           classNames?.control
         )}
+        style={styles?.control}
       >
         {particleBurst > 0 && (
           <span
@@ -142,6 +149,7 @@ const RadioRoot = <Value = string,>({
         <span
           data-slot="radio-label"
           className={cn('contents', classNames?.label)}
+          style={styles?.label}
         >
           {children}
         </span>
@@ -252,4 +260,10 @@ const Radio = Object.assign(RadioRoot, {
 registerFormControl(RadioGroup);
 
 export { Radio };
-export type { RadioClassNames, RadioGroupProps, RadioOption, RadioProps };
+export type {
+  RadioClassNames,
+  RadioGroupProps,
+  RadioOption,
+  RadioProps,
+  RadioStyles,
+};

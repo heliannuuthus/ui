@@ -1,6 +1,6 @@
 import { docsCopy } from './i18n/content';
 import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
-import { Card } from '@heliannuuthus/ui';
+import { Card, type CardProps } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
 import { DemoLabel } from './demo-label';
@@ -8,37 +8,37 @@ import { MoreHorizontal } from 'lucide-react';
 
 const cardSemanticRegions = [
   {
-    api: 'className',
+    api: 'className / style',
     description: docsCopy('卡片根容器，负责变体、背景、边框、圆角和整体间距。'),
     slot: 'root',
   },
   {
-    api: 'classNames.header',
+    api: 'classNames.header / styles.header',
     description: docsCopy('头部布局区域，容纳标题、说明与右侧操作。'),
     slot: 'header',
   },
   {
-    api: 'classNames.title',
+    api: 'classNames.title / styles.title',
     description: docsCopy('卡片主标题区域。'),
     slot: 'title',
   },
   {
-    api: 'classNames.description',
+    api: 'classNames.description / styles.description',
     description: docsCopy('标题下方的辅助说明区域。'),
     slot: 'description',
   },
   {
-    api: 'classNames.action',
+    api: 'classNames.action / styles.action',
     description: docsCopy('头部右侧的辅助操作区域。'),
     slot: 'action',
   },
   {
-    api: 'classNames.content',
+    api: 'classNames.content / styles.content',
     description: docsCopy('承载卡片主要信息的内容区域。'),
     slot: 'content',
   },
   {
-    api: 'classNames.footer',
+    api: 'classNames.footer / styles.footer',
     description: docsCopy('卡片底部的补充信息与操作区域。'),
     slot: 'footer',
   },
@@ -46,9 +46,17 @@ const cardSemanticRegions = [
 
 type CardSemanticSlot = (typeof cardSemanticRegions)[number]['slot'];
 
-export const CardBasicDemo = () => {
+export const CardBasicDemo = ({
+  variant = 'elevated',
+}: {
+  variant?: CardProps['variant'];
+}) => {
   return (
-    <Card className="card-basic-demo" title={docsCopy('设计系统更新')}>
+    <Card
+      className="card-basic-demo"
+      title={docsCopy('设计系统更新')}
+      variant={variant}
+    >
       <p>
         {docsCopy('本周补充了组件示例与无障碍说明，方便团队快速查阅和复用。')}
       </p>
@@ -56,10 +64,15 @@ export const CardBasicDemo = () => {
   );
 };
 
-export const CardAnatomyDemo = () => {
+export const CardAnatomyDemo = ({
+  variant = 'elevated',
+}: {
+  variant?: CardProps['variant'];
+}) => {
   return (
     <Card
       className="card-showcase"
+      variant={variant}
       title={
         <span className="card-region-heading">
           <span>Header</span>

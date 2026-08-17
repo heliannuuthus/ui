@@ -21,10 +21,15 @@ export const componentSearchMetadata = {
       'code',
     ],
   ],
+  tag: [
+    'Displays short semantic labels for status, categories, and attributes.',
+    ['标签', '状态', '分类', '属性'],
+    ['tag', 'status', 'category', 'label'],
+  ],
   badge: [
-    'Displays status, categories, or short attributes for quick scanning.',
-    ['徽标', '状态', '标签'],
-    ['status', 'tag', 'label'],
+    'Displays notification counts and dots independently or over an anchor.',
+    ['徽标', '通知', '数字', '红点', '未读'],
+    ['badge', 'notification', 'count', 'dot', 'unread'],
   ],
   kbd: [
     'Displays keyboard keys and shortcut combinations.',

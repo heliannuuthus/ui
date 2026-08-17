@@ -6,11 +6,12 @@ import {
   useState,
   type CSSProperties,
 } from 'react';
-import { Badge } from '@heliannuuthus/ui';
+import { Tag } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Card } from '@heliannuuthus/ui';
 import { Command } from '@heliannuuthus/ui';
 import { Empty } from '@heliannuuthus/ui';
+import { Drawer } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
 import { Item } from '@heliannuuthus/ui';
 import { Layout } from '@heliannuuthus/ui';
@@ -36,6 +37,7 @@ import {
   Moon,
   Package,
   PackagePlus,
+  PanelLeft,
   Search,
   SearchX,
   Sparkles,
@@ -525,10 +527,10 @@ const HomePage = () => {
       <section className="home-hero">
         <Stack block className="hero-content" gap={32}>
           <Stack block gap={16}>
-            <Badge variant="outline">
+            <Tag type="primary">
               <Sparkles data-icon="inline-start" />
               {t('home.componentCount', { count: componentCatalog.length })}
-            </Badge>
+            </Tag>
             <Typography.Title>{t('home.title')}</Typography.Title>
             <Typography.Text
               as="p"
@@ -587,13 +589,13 @@ const HomePage = () => {
           className="hero-showcase rounded-lg"
           title={t('home.previewTitle')}
           description={t('home.previewDescription')}
-          action={<Badge variant="secondary">Live</Badge>}
+          action={<Tag type="success">Live</Tag>}
         >
           <Stack block gap={24}>
             <Stack align="center" gap={8} orientation="horizontal" wrap>
-              <Badge variant="outline">Accessible</Badge>
-              <Badge variant="outline">Type-safe</Badge>
-              <Badge variant="outline">Composable</Badge>
+              <Tag>Accessible</Tag>
+              <Tag>Type-safe</Tag>
+              <Tag>Composable</Tag>
             </Stack>
             <Stack block gap={8}>
               <DemoLabel htmlFor="home-workspace-name">
@@ -806,7 +808,7 @@ const GettingStartedPage = () => {
         href={path('/components')}
         title={
           <Stack align="center" gap={8} orientation="horizontal">
-            <Badge variant="secondary">04</Badge>
+            <Tag type="primary">04</Tag>
             <Typography.Text
               as="div"
               size="lg"
@@ -1110,7 +1112,13 @@ const ComponentSearchDialog = ({
   );
 };
 
-const ComponentNavigation = ({ component }: { component: string }) => {
+const ComponentNavigation = ({
+  component,
+  onNavigate,
+}: {
+  component: string;
+  onNavigate?: () => void;
+}) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const path = useLocalizedPath();
   const { t } = useTranslation();
@@ -1177,6 +1185,7 @@ const ComponentNavigation = ({ component }: { component: string }) => {
                     <ComponentNavigationLink
                       isActive={slug === component}
                       item={item}
+                      onNavigate={onNavigate}
                       slug={slug}
                     />
                   </li>
@@ -1190,13 +1199,47 @@ const ComponentNavigation = ({ component }: { component: string }) => {
   );
 };
 
+const ComponentNavigationDrawer = ({ component }: { component: string }) => {
+  const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
+
+  return (
+    <Drawer
+      behavior="panel"
+      classNames={{ content: 'component-navigation-drawer' }}
+      onOpenChange={setOpen}
+      open={open}
+      side="left"
+      showSwipeHandle={false}
+      title={t('components.navigation')}
+      trigger={
+        <Button
+          className="component-navigation-trigger"
+          size="sm"
+          variant="outline"
+        >
+          <PanelLeft aria-hidden="true" />
+          {t('components.openNavigation')}
+        </Button>
+      }
+    >
+      <ComponentNavigation
+        component={component}
+        onNavigate={() => setOpen(false)}
+      />
+    </Drawer>
+  );
+};
+
 const ComponentNavigationLink = ({
   isActive,
   item,
+  onNavigate,
   slug,
 }: {
   isActive: boolean;
   item: string;
+  onNavigate?: () => void;
   slug: string;
 }) => {
   const path = useLocalizedPath();
@@ -1207,6 +1250,7 @@ const ComponentNavigationLink = ({
     <NavLink
       className="component-docs-sidebar-link"
       data-active={isActive || undefined}
+      onClick={onNavigate}
       to={to}
     >
       <span>{localizedComponentName(item, locale)}</span>
@@ -1265,6 +1309,7 @@ const ComponentPage = () => {
             : ''
         }`}
       >
+        <ComponentNavigationDrawer component={component} />
         <div className="breadcrumb">
           <NavLink to={path('/components')}>{t('components.label')}</NavLink>
           <span>/</span>
@@ -1677,7 +1722,7 @@ const DocSection = ({
           size="sm"
           title={
             <Stack align="center" gap={8} orientation="horizontal">
-              <Badge variant="secondary">{step}</Badge>
+              <Tag type="primary">{step}</Tag>
               <Typography.Title
                 level={2}
                 className="border-0 pb-0 text-2xl font-bold"
@@ -1716,9 +1761,7 @@ const DocLayout = ({
     <main className="doc-page">
       <Stack block className="doc-content" gap={48}>
         <Stack block className="doc-intro" gap={8}>
-          <Badge className="doc-kicker" variant="outline">
-            {kicker}
-          </Badge>
+          <Tag className="doc-kicker">{kicker}</Tag>
           <Typography.Title id="page-title">{title}</Typography.Title>
           <Typography.Text
             as="p"
@@ -1756,9 +1799,7 @@ const DocLayout = ({
                 >
                   {item.icon}
                   {item.label}
-                  <Badge variant="ghost">
-                    {String(index + 1).padStart(2, '0')}
-                  </Badge>
+                  <Tag>{String(index + 1).padStart(2, '0')}</Tag>
                 </Button>
               ))}
             </Stack>

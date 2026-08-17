@@ -239,10 +239,7 @@ type MenubarMenuConfig = {
 
 type MenubarProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   disabled?: boolean;
-  loopFocus?: boolean;
   menus: MenubarMenuConfig[];
-  modal?: boolean;
-  orientation?: 'horizontal' | 'vertical';
   size?: 'default' | 'lg' | 'sm';
 };
 

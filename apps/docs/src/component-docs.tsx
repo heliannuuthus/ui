@@ -1,6 +1,6 @@
 import { docsCopy } from './i18n/content';
 import type { ReactNode } from 'react';
-import { Badge } from '@heliannuuthus/ui';
+import { Badge, Tag } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Checkbox } from '@heliannuuthus/ui';
 import { Empty } from '@heliannuuthus/ui';
@@ -30,6 +30,7 @@ import {
   CardBasicDemo,
   CardSemanticDomDemo,
 } from './card-preview';
+import { ButtonActionsDemo } from './button-preview';
 import {
   CommandDialogDemo,
   CommandEmptyDemo,
@@ -178,6 +179,7 @@ import {
 } from './menubar-preview';
 import {
   LayoutApplicationDemo,
+  LayoutCollapsibleSidebarDemo,
   LayoutLeftSidebarDemo,
   LayoutPageDemo,
   LayoutRightSidebarDemo,
@@ -310,28 +312,34 @@ export const ButtonVariants = () => {
 }`),
     },
     {
-      title: docsCopy('不同尺寸'),
+      title: docsCopy('尺寸与宽度'),
       description: docsCopy(
-        '尺寸应跟随容器密度，而不是用来表达重要程度。默认尺寸适合大多数表单与页面。'
+        '尺寸应跟随容器密度；block 只改变按钮占用的可用宽度，不表达操作重要程度。'
       ),
       preview: (
-        <div className="example-row example-row-end">
-          <Button size="xs">{docsCopy('超小按钮')}</Button>
-          <Button size="sm">{docsCopy('小按钮')}</Button>
-          <Button>{docsCopy('默认按钮')}</Button>
-          <Button size="lg">{docsCopy('大按钮')}</Button>
-        </div>
+        <Stack block gap={16}>
+          <div className="example-row example-row-end">
+            <Button size="xs">{docsCopy('超小按钮')}</Button>
+            <Button size="sm">{docsCopy('小按钮')}</Button>
+            <Button>{docsCopy('默认按钮')}</Button>
+            <Button size="lg">{docsCopy('大按钮')}</Button>
+          </div>
+          <Button block>{docsCopy('填满容器')}</Button>
+        </Stack>
       ),
       code: docsCopy(`${buttonImport}
 
-export const ButtonSizes = () => {
+export const ButtonSizesAndWidth = () => {
   return (
-    <div className="flex items-end gap-3">
-      <Button size="xs">超小按钮</Button>
-      <Button size="sm">小按钮</Button>
-      <Button>默认按钮</Button>
-      <Button size="lg">大按钮</Button>
-    </div>
+    <>
+      <div className="flex items-end gap-3">
+        <Button size="xs">超小按钮</Button>
+        <Button size="sm">小按钮</Button>
+        <Button>默认按钮</Button>
+        <Button size="lg">大按钮</Button>
+      </div>
+      <Button block>填满容器</Button>
+    </>
   )
 }`),
     },
@@ -340,8 +348,37 @@ export const ButtonSizes = () => {
       description: docsCopy(
         '将紧密相关的操作收进同一个视觉组，并保持操作语义单一。'
       ),
-      preview: (
-        <Button.Group aria-label={docsCopy('分页操作')}>
+      caseLayout: 'segmented',
+      caseAxes: [
+        {
+          name: 'orientation',
+          label: docsCopy('方向'),
+          defaultValue: 'horizontal',
+          property: 'Button.Group.orientation',
+          options: [
+            { label: docsCopy('水平'), value: 'horizontal' },
+            { label: docsCopy('垂直'), value: 'vertical' },
+          ],
+        },
+        {
+          name: 'block',
+          label: docsCopy('宽度'),
+          defaultValue: 'false',
+          property: 'Button.Group.block',
+          options: [
+            { label: docsCopy('内容宽度'), value: 'false' },
+            { label: docsCopy('填满容器'), value: 'true' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <Button.Group
+          aria-label={docsCopy('分页操作')}
+          block={values.block === 'true'}
+          orientation={
+            values.orientation === 'vertical' ? 'vertical' : 'horizontal'
+          }
+        >
           <Button variant="outline">{docsCopy('上一项')}</Button>
           <Button>{docsCopy('下一项')}</Button>
         </Button.Group>
@@ -350,10 +387,36 @@ export const ButtonSizes = () => {
 
 export const GroupedButtons = () => {
   return (
-    <Button.Group aria-label="分页操作">
+    <Button.Group aria-label="分页操作" block orientation="vertical">
       <Button variant="outline">上一项</Button>
       <Button>下一项</Button>
     </Button.Group>
+  )
+}`),
+    },
+    {
+      title: docsCopy('表单与点击事件'),
+      description: docsCopy(
+        '原生 type 保留表单语义；onClick 适合处理不依赖表单提交的即时操作。'
+      ),
+      preview: <ButtonActionsDemo />,
+      code: docsCopy(`${buttonImport}
+import { useState } from 'react'
+
+export const FormActions = () => {
+  const [message, setMessage] = useState('尚未执行操作')
+
+  return (
+    <form onSubmit={(event) => {
+      event.preventDefault()
+      setMessage('表单已提交')
+    }}>
+      <Button type="submit">保存</Button>
+      <Button type="button" variant="outline" onClick={() => setMessage('草稿已预览')}>
+        预览
+      </Button>
+      <output aria-live="polite">{message}</output>
+    </form>
   )
 }`),
     },
@@ -427,9 +490,9 @@ export const ButtonStates = () => {
 }`),
     },
     {
-      title: docsCopy('导航按钮'),
+      title: docsCopy('导航、外链与下载'),
       description: docsCopy(
-        '设置 href 后输出具有链接语义的 a 元素；不设置 href 时始终输出原生 button。导航不要通过点击事件手动修改地址。'
+        'href 统一承载站内导航、外链与下载；新窗口外链同时声明 target 与 rel，下载场景使用 download。'
       ),
       preview: (
         <div className="example-row">
@@ -439,6 +502,17 @@ export const ButtonStates = () => {
           </Button>
           <Button disabled href="/components/card" variant="outline">
             {docsCopy('暂不可用')}
+          </Button>
+          <Button
+            href="https://ui.heliannuuthus.com"
+            rel="noreferrer"
+            target="_blank"
+            variant="outline"
+          >
+            {docsCopy('新窗口打开')}
+          </Button>
+          <Button download="heliannuuthus-ui.css" href="/styles.css">
+            {docsCopy('下载样式文件')}
           </Button>
         </div>
       ),
@@ -454,6 +528,17 @@ export const ButtonLink = () => {
       </Button>
       <Button disabled href="/components/card" variant="outline">
         暂不可用
+      </Button>
+      <Button
+        href="https://ui.heliannuuthus.com"
+        target="_blank"
+        rel="noreferrer"
+        variant="outline"
+      >
+        新窗口打开
+      </Button>
+      <Button href="/styles.css" download="heliannuuthus-ui.css">
+        下载样式文件
       </Button>
     </>
   )
@@ -903,54 +988,110 @@ export const TypographyStory = () => {
   ],
 };
 
-const badgeDocumentation: ComponentDocumentation = {
-  name: 'Badge',
-  slug: 'badge',
-  summary: docsCopy('展示状态、分类或简短属性，帮助用户快速扫描信息。'),
+const tagDocumentation: ComponentDocumentation = {
+  name: 'Tag',
+  slug: 'tag',
+  summary: docsCopy('用简短文本表达对象的状态、分类或属性。'),
   whenToUse: [
-    docsCopy('标记对象的状态或分类。'),
-    docsCopy('在有限空间内展示短小、非交互属性。'),
+    docsCopy('标记对象的状态、分类或稳定属性。'),
+    docsCopy('在列表、卡片和详情中提供便于扫描的短文本。'),
   ],
   examples: [
     {
-      title: docsCopy('基础用法'),
-      description: docsCopy('用简短文本标记对象当前最重要的状态或属性。'),
-      preview: <Badge>{docsCopy('已发布')}</Badge>,
-      code: docsCopy(`import { Badge } from '@heliannuuthus/ui'
-
-export const BadgeBasic = () => {
-  return <Badge>已发布</Badge>
-}`),
-    },
-    {
-      title: docsCopy('语义样式'),
+      title: docsCopy('语义类型'),
       description: docsCopy(
-        'variant 只区分信息层级；同一种状态不要在页面内混用多套样式。'
+        'Tag 始终渲染为 span；type 表达标签语义，不要只为了颜色选择与内容无关的类型。'
       ),
       preview: (
         <div className="example-row">
-          <Badge>{docsCopy('默认')}</Badge>
-          <Badge variant="secondary">{docsCopy('次要')}</Badge>
-          <Badge variant="outline">{docsCopy('描边')}</Badge>
-          <Badge variant="ghost">{docsCopy('弱化')}</Badge>
-          <Badge variant="destructive">{docsCopy('需处理')}</Badge>
+          <Tag>{docsCopy('默认')}</Tag>
+          <Tag type="primary">{docsCopy('主要')}</Tag>
+          <Tag type="info">{docsCopy('信息')}</Tag>
+          <Tag type="success">{docsCopy('成功')}</Tag>
+          <Tag type="warning">{docsCopy('警告')}</Tag>
+          <Tag type="error">{docsCopy('错误')}</Tag>
         </div>
+      ),
+      code: docsCopy(`import { Tag } from '@heliannuuthus/ui'
+
+<Tag>默认</Tag>
+<Tag type="primary">主要</Tag>
+<Tag type="info">信息</Tag>
+<Tag type="success">成功</Tag>
+<Tag type="warning">警告</Tag>
+<Tag type="error">错误</Tag>`),
+      coveredProperties: ['type', 'children', 'className', 'style'],
+    },
+  ],
+  api: [
+    {
+      name: 'type',
+      description: docsCopy('设置标签表达的语义类型。'),
+      type: "'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'",
+      defaultValue: "'default'",
+    },
+    {
+      name: 'children',
+      description: docsCopy('标签中的简短文本或辅助图标。'),
+      type: 'ReactNode',
+    },
+    {
+      name: 'className',
+      description: docsCopy('扩展标签样式。'),
+      type: 'string',
+    },
+    {
+      name: 'style',
+      description: docsCopy('扩展标签行内样式。'),
+      type: 'CSSProperties',
+    },
+  ],
+  accessibility: [
+    docsCopy('状态不能只依靠颜色表达，标签文本必须保留完整含义。'),
+    docsCopy('Tag 支持标准 span、ARIA、data 属性和事件，并转发 span ref。'),
+  ],
+  pitfalls: [
+    docsCopy('不要把 Tag 用作按钮或链接；交互场景应组合 Button 或原生链接。'),
+    docsCopy('避免在 Tag 中放入长句或复杂操作。'),
+  ],
+};
+
+const badgeDocumentation: ComponentDocumentation = {
+  name: 'Badge',
+  slug: 'badge',
+  summary: docsCopy('在对象角落或独立位置展示通知数字与状态红点。'),
+  whenToUse: [
+    docsCopy('在按钮、头像或其他对象上叠加未读数量。'),
+    docsCopy('只需提示存在新内容，或需要独立展示简短计数。'),
+  ],
+  examples: [
+    {
+      title: docsCopy('独立数字'),
+      description: docsCopy(
+        '没有 children 时独立显示通知；数字 0 会保留，超过 max 时显示封顶文案。'
+      ),
+      preview: (
+        <Stack align="center" gap={16} orientation="horizontal">
+          <Badge indicator={5} />
+          <Badge indicator={0} />
+          <Badge indicator={123} max={99} />
+        </Stack>
       ),
       code: docsCopy(`import { Badge } from '@heliannuuthus/ui'
 
-<Badge>默认</Badge>
-<Badge variant="secondary">次要</Badge>
-<Badge variant="outline">描边</Badge>
-<Badge variant="destructive">需处理</Badge>`),
+<Badge indicator={5} />
+<Badge indicator={0} />
+<Badge indicator={123} max={99} />`),
+      coveredProperties: ['indicator', 'max', 'className', 'style'],
     },
     {
-      title: docsCopy('消息提醒'),
+      title: docsCopy('锚点通知'),
       description: docsCopy(
-        '通过 count 展示未读数量，通过 dot 只提示是否有新内容；超出 overflowCount 时自动封顶。'
+        '传入 children 后，通知会定位到对象的 inline-end 顶角；offset 可微调逻辑方向位置。'
       ),
       preview: (
-        <Stack gap={24} orientation="horizontal" wrap>
-          <Badge count={5} indicatorLabel={docsCopy('5 条未读消息')}>
+        <Stack gap={28} orientation="horizontal" wrap>
+          <Badge indicator={5} indicatorLabel={docsCopy('5 条未读消息')}>
             <Button
               aria-label={docsCopy('查看 5 条未读消息')}
               size="icon"
@@ -959,126 +1100,83 @@ export const BadgeBasic = () => {
               <Mail />
             </Button>
           </Badge>
-          <Badge
-            count={123}
-            indicatorLabel={docsCopy('超过 99 条未读消息')}
-            overflowCount={99}
-          >
+          <Badge dir="rtl" indicator={12} offset={[3, -2]}>
             <Button variant="outline">{docsCopy('收件箱')}</Button>
           </Badge>
-          <Badge dot indicatorLabel={docsCopy('有新的系统通知')}>
+          <Badge indicator indicatorLabel={docsCopy('有新的系统通知')}>
             <Button variant="outline">{docsCopy('系统通知')}</Button>
-          </Badge>
-          <Badge count={0} indicatorLabel={docsCopy('暂无待办')} showZero>
-            <Button variant="outline">{docsCopy('待办')}</Button>
           </Badge>
         </Stack>
       ),
       code: docsCopy(`import { Badge, Button } from '@heliannuuthus/ui'
 import { Mail } from 'lucide-react'
 
-<Badge count={5} indicatorLabel="5 条未读消息">
-  <Button aria-label="查看未读消息" size="icon" variant="outline">
+<Badge indicator={5} indicatorLabel="5 条未读消息">
+  <Button aria-label="查看消息" size="icon" variant="outline">
     <Mail />
   </Button>
 </Badge>
 
-<Badge count={123} overflowCount={99}>
+<Badge dir="rtl" indicator={12} offset={[3, -2]}>
   <Button variant="outline">收件箱</Button>
 </Badge>
 
-<Badge dot indicatorLabel="有新的系统通知">
+<Badge indicator indicatorLabel="有新的系统通知">
   <Button variant="outline">系统通知</Button>
 </Badge>`),
+      coveredProperties: ['children', 'offset', 'indicatorLabel'],
     },
     {
-      title: docsCopy('状态与链接'),
+      title: docsCopy('样式扩展'),
       description: docsCopy(
-        '图标用于帮助扫描，文本仍需表达完整含义；需要导航时使用 href 获得链接语义。'
+        '根节点使用 className 与 style，通知标记使用对应的 classNames 和 styles 插槽。'
       ),
       preview: (
-        <div className="example-row">
-          <Badge>
-            <span aria-hidden="true" className="status-dot" />
-            {docsCopy('运行中')}
-          </Badge>
-          <Badge variant="outline">v0.1.0</Badge>
-          <Badge
-            href="https://www.npmjs.com/package/@heliannuuthus/ui"
-            rel="noreferrer"
-            target="_blank"
-            variant="link"
-          >
-            {docsCopy('查看版本')}
-            <ArrowRight data-icon="inline-end" />
-          </Badge>
-        </div>
+        <Badge
+          classNames={{ indicator: 'bg-primary' }}
+          indicator={8}
+          styles={{ indicator: { fontVariantNumeric: 'tabular-nums' } }}
+        />
       ),
       code: docsCopy(`import { Badge } from '@heliannuuthus/ui'
 
-<Badge><span aria-hidden="true" />运行中</Badge>
-<Badge variant="outline">v0.1.0</Badge>
-<Badge href="/releases" variant="link">查看版本</Badge>`),
+<Badge
+  classNames={{ indicator: 'bg-primary' }}
+  indicator={8}
+  styles={{ indicator: { fontVariantNumeric: 'tabular-nums' } }}
+/>`),
+      coveredProperties: ['classNames', 'styles'],
     },
   ],
   api: [
     {
-      name: 'variant',
+      name: 'indicator',
       description: docsCopy(
-        '徽标视觉样式；文本徽标默认使用 default，数字和红点通知默认使用 destructive。'
+        '设置通知内容；true 显示红点，节点显示内容，false、null 或 undefined 隐藏。'
       ),
-      type: "'default' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'link'",
-      defaultValue: "'default' / 'destructive'",
+      type: 'true | ReactNode | false | null',
     },
     {
-      name: 'count',
-      description: docsCopy(
-        '显示通知数量；传入数字时可配合 overflowCount 自动生成封顶文案。'
-      ),
-      type: 'React.ReactNode',
-    },
-    {
-      name: 'dot',
-      description: docsCopy('只显示通知红点，不展示 count 内容。'),
-      type: 'boolean',
-      defaultValue: 'false',
-    },
-    {
-      name: 'overflowCount',
-      description: docsCopy(
-        '数字通知的显示上限，例如 123 在上限 99 时显示为 99+。'
-      ),
+      name: 'max',
+      description: docsCopy('设置数字通知的显示上限，超出时追加加号。'),
       type: 'number',
       defaultValue: '99',
     },
     {
-      name: 'showZero',
-      description: docsCopy('count 为 0 时是否仍显示数字。'),
-      type: 'boolean',
-      defaultValue: 'false',
-    },
-    {
       name: 'offset',
-      description: docsCopy('微调通知标记相对锚点的水平与垂直位置。'),
+      description: docsCopy('微调通知相对锚点的水平与垂直位置。'),
       type: 'readonly [horizontal: number, vertical: number]',
       defaultValue: '[0, 0]',
     },
     {
       name: 'indicatorLabel',
-      description: docsCopy('通知数字或红点的无障碍说明，红点场景应明确提供。'),
-      type: 'string',
-    },
-    {
-      name: 'href',
-      description: docsCopy(
-        '将文本徽标渲染为原生链接；通知模式应把链接作为 children。'
-      ),
+      description: docsCopy('设置通知的无障碍名称；红点模式必须提供。'),
       type: 'string',
     },
     {
       name: 'children',
-      description: docsCopy('徽标文本或通知标记的锚点。'),
-      type: 'React.ReactNode',
+      description: docsCopy('设置通知标记的锚点；省略时独立显示。'),
+      type: 'ReactNode',
     },
     {
       name: 'className',
@@ -1088,29 +1186,19 @@ import { Mail } from 'lucide-react'
     {
       name: 'style',
       description: docsCopy('扩展根节点行内样式。'),
-      type: 'React.CSSProperties',
-    },
-    {
-      name: 'ref',
-      description: docsCopy('转发到根 span 或链接元素。'),
-      type: 'React.Ref<HTMLSpanElement | HTMLAnchorElement>',
-    },
-    {
-      name: docsCopy('原生属性'),
-      description: docsCopy(
-        '支持对应 span 或 a 的标准 HTML、ARIA、data 属性和事件。'
-      ),
-      type: 'HTMLAttributes | AnchorHTMLAttributes',
+      type: 'CSSProperties',
     },
   ],
   accessibility: [
-    docsCopy('状态不能只依靠颜色表达，必须保留文本。'),
-    docsCopy('红点没有可见文字，应通过 indicatorLabel 说明通知含义。'),
-    docsCopy('需要交互时使用 href，或把 Button、链接作为通知标记的 children。'),
+    docsCopy('红点没有可见文字，必须通过 indicatorLabel 说明通知含义。'),
+    docsCopy('数字已有可见文本；含义不明确时仍应补充 indicatorLabel。'),
+    docsCopy('Badge 支持标准 span、ARIA、data 属性和事件，并转发 span ref。'),
   ],
   pitfalls: [
-    docsCopy('避免放入长句或复杂操作。'),
-    docsCopy('不要把 Badge 用作没有键盘语义的可点击控件。'),
+    docsCopy('Badge 只表示通知；状态、分类和简短属性应使用 Tag。'),
+    docsCopy(
+      '不要把 Badge 本身当作交互控件，应把 Button 或链接作为 children。'
+    ),
   ],
 };
 
@@ -1124,32 +1212,24 @@ const kbdDocumentation: ComponentDocumentation = {
   ],
   examples: [
     {
-      title: docsCopy('单个按键'),
-      description: docsCopy('使用用户设备上容易识别的按键名称。'),
+      title: docsCopy('组合快捷键'),
+      description: docsCopy(
+        '直接传入内容展示单个按键；通过 keys 和 separator 统一组合快捷键的间距与分隔。'
+      ),
       preview: (
         <div className="example-row">
           <Kbd>Enter</Kbd>
           <Kbd>Esc</Kbd>
-          <Kbd>Tab</Kbd>
-          <Kbd>⌫</Kbd>
-        </div>
-      ),
-      code: `import { Kbd } from '@heliannuuthus/ui'
-
-<Kbd>Enter</Kbd>`,
-    },
-    {
-      title: docsCopy('组合快捷键'),
-      description: docsCopy('通过 keys 属性统一多个按键之间的间距。'),
-      preview: (
-        <div className="example-row">
           <Kbd keys={['⌘', 'K']} />
           <Kbd keys={['Ctrl', 'Shift', 'P']} />
+          <Kbd keys={['Ctrl', 'Alt', 'Delete']} separator="·" />
         </div>
       ),
       code: `import { Kbd } from '@heliannuuthus/ui'
 
-<Kbd keys={['⌘', 'K']} />`,
+<Kbd>Enter</Kbd>
+<Kbd keys={['⌘', 'K']} />
+<Kbd keys={['Ctrl', 'Alt', 'Delete']} separator="·" />`,
     },
   ],
   api: [
@@ -1190,58 +1270,73 @@ const separatorDocumentation: ComponentDocumentation = {
   ],
   examples: [
     {
-      title: docsCopy('水平分隔'),
-      description: docsCopy('水平线分隔上下排列的章节、列表分组或信息层级。'),
-      preview: (
-        <div className="separator-horizontal-demo">
-          <section>
-            <span>{docsCopy('项目空间')}</span>
-            <strong>Heliannuuthus UI</strong>
-            <p>{docsCopy('一套用于构建清晰、稳定界面的基础组件。')}</p>
-          </section>
-          <Separator />
-          <section>
-            <span>{docsCopy('最近更新')}</span>
-            <strong>{docsCopy('组件文档与交互示例')}</strong>
-            <p>{docsCopy('今天 14:30 · 由 Heliannuuthus 更新')}</p>
-          </section>
-        </div>
+      title: docsCopy('分隔方向'),
+      description: docsCopy(
+        '在同一案例中切换水平与垂直方向：水平线组织上下章节，垂直线分隔同一行内的元信息。'
       ),
+      caseLayout: 'segmented',
+      caseAxes: [
+        {
+          name: 'orientation',
+          label: docsCopy('方向'),
+          defaultValue: 'horizontal',
+          property: 'Separator.orientation',
+          options: [
+            { label: docsCopy('水平'), value: 'horizontal' },
+            { label: docsCopy('垂直'), value: 'vertical' },
+          ],
+        },
+      ],
+      preview: (values) =>
+        values.orientation === 'vertical' ? (
+          <div className="separator-vertical-demo">
+            <div className="separator-vertical-item">
+              <span>{docsCopy('状态')}</span>
+              <strong>{docsCopy('设计中')}</strong>
+            </div>
+            <Separator orientation="vertical" />
+            <div className="separator-vertical-item">
+              <span>{docsCopy('负责人')}</span>
+              <strong>Heliannuuthus</strong>
+            </div>
+            <Separator orientation="vertical" />
+            <div className="separator-vertical-item">
+              <span>{docsCopy('更新时间')}</span>
+              <strong>{docsCopy('刚刚')}</strong>
+            </div>
+          </div>
+        ) : (
+          <div className="separator-horizontal-demo">
+            <section>
+              <span>{docsCopy('项目空间')}</span>
+              <strong>Heliannuuthus UI</strong>
+              <p>{docsCopy('一套用于构建清晰、稳定界面的基础组件。')}</p>
+            </section>
+            <Separator />
+            <section>
+              <span>{docsCopy('最近更新')}</span>
+              <strong>{docsCopy('组件文档与交互示例')}</strong>
+              <p>{docsCopy('今天 14:30 · 由 Heliannuuthus 更新')}</p>
+            </section>
+          </div>
+        ),
       code: docsCopy(`import { Separator } from '@heliannuuthus/ui'
 
-<section>上方内容</section>
-<Separator />
-<section>下方内容</section>`),
-      previewHeight: 360,
-    },
-    {
-      title: docsCopy('垂直分隔'),
-      description: docsCopy('垂直线分隔同一行内并列的操作、状态或元信息。'),
-      preview: (
-        <div className="separator-vertical-demo">
-          <div className="separator-vertical-item">
-            <span>{docsCopy('状态')}</span>
-            <strong>{docsCopy('设计中')}</strong>
-          </div>
-          <Separator orientation="vertical" />
-          <div className="separator-vertical-item">
-            <span>{docsCopy('负责人')}</span>
-            <strong>Heliannuuthus</strong>
-          </div>
-          <Separator orientation="vertical" />
-          <div className="separator-vertical-item">
-            <span>{docsCopy('更新时间')}</span>
-            <strong>{docsCopy('刚刚')}</strong>
-          </div>
-        </div>
-      ),
-      code: docsCopy(`import { Separator } from '@heliannuuthus/ui'
-
-<div className="flex items-stretch gap-4">
-  <div>状态</div>
-  <Separator orientation="vertical" />
-  <div>负责人</div>
-</div>`),
+export const SectionSeparator = ({ orientation = 'horizontal' }) => {
+  return orientation === 'vertical' ? (
+    <div className="flex items-stretch gap-4">
+      <div>状态</div>
+      <Separator orientation="vertical" />
+      <div>负责人</div>
+    </div>
+  ) : (
+    <>
+      <section>上方内容</section>
+      <Separator />
+      <section>下方内容</section>
+    </>
+  )
+}`),
       previewHeight: 360,
     },
     {
@@ -1333,7 +1428,7 @@ const masonryDocumentation: ComponentDocumentation = {
 const items = cards.map((card) => ({
   key: card.id,
   content: <Card {...card} />,
-})) satisfies readonly MasonryItem[]
+})) satisfies readonly MasonryItem[];
 
 <Masonry
   columns={3}
@@ -1547,7 +1642,26 @@ export const StackGapExample = () => {
       description: docsCopy(
         'Compact 不只组合按钮，也可以拼接 Input、Select、Slider 与操作控件。'
       ),
-      preview: <StackCompactVariantsDemo />,
+      caseLayout: 'segmented',
+      caseAxes: [
+        {
+          name: 'orientation',
+          label: docsCopy('方向'),
+          defaultValue: 'horizontal',
+          property: 'Stack.Compact.orientation',
+          options: [
+            { label: docsCopy('水平'), value: 'horizontal' },
+            { label: docsCopy('垂直'), value: 'vertical' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <StackCompactVariantsDemo
+          orientation={
+            values.orientation === 'vertical' ? 'vertical' : 'horizontal'
+          }
+        />
+      ),
       code: docsCopy(`import { useState } from 'react'
 import { Input } from '@heliannuuthus/ui'
 import { Slider } from '@heliannuuthus/ui'
@@ -1604,6 +1718,26 @@ export const SliderCompactExample = () => {
 </Stack>`,
       previewHeight: 820,
       wide: true,
+    },
+    {
+      title: docsCopy('元素分隔'),
+      description: docsCopy(
+        'separator 在相邻元素之间插入一致的视觉分隔，不需要为每个子元素重复编写。'
+      ),
+      preview: (
+        <Stack orientation="horizontal" separator={<span aria-hidden>·</span>}>
+          <span>{docsCopy('概览')}</span>
+          <span>{docsCopy('活动')}</span>
+          <span>{docsCopy('设置')}</span>
+        </Stack>
+      ),
+      code: docsCopy(`import { Stack } from '@heliannuuthus/ui'
+
+<Stack orientation="horizontal" separator={<span aria-hidden>·</span>}>
+  <span>概览</span>
+  <span>活动</span>
+  <span>设置</span>
+</Stack>`),
     },
   ],
   parts: [
@@ -1769,47 +1903,65 @@ const cardDocumentation: ComponentDocumentation = {
   ],
   examples: [
     {
-      title: docsCopy('基础卡片'),
-      description: docsCopy('只提供标题和内容，即可快速组织一组相关信息。'),
-      previewHeight: 340,
-      preview: <CardBasicDemo />,
-      code: docsCopy(`import { Card } from '@heliannuuthus/ui'
-
-export const UpdateCard = () => {
-  return (
-    <Card title="设计系统更新">
-      <p>本周补充了组件示例与无障碍说明。</p>
-    </Card>
-  )
-}`),
-    },
-    {
-      title: docsCopy('Header、Content 与 Footer'),
+      title: docsCopy('结构与外观'),
       description: docsCopy(
-        'Header 负责标题与辅助操作，Content 承载主体，Footer 放置与整张卡片相关的操作。'
+        '在同一案例中切换基础或完整结构，并分别验证阴影、描边与透明外观。'
       ),
       wide: true,
       previewHeight: 520,
-      preview: <CardAnatomyDemo />,
-      code: docsCopy(`import { Card } from '@heliannuuthus/ui'
+      caseLayout: 'segmented',
+      caseAxes: [
+        {
+          name: 'structure',
+          label: docsCopy('结构'),
+          defaultValue: 'basic',
+          property: false,
+          options: [
+            { label: docsCopy('基础'), value: 'basic' },
+            { label: docsCopy('完整'), value: 'complete' },
+          ],
+        },
+        {
+          name: 'variant',
+          label: docsCopy('外观'),
+          defaultValue: 'elevated',
+          options: [
+            { label: docsCopy('阴影'), value: 'elevated' },
+            { label: docsCopy('描边'), value: 'outline' },
+            { label: docsCopy('透明'), value: 'ghost' },
+          ],
+        },
+      ],
+      preview: (values) => {
+        const variant =
+          values.variant === 'outline' || values.variant === 'ghost'
+            ? values.variant
+            : 'elevated';
 
-export const WorkspaceCard = () => {
+        return values.structure === 'complete' ? (
+          <CardAnatomyDemo variant={variant} />
+        ) : (
+          <CardBasicDemo variant={variant} />
+        );
+      },
+      code: docsCopy(`import { Card, type CardProps } from '@heliannuuthus/ui'
+
+export const UpdateCard = ({
+  detailed = false,
+  variant = 'elevated',
+}: {
+  detailed?: boolean
+  variant?: CardProps['variant']
+}) => {
   return (
     <Card
-      title="工作区资料"
-      description="修改成员看到的工作区名称。"
-      action={<button>更多操作</button>}
-      footer={
-        <>
-          <span>上次保存于 10:24</span>
-          <button>保存修改</button>
-        </>
-      }
+      title="设计系统更新"
+      description={detailed ? '修改成员看到的工作区名称。' : undefined}
+      action={detailed ? <button>更多操作</button> : undefined}
+      footer={detailed ? <button>保存修改</button> : undefined}
+      variant={variant}
     >
-      <label>
-        工作区名称
-        <input defaultValue="Heliannuuthus UI" />
-      </label>
+      <p>{detailed ? '工作区名称：Heliannuuthus UI' : '本周补充了组件示例。'}</p>
     </Card>
   )
 }`),
@@ -1817,7 +1969,7 @@ export const WorkspaceCard = () => {
   ],
   semanticDom: {
     description: docsCopy(
-      '悬停、聚焦或点击右侧属性行，查看 className 与 CardClassNames 各字段对应的真实区域。'
+      '悬停、聚焦或点击右侧属性行，查看根节点 className/style 与 CardClassNames/CardStyles 各字段对应的真实区域。'
     ),
     preview: <CardSemanticDomDemo />,
   },
@@ -3079,37 +3231,43 @@ const layoutDocumentation: ComponentDocumentation = {
 </Layout>`,
     },
     {
-      title: docsCopy('左侧导航'),
+      title: docsCopy('侧边区域'),
       description: docsCopy(
-        'Sidebar 与一个嵌套 Layout 横向排列；嵌套区域继续负责 Header 和 Content 的纵向关系。'
+        '通过 side 和布局顺序在同一案例中切换起始侧导航与结束侧详情。'
       ),
       previewHeight: 370,
-      preview: <LayoutLeftSidebarDemo />,
+      caseLayout: 'segmented',
+      caseAxes: [
+        {
+          name: 'side',
+          label: docsCopy('位置'),
+          defaultValue: 'start',
+          property: 'Layout.Sidebar.side',
+          options: [
+            { label: docsCopy('起始侧'), value: 'start' },
+            { label: docsCopy('结束侧'), value: 'end' },
+          ],
+        },
+      ],
+      preview: (values) =>
+        values.side === 'end' ? (
+          <LayoutRightSidebarDemo />
+        ) : (
+          <LayoutLeftSidebarDemo />
+        ),
       code: `import { Layout } from '@heliannuuthus/ui'
 
-<Layout>
-  <Layout.Sidebar width={240}>Sidebar</Layout.Sidebar>
+export const SidebarLayout = ({ side = 'start' }) => (
   <Layout>
-    <Layout.Header>Header</Layout.Header>
+    {side === 'start' ? (
+      <Layout.Sidebar side="start" width={240}>Navigation</Layout.Sidebar>
+    ) : null}
     <Layout.Content>Content</Layout.Content>
+    {side === 'end' ? (
+      <Layout.Sidebar side="end" width="18rem">Details</Layout.Sidebar>
+    ) : null}
   </Layout>
-</Layout>`,
-    },
-    {
-      title: docsCopy('右侧详情'),
-      description: docsCopy(
-        '将 Sidebar 放在内容之后即可形成右侧辅助区，适合目录、属性和上下文详情。'
-      ),
-      previewHeight: 370,
-      preview: <LayoutRightSidebarDemo />,
-      code: `import { Layout } from '@heliannuuthus/ui'
-
-<Layout>
-  <Layout>
-    <Layout.Content>Content</Layout.Content>
-  </Layout>
-  <Layout.Sidebar width="18rem">Details</Layout.Sidebar>
-</Layout>`,
+)`,
     },
     {
       title: docsCopy('完整应用框架'),
@@ -3128,6 +3286,73 @@ const layoutDocumentation: ComponentDocumentation = {
   </Layout>
   <Layout.Footer>Footer</Layout.Footer>
 </Layout>`,
+    },
+    {
+      title: docsCopy('响应式折叠'),
+      description: docsCopy(
+        'Sidebar 在 lg 以下自动折叠，也可以通过内置触发器手动切换；collapsedWidth 决定折叠后保留的宽度。'
+      ),
+      previewHeight: 370,
+      caseLayout: 'segmented',
+      caseAxes: [
+        {
+          name: 'defaultCollapsed',
+          label: docsCopy('初始状态'),
+          defaultValue: 'false',
+          property: 'Layout.Sidebar.defaultCollapsed',
+          options: [
+            { label: docsCopy('展开'), value: 'false' },
+            { label: docsCopy('收起'), value: 'true' },
+          ],
+        },
+        {
+          name: 'side',
+          label: docsCopy('位置'),
+          defaultValue: 'start',
+          property: 'Layout.Sidebar.side',
+          options: [
+            { label: docsCopy('起始侧'), value: 'start' },
+            { label: docsCopy('结束侧'), value: 'end' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <LayoutCollapsibleSidebarDemo
+          defaultCollapsed={values.defaultCollapsed === 'true'}
+          side={values.side === 'end' ? 'end' : 'start'}
+        />
+      ),
+      code: docsCopy(`import { Layout } from '@heliannuuthus/ui'
+import { useState } from 'react'
+
+export const ResponsiveLayout = () => {
+  const [status, setStatus] = useState('')
+
+  return (
+    <Layout>
+      <Layout.Sidebar
+        breakpoint="lg"
+        collapsible
+        collapsedWidth={64}
+        defaultCollapsed={false}
+        side="start"
+        triggerLabels={{
+          collapse: '收起侧边栏',
+          expand: '展开侧边栏',
+        }}
+        onBreakpointChange={(below) => setStatus(below ? '窄屏' : '宽屏')}
+        onCollapsedChange={(collapsed, reason) =>
+          setStatus(
+            (collapsed ? '已收起' : '已展开') + '：' + reason
+          )
+        }
+      >
+        Navigation
+      </Layout.Sidebar>
+      <Layout.Content>{status}</Layout.Content>
+    </Layout>
+  )
+}`),
     },
   ],
   parts: [
@@ -3155,6 +3380,78 @@ const layoutDocumentation: ComponentDocumentation = {
     },
   ],
   api: [
+    {
+      component: 'Layout.Sidebar',
+      name: 'breakpoint',
+      description: docsCopy(
+        '低于指定视口断点时自动折叠；使用与 Tailwind 默认断点一致的 token。'
+      ),
+      type: "'sm' | 'md' | 'lg' | 'xl' | '2xl'",
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'collapsed',
+      description: docsCopy('受控的折叠状态。'),
+      type: 'boolean',
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'collapsedWidth',
+      description: docsCopy(
+        '折叠后的侧边栏宽度；数字按像素处理，设置为 0 时隐藏内容。'
+      ),
+      type: 'number | string',
+      defaultValue: '80',
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'collapsible',
+      description: docsCopy(
+        '启用内置折叠触发器；传入 ReactNode 可以替换默认图标。'
+      ),
+      type: 'boolean | ReactNode',
+      defaultValue: 'false',
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'defaultCollapsed',
+      description: docsCopy('非受控模式下的初始折叠状态。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'onBreakpointChange',
+      description: docsCopy('进入或离开 breakpoint 范围时调用。'),
+      type: '(below: boolean) => void',
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'onCollapsedChange',
+      description: docsCopy(
+        '折叠状态请求变化时调用，并说明变化来自断点还是触发器。'
+      ),
+      type: "(collapsed: boolean, reason: 'breakpoint' | 'trigger') => void",
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'side',
+      description: docsCopy(
+        '声明侧边栏位于逻辑起始侧或结束侧，用于调整内置触发器的位置与图标。'
+      ),
+      type: "'start' | 'end'",
+      defaultValue: "'start'",
+    },
+    {
+      component: 'Layout.Sidebar',
+      name: 'triggerLabels',
+      description: docsCopy(
+        '设置内置折叠触发器在展开和折叠状态下的可访问名称。'
+      ),
+      type: '{ collapse: string; expand: string }',
+      defaultValue:
+        "{ collapse: 'Collapse sidebar', expand: 'Expand sidebar' }",
+    },
     {
       component: 'Layout.Sidebar',
       name: 'width',
@@ -3187,7 +3484,7 @@ const layoutDocumentation: ComponentDocumentation = {
       '不要把所有区域平铺在同一个 Layout；跨整页的 Header 和 Footer 应包住中间的嵌套 Layout。'
     ),
     docsCopy(
-      'Sidebar 只负责结构和宽度；需要折叠、抽屉或菜单状态时组合专用组件。'
+      '文字导航在窄屏下通常不适合压成图标栏；将 collapsedWidth 设置为 0，并组合 Drawer 提供完整导航。'
     ),
   ],
 };
@@ -3195,6 +3492,7 @@ const layoutDocumentation: ComponentDocumentation = {
 export const componentDocumentation: Record<string, ComponentDocumentation> = {
   button: buttonDocumentation,
   typography: typographyDocumentation,
+  tag: tagDocumentation,
   badge: badgeDocumentation,
   kbd: kbdDocumentation,
   masonry: masonryDocumentation,
@@ -3887,24 +4185,23 @@ componentDocumentation.avatar.examples = [
     code: `<Avatar.Group
   items={members}
   max={3}
-  renderCount={(count) => <Badge>+{count}</Badge>}
+  renderCount={(count) => <Tag>+{count}</Tag>}
   shape="square"
   size="lg"
 />`,
     previewHeight: 'auto',
   },
   {
-    title: docsCopy('与 Badge 组合'),
+    title: docsCopy('与 Tag 和 Badge 组合'),
     description: docsCopy(
-      '通过 badge 放置在线点、认证图标或 Badge 节点，状态始终锚定在头像右下角。'
+      'badge 插槽可放置 Tag 状态标签或 Badge 通知标记，并始终锚定在头像右下角。'
     ),
     preview: <AvatarBadgeDemo />,
-    code: docsCopy(`import { Avatar } from '@heliannuuthus/ui'
-import { Badge } from '@heliannuuthus/ui'
+    code: docsCopy(`import { Avatar, Badge } from '@heliannuuthus/ui'
 
 <Avatar
   alt="陈序"
-  badge={<Badge variant="destructive">8</Badge>}
+  badge={<Badge indicator={8} indicatorLabel="8 条未读消息" />}
   fallback="陈"
   size="lg"
 />`),
@@ -5817,7 +6114,7 @@ if (!request.pending && records.length === 0) {
         '用 Item.Group 组织同类动态，并通过分隔线维持连续列表的阅读节奏。'
       ),
       preview: <ItemActivityDemo />,
-      code: docsCopy(`import { Badge, Item } from '@heliannuuthus/ui'
+      code: docsCopy(`import { Tag, Item } from '@heliannuuthus/ui'
 
 <Item.Group
   separator
@@ -5827,7 +6124,7 @@ if (!request.pending && records.length === 0) {
       mediaType: 'icon',
       title: '林默回复了检查项',
       description: '确认索引变更不会锁表。',
-      actions: <Badge>2 分钟前</Badge>,
+      actions: <Tag>2 分钟前</Tag>,
     },
   ]}
 />`),
@@ -5839,14 +6136,14 @@ if (!request.pending && records.length === 0) {
         '头像、身份说明和成员状态保持同一行对齐，描边外观明确每个成员的点击区域。'
       ),
       preview: <ItemMemberDirectoryDemo />,
-      code: docsCopy(`import { Avatar, Badge, Item } from '@heliannuuthus/ui'
+      code: docsCopy(`import { Avatar, Tag, Item } from '@heliannuuthus/ui'
 
 <Item
   variant="outline"
   media={<Avatar alt="林默" fallback="林" />}
   title="林默"
   description="平台工程 · 发布管理员"
-  actions={<Badge variant="secondary">在线</Badge>}
+  actions={<Tag type="success">在线</Tag>}
 />`),
       previewHeight: 340,
     },
@@ -5874,12 +6171,12 @@ if (!request.pending && records.length === 0) {
         '使用 href 把整个资源项变成原生链接；header 和 footer 承载辅助元数据。'
       ),
       preview: <ItemResourceDemo />,
-      code: docsCopy(`import { Badge, Item } from '@heliannuuthus/ui'
+      code: docsCopy(`import { Tag, Item } from '@heliannuuthus/ui'
 
 <Item
   href="/release-notes/v0.12.0"
   variant="outline"
-  header={<Badge>发布说明</Badge>}
+  header={<Tag>发布说明</Tag>}
   media={<FileText />}
   mediaType="icon"
   title="v0.12.0-release-notes.md"
@@ -6037,7 +6334,7 @@ if (!request.pending && records.length === 0) {
       code: `<Item.Group
   items={items}
   renderItem={(item, index) => (
-    <Item {...item} actions={<Badge>0{index + 1}</Badge>} />
+    <Item {...item} actions={<Tag>0{index + 1}</Tag>} />
   )}
 />`,
       previewHeight: 'auto',
@@ -6934,7 +7231,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       name: 'badge',
       description: docsCopy(
-        '在头像右下角放置在线点、认证图标或 Badge 等状态节点。'
+        '在头像右下角放置在线点、认证图标或 Tag 等状态节点。'
       ),
       type: 'ReactNode',
     },
@@ -7308,12 +7605,6 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     },
     {
       component: 'Table.ClassNames',
-      name: 'root',
-      description: docsCopy('扩展数据表最外层根区域的类名。'),
-      type: 'string',
-    },
-    {
-      component: 'Table.ClassNames',
       name: 'toolbar',
       description: docsCopy('扩展搜索等表格级操作区域的类名。'),
       type: 'string',
@@ -7359,12 +7650,6 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
       name: 'pagination',
       description: docsCopy('扩展分页摘要与翻页控件容器的类名。'),
       type: 'string',
-    },
-    {
-      component: 'Table.Styles',
-      name: 'root',
-      description: docsCopy('设置数据表最外层根区域的行内样式。'),
-      type: 'CSSProperties',
     },
     {
       component: 'Table.Styles',
@@ -7496,7 +7781,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       name: 'classNames',
       description: docsCopy(
-        '按 root、toolbar、container、table、header、body、footer、state 与 pagination 定制语义区域。'
+        '按 toolbar、container、table、header、body、footer、state 与 pagination 定制内部语义区域。'
       ),
       type: 'Table.ClassNames',
     },
@@ -7661,13 +7946,13 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       component: 'Table.Primitive',
       name: 'classNames',
-      description: docsCopy('分别扩展滚动容器与原生 table 节点的类名。'),
+      description: docsCopy('扩展原生 table 节点的类名。'),
       type: 'Table.PrimitiveClassNames',
     },
     {
       component: 'Table.Primitive',
       name: 'styles',
-      description: docsCopy('分别设置滚动容器与原生 table 节点的行内样式。'),
+      description: docsCopy('设置原生 table 节点的行内样式。'),
       type: 'Table.PrimitiveStyles',
     },
     {
@@ -7678,21 +7963,9 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     },
     {
       component: 'Table.PrimitiveClassNames',
-      name: 'container',
-      description: docsCopy('扩展 Table.Primitive 滚动容器的类名。'),
-      type: 'string',
-    },
-    {
-      component: 'Table.PrimitiveClassNames',
       name: 'table',
       description: docsCopy('扩展 Table.Primitive 原生 table 节点的类名。'),
       type: 'string',
-    },
-    {
-      component: 'Table.PrimitiveStyles',
-      name: 'container',
-      description: docsCopy('设置 Table.Primitive 滚动容器的行内样式。'),
-      type: 'CSSProperties',
     },
     {
       component: 'Table.PrimitiveStyles',
@@ -8661,9 +8934,7 @@ const dataEntryApi: Record<string, ApiProperty[]> = {
     {
       component: 'Input',
       name: 'classNames',
-      description: docsCopy(
-        '分别扩展根容器、输入控件、前后缀及块级附加区域的样式。'
-      ),
+      description: docsCopy('分别扩展输入控件、前后缀及块级附加区域的类名。'),
       type: 'InputClassNames',
     },
     {
@@ -11426,7 +11697,16 @@ const semanticStyleContracts = {
     slots: ['content'],
   },
   badge: { componentName: 'Badge', slots: ['indicator'] },
+  card: {
+    componentName: 'Card',
+    slots: ['action', 'content', 'description', 'footer', 'header', 'title'],
+  },
   carousel: { componentName: 'Carousel', slots: ['content', 'item'] },
+  checkbox: {
+    apiComponent: 'Checkbox',
+    componentName: 'Checkbox',
+    slots: ['control', 'label'],
+  },
   collapsible: {
     componentName: 'Collapsible',
     slots: ['content', 'header'],
@@ -11440,7 +11720,46 @@ const semanticStyleContracts = {
   dialog: { componentName: 'Dialog', slots: ['content'] },
   drawer: { componentName: 'Drawer', slots: ['content'] },
   'dropdown-menu': { componentName: 'DropdownMenu', slots: ['content'] },
+  input: {
+    apiComponent: 'Input',
+    componentName: 'Input',
+    slots: ['addonAfter', 'addonBefore', 'input', 'prefix', 'suffix'],
+  },
+  'input-number': {
+    componentName: 'InputNumber',
+    slots: [
+      'controls',
+      'decrement',
+      'group',
+      'increment',
+      'input',
+      'prefix',
+      'suffix',
+    ],
+  },
+  item: {
+    componentName: 'Item',
+    slots: [
+      'actions',
+      'content',
+      'description',
+      'footer',
+      'header',
+      'media',
+      'title',
+    ],
+  },
+  marker: { componentName: 'Marker', slots: ['content', 'icon'] },
   popover: { componentName: 'Popover', slots: ['content'] },
+  radio: {
+    apiComponent: 'Radio',
+    componentName: 'Radio',
+    slots: ['control', 'label'],
+  },
+  resizable: {
+    componentName: 'Resizable',
+    slots: ['panel', 'separator'],
+  },
   select: { componentName: 'Select', slots: ['trigger'] },
   tabs: {
     componentName: 'Tabs',
@@ -11453,14 +11772,29 @@ for (const [slug, contract] of Object.entries(semanticStyleContracts)) {
   const documentation = componentDocumentation[slug];
   const classNamesType = `${contract.componentName}ClassNames`;
   const stylesType = `${contract.componentName}Styles`;
+  const apiComponent =
+    'apiComponent' in contract ? contract.apiComponent : undefined;
+
+  documentation.api = documentation.api.filter(
+    (property) =>
+      !(
+        (property.name === 'classNames' || property.name === 'styles') &&
+        property.component === apiComponent
+      )
+  );
+  documentation.typePreviews = (documentation.typePreviews ?? []).filter(
+    (preview) => preview.name !== classNamesType && preview.name !== stylesType
+  );
 
   documentation.api.push(
     {
+      component: apiComponent,
       name: 'classNames',
       description: docsCopy('扩展对应语义槽位的 className。'),
       type: classNamesType,
     },
     {
+      component: apiComponent,
       name: 'styles',
       description: docsCopy('按与 classNames 相同的语义区域设置行内样式。'),
       type: stylesType,
@@ -11826,9 +12160,6 @@ appendMissingApi('masonry', [
 appendMissingApi('stack', [
   publicProperty('children', 'ReactNode'),
   publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">'),
-  ...['align', 'gap', 'justify', 'wrap'].map((name) =>
-    publicProperty(name, 'StackProps', { component: 'Stack.Compact' })
-  ),
   publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
     component: 'Stack.Compact',
   }),
@@ -11905,9 +12236,6 @@ appendMissingApi('collapsible', [
   publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
 ]);
 appendMissingApi('button', [
-  ...['align', 'gap', 'justify', 'wrap'].map((name) =>
-    publicProperty(name, 'StackCompactProps', { component: 'Button.Group' })
-  ),
   publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
     component: 'Button.Group',
   }),
@@ -11950,6 +12278,71 @@ appendMissingApi('table', [
     component: 'Table.Cell',
   }),
 ]);
+
+const prunedPrimitiveApi: Readonly<Record<string, readonly string[]>> = {
+  'alert-dialog': ['onOpenChangeComplete'],
+  'context-menu': [
+    'highlightItemOnHover',
+    'loopFocus',
+    'onOpenChangeComplete',
+    'orientation',
+  ],
+  'dropdown-menu': [
+    'highlightItemOnHover',
+    'loopFocus',
+    'modal',
+    'onOpenChangeComplete',
+    'orientation',
+  ],
+  'navigation-menu': ['onOpenChangeComplete'],
+  collapsible: ['onOpenChangeComplete'],
+  counter: [
+    'borderRadius',
+    'gradientHeight',
+    'horizontalPadding',
+    'padding',
+    'textColor',
+  ],
+  dialog: ['contentProps', 'disablePointerDismissal', 'onOpenChangeComplete'],
+  drawer: [
+    'contentProps',
+    'disablePointerDismissal',
+    'modal',
+    'onOpenChangeComplete',
+  ],
+  form: ['Form.Field.shouldUnregister'],
+  menubar: ['loopFocus', 'modal', 'orientation'],
+  popover: ['modal', 'onOpenChangeComplete'],
+  select: [
+    'autoHighlight',
+    'highlightItemOnHover',
+    'limit',
+    'loopFocus',
+    'modal',
+    'onOpenChangeComplete',
+    'openOnInputClick',
+  ],
+  toggle: ['Toggle.Group.loopFocus'],
+  tooltip: [
+    'contentProps',
+    'disableHoverablePopup',
+    'onOpenChangeComplete',
+    'trackCursorAxis',
+  ],
+};
+
+for (const [slug, names] of Object.entries(prunedPrimitiveApi)) {
+  const prunedNames = new Set(names);
+  componentDocumentation[slug].api = componentDocumentation[slug].api.filter(
+    (property) =>
+      !prunedNames.has(
+        property.component
+          ? `${property.component}.${property.name}`
+          : property.name
+      )
+  );
+}
+
 componentDocumentation.layout.api = componentDocumentation.layout.api.filter(
   (property) => property.component !== docsCopy('全部组成组件')
 );
@@ -12027,7 +12420,7 @@ customTableDocumentation.typeDefinitionGroups = [
 ];
 customTableDocumentation.semanticDom = {
   description: docsCopy(
-    '悬停、聚焦或点击右侧属性行，查看 classNames 与 styles 各字段对应的真实数据表区域。'
+    '悬停、聚焦或点击右侧属性行，查看根节点 className/style 与内部 classNames/styles 各字段对应的真实数据表区域。'
   ),
   preview: <TableSemanticDomDemo />,
 };
@@ -12141,6 +12534,237 @@ for (const documentation of Object.values(componentDocumentation)) {
   }
 }
 
+const caseCoverageSnippets: Readonly<Record<string, string>> = {
+  resizable: `<Resizable
+  items={items}
+  separator={({ itemKey, nextItemKey, orientation }) => (
+    <span>{itemKey} · {nextItemKey} · {orientation}</span>
+  )}
+/>`,
+  'dropdown-menu': `<DropdownMenu defaultOpen={false} disabled items={items} side="right" trigger={trigger} />
+<DropdownMenu open={open} onOpenChange={setOpen} items={items} trigger={trigger} />`,
+  menubar: `<Menubar disabled items={items} />`,
+  'navigation-menu': `<NavigationMenu
+  items={items}
+  orientation="vertical"
+  value={value}
+  onChange={setValue}
+  delay={100}
+  closeDelay={200}
+/>
+<NavigationMenu defaultValue="docs" items={items} />`,
+  tabs: `<Tabs value={value} onChange={setValue} items={items} orientation="vertical" />`,
+  'scroll-area': `<ScrollArea orientation="both" className="h-80 w-80">{content}</ScrollArea>`,
+  checkbox: `<Checkbox
+  checked={checked}
+  onChange={setChecked}
+  variant="card"
+  uncheckedValue="off"
+  classNames={{ control: 'border-primary' }}
+  styles={{ label: { fontWeight: 600 } }}
+>
+  Release notifications
+</Checkbox>
+<Checkbox parent checked={allChecked} onChange={setAllChecked}>All permissions</Checkbox>
+<Checkbox.Group allValues={allValues} disabled options={options} />`,
+  'date-picker': `<DatePicker defaultValue={new Date()} disabled />
+<DatePicker calendarProps={{ fixedWeeks: true }} />`,
+  form: `<Form form={form} onInvalid={handleInvalid} onSubmit={handleSubmit}>
+  <Form.Field name="team" defaultValue="platform" disabled>
+    <Input />
+  </Form.Field>
+</Form>`,
+  input: `<Input
+  addonBefore="https://"
+  addonAfter=".com"
+  classNames={{ input: 'font-mono' }}
+  styles={{ prefix: { color: 'var(--muted-foreground)' } }}
+/>
+<Input.OTP defaultValue="123456" maxLength={6} pattern="[0-9]*" />
+<Input.TextArea defaultValue="Release notes" rows={4} />`,
+  'input-number': `<Input.Number
+  defaultValue={10}
+  onChangeComplete={setCommittedValue}
+  largeStep={25}
+  prefix="¥"
+  placeholder="Amount"
+  allowWheelScrub
+  snapOnStep
+  classNames={{ input: 'tabular-nums' }}
+  styles={{ controls: { opacity: 0.9 } }}
+/>`,
+  radio: `<Radio
+  value="daily"
+  disabled
+  classNames={{ control: 'border-primary' }}
+  styles={{ label: { fontWeight: 600 } }}
+>
+  Daily
+</Radio>
+<Radio.Group defaultValue="daily" disabled gap={16} options={options} />`,
+  select: `<Select
+  searchValue={query}
+  onSearch={setQuery}
+  multiple
+  disabled={loading}
+  locale="en-US"
+  options={options}
+/>
+<Select defaultOpen defaultSearchValue="platform" options={options} />`,
+  slider: `<Slider
+  defaultValue={[20, 80]}
+  disabled={loading}
+  format={{ style: 'percent' }}
+  locale="en-US"
+  largeStep={10}
+  minStepsBetweenValues={2}
+  thumbCollisionBehavior="push"
+  onChangeComplete={setCommittedValue}
+/>`,
+  switch: `<Switch value="enabled" uncheckedValue="disabled">Notifications</Switch>`,
+  toggle: `<Toggle.Group disabled orientation="vertical" items={items} />`,
+  chart: `<Chart.Tooltip
+  content={(
+    <Chart.TooltipContent
+      hideLabel
+      hideIndicator
+      nameKey="name"
+      labelKey="label"
+    />
+  )}
+/>
+<Chart.Legend content={<Chart.LegendContent hideIcon nameKey="name" />} />
+<Chart.Style id="deployment-chart" config={config} />`,
+  counter: `<Counter
+  value={1280}
+  gap={2}
+  prefix="¥"
+  springOptions={{ damping: 24, stiffness: 180 }}
+  classNames={{ digit: 'tabular-nums' }}
+  styles={{ visual: { minWidth: 12 } }}
+/>`,
+  table: `<Table
+  columns={columns}
+  data={rows}
+  showHeader={false}
+  rowProps={(row) => ({ 'data-row-id': row.id })}
+/>
+<Table.Primitive>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head fixedOffset={48}>Name</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell fixedOffset={48}>Atlas</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table.Primitive>`,
+  tooltip: `<Tooltip
+  content="Keyboard shortcut"
+  sideOffset={8}
+  alignOffset={4}
+  disabled={disabled}
+  open={open}
+  onOpenChange={setOpen}
+  classNames={{ content: 'max-w-64' }}
+  styles={{ content: { textAlign: 'start' } }}
+>
+  <Button>Save</Button>
+</Tooltip>
+<Tooltip defaultOpen content="Pinned hint"><Button>Help</Button></Tooltip>`,
+  'alert-dialog': `<AlertDialog
+  open={open}
+  onOpenChange={setOpen}
+  title="Delete project?"
+  description="This action cannot be undone."
+  classNames={{ content: 'max-w-lg' }}
+  styles={{ content: { minHeight: 240 } }}
+/>
+<AlertDialog defaultOpen={false} title="Archive project?" />`,
+  dialog: `<Dialog
+  open={open}
+  onOpenChange={setOpen}
+  footer={<Button>Save</Button>}
+  showCloseButton
+  classNames={{ content: 'max-w-xl' }}
+  styles={{ content: { minHeight: 320 } }}
+/>
+<Dialog defaultOpen={false} title="Workspace settings" />`,
+  drawer: `<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  snapPoints={[0.25, 0.5, 1]}
+  snapPoint={snapPoint}
+  onSnapPointChange={setSnapPoint}
+  showCloseButton
+  showSwipeHandle
+  snapToSequentialPoints
+  swipeDirection="down"
+  classNames={{ content: 'max-h-screen' }}
+  styles={{ content: { minHeight: 320 } }}
+/>
+<Drawer defaultOpen={false} defaultSnapPoint={0.5} />`,
+  popover: `<Popover
+  open={open}
+  onOpenChange={setOpen}
+  align="start"
+  sideOffset={8}
+  alignOffset={4}
+  classNames={{ content: 'w-80' }}
+  styles={{ content: { padding: 16 } }}
+/>
+<Popover defaultOpen={false} trigger={<Button>Open</Button>} />`,
+  progress: `<Progress
+  value={completed}
+  min={0}
+  max={200}
+  locale="en-US"
+  format={{ style: 'percent' }}
+  getAriaValueText={(value, maximum) => value + ' of ' + maximum}
+/>`,
+  toast: `<Toast.Toaster position="top-right" richColors scope="local" />`,
+  command: `<Command
+  value={query}
+  onChange={setQuery}
+  filter={filterCommand}
+  label="Quick actions"
+  loop
+  vimBindings
+  disablePointerSelection
+  groups={[
+    {
+      heading: 'Workspace',
+      options: [
+        {
+          value: 'open-settings',
+          label: 'Open settings',
+          keywords: ['preferences'],
+          icon: <Settings />,
+          shortcut: '⌘,',
+          disabled: false,
+          onSelect: openSettings,
+        },
+      ],
+    },
+  ]}
+/>
+<Command defaultValue="settings" groups={groups} />`,
+  'context-menu': `<ContextMenu
+  trigger={target}
+  items={items}
+  classNames={{ content: 'min-w-48' }}
+  styles={{ content: { padding: 4 } }}
+/>`,
+};
+
+for (const [slug, snippet] of Object.entries(caseCoverageSnippets)) {
+  const examples = componentDocumentation[slug]?.examples;
+  const example = examples?.[examples.length - 1];
+  if (example) example.code = `${example.code}\n\n${snippet}`;
+}
+
 const accordionSingleExample = componentDocumentation.accordion.examples[0];
 if (accordionSingleExample) {
   accordionSingleExample.title = docsCopy('单项展开');
@@ -12195,35 +12819,8 @@ for (const documentation of Object.values(componentDocumentation)) {
     }
   }
 
-  const coveredApiNames = new Set<string>();
-  for (const example of documentation.examples) {
-    for (const name of example.coveredProperties ?? []) {
-      coveredApiNames.add(resolveApiCaseName(name, apiNames));
-    }
-    for (const axis of example.caseAxes ?? []) {
-      if (axis.property) coveredApiNames.add(axis.property);
-      for (const option of axis.options) {
-        for (const name of Object.keys(option.properties ?? {})) {
-          coveredApiNames.add(resolveApiCaseName(name, apiNames));
-        }
-      }
-    }
-    for (const harnessCase of example.cases ?? []) {
-      for (const name of Object.keys(harnessCase.properties ?? {})) {
-        coveredApiNames.add(resolveApiCaseName(name, apiNames));
-      }
-    }
-  }
-
   const basicExample = documentation.examples[0];
   if (!basicExample) continue;
-
-  const missingApiNames = documentation.api
-    .map(apiCaseName)
-    .filter((name) => !coveredApiNames.has(name));
-  basicExample.coveredProperties = Array.from(
-    new Set([...(basicExample.coveredProperties ?? []), ...missingApiNames])
-  );
   const basicCases = basicExample.cases
     ? basicExample.cases
     : basicExample.caseAxes

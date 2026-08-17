@@ -247,7 +247,6 @@ type PopoverProps = OpenStateProps & {
   content: React.ReactNode;
   delay?: number;
   description?: React.ReactNode;
-  modal?: boolean | 'trap-focus';
   side?: PopupSide;
   sideOffset?: number;
   styles?: PopoverStyles;
