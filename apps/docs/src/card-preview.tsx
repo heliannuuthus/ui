@@ -1,6 +1,6 @@
 import { docsCopy } from './i18n/content';
 import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
-import { Card } from '@heliannuuthus/ui';
+import { Card, type CardProps } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
 import { DemoLabel } from './demo-label';
@@ -46,9 +46,17 @@ const cardSemanticRegions = [
 
 type CardSemanticSlot = (typeof cardSemanticRegions)[number]['slot'];
 
-export const CardBasicDemo = () => {
+export const CardBasicDemo = ({
+  variant = 'elevated',
+}: {
+  variant?: CardProps['variant'];
+}) => {
   return (
-    <Card className="card-basic-demo" title={docsCopy('设计系统更新')}>
+    <Card
+      className="card-basic-demo"
+      title={docsCopy('设计系统更新')}
+      variant={variant}
+    >
       <p>
         {docsCopy('本周补充了组件示例与无障碍说明，方便团队快速查阅和复用。')}
       </p>

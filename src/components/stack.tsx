@@ -21,7 +21,7 @@ type StackProps = Omit<React.ComponentProps<'div'>, 'children'> & {
 
 type StackCompactProps = Omit<
   StackProps,
-  'align' | 'gap' | 'separator' | 'wrap'
+  'align' | 'gap' | 'justify' | 'separator' | 'wrap'
 >;
 
 const alignments: Record<StackAlign, string> = {

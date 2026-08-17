@@ -4,7 +4,7 @@ import { XIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
 import { Button } from './button';
-import type { DataAttributes, OpenStateProps } from './internal/public-types';
+import type { OpenStateProps } from './internal/public-types';
 
 type DialogClassNames = {
   content?: string;
@@ -19,12 +19,6 @@ type DialogProps = OpenStateProps & {
   children?: React.ReactNode;
   confirmText?: React.ReactNode;
   classNames?: DialogClassNames;
-  contentProps?: Omit<
-    React.HTMLAttributes<HTMLDivElement>,
-    'children' | 'className' | 'style'
-  > &
-    DataAttributes;
-  disablePointerDismissal?: boolean;
   description?: React.ReactNode;
   footer?: React.ReactNode;
   onConfirm?: () => void;
@@ -39,7 +33,6 @@ const Dialog = ({
   children,
   confirmText,
   classNames,
-  contentProps,
   description,
   footer,
   onConfirm,
@@ -64,7 +57,6 @@ const Dialog = ({
         />
         <DialogPrimitive.Popup
           data-slot="dialog-content"
-          {...contentProps}
           className={cn(
             'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-6 rounded-4xl bg-popover p-6 text-sm text-popover-foreground shadow-xl ring-1 ring-foreground/5 duration-100 outline-none sm:max-w-md dark:ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
             classNames?.content

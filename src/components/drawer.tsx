@@ -5,11 +5,7 @@ import { Drawer as DrawerPrimitive } from '@base-ui/react/drawer';
 
 import { cn } from '../lib/utils';
 import { Button } from './button';
-import type {
-  DataAttributes,
-  OpenStateProps,
-  PortalContainer,
-} from './internal/public-types';
+import type { OpenStateProps, PortalContainer } from './internal/public-types';
 import { XIcon } from 'lucide-react';
 
 type DrawerSide = 'top' | 'right' | 'bottom' | 'left';
@@ -336,16 +332,9 @@ type DrawerProps = OpenStateProps & {
   closeText?: React.ReactNode;
   closeVariant?: React.ComponentProps<typeof Button>['variant'];
   container?: PortalContainer;
-  contentProps?: Omit<
-    React.HTMLAttributes<HTMLDivElement>,
-    'children' | 'className' | 'style'
-  > &
-    DataAttributes;
   defaultSnapPoint?: DrawerSnapPoint | null;
   description?: React.ReactNode;
-  disablePointerDismissal?: boolean;
   footer?: React.ReactNode;
-  modal?: boolean | 'trap-focus';
   onSnapPointChange?: (snapPoint: DrawerSnapPoint | null) => void;
   showCloseButton?: boolean;
   showSwipeHandle?: boolean;
@@ -364,7 +353,6 @@ const Drawer = ({
   classNames,
   closeText,
   closeVariant = 'outline',
-  contentProps,
   description,
   footer,
   showCloseButton,
@@ -377,7 +365,6 @@ const Drawer = ({
     <DrawerRoot {...props}>
       {trigger != null ? <DrawerTrigger render={trigger} /> : null}
       <DrawerContent
-        {...contentProps}
         className={classNames?.content}
         showCloseButton={showCloseButton}
         style={styles?.content}

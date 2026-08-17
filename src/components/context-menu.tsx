@@ -263,10 +263,7 @@ type ContextMenuStyles = {
 type ContextMenuProps = OpenStateProps & {
   classNames?: ContextMenuClassNames;
   disabled?: boolean;
-  highlightItemOnHover?: boolean;
   items: readonly DropdownMenuEntry[];
-  loopFocus?: boolean;
-  orientation?: 'horizontal' | 'vertical';
   styles?: ContextMenuStyles;
   trigger: React.ReactElement;
 };

@@ -143,7 +143,6 @@ type FormFieldProps<
     RegisterOptions<TFieldValues, TName>,
     'disabled' | 'setValueAs' | 'valueAsDate' | 'valueAsNumber'
   >;
-  shouldUnregister?: boolean;
 };
 
 const useForm = <
@@ -233,7 +232,6 @@ const FormField = <
   name,
   required,
   rules,
-  shouldUnregister,
   ...props
 }: FormFieldProps<TFieldValues, TName>) => {
   const reactId = React.useId();
@@ -248,7 +246,6 @@ const FormField = <
     disabled,
     name,
     rules,
-    shouldUnregister,
   });
   const error = fieldState.error?.message;
   const fieldRef = field.ref;

@@ -4856,4 +4856,48 @@ const ActionCell = () => {
     'Text navigation usually should not be compressed into an icon rail on narrow screens; set collapsedWidth to 0 and compose Drawer for complete navigation.',
   "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar\n    breakpoint=\"lg\"\n    collapsible\n    collapsedWidth={64}\n    triggerLabels={{\n      collapse: '收起侧边栏',\n      expand: '展开侧边栏',\n    }}\n  >\n    Navigation\n  </Layout.Sidebar>\n  <Layout.Content>Content</Layout.Content>\n</Layout>":
     "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar\n    breakpoint=\"lg\"\n    collapsible\n    collapsedWidth={64}\n    triggerLabels={{\n      collapse: 'Collapse sidebar',\n      expand: 'Expand sidebar',\n    }}\n  >\n    Navigation\n  </Layout.Sidebar>\n  <Layout.Content>Content</Layout.Content>\n</Layout>",
+  尚未执行操作: 'No action yet',
+  表单已提交: 'Form submitted',
+  草稿已预览: 'Draft previewed',
+  垂直: 'Vertical',
+  宽度: 'Width',
+  内容宽度: 'Content width',
+  填满容器: 'Fill container',
+  继续: 'Continue',
+  表单与点击事件: 'Form and click events',
+  '使用 block 让单个按钮占满父容器的可用宽度。':
+    'Use block to make one button fill the available width of its parent.',
+  '原生 type 保留表单语义；onClick 适合处理不依赖表单提交的即时操作。':
+    'Native type preserves form semantics; use onClick for immediate actions that do not depend on form submission.',
+  外链与下载: 'External links and downloads',
+  '新窗口外链同时声明 target 与 rel；download 用于下载同源资源并可指定文件名。':
+    'External links that open a new window declare both target and rel; download saves a same-origin resource and can specify its filename.',
+  新窗口打开: 'Open in a new window',
+  下载样式文件: 'Download stylesheet',
+  元素分隔: 'Item separators',
+  'separator 在相邻元素之间插入一致的视觉分隔，不需要为每个子元素重复编写。':
+    'separator inserts a consistent visual divider between adjacent items without repeating it on every child.',
+  活动: 'Activity',
+  外观: 'Appearance',
+  阴影: 'Elevated',
+  初始状态: 'Initial state',
+  结束侧: 'End side',
+  等待侧边栏变化: 'Waiting for a sidebar change',
+  已进入窄屏断点: 'Entered the narrow breakpoint',
+  已离开窄屏断点: 'Left the narrow breakpoint',
+  '侧边栏已收起（': 'Sidebar collapsed (',
+  '侧边栏已展开（': 'Sidebar expanded (',
+  'import { Button } from \'@heliannuuthus/ui\'\n\nexport const GroupedButtons = () => {\n  return (\n    <Button.Group aria-label="分页操作" block orientation="vertical">\n      <Button variant="outline">上一项</Button>\n      <Button>下一项</Button>\n    </Button.Group>\n  )\n}':
+    'import { Button } from \'@heliannuuthus/ui\'\n\nexport const GroupedButtons = () => {\n  return (\n    <Button.Group aria-label="Pagination actions" block orientation="vertical">\n      <Button variant="outline">Previous</Button>\n      <Button>Next</Button>\n    </Button.Group>\n  )\n}',
+  '<Button block>继续</Button>': '<Button block>Continue</Button>',
+  'import { useState } from \'react\'\n\nexport const FormActions = () => {\n  const [message, setMessage] = useState(\'尚未执行操作\')\n\n  return (\n    <form onSubmit={(event) => {\n      event.preventDefault()\n      setMessage(\'表单已提交\')\n    }}>\n      <Button type="submit">保存</Button>\n      <Button type="button" variant="outline" onClick={() => setMessage(\'草稿已预览\')}>\n        预览\n      </Button>\n      <output aria-live="polite">{message}</output>\n    </form>\n  )\n}':
+    'import { useState } from \'react\'\n\nexport const FormActions = () => {\n  const [message, setMessage] = useState(\'No action yet\')\n\n  return (\n    <form onSubmit={(event) => {\n      event.preventDefault()\n      setMessage(\'Form submitted\')\n    }}>\n      <Button type="submit">Save</Button>\n      <Button type="button" variant="outline" onClick={() => setMessage(\'Draft previewed\')}>\n        Preview\n      </Button>\n      <output aria-live="polite">{message}</output>\n    </form>\n  )\n}',
+  '<Button\n  href="https://ui.heliannuuthus.com"\n  target="_blank"\n  rel="noreferrer"\n  variant="outline"\n>\n  新窗口打开\n</Button>\n\n<Button href="/styles.css" download="heliannuuthus-ui.css">\n  下载样式文件\n</Button>':
+    '<Button\n  href="https://ui.heliannuuthus.com"\n  target="_blank"\n  rel="noreferrer"\n  variant="outline"\n>\n  Open in a new window\n</Button>\n\n<Button href="/styles.css" download="heliannuuthus-ui.css">\n  Download stylesheet\n</Button>',
+  'import { Stack } from \'@heliannuuthus/ui\'\n\n<Stack orientation="horizontal" separator={<span aria-hidden>·</span>}>\n  <span>概览</span>\n  <span>活动</span>\n  <span>设置</span>\n</Stack>':
+    'import { Stack } from \'@heliannuuthus/ui\'\n\n<Stack orientation="horizontal" separator={<span aria-hidden>·</span>}>\n  <span>Overview</span>\n  <span>Activity</span>\n  <span>Settings</span>\n</Stack>',
+  'import { Card } from \'@heliannuuthus/ui\'\n\nexport const UpdateCard = () => {\n  return (\n    <Card title="设计系统更新" variant="elevated">\n      <p>本周补充了组件示例与无障碍说明。</p>\n    </Card>\n  )\n}\n\n<Card title="描边卡片" variant="outline" />\n<Card title="透明卡片" variant="ghost" />':
+    'import { Card } from \'@heliannuuthus/ui\'\n\nexport const UpdateCard = () => {\n  return (\n    <Card title="Design system update" variant="elevated">\n      <p>This week adds component examples and accessibility guidance.</p>\n    </Card>\n  )\n}\n\n<Card title="Outlined card" variant="outline" />\n<Card title="Ghost card" variant="ghost" />',
+  "import { Layout } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nexport const ResponsiveLayout = () => {\n  const [status, setStatus] = useState('')\n\n  return (\n    <Layout>\n      <Layout.Sidebar\n        breakpoint=\"lg\"\n        collapsible\n        collapsedWidth={64}\n        defaultCollapsed={false}\n        side=\"start\"\n        triggerLabels={{\n          collapse: '收起侧边栏',\n          expand: '展开侧边栏',\n        }}\n        onBreakpointChange={(below) => setStatus(below ? '窄屏' : '宽屏')}\n        onCollapsedChange={(collapsed, reason) =>\n          setStatus(\n            (collapsed ? '已收起' : '已展开') + '：' + reason\n          )\n        }\n      >\n        Navigation\n      </Layout.Sidebar>\n      <Layout.Content>{status}</Layout.Content>\n    </Layout>\n  )\n}":
+    "import { Layout } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nexport const ResponsiveLayout = () => {\n  const [status, setStatus] = useState('')\n\n  return (\n    <Layout>\n      <Layout.Sidebar\n        breakpoint=\"lg\"\n        collapsible\n        collapsedWidth={64}\n        defaultCollapsed={false}\n        side=\"start\"\n        triggerLabels={{\n          collapse: 'Collapse sidebar',\n          expand: 'Expand sidebar',\n        }}\n        onBreakpointChange={(below) => setStatus(below ? 'Narrow' : 'Wide')}\n        onCollapsedChange={(collapsed, reason) =>\n          setStatus(\n            (collapsed ? 'Collapsed' : 'Expanded') + ': ' + reason\n          )\n        }\n      >\n        Navigation\n      </Layout.Sidebar>\n      <Layout.Content>{status}</Layout.Content>\n    </Layout>\n  )\n}",
 };

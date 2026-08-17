@@ -30,6 +30,7 @@ import {
   CardBasicDemo,
   CardSemanticDomDemo,
 } from './card-preview';
+import { ButtonActionsDemo } from './button-preview';
 import {
   CommandDialogDemo,
   CommandEmptyDemo,
@@ -341,8 +342,37 @@ export const ButtonSizes = () => {
       description: docsCopy(
         '将紧密相关的操作收进同一个视觉组，并保持操作语义单一。'
       ),
-      preview: (
-        <Button.Group aria-label={docsCopy('分页操作')}>
+      caseLayout: 'segmented',
+      caseAxes: [
+        {
+          name: 'orientation',
+          label: docsCopy('方向'),
+          defaultValue: 'horizontal',
+          property: 'Button.Group.orientation',
+          options: [
+            { label: docsCopy('水平'), value: 'horizontal' },
+            { label: docsCopy('垂直'), value: 'vertical' },
+          ],
+        },
+        {
+          name: 'block',
+          label: docsCopy('宽度'),
+          defaultValue: 'false',
+          property: 'Button.Group.block',
+          options: [
+            { label: docsCopy('内容宽度'), value: 'false' },
+            { label: docsCopy('填满容器'), value: 'true' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <Button.Group
+          aria-label={docsCopy('分页操作')}
+          block={values.block === 'true'}
+          orientation={
+            values.orientation === 'vertical' ? 'vertical' : 'horizontal'
+          }
+        >
           <Button variant="outline">{docsCopy('上一项')}</Button>
           <Button>{docsCopy('下一项')}</Button>
         </Button.Group>
@@ -351,10 +381,44 @@ export const ButtonSizes = () => {
 
 export const GroupedButtons = () => {
   return (
-    <Button.Group aria-label="分页操作">
+    <Button.Group aria-label="分页操作" block orientation="vertical">
       <Button variant="outline">上一项</Button>
       <Button>下一项</Button>
     </Button.Group>
+  )
+}`),
+    },
+    {
+      title: docsCopy('填满容器'),
+      description: docsCopy('使用 block 让单个按钮占满父容器的可用宽度。'),
+      preview: <Button block>{docsCopy('继续')}</Button>,
+      code: docsCopy(`${buttonImport}
+
+<Button block>继续</Button>`),
+    },
+    {
+      title: docsCopy('表单与点击事件'),
+      description: docsCopy(
+        '原生 type 保留表单语义；onClick 适合处理不依赖表单提交的即时操作。'
+      ),
+      preview: <ButtonActionsDemo />,
+      code: docsCopy(`${buttonImport}
+import { useState } from 'react'
+
+export const FormActions = () => {
+  const [message, setMessage] = useState('尚未执行操作')
+
+  return (
+    <form onSubmit={(event) => {
+      event.preventDefault()
+      setMessage('表单已提交')
+    }}>
+      <Button type="submit">保存</Button>
+      <Button type="button" variant="outline" onClick={() => setMessage('草稿已预览')}>
+        预览
+      </Button>
+      <output aria-live="polite">{message}</output>
+    </form>
   )
 }`),
     },
@@ -459,6 +523,41 @@ export const ButtonLink = () => {
     </>
   )
 }`),
+    },
+    {
+      title: docsCopy('外链与下载'),
+      description: docsCopy(
+        '新窗口外链同时声明 target 与 rel；download 用于下载同源资源并可指定文件名。'
+      ),
+      preview: (
+        <div className="example-row">
+          <Button
+            href="https://ui.heliannuuthus.com"
+            rel="noreferrer"
+            target="_blank"
+            variant="outline"
+          >
+            {docsCopy('新窗口打开')}
+          </Button>
+          <Button download="heliannuuthus-ui.css" href="/styles.css">
+            {docsCopy('下载样式文件')}
+          </Button>
+        </div>
+      ),
+      code: docsCopy(`${buttonImport}
+
+<Button
+  href="https://ui.heliannuuthus.com"
+  target="_blank"
+  rel="noreferrer"
+  variant="outline"
+>
+  新窗口打开
+</Button>
+
+<Button href="/styles.css" download="heliannuuthus-ui.css">
+  下载样式文件
+</Button>`),
     },
   ],
   parts: [
@@ -1167,11 +1266,13 @@ const kbdDocumentation: ComponentDocumentation = {
         <div className="example-row">
           <Kbd keys={['⌘', 'K']} />
           <Kbd keys={['Ctrl', 'Shift', 'P']} />
+          <Kbd keys={['Ctrl', 'Alt', 'Delete']} separator="·" />
         </div>
       ),
       code: `import { Kbd } from '@heliannuuthus/ui'
 
-<Kbd keys={['⌘', 'K']} />`,
+<Kbd keys={['⌘', 'K']} />
+<Kbd keys={['Ctrl', 'Alt', 'Delete']} separator="·" />`,
     },
   ],
   api: [
@@ -1355,7 +1456,7 @@ const masonryDocumentation: ComponentDocumentation = {
 const items = cards.map((card) => ({
   key: card.id,
   content: <Card {...card} />,
-})) satisfies readonly MasonryItem[]
+})) satisfies readonly MasonryItem[];
 
 <Masonry
   columns={3}
@@ -1569,7 +1670,26 @@ export const StackGapExample = () => {
       description: docsCopy(
         'Compact 不只组合按钮，也可以拼接 Input、Select、Slider 与操作控件。'
       ),
-      preview: <StackCompactVariantsDemo />,
+      caseLayout: 'segmented',
+      caseAxes: [
+        {
+          name: 'orientation',
+          label: docsCopy('方向'),
+          defaultValue: 'horizontal',
+          property: 'Stack.Compact.orientation',
+          options: [
+            { label: docsCopy('水平'), value: 'horizontal' },
+            { label: docsCopy('垂直'), value: 'vertical' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <StackCompactVariantsDemo
+          orientation={
+            values.orientation === 'vertical' ? 'vertical' : 'horizontal'
+          }
+        />
+      ),
       code: docsCopy(`import { useState } from 'react'
 import { Input } from '@heliannuuthus/ui'
 import { Slider } from '@heliannuuthus/ui'
@@ -1626,6 +1746,26 @@ export const SliderCompactExample = () => {
 </Stack>`,
       previewHeight: 820,
       wide: true,
+    },
+    {
+      title: docsCopy('元素分隔'),
+      description: docsCopy(
+        'separator 在相邻元素之间插入一致的视觉分隔，不需要为每个子元素重复编写。'
+      ),
+      preview: (
+        <Stack orientation="horizontal" separator={<span aria-hidden>·</span>}>
+          <span>{docsCopy('概览')}</span>
+          <span>{docsCopy('活动')}</span>
+          <span>{docsCopy('设置')}</span>
+        </Stack>
+      ),
+      code: docsCopy(`import { Stack } from '@heliannuuthus/ui'
+
+<Stack orientation="horizontal" separator={<span aria-hidden>·</span>}>
+  <span>概览</span>
+  <span>活动</span>
+  <span>设置</span>
+</Stack>`),
     },
   ],
   parts: [
@@ -1794,16 +1934,40 @@ const cardDocumentation: ComponentDocumentation = {
       title: docsCopy('基础卡片'),
       description: docsCopy('只提供标题和内容，即可快速组织一组相关信息。'),
       previewHeight: 340,
-      preview: <CardBasicDemo />,
+      caseLayout: 'segmented',
+      caseAxes: [
+        {
+          name: 'variant',
+          label: docsCopy('外观'),
+          defaultValue: 'elevated',
+          options: [
+            { label: docsCopy('阴影'), value: 'elevated' },
+            { label: docsCopy('描边'), value: 'outline' },
+            { label: docsCopy('透明'), value: 'ghost' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <CardBasicDemo
+          variant={
+            values.variant === 'outline' || values.variant === 'ghost'
+              ? values.variant
+              : 'elevated'
+          }
+        />
+      ),
       code: docsCopy(`import { Card } from '@heliannuuthus/ui'
 
 export const UpdateCard = () => {
   return (
-    <Card title="设计系统更新">
+    <Card title="设计系统更新" variant="elevated">
       <p>本周补充了组件示例与无障碍说明。</p>
     </Card>
   )
-}`),
+}
+
+<Card title="描边卡片" variant="outline" />
+<Card title="透明卡片" variant="ghost" />`),
     },
     {
       title: docsCopy('Header、Content 与 Footer'),
@@ -3157,23 +3321,66 @@ const layoutDocumentation: ComponentDocumentation = {
         'Sidebar 在 lg 以下自动折叠，也可以通过内置触发器手动切换；collapsedWidth 决定折叠后保留的宽度。'
       ),
       previewHeight: 370,
-      preview: <LayoutCollapsibleSidebarDemo />,
+      caseLayout: 'segmented',
+      caseAxes: [
+        {
+          name: 'defaultCollapsed',
+          label: docsCopy('初始状态'),
+          defaultValue: 'false',
+          property: 'Layout.Sidebar.defaultCollapsed',
+          options: [
+            { label: docsCopy('展开'), value: 'false' },
+            { label: docsCopy('收起'), value: 'true' },
+          ],
+        },
+        {
+          name: 'side',
+          label: docsCopy('位置'),
+          defaultValue: 'start',
+          property: 'Layout.Sidebar.side',
+          options: [
+            { label: docsCopy('起始侧'), value: 'start' },
+            { label: docsCopy('结束侧'), value: 'end' },
+          ],
+        },
+      ],
+      preview: (values) => (
+        <LayoutCollapsibleSidebarDemo
+          defaultCollapsed={values.defaultCollapsed === 'true'}
+          side={values.side === 'end' ? 'end' : 'start'}
+        />
+      ),
       code: docsCopy(`import { Layout } from '@heliannuuthus/ui'
+import { useState } from 'react'
 
-<Layout>
-  <Layout.Sidebar
-    breakpoint="lg"
-    collapsible
-    collapsedWidth={64}
-    triggerLabels={{
-      collapse: '收起侧边栏',
-      expand: '展开侧边栏',
-    }}
-  >
-    Navigation
-  </Layout.Sidebar>
-  <Layout.Content>Content</Layout.Content>
-</Layout>`),
+export const ResponsiveLayout = () => {
+  const [status, setStatus] = useState('')
+
+  return (
+    <Layout>
+      <Layout.Sidebar
+        breakpoint="lg"
+        collapsible
+        collapsedWidth={64}
+        defaultCollapsed={false}
+        side="start"
+        triggerLabels={{
+          collapse: '收起侧边栏',
+          expand: '展开侧边栏',
+        }}
+        onBreakpointChange={(below) => setStatus(below ? '窄屏' : '宽屏')}
+        onCollapsedChange={(collapsed, reason) =>
+          setStatus(
+            (collapsed ? '已收起' : '已展开') + '：' + reason
+          )
+        }
+      >
+        Navigation
+      </Layout.Sidebar>
+      <Layout.Content>{status}</Layout.Content>
+    </Layout>
+  )
+}`),
     },
   ],
   parts: [
@@ -11981,9 +12188,6 @@ appendMissingApi('masonry', [
 appendMissingApi('stack', [
   publicProperty('children', 'ReactNode'),
   publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">'),
-  ...['align', 'gap', 'justify', 'wrap'].map((name) =>
-    publicProperty(name, 'StackProps', { component: 'Stack.Compact' })
-  ),
   publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
     component: 'Stack.Compact',
   }),
@@ -12060,9 +12264,6 @@ appendMissingApi('collapsible', [
   publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
 ]);
 appendMissingApi('button', [
-  ...['align', 'gap', 'justify', 'wrap'].map((name) =>
-    publicProperty(name, 'StackCompactProps', { component: 'Button.Group' })
-  ),
   publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">', {
     component: 'Button.Group',
   }),
@@ -12105,6 +12306,71 @@ appendMissingApi('table', [
     component: 'Table.Cell',
   }),
 ]);
+
+const prunedPrimitiveApi: Readonly<Record<string, readonly string[]>> = {
+  'alert-dialog': ['onOpenChangeComplete'],
+  'context-menu': [
+    'highlightItemOnHover',
+    'loopFocus',
+    'onOpenChangeComplete',
+    'orientation',
+  ],
+  'dropdown-menu': [
+    'highlightItemOnHover',
+    'loopFocus',
+    'modal',
+    'onOpenChangeComplete',
+    'orientation',
+  ],
+  'navigation-menu': ['onOpenChangeComplete'],
+  collapsible: ['onOpenChangeComplete'],
+  counter: [
+    'borderRadius',
+    'gradientHeight',
+    'horizontalPadding',
+    'padding',
+    'textColor',
+  ],
+  dialog: ['contentProps', 'disablePointerDismissal', 'onOpenChangeComplete'],
+  drawer: [
+    'contentProps',
+    'disablePointerDismissal',
+    'modal',
+    'onOpenChangeComplete',
+  ],
+  form: ['Form.Field.shouldUnregister'],
+  menubar: ['loopFocus', 'modal', 'orientation'],
+  popover: ['modal', 'onOpenChangeComplete'],
+  select: [
+    'autoHighlight',
+    'highlightItemOnHover',
+    'limit',
+    'loopFocus',
+    'modal',
+    'onOpenChangeComplete',
+    'openOnInputClick',
+  ],
+  toggle: ['Toggle.Group.loopFocus'],
+  tooltip: [
+    'contentProps',
+    'disableHoverablePopup',
+    'onOpenChangeComplete',
+    'trackCursorAxis',
+  ],
+};
+
+for (const [slug, names] of Object.entries(prunedPrimitiveApi)) {
+  const prunedNames = new Set(names);
+  componentDocumentation[slug].api = componentDocumentation[slug].api.filter(
+    (property) =>
+      !prunedNames.has(
+        property.component
+          ? `${property.component}.${property.name}`
+          : property.name
+      )
+  );
+}
+
 componentDocumentation.layout.api = componentDocumentation.layout.api.filter(
   (property) => property.component !== docsCopy('全部组成组件')
 );
@@ -12296,6 +12562,237 @@ for (const documentation of Object.values(componentDocumentation)) {
   }
 }
 
+const caseCoverageSnippets: Readonly<Record<string, string>> = {
+  resizable: `<Resizable
+  items={items}
+  separator={({ itemKey, nextItemKey, orientation }) => (
+    <span>{itemKey} · {nextItemKey} · {orientation}</span>
+  )}
+/>`,
+  'dropdown-menu': `<DropdownMenu defaultOpen={false} disabled items={items} side="right" trigger={trigger} />
+<DropdownMenu open={open} onOpenChange={setOpen} items={items} trigger={trigger} />`,
+  menubar: `<Menubar disabled items={items} />`,
+  'navigation-menu': `<NavigationMenu
+  items={items}
+  orientation="vertical"
+  value={value}
+  onChange={setValue}
+  delay={100}
+  closeDelay={200}
+/>
+<NavigationMenu defaultValue="docs" items={items} />`,
+  tabs: `<Tabs value={value} onChange={setValue} items={items} orientation="vertical" />`,
+  'scroll-area': `<ScrollArea orientation="both" className="h-80 w-80">{content}</ScrollArea>`,
+  checkbox: `<Checkbox
+  checked={checked}
+  onChange={setChecked}
+  variant="card"
+  uncheckedValue="off"
+  classNames={{ control: 'border-primary' }}
+  styles={{ label: { fontWeight: 600 } }}
+>
+  Release notifications
+</Checkbox>
+<Checkbox parent checked={allChecked} onChange={setAllChecked}>All permissions</Checkbox>
+<Checkbox.Group allValues={allValues} disabled options={options} />`,
+  'date-picker': `<DatePicker defaultValue={new Date()} disabled />
+<DatePicker calendarProps={{ fixedWeeks: true }} />`,
+  form: `<Form form={form} onInvalid={handleInvalid} onSubmit={handleSubmit}>
+  <Form.Field name="team" defaultValue="platform" disabled>
+    <Input />
+  </Form.Field>
+</Form>`,
+  input: `<Input
+  addonBefore="https://"
+  addonAfter=".com"
+  classNames={{ input: 'font-mono' }}
+  styles={{ prefix: { color: 'var(--muted-foreground)' } }}
+/>
+<Input.OTP defaultValue="123456" maxLength={6} pattern="[0-9]*" />
+<Input.TextArea defaultValue="Release notes" rows={4} />`,
+  'input-number': `<Input.Number
+  defaultValue={10}
+  onChangeComplete={setCommittedValue}
+  largeStep={25}
+  prefix="¥"
+  placeholder="Amount"
+  allowWheelScrub
+  snapOnStep
+  classNames={{ input: 'tabular-nums' }}
+  styles={{ controls: { opacity: 0.9 } }}
+/>`,
+  radio: `<Radio
+  value="daily"
+  disabled
+  classNames={{ control: 'border-primary' }}
+  styles={{ label: { fontWeight: 600 } }}
+>
+  Daily
+</Radio>
+<Radio.Group defaultValue="daily" disabled gap={16} options={options} />`,
+  select: `<Select
+  searchValue={query}
+  onSearch={setQuery}
+  multiple
+  disabled={loading}
+  locale="en-US"
+  options={options}
+/>
+<Select defaultOpen defaultSearchValue="platform" options={options} />`,
+  slider: `<Slider
+  defaultValue={[20, 80]}
+  disabled={loading}
+  format={{ style: 'percent' }}
+  locale="en-US"
+  largeStep={10}
+  minStepsBetweenValues={2}
+  thumbCollisionBehavior="push"
+  onChangeComplete={setCommittedValue}
+/>`,
+  switch: `<Switch value="enabled" uncheckedValue="disabled">Notifications</Switch>`,
+  toggle: `<Toggle.Group disabled orientation="vertical" items={items} />`,
+  chart: `<Chart.Tooltip
+  content={(
+    <Chart.TooltipContent
+      hideLabel
+      hideIndicator
+      nameKey="name"
+      labelKey="label"
+    />
+  )}
+/>
+<Chart.Legend content={<Chart.LegendContent hideIcon nameKey="name" />} />
+<Chart.Style id="deployment-chart" config={config} />`,
+  counter: `<Counter
+  value={1280}
+  gap={2}
+  prefix="¥"
+  springOptions={{ damping: 24, stiffness: 180 }}
+  classNames={{ digit: 'tabular-nums' }}
+  styles={{ visual: { minWidth: 12 } }}
+/>`,
+  table: `<Table
+  columns={columns}
+  data={rows}
+  showHeader={false}
+  rowProps={(row) => ({ 'data-row-id': row.id })}
+/>
+<Table.Primitive>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head fixedOffset={48}>Name</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell fixedOffset={48}>Atlas</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table.Primitive>`,
+  tooltip: `<Tooltip
+  content="Keyboard shortcut"
+  sideOffset={8}
+  alignOffset={4}
+  disabled={disabled}
+  open={open}
+  onOpenChange={setOpen}
+  classNames={{ content: 'max-w-64' }}
+  styles={{ content: { textAlign: 'start' } }}
+>
+  <Button>Save</Button>
+</Tooltip>
+<Tooltip defaultOpen content="Pinned hint"><Button>Help</Button></Tooltip>`,
+  'alert-dialog': `<AlertDialog
+  open={open}
+  onOpenChange={setOpen}
+  title="Delete project?"
+  description="This action cannot be undone."
+  classNames={{ content: 'max-w-lg' }}
+  styles={{ content: { minHeight: 240 } }}
+/>
+<AlertDialog defaultOpen={false} title="Archive project?" />`,
+  dialog: `<Dialog
+  open={open}
+  onOpenChange={setOpen}
+  footer={<Button>Save</Button>}
+  showCloseButton
+  classNames={{ content: 'max-w-xl' }}
+  styles={{ content: { minHeight: 320 } }}
+/>
+<Dialog defaultOpen={false} title="Workspace settings" />`,
+  drawer: `<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  snapPoints={[0.25, 0.5, 1]}
+  snapPoint={snapPoint}
+  onSnapPointChange={setSnapPoint}
+  showCloseButton
+  showSwipeHandle
+  snapToSequentialPoints
+  swipeDirection="down"
+  classNames={{ content: 'max-h-screen' }}
+  styles={{ content: { minHeight: 320 } }}
+/>
+<Drawer defaultOpen={false} defaultSnapPoint={0.5} />`,
+  popover: `<Popover
+  open={open}
+  onOpenChange={setOpen}
+  align="start"
+  sideOffset={8}
+  alignOffset={4}
+  classNames={{ content: 'w-80' }}
+  styles={{ content: { padding: 16 } }}
+/>
+<Popover defaultOpen={false} trigger={<Button>Open</Button>} />`,
+  progress: `<Progress
+  value={completed}
+  min={0}
+  max={200}
+  locale="en-US"
+  format={{ style: 'percent' }}
+  getAriaValueText={(value, maximum) => value + ' of ' + maximum}
+/>`,
+  toast: `<Toast.Toaster position="top-right" richColors scope="local" />`,
+  command: `<Command
+  value={query}
+  onChange={setQuery}
+  filter={filterCommand}
+  label="Quick actions"
+  loop
+  vimBindings
+  disablePointerSelection
+  groups={[
+    {
+      heading: 'Workspace',
+      options: [
+        {
+          value: 'open-settings',
+          label: 'Open settings',
+          keywords: ['preferences'],
+          icon: <Settings />,
+          shortcut: '⌘,',
+          disabled: false,
+          onSelect: openSettings,
+        },
+      ],
+    },
+  ]}
+/>
+<Command defaultValue="settings" groups={groups} />`,
+  'context-menu': `<ContextMenu
+  trigger={target}
+  items={items}
+  classNames={{ content: 'min-w-48' }}
+  styles={{ content: { padding: 4 } }}
+/>`,
+};
+
+for (const [slug, snippet] of Object.entries(caseCoverageSnippets)) {
+  const examples = componentDocumentation[slug]?.examples;
+  const example = examples?.[examples.length - 1];
+  if (example) example.code = `${example.code}\n\n${snippet}`;
+}
+
 const accordionSingleExample = componentDocumentation.accordion.examples[0];
 if (accordionSingleExample) {
   accordionSingleExample.title = docsCopy('单项展开');
@@ -12350,35 +12847,8 @@ for (const documentation of Object.values(componentDocumentation)) {
     }
   }
 
-  const coveredApiNames = new Set<string>();
-  for (const example of documentation.examples) {
-    for (const name of example.coveredProperties ?? []) {
-      coveredApiNames.add(resolveApiCaseName(name, apiNames));
-    }
-    for (const axis of example.caseAxes ?? []) {
-      if (axis.property) coveredApiNames.add(axis.property);
-      for (const option of axis.options) {
-        for (const name of Object.keys(option.properties ?? {})) {
-          coveredApiNames.add(resolveApiCaseName(name, apiNames));
-        }
-      }
-    }
-    for (const harnessCase of example.cases ?? []) {
-      for (const name of Object.keys(harnessCase.properties ?? {})) {
-        coveredApiNames.add(resolveApiCaseName(name, apiNames));
-      }
-    }
-  }
-
   const basicExample = documentation.examples[0];
   if (!basicExample) continue;
-
-  const missingApiNames = documentation.api
-    .map(apiCaseName)
-    .filter((name) => !coveredApiNames.has(name));
-  basicExample.coveredProperties = Array.from(
-    new Set([...(basicExample.coveredProperties ?? []), ...missingApiNames])
-  );
   const basicCases = basicExample.cases
     ? basicExample.cases
     : basicExample.caseAxes

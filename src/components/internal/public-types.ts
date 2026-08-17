@@ -3,7 +3,6 @@ import type * as React from 'react';
 type OpenStateProps = {
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
-  onOpenChangeComplete?: (open: boolean) => void;
   open?: boolean;
 };
 

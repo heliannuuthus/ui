@@ -196,7 +196,11 @@ const StringSelect = ({
   );
 };
 
-export const StackCompactVariantsDemo = () => {
+export const StackCompactVariantsDemo = ({
+  orientation = 'horizontal',
+}: {
+  orientation?: 'horizontal' | 'vertical';
+}) => {
   const [quality, setQuality] = useState(68);
 
   const updateQuality = (value: string) => {
@@ -212,7 +216,11 @@ export const StackCompactVariantsDemo = () => {
         description={docsCopy('独立 Select 作为输入协议前缀。')}
         title={docsCopy('前置选择控件')}
       >
-        <Stack.Compact aria-label={docsCopy('项目地址')} block>
+        <Stack.Compact
+          aria-label={docsCopy('项目地址')}
+          block
+          orientation={orientation}
+        >
           <StringSelect
             ariaLabel={docsCopy('协议')}
             className="w-28 shrink-0"
@@ -230,7 +238,11 @@ export const StackCompactVariantsDemo = () => {
         description={docsCopy('Select 作为数值输入的单位后缀。')}
         title={docsCopy('后置选择控件')}
       >
-        <Stack.Compact aria-label={docsCopy('存储配额')} block>
+        <Stack.Compact
+          aria-label={docsCopy('存储配额')}
+          block
+          orientation={orientation}
+        >
           <Input
             aria-label={docsCopy('存储配额数值')}
             defaultValue="100"
@@ -251,7 +263,11 @@ export const StackCompactVariantsDemo = () => {
         )}
         title={docsCopy('混合控件组合')}
       >
-        <Stack.Compact aria-label={docsCopy('组件搜索')} block>
+        <Stack.Compact
+          aria-label={docsCopy('组件搜索')}
+          block
+          orientation={orientation}
+        >
           <StringSelect
             ariaLabel={docsCopy('组件范围')}
             className="w-32 shrink-0"
@@ -274,7 +290,11 @@ export const StackCompactVariantsDemo = () => {
         title={docsCopy('Slider 数值联动')}
       >
         <Stack block gap={8}>
-          <Stack.Compact aria-label={docsCopy('压缩质量')} block>
+          <Stack.Compact
+            aria-label={docsCopy('压缩质量')}
+            block
+            orientation={orientation}
+          >
             <div className="flex min-h-9 flex-1 items-center border border-input px-4 focus-within:border-primary">
               <Slider
                 aria-label={docsCopy('压缩质量滑块')}

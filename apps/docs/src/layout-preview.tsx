@@ -1,4 +1,5 @@
 import { docsCopy } from './i18n/content';
+import { useState } from 'react';
 import { Layout } from '@heliannuuthus/ui';
 import {
   Bell,
@@ -146,6 +147,7 @@ export const LayoutRightSidebarDemo = () => {
         <Layout.Sidebar
           aria-label={docsCopy('详情面板')}
           className="layout-demo-sidebar layout-demo-sidebar-detail"
+          side="end"
           width={104}
         >
           <small>{docsCopy('项目详情')}</small>
@@ -187,41 +189,68 @@ export const LayoutApplicationDemo = () => {
   );
 };
 
-export const LayoutCollapsibleSidebarDemo = () => {
+export const LayoutCollapsibleSidebarDemo = ({
+  defaultCollapsed = false,
+  side = 'start',
+}: {
+  defaultCollapsed?: boolean;
+  side?: 'start' | 'end';
+}) => {
+  const [status, setStatus] = useState(docsCopy('等待侧边栏变化'));
+  const sidebar = (
+    <Layout.Sidebar
+      aria-label={docsCopy('工作区导航')}
+      breakpoint="lg"
+      className="layout-demo-sidebar"
+      collapsedWidth={48}
+      collapsible
+      defaultCollapsed={defaultCollapsed}
+      side={side}
+      triggerLabels={{
+        collapse: docsCopy('收起侧边栏'),
+        expand: docsCopy('展开侧边栏'),
+      }}
+      width={124}
+      onBreakpointChange={(below) =>
+        setStatus(
+          below ? docsCopy('已进入窄屏断点') : docsCopy('已离开窄屏断点')
+        )
+      }
+      onCollapsedChange={(collapsed, reason) =>
+        setStatus(
+          collapsed
+            ? docsCopy(`侧边栏已收起（${reason}）`)
+            : docsCopy(`侧边栏已展开（${reason}）`)
+        )
+      }
+    >
+      <small>{docsCopy('工作区')}</small>
+      <nav aria-label={docsCopy('工作区导航')}>
+        {navigationItems.map((item) => (
+          <a
+            aria-label={item.label}
+            className={item.active ? 'is-active' : undefined}
+            href="#"
+            key={item.label}
+          >
+            <item.icon />
+            <span>{item.label}</span>
+          </a>
+        ))}
+      </nav>
+      <output aria-live="polite">{status}</output>
+    </Layout.Sidebar>
+  );
+
   return (
     <div className="layout-demo-frame layout-demo-frame-wide">
       <Layout className="layout-demo-shell">
-        <Layout.Sidebar
-          aria-label={docsCopy('工作区导航')}
-          breakpoint="lg"
-          className="layout-demo-sidebar"
-          collapsedWidth={48}
-          collapsible
-          triggerLabels={{
-            collapse: docsCopy('收起侧边栏'),
-            expand: docsCopy('展开侧边栏'),
-          }}
-          width={124}
-        >
-          <small>{docsCopy('工作区')}</small>
-          <nav aria-label={docsCopy('工作区导航')}>
-            {navigationItems.map((item) => (
-              <a
-                aria-label={item.label}
-                className={item.active ? 'is-active' : undefined}
-                href="#"
-                key={item.label}
-              >
-                <item.icon />
-                <span>{item.label}</span>
-              </a>
-            ))}
-          </nav>
-        </Layout.Sidebar>
+        {side === 'start' ? sidebar : null}
         <Layout>
           <PreviewHeader compact />
           <PreviewContent detailed />
         </Layout>
+        {side === 'end' ? sidebar : null}
       </Layout>
     </div>
   );

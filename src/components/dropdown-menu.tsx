@@ -274,11 +274,7 @@ type DropdownMenuProps = OpenStateProps & {
   align?: PopupAlign;
   classNames?: DropdownMenuClassNames;
   disabled?: boolean;
-  highlightItemOnHover?: boolean;
   items: DropdownMenuEntry[];
-  loopFocus?: boolean;
-  modal?: boolean;
-  orientation?: 'horizontal' | 'vertical';
   side?: PopupSide;
   size?: 'default' | 'lg' | 'sm';
   styles?: DropdownMenuStyles;
