@@ -64,10 +64,15 @@ export const CardBasicDemo = ({
   );
 };
 
-export const CardAnatomyDemo = () => {
+export const CardAnatomyDemo = ({
+  variant = 'elevated',
+}: {
+  variant?: CardProps['variant'];
+}) => {
   return (
     <Card
       className="card-showcase"
+      variant={variant}
       title={
         <span className="card-region-heading">
           <span>Header</span>

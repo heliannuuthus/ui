@@ -312,28 +312,34 @@ export const ButtonVariants = () => {
 }`),
     },
     {
-      title: docsCopy('不同尺寸'),
+      title: docsCopy('尺寸与宽度'),
       description: docsCopy(
-        '尺寸应跟随容器密度，而不是用来表达重要程度。默认尺寸适合大多数表单与页面。'
+        '尺寸应跟随容器密度；block 只改变按钮占用的可用宽度，不表达操作重要程度。'
       ),
       preview: (
-        <div className="example-row example-row-end">
-          <Button size="xs">{docsCopy('超小按钮')}</Button>
-          <Button size="sm">{docsCopy('小按钮')}</Button>
-          <Button>{docsCopy('默认按钮')}</Button>
-          <Button size="lg">{docsCopy('大按钮')}</Button>
-        </div>
+        <Stack block gap={16}>
+          <div className="example-row example-row-end">
+            <Button size="xs">{docsCopy('超小按钮')}</Button>
+            <Button size="sm">{docsCopy('小按钮')}</Button>
+            <Button>{docsCopy('默认按钮')}</Button>
+            <Button size="lg">{docsCopy('大按钮')}</Button>
+          </div>
+          <Button block>{docsCopy('填满容器')}</Button>
+        </Stack>
       ),
       code: docsCopy(`${buttonImport}
 
-export const ButtonSizes = () => {
+export const ButtonSizesAndWidth = () => {
   return (
-    <div className="flex items-end gap-3">
-      <Button size="xs">超小按钮</Button>
-      <Button size="sm">小按钮</Button>
-      <Button>默认按钮</Button>
-      <Button size="lg">大按钮</Button>
-    </div>
+    <>
+      <div className="flex items-end gap-3">
+        <Button size="xs">超小按钮</Button>
+        <Button size="sm">小按钮</Button>
+        <Button>默认按钮</Button>
+        <Button size="lg">大按钮</Button>
+      </div>
+      <Button block>填满容器</Button>
+    </>
   )
 }`),
     },
@@ -387,14 +393,6 @@ export const GroupedButtons = () => {
     </Button.Group>
   )
 }`),
-    },
-    {
-      title: docsCopy('填满容器'),
-      description: docsCopy('使用 block 让单个按钮占满父容器的可用宽度。'),
-      preview: <Button block>{docsCopy('继续')}</Button>,
-      code: docsCopy(`${buttonImport}
-
-<Button block>继续</Button>`),
     },
     {
       title: docsCopy('表单与点击事件'),
@@ -492,9 +490,9 @@ export const ButtonStates = () => {
 }`),
     },
     {
-      title: docsCopy('导航按钮'),
+      title: docsCopy('导航、外链与下载'),
       description: docsCopy(
-        '设置 href 后输出具有链接语义的 a 元素；不设置 href 时始终输出原生 button。导航不要通过点击事件手动修改地址。'
+        'href 统一承载站内导航、外链与下载；新窗口外链同时声明 target 与 rel，下载场景使用 download。'
       ),
       preview: (
         <div className="example-row">
@@ -504,6 +502,17 @@ export const ButtonStates = () => {
           </Button>
           <Button disabled href="/components/card" variant="outline">
             {docsCopy('暂不可用')}
+          </Button>
+          <Button
+            href="https://ui.heliannuuthus.com"
+            rel="noreferrer"
+            target="_blank"
+            variant="outline"
+          >
+            {docsCopy('新窗口打开')}
+          </Button>
+          <Button download="heliannuuthus-ui.css" href="/styles.css">
+            {docsCopy('下载样式文件')}
           </Button>
         </div>
       ),
@@ -520,44 +529,20 @@ export const ButtonLink = () => {
       <Button disabled href="/components/card" variant="outline">
         暂不可用
       </Button>
+      <Button
+        href="https://ui.heliannuuthus.com"
+        target="_blank"
+        rel="noreferrer"
+        variant="outline"
+      >
+        新窗口打开
+      </Button>
+      <Button href="/styles.css" download="heliannuuthus-ui.css">
+        下载样式文件
+      </Button>
     </>
   )
 }`),
-    },
-    {
-      title: docsCopy('外链与下载'),
-      description: docsCopy(
-        '新窗口外链同时声明 target 与 rel；download 用于下载同源资源并可指定文件名。'
-      ),
-      preview: (
-        <div className="example-row">
-          <Button
-            href="https://ui.heliannuuthus.com"
-            rel="noreferrer"
-            target="_blank"
-            variant="outline"
-          >
-            {docsCopy('新窗口打开')}
-          </Button>
-          <Button download="heliannuuthus-ui.css" href="/styles.css">
-            {docsCopy('下载样式文件')}
-          </Button>
-        </div>
-      ),
-      code: docsCopy(`${buttonImport}
-
-<Button
-  href="https://ui.heliannuuthus.com"
-  target="_blank"
-  rel="noreferrer"
-  variant="outline"
->
-  新窗口打开
-</Button>
-
-<Button href="/styles.css" download="heliannuuthus-ui.css">
-  下载样式文件
-</Button>`),
     },
   ],
   parts: [
@@ -1013,18 +998,9 @@ const tagDocumentation: ComponentDocumentation = {
   ],
   examples: [
     {
-      title: docsCopy('基础用法'),
-      description: docsCopy('Tag 是纯展示元素，始终渲染为 span。'),
-      preview: <Tag>{docsCopy('默认标签')}</Tag>,
-      code: docsCopy(`import { Tag } from '@heliannuuthus/ui'
-
-<Tag>默认标签</Tag>`),
-      coveredProperties: ['children', 'className', 'style'],
-    },
-    {
       title: docsCopy('语义类型'),
       description: docsCopy(
-        'type 表达标签的语义，不要只为了颜色选择与内容无关的类型。'
+        'Tag 始终渲染为 span；type 表达标签语义，不要只为了颜色选择与内容无关的类型。'
       ),
       preview: (
         <div className="example-row">
@@ -1044,7 +1020,7 @@ const tagDocumentation: ComponentDocumentation = {
 <Tag type="success">成功</Tag>
 <Tag type="warning">警告</Tag>
 <Tag type="error">错误</Tag>`),
-      coveredProperties: ['type'],
+      coveredProperties: ['type', 'children', 'className', 'style'],
     },
   ],
   api: [
@@ -1127,6 +1103,9 @@ const badgeDocumentation: ComponentDocumentation = {
           <Badge dir="rtl" indicator={12} offset={[3, -2]}>
             <Button variant="outline">{docsCopy('收件箱')}</Button>
           </Badge>
+          <Badge indicator indicatorLabel={docsCopy('有新的系统通知')}>
+            <Button variant="outline">{docsCopy('系统通知')}</Button>
+          </Badge>
         </Stack>
       ),
       code: docsCopy(`import { Badge, Button } from '@heliannuuthus/ui'
@@ -1140,24 +1119,12 @@ import { Mail } from 'lucide-react'
 
 <Badge dir="rtl" indicator={12} offset={[3, -2]}>
   <Button variant="outline">收件箱</Button>
-</Badge>`),
-      coveredProperties: ['children', 'offset', 'indicatorLabel'],
-    },
-    {
-      title: docsCopy('状态红点'),
-      description: docsCopy(
-        'indicator 为 true 时只显示红点；因为没有可见内容，必须提供 indicatorLabel。'
-      ),
-      preview: (
-        <Badge indicator indicatorLabel={docsCopy('有新的系统通知')}>
-          <Button variant="outline">{docsCopy('系统通知')}</Button>
-        </Badge>
-      ),
-      code: docsCopy(`import { Badge, Button } from '@heliannuuthus/ui'
+</Badge>
 
 <Badge indicator indicatorLabel="有新的系统通知">
   <Button variant="outline">系统通知</Button>
 </Badge>`),
+      coveredProperties: ['children', 'offset', 'indicatorLabel'],
     },
     {
       title: docsCopy('样式扩展'),
@@ -1245,25 +1212,14 @@ const kbdDocumentation: ComponentDocumentation = {
   ],
   examples: [
     {
-      title: docsCopy('单个按键'),
-      description: docsCopy('使用用户设备上容易识别的按键名称。'),
+      title: docsCopy('组合快捷键'),
+      description: docsCopy(
+        '直接传入内容展示单个按键；通过 keys 和 separator 统一组合快捷键的间距与分隔。'
+      ),
       preview: (
         <div className="example-row">
           <Kbd>Enter</Kbd>
           <Kbd>Esc</Kbd>
-          <Kbd>Tab</Kbd>
-          <Kbd>⌫</Kbd>
-        </div>
-      ),
-      code: `import { Kbd } from '@heliannuuthus/ui'
-
-<Kbd>Enter</Kbd>`,
-    },
-    {
-      title: docsCopy('组合快捷键'),
-      description: docsCopy('通过 keys 属性统一多个按键之间的间距。'),
-      preview: (
-        <div className="example-row">
           <Kbd keys={['⌘', 'K']} />
           <Kbd keys={['Ctrl', 'Shift', 'P']} />
           <Kbd keys={['Ctrl', 'Alt', 'Delete']} separator="·" />
@@ -1271,6 +1227,7 @@ const kbdDocumentation: ComponentDocumentation = {
       ),
       code: `import { Kbd } from '@heliannuuthus/ui'
 
+<Kbd>Enter</Kbd>
 <Kbd keys={['⌘', 'K']} />
 <Kbd keys={['Ctrl', 'Alt', 'Delete']} separator="·" />`,
     },
@@ -1313,58 +1270,73 @@ const separatorDocumentation: ComponentDocumentation = {
   ],
   examples: [
     {
-      title: docsCopy('水平分隔'),
-      description: docsCopy('水平线分隔上下排列的章节、列表分组或信息层级。'),
-      preview: (
-        <div className="separator-horizontal-demo">
-          <section>
-            <span>{docsCopy('项目空间')}</span>
-            <strong>Heliannuuthus UI</strong>
-            <p>{docsCopy('一套用于构建清晰、稳定界面的基础组件。')}</p>
-          </section>
-          <Separator />
-          <section>
-            <span>{docsCopy('最近更新')}</span>
-            <strong>{docsCopy('组件文档与交互示例')}</strong>
-            <p>{docsCopy('今天 14:30 · 由 Heliannuuthus 更新')}</p>
-          </section>
-        </div>
+      title: docsCopy('分隔方向'),
+      description: docsCopy(
+        '在同一案例中切换水平与垂直方向：水平线组织上下章节，垂直线分隔同一行内的元信息。'
       ),
+      caseLayout: 'segmented',
+      caseAxes: [
+        {
+          name: 'orientation',
+          label: docsCopy('方向'),
+          defaultValue: 'horizontal',
+          property: 'Separator.orientation',
+          options: [
+            { label: docsCopy('水平'), value: 'horizontal' },
+            { label: docsCopy('垂直'), value: 'vertical' },
+          ],
+        },
+      ],
+      preview: (values) =>
+        values.orientation === 'vertical' ? (
+          <div className="separator-vertical-demo">
+            <div className="separator-vertical-item">
+              <span>{docsCopy('状态')}</span>
+              <strong>{docsCopy('设计中')}</strong>
+            </div>
+            <Separator orientation="vertical" />
+            <div className="separator-vertical-item">
+              <span>{docsCopy('负责人')}</span>
+              <strong>Heliannuuthus</strong>
+            </div>
+            <Separator orientation="vertical" />
+            <div className="separator-vertical-item">
+              <span>{docsCopy('更新时间')}</span>
+              <strong>{docsCopy('刚刚')}</strong>
+            </div>
+          </div>
+        ) : (
+          <div className="separator-horizontal-demo">
+            <section>
+              <span>{docsCopy('项目空间')}</span>
+              <strong>Heliannuuthus UI</strong>
+              <p>{docsCopy('一套用于构建清晰、稳定界面的基础组件。')}</p>
+            </section>
+            <Separator />
+            <section>
+              <span>{docsCopy('最近更新')}</span>
+              <strong>{docsCopy('组件文档与交互示例')}</strong>
+              <p>{docsCopy('今天 14:30 · 由 Heliannuuthus 更新')}</p>
+            </section>
+          </div>
+        ),
       code: docsCopy(`import { Separator } from '@heliannuuthus/ui'
 
-<section>上方内容</section>
-<Separator />
-<section>下方内容</section>`),
-      previewHeight: 360,
-    },
-    {
-      title: docsCopy('垂直分隔'),
-      description: docsCopy('垂直线分隔同一行内并列的操作、状态或元信息。'),
-      preview: (
-        <div className="separator-vertical-demo">
-          <div className="separator-vertical-item">
-            <span>{docsCopy('状态')}</span>
-            <strong>{docsCopy('设计中')}</strong>
-          </div>
-          <Separator orientation="vertical" />
-          <div className="separator-vertical-item">
-            <span>{docsCopy('负责人')}</span>
-            <strong>Heliannuuthus</strong>
-          </div>
-          <Separator orientation="vertical" />
-          <div className="separator-vertical-item">
-            <span>{docsCopy('更新时间')}</span>
-            <strong>{docsCopy('刚刚')}</strong>
-          </div>
-        </div>
-      ),
-      code: docsCopy(`import { Separator } from '@heliannuuthus/ui'
-
-<div className="flex items-stretch gap-4">
-  <div>状态</div>
-  <Separator orientation="vertical" />
-  <div>负责人</div>
-</div>`),
+export const SectionSeparator = ({ orientation = 'horizontal' }) => {
+  return orientation === 'vertical' ? (
+    <div className="flex items-stretch gap-4">
+      <div>状态</div>
+      <Separator orientation="vertical" />
+      <div>负责人</div>
+    </div>
+  ) : (
+    <>
+      <section>上方内容</section>
+      <Separator />
+      <section>下方内容</section>
+    </>
+  )
+}`),
       previewHeight: 360,
     },
     {
@@ -1931,11 +1903,24 @@ const cardDocumentation: ComponentDocumentation = {
   ],
   examples: [
     {
-      title: docsCopy('基础卡片'),
-      description: docsCopy('只提供标题和内容，即可快速组织一组相关信息。'),
-      previewHeight: 340,
+      title: docsCopy('结构与外观'),
+      description: docsCopy(
+        '在同一案例中切换基础或完整结构，并分别验证阴影、描边与透明外观。'
+      ),
+      wide: true,
+      previewHeight: 520,
       caseLayout: 'segmented',
       caseAxes: [
+        {
+          name: 'structure',
+          label: docsCopy('结构'),
+          defaultValue: 'basic',
+          property: false,
+          options: [
+            { label: docsCopy('基础'), value: 'basic' },
+            { label: docsCopy('完整'), value: 'complete' },
+          ],
+        },
         {
           name: 'variant',
           label: docsCopy('外观'),
@@ -1947,55 +1932,36 @@ const cardDocumentation: ComponentDocumentation = {
           ],
         },
       ],
-      preview: (values) => (
-        <CardBasicDemo
-          variant={
-            values.variant === 'outline' || values.variant === 'ghost'
-              ? values.variant
-              : 'elevated'
-          }
-        />
-      ),
-      code: docsCopy(`import { Card } from '@heliannuuthus/ui'
+      preview: (values) => {
+        const variant =
+          values.variant === 'outline' || values.variant === 'ghost'
+            ? values.variant
+            : 'elevated';
 
-export const UpdateCard = () => {
-  return (
-    <Card title="设计系统更新" variant="elevated">
-      <p>本周补充了组件示例与无障碍说明。</p>
-    </Card>
-  )
-}
+        return values.structure === 'complete' ? (
+          <CardAnatomyDemo variant={variant} />
+        ) : (
+          <CardBasicDemo variant={variant} />
+        );
+      },
+      code: docsCopy(`import { Card, type CardProps } from '@heliannuuthus/ui'
 
-<Card title="描边卡片" variant="outline" />
-<Card title="透明卡片" variant="ghost" />`),
-    },
-    {
-      title: docsCopy('Header、Content 与 Footer'),
-      description: docsCopy(
-        'Header 负责标题与辅助操作，Content 承载主体，Footer 放置与整张卡片相关的操作。'
-      ),
-      wide: true,
-      previewHeight: 520,
-      preview: <CardAnatomyDemo />,
-      code: docsCopy(`import { Card } from '@heliannuuthus/ui'
-
-export const WorkspaceCard = () => {
+export const UpdateCard = ({
+  detailed = false,
+  variant = 'elevated',
+}: {
+  detailed?: boolean
+  variant?: CardProps['variant']
+}) => {
   return (
     <Card
-      title="工作区资料"
-      description="修改成员看到的工作区名称。"
-      action={<button>更多操作</button>}
-      footer={
-        <>
-          <span>上次保存于 10:24</span>
-          <button>保存修改</button>
-        </>
-      }
+      title="设计系统更新"
+      description={detailed ? '修改成员看到的工作区名称。' : undefined}
+      action={detailed ? <button>更多操作</button> : undefined}
+      footer={detailed ? <button>保存修改</button> : undefined}
+      variant={variant}
     >
-      <label>
-        工作区名称
-        <input defaultValue="Heliannuuthus UI" />
-      </label>
+      <p>{detailed ? '工作区名称：Heliannuuthus UI' : '本周补充了组件示例。'}</p>
     </Card>
   )
 }`),
@@ -3265,37 +3231,43 @@ const layoutDocumentation: ComponentDocumentation = {
 </Layout>`,
     },
     {
-      title: docsCopy('左侧导航'),
+      title: docsCopy('侧边区域'),
       description: docsCopy(
-        'Sidebar 与一个嵌套 Layout 横向排列；嵌套区域继续负责 Header 和 Content 的纵向关系。'
+        '通过 side 和布局顺序在同一案例中切换起始侧导航与结束侧详情。'
       ),
       previewHeight: 370,
-      preview: <LayoutLeftSidebarDemo />,
+      caseLayout: 'segmented',
+      caseAxes: [
+        {
+          name: 'side',
+          label: docsCopy('位置'),
+          defaultValue: 'start',
+          property: 'Layout.Sidebar.side',
+          options: [
+            { label: docsCopy('起始侧'), value: 'start' },
+            { label: docsCopy('结束侧'), value: 'end' },
+          ],
+        },
+      ],
+      preview: (values) =>
+        values.side === 'end' ? (
+          <LayoutRightSidebarDemo />
+        ) : (
+          <LayoutLeftSidebarDemo />
+        ),
       code: `import { Layout } from '@heliannuuthus/ui'
 
-<Layout>
-  <Layout.Sidebar width={240}>Sidebar</Layout.Sidebar>
+export const SidebarLayout = ({ side = 'start' }) => (
   <Layout>
-    <Layout.Header>Header</Layout.Header>
+    {side === 'start' ? (
+      <Layout.Sidebar side="start" width={240}>Navigation</Layout.Sidebar>
+    ) : null}
     <Layout.Content>Content</Layout.Content>
+    {side === 'end' ? (
+      <Layout.Sidebar side="end" width="18rem">Details</Layout.Sidebar>
+    ) : null}
   </Layout>
-</Layout>`,
-    },
-    {
-      title: docsCopy('右侧详情'),
-      description: docsCopy(
-        '将 Sidebar 放在内容之后即可形成右侧辅助区，适合目录、属性和上下文详情。'
-      ),
-      previewHeight: 370,
-      preview: <LayoutRightSidebarDemo />,
-      code: `import { Layout } from '@heliannuuthus/ui'
-
-<Layout>
-  <Layout>
-    <Layout.Content>Content</Layout.Content>
-  </Layout>
-  <Layout.Sidebar width="18rem">Details</Layout.Sidebar>
-</Layout>`,
+)`,
     },
     {
       title: docsCopy('完整应用框架'),
