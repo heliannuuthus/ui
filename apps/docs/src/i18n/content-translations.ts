@@ -3613,10 +3613,6 @@ const ActionCell = () => {
     'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button variant="outline">3 persons in charge</Button>}\n  title="Release Manager"\n  description="These members will be notified when publishing and rolling back."\n  content={<OwnerList />}\n  side="bottom"\n/>',
   'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  align="start"\n  content="左上提示"\n  delay={100}\n  side="top"\n  trigger={<Button>左上</Button>}\n/>':
     'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  align="start"\n  content="Top left tip"\n  delay={100}\n  side="top"\n  trigger={<Button>Top left</Button>}\n/>',
-  'import { Card } from \'@heliannuuthus/ui\'\n\nexport const UpdateCard = () => {\n  return (\n    <Card title="设计系统更新">\n      <p>本周补充了组件示例与无障碍说明。</p>\n    </Card>\n  )\n}':
-    'import { Card } from \'@heliannuuthus/ui\'\n\nexport const UpdateCard = () => {\n  return (\n    <Card title="Design System Update">\n      <p>Added component examples and accessibility instructions this week. </p>\n    </Card>\n  )\n}',
-  'import { Card } from \'@heliannuuthus/ui\'\n\nexport const WorkspaceCard = () => {\n  return (\n    <Card\n      title="工作区资料"\n      description="修改成员看到的工作区名称。"\n      action={<button>更多操作</button>}\n      footer={\n        <>\n          <span>上次保存于 10:24</span>\n          <button>保存修改</button>\n        </>\n      }\n    >\n      <label>\n        工作区名称\n        <input defaultValue="Heliannuuthus UI" />\n      </label>\n    </Card>\n  )\n}':
-    'import { Card } from \'@heliannuuthus/ui\'\n\nexport const WorkspaceCard = () => {\n  return (\n    <Card\n      title="Workspace Information"\n      description="Modify the workspace name seen by members."\n      action={<button>More actions</button>}\n      footer={\n        <>\n          <span>Last saved at 10:24</span>\n          <button>Save changes</button>\n        </>\n      }\n    >\n      <label>\n        workspace name\n        <input defaultValue="Heliannuuthus UI" />\n      </label>\n    </Card>\n  )\n}',
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: '读取', value: 'read' },\n    { label: '编辑', value: 'write' },\n    { label: '管理', value: 'admin' },\n  ]}\n/>":
     "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: 'read', value: 'read' },\n    { label: 'edit', value: 'write' },\n    { label: 'admin', value: 'admin' },\n  ]}\n/>",
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  name=\"permission\"\n  value={selected}\n  onChange={setSelected}\n  options={[\n    { label: '查看项目', value: 'read' },\n    { label: '参与评论', value: 'comment' },\n    { label: '管理项目', value: 'manage' },\n  ]}\n/>":
@@ -4896,8 +4892,83 @@ const ActionCell = () => {
     '<Button\n  href="https://ui.heliannuuthus.com"\n  target="_blank"\n  rel="noreferrer"\n  variant="outline"\n>\n  Open in a new window\n</Button>\n\n<Button href="/styles.css" download="heliannuuthus-ui.css">\n  Download stylesheet\n</Button>',
   'import { Stack } from \'@heliannuuthus/ui\'\n\n<Stack orientation="horizontal" separator={<span aria-hidden>·</span>}>\n  <span>概览</span>\n  <span>活动</span>\n  <span>设置</span>\n</Stack>':
     'import { Stack } from \'@heliannuuthus/ui\'\n\n<Stack orientation="horizontal" separator={<span aria-hidden>·</span>}>\n  <span>Overview</span>\n  <span>Activity</span>\n  <span>Settings</span>\n</Stack>',
-  'import { Card } from \'@heliannuuthus/ui\'\n\nexport const UpdateCard = () => {\n  return (\n    <Card title="设计系统更新" variant="elevated">\n      <p>本周补充了组件示例与无障碍说明。</p>\n    </Card>\n  )\n}\n\n<Card title="描边卡片" variant="outline" />\n<Card title="透明卡片" variant="ghost" />':
-    'import { Card } from \'@heliannuuthus/ui\'\n\nexport const UpdateCard = () => {\n  return (\n    <Card title="Design system update" variant="elevated">\n      <p>This week adds component examples and accessibility guidance.</p>\n    </Card>\n  )\n}\n\n<Card title="Outlined card" variant="outline" />\n<Card title="Ghost card" variant="ghost" />',
+  [`import { Card } from '@heliannuuthus/ui'
+
+export const UpdateCard = () => {
+  return (
+    <Card header={{ title: '设计系统更新' }} variant="elevated">
+      <p>本周补充了组件示例与无障碍说明。</p>
+    </Card>
+  )
+}
+
+<Card header={{ title: '描边卡片' }} variant="outline" />
+<Card header={{ title: '透明卡片' }} variant="ghost" />`]:
+    `import { Card } from '@heliannuuthus/ui'
+
+export const UpdateCard = () => {
+  return (
+    <Card header={{ title: 'Design system update' }} variant="elevated">
+      <p>This week adds component examples and accessibility guidance.</p>
+    </Card>
+  )
+}
+
+<Card header={{ title: 'Outlined card' }} variant="outline" />
+<Card header={{ title: 'Ghost card' }} variant="ghost" />`,
+  [`import { Card } from '@heliannuuthus/ui'
+
+export const WorkspaceCard = () => {
+  return (
+    <Card
+      header={{
+        title: '工作区资料',
+        description: '修改成员看到的工作区名称。',
+        action: <button>更多操作</button>,
+      }}
+      footer={
+        <>
+          <span>上次保存于 10:24</span>
+          <button>保存修改</button>
+        </>
+      }
+    >
+      <label>
+        工作区名称
+        <input defaultValue="Heliannuuthus UI" />
+      </label>
+    </Card>
+  )
+}`]: `import { Card } from '@heliannuuthus/ui'
+
+export const WorkspaceCard = () => {
+  return (
+    <Card
+      header={{
+        title: 'Workspace information',
+        description: 'Change the workspace name visible to members.',
+        action: <button>More actions</button>,
+      }}
+      footer={
+        <>
+          <span>Last saved at 10:24</span>
+          <button>Save changes</button>
+        </>
+      }
+    >
+      <label>
+        Workspace name
+        <input defaultValue="Heliannuuthus UI" />
+      </label>
+    </Card>
+  )
+}`,
+  '统一配置标题、辅助说明与右侧操作；不再占用根节点原生 title 属性。':
+    'Configure the title, supporting description, and trailing action together without occupying the native title attribute on the root.',
+  '卡片标题；传入 header 时必须提供。':
+    'The card title; required whenever header is provided.',
+  'header.action 和 footer 中的图标按钮需要提供可访问名称。':
+    'Icon buttons in header.action and footer need accessible names.',
   "import { Layout } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nexport const ResponsiveLayout = () => {\n  const [status, setStatus] = useState('')\n\n  return (\n    <Layout>\n      <Layout.Sidebar\n        breakpoint=\"lg\"\n        collapsible\n        collapsedWidth={64}\n        defaultCollapsed={false}\n        side=\"start\"\n        triggerLabels={{\n          collapse: '收起侧边栏',\n          expand: '展开侧边栏',\n        }}\n        onBreakpointChange={(below) => setStatus(below ? '窄屏' : '宽屏')}\n        onCollapsedChange={(collapsed, reason) =>\n          setStatus(\n            (collapsed ? '已收起' : '已展开') + '：' + reason\n          )\n        }\n      >\n        Navigation\n      </Layout.Sidebar>\n      <Layout.Content>{status}</Layout.Content>\n    </Layout>\n  )\n}":
     "import { Layout } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nexport const ResponsiveLayout = () => {\n  const [status, setStatus] = useState('')\n\n  return (\n    <Layout>\n      <Layout.Sidebar\n        breakpoint=\"lg\"\n        collapsible\n        collapsedWidth={64}\n        defaultCollapsed={false}\n        side=\"start\"\n        triggerLabels={{\n          collapse: 'Collapse sidebar',\n          expand: 'Expand sidebar',\n        }}\n        onBreakpointChange={(below) => setStatus(below ? 'Narrow' : 'Wide')}\n        onCollapsedChange={(collapsed, reason) =>\n          setStatus(\n            (collapsed ? 'Collapsed' : 'Expanded') + ': ' + reason\n          )\n        }\n      >\n        Navigation\n      </Layout.Sidebar>\n      <Layout.Content>{status}</Layout.Content>\n    </Layout>\n  )\n}",
 };

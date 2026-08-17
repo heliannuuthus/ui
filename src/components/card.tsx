@@ -17,11 +17,15 @@ type CardStyles = {
 
 type CardVariant = 'elevated' | 'outline' | 'ghost';
 
-type CardProps = Omit<React.ComponentProps<'div'>, 'title'> & {
-  variant?: CardVariant;
-  title?: React.ReactNode;
+type CardHeader = {
+  title: React.ReactNode;
   description?: React.ReactNode;
   action?: React.ReactNode;
+};
+
+type CardProps = React.ComponentProps<'div'> & {
+  variant?: CardVariant;
+  header?: CardHeader;
   footer?: React.ReactNode;
   classNames?: CardClassNames;
   styles?: CardStyles;
@@ -30,17 +34,13 @@ type CardProps = Omit<React.ComponentProps<'div'>, 'title'> & {
 const Card = ({
   className,
   variant = 'elevated',
-  title,
-  description,
-  action,
+  header,
   footer,
   classNames,
   styles,
   children,
   ...props
 }: CardProps) => {
-  const hasHeader = title != null || description != null || action != null;
-
   return (
     <div
       data-slot="card"
@@ -51,7 +51,7 @@ const Card = ({
       )}
       {...props}
     >
-      {hasHeader && (
+      {header != null && (
         <div
           data-slot="card-header"
           className={cn(
@@ -60,7 +60,7 @@ const Card = ({
           )}
           style={styles?.header}
         >
-          {title != null && (
+          {header.title != null && (
             <div
               data-slot="card-title"
               className={cn(
@@ -69,10 +69,10 @@ const Card = ({
               )}
               style={styles?.title}
             >
-              {title}
+              {header.title}
             </div>
           )}
-          {description != null && (
+          {header.description != null && (
             <div
               data-slot="card-description"
               className={cn(
@@ -81,10 +81,10 @@ const Card = ({
               )}
               style={styles?.description}
             >
-              {description}
+              {header.description}
             </div>
           )}
-          {action != null && (
+          {header.action != null && (
             <div
               data-slot="card-action"
               className={cn(
@@ -93,7 +93,7 @@ const Card = ({
               )}
               style={styles?.action}
             >
-              {action}
+              {header.action}
             </div>
           )}
         </div>
@@ -123,6 +123,7 @@ const Card = ({
 
 export {
   Card,
+  type CardHeader,
   type CardClassNames,
   type CardProps,
   type CardStyles,

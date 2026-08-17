@@ -1923,7 +1923,7 @@ export const CoverEditor = () => {
 const cardDocumentation: ComponentDocumentation = {
   name: 'Card',
   slug: 'card',
-  typeDefinitionGroups: ['CardClassNames'],
+  typeDefinitionGroups: ['CardHeader', 'CardClassNames'],
   summary: docsCopy('用清晰的头部、内容和底部区域承载同一主题的信息与操作。'),
   whenToUse: [
     docsCopy('需要将一组相关信息和操作组织成独立内容单元。'),
@@ -1960,14 +1960,14 @@ const cardDocumentation: ComponentDocumentation = {
 
 export const UpdateCard = () => {
   return (
-    <Card title="设计系统更新" variant="elevated">
+    <Card header={{ title: '设计系统更新' }} variant="elevated">
       <p>本周补充了组件示例与无障碍说明。</p>
     </Card>
   )
 }
 
-<Card title="描边卡片" variant="outline" />
-<Card title="透明卡片" variant="ghost" />`),
+<Card header={{ title: '描边卡片' }} variant="outline" />
+<Card header={{ title: '透明卡片' }} variant="ghost" />`),
     },
     {
       title: docsCopy('Header、Content 与 Footer'),
@@ -1982,9 +1982,11 @@ export const UpdateCard = () => {
 export const WorkspaceCard = () => {
   return (
     <Card
-      title="工作区资料"
-      description="修改成员看到的工作区名称。"
-      action={<button>更多操作</button>}
+      header={{
+        title: '工作区资料',
+        description: '修改成员看到的工作区名称。',
+        action: <button>更多操作</button>,
+      }}
       footer={
         <>
           <span>上次保存于 10:24</span>
@@ -2017,19 +2019,11 @@ export const WorkspaceCard = () => {
       defaultValue: "'elevated'",
     },
     {
-      name: 'title',
-      description: docsCopy('卡片标题；存在时自动生成 Header。'),
-      type: 'ReactNode',
-    },
-    {
-      name: 'description',
-      description: docsCopy('标题下方的辅助说明。'),
-      type: 'ReactNode',
-    },
-    {
-      name: 'action',
-      description: docsCopy('Header 右侧的辅助操作。'),
-      type: 'ReactNode',
+      name: 'header',
+      description: docsCopy(
+        '统一配置标题、辅助说明与右侧操作；不再占用根节点原生 title 属性。'
+      ),
+      type: 'CardHeader',
     },
     {
       name: 'children',
@@ -2050,6 +2044,25 @@ export const WorkspaceCard = () => {
       name: 'className',
       description: docsCopy('扩展 Card 根节点样式。'),
       type: 'string',
+    },
+    {
+      component: 'CardHeader',
+      name: 'title',
+      description: docsCopy('卡片标题；传入 header 时必须提供。'),
+      type: 'ReactNode',
+      required: true,
+    },
+    {
+      component: 'CardHeader',
+      name: 'description',
+      description: docsCopy('标题下方的辅助说明。'),
+      type: 'ReactNode',
+    },
+    {
+      component: 'CardHeader',
+      name: 'action',
+      description: docsCopy('Header 右侧的辅助操作。'),
+      type: 'ReactNode',
     },
     {
       component: 'CardClassNames',
@@ -2090,7 +2103,7 @@ export const WorkspaceCard = () => {
   ],
   accessibility: [
     docsCopy('标题应准确描述卡片主题，并保持页面标题层级连续。'),
-    docsCopy('action 和 footer 中的图标按钮需要提供可访问名称。'),
+    docsCopy('header.action 和 footer 中的图标按钮需要提供可访问名称。'),
   ],
   pitfalls: [
     docsCopy('不要把互不相关的信息仅因为视觉需要塞进同一张 Card。'),

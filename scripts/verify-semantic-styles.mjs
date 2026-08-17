@@ -140,13 +140,22 @@ const cardMarkup = renderToStaticMarkup(
     Card,
     {
       className: 'card-root',
+      header: {
+        title: 'Visible title',
+        description: 'Description',
+        action: 'Action',
+      },
       styles: { content: { minWidth: 0 } },
-      title: 'Title',
+      title: 'Native tooltip',
     },
     'Content'
   )
 );
 assert.match(cardMarkup, /^<div\b[^>]*class="[^"]*card-root/);
+assert.match(cardMarkup, /^<div\b[^>]*title="Native tooltip"/);
+assert.match(cardMarkup, /data-slot="card-title"[^>]*>Visible title</);
+assert.match(cardMarkup, /data-slot="card-description"[^>]*>Description</);
+assert.match(cardMarkup, /data-slot="card-action"[^>]*>Action</);
 assert.match(cardMarkup, /data-slot="card-content"[^>]*style="min-width:0"/);
 
 const tableMarkup = renderToStaticMarkup(

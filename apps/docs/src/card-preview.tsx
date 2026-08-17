@@ -54,7 +54,7 @@ export const CardBasicDemo = ({
   return (
     <Card
       className="card-basic-demo"
-      title={docsCopy('设计系统更新')}
+      header={{ title: docsCopy('设计系统更新') }}
       variant={variant}
     >
       <p>
@@ -68,22 +68,24 @@ export const CardAnatomyDemo = () => {
   return (
     <Card
       className="card-showcase"
-      title={
-        <span className="card-region-heading">
-          <span>Header</span>
-          {docsCopy('工作区资料')}
-        </span>
-      }
-      description={docsCopy('修改成员看到的工作区名称。')}
-      action={
-        <Button
-          aria-label={docsCopy('更多操作')}
-          size="icon-sm"
-          variant="outline"
-        >
-          <MoreHorizontal />
-        </Button>
-      }
+      header={{
+        title: (
+          <span className="card-region-heading">
+            <span>Header</span>
+            {docsCopy('工作区资料')}
+          </span>
+        ),
+        description: docsCopy('修改成员看到的工作区名称。'),
+        action: (
+          <Button
+            aria-label={docsCopy('更多操作')}
+            size="icon-sm"
+            variant="outline"
+          >
+            <MoreHorizontal />
+          </Button>
+        ),
+      }}
       footer={
         <>
           <span className="card-footer-meta">
@@ -209,24 +211,26 @@ export const CardSemanticDomDemo = () => {
     >
       <div className="card-semantic-stage" ref={stageRef}>
         <Card
-          action={
-            <Button
-              aria-label={docsCopy('更多操作')}
-              size="icon-sm"
-              variant="ghost"
-            >
-              <MoreHorizontal />
-            </Button>
-          }
           className="card-semantic-card"
-          description={docsCopy('生产环境 · 今天 18:00')}
           footer={
             <>
               <span>{docsCopy('3 位审核人已确认')}</span>
               <Button size="sm">{docsCopy('查看计划')}</Button>
             </>
           }
-          title={docsCopy('Web Console 发布计划')}
+          header={{
+            title: docsCopy('Web Console 发布计划'),
+            description: docsCopy('生产环境 · 今天 18:00'),
+            action: (
+              <Button
+                aria-label={docsCopy('更多操作')}
+                size="icon-sm"
+                variant="ghost"
+              >
+                <MoreHorizontal />
+              </Button>
+            ),
+          }}
         >
           <div className="card-semantic-content">
             <span>{docsCopy('当前版本')}</span>
