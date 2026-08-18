@@ -6,6 +6,7 @@ import { Checkbox } from '@heliannuuthus/ui';
 import { Empty } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
 import { Kbd } from '@heliannuuthus/ui';
+import { ScrollArea } from '@heliannuuthus/ui';
 import { Separator } from '@heliannuuthus/ui';
 import { Stack } from '@heliannuuthus/ui';
 import { Toggle } from '@heliannuuthus/ui';
@@ -48,7 +49,6 @@ import {
   MasonryResponsiveDemo,
   MasonrySpanDemo,
 } from './masonry-preview';
-import { ScrollAreaAnimatedListDemo } from './scroll-area-preview';
 import {
   StackAlignmentDemo,
   StackCompactVariantsDemo,
@@ -189,6 +189,7 @@ import {
   NavigationMenuMegaDemo,
   PaginationControlledDemo,
   PaginationOverflowDemo,
+  PaginationStatesDemo,
   TabsDashboardDemo,
   TabsMotionDemo,
   TabsResponsiveDemo,
@@ -273,7 +274,7 @@ const buttonDocumentation: ComponentDocumentation = {
   name: 'Button',
   slug: 'button',
   summary: docsCopy(
-    '触发操作或事件的基础控件，用于提交、确认、导航及页面中的即时操作。'
+    '触发操作或事件的基础控件；设置 href 时切换为使用相同视觉样式的原生链接。'
   ),
   whenToUse: [
     docsCopy('用户需要执行一个明确动作，例如提交表单、创建内容或确认选择。'),
@@ -292,7 +293,7 @@ const buttonDocumentation: ComponentDocumentation = {
           <Button variant="secondary">{docsCopy('次要操作')}</Button>
           <Button variant="outline">{docsCopy('描边按钮')}</Button>
           <Button variant="ghost">{docsCopy('幽灵按钮')}</Button>
-          <Button variant="link">{docsCopy('文字链接')}</Button>
+          <Button variant="link">{docsCopy('文字按钮')}</Button>
           <Button variant="destructive">{docsCopy('危险操作')}</Button>
         </div>
       ),
@@ -305,7 +306,7 @@ export const ButtonVariants = () => {
       <Button variant="secondary">次要操作</Button>
       <Button variant="outline">描边按钮</Button>
       <Button variant="ghost">幽灵按钮</Button>
-      <Button variant="link">文字链接</Button>
+      <Button variant="link">文字按钮</Button>
       <Button variant="destructive">危险操作</Button>
     </div>
   )
@@ -342,49 +343,28 @@ export const ButtonSizes = () => {
       description: docsCopy(
         '将紧密相关的操作收进同一个视觉组，并保持操作语义单一。'
       ),
-      caseLayout: 'segmented',
-      caseAxes: [
-        {
-          name: 'orientation',
-          label: docsCopy('方向'),
-          defaultValue: 'horizontal',
-          property: 'Button.Group.orientation',
-          options: [
-            { label: docsCopy('水平'), value: 'horizontal' },
-            { label: docsCopy('垂直'), value: 'vertical' },
-          ],
-        },
-        {
-          name: 'block',
-          label: docsCopy('宽度'),
-          defaultValue: 'false',
-          property: 'Button.Group.block',
-          options: [
-            { label: docsCopy('内容宽度'), value: 'false' },
-            { label: docsCopy('填满容器'), value: 'true' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <Button.Group
-          aria-label={docsCopy('分页操作')}
-          block={values.block === 'true'}
-          orientation={
-            values.orientation === 'vertical' ? 'vertical' : 'horizontal'
-          }
-        >
-          <Button variant="outline">{docsCopy('上一项')}</Button>
-          <Button>{docsCopy('下一项')}</Button>
-        </Button.Group>
+      preview: (
+        <div className="mx-auto w-80 max-w-full">
+          <Button.Group
+            aria-label={docsCopy('分页操作')}
+            block
+            orientation="horizontal"
+          >
+            <Button variant="outline">{docsCopy('上一项')}</Button>
+            <Button>{docsCopy('下一项')}</Button>
+          </Button.Group>
+        </div>
       ),
       code: docsCopy(`import { Button } from '@heliannuuthus/ui'
 
 export const GroupedButtons = () => {
   return (
-    <Button.Group aria-label="分页操作" block orientation="vertical">
-      <Button variant="outline">上一项</Button>
-      <Button>下一项</Button>
-    </Button.Group>
+    <div className="mx-auto w-80 max-w-full">
+      <Button.Group aria-label="分页操作" block orientation="horizontal">
+        <Button variant="outline">上一项</Button>
+        <Button>下一项</Button>
+      </Button.Group>
+    </div>
   )
 }`),
     },
@@ -492,9 +472,9 @@ export const ButtonStates = () => {
 }`),
     },
     {
-      title: docsCopy('导航按钮'),
+      title: docsCopy('链接模式'),
       description: docsCopy(
-        '设置 href 后输出具有链接语义的 a 元素；不设置 href 时始终输出原生 button。导航不要通过点击事件手动修改地址。'
+        'href 会把根节点切换为原生 a 元素；target、rel 与 download 都是原生链接属性，variant 和 size 只负责视觉样式。'
       ),
       preview: (
         <div className="example-row">
@@ -502,35 +482,6 @@ export const ButtonStates = () => {
             {docsCopy('查看 Card 文档')}
             <ArrowRight data-icon="inline-end" />
           </Button>
-          <Button disabled href="/components/card" variant="outline">
-            {docsCopy('暂不可用')}
-          </Button>
-        </div>
-      ),
-      code: docsCopy(`${buttonImport}
-import { ArrowRight } from 'lucide-react'
-
-export const ButtonLink = () => {
-  return (
-    <>
-      <Button href="/components/card" variant="outline">
-        查看 Card 文档
-        <ArrowRight data-icon="inline-end" />
-      </Button>
-      <Button disabled href="/components/card" variant="outline">
-        暂不可用
-      </Button>
-    </>
-  )
-}`),
-    },
-    {
-      title: docsCopy('外链与下载'),
-      description: docsCopy(
-        '新窗口外链同时声明 target 与 rel；download 用于下载同源资源并可指定文件名。'
-      ),
-      preview: (
-        <div className="example-row">
           <Button
             href="https://ui.heliannuuthus.com"
             rel="noreferrer"
@@ -545,6 +496,12 @@ export const ButtonLink = () => {
         </div>
       ),
       code: docsCopy(`${buttonImport}
+import { ArrowRight } from 'lucide-react'
+
+<Button href="/components/card" variant="outline">
+  查看 Card 文档
+  <ArrowRight data-icon="inline-end" />
+</Button>
 
 <Button
   href="https://ui.heliannuuthus.com"
@@ -561,7 +518,12 @@ export const ButtonLink = () => {
     },
   ],
   parts: [
-    { name: 'Button', description: docsCopy('触发单个明确操作的基础按钮。') },
+    {
+      name: 'Button',
+      description: docsCopy(
+        '未设置 href 时渲染原生 button；设置 href 时渲染原生 a 元素。'
+      ),
+    },
     {
       name: 'Button.Group',
       description: docsCopy('组合紧密相关的按钮，并支持水平或垂直排列。'),
@@ -570,7 +532,7 @@ export const ButtonLink = () => {
   api: [
     {
       name: 'variant',
-      description: docsCopy('按钮的视觉样式。'),
+      description: docsCopy('按钮或链接的视觉样式；不参与决定根元素的语义。'),
       type: "'default' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link'",
       defaultValue: "'default'",
     },
@@ -589,7 +551,7 @@ export const ButtonLink = () => {
     {
       name: 'href',
       description: docsCopy(
-        '导航地址；设置后渲染为 a 元素，未设置时渲染为原生 button。'
+        '导航地址与根元素判别字段；设置后渲染为 a，未设置时渲染为原生 button。'
       ),
       type: 'string',
     },
@@ -677,6 +639,9 @@ export const ButtonLink = () => {
   pitfalls: [
     docsCopy('不要在同一操作组中放置多个同等强调的主要按钮。'),
     docsCopy('不要用禁用按钮隐藏失败原因；在附近说明需要满足的条件。'),
+    docsCopy(
+      '执行操作时不要设置 href；页面导航也不要通过 onClick 手动修改地址。'
+    ),
   ],
 };
 
@@ -2450,7 +2415,7 @@ export const PageBreadcrumb = () => {
     {
       name: 'separator',
       description: docsCopy('设置统一的路径分隔符，也可以传入自己的图标。'),
-      type: "'chevron' | 'slash' | 'dot' | ReactNode",
+      type: 'BreadcrumbSeparator',
       defaultValue: "'chevron'",
     },
     {
@@ -2948,66 +2913,239 @@ const paginationDocumentation: ComponentDocumentation = {
 />`,
     },
     {
-      title: docsCopy('大量数据与省略'),
+      title: docsCopy('完整数据分页'),
       description: docsCopy(
-        '保留首页、末页和当前页附近范围，其余页码用省略标记收起。'
+        '通过总数与每页数量推导页数，并在一行内组合数据范围、页码、每页数量和快速跳转。'
       ),
       preview: <PaginationOverflowDemo />,
+      previewHeight: 180,
+      wide: true,
       code: docsCopy(`<Pagination
   current={24}
-  pageCount={80}
-  previousText="上一页"
-  nextText="下一页"
-  siblingCount={1}
-/>`),
+  total={2480}
+  pageSize={20}
+  showTotal
+  showSizeChanger
+  showQuickJumper
+      />`),
+    },
+    {
+      title: docsCopy('简洁与禁用状态'),
+      description: docsCopy(
+        '简洁模式使用页码输入完成长范围跳转；禁用状态保留当前分页上下文但阻止全部操作。'
+      ),
+      preview: <PaginationStatesDemo />,
+      code: `<Pagination
+  defaultCurrent={6}
+  defaultPageSize={10}
+  total={120}
+  simple
+  size="sm"
+/>
+
+<Pagination
+  defaultCurrent={3}
+  pageCount={8}
+  disabled
+  previous={false}
+  next={false}
+/>
+
+<Pagination pageCount={1} hideOnSinglePage />`,
     },
   ],
   api: [
     {
+      name: 'align',
+      description: docsCopy('设置分页器在可用宽度内的对齐方式。'),
+      type: "'start' | 'center' | 'end'",
+      defaultValue: "'center'",
+    },
+    {
       name: 'current',
-      description: docsCopy('设置当前页。'),
+      description: docsCopy('受控模式下的当前页，从 1 开始。'),
       type: 'number',
+    },
+    {
+      name: 'defaultCurrent',
+      description: docsCopy('非受控模式下的初始页码。'),
+      type: 'number',
+      defaultValue: '1',
     },
     {
       name: 'pageCount',
-      description: docsCopy('设置总页数。'),
+      description: docsCopy(
+        '直接设置总页数；省略时由 total 与 pageSize 推导。'
+      ),
       type: 'number',
-      required: true,
+    },
+    {
+      name: 'total',
+      description: docsCopy(
+        '设置数据总数，并结合 pageSize 推导总页数；pageCount 可直接覆盖推导结果。'
+      ),
+      type: 'number',
+      defaultValue: '0',
+    },
+    {
+      name: 'pageSize',
+      description: docsCopy('受控模式下的每页数据条数。'),
+      type: 'number',
+    },
+    {
+      name: 'defaultPageSize',
+      description: docsCopy('非受控模式下的初始每页数据条数。'),
+      type: 'number',
+      defaultValue: '10',
     },
     {
       name: 'onChange',
-      description: docsCopy('页码变化时回传目标页。'),
-      type: '(page: number) => void',
+      description: docsCopy('页码或每页数量变化时回传下一页和每页数量。'),
+      type: '(page: number, pageSize: number) => void',
     },
     {
-      name: 'previousText',
-      description: docsCopy('自定义上一页按钮的可见文字。'),
-      type: 'ReactNode',
-      defaultValue: docsCopy("'上一页'"),
+      name: 'onPageSizeChange',
+      description: docsCopy('每页数量变化时回传校正后的页码和每页数量。'),
+      type: '(page: number, pageSize: number) => void',
     },
     {
-      name: 'nextText',
-      description: docsCopy('自定义下一页按钮的可见文字。'),
-      type: 'ReactNode',
-      defaultValue: docsCopy("'下一页'"),
+      name: 'pageSizeOptions',
+      description: docsCopy('设置每页数量选择器的候选值。'),
+      type: 'readonly number[]',
+      defaultValue: '[10, 20, 50, 100]',
+    },
+    {
+      name: 'pageSizeLabel',
+      description: docsCopy('格式化每页数量选项的可见文字。'),
+      type: '(pageSize: number) => ReactNode',
+    },
+    {
+      name: 'showSizeChanger',
+      description: docsCopy('显示每页数量选择器。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'showQuickJumper',
+      description: docsCopy(
+        '显示快速跳页输入框，并可配置标签、后缀和确认按钮。'
+      ),
+      type: 'boolean | PaginationQuickJumperOptions',
+      defaultValue: 'false',
+    },
+    {
+      name: 'showTotal',
+      description: docsCopy('显示数据总数，或根据总数与当前范围自定义摘要。'),
+      type: 'boolean | ((total: number, range: readonly [number, number]) => ReactNode)',
+      defaultValue: 'false',
+    },
+    {
+      name: 'simple',
+      description: docsCopy('使用紧凑的页码输入模式，并可设为只读。'),
+      type: 'boolean | PaginationSimpleOptions',
+      defaultValue: 'false',
+    },
+    {
+      name: 'disabled',
+      description: docsCopy('禁用所有分页、跳页和每页数量操作。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'hideOnSinglePage',
+      description: docsCopy('只有一页时隐藏整个分页器。'),
+      type: 'boolean',
+      defaultValue: 'false',
+    },
+    {
+      name: 'previous',
+      description: docsCopy(
+        '控制上一页条目；false 隐藏，true 使用默认内容，ReactNode 自定义完整内容。'
+      ),
+      type: 'boolean | ReactNode',
+      defaultValue: 'true',
+    },
+    {
+      name: 'next',
+      description: docsCopy(
+        '控制下一页条目；false 隐藏，true 使用默认内容，ReactNode 自定义完整内容。'
+      ),
+      type: 'boolean | ReactNode',
+      defaultValue: 'true',
+    },
+    {
+      name: 'first',
+      description: docsCopy(
+        '控制第一页条目；false 隐藏，true 使用默认图标，ReactNode 自定义完整内容。'
+      ),
+      type: 'boolean | ReactNode',
+      defaultValue: 'false',
+    },
+    {
+      name: 'last',
+      description: docsCopy(
+        '控制最后一页条目；false 隐藏，true 使用默认图标，ReactNode 自定义完整内容。'
+      ),
+      type: 'boolean | ReactNode',
+      defaultValue: 'false',
+    },
+    {
+      name: 'showTitle',
+      description: docsCopy('为页码和导航按钮提供原生 title 提示。'),
+      type: 'boolean',
+      defaultValue: 'true',
     },
     {
       name: 'ariaLabels',
       description: docsCopy(
         '本地化分页导航、前后翻页按钮和省略页码的无障碍名称。'
       ),
-      type: '{ navigation?: string; previous?: string; next?: string; more?: string }',
+      type: 'PaginationAriaLabels',
+    },
+    {
+      name: 'getItemAriaLabel',
+      description: docsCopy('根据条目类型、页码和选中状态生成无障碍名称。'),
+      type: '(context: PaginationAriaLabelContext) => string',
     },
     {
       name: 'getItemHref',
-      description: docsCopy('为每个页码生成可复制、可打开新窗口的真实地址。'),
-      type: '(page: number) => string',
+      description: docsCopy(
+        '为页码和导航按钮生成可复制、可打开新窗口的真实地址。'
+      ),
+      type: '(page: number, type: PaginationItemType) => string',
     },
     {
-      name: 'siblingCount',
+      name: 'boundaries',
+      description: docsCopy('控制首尾两侧始终保留多少个边界页码。'),
+      type: 'number',
+      defaultValue: '1',
+    },
+    {
+      name: 'siblings',
       description: docsCopy('控制当前页两侧保留多少个相邻页码。'),
       type: 'number',
       defaultValue: '1',
+    },
+    {
+      name: 'renderItem',
+      description: docsCopy('自定义页码、导航按钮和省略标记的最终渲染。'),
+      type: '(item: PaginationRenderItemProps) => ReactNode',
+    },
+    {
+      name: 'size',
+      description: docsCopy('设置分页控件尺寸。'),
+      type: 'PaginationSize',
+      defaultValue: "'default'",
+    },
+    {
+      name: 'classNames',
+      description: docsCopy('按语义插槽扩展分页器内部类名。'),
+      type: 'PaginationClassNames',
+    },
+    {
+      name: 'styles',
+      description: docsCopy('按语义插槽扩展分页器内部行内样式。'),
+      type: 'PaginationStyles',
     },
   ],
   accessibility: [
@@ -3489,7 +3627,7 @@ export const ResponsiveLayout = () => {
       description: docsCopy(
         '设置内置折叠触发器在展开和折叠状态下的可访问名称。'
       ),
-      type: '{ collapse: string; expand: string }',
+      type: 'LayoutSidebarTriggerLabels',
       defaultValue:
         "{ collapse: 'Collapse sidebar', expand: 'Expand sidebar' }",
     },
@@ -3968,69 +4106,124 @@ componentDocumentation['context-menu'].examples = [
   },
 ];
 
-componentDocumentation['context-menu'].typePreviews = [
+componentDocumentation['dropdown-menu'].typePreviews = [
   {
     name: 'DropdownMenuEntry',
     definition: `type DropdownMenuEntry =
-  | { type?: 'item'; label: ReactNode; icon?: ReactNode; shortcut?: ReactNode; href?: string; disabled?: boolean; destructive?: boolean; onSelect?: () => void; children?: DropdownMenuEntry[] }
-  | { type: 'label'; label: ReactNode }
-  | { type: 'separator' }
-  | { type: 'checkbox'; label: ReactNode; checked: boolean; disabled?: boolean; onChange?: (checked: boolean) => void }
-  | { type: 'radio'; value: string; onChange?: (value: string) => void; items: Array<{ label: ReactNode; value: string; disabled?: boolean }> }`,
+  | DropdownMenuItemEntry
+  | DropdownMenuLabelEntry
+  | DropdownMenuSeparatorEntry
+  | DropdownMenuCheckboxEntry
+  | DropdownMenuRadioEntry`,
+  },
+  {
+    name: 'DropdownMenuItemEntry',
+    definition: `type DropdownMenuItemEntry = {
+  type?: 'item'
+  label: ReactNode
+  icon?: ReactNode
+  shortcut?: ReactNode
+  href?: string
+  disabled?: boolean
+  destructive?: boolean
+  onSelect?: () => void
+  children?: DropdownMenuEntry[]
+}`,
+  },
+  {
+    name: 'DropdownMenuLabelEntry',
+    definition: `type DropdownMenuLabelEntry = {
+  type: 'label'
+  label: ReactNode
+}`,
+  },
+  {
+    name: 'DropdownMenuSeparatorEntry',
+    definition: `type DropdownMenuSeparatorEntry = {
+  type: 'separator'
+}`,
+  },
+  {
+    name: 'DropdownMenuCheckboxEntry',
+    definition: `type DropdownMenuCheckboxEntry = {
+  type: 'checkbox'
+  label: ReactNode
+  checked: boolean
+  disabled?: boolean
+  onChange?: (checked: boolean) => void
+}`,
+  },
+  {
+    name: 'DropdownMenuRadioOption',
+    definition: `type DropdownMenuRadioOption = {
+  label: ReactNode
+  value: string
+  disabled?: boolean
+}`,
+  },
+  {
+    name: 'DropdownMenuRadioEntry',
+    definition: `type DropdownMenuRadioEntry = {
+  type: 'radio'
+  value: string
+  onChange?: (value: string) => void
+  items: DropdownMenuRadioOption[]
+}`,
   },
 ];
 
 const scrollAreaDocumentation = componentDocumentation['scroll-area'];
 if (scrollAreaDocumentation) {
   scrollAreaDocumentation.summary = docsCopy(
-    '在受限区域内承载长内容，并以自适应滚动条和边缘渐隐提示剩余内容。'
+    '在受限区域内承载长内容，并通过封装后的原生滚动视口提供一致的滚动体验。'
   );
   scrollAreaDocumentation.whenToUse = [
     docsCopy(
       '列表、日志或长文本必须保持在固定高度内，但仍需完整访问全部内容。'
     ),
-    docsCopy('需要使用边缘渐隐提示滚动方向，同时保持原生滚动和触控惯性。'),
-    docsCopy('内容可能横向溢出，或需要按场景选择自动、常驻与隐藏滚动条。'),
+    docsCopy('需要保持原生滚动、键盘操作和触控惯性，同时统一滚动条样式。'),
+    docsCopy('内容可能横向溢出，或需要配置滚动条的尺寸与显隐策略。'),
   ];
   scrollAreaDocumentation.examples = [
     {
-      title: docsCopy('可导航的发布动态'),
+      title: docsCopy('基础滚动区域'),
       description: docsCopy(
-        '边缘渐隐会跟随真实滚动距离变化；列表项进入视口时轻量出现，并支持方向键浏览与 Enter 选择。'
+        '组件内部创建可滚动视口和所需滚动条；业务只需提供尺寸、滚动条配置与内容。'
       ),
-      preview: <ScrollAreaAnimatedListDemo />,
+      preview: (
+        <ScrollArea
+          className="h-72 w-full max-w-xl rounded-3xl border bg-card"
+          scrollbar={{ size: 'sm', visibility: 'auto' }}
+        >
+          <div className="divide-y px-5">
+            {Array.from({ length: 12 }, (_, index) => (
+              <p className="py-4 text-sm text-muted-foreground" key={index}>
+                {docsCopy('可滚动内容')} {index + 1}
+              </p>
+            ))}
+          </div>
+        </ScrollArea>
+      ),
       code: docsCopy(`import { ScrollArea } from '@heliannuuthus/ui'
 
 <ScrollArea
-  className="h-80"
-  fadeEdges
-  fadeSize={52}
-  scrollbarVisibility="auto"
-  viewportProps={{
-    role: 'listbox',
-    tabIndex: 0,
-    'aria-label': '发布动态',
-  }}
+  className="h-72 rounded-3xl border"
+  scrollbar={{ size: 'sm', visibility: 'auto' }}
 >
-  {events.map((event) => (
-    <ReleaseEvent key={event.id} event={event} />
-  ))}
+  <div className="divide-y px-5">
+    {items.map((item) => (
+      <p className="py-4" key={item.id}>{item.label}</p>
+    ))}
+  </div>
 </ScrollArea>`),
-      previewHeight: 620,
-      wide: true,
+      previewHeight: 440,
     },
   ];
   scrollAreaDocumentation.parts = [
     {
       name: 'ScrollArea',
       description: docsCopy(
-        '组合根容器、可聚焦视口、所需方向的滚动条与双轴交汇角。'
-      ),
-    },
-    {
-      name: 'ScrollArea.Bar',
-      description: docsCopy(
-        '可单独复用的滚动条部件，支持纵向、横向及自动或常驻可见策略。'
+        '封装根容器、可聚焦滚动视口、滚动条与双轴交汇角，无需业务手动组合内部部件。'
       ),
     },
   ];
@@ -4042,55 +4235,55 @@ if (scrollAreaDocumentation) {
       defaultValue: "'vertical'",
     },
     {
-      name: 'scrollbarVisibility',
-      description: docsCopy('滚动条在交互时出现、始终显示，或完全隐藏。'),
-      type: "'auto' | 'always' | 'hidden'",
-      defaultValue: "'auto'",
+      name: 'scrollbar',
+      description: docsCopy('集中配置滚动条尺寸与显隐策略。'),
+      type: 'ScrollAreaScrollbarConfig',
+      defaultValue: "{ size: 'md', visibility: 'auto' }",
     },
+  ];
+  scrollAreaDocumentation.typePreviews = [
     {
-      name: 'fadeEdges',
-      description: docsCopy('为纵向或横向溢出边缘添加随滚动距离变化的渐隐。'),
-      type: "boolean | 'vertical' | 'horizontal'",
-      defaultValue: 'false',
-    },
-    {
-      name: 'fadeSize',
-      description: docsCopy('设置边缘渐隐的最大长度，数字按像素处理。'),
-      type: 'number | string',
-      defaultValue: '40',
-    },
-    {
-      name: 'viewportProps',
-      description: docsCopy(
-        '向真实滚动视口传递 ref、事件、ARIA、className 与 style。'
-      ),
-      type: 'ScrollAreaViewportProps',
-    },
-    {
-      name: 'overflowEdgeThreshold',
-      description: docsCopy('越过指定像素后才将对应边缘视为存在溢出。'),
-      type: 'number | Partial<Record<OverflowEdge, number>>',
-      defaultValue: '0',
+      name: 'ScrollAreaScrollbarConfig',
+      definition: `type ScrollAreaScrollbarConfig = {
+  size?: 'sm' | 'md' | 'lg' | number
+  visibility?: 'auto' | 'always' | 'hidden'
+}`,
+      api: [
+        {
+          name: 'size',
+          description: docsCopy(
+            '设置滚动条粗细；预设分别为 6、10、14 像素，数字按像素处理。'
+          ),
+          type: "'sm' | 'md' | 'lg' | number",
+          defaultValue: "'md'",
+        },
+        {
+          name: 'visibility',
+          description: docsCopy(
+            '自动按悬停或滚动显示、始终显示，或完全隐藏滚动条。'
+          ),
+          type: "'auto' | 'always' | 'hidden'",
+          defaultValue: "'auto'",
+        },
+      ],
     },
   ];
   scrollAreaDocumentation.accessibility = [
     docsCopy(
-      '滚动区域需要参与键盘交互时，通过 viewportProps 提供 tabIndex、角色和可访问名称。'
+      '内部视口只在内容溢出时进入 Tab 顺序，并保留浏览器原生键盘滚动行为。'
     ),
     docsCopy(
       '隐藏滚动条不会禁用滚动；仍需确保触控、滚轮与键盘均可到达全部内容。'
     ),
     docsCopy(
-      '示例列表使用 aria-activedescendant 表达活动项，并支持方向键、Home、End 与 Enter。'
+      '列表、日志等内容语义应声明在子内容容器上，不需要操作内部 viewport。'
     ),
   ];
   scrollAreaDocumentation.pitfalls = [
     docsCopy('不要在内容可以自然撑开页面时强行嵌套滚动区域。'),
+    docsCopy('隐藏滚动条前应确认界面仍有足够线索表明内容可以滚动。'),
     docsCopy(
-      '不要只靠渐隐表达内容可滚动；长列表仍应保留滚动条或明确的操作提示。'
-    ),
-    docsCopy(
-      '列表选择、业务动画与数据状态应由组合层管理，不应下沉到 ScrollArea。'
+      '不要依赖或覆盖内部 viewport、thumb 与 corner；它们不是公共组合 API。'
     ),
   ];
 }
@@ -6592,18 +6785,19 @@ import { ScrollArea } from '@heliannuuthus/ui'
 
 <ScrollArea
   className="h-80"
-  fadeEdges
-  viewportProps={{ role: 'list', 'aria-label': '协作消息' }}
+  scrollbar={{ size: 'sm', visibility: 'auto' }}
 >
-  {messages.map((message) => (
-    <div className="flex gap-2" role="listitem">
-      <Avatar alt={message.author} fallback={message.avatar} />
-      <div className="flex min-w-0 flex-1 flex-col gap-2">
-        <span>{message.author} · {message.time}</span>
-        <Bubble content={message.content} variant="elevated" />
+  <div role="list" aria-label="协作消息">
+    {messages.map((message) => (
+      <div className="flex gap-2" role="listitem">
+        <Avatar alt={message.author} fallback={message.avatar} />
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <span>{message.author} · {message.time}</span>
+          <Bubble content={message.content} variant="elevated" />
+        </div>
       </div>
-    </div>
-  ))}
+    ))}
+  </div>
 </ScrollArea>`),
       previewHeight: 560,
     },
@@ -7366,7 +7560,7 @@ const dataDisplayApi: Record<string, ApiProperty[]> = {
     {
       name: 'initialDimension',
       description: docsCopy('设置首次测量前用于服务端渲染的稳定初始尺寸。'),
-      type: '{ width: number; height: number }',
+      type: 'ChartInitialDimension',
       defaultValue: '{ width: 320, height: 200 }',
     },
     {
@@ -8698,13 +8892,6 @@ componentDocumentation.toast.api = [
     defaultValue: 'true',
   },
 ];
-componentDocumentation.toast.typePreviews = [
-  {
-    name: 'useToast()',
-    definition:
-      'Returns the scoped toast API with success, info, warning, error, loading, promise, dismiss, and history methods.',
-  },
-];
 componentDocumentation.toast.accessibility = [
   docsCopy(
     'Toast 使用非阻塞通知区域；消息标题应简短，并在 description 中说明必要上下文。'
@@ -9711,13 +9898,36 @@ replaceExampleCodes('pagination', [
   `import { Pagination } from '@heliannuuthus/ui'
 
 <Pagination current={page} pageCount={5} onChange={setPage} />`,
-  `import { Pagination } from '@heliannuuthus/ui'
+  docsCopy(`import { Pagination } from '@heliannuuthus/ui'
 
 <Pagination
+  align="start"
+  boundaries={2}
+  siblings={1}
   current={24}
-  pageCount={80}
+  total={2480}
+  pageSize={20}
+  onChange={setPage}
+  onPageSizeChange={(page, size) => {
+    setPage(page)
+    setPageSize(size)
+  }}
+  pageSizeOptions={[10, 20, 50, 100]}
+  pageSizeLabel={(size) => \`\${size} 条 / 页\`}
+  showTotal={(total, range) => \`\${range[0]}–\${range[1]} / \${total} 项\`}
+  showSizeChanger
+  showQuickJumper={{ goButton: '跳转', label: '跳至', suffix: '页' }}
+  first
+  last
+  previous="上一页"
+  next="下一页"
+  showTitle
+  getItemAriaLabel={({ page }) => \`Page \${page}\`}
   getItemHref={(page) => \`#page-\${page}\`}
-/>`,
+  renderItem={({ originalElement }) => originalElement}
+  classNames={{ summary: 'font-medium' }}
+  styles={{ summary: { minWidth: 120 } }}
+/>`),
 ]);
 
 replaceExampleCodes('tabs', [
@@ -10676,7 +10886,7 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     ...[
       { name: 'confirmText', type: 'ReactNode' },
       { name: 'cancelText', type: 'ReactNode' },
-      { name: 'confirmVariant', type: 'ButtonVariant' },
+      { name: 'confirmVariant', type: 'ButtonProps["variant"]' },
     ].map((property) => ({
       ...property,
       description: docsCopy('设置确认与取消操作的文字和确认按钮样式。'),
@@ -11123,8 +11333,8 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       type: 'ReactNode',
     })),
     ...[
-      { name: 'side', type: 'PopupPosition["side"]' },
-      { name: 'align', type: 'PopupPosition["align"]' },
+      { name: 'side', type: "'top' | 'right' | 'bottom' | 'left'" },
+      { name: 'align', type: "'start' | 'center' | 'end'" },
       { name: 'sideOffset', type: 'number' },
       { name: 'alignOffset', type: 'number' },
     ].map((property) => ({
@@ -11237,8 +11447,8 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy('设置需要补充说明的交互元素和简短提示内容。'),
     })),
     ...[
-      { name: 'side', type: 'PopupPosition["side"]' },
-      { name: 'align', type: 'PopupPosition["align"]' },
+      { name: 'side', type: "'top' | 'right' | 'bottom' | 'left'" },
+      { name: 'align', type: "'start' | 'center' | 'end'" },
       { name: 'sideOffset', type: 'number' },
       { name: 'alignOffset', type: 'number' },
     ].map((property) => ({
@@ -11791,6 +12001,18 @@ const semanticStyleContracts = {
     ],
   },
   marker: { componentName: 'Marker', slots: ['content', 'icon'] },
+  pagination: {
+    componentName: 'Pagination',
+    slots: [
+      'content',
+      'control',
+      'ellipsis',
+      'item',
+      'pageSize',
+      'quickJumper',
+      'summary',
+    ],
+  },
   popover: { componentName: 'Popover', slots: ['content'] },
   radio: {
     apiComponent: 'Radio',
@@ -11915,7 +12137,7 @@ appendMissingApi('dialog', [
 ]);
 appendMissingApi('drawer', [
   publicProperty('closeText', 'ReactNode'),
-  publicProperty('closeVariant', 'ButtonVariant', {
+  publicProperty('closeVariant', 'ButtonProps["variant"]', {
     defaultValue: "'outline'",
   }),
   publicProperty('contentProps', 'ComponentProps<"div">'),
@@ -12559,7 +12781,6 @@ const masonryNavigationComponents = [
   'dropdown-menu',
   'menubar',
   'navigation-menu',
-  'pagination',
 ] as const;
 
 for (const slug of masonryNavigationComponents) {
@@ -12886,3 +13107,389 @@ for (const documentation of Object.values(componentDocumentation)) {
     properties: harnessCase.properties,
   }));
 }
+
+const appendTypePreviews = (slug: string, previews: ApiTypePreview[]) => {
+  const documentation = componentDocumentation[slug];
+  if (!documentation) return;
+
+  documentation.typePreviews = [
+    ...(documentation.typePreviews ?? []),
+    ...previews,
+  ];
+};
+
+appendTypePreviews('breadcrumb', [
+  {
+    name: 'BreadcrumbItem',
+    definition: `type BreadcrumbItem = {
+  label: ReactNode
+  href?: string
+  icon?: ReactNode
+  disabled?: boolean
+  menu?: BreadcrumbMenuItem[]
+  separator?: BreadcrumbSeparator
+  onClick?: MouseEventHandler<HTMLAnchorElement>
+}`,
+  },
+  {
+    name: 'BreadcrumbMenuItem',
+    definition: `type BreadcrumbMenuItem = {
+  label: ReactNode
+  href?: string
+  icon?: ReactNode
+  disabled?: boolean
+  onSelect?: () => void
+}`,
+  },
+  {
+    name: 'BreadcrumbSeparator',
+    definition:
+      "type BreadcrumbSeparator = 'chevron' | 'slash' | 'dot' | ReactNode",
+  },
+]);
+
+appendTypePreviews('chart', [
+  {
+    name: 'ChartConfig',
+    definition: 'type ChartConfig = Record<string, ChartConfigItem>',
+  },
+  {
+    name: 'ChartConfigItem',
+    definition:
+      'type ChartConfigItem = ChartConfigBase & (ChartConfigColor | ChartConfigTheme)',
+  },
+  {
+    name: 'ChartConfigBase',
+    definition: `type ChartConfigBase = {
+  label?: ReactNode
+  icon?: ComponentType
+}`,
+  },
+  {
+    name: 'ChartConfigColor',
+    definition: `type ChartConfigColor = {
+  color?: string
+  theme?: never
+}`,
+  },
+  {
+    name: 'ChartConfigTheme',
+    definition: `type ChartConfigTheme = {
+  color?: never
+  theme: Record<'light' | 'dark', string>
+}`,
+  },
+  {
+    name: 'ChartInitialDimension',
+    definition: `type ChartInitialDimension = {
+  width: number
+  height: number
+}`,
+  },
+]);
+
+appendTypePreviews('checkbox', [
+  {
+    name: 'CheckboxOption',
+    definition: `type CheckboxOption = {
+  className?: string
+  disabled?: boolean
+  label: ReactNode
+  value: string
+  variant?: 'default' | 'task'
+}`,
+  },
+]);
+
+appendTypePreviews('command', [
+  {
+    name: 'CommandFilter',
+    definition: `type CommandFilter = (
+  value: string,
+  search: string,
+  keywords?: string[]
+) => number`,
+  },
+]);
+
+appendTypePreviews('drawer', [
+  {
+    name: 'DrawerSnapPoint',
+    definition: 'type DrawerSnapPoint = number | string',
+  },
+]);
+
+appendTypePreviews('input-number', [
+  {
+    name: 'InputNumberControls',
+    definition: `type InputNumberControls = {
+  decrement?: ReactNode
+  increment?: ReactNode
+}`,
+  },
+]);
+
+appendTypePreviews('masonry', [
+  {
+    name: 'MasonryLength',
+    definition: 'type MasonryLength = number | string',
+  },
+  {
+    name: 'MasonryGap',
+    definition:
+      'type MasonryGap = MasonryLength | readonly [MasonryLength, MasonryLength]',
+  },
+]);
+
+appendTypePreviews('navigation-menu', [
+  {
+    name: 'NavigationMenuItemConfig',
+    definition: `type NavigationMenuItemConfig = {
+  active?: boolean
+  content?: ReactNode | ((slots: NavigationMenuLinkSlots) => ReactNode)
+  disabled?: boolean
+  href?: string
+  label: ReactNode
+  value?: string
+}`,
+  },
+  {
+    name: 'NavigationMenuLinkSlots',
+    definition: `type NavigationMenuLinkSlots = {
+  Link: NavigationMenuLinkComponent
+}`,
+  },
+  {
+    name: 'NavigationMenuLinkComponent',
+    definition:
+      'type NavigationMenuLinkComponent = (props: NavigationMenuLinkProps) => ReactNode',
+  },
+  {
+    name: 'NavigationMenuLinkProps',
+    definition: `type NavigationMenuLinkProps = Omit<ComponentProps<'a'>, 'children'> & {
+  active?: boolean
+  children?: ReactNode
+  closeOnClick?: boolean
+}`,
+  },
+]);
+
+appendTypePreviews('layout', [
+  {
+    name: 'LayoutSidebarTriggerLabels',
+    definition: `type LayoutSidebarTriggerLabels = {
+  collapse: string
+  expand: string
+}`,
+  },
+]);
+
+appendTypePreviews('pagination', [
+  {
+    name: 'PaginationAriaLabels',
+    definition: `type PaginationAriaLabels = {
+  first?: string
+  last?: string
+  more?: string
+  navigation?: string
+  next?: string
+  page?: (page: number) => string
+  pageSize?: string
+  previous?: string
+  quickJumper?: string
+}`,
+  },
+  {
+    name: 'PaginationAriaLabelContext',
+    definition: `type PaginationAriaLabelContext = {
+  page: number | null
+  selected: boolean
+  type: PaginationItemType
+}`,
+  },
+  {
+    name: 'PaginationItemType',
+    definition: `type PaginationItemType =
+  | 'page'
+  | 'first'
+  | 'last'
+  | 'next'
+  | 'previous'
+  | 'ellipsis-start'
+  | 'ellipsis-end'`,
+  },
+  {
+    name: 'PaginationQuickJumperOptions',
+    definition: `type PaginationQuickJumperOptions = {
+  goButton?: ReactNode
+  label?: ReactNode
+  suffix?: ReactNode
+}`,
+  },
+  {
+    name: 'PaginationRenderItemProps',
+    definition: `type PaginationRenderItemProps = {
+  disabled: boolean
+  originalElement: ReactElement
+  page: number | null
+  selected: boolean
+  type: PaginationItemType
+}`,
+  },
+  {
+    name: 'PaginationSimpleOptions',
+    definition: `type PaginationSimpleOptions = {
+  readOnly?: boolean
+}`,
+  },
+  {
+    name: 'PaginationSize',
+    definition: "type PaginationSize = 'sm' | 'default' | 'lg'",
+  },
+]);
+
+appendTypePreviews('radio', [
+  {
+    name: 'RadioOption',
+    definition: `type RadioOption<Value = string> = {
+  className?: string
+  disabled?: boolean
+  label: ReactNode
+  value: Value
+}`,
+  },
+]);
+
+appendTypePreviews('resizable', [
+  {
+    name: 'PanelSize',
+    definition: `type PanelSize = {
+  asPercentage: number
+  inPixels: number
+}`,
+  },
+  {
+    name: 'ResizableSeparator',
+    definition:
+      'type ResizableSeparator = ReactNode | ((props: ResizableSeparatorRenderProps) => ReactNode)',
+  },
+]);
+
+appendTypePreviews('select', [
+  {
+    name: 'SelectOption',
+    definition: `type SelectOption<Value> = {
+  disabled?: boolean
+  label: ReactNode
+  value: Value
+}`,
+  },
+  {
+    name: 'SelectOptionGroup',
+    definition: `type SelectOptionGroup<Value> = {
+  label: ReactNode
+  options: readonly SelectOption<Value>[]
+}`,
+  },
+  {
+    name: 'SelectTriggerProps',
+    definition: `type SelectTriggerProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'children' | 'className'> & {
+  children?: ReactNode
+  className?: string
+  inputRef?: Ref<HTMLInputElement>
+  showClear?: boolean
+  showTrigger?: boolean
+}`,
+  },
+]);
+
+appendTypePreviews('table', [
+  {
+    name: 'Table.Render',
+    definition:
+      'type Table.Render<TData> = (value: unknown, row: TData, index: number) => ReactNode',
+  },
+  {
+    name: 'Table.SearchProps',
+    definition: `type Table.SearchProps<TData> = {
+  'aria-label'?: string
+  columnKeys?: string[]
+  defaultValue?: string
+  mode?: 'client' | 'manual'
+  onChange?: (value: string) => void
+  placeholder?: string
+  predicate?: (row: TData, query: string) => boolean
+  value?: string
+}`,
+  },
+  {
+    name: 'Table.SortingProps',
+    definition: `type Table.SortingProps = {
+  defaultValue?: Table.SortState | null
+  mode?: 'client' | 'manual'
+  onChange?: (value: Table.SortState | null) => void
+  value?: Table.SortState | null
+}`,
+  },
+  {
+    name: 'Table.SortState',
+    definition: `type Table.SortState = {
+  columnKey: string
+  order: Table.SortOrder
+}`,
+  },
+  {
+    name: 'Table.SortOrder',
+    definition: "type Table.SortOrder = 'ascending' | 'descending'",
+  },
+  {
+    name: 'Table.PaginationProps',
+    definition: `type Table.PaginationProps = {
+  current?: number
+  defaultCurrent?: number
+  mode?: 'client' | 'manual'
+  onChange?: (page: number, pageSize: number) => void
+  pageSize?: number
+  renderSummary?: (total: number, current: number, pageCount: number) => ReactNode
+  showSummary?: boolean
+  total?: number
+}`,
+  },
+  {
+    name: 'Table.RowSelectionProps',
+    definition: `type Table.RowSelectionProps<TData> = {
+  defaultSelectedRowKeys?: Key[]
+  isRowDisabled?: (row: TData, index: number) => boolean
+  onChange?: (keys: Key[], rows: readonly TData[]) => void
+  selectedRowKeys?: Key[]
+}`,
+  },
+  {
+    name: 'Table.ExpandableProps',
+    definition: `type Table.ExpandableProps<TData> = {
+  defaultExpandedRowKeys?: Key[]
+  expandedRowKeys?: Key[]
+  onExpandedRowKeysChange?: (keys: Key[]) => void
+  render: (row: TData, index: number) => ReactNode
+  rowExpandable?: (row: TData, index: number) => boolean
+}`,
+  },
+  {
+    name: 'Table.VirtualProps',
+    definition: `type Table.VirtualProps = {
+  containerHeight?: number | string
+  overscan?: number
+  rowHeight?: number
+}`,
+  },
+]);
+
+appendTypePreviews('toggle', [
+  {
+    name: 'ToggleGroupOption',
+    definition: `type ToggleGroupOption<Value extends string = string> = {
+  label: ReactNode
+  value: Value
+} & ButtonHTMLAttributes<HTMLButtonElement>`,
+  },
+]);

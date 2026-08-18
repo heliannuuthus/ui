@@ -54,7 +54,7 @@ export const componentSearchMetadata = {
   'scroll-area': [
     'Provides a consistent scrolling experience inside constrained regions.',
     ['滚动区域', '滚动条'],
-    ['scroll', 'viewport', 'overflow'],
+    ['scroll', 'scrollbar', 'overflow'],
   ],
   masonry: [
     'Places variable-height content into the shortest column and supports full-row items.',
