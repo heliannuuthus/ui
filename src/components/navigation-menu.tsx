@@ -15,11 +15,14 @@ type NavigationMenuLinkComponent = (
   props: NavigationMenuLinkProps
 ) => React.ReactNode;
 
+type NavigationMenuLinkSlots = {
+  Link: NavigationMenuLinkComponent;
+};
+
 type NavigationMenuItemConfig = {
   active?: boolean;
   content?:
-    | React.ReactNode
-    | ((slots: { Link: NavigationMenuLinkComponent }) => React.ReactNode);
+    React.ReactNode | ((slots: NavigationMenuLinkSlots) => React.ReactNode);
   disabled?: boolean;
   href?: string;
   label: React.ReactNode;
@@ -206,6 +209,8 @@ export {
   NavigationMenu,
   navigationMenuTriggerStyle,
   type NavigationMenuItemConfig,
+  type NavigationMenuLinkComponent,
   type NavigationMenuLinkProps,
+  type NavigationMenuLinkSlots,
   type NavigationMenuProps,
 };

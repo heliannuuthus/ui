@@ -5,115 +5,42 @@ import { cn } from '../lib/utils';
 
 type ScrollAreaOrientation = 'vertical' | 'horizontal' | 'both';
 type ScrollAreaScrollbarVisibility = 'auto' | 'always' | 'hidden';
-type ScrollAreaFadeEdges = boolean | Exclude<ScrollAreaOrientation, 'both'>;
-type ScrollAreaOverflowEdgeThreshold =
-  | number
-  | Partial<{
-      xStart: number;
-      xEnd: number;
-      yStart: number;
-      yEnd: number;
-    }>;
+type ScrollAreaScrollbarSize = 'sm' | 'md' | 'lg' | number;
 
-type ScrollAreaProps = React.ComponentProps<'div'> & {
-  fadeEdges?: ScrollAreaFadeEdges;
-  fadeSize?: number | string;
+type ScrollAreaScrollbarConfig = {
+  size?: ScrollAreaScrollbarSize;
+  visibility?: ScrollAreaScrollbarVisibility;
+};
+
+type ScrollAreaProps = React.ComponentPropsWithoutRef<'div'> & {
   orientation?: ScrollAreaOrientation;
-  overflowEdgeThreshold?: ScrollAreaOverflowEdgeThreshold;
-  scrollbarVisibility?: ScrollAreaScrollbarVisibility;
-  viewportProps?: React.ComponentProps<'div'>;
+  scrollbar?: ScrollAreaScrollbarConfig;
 };
 
-const toCssLength = (value: number | string) => {
-  return typeof value === 'number' ? `${value}px` : value;
-};
+const scrollbarSizes = {
+  sm: 6,
+  md: 10,
+  lg: 14,
+} as const;
 
-const ScrollArea = ({
-  className,
-  children,
-  fadeEdges = false,
-  fadeSize = 40,
-  orientation = 'vertical',
-  scrollbarVisibility = 'auto',
-  style,
-  viewportProps,
-  ...props
-}: ScrollAreaProps) => {
-  const fadeAxis = fadeEdges === true ? 'vertical' : fadeEdges || undefined;
-  const {
-    className: viewportClassName,
-    style: viewportStyle,
-    ...resolvedViewportProps
-  } = viewportProps ?? {};
-  const fadeStyle = fadeAxis
-    ? ({
-        '--scroll-area-fade-size': toCssLength(fadeSize),
-      } as React.CSSProperties)
-    : undefined;
-  const resolvedStyle = { ...style, ...fadeStyle };
-
-  return (
-    <ScrollAreaPrimitive.Root
-      data-slot="scroll-area"
-      data-fade={fadeAxis}
-      data-orientation={orientation}
-      data-scrollbar-visibility={scrollbarVisibility}
-      className={cn('relative', className)}
-      style={resolvedStyle}
-      {...props}
-    >
-      <ScrollAreaPrimitive.Viewport
-        {...resolvedViewportProps}
-        data-slot="scroll-area-viewport"
-        className={cn(
-          'size-full rounded-[inherit] outline-none',
-          viewportClassName
-        )}
-        style={viewportStyle}
-      >
-        {children}
-      </ScrollAreaPrimitive.Viewport>
-      {scrollbarVisibility !== 'hidden' &&
-        (orientation === 'vertical' || orientation === 'both') && (
-          <ScrollBar visibility={scrollbarVisibility} />
-        )}
-      {scrollbarVisibility !== 'hidden' &&
-        (orientation === 'horizontal' || orientation === 'both') && (
-          <ScrollBar
-            orientation="horizontal"
-            visibility={scrollbarVisibility}
-          />
-        )}
-      {scrollbarVisibility !== 'hidden' && orientation === 'both' && (
-        <ScrollAreaPrimitive.Corner data-slot="scroll-area-corner" />
-      )}
-    </ScrollAreaPrimitive.Root>
-  );
-};
-
-type ScrollBarProps = React.ComponentProps<'div'> & {
-  keepMounted?: boolean;
-  orientation?: Exclude<ScrollAreaOrientation, 'both'>;
-  visibility?: Exclude<ScrollAreaScrollbarVisibility, 'hidden'>;
+const resolveScrollbarSize = (size: ScrollAreaScrollbarSize) => {
+  return typeof size === 'number' ? size : scrollbarSizes[size];
 };
 
 const ScrollBar = ({
-  className,
   orientation = 'vertical',
-  visibility = 'auto',
-  ...props
-}: ScrollBarProps) => {
+  visibility,
+}: {
+  orientation?: Exclude<ScrollAreaOrientation, 'both'>;
+  visibility: Exclude<ScrollAreaScrollbarVisibility, 'hidden'>;
+}) => {
   return (
     <ScrollAreaPrimitive.Scrollbar
       data-slot="scroll-area-scrollbar"
-      data-orientation={orientation}
       data-visibility={visibility}
+      keepMounted={visibility === 'always'}
       orientation={orientation}
-      className={cn(
-        'pointer-events-none flex touch-none p-px opacity-0 transition-[opacity,colors] duration-150 select-none data-hovering:pointer-events-auto data-hovering:opacity-100 data-scrolling:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0 data-[visibility=always]:pointer-events-auto data-[visibility=always]:opacity-100 data-horizontal:h-2.5 data-horizontal:flex-col data-horizontal:border-t data-horizontal:border-t-transparent data-vertical:h-full data-vertical:w-2.5 data-vertical:border-l data-vertical:border-l-transparent',
-        className
-      )}
-      {...props}
+      className="pointer-events-none flex touch-none p-px opacity-0 transition-opacity duration-150 select-none data-hovering:pointer-events-auto data-hovering:opacity-100 data-scrolling:pointer-events-auto data-scrolling:opacity-100 data-scrolling:duration-0 data-[visibility=always]:pointer-events-auto data-[visibility=always]:opacity-100 data-horizontal:h-(--scroll-area-scrollbar-size) data-horizontal:flex-col data-vertical:h-full data-vertical:w-(--scroll-area-scrollbar-size)"
     >
       <ScrollAreaPrimitive.Thumb
         data-slot="scroll-area-thumb"
@@ -123,16 +50,65 @@ const ScrollBar = ({
   );
 };
 
-const ScrollAreaCompound = Object.assign(ScrollArea, {
-  Bar: ScrollBar,
-});
+const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
+  (
+    {
+      children,
+      className,
+      orientation = 'vertical',
+      scrollbar,
+      style,
+      ...props
+    },
+    ref
+  ) => {
+    const { size = 'md', visibility = 'auto' } = scrollbar ?? {};
+    const showsScrollbar = visibility !== 'hidden';
+
+    return (
+      <ScrollAreaPrimitive.Root
+        {...props}
+        ref={ref}
+        data-slot="scroll-area"
+        data-orientation={orientation}
+        data-scrollbar-visibility={visibility}
+        className={cn('relative', className)}
+        style={
+          {
+            '--scroll-area-scrollbar-size': `${resolveScrollbarSize(size)}px`,
+            ...style,
+          } as React.CSSProperties
+        }
+      >
+        <ScrollAreaPrimitive.Viewport
+          data-slot="scroll-area-viewport"
+          className="size-full rounded-[inherit] outline-none"
+        >
+          {children}
+        </ScrollAreaPrimitive.Viewport>
+        {showsScrollbar &&
+          (orientation === 'vertical' || orientation === 'both') && (
+            <ScrollBar visibility={visibility} />
+          )}
+        {showsScrollbar &&
+          (orientation === 'horizontal' || orientation === 'both') && (
+            <ScrollBar orientation="horizontal" visibility={visibility} />
+          )}
+        {showsScrollbar && orientation === 'both' && (
+          <ScrollAreaPrimitive.Corner data-slot="scroll-area-corner" />
+        )}
+      </ScrollAreaPrimitive.Root>
+    );
+  }
+);
+
+ScrollArea.displayName = 'ScrollArea';
 
 export {
-  ScrollAreaCompound as ScrollArea,
-  type ScrollAreaFadeEdges,
+  ScrollArea,
   type ScrollAreaOrientation,
-  type ScrollAreaOverflowEdgeThreshold,
   type ScrollAreaProps,
+  type ScrollAreaScrollbarConfig,
+  type ScrollAreaScrollbarSize,
   type ScrollAreaScrollbarVisibility,
-  type ScrollBarProps,
 };

@@ -201,7 +201,7 @@ interface TableRowSelectionProps<TData> {
 
 interface TablePaginationBaseProps extends Pick<
   PaginationProps,
-  'ariaLabels' | 'className' | 'nextText' | 'previousText' | 'siblingCount'
+  'ariaLabels' | 'className' | 'next' | 'previous' | 'siblings'
 > {
   current?: number;
   defaultCurrent?: number;
@@ -1070,11 +1070,11 @@ const ManagedTable = <TData,>({
             className={cn('mx-0 w-auto', paginationOptions.className)}
             ariaLabels={paginationOptions.ariaLabels}
             current={Math.min(currentPage, pageCount)}
-            nextText={paginationOptions.nextText}
+            next={paginationOptions.next}
             onChange={(page) => table.setPageIndex(page - 1)}
             pageCount={pageCount}
-            previousText={paginationOptions.previousText}
-            siblingCount={paginationOptions.siblingCount}
+            previous={paginationOptions.previous}
+            siblings={paginationOptions.siblings}
           />
         </div>
       ) : null}
