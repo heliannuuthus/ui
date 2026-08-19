@@ -179,14 +179,20 @@ const FieldSeparator = ({
   );
 };
 
+type FieldErrorItem = {
+  message?: string;
+};
+
+type FieldErrorProps = React.ComponentProps<'div'> & {
+  errors?: Array<FieldErrorItem | undefined>;
+};
+
 const FieldError = ({
   className,
   children,
   errors,
   ...props
-}: React.ComponentProps<'div'> & {
-  errors?: Array<{ message?: string } | undefined>;
-}) => {
+}: FieldErrorProps) => {
   const content = useMemo(() => {
     if (children) {
       return children;
@@ -243,3 +249,4 @@ const FieldCompound = Object.assign(Field, {
 });
 
 export { FieldCompound as Field };
+export type { FieldErrorItem, FieldErrorProps };

@@ -819,16 +819,13 @@ export const BubbleConversationDemo = () => {
       </div>
       <ScrollArea
         className="display-conversation-scroll"
-        fadeEdges
-        fadeSize={28}
-        overflowEdgeThreshold={2}
-        viewportProps={{
-          'aria-label': docsCopy('发布协作消息'),
-          role: 'list',
-          tabIndex: 0,
-        }}
+        scrollbar={{ size: 'sm', visibility: 'auto' }}
       >
-        <div className="display-conversation-scroll-list">
+        <div
+          aria-label={docsCopy('发布协作消息')}
+          className="display-conversation-scroll-list"
+          role="list"
+        >
           {conversationMessages.map((message) => (
             <div
               className="display-conversation-message"
@@ -1770,9 +1767,9 @@ export const TableManagedDemo = () => {
             next: docsCopy('前往下一页'),
             previous: docsCopy('前往上一页'),
           },
-          nextText: docsCopy('下一页'),
+          next: docsCopy('下一页'),
           pageSize: 3,
-          previousText: docsCopy('上一页'),
+          previous: docsCopy('上一页'),
           renderSummary: (total, current, pageCount) =>
             docsCopy(`共 ${total} 项 · 第 ${current} / ${pageCount} 页`),
         }}
@@ -2696,8 +2693,8 @@ export const TablePaginationDemo = () => {
           current={page}
           onChange={setPage}
           pageCount={pageCount}
-          previousText={docsCopy('上一页')}
-          nextText={docsCopy('下一页')}
+          previous={docsCopy('上一页')}
+          next={docsCopy('下一页')}
         />
       </div>
     </div>

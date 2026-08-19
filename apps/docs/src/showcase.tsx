@@ -53,6 +53,7 @@ import {
   useParams,
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Highlight } from 'prism-react-renderer';
 import {
   componentDocumentation,
   type ApiProperty,
@@ -74,7 +75,13 @@ import {
   type PackageManagerName,
 } from './package-manager-icon';
 import { SyntaxCode } from './syntax-code';
+import { docsSyntaxTheme } from './syntax-theme';
 import { orderApiProperties } from './api-property-order';
+import {
+  apiTypeDefinitionReference,
+  createApiTypeDefinitions,
+  type ApiTypeDefinition,
+} from './api-type-definitions';
 
 const repositoryUrl = 'https://github.com/heliannuuthus/ui';
 const docsBasePath = window.location.hostname.endsWith('github.io')
@@ -109,111 +116,192 @@ const groupApiProperties = (
   return Array.from(groups, ([component, api]) => ({ api, component }));
 };
 
-type ApiTypeDefinition = {
-  api?: ApiProperty[];
-  declaration?: string;
-  definition?: string;
-  name: string;
+const apiTypeDefinitions = createApiTypeDefinitions(componentDocumentation);
+
+type ApiTypeSyntaxSegment = {
+  className?: string;
+  end: number;
+  start: number;
+  style?: CSSProperties;
+  text: string;
 };
 
-const apiTypeDefinitions = (() => {
-  const definitions = new Map<string, ApiTypeDefinition>();
+const apiTypeReferencePattern =
+  /[A-Za-z_$][A-Za-z0-9_$]*(?:\.[A-Za-z_$][A-Za-z0-9_$]*)*/g;
 
-  for (const documentation of Object.values(componentDocumentation)) {
-    const groups = groupApiProperties(documentation.api, documentation.name);
-    const primaryGroup = groups.find(
-      (group) => group.component === documentation.name
-    );
-    const componentTypeName = documentation.name.replace(/[^A-Za-z0-9_$]/g, '');
+const ApiType = ({
+  excludeReferences,
+  inline = false,
+  type,
+}: {
+  excludeReferences?: ReadonlySet<string>;
+  inline?: boolean;
+  type: string;
+}) => {
+  const { t } = useTranslation();
+  const references = Array.from(type.matchAll(apiTypeReferencePattern)).flatMap(
+    (match) => {
+      const reference = match[0];
+      const definition = excludeReferences?.has(reference)
+        ? undefined
+        : apiTypeDefinitions.get(reference);
 
-    if (primaryGroup && componentTypeName) {
-      const name = `${componentTypeName}Props`;
-      definitions.set(name, { api: primaryGroup.api, name });
+      if (!definition || match.index === undefined) return [];
+
+      return [
+        {
+          definition,
+          end: match.index + reference.length,
+          reference,
+          start: match.index,
+        },
+      ];
     }
+  );
 
-    for (const group of groups) {
-      if (documentation.typeDefinitionGroups?.includes(group.component)) {
-        definitions.set(group.component, {
-          api: group.api,
-          name: group.component,
+  return (
+    <Highlight code={type} language="tsx" theme={docsSyntaxTheme}>
+      {({ tokens, getTokenProps }) => {
+        const syntaxSegments: ApiTypeSyntaxSegment[] = [];
+        let offset = 0;
+
+        tokens.forEach((line, lineIndex) => {
+          line.forEach((token) => {
+            const { className, style } = getTokenProps({ token });
+            const start = offset;
+            offset += token.content.length;
+            syntaxSegments.push({
+              className,
+              end: offset,
+              start,
+              style,
+              text: token.content,
+            });
+          });
+
+          if (lineIndex < tokens.length - 1) {
+            syntaxSegments.push({
+              end: offset + 1,
+              start: offset,
+              text: '\n',
+            });
+            offset += 1;
+          }
         });
-      }
-    }
 
-    for (const preview of documentation.typePreviews ?? []) {
-      definitions.set(preview.name, preview);
-    }
-  }
+        const renderRange = (start: number, end: number, key: string) =>
+          syntaxSegments.flatMap((segment, segmentIndex) => {
+            const rangeStart = Math.max(start, segment.start);
+            const rangeEnd = Math.min(end, segment.end);
 
-  return definitions;
-})();
+            if (rangeStart >= rangeEnd) return [];
+
+            return [
+              <span
+                className={segment.className}
+                key={`${key}-${segmentIndex}`}
+                style={segment.style}
+              >
+                {segment.text.slice(
+                  rangeStart - segment.start,
+                  rangeEnd - segment.start
+                )}
+              </span>,
+            ];
+          });
+
+        const content: React.ReactNode[] = [];
+        let cursor = 0;
+
+        references.forEach((reference, index) => {
+          content.push(
+            ...renderRange(cursor, reference.start, `text-${index}`)
+          );
+          content.push(
+            <Popover
+              align="start"
+              classNames={{ content: 'component-api-type-popover' }}
+              content={
+                <ApiTypeDefinitionPreview definition={reference.definition} />
+              }
+              delay={180}
+              key={`${reference.reference}-${reference.start}`}
+              side="top"
+              trigger={
+                <button
+                  aria-label={t('docs.previewType', {
+                    type: reference.reference,
+                  })}
+                  className="component-api-type-reference"
+                  type="button"
+                >
+                  {renderRange(
+                    reference.start,
+                    reference.end,
+                    `reference-${index}`
+                  )}
+                </button>
+              }
+              triggerMode="hover"
+            />
+          );
+          cursor = reference.end;
+        });
+        content.push(...renderRange(cursor, type.length, 'text-final'));
+
+        return inline ? (
+          <span className="component-api-type">{content}</span>
+        ) : (
+          <code className="component-api-type">{content}</code>
+        );
+      }}
+    </Highlight>
+  );
+};
 
 const ApiTypeDefinitionPreview = ({
   definition,
 }: {
   definition: ApiTypeDefinition;
-}) => (
-  <div className="component-api-type-definition">
-    {definition.definition ? (
-      <pre className="component-api-type-source">
-        <code>{definition.definition}</code>
-      </pre>
-    ) : (
-      <>
-        <code className="component-api-type-declaration">
-          <span>type</span> <strong>{definition.name}</strong> ={' '}
-          {definition.declaration ?? '{'}
-        </code>
-        <div className="component-api-type-fields">
-          {definition.api?.map((property) => (
-            <div key={property.name}>
-              <code>
-                <strong>{property.name}</strong>
-                {property.required ? ':' : '?:'} {property.type}
-              </code>
-              <p>{property.description}</p>
-            </div>
-          ))}
-        </div>
-        <code className="component-api-type-declaration">{'}'}</code>
-      </>
-    )}
-  </div>
-);
-
-const ApiType = ({ type }: { type: string }) => {
-  const { t } = useTranslation();
-  const parts = type.split(/([A-Za-z_$][A-Za-z0-9_$]*)/g);
+}) => {
+  const ownReference = new Set([apiTypeDefinitionReference(definition.name)]);
 
   return (
-    <code className="component-api-type">
-      {parts.map((part, index) => {
-        const definition = apiTypeDefinitions.get(part);
-
-        if (!definition) return part;
-
-        return (
-          <Popover
-            align="start"
-            classNames={{ content: 'component-api-type-popover' }}
-            content={<ApiTypeDefinitionPreview definition={definition} />}
-            delay={180}
-            key={`${part}-${index}`}
-            side="top"
-            trigger={
-              <button
-                aria-label={t('docs.previewType', { type: part })}
-                className="component-api-type-reference"
-                type="button"
-              >
-                {part}
-              </button>
-            }
-            triggerMode="hover"
+    <div className="component-api-type-definition">
+      {definition.definition ? (
+        <pre className="component-api-type-source">
+          <ApiType
+            excludeReferences={ownReference}
+            inline
+            type={definition.definition}
           />
-        );
-      })}
-    </code>
+        </pre>
+      ) : (
+        <>
+          <code className="component-api-type-declaration">
+            <span>type</span> <strong>{definition.name}</strong> ={' '}
+            <ApiType
+              excludeReferences={ownReference}
+              inline
+              type={definition.declaration ?? '{'}
+            />
+          </code>
+          <div className="component-api-type-fields">
+            {definition.api?.map((property) => (
+              <div key={property.name}>
+                <code>
+                  <strong>{property.name}</strong>
+                  {property.required ? ':' : '?:'}{' '}
+                  <ApiType inline type={property.type} />
+                </code>
+                <p>{property.description}</p>
+              </div>
+            ))}
+          </div>
+          <code className="component-api-type-declaration">{'}'}</code>
+        </>
+      )}
+    </div>
   );
 };
 

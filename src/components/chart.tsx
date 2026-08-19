@@ -12,16 +12,42 @@ const THEMES = { light: '', dark: '.dark' } as const;
 const INITIAL_DIMENSION = { width: 320, height: 200 } as const;
 type TooltipNameType = number | string;
 
-export type ChartConfig = Record<
-  string,
-  {
-    label?: React.ReactNode;
-    icon?: React.ComponentType;
-  } & (
-    | { color?: string; theme?: never }
-    | { color?: never; theme: Record<keyof typeof THEMES, string> }
-  )
->;
+type ChartConfigBase = {
+  label?: React.ReactNode;
+  icon?: React.ComponentType;
+};
+
+type ChartConfigColor = {
+  color?: string;
+  theme?: never;
+};
+
+type ChartConfigTheme = {
+  color?: never;
+  theme: Record<keyof typeof THEMES, string>;
+};
+
+type ChartConfigItem = ChartConfigBase & (ChartConfigColor | ChartConfigTheme);
+
+type ChartConfig = Record<string, ChartConfigItem>;
+
+type ChartInitialDimension = {
+  width: number;
+  height: number;
+};
+
+type ChartProps = React.ComponentProps<'div'> & {
+  config: ChartConfig;
+  children: React.ComponentProps<
+    typeof RechartsPrimitive.ResponsiveContainer
+  >['children'];
+  initialDimension?: ChartInitialDimension;
+};
+
+type ChartStyleProps = {
+  config: ChartConfig;
+  id: string;
+};
 
 type ChartContextProps = {
   config: ChartConfig;
@@ -46,16 +72,7 @@ const ChartContainer = ({
   config,
   initialDimension = INITIAL_DIMENSION,
   ...props
-}: React.ComponentProps<'div'> & {
-  config: ChartConfig;
-  children: React.ComponentProps<
-    typeof RechartsPrimitive.ResponsiveContainer
-  >['children'];
-  initialDimension?: {
-    width: number;
-    height: number;
-  };
-}) => {
+}: ChartProps) => {
   const uniqueId = React.useId();
   const chartId = `chart-${id ?? uniqueId.replace(/:/g, '')}`;
 
@@ -81,7 +98,7 @@ const ChartContainer = ({
   );
 };
 
-const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
+const ChartStyle = ({ id, config }: ChartStyleProps) => {
   const colorConfig = Object.entries(config).filter(
     ([, config]) => config.theme ?? config.color
   );
@@ -376,3 +393,13 @@ const Chart = Object.assign(ChartContainer, {
 });
 
 export { Chart };
+export type {
+  ChartConfig,
+  ChartConfigBase,
+  ChartConfigColor,
+  ChartConfigItem,
+  ChartConfigTheme,
+  ChartInitialDimension,
+  ChartProps,
+  ChartStyleProps,
+};

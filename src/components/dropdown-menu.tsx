@@ -230,37 +230,54 @@ const DropdownMenuShortcut = ({
   );
 };
 
+type DropdownMenuItemEntry = {
+  type?: 'item';
+  label: React.ReactNode;
+  icon?: React.ReactNode;
+  shortcut?: React.ReactNode;
+  href?: string;
+  disabled?: boolean;
+  destructive?: boolean;
+  onSelect?: () => void;
+  children?: DropdownMenuEntry[];
+};
+
+type DropdownMenuLabelEntry = {
+  type: 'label';
+  label: React.ReactNode;
+};
+
+type DropdownMenuSeparatorEntry = {
+  type: 'separator';
+};
+
+type DropdownMenuCheckboxEntry = {
+  type: 'checkbox';
+  label: React.ReactNode;
+  checked: boolean;
+  disabled?: boolean;
+  onChange?: (checked: boolean) => void;
+};
+
+type DropdownMenuRadioOption = {
+  label: React.ReactNode;
+  value: string;
+  disabled?: boolean;
+};
+
+type DropdownMenuRadioEntry = {
+  type: 'radio';
+  value: string;
+  onChange?: (value: string) => void;
+  items: DropdownMenuRadioOption[];
+};
+
 type DropdownMenuEntry =
-  | {
-      type?: 'item';
-      label: React.ReactNode;
-      icon?: React.ReactNode;
-      shortcut?: React.ReactNode;
-      href?: string;
-      disabled?: boolean;
-      destructive?: boolean;
-      onSelect?: () => void;
-      children?: DropdownMenuEntry[];
-    }
-  | { type: 'label'; label: React.ReactNode }
-  | { type: 'separator' }
-  | {
-      type: 'checkbox';
-      label: React.ReactNode;
-      checked: boolean;
-      disabled?: boolean;
-      onChange?: (checked: boolean) => void;
-    }
-  | {
-      type: 'radio';
-      value: string;
-      onChange?: (value: string) => void;
-      items: Array<{
-        label: React.ReactNode;
-        value: string;
-        disabled?: boolean;
-      }>;
-    };
+  | DropdownMenuItemEntry
+  | DropdownMenuLabelEntry
+  | DropdownMenuSeparatorEntry
+  | DropdownMenuCheckboxEntry
+  | DropdownMenuRadioEntry;
 
 type DropdownMenuClassNames = {
   content?: string;
@@ -398,8 +415,14 @@ const DropdownMenu = ({
 
 export {
   DropdownMenu,
+  type DropdownMenuCheckboxEntry,
   type DropdownMenuClassNames,
   type DropdownMenuEntry,
+  type DropdownMenuItemEntry,
+  type DropdownMenuLabelEntry,
   type DropdownMenuProps,
+  type DropdownMenuRadioEntry,
+  type DropdownMenuRadioOption,
+  type DropdownMenuSeparatorEntry,
   type DropdownMenuStyles,
 };

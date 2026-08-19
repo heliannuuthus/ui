@@ -164,35 +164,77 @@ export const PaginationControlledDemo = () => {
           previous: docsCopy('前往上一页'),
         }}
         current={page}
-        nextText={docsCopy('下一页')}
         onChange={setPage}
         pageCount={5}
-        previousText={docsCopy('上一页')}
       />
     </div>
   );
 };
 
 export const PaginationOverflowDemo = () => {
+  const [page, setPage] = useState(24);
+  const [pageSize, setPageSize] = useState(20);
+
   return (
-    <div className="pagination-demo-stack">
+    <div className="pagination-demo-stack pagination-demo-stack-wide">
       <PageSummary>
         <span>{docsCopy('审计日志')}</span>
         <strong>{docsCopy('2,480 条记录')}</strong>
       </PageSummary>
       <Pagination
+        align="start"
         ariaLabels={{
+          first: docsCopy('前往第一页'),
+          last: docsCopy('前往最后一页'),
           more: docsCopy('更多页面'),
           navigation: docsCopy('分页'),
           next: docsCopy('前往下一页'),
+          page: (targetPage) =>
+            `${docsCopy('前往第')} ${targetPage} ${docsCopy('页')}`,
+          pageSize: docsCopy('每页条数'),
           previous: docsCopy('前往上一页'),
+          quickJumper: docsCopy('跳转页码'),
         }}
-        current={24}
+        classNames={{ summary: 'mr-auto font-medium' }}
+        current={page}
         getItemHref={(page) => `#page-${page}`}
-        nextText={docsCopy('下一页')}
-        pageCount={80}
-        previousText={docsCopy('上一页')}
+        onChange={setPage}
+        onPageSizeChange={(nextPage, nextPageSize) => {
+          setPage(nextPage);
+          setPageSize(nextPageSize);
+        }}
+        pageSize={pageSize}
+        pageSizeLabel={(value) => `${value} ${docsCopy('条 / 页')}`}
+        pageSizeOptions={[10, 20, 50, 100]}
+        showQuickJumper={{
+          label: docsCopy('跳至'),
+          suffix: docsCopy('页'),
+        }}
+        showSizeChanger
+        showTotal={(total, range) =>
+          `${range[0]}–${range[1]} / ${total.toLocaleString()} ${docsCopy('项')}`
+        }
+        size="sm"
+        total={2480}
       />
+    </div>
+  );
+};
+
+export const PaginationStatesDemo = () => {
+  return (
+    <div className="pagination-demo-stack">
+      <PageSummary>
+        <span>{docsCopy('简洁模式')}</span>
+        <strong>{docsCopy('可直接输入页码')}</strong>
+      </PageSummary>
+      <Pagination defaultCurrent={6} simple size="sm" total={120} />
+      <PageSummary>
+        <span>{docsCopy('禁用状态')}</span>
+        <strong>{docsCopy('保留完整分页上下文')}</strong>
+      </PageSummary>
+      <Pagination defaultCurrent={3} disabled pageCount={8} />
+      <Pagination hideOnSinglePage pageCount={1} />
     </div>
   );
 };

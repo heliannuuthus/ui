@@ -53,13 +53,34 @@ type ButtonStyleProps = VariantProps<typeof buttonVariants> & {
   block?: boolean;
 };
 
+type AnchorOnlyProps = {
+  [
+    Key in Exclude<
+      keyof AnchorHTMLAttributes<HTMLAnchorElement>,
+      keyof ButtonHTMLAttributes<HTMLButtonElement>
+    >
+  ]?: never;
+};
+
+type NativeButtonOnlyProps = Omit<
+  {
+    [
+      Key in Exclude<
+        keyof ButtonHTMLAttributes<HTMLButtonElement>,
+        keyof AnchorHTMLAttributes<HTMLAnchorElement>
+      >
+    ]?: never;
+  },
+  'disabled'
+>;
+
 type ButtonNativeProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   'color'
 > &
   ButtonStyleProps & {
     href?: never;
-  };
+  } & AnchorOnlyProps;
 
 type ButtonLinkProps = Omit<
   AnchorHTMLAttributes<HTMLAnchorElement>,
@@ -68,14 +89,14 @@ type ButtonLinkProps = Omit<
   ButtonStyleProps & {
     disabled?: boolean;
     href: string;
-  };
+  } & NativeButtonOnlyProps;
 
 type ButtonProps = ButtonNativeProps | ButtonLinkProps;
 type ButtonRef = HTMLAnchorElement | HTMLButtonElement;
 type ButtonGroupProps = StackCompactProps;
 
 const ButtonRender = (props: ButtonProps, ref: ForwardedRef<ButtonRef>) => {
-  if (typeof props.href === 'string') {
+  if (props.href !== undefined) {
     const {
       'aria-disabled': ariaDisabled,
       block = false,
@@ -95,6 +116,7 @@ const ButtonRender = (props: ButtonProps, ref: ForwardedRef<ButtonRef>) => {
         ref={ref as ForwardedRef<HTMLAnchorElement>}
         data-disabled={disabled ? '' : undefined}
         data-slot="button"
+        data-variant={variant}
         aria-disabled={disabled ? true : ariaDisabled}
         className={cn(
           buttonVariants({ variant, size, className }),
@@ -102,7 +124,7 @@ const ButtonRender = (props: ButtonProps, ref: ForwardedRef<ButtonRef>) => {
           disabled &&
             'cursor-not-allowed opacity-50 active:translate-y-0 active:scale-100'
         )}
-        href={href}
+        href={disabled ? undefined : href}
         tabIndex={disabled ? -1 : tabIndex}
         onClick={(event) => {
           if (disabled) {
@@ -130,6 +152,7 @@ const ButtonRender = (props: ButtonProps, ref: ForwardedRef<ButtonRef>) => {
       {...buttonProps}
       ref={ref as ForwardedRef<HTMLButtonElement>}
       data-slot="button"
+      data-variant={variant}
       className={cn(
         buttonVariants({ variant, size, className }),
         block && 'w-full'

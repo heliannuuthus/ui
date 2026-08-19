@@ -11,12 +11,6 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
   '菜单开关状态变化时调用。': 'Called when the menu open state changes.',
   '设置当前页。': 'Set the current page.',
   '设置总页数。': 'Set the total page count.',
-  '自定义上一页按钮的可见文字。':
-    'Customize the visible text of the previous-page button.',
-  "'上一页'": "'Previous'",
-  '自定义下一页按钮的可见文字。':
-    'Customize the visible text of the next-page button.',
-  "'下一页'": "'Next'",
   '在支持状态时设置受控值。': 'Set the controlled value when supported.',
   '在支持状态时设置非受控初始值。':
     'Set the initial uncontrolled value when supported.',
@@ -509,6 +503,137 @@ const ActionCell = () => {
     'Localizes pagination accessible names and the total and current-page summary.',
   '同时本地化日历名称、星期、月份和弹出触发器中的日期格式。':
     'Localizes calendar labels, weekdays, months, and the date format shown in the popover trigger.',
+  完整数据分页: 'Complete data pagination',
+  '通过总数与每页数量推导页数，并在一行内组合数据范围、页码、每页数量和快速跳转。':
+    'Derive the page count from the total and page size, then keep the visible range, page controls, page-size selection, and quick jump on one line.',
+  '设置分页器在可用宽度内的对齐方式。':
+    'Aligns the pagination within its available width.',
+  '受控模式下的当前页，从 1 开始。':
+    'Sets the controlled current page, starting at 1.',
+  '非受控模式下的初始页码。': 'Sets the initial page in uncontrolled mode.',
+  '直接设置总页数；省略时由 total 与 pageSize 推导。':
+    'Sets the page count directly; when omitted, it is derived from total and pageSize.',
+  '设置数据总数，并结合 pageSize 推导总页数；pageCount 可直接覆盖推导结果。':
+    'Sets the total item count and derives the page count from pageSize; pageCount can override the derived result.',
+  '受控模式下的每页数据条数。': 'Sets the controlled number of items per page.',
+  '非受控模式下的初始每页数据条数。':
+    'Sets the initial number of items per page in uncontrolled mode.',
+  '页码或每页数量变化时回传下一页和每页数量。':
+    'Returns the next page and page size when either value changes.',
+  '每页数量变化时回传校正后的页码和每页数量。':
+    'Returns the adjusted page and new page size when the page size changes.',
+  '设置每页数量选择器的候选值。':
+    'Sets the options available in the page-size selector.',
+  '格式化每页数量选项的可见文字。':
+    'Formats the visible label for each page-size option.',
+  '显示每页数量选择器。': 'Shows the page-size selector.',
+  '显示快速跳页输入框，并可配置标签、后缀和确认按钮。':
+    'Shows a quick-jump input with configurable label, suffix, and confirmation button.',
+  '显示数据总数，或根据总数与当前范围自定义摘要。':
+    'Shows the total item count or renders a custom summary from the total and current range.',
+  '使用紧凑的页码输入模式，并可设为只读。':
+    'Uses a compact page-input mode that can be made read-only.',
+  '禁用所有分页、跳页和每页数量操作。':
+    'Disables page navigation, quick jumping, and page-size changes.',
+  '只有一页时隐藏整个分页器。':
+    'Hides the entire pagination when only one page is available.',
+  '控制上一页条目；false 隐藏，true 使用默认内容，ReactNode 自定义完整内容。':
+    'Controls the previous-page item: false hides it, true uses the default content, and a ReactNode replaces its complete content.',
+  '控制下一页条目；false 隐藏，true 使用默认内容，ReactNode 自定义完整内容。':
+    'Controls the next-page item: false hides it, true uses the default content, and a ReactNode replaces its complete content.',
+  '控制第一页条目；false 隐藏，true 使用默认图标，ReactNode 自定义完整内容。':
+    'Controls the first-page item: false hides it, true uses the default icon, and a ReactNode replaces its complete content.',
+  '控制最后一页条目；false 隐藏，true 使用默认图标，ReactNode 自定义完整内容。':
+    'Controls the last-page item: false hides it, true uses the default icon, and a ReactNode replaces its complete content.',
+  '为页码和导航按钮提供原生 title 提示。':
+    'Adds native title text to page and navigation controls.',
+  '根据条目类型、页码和选中状态生成无障碍名称。':
+    'Generates an accessible name from the item type, page, and selected state.',
+  '为页码和导航按钮生成可复制、可打开新窗口的真实地址。':
+    'Generates real, copyable URLs for page and navigation controls.',
+  '控制首尾两侧始终保留多少个边界页码。':
+    'Controls how many boundary pages remain visible at the beginning and end.',
+  '自定义页码、导航按钮和省略标记的最终渲染。':
+    'Customizes the final rendering of pages, navigation controls, and ellipses.',
+  '设置分页控件尺寸。': 'Sets the pagination control size.',
+  '按语义插槽扩展分页器内部类名。':
+    'Extends pagination class names by semantic slot.',
+  '按语义插槽扩展分页器内部行内样式。':
+    'Extends pagination inline styles by semantic slot.',
+  前往第一页: 'Go to the first page',
+  前往最后一页: 'Go to the last page',
+  每页条数: 'Items per page',
+  跳转页码: 'Page to jump to',
+  '条 / 页': 'items / page',
+  跳转: 'Go',
+  跳至: 'Jump to',
+  项: 'items',
+  简洁模式: 'Simple mode',
+  可直接输入页码: 'Enter a page directly',
+  禁用状态: 'Disabled state',
+  保留完整分页上下文: 'Preserves the complete pagination context',
+  简洁与禁用状态: 'Simple and disabled states',
+  '简洁模式使用页码输入完成长范围跳转；禁用状态保留当前分页上下文但阻止全部操作。':
+    'Simple mode uses a page input for long-range jumps; the disabled state preserves pagination context while preventing every action.',
+  [`import { Pagination } from '@heliannuuthus/ui'
+
+<Pagination
+  align="start"
+  boundaries={2}
+  siblings={1}
+  current={24}
+  total={2480}
+  pageSize={20}
+  onChange={setPage}
+  onPageSizeChange={(page, size) => {
+    setPage(page)
+    setPageSize(size)
+  }}
+  pageSizeOptions={[10, 20, 50, 100]}
+  pageSizeLabel={(size) => \`\${size} 条 / 页\`}
+  showTotal={(total, range) => \`\${range[0]}–\${range[1]} / \${total} 项\`}
+  showSizeChanger
+  showQuickJumper={{ goButton: '跳转', label: '跳至', suffix: '页' }}
+  first
+  last
+  previous="上一页"
+  next="下一页"
+  showTitle
+  getItemAriaLabel={({ page }) => \`Page \${page}\`}
+  getItemHref={(page) => \`#page-\${page}\`}
+  renderItem={({ originalElement }) => originalElement}
+  classNames={{ summary: 'font-medium' }}
+  styles={{ summary: { minWidth: 120 } }}
+/>`]: `import { Pagination } from '@heliannuuthus/ui'
+
+<Pagination
+  align="start"
+  boundaries={2}
+  siblings={1}
+  current={24}
+  total={2480}
+  pageSize={20}
+  onChange={setPage}
+  onPageSizeChange={(page, size) => {
+    setPage(page)
+    setPageSize(size)
+  }}
+  pageSizeOptions={[10, 20, 50, 100]}
+  pageSizeLabel={(size) => \`\${size} items / page\`}
+  showTotal={(total, range) => \`\${range[0]}–\${range[1]} / \${total} items\`}
+  showSizeChanger
+  showQuickJumper={{ goButton: 'Go', label: 'Jump to', suffix: 'page' }}
+  first
+  last
+  previous="Previous"
+  next="Next"
+  showTitle
+  getItemAriaLabel={({ page }) => \`Page \${page}\`}
+  getItemHref={(page) => \`#page-\${page}\`}
+  renderItem={({ originalElement }) => originalElement}
+  classNames={{ summary: 'font-medium' }}
+  styles={{ summary: { minWidth: 120 } }}
+/>`,
   分页: 'Pagination',
   前往上一页: 'Go to the previous page',
   前往下一页: 'Go to the next page',
@@ -536,8 +661,6 @@ const ActionCell = () => {
     '<Input defaultValue="Design system migration" />\n<Input aria-invalid defaultValue="my workspace" />\n<Input value="UI-2048" readOnly />\n<Input value="Project in progress" disabled />',
   '<NavigationMenu\n  align="end"\n  items={[\n    {\n      label: \'产品\',\n      content: ({ Link }) => (\n        <Link href="/components">组件库</Link>\n      ),\n    },\n  ]}\n/>':
     '<NavigationMenu\n  align="end"\n  items={[\n    {\n      label: \'product\',\n      content: ({ Link }) => (\n        <Link href="/components">Component Library</Link>\n      ),\n    },\n  ]}\n/>',
-  '<Pagination\n  current={24}\n  pageCount={80}\n  previousText="上一页"\n  nextText="下一页"\n  siblingCount={1}\n/>':
-    '<Pagination\n  current={24}\n  pageCount={80}\n  previousText="previous page"\n  nextText="next page"\n  siblingCount={1}\n/>',
   "<Select\n  value={value}\n  onChange={setValue}\n  options={[\n    {\n      label: '个人工作区',\n      options: personalWorkspaces,\n    },\n    {\n      label: '团队工作区',\n      options: teamWorkspaces,\n    },\n  ]}\n  placeholder=\"选择工作区\"\n/>":
     "<Select\n  value={value}\n  onChange={setValue}\n  options={[\n    {\n      label: 'Personal workspace',\n      options: personalWorkspaces,\n    },\n    {\n      label: 'Team workspace',\n      options: teamWorkspaces,\n    },\n  ]}\n  placeholder=\"Select workspace\"\n/>",
   '<Select\n  value={value}\n  onChange={setValue}\n  options={members.map((member) => ({\n    label: member.name,\n    value: member.id,\n  }))}\n  placeholder="搜索成员…"\n  showClear\n/>':
@@ -1332,8 +1455,6 @@ const ActionCell = () => {
   归档草稿: 'Archive draft',
   归档记录: 'Archived records',
   归档原因: 'Reason for filing',
-  '滚动区域需要参与键盘交互时，通过 viewportProps 提供 tabIndex、角色和可访问名称。':
-    'When the scroll area needs to participate in keyboard interaction, provide tabIndex, role and accessible name through viewportProps.',
   '滚动条在交互时出现、始终显示，或完全隐藏。':
     'Scrollbars appear upon interaction, are always shown, or are hidden completely.',
   还没有生产发布: 'No production release yet',
@@ -3591,8 +3712,6 @@ const ActionCell = () => {
     "import { Breadcrumb } from '@heliannuuthus/ui'\n\nconst items = [\n  { label: 'Home', href: '/' },\n  { label: 'component', href: '/components' },\n  { label: 'Navigation', href: '/components/navigation-menu' },\n  { label: 'Breadcrumb' },\n]\n\nexport const PageBreadcrumb = () => {\n  return <Breadcrumb items={items} icon />\n}",
   'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    variant="default"\n    content="已经补充完成，可以重新评审。"\n    reactions="✓ 2"\n  />\n  <Bubble align="start" variant="elevated" content="收到，我现在检查。" />\n</Bubble.Group>':
     'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    variant="default"\n    content="The supplement has been completed and can be reviewed again."\n    reactions="✓ 2"\n  />\n  <Bubble align="start" variant="elevated" content="Received, I\'ll check now." />\n</Bubble.Group>',
-  "import { Bubble } from '@heliannuuthus/ui'\nimport { Avatar } from '@heliannuuthus/ui'\nimport { ScrollArea } from '@heliannuuthus/ui'\n\n<ScrollArea\n  className=\"h-80\"\n  fadeEdges\n  viewportProps={{ role: 'list', 'aria-label': '协作消息' }}\n>\n  {messages.map((message) => (\n    <div className=\"flex gap-2\" role=\"listitem\">\n      <Avatar alt={message.author} fallback={message.avatar} />\n      <div className=\"flex min-w-0 flex-1 flex-col gap-2\">\n        <span>{message.author} · {message.time}</span>\n        <Bubble content={message.content} variant=\"elevated\" />\n      </div>\n    </div>\n  ))}\n</ScrollArea>":
-    "import { Bubble } from '@heliannuuthus/ui'\nimport { Avatar } from '@heliannuuthus/ui'\nimport { ScrollArea } from '@heliannuuthus/ui'\n\n<ScrollArea\n  className=\"h-80\"\n  fadeEdges\n  viewportProps={{ role: 'list', 'aria-label': 'Collaboration message' }}\n>\n  {messages.map((message) => (\n    <div className=\"flex gap-2\" role=\"listitem\">\n      <Avatar alt={message.author} fallback={message.avatar} />\n      <div className=\"flex min-w-0 flex-1 flex-col gap-2\">\n        <span>{message.author} · {message.time}</span>\n        <Bubble content={message.content} variant=\"elevated\" />\n      </div>\n    </div>\n  ))}\n</ScrollArea>",
   'import { Bubble } from \'@heliannuuthus/ui\'\nimport { Separator } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    content="已经补充完成，可以重新评审。"\n    reactions="✓ 2"\n    variant="default"\n  />\n  <Separator />\n  <Bubble\n    align="end"\n    content="已经补充完成，可以重新评审。"\n    variant="elevated"\n  />\n</Bubble.Group>':
     'import { Bubble } from \'@heliannuuthus/ui\'\nimport { Separator } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    content="The supplement has been completed and can be reviewed again."\n    reactions="✓ 2"\n    variant="default"\n  />\n  <Separator />\n  <Bubble\n    align="end"\n    content="The supplement has been completed and can be reviewed again."\n    variant="elevated"\n  />\n</Bubble.Group>',
   'import { Button } from \'@heliannuuthus/ui\'\n\nexport const ButtonDemo = () => {\n  return (\n    <div className="flex gap-3">\n      <Button>开始使用</Button>\n      <Button variant="outline">查看文档</Button>\n    </div>\n  )\n}':
@@ -3697,8 +3816,6 @@ const ActionCell = () => {
     "import { Resizable } from '@heliannuuthus/ui'\nimport { GripHorizontal } from 'lucide-react'\n\nexport const EditorWithTerminal = () => {\n  return (\n    <Resizable\n      className=\"h-96\"\n      orientation=\"vertical\"\n      separator={<GripHorizontal aria-hidden />}\n      items={[\n        {\n          key: 'editor',\n          panel: <section>Editor</section>,\n          size: ['64', '38'],\n        },\n        {\n          key: 'terminal',\n          panel: <section>Terminal</section>,\n          size: ['36', '20'],\n        },\n      ]}\n    />\n  )\n}",
   "import { Resizable } from '@heliannuuthus/ui'\nimport { GripVertical } from 'lucide-react'\n\nexport const Workspace = () => {\n  return (\n    <Resizable\n      orientation=\"horizontal\"\n      separator={<GripVertical aria-hidden />}\n      items={[\n        { key: 'files', panel: '文件列表', size: ['34', '24'] },\n        { key: 'preview', panel: '内容预览', size: ['66', '40'] },\n      ]}\n    />\n  )\n}":
     "import { Resizable } from '@heliannuuthus/ui'\nimport { GripVertical } from 'lucide-react'\n\nexport const Workspace = () => {\n  return (\n    <Resizable\n      orientation=\"horizontal\"\n      separator={<GripVertical aria-hidden />}\n      items={[\n        { key: 'files', panel: 'file list', size: ['34', '24'] },\n        { key: 'preview', panel: 'content preview', size: ['66', '40'] },\n      ]}\n    />\n  )\n}",
-  "import { ScrollArea } from '@heliannuuthus/ui'\n\n<ScrollArea\n  className=\"h-80\"\n  fadeEdges\n  fadeSize={52}\n  scrollbarVisibility=\"auto\"\n  viewportProps={{\n    role: 'listbox',\n    tabIndex: 0,\n    'aria-label': '发布动态',\n  }}\n>\n  {events.map((event) => (\n    <ReleaseEvent key={event.id} event={event} />\n  ))}\n</ScrollArea>":
-    "import { ScrollArea } from '@heliannuuthus/ui'\n\n<ScrollArea\n  className=\"h-80\"\n  fadeEdges\n  fadeSize={52}\n  scrollbarVisibility=\"auto\"\n  viewportProps={{\n    role: 'listbox',\n    tabIndex: 0,\n    'aria-label': 'Publish updates',\n  }}\n>\n  {events.map((event) => (\n    <ReleaseEvent key={event.id} event={event} />\n  ))}\n</ScrollArea>",
   'import { Select } from \'@heliannuuthus/ui\'\n\n<Select\n  value={value}\n  onChange={setValue}\n  placeholder="搜索成员…"\n  showClear\n  emptyText="没有找到成员"\n  options={members.map((member) => ({ label: member, value: member }))}\n/>':
     'import { Select } from \'@heliannuuthus/ui\'\n\n<Select\n  value={value}\n  onChange={setValue}\n  placeholder="Search for members…"\n  showClear\n  emptyText="Member not found"\n  options={members.map((member) => ({ label: member, value: member }))}\n/>',
   'import { Select } from \'@heliannuuthus/ui\'\n\n<Select\n  value={value}\n  onChange={setValue}\n  placeholder="选择工作区"\n  options={groups.map((group) => ({\n    label: group.label,\n    options: group.items.map((item) => ({\n      label: item.label,\n      value: item,\n      disabled: item.disabled,\n    })),\n  }))}\n/>':
@@ -4883,8 +5000,6 @@ const ActionCell = () => {
   已离开窄屏断点: 'Left the narrow breakpoint',
   '侧边栏已收起（': 'Sidebar collapsed (',
   '侧边栏已展开（': 'Sidebar expanded (',
-  'import { Button } from \'@heliannuuthus/ui\'\n\nexport const GroupedButtons = () => {\n  return (\n    <Button.Group aria-label="分页操作" block orientation="vertical">\n      <Button variant="outline">上一项</Button>\n      <Button>下一项</Button>\n    </Button.Group>\n  )\n}':
-    'import { Button } from \'@heliannuuthus/ui\'\n\nexport const GroupedButtons = () => {\n  return (\n    <Button.Group aria-label="Pagination actions" block orientation="vertical">\n      <Button variant="outline">Previous</Button>\n      <Button>Next</Button>\n    </Button.Group>\n  )\n}',
   '<Button block>继续</Button>': '<Button block>Continue</Button>',
   'import { useState } from \'react\'\n\nexport const FormActions = () => {\n  const [message, setMessage] = useState(\'尚未执行操作\')\n\n  return (\n    <form onSubmit={(event) => {\n      event.preventDefault()\n      setMessage(\'表单已提交\')\n    }}>\n      <Button type="submit">保存</Button>\n      <Button type="button" variant="outline" onClick={() => setMessage(\'草稿已预览\')}>\n        预览\n      </Button>\n      <output aria-live="polite">{message}</output>\n    </form>\n  )\n}':
     'import { useState } from \'react\'\n\nexport const FormActions = () => {\n  const [message, setMessage] = useState(\'No action yet\')\n\n  return (\n    <form onSubmit={(event) => {\n      event.preventDefault()\n      setMessage(\'Form submitted\')\n    }}>\n      <Button type="submit">Save</Button>\n      <Button type="button" variant="outline" onClick={() => setMessage(\'Draft previewed\')}>\n        Preview\n      </Button>\n      <output aria-live="polite">{message}</output>\n    </form>\n  )\n}',
@@ -4971,4 +5086,144 @@ export const WorkspaceCard = () => {
     'Icon buttons in header.action and footer need accessible names.',
   "import { Layout } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nexport const ResponsiveLayout = () => {\n  const [status, setStatus] = useState('')\n\n  return (\n    <Layout>\n      <Layout.Sidebar\n        breakpoint=\"lg\"\n        collapsible\n        collapsedWidth={64}\n        defaultCollapsed={false}\n        side=\"start\"\n        triggerLabels={{\n          collapse: '收起侧边栏',\n          expand: '展开侧边栏',\n        }}\n        onBreakpointChange={(below) => setStatus(below ? '窄屏' : '宽屏')}\n        onCollapsedChange={(collapsed, reason) =>\n          setStatus(\n            (collapsed ? '已收起' : '已展开') + '：' + reason\n          )\n        }\n      >\n        Navigation\n      </Layout.Sidebar>\n      <Layout.Content>{status}</Layout.Content>\n    </Layout>\n  )\n}":
     "import { Layout } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nexport const ResponsiveLayout = () => {\n  const [status, setStatus] = useState('')\n\n  return (\n    <Layout>\n      <Layout.Sidebar\n        breakpoint=\"lg\"\n        collapsible\n        collapsedWidth={64}\n        defaultCollapsed={false}\n        side=\"start\"\n        triggerLabels={{\n          collapse: 'Collapse sidebar',\n          expand: 'Expand sidebar',\n        }}\n        onBreakpointChange={(below) => setStatus(below ? 'Narrow' : 'Wide')}\n        onCollapsedChange={(collapsed, reason) =>\n          setStatus(\n            (collapsed ? 'Collapsed' : 'Expanded') + ': ' + reason\n          )\n        }\n      >\n        Navigation\n      </Layout.Sidebar>\n      <Layout.Content>{status}</Layout.Content>\n    </Layout>\n  )\n}",
+  '触发操作或事件的基础控件；设置 href 时切换为使用相同视觉样式的原生链接。':
+    'A foundational control for triggering actions or events; setting href switches it to a native link with the same visual styles.',
+  文字按钮: 'Text button',
+  [`export const ButtonVariants = () => {
+  return (
+    <div className="flex flex-wrap gap-3">
+      <Button>主要操作</Button>
+      <Button variant="secondary">次要操作</Button>
+      <Button variant="outline">描边按钮</Button>
+      <Button variant="ghost">幽灵按钮</Button>
+      <Button variant="link">文字按钮</Button>
+      <Button variant="destructive">危险操作</Button>
+    </div>
+  )
+}`]: `export const ButtonVariants = () => {
+  return (
+    <div className="flex flex-wrap gap-3">
+      <Button>Primary action</Button>
+      <Button variant="secondary">Secondary action</Button>
+      <Button variant="outline">Outline button</Button>
+      <Button variant="ghost">Ghost button</Button>
+      <Button variant="link">Text button</Button>
+      <Button variant="destructive">Destructive action</Button>
+    </div>
+  )
+}`,
+  链接模式: 'Link mode',
+  'href 会把根节点切换为原生 a 元素；target、rel 与 download 都是原生链接属性，variant 和 size 只负责视觉样式。':
+    'href switches the root to a native a element; target, rel, and download are native link attributes, while variant and size only control visual styling.',
+  [`import { ArrowRight } from 'lucide-react'
+
+<Button href="/components/card" variant="outline">
+  查看 Card 文档
+  <ArrowRight data-icon="inline-end" />
+</Button>
+
+<Button
+  href="https://ui.heliannuuthus.com"
+  target="_blank"
+  rel="noreferrer"
+  variant="outline"
+>
+  新窗口打开
+</Button>
+
+<Button href="/styles.css" download="heliannuuthus-ui.css">
+  下载样式文件
+</Button>`]: `import { ArrowRight } from 'lucide-react'
+
+<Button href="/components/card" variant="outline">
+  View Card documentation
+  <ArrowRight data-icon="inline-end" />
+</Button>
+
+<Button
+  href="https://ui.heliannuuthus.com"
+  target="_blank"
+  rel="noreferrer"
+  variant="outline"
+>
+  Open in a new window
+</Button>
+
+<Button href="/styles.css" download="heliannuuthus-ui.css">
+  Download stylesheet
+</Button>`,
+  '未设置 href 时渲染原生 button；设置 href 时渲染原生 a 元素。':
+    'Renders a native button without href and a native a element when href is set.',
+  '执行操作时不要设置 href；页面导航也不要通过 onClick 手动修改地址。':
+    'Do not set href for actions, and do not implement page navigation by manually changing the address in onClick.',
+  '按钮或链接的视觉样式；不参与决定根元素的语义。':
+    'The visual style of a button or link; it does not determine the semantics of the root element.',
+  '导航地址与根元素判别字段；设置后渲染为 a，未设置时渲染为原生 button。':
+    'The navigation destination and root-element discriminator; renders an a element when set and a native button when omitted.',
+  'import { Button } from \'@heliannuuthus/ui\'\n\nexport const GroupedButtons = () => {\n  return (\n    <div className="mx-auto w-80 max-w-full">\n      <Button.Group aria-label="分页操作" block orientation="horizontal">\n        <Button variant="outline">上一项</Button>\n        <Button>下一项</Button>\n      </Button.Group>\n    </div>\n  )\n}':
+    'import { Button } from \'@heliannuuthus/ui\'\n\nexport const GroupedButtons = () => {\n  return (\n    <div className="mx-auto w-80 max-w-full">\n      <Button.Group aria-label="Pagination actions" block orientation="horizontal">\n        <Button variant="outline">Previous</Button>\n        <Button>Next</Button>\n      </Button.Group>\n    </div>\n  )\n}',
+  '在受限区域内承载长内容，并通过封装后的原生滚动视口提供一致的滚动体验。':
+    'Contains long content within a constrained region and provides consistent scrolling through an encapsulated native viewport.',
+  '需要保持原生滚动、键盘操作和触控惯性，同时统一滚动条样式。':
+    'Use it to preserve native scrolling, keyboard access, and touch momentum while keeping scrollbar styling consistent.',
+  '内容可能横向溢出，或需要配置滚动条的尺寸与显隐策略。':
+    'Use it when content may overflow horizontally or scrollbar size and visibility need configuration.',
+  基础滚动区域: 'Basic scroll area',
+  '组件内部创建可滚动视口和所需滚动条；业务只需提供尺寸、滚动条配置与内容。':
+    'The component creates the scrollable viewport and required scrollbars internally; applications only provide dimensions, scrollbar configuration, and content.',
+  '封装根容器、可聚焦滚动视口、滚动条与双轴交汇角，无需业务手动组合内部部件。':
+    'Encapsulates the root, focusable scroll viewport, scrollbars, and two-axis corner so applications do not assemble internal parts.',
+  '集中配置滚动条尺寸与显隐策略。':
+    'Configures scrollbar size and visibility in one place.',
+  '设置滚动条粗细；预设分别为 6、10、14 像素，数字按像素处理。':
+    'Sets scrollbar thickness; the presets are 6, 10, and 14 pixels, and numeric values are interpreted as pixels.',
+  '自动按悬停或滚动显示、始终显示，或完全隐藏滚动条。':
+    'Shows the scrollbar automatically on hover or scroll, keeps it always visible, or hides it completely.',
+  '内部视口只在内容溢出时进入 Tab 顺序，并保留浏览器原生键盘滚动行为。':
+    'The internal viewport enters the tab order only when content overflows and preserves native keyboard scrolling.',
+  '列表、日志等内容语义应声明在子内容容器上，不需要操作内部 viewport。':
+    'Declare list, log, and similar content semantics on the child content container without accessing the internal viewport.',
+  '隐藏滚动条前应确认界面仍有足够线索表明内容可以滚动。':
+    'Before hiding the scrollbar, ensure the interface still provides enough indication that the content is scrollable.',
+  '不要依赖或覆盖内部 viewport、thumb 与 corner；它们不是公共组合 API。':
+    'Do not depend on or override the internal viewport, thumb, or corner; they are not public composition APIs.',
+  [`import { Bubble } from '@heliannuuthus/ui'
+import { Avatar } from '@heliannuuthus/ui'
+import { ScrollArea } from '@heliannuuthus/ui'
+
+<ScrollArea
+  className="h-80"
+  scrollbar={{ size: 'sm', visibility: 'auto' }}
+>
+  <div role="list" aria-label="协作消息">
+    {messages.map((message) => (
+      <div className="flex gap-2" role="listitem">
+        <Avatar alt={message.author} fallback={message.avatar} />
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <span>{message.author} · {message.time}</span>
+          <Bubble content={message.content} variant="elevated" />
+        </div>
+      </div>
+    ))}
+  </div>
+</ScrollArea>`]: `import { Bubble } from '@heliannuuthus/ui'
+import { Avatar } from '@heliannuuthus/ui'
+import { ScrollArea } from '@heliannuuthus/ui'
+
+<ScrollArea
+  className="h-80"
+  scrollbar={{ size: 'sm', visibility: 'auto' }}
+>
+  <div role="list" aria-label="Collaboration messages">
+    {messages.map((message) => (
+      <div className="flex gap-2" role="listitem">
+        <Avatar alt={message.author} fallback={message.avatar} />
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <span>{message.author} · {message.time}</span>
+          <Bubble content={message.content} variant="elevated" />
+        </div>
+      </div>
+    ))}
+  </div>
+</ScrollArea>`,
 };

@@ -48,6 +48,12 @@ const loadHarnessModule = async () => {
           orderPropertyEntries,
           qualifiedApiPropertyName,
         } from './apps/docs/src/api-property-order.ts'
+        export {
+          apiTypeDefinitionReference,
+          apiTypeReferences,
+          createApiTypeDefinitions,
+          isCustomApiTypeReference,
+        } from './apps/docs/src/api-type-definitions.ts'
       `,
       loader: 'ts',
       resolveDir: packageRoot,
@@ -437,15 +443,19 @@ globalThis.window = {
   },
 };
 const {
+  apiTypeDefinitionReference,
+  apiTypeReferences,
   componentCatalog,
   componentGroups,
   componentDocumentation,
   componentSearchMetadata,
   componentSlug,
   comparePropertyNames,
+  createApiTypeDefinitions,
   defaultLocale,
   englishContentTranslations,
   htmlLanguage,
+  isCustomApiTypeReference,
   isDocsLocale,
   localizedComponentName,
   localizedComponentMetadata,
@@ -947,6 +957,150 @@ for (const [slug, documentation] of Object.entries(componentDocumentation)) {
     missingCaseCoverage[slug] = missingApiNames;
   }
 }
+
+assert.deepEqual(apiTypeReferences("'sm' | ReactNode | PanelSize"), [
+  'ReactNode',
+  'PanelSize',
+]);
+assert.equal(isCustomApiTypeReference('ReactNode'), false);
+assert.equal(isCustomApiTypeReference('React.CSSProperties'), false);
+assert.equal(isCustomApiTypeReference('PanelSize'), true);
+assert.equal(isCustomApiTypeReference('Table.Column'), true);
+
+const apiTypeDefinitions = createApiTypeDefinitions(componentDocumentation);
+assert.deepEqual(
+  [...apiTypeDefinitions.keys()].filter(
+    (reference) => !isCustomApiTypeReference(reference)
+  ),
+  [],
+  'Only custom API types may receive standalone hover definitions.'
+);
+const missingApiTypeDefinitions = [];
+const inlineApiObjectTypes = [];
+const nestedAnonymousTypeDefinitions = [];
+
+const inspectApiType = (
+  slug,
+  location,
+  type,
+  ownReference,
+  rejectInlineObject = false
+) => {
+  if (rejectInlineObject && type.includes('{')) {
+    inlineApiObjectTypes.push(`${slug}.${location}`);
+  }
+
+  for (const reference of apiTypeReferences(type)) {
+    if (
+      reference !== ownReference &&
+      isCustomApiTypeReference(reference) &&
+      !apiTypeDefinitions.has(reference)
+    ) {
+      missingApiTypeDefinitions.push(`${slug}.${location}: ${reference}`);
+    }
+  }
+};
+
+const hasNestedAnonymousType = (definition) => {
+  const parseableDefinition = definition.replace(
+    /^(\s*type\s+)[A-Za-z_$][A-Za-z0-9_$]*\./,
+    '$1'
+  );
+  const ast = parse(parseableDefinition, {
+    plugins: ['typescript'],
+    sourceType: 'module',
+  });
+  const alias = ast.program.body.find(
+    (node) => node.type === 'TSTypeAliasDeclaration'
+  );
+  if (!alias) return false;
+
+  let nested = false;
+  const visit = (node, parent) => {
+    if (!node || typeof node !== 'object' || nested) return;
+
+    if (node.type === 'TSTypeLiteral') {
+      const isPrimaryLiteral =
+        node === alias.typeAnnotation ||
+        (parent?.type === 'TSIntersectionType' &&
+          parent === alias.typeAnnotation);
+      if (!isPrimaryLiteral) {
+        nested = true;
+        return;
+      }
+    }
+
+    for (const [key, value] of Object.entries(node)) {
+      if (['end', 'extra', 'loc', 'start'].includes(key)) continue;
+      if (Array.isArray(value)) {
+        value.forEach((child) => visit(child, node));
+      } else if (value && typeof value === 'object') {
+        visit(value, node);
+      }
+    }
+  };
+
+  visit(alias.typeAnnotation, alias);
+  return nested;
+};
+
+for (const [slug, documentation] of Object.entries(componentDocumentation)) {
+  for (const property of documentation.api) {
+    const qualifiedName = property.component
+      ? `${property.component}.${property.name}`
+      : property.name;
+    inspectApiType(slug, qualifiedName, property.type, undefined, true);
+  }
+
+  for (const preview of documentation.typePreviews ?? []) {
+    const ownReference = apiTypeDefinitionReference(preview.name);
+
+    if (preview.declaration) {
+      inspectApiType(
+        slug,
+        `${preview.name} declaration`,
+        preview.declaration,
+        ownReference
+      );
+    }
+    if (preview.definition) {
+      inspectApiType(
+        slug,
+        `${preview.name} definition`,
+        preview.definition,
+        ownReference
+      );
+      if (hasNestedAnonymousType(preview.definition)) {
+        nestedAnonymousTypeDefinitions.push(`${slug}.${preview.name}`);
+      }
+    }
+    for (const property of preview.api ?? []) {
+      inspectApiType(
+        slug,
+        `${preview.name}.${property.name}`,
+        property.type,
+        ownReference,
+        true
+      );
+    }
+  }
+}
+
+assert.deepEqual(
+  [...new Set(missingApiTypeDefinitions)].sort(),
+  [],
+  'Every custom API type must have a standalone hover definition.'
+);
+assert.deepEqual(
+  inlineApiObjectTypes,
+  [],
+  'API property types must reference named custom types instead of inline object literals.'
+);
+assert.deepEqual(
+  nestedAnonymousTypeDefinitions,
+  [],
+  'Custom type definitions must name nested object types instead of embedding anonymous type literals.'
+);
 
 assert.deepEqual(
   missingCaseCoverage,

@@ -78,7 +78,17 @@ export {
   type CarouselStyles,
   useCarousel,
 } from './components/carousel';
-export { Chart, type ChartConfig } from './components/chart';
+export {
+  Chart,
+  type ChartConfig,
+  type ChartConfigBase,
+  type ChartConfigColor,
+  type ChartConfigItem,
+  type ChartConfigTheme,
+  type ChartInitialDimension,
+  type ChartProps,
+  type ChartStyleProps,
+} from './components/chart';
 export {
   Checkbox,
   type CheckboxClassNames,
@@ -145,9 +155,15 @@ export {
 } from './components/drawer';
 export {
   DropdownMenu,
+  type DropdownMenuCheckboxEntry,
   type DropdownMenuClassNames,
   type DropdownMenuEntry,
+  type DropdownMenuItemEntry,
+  type DropdownMenuLabelEntry,
   type DropdownMenuProps,
+  type DropdownMenuRadioEntry,
+  type DropdownMenuRadioOption,
+  type DropdownMenuSeparatorEntry,
   type DropdownMenuStyles,
 } from './components/dropdown-menu';
 export { Empty, type EmptyProps } from './components/empty';
@@ -231,10 +247,24 @@ export {
   NavigationMenu,
   navigationMenuTriggerStyle,
   type NavigationMenuItemConfig,
+  type NavigationMenuLinkComponent,
   type NavigationMenuLinkProps,
+  type NavigationMenuLinkSlots,
   type NavigationMenuProps,
 } from './components/navigation-menu';
-export { Pagination, type PaginationProps } from './components/pagination';
+export {
+  Pagination,
+  type PaginationAriaLabelContext,
+  type PaginationAriaLabels,
+  type PaginationClassNames,
+  type PaginationItemType,
+  type PaginationProps,
+  type PaginationQuickJumperOptions,
+  type PaginationRenderItemProps,
+  type PaginationSimpleOptions,
+  type PaginationSize,
+  type PaginationStyles,
+} from './components/pagination';
 export {
   Popover,
   type PopoverClassNames,
@@ -269,12 +299,11 @@ export {
 } from './components/resizable';
 export {
   ScrollArea,
-  type ScrollAreaFadeEdges,
   type ScrollAreaOrientation,
-  type ScrollAreaOverflowEdgeThreshold,
   type ScrollAreaProps,
+  type ScrollAreaScrollbarConfig,
+  type ScrollAreaScrollbarSize,
   type ScrollAreaScrollbarVisibility,
-  type ScrollBarProps,
 } from './components/scroll-area';
 export {
   Select,
