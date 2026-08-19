@@ -587,9 +587,11 @@ const HomePage = () => {
 
         <Card
           className="hero-showcase rounded-lg"
-          title={t('home.previewTitle')}
-          description={t('home.previewDescription')}
-          action={<Tag type="success">Live</Tag>}
+          header={{
+            title: t('home.previewTitle'),
+            description: t('home.previewDescription'),
+            action: <Tag type="success">Live</Tag>,
+          }}
         >
           <Stack block gap={24}>
             <Stack align="center" gap={8} orientation="horizontal" wrap>
@@ -1520,7 +1522,10 @@ const ComponentExampleCard = ({
         content: 'example-card-body',
         footer: 'example-card-footer block p-0',
       }}
-      description={<p>{example.description}</p>}
+      header={{
+        title: <h3>{example.title}</h3>,
+        description: <p>{example.description}</p>,
+      }}
       footer={
         <div className="example-card-footer-content">
           <div className="demo-actions">
@@ -1608,7 +1613,6 @@ const ComponentExampleCard = ({
         </div>
       }
       role="article"
-      title={<h3>{example.title}</h3>}
     >
       <div
         className={`demo-preview demo-preview-${component}${

@@ -2306,6 +2306,12 @@ a {
   width: min(480px, 100%);
   border: 1px solid rgb(105 115 134 / 12%);
 }
+.demo-preview-card
+  .component-harness-case-segmented
+  .component-harness-case-stage {
+  overflow: visible;
+  padding: 16px 12px;
+}
 .card-basic-demo p {
   max-width: 42ch;
   margin: 0;

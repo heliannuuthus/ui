@@ -96,40 +96,42 @@ export const SyntaxCode = ({
       data-language={language}
       data-line-count={lineCount}
       variant={variant}
-      title={
-        <Stack
-          align="center"
-          block
-          gap={16}
-          justify="between"
-          orientation="horizontal"
-        >
-          <Stack align="center" gap={8} orientation="horizontal">
-            <Typography.Text
-              as="small"
-              size="sm"
-              weight="medium"
-              className="font-heading font-bold"
-            >
-              {fileName}
-            </Typography.Text>
-          </Stack>
+      header={{
+        title: (
           <Stack
             align="center"
-            className="syntax-code-meta"
-            gap={8}
+            block
+            gap={16}
+            justify="between"
             orientation="horizontal"
-            separator={<i />}
           >
-            <span>{language.toUpperCase()}</span>
-            <span>
-              {lineCount}
-              {docsCopy('行')}
-            </span>
+            <Stack align="center" gap={8} orientation="horizontal">
+              <Typography.Text
+                as="small"
+                size="sm"
+                weight="medium"
+                className="font-heading font-bold"
+              >
+                {fileName}
+              </Typography.Text>
+            </Stack>
+            <Stack
+              align="center"
+              className="syntax-code-meta"
+              gap={8}
+              orientation="horizontal"
+              separator={<i />}
+            >
+              <span>{language.toUpperCase()}</span>
+              <span>
+                {lineCount}
+                {docsCopy('行')}
+              </span>
+            </Stack>
           </Stack>
-        </Stack>
-      }
-      action={action}
+        ),
+        action,
+      }}
     >
       <Highlight
         code={normalizedCode}

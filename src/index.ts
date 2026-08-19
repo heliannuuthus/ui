@@ -62,6 +62,7 @@ export {
 export {
   Card,
   type CardClassNames,
+  type CardHeader,
   type CardProps,
   type CardStyles,
   type CardVariant,
