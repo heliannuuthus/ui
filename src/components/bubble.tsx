@@ -6,6 +6,21 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/utils';
 import type { DataAttributes } from './internal/public-types';
 
+type BubbleVariantOptions = {
+  class?: never;
+  className?: string;
+  variant?:
+    | 'default'
+    | 'secondary'
+    | 'muted'
+    | 'elevated'
+    | 'tinted'
+    | 'outline'
+    | 'ghost'
+    | 'destructive'
+    | null;
+};
+
 const BubbleGroup = ({ className, ...props }: React.ComponentProps<'div'>) => {
   return (
     <div
@@ -16,7 +31,7 @@ const BubbleGroup = ({ className, ...props }: React.ComponentProps<'div'>) => {
   );
 };
 
-const bubbleVariants = cva(
+const bubbleVariants: (props?: BubbleVariantOptions) => string = cva(
   'group/bubble relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1 data-[align=end]:self-end data-[variant=ghost]:max-w-full',
   {
     variants: {

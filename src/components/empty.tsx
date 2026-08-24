@@ -20,7 +20,7 @@ const Empty = ({
   icon = <InboxIcon aria-hidden="true" />,
   title,
   ...props
-}: EmptyProps) => {
+}: EmptyProps): React.JSX.Element => {
   return (
     <div
       data-slot="empty"

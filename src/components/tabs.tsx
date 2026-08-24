@@ -7,7 +7,13 @@ import { cn } from '../lib/utils';
 
 type TabsAnimation = 'none' | 'fade' | 'slide';
 
-const tabsListVariants = cva(
+type TabsListVariantOptions = {
+  class?: never;
+  className?: string;
+  variant?: 'default' | 'line' | 'outline' | 'soft' | null;
+};
+
+const tabsListVariants: (props?: TabsListVariantOptions) => string = cva(
   'no-scrollbar group/tabs-list relative isolate inline-flex w-fit max-w-full items-center justify-center rounded-full p-1 text-muted-foreground group-data-horizontal/tabs:h-9 group-data-horizontal/tabs:justify-start group-data-horizontal/tabs:overflow-x-auto group-data-horizontal/tabs:overflow-y-hidden group-data-horizontal/tabs:overscroll-x-contain group-data-horizontal/tabs:scroll-smooth group-data-horizontal/tabs:snap-x group-data-horizontal/tabs:snap-proximity group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col group-data-vertical/tabs:rounded-2xl data-[centered=true]:self-center data-[variant=line]:rounded-none motion-reduce:scroll-auto',
   {
     variants: {

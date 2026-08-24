@@ -13,7 +13,13 @@ import {
   useFormControl,
 } from './internal/form-control';
 
-const toggleVariants = cva(
+type ToggleVariantOptions = {
+  class?: never;
+  className?: string;
+  variant?: 'default' | 'outline' | null;
+};
+
+const toggleVariants: (props?: ToggleVariantOptions) => string = cva(
   "group/toggle inline-flex h-9 min-w-9 items-center justify-center gap-1 rounded-3xl px-3 text-sm font-medium whitespace-nowrap transition-colors outline-none has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5 hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:hover:bg-primary/85 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {

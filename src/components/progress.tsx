@@ -30,7 +30,7 @@ const Progress = ({
   showValue = false,
   value,
   ...props
-}: ProgressProps) => {
+}: ProgressProps): React.JSX.Element => {
   return (
     <ProgressPrimitive.Root
       value={value}
