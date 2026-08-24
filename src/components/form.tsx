@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { isForwardRef } from 'react-is';
 import {
   FormProvider,
   useController,
@@ -209,16 +208,6 @@ const hasRequiredRule = (rule: RegisterOptions['required']) => {
   return Boolean(rule);
 };
 
-const canReceiveInjectedRef = (element: React.ReactElement) => {
-  const reactMajorVersion = Number.parseInt(React.version, 10);
-
-  return (
-    reactMajorVersion >= 19 ||
-    typeof element.type === 'string' ||
-    isForwardRef(element)
-  );
-};
-
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
@@ -260,7 +249,6 @@ const FormField = <
     : null;
   const mergedChildRef = useMergedRefs(childElement?.props.ref, focusRef);
   const resolvedControlId = childElement?.props.id ?? controlId;
-  const injectRef = childElement ? canReceiveInjectedRef(childElement) : false;
   const fieldValue: FormFieldRenderField<FieldPathValue<TFieldValues, TName>> =
     {
       name: field.name,
@@ -359,7 +347,7 @@ const FormField = <
           childElement.props.onChange?.(value);
           field.onChange(value);
         },
-        ...(injectRef ? { ref: mergedChildRef } : {}),
+        ref: mergedChildRef,
         required: Boolean(isRequired || childElement.props.required),
         value: field.value,
       })

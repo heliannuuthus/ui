@@ -17,12 +17,12 @@ type DialogStyles = {
 type DialogProps = OpenStateProps & {
   cancelText?: React.ReactNode;
   children?: React.ReactNode;
+  closable?: boolean | React.ReactNode;
   confirmText?: React.ReactNode;
   classNames?: DialogClassNames;
   description?: React.ReactNode;
   footer?: React.ReactNode;
   onConfirm?: () => void;
-  showCloseButton?: boolean;
   styles?: DialogStyles;
   title?: React.ReactNode;
   trigger?: React.ReactElement;
@@ -31,12 +31,12 @@ type DialogProps = OpenStateProps & {
 const Dialog = ({
   cancelText,
   children,
+  closable = true,
   confirmText,
   classNames,
   description,
   footer,
   onConfirm,
-  showCloseButton = true,
   styles,
   title,
   trigger,
@@ -102,7 +102,7 @@ const Dialog = ({
               ) : null}
             </div>
           ) : null}
-          {showCloseButton ? (
+          {closable !== false && closable != null ? (
             <DialogPrimitive.Close
               data-slot="dialog-close"
               render={
@@ -113,7 +113,7 @@ const Dialog = ({
                 />
               }
             >
-              <XIcon />
+              {closable === true ? <XIcon /> : closable}
               <span className="sr-only">关闭</span>
             </DialogPrimitive.Close>
           ) : null}

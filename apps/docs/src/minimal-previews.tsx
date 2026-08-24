@@ -200,10 +200,10 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
         { destructive: true, icon: <Trash2 />, label: docsCopy('删除项目') },
       ]}
       trigger={
-        <button className="minimal-context-menu-trigger" type="button">
+        <Button className="minimal-context-menu-trigger" variant="outline">
           <span>{docsCopy('组件文档')}</span>
           <small>{docsCopy('在这里单击右键')}</small>
-        </button>
+        </Button>
       }
     />
   ),

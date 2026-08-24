@@ -75,15 +75,6 @@ const zh = {
     },
     docs: {
       onThisPage: '本页目录',
-      typeDefinition: '类型定义',
-      field: '{{component}} 字段',
-      scope: '作用域',
-      constraint: '约束',
-      internalNode: '{{component}} 内部语义节点',
-      required: '必填字段',
-      optional: '可选字段',
-      usage: '用法',
-      typeAccess: '类型访问',
       previewType: '预览 {{type}} 类型',
     },
     demo: {
@@ -239,15 +230,6 @@ const en = {
     },
     docs: {
       onThisPage: 'On this page',
-      typeDefinition: 'Type definition',
-      field: '{{component}} fields',
-      scope: 'Scope',
-      constraint: 'Constraint',
-      internalNode: 'Semantic node inside {{component}}',
-      required: 'Required field',
-      optional: 'Optional field',
-      usage: 'Usage',
-      typeAccess: 'Type access',
       previewType: 'Preview the {{type}} type',
     },
     demo: {

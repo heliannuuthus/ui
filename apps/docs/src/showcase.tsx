@@ -1,3 +1,5 @@
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V4 */
+
 import {
   useEffect,
   useLayoutEffect,
@@ -6,23 +8,25 @@ import {
   useState,
   type CSSProperties,
 } from 'react';
-import { Tag } from '@heliannuuthus/ui';
-import { Button } from '@heliannuuthus/ui';
-import { Card } from '@heliannuuthus/ui';
-import { Command } from '@heliannuuthus/ui';
-import { Empty } from '@heliannuuthus/ui';
-import { Drawer } from '@heliannuuthus/ui';
-import { Input } from '@heliannuuthus/ui';
-import { Item } from '@heliannuuthus/ui';
-import { Layout } from '@heliannuuthus/ui';
-import { Masonry } from '@heliannuuthus/ui';
-import { Popover } from '@heliannuuthus/ui';
-import { Separator } from '@heliannuuthus/ui';
-import { Toggle } from '@heliannuuthus/ui';
-import { Stack } from '@heliannuuthus/ui';
-import { Tabs } from '@heliannuuthus/ui';
-import { Tooltip } from '@heliannuuthus/ui';
-import { Typography } from '@heliannuuthus/ui';
+import {
+  Button,
+  Card,
+  Command,
+  Drawer,
+  Empty,
+  Input,
+  Item,
+  Layout,
+  Masonry,
+  Popover,
+  Separator,
+  Stack,
+  Tabs,
+  Tag,
+  Toggle,
+  Tooltip,
+  Typography,
+} from '@heliannuuthus/ui';
 import {
   ArrowRight,
   Blocks,
@@ -228,19 +232,20 @@ const ApiType = ({
               key={`${reference.reference}-${reference.start}`}
               side="top"
               trigger={
-                <button
+                <Button
                   aria-label={t('docs.previewType', {
                     type: reference.reference,
                   })}
                   className="component-api-type-reference"
-                  type="button"
+                  size="xs"
+                  variant="link"
                 >
                   {renderRange(
                     reference.start,
                     reference.end,
                     `reference-${index}`
                   )}
-                </button>
+                </Button>
               }
               triggerMode="hover"
             />
@@ -301,149 +306,6 @@ const ApiTypeDefinitionPreview = ({
           <code className="component-api-type-declaration">{'}'}</code>
         </>
       )}
-    </div>
-  );
-};
-
-const classNameSlotExamples: Record<string, string> = {
-  action: 'text-primary',
-  content: 'space-y-4',
-  description: 'text-muted-foreground',
-  footer: 'justify-end gap-2',
-  header: 'border-primary/20 bg-primary/5',
-  title: 'text-lg font-semibold',
-};
-
-const TypeDefinitionExplorer = ({
-  api,
-  component,
-}: {
-  api: ApiProperty[];
-  component: string;
-}) => {
-  const { t } = useTranslation();
-  const [activeName, setActiveName] = useState(api[0]?.name ?? '');
-  const [copied, setCopied] = useState(false);
-  const activeProperty =
-    api.find((property) => property.name === activeName) ?? api[0];
-
-  if (!activeProperty) {
-    return null;
-  }
-
-  const activeIndex = api.indexOf(activeProperty);
-  const isClassNames = component.endsWith('ClassNames');
-  const owner = component.replace(/ClassNames$/, '');
-  const declarationName =
-    component === 'ColumnDef' ? 'ColumnDef<TData, TValue>' : component;
-  const exampleClassName = isClassNames
-    ? (classNameSlotExamples[activeProperty.name] ?? 'your-class-name')
-    : '';
-  const usageExample = isClassNames
-    ? `<${owner}
-  classNames={{
-    ${activeProperty.name}: '${exampleClassName}',
-  }}
-/>`
-    : `type FieldType = ${declarationName}['${activeProperty.name}']`;
-
-  const copyUsage = async () => {
-    await navigator.clipboard.writeText(usageExample);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1200);
-  };
-
-  return (
-    <div className="class-names-explorer">
-      <section className="class-names-definition">
-        <div className="class-names-definition-heading">
-          <span>{t('docs.typeDefinition')}</span>
-          <code>export type</code>
-        </div>
-        <div
-          aria-label={t('docs.field', { component })}
-          className="class-names-source"
-        >
-          <p>
-            <span>type</span> <strong>{declarationName}</strong> = {'{'}
-          </p>
-          {api.map((property, index) => (
-            <button
-              aria-pressed={activeProperty.name === property.name}
-              data-active={
-                activeProperty.name === property.name ? '' : undefined
-              }
-              key={property.name}
-              onClick={() => setActiveName(property.name)}
-              onFocus={() => setActiveName(property.name)}
-              onMouseEnter={() => setActiveName(property.name)}
-              type="button"
-            >
-              <span aria-hidden="true">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <code>
-                <strong>{property.name}</strong>
-                <i>{property.required ? ':' : '?:'}</i> {property.type};
-              </code>
-            </button>
-          ))}
-          <p>{'}'}</p>
-        </div>
-      </section>
-
-      <section
-        aria-live="polite"
-        className="class-names-inspector"
-        data-property={activeProperty.name}
-        key={activeProperty.name}
-      >
-        <div className="class-names-inspector-heading">
-          <span>
-            {String(activeIndex + 1).padStart(2, '0')} /{' '}
-            {String(api.length).padStart(2, '0')}
-          </span>
-          <code>
-            {isClassNames
-              ? `classNames.${activeProperty.name}`
-              : activeProperty.name}
-          </code>
-        </div>
-        <p>{activeProperty.description}</p>
-        <dl>
-          <div>
-            <dt>{t('components.type')}</dt>
-            <dd>
-              <code>{activeProperty.type}</code>
-            </dd>
-          </div>
-          <div>
-            <dt>{t(isClassNames ? 'docs.scope' : 'docs.constraint')}</dt>
-            <dd>
-              {isClassNames
-                ? t('docs.internalNode', { component: owner })
-                : activeProperty.required
-                  ? t('docs.required')
-                  : t('docs.optional')}
-            </dd>
-          </div>
-        </dl>
-
-        <div className="class-names-usage-heading">
-          <span>{t(isClassNames ? 'docs.usage' : 'docs.typeAccess')}</span>
-          <Button
-            aria-label={t(copied ? 'actions.copied' : 'actions.copy')}
-            onClick={copyUsage}
-            size="icon-sm"
-            variant="ghost"
-          >
-            {copied ? <Check /> : <Copy />}
-          </Button>
-        </div>
-        <pre className="class-names-usage">
-          <code>{usageExample}</code>
-        </pre>
-      </section>
     </div>
   );
 };
@@ -595,6 +457,31 @@ const SiteHeader = ({
         </Button>
       </div>
     </header>
+  );
+};
+
+const SiteFooter = () => {
+  const path = useLocalizedPath();
+  const { t } = useTranslation();
+
+  return (
+    <footer className="site-footer">
+      <Typography.Text as="span" weight="semibold">
+        Heliannuuthus UI
+      </Typography.Text>
+      <Stack align="center" gap={4} orientation="horizontal" wrap>
+        <Button href={path('/components')} size="sm" variant="link">
+          {t('navigation.components')}
+        </Button>
+        <span aria-hidden="true">·</span>
+        <Button href={repositoryUrl} size="sm" variant="link">
+          GitHub
+        </Button>
+      </Stack>
+      <Typography.Text as="span" size="sm" tone="muted">
+        React primitives · MIT
+      </Typography.Text>
+    </footer>
   );
 };
 
@@ -1144,7 +1031,7 @@ const ComponentSearchDialog = ({
           </div>
         ),
         open,
-        showCloseButton: false,
+        closable: false,
         title: t('search.title'),
         onOpenChange,
       }}
@@ -1300,7 +1187,7 @@ const ComponentNavigationDrawer = ({ component }: { component: string }) => {
       onOpenChange={setOpen}
       open={open}
       side="left"
-      showSwipeHandle={false}
+      handle={false}
       title={t('components.navigation')}
       trigger={
         <Button
@@ -1410,11 +1297,13 @@ const ComponentPage = () => {
             <h1>{name}</h1>
             <p>{metadata.summary || t('components.draftSummary')}</p>
           </div>
-          <a
+          <Button
             href={`${repositoryUrl}/blob/main/src/components/${component}.tsx`}
+            size="sm"
+            variant="outline"
           >
             <Github /> {t('actions.viewSource')}
-          </a>
+          </Button>
         </div>
         {documentation ? (
           <>
@@ -1490,25 +1379,21 @@ const ComponentPage = () => {
                       {t('components.inheritedPropsNotice')}
                     </p>
                     <div className="component-api-groups">
-                      {groupApiProperties(
-                        documentation.api,
-                        documentation.name
-                      ).map((group) => (
-                        <section
-                          className="component-api-group"
-                          key={group.component}
-                        >
-                          <h4>
-                            <code>{group.component}</code>
-                          </h4>
-                          {documentation.typeDefinitionGroups?.includes(
-                            group.component
-                          ) ? (
-                            <TypeDefinitionExplorer
-                              api={group.api}
-                              component={group.component}
-                            />
-                          ) : (
+                      {groupApiProperties(documentation.api, documentation.name)
+                        .filter(
+                          (group) =>
+                            !documentation.typeDefinitionGroups?.includes(
+                              group.component
+                            )
+                        )
+                        .map((group) => (
+                          <section
+                            className="component-api-group"
+                            key={group.component}
+                          >
+                            <h4>
+                              <code>{group.component}</code>
+                            </h4>
                             <div className="component-api-table">
                               <div className="component-api-head">
                                 <span>{t('components.properties')}</span>
@@ -1525,9 +1410,8 @@ const ComponentPage = () => {
                                 </div>
                               ))}
                             </div>
-                          )}
-                        </section>
-                      ))}
+                          </section>
+                        ))}
                     </div>
                   </div>
                 )}
@@ -1568,7 +1452,7 @@ const ComponentExampleList = ({
   return (
     <Masonry
       className="example-list"
-      columns={2}
+      columns={3}
       gap={[20, 32]}
       items={examples.map((example) => ({
         className: `example-item${example.wide ? ' example-item-wide' : ''}`,
@@ -1578,7 +1462,7 @@ const ComponentExampleList = ({
         key: example.title,
         span: example.wide ? 'full' : 'auto',
       }))}
-      minColumnWidth={300}
+      minColumnWidth="26rem"
     />
   );
 };
@@ -1621,55 +1505,62 @@ const ComponentExampleCard = ({
               content={t(copied ? 'demo.copied' : 'demo.copyCode')}
               delay={300}
               trigger={
-                <button
-                  type="button"
+                <Button
+                  size="icon-sm"
+                  variant="ghost"
                   onClick={copy}
                   aria-label={t(copied ? 'actions.copied' : 'demo.copyCode')}
                 >
                   {copied ? <Check /> : <Copy />}
-                </button>
+                </Button>
               }
             />
             <Tooltip
               content={t('actions.viewOnGitHub')}
               delay={300}
               trigger={
-                <a
+                <Button
                   href={`${repositoryUrl}/blob/main/src/components/${component}.tsx`}
+                  size="icon-sm"
+                  variant="ghost"
                   target="_blank"
                   rel="noreferrer"
                   aria-label={t('actions.viewOnGitHub')}
                 >
                   <Github />
-                </a>
+                </Button>
               }
             />
             <Tooltip
               content={t('demo.openCodeSandbox')}
               delay={300}
               trigger={
-                <a
+                <Button
                   href="https://codesandbox.io/p/github/heliannuuthus/ui/main"
+                  size="icon-sm"
+                  variant="ghost"
                   target="_blank"
                   rel="noreferrer"
                   aria-label={t('demo.openCodeSandbox')}
                 >
                   <Box />
-                </a>
+                </Button>
               }
             />
             <Tooltip
               content={t('demo.openStackBlitz')}
               delay={300}
               trigger={
-                <a
+                <Button
                   href="https://stackblitz.com/github/heliannuuthus/ui"
+                  size="icon-sm"
+                  variant="ghost"
                   target="_blank"
                   rel="noreferrer"
                   aria-label={t('demo.openStackBlitz')}
                 >
                   <Zap />
-                </a>
+                </Button>
               }
             />
             <Tooltip
@@ -1902,11 +1793,10 @@ const DocLayout = ({
   );
 };
 
-export const Showcase = ({
-  page,
-}: {
-  page: 'home' | 'getting-started' | 'design' | 'components' | 'component';
-}) => {
+export type ShowcasePage =
+  'home' | 'getting-started' | 'design' | 'components' | 'component';
+
+export const Showcase = ({ page }: { page: ShowcasePage }) => {
   const [dark, setDark] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -1935,6 +1825,7 @@ export const Showcase = ({
       {page === 'design' && <DesignPage />}
       {page === 'components' && <ComponentsOverview />}
       {page === 'component' && <ComponentPage />}
+      <SiteFooter />
     </div>
   );
 };

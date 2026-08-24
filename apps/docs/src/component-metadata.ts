@@ -181,11 +181,6 @@ export const componentSearchMetadata = {
     ['轮播', '走马灯'],
     ['slides', 'gallery'],
   ],
-  chart: [
-    'Provides responsive containers, theme variables, and consistent tooltips for Recharts.',
-    ['图表', '数据可视化'],
-    ['graph', 'visualization', 'recharts'],
-  ],
   collapsible: [
     'Expands or collapses one content region.',
     ['折叠', '展开'],

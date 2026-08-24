@@ -1,6 +1,6 @@
 import { docsCopy } from './i18n/content';
 import { useState } from 'react';
-import { Resizable } from '@heliannuuthus/ui';
+import { Button, Resizable } from '@heliannuuthus/ui';
 import {
   FileCode2,
   FolderOpen,
@@ -41,14 +41,14 @@ export const ResizableWorkspaceDemo = () => {
                 </div>
                 <nav aria-label={docsCopy('示例文件')}>
                   {files.map((file) => (
-                    <button
+                    <Button
                       className={file === 'resizable.tsx' ? 'active' : ''}
                       key={file}
-                      type="button"
+                      variant="ghost"
                     >
                       <FileCode2 />
                       {file}
-                    </button>
+                    </Button>
                   ))}
                 </nav>
               </aside>

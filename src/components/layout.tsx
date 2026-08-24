@@ -15,23 +15,20 @@ type LayoutFooterProps = React.ComponentProps<'footer'>;
 type LayoutBreakpoint = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 type LayoutSidebarCollapseReason = 'breakpoint' | 'trigger';
 type LayoutSidebarSide = 'start' | 'end';
-type LayoutSidebarTriggerLabels = {
+type LayoutSidebarLabels = {
   collapse: string;
   expand: string;
 };
-type LayoutSidebarProps = React.ComponentProps<'aside'> & {
+type LayoutSidebarProps = Omit<React.ComponentProps<'aside'>, 'onChange'> & {
   breakpoint?: LayoutBreakpoint;
   collapsed?: boolean;
   collapsedWidth?: number | string;
   collapsible?: boolean | React.ReactNode;
   defaultCollapsed?: boolean;
+  labels?: LayoutSidebarLabels;
   onBreakpointChange?: (below: boolean) => void;
-  onCollapsedChange?: (
-    collapsed: boolean,
-    reason: LayoutSidebarCollapseReason
-  ) => void;
+  onChange?: (collapsed: boolean, reason: LayoutSidebarCollapseReason) => void;
   side?: LayoutSidebarSide;
-  triggerLabels?: LayoutSidebarTriggerLabels;
   width?: number | string;
 };
 
@@ -43,7 +40,7 @@ const breakpointQueries: Record<LayoutBreakpoint, string> = {
   '2xl': '(max-width: 1535.98px)',
 };
 
-const defaultTriggerLabels: LayoutSidebarTriggerLabels = {
+const defaultLabels: LayoutSidebarLabels = {
   collapse: 'Collapse sidebar',
   expand: 'Expand sidebar',
 };
@@ -110,11 +107,11 @@ const LayoutSidebar = ({
   collapsedWidth = 80,
   collapsible = false,
   defaultCollapsed = false,
+  labels = defaultLabels,
   onBreakpointChange,
-  onCollapsedChange,
+  onChange,
   side = 'start',
   style,
-  triggerLabels = defaultTriggerLabels,
   width = 240,
   ...props
 }: LayoutSidebarProps) => {
@@ -131,13 +128,13 @@ const LayoutSidebar = ({
   const resolvedCollapsed = collapsed ?? uncontrolledCollapsed;
   const collapsedRef = React.useRef(resolvedCollapsed);
   const onBreakpointChangeRef = React.useRef(onBreakpointChange);
-  const onCollapsedChangeRef = React.useRef(onCollapsedChange);
+  const onChangeRef = React.useRef(onChange);
 
   React.useEffect(() => {
     collapsedRef.current = resolvedCollapsed;
     onBreakpointChangeRef.current = onBreakpointChange;
-    onCollapsedChangeRef.current = onCollapsedChange;
-  }, [onBreakpointChange, onCollapsedChange, resolvedCollapsed]);
+    onChangeRef.current = onChange;
+  }, [onBreakpointChange, onChange, resolvedCollapsed]);
 
   const updateCollapsed = React.useCallback(
     (nextCollapsed: boolean, reason: LayoutSidebarCollapseReason) => {
@@ -147,7 +144,7 @@ const LayoutSidebar = ({
         collapsedRef.current = nextCollapsed;
         setUncontrolledCollapsed(nextCollapsed);
       }
-      onCollapsedChangeRef.current?.(nextCollapsed, reason);
+      onChangeRef.current?.(nextCollapsed, reason);
     },
     [collapsed]
   );
@@ -225,9 +222,7 @@ const LayoutSidebar = ({
         <button
           aria-controls={contentId}
           aria-expanded={!resolvedCollapsed}
-          aria-label={
-            resolvedCollapsed ? triggerLabels.expand : triggerLabels.collapse
-          }
+          aria-label={resolvedCollapsed ? labels.expand : labels.collapse}
           className={cn(
             'absolute bottom-2 z-10 grid size-8 place-items-center rounded-lg border border-border bg-background text-muted-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
             side === 'start' ? 'end-2' : 'start-2',
@@ -261,9 +256,9 @@ export type {
   LayoutContentProps,
   LayoutFooterProps,
   LayoutHeaderProps,
+  LayoutSidebarLabels,
   LayoutProps,
   LayoutSidebarCollapseReason,
   LayoutSidebarProps,
   LayoutSidebarSide,
-  LayoutSidebarTriggerLabels,
 };

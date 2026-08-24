@@ -250,21 +250,22 @@ export const CardSemanticDomDemo = () => {
         className="card-semantic-regions"
       >
         {cardSemanticRegions.map((region) => (
-          <button
+          <Button
             aria-pressed={activeSlot === region.slot}
+            block
             data-active={activeSlot === region.slot ? '' : undefined}
             key={region.slot}
             onClick={() => setActiveSlot(region.slot)}
             onFocus={() => setActiveSlot(region.slot)}
             onMouseEnter={() => setActiveSlot(region.slot)}
-            type="button"
+            variant="ghost"
           >
             <span>
               <strong>{region.slot}</strong>
               <code>{region.api}</code>
             </span>
             <small>{region.description}</small>
-          </button>
+          </Button>
         ))}
       </div>
     </div>

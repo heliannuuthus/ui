@@ -79,17 +79,6 @@ export {
   useCarousel,
 } from './components/carousel';
 export {
-  Chart,
-  type ChartConfig,
-  type ChartConfigBase,
-  type ChartConfigColor,
-  type ChartConfigItem,
-  type ChartConfigTheme,
-  type ChartInitialDimension,
-  type ChartProps,
-  type ChartStyleProps,
-} from './components/chart';
-export {
   Checkbox,
   type CheckboxClassNames,
   type CheckboxGroupProps,
@@ -217,9 +206,9 @@ export {
   type LayoutHeaderProps,
   type LayoutProps,
   type LayoutSidebarCollapseReason,
+  type LayoutSidebarLabels,
   type LayoutSidebarProps,
   type LayoutSidebarSide,
-  type LayoutSidebarTriggerLabels,
 } from './components/layout';
 export {
   Marker,
@@ -347,7 +336,7 @@ export {
   type TabsClassNames,
   type TabsItem,
   type TabsProps,
-  type TabsScrollButtonLabels,
+  type TabsScrollLabels,
   type TabsStyles,
 } from './components/tabs';
 export { Tag, type TagProps, type TagType } from './components/tag';

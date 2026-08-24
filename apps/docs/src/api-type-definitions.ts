@@ -153,7 +153,7 @@ export const apiTypeReferences = (type: string) => {
 
 export const isCustomApiTypeReference = (reference: string) => {
   if (platformTypeNames.has(reference)) return false;
-  if (/^(?:Intl|React|Recharts|NavigationMenuPrimitive)\./.test(reference)) {
+  if (/^(?:Intl|React|NavigationMenuPrimitive)\./.test(reference)) {
     return false;
   }
   if (['Item', 'Key', 'TData', 'Value'].includes(reference)) return false;

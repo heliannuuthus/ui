@@ -2,6 +2,8 @@
 
 Accessible shadcn-style primitives shared by Heliannuuthus products.
 
+Requires React 19 and React DOM 19.
+
 Import the static stylesheet once at the application entry, then use named
 imports from the package root:
 
@@ -33,7 +35,9 @@ the packaged component modules, and a gzip size budget for the static CSS.
 
 The package is intentionally domain-neutral. Authentication flows, API calls, routing and product copy stay in Pallas.
 
-The package implements the complete shadcn/ui component catalog for the Radix foundation, including Heliannuuthus-owned recipe exports for Table, Date Picker, Form, Input.Number, and Typography.
+The package implements the domain-neutral shadcn/ui primitives that belong in
+the shared Radix foundation, including Heliannuuthus-owned recipe exports for
+Table, Date Picker, Form, Input.Number, and Typography.
 
 ## Workspace policy
 

@@ -114,10 +114,18 @@ export const StackGapDemo = () => {
   );
 };
 
-export const StackAlignmentDemo = () => {
+export const StackAlignmentDemo = ({
+  axis = 'align',
+}: {
+  axis?: 'align' | 'justify';
+}) => {
+  const visibleCases = alignmentCases.filter((item) =>
+    axis === 'justify' ? item.justify != null : item.align != null
+  );
+
   return (
     <div className="stack-alignment-grid">
-      {alignmentCases.map((item) => (
+      {visibleCases.map((item) => (
         <article className="stack-alignment-case" key={item.label}>
           <div className="stack-alignment-copy">
             <code>{item.label}</code>

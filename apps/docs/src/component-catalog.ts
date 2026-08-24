@@ -62,7 +62,7 @@ export const componentGroups = [
   {
     key: 'dataDisplay',
     title: '数据展示',
-    items: ['Badge', 'Chart', 'Counter', 'Table'],
+    items: ['Badge', 'Counter', 'Table'],
   },
   {
     key: 'overlays',
@@ -129,7 +129,6 @@ export const zhComponentNames = {
   Avatar: '头像',
   Bubble: '气泡',
   Carousel: '轮播',
-  Chart: '图表',
   Collapsible: '折叠',
   Counter: '计数器',
   Empty: '空状态',

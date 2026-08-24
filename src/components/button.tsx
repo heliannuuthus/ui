@@ -190,6 +190,7 @@ const ButtonRoot = forwardRef<ButtonRef, ButtonProps>(ButtonRender);
 ButtonRoot.displayName = 'Button';
 
 const ButtonGroup = ({
+  block = false,
   className,
   orientation,
   children,
@@ -199,8 +200,13 @@ const ButtonGroup = ({
     <Stack.Compact
       role="group"
       data-slot="button-group"
+      block={block}
       orientation={orientation ?? 'horizontal'}
-      className={cn(buttonGroupVariants(), className)}
+      className={cn(
+        buttonGroupVariants(),
+        block && '[&>[data-slot=button]]:flex-1',
+        className
+      )}
       {...props}
     >
       {children}
