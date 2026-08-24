@@ -10,7 +10,9 @@ type DirectionProviderProps = {
   direction?: TextDirection;
 };
 
-const DirectionProvider = (props: DirectionProviderProps) => {
+const DirectionProvider = (
+  props: DirectionProviderProps
+): React.JSX.Element => {
   return <BaseDirectionProvider {...props} />;
 };
 

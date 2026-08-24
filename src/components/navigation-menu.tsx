@@ -49,7 +49,7 @@ const NavigationMenu = ({
   items,
   onChange,
   ...props
-}: NavigationMenuProps) => {
+}: NavigationMenuProps): React.JSX.Element => {
   return (
     <NavigationMenuPrimitive.Root
       data-slot="navigation-menu"
@@ -120,7 +120,7 @@ const NavigationMenuItem = ({
   );
 };
 
-const navigationMenuTriggerStyle = cva(
+const navigationMenuTriggerStyle: () => string = cva(
   'group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center rounded-3xl px-4.5 py-2.5 text-sm font-medium transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-popup-open:bg-accent data-popup-open:text-primary data-popup-open:hover:bg-accent data-open:bg-accent data-open:text-primary data-open:hover:bg-accent data-open:focus:bg-accent'
 );
 

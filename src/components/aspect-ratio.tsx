@@ -4,7 +4,7 @@ const AspectRatio = ({
   ratio,
   className,
   ...props
-}: React.ComponentProps<'div'> & { ratio: number }) => {
+}: React.ComponentProps<'div'> & { ratio: number }): React.JSX.Element => {
   return (
     <div
       data-slot="aspect-ratio"

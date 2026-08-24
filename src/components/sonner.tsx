@@ -10,7 +10,7 @@ import {
   Loader2Icon,
 } from 'lucide-react';
 
-const Toaster = ({ ...props }: ToasterProps) => {
+const Toaster = ({ ...props }: ToasterProps): React.JSX.Element => {
   const { theme = 'system' } = useTheme();
 
   return (
@@ -42,7 +42,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
   );
 };
 
-const Sonner = Toaster;
+const Sonner: typeof Toaster = Toaster;
 
 export { Sonner };
 export type { ToasterProps as SonnerProps };

@@ -8,7 +8,7 @@ const Skeleton = ({
   ...props
 }: React.ComponentProps<'div'> & {
   effect?: SkeletonEffect;
-}) => {
+}): React.JSX.Element => {
   return (
     <div
       data-slot="skeleton"

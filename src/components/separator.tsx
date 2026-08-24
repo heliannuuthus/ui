@@ -10,7 +10,7 @@ const Separator = ({
   className,
   orientation = 'horizontal',
   ...props
-}: SeparatorProps) => {
+}: SeparatorProps): React.JSX.Element => {
   return (
     <SeparatorPrimitive
       data-slot="separator"

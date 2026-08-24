@@ -13,7 +13,11 @@ const spinnerSizes: Record<SpinnerSize, string> = {
   lg: 'size-6',
 };
 
-const Spinner = ({ className, size = 'default', ...props }: SpinnerProps) => {
+const Spinner = ({
+  className,
+  size = 'default',
+  ...props
+}: SpinnerProps): React.JSX.Element => {
   return (
     <Loader2Icon
       data-slot="spinner"

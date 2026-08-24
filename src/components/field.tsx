@@ -7,6 +7,12 @@ import { cn } from '../lib/utils';
 import { Label } from './label';
 import { Separator } from './separator';
 
+type FieldVariantOptions = {
+  class?: never;
+  className?: string;
+  orientation?: 'vertical' | 'horizontal' | 'responsive' | null;
+};
+
 const FieldSet = ({
   className,
   ...props
@@ -54,7 +60,7 @@ const FieldGroup = ({ className, ...props }: React.ComponentProps<'div'>) => {
   );
 };
 
-const fieldVariants = cva(
+const fieldVariants: (props?: FieldVariantOptions) => string = cva(
   'group/field flex w-full gap-3 data-[invalid=true]:text-destructive',
   {
     variants: {
