@@ -141,19 +141,15 @@ const Tooltip = ({
               {arrow !== false ? (
                 <TooltipPrimitive.Arrow
                   data-slot="tooltip-arrow"
-                  className="pointer-events-none z-50 size-4 overflow-hidden text-foreground data-[side=bottom]:top-[-14px] data-[side=inline-end]:-rotate-90 data-[side=inline-end]:[inset-inline-start:-14px] data-[side=inline-start]:rotate-90 data-[side=inline-start]:[inset-inline-end:-14px] data-[side=left]:right-[-14px] data-[side=left]:rotate-90 data-[side=right]:left-[-14px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-14px] data-[side=top]:rotate-180 rtl:data-[side=inline-end]:rotate-90 rtl:data-[side=inline-start]:-rotate-90"
+                  className="pointer-events-none z-50 size-4 overflow-visible text-foreground data-[side=bottom]:top-[-16px] data-[side=inline-end]:-rotate-90 data-[side=inline-end]:[inset-inline-start:-16px] data-[side=inline-start]:rotate-90 data-[side=inline-start]:[inset-inline-end:-16px] data-[side=left]:right-[-16px] data-[side=left]:rotate-90 data-[side=right]:left-[-16px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-16px] data-[side=top]:rotate-180 rtl:data-[side=inline-end]:rotate-90 rtl:data-[side=inline-start]:-rotate-90"
                   style={getArrowEdgeStyle}
                 >
-                  <span
-                    aria-hidden="true"
-                    className="absolute bottom-0 left-0 h-0.5 w-4 bg-current"
-                  />
                   <svg
                     aria-hidden="true"
-                    className="absolute bottom-0 left-0 h-2 w-4 fill-current"
-                    viewBox="0 0 16 8"
+                    className="absolute bottom-[-2px] left-0 h-[10px] w-4 fill-current"
+                    viewBox="0 0 16 10"
                   >
-                    <path d="M0 8A4 4 0 0 0 2.83 6.83L6.59 3.07A2 2 0 0 1 9.41 3.07L13.17 6.83A4 4 0 0 0 16 8Z" />
+                    <path d="M0 8A4 4 0 0 0 2.83 6.83L6.59 3.07A2 2 0 0 1 9.41 3.07L13.17 6.83A4 4 0 0 0 16 8V10H0Z" />
                   </svg>
                 </TooltipPrimitive.Arrow>
               ) : null}
