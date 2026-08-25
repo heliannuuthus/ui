@@ -14,7 +14,6 @@ import { Typography } from '@heliannuuthus/ui';
 import {
   ArrowRight,
   Bold,
-  CircleX,
   Download,
   Italic,
   Mail,
@@ -7078,38 +7077,7 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description: docsCopy(
         '在不离开当前页面的情况下完成一项聚焦编辑任务，并保留明确的取消和保存动作。'
       ),
-      caseLayout: 'segmented',
-      cases: [
-        {
-          isDefault: true,
-          label: docsCopy('默认关闭按钮'),
-          properties: {},
-          values: { closable: 'default' },
-        },
-        {
-          label: docsCopy('自定义关闭按钮'),
-          properties: { closable: '<CircleX />' },
-          values: { closable: 'custom' },
-        },
-        {
-          label: docsCopy('隐藏关闭按钮'),
-          properties: { closable: 'false' },
-          values: { closable: 'hidden' },
-        },
-      ],
-      preview: (values) => (
-        <DialogReleaseDemo
-          closable={
-            values.closable === 'custom' ? (
-              <CircleX />
-            ) : values.closable === 'hidden' ? (
-              false
-            ) : (
-              true
-            )
-          }
-        />
-      ),
+      preview: <DialogReleaseDemo />,
       code: docsCopy(`import { Button, Dialog } from '@heliannuuthus/ui'
 
 <Dialog
@@ -7131,34 +7099,7 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description: docsCopy(
         '统一从上、右、下、左进入；adaptive 模式在窄屏保留手势，在宽屏收敛为稳定的边缘面板。'
       ),
-      caseLayout: 'segmented',
-      cases: [
-        {
-          isDefault: true,
-          label: docsCopy('默认控件'),
-          properties: { closable: 'true', handle: 'undefined' },
-          values: { chrome: 'default' },
-        },
-        {
-          label: docsCopy('自定义关闭按钮'),
-          properties: { closable: '<CircleX />', handle: 'undefined' },
-          values: { chrome: 'custom' },
-        },
-        {
-          label: docsCopy('精简控件'),
-          properties: { closable: 'false', handle: 'false' },
-          values: { chrome: 'minimal' },
-        },
-      ],
-      preview: (values) => (
-        <DrawerReleaseDemo
-          chrome={
-            values.chrome === 'custom' || values.chrome === 'minimal'
-              ? values.chrome
-              : 'default'
-          }
-        />
-      ),
+      preview: <DrawerReleaseDemo />,
       code: docsCopy(`import { Button, Drawer } from '@heliannuuthus/ui'
 
 <Drawer

@@ -5182,11 +5182,6 @@ import { ScrollArea } from '@heliannuuthus/ui'
   自定义摘要: 'Custom summary',
   隐藏摘要: 'Hidden summary',
   限制展开: 'Restricted expansion',
-  默认关闭按钮: 'Default close button',
-  自定义关闭按钮: 'Custom close button',
-  隐藏关闭按钮: 'Hidden close button',
-  默认控件: 'Default controls',
-  精简控件: 'Minimal controls',
   '统一设置 Header 或独立触发按钮的状态图标；true 使用默认图标，false 隐藏，也可传入自定义节点。':
     'Sets the status icon for either the Header or a separate trigger; true uses the default icon, false hides it, and a custom node replaces it.',
   '控制右上角关闭操作；true 使用默认图标，false 隐藏，也可传入自定义节点。':
