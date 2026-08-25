@@ -1546,8 +1546,8 @@ const ActionCell = () => {
     'Continuously place content of different heights into the current shortest column, and allow specified content to occupy the entire row.',
   '将菜单绑定到明确的内容区域，右键或键盘菜单键打开与当前对象相关的操作。':
     'Bind menus to explicit content areas, and right-click or keyboard menu keys to open actions related to the current object.',
-  'side 决定浮层位于触发器的哪一侧；箭头始终指向触发器，align 只调整浮层沿该侧的对齐。':
-    'side chooses which edge of the trigger the popup uses; the arrow always points to the trigger, while align only adjusts the popup along that edge.',
+  'placement 表示箭头落在触发器边缘的位置，浮层会从该位置向外展开。':
+    'placement identifies where the arrow lands on the trigger edge, and the popup expands outward from that point.',
   '将错误语义和颜色传递给整个字段。':
     'Pass error semantics and color to the entire field.',
   '将互斥选项扩展为整行可点击的卡片，同时保留原生单选语义。':
@@ -2057,8 +2057,10 @@ const ActionCell = () => {
     'Sets the horizontal and vertical spacing between Radio.Group options.',
   '设置 Tooltip 方向、对齐和间距。':
     'Set Tooltip orientation, alignment and spacing.',
-  '设置浮层位于触发器的哪一侧。':
-    'Choose which side of the trigger contains the popup.',
+  '设置箭头落在触发器边缘的位置；使用时无需同时设置 side 或 align。':
+    'Choose where the arrow lands on the trigger edge; do not set side or align at the same time.',
+  '不使用 placement 时，设置浮层位于触发器的哪一侧。':
+    'Choose which side of the trigger contains the popup when placement is not used.',
   '设置浮层盒子沿 side 方向的交叉轴对齐；箭头仍然指向触发器。':
     'Align the popup box along the cross axis of side; the arrow still points to the trigger.',
   '设置浮层与触发器沿 side 方向的间距。':
@@ -2443,6 +2445,7 @@ const ActionCell = () => {
   '说明当前为什么没有内容；传入 null 可隐藏标题。':
     'Explain why there is currently no content; pass null to hide the title.',
   四个方向: 'four directions',
+  八个箭头位置: 'Eight arrow positions',
   '从页面边缘承载较长内容和连续操作，同时保留当前页面上下文。':
     'Use the page edge for longer content and continuous actions while preserving the current page context.',
   四种样式与快捷居中: 'Four styles and quick centering',
@@ -3708,8 +3711,8 @@ const ActionCell = () => {
     'import { Button, Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>Open from the right</Button>}\n  title="Tonight\'s release window"\n  description="22:00–23:00"\n>\n  <ReleaseWindow />\n</Drawer>',
   'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button variant="outline">3 位负责人</Button>}\n  title="发布负责人"\n  description="发布和回滚时会通知这些成员。"\n  content={<OwnerList />}\n  side="bottom"\n/>':
     'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button variant="outline">3 persons in charge</Button>}\n  title="Release Manager"\n  description="These members will be notified when publishing and rolling back."\n  content={<OwnerList />}\n  side="bottom"\n/>',
-  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="上方提示"\n  delay={100}\n  side="top"\n  trigger={<Button>上方</Button>}\n/>':
-    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Top tooltip"\n  delay={100}\n  side="top"\n  trigger={<Button>Top</Button>}\n/>',
+  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="左上提示"\n  delay={100}\n  placement="top-left"\n  trigger={<Button>左上</Button>}\n/>':
+    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Upper-left tooltip"\n  delay={100}\n  placement="top-left"\n  trigger={<Button>Upper left</Button>}\n/>',
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: '读取', value: 'read' },\n    { label: '编辑', value: 'write' },\n    { label: '管理', value: 'admin' },\n  ]}\n/>":
     "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: 'read', value: 'read' },\n    { label: 'edit', value: 'write' },\n    { label: 'admin', value: 'admin' },\n  ]}\n/>",
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  name=\"permission\"\n  value={selected}\n  onChange={setSelected}\n  options={[\n    { label: '查看项目', value: 'read' },\n    { label: '参与评论', value: 'comment' },\n    { label: '管理项目', value: 'manage' },\n  ]}\n/>":
@@ -3921,7 +3924,7 @@ const ActionCell = () => {
     'Toast will only appear at the top of the current container',
   'Toggle 与 Toggle.Group 使用统一尺寸；通过 items 管理可同时开启的工具状态。':
     'Toggle and Toggle.Group use the same size; use items to manage the status of tools that can be opened at the same time.',
-  'Tooltip 四个方向': 'Tooltip four directions',
+  'Tooltip 八个箭头位置': 'Tooltip eight arrow positions',
   'v0.12.0 发布详情': 'v0.12.0 release details',
   'v0.12.0 已部署到生产环境。': 'v0.12.0 has been deployed to production.',
   'variant 只区分信息层级；同一种状态不要在页面内混用多套样式。':

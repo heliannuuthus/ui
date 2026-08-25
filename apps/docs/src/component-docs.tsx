@@ -7020,18 +7020,18 @@ const ActionCell = () => {
       previewHeight: 300,
     },
     {
-      title: docsCopy('四个方向'),
+      title: docsCopy('八个箭头位置'),
       description: docsCopy(
-        'side 决定浮层位于触发器的哪一侧；箭头始终指向触发器，align 只调整浮层沿该侧的对齐。'
+        'placement 表示箭头落在触发器边缘的位置，浮层会从该位置向外展开。'
       ),
       preview: <TooltipPlacementsDemo />,
       code: docsCopy(`import { Button, Tooltip } from '@heliannuuthus/ui'
 
 <Tooltip
-  content="上方提示"
+  content="左上提示"
   delay={100}
-  side="top"
-  trigger={<Button>上方</Button>}
+  placement="top-left"
+  trigger={<Button>左上</Button>}
 />`),
       previewHeight: 440,
       wide: true,
@@ -11374,9 +11374,18 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy('设置需要补充说明的交互元素和简短提示内容。'),
     })),
     {
+      name: 'placement',
+      type: 'TooltipPlacement',
+      description: docsCopy(
+        '设置箭头落在触发器边缘的位置；使用时无需同时设置 side 或 align。'
+      ),
+    },
+    {
       name: 'side',
       type: "'top' | 'right' | 'bottom' | 'left'",
-      description: docsCopy('设置浮层位于触发器的哪一侧。'),
+      description: docsCopy(
+        '不使用 placement 时，设置浮层位于触发器的哪一侧。'
+      ),
     },
     {
       name: 'align',
@@ -13356,6 +13365,21 @@ appendTypePreviews('table', [
   overscan?: number
   rowHeight?: number
 }`,
+  },
+]);
+
+appendTypePreviews('tooltip', [
+  {
+    name: 'TooltipPlacement',
+    definition: `type TooltipPlacement =
+  | 'top-left'
+  | 'top'
+  | 'top-right'
+  | 'right'
+  | 'bottom-right'
+  | 'bottom'
+  | 'bottom-left'
+  | 'left'`,
   },
 ]);
 

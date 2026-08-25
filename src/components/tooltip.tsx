@@ -16,17 +16,66 @@ type TooltipStyles = {
   content?: React.CSSProperties;
 };
 
-type TooltipProps = OpenStateProps & {
-  align?: PopupAlign;
-  alignOffset?: number;
-  classNames?: TooltipClassNames;
-  content: React.ReactNode;
-  delay?: number;
-  disabled?: boolean;
-  side?: PopupSide;
-  sideOffset?: number;
-  styles?: TooltipStyles;
-  trigger: React.ReactElement;
+type TooltipPlacement =
+  | 'bottom'
+  | 'bottom-left'
+  | 'bottom-right'
+  | 'left'
+  | 'right'
+  | 'top'
+  | 'top-left'
+  | 'top-right';
+
+type TooltipPositionProps =
+  | {
+      align?: PopupAlign;
+      alignOffset?: number;
+      placement?: never;
+      side?: PopupSide;
+    }
+  | {
+      align?: never;
+      alignOffset?: number;
+      placement: TooltipPlacement;
+      side?: never;
+    };
+
+type TooltipProps = OpenStateProps &
+  TooltipPositionProps & {
+    classNames?: TooltipClassNames;
+    content: React.ReactNode;
+    delay?: number;
+    disabled?: boolean;
+    sideOffset?: number;
+    styles?: TooltipStyles;
+    trigger: React.ReactElement;
+  };
+
+const placementSides: Record<TooltipPlacement, PopupSide> = {
+  bottom: 'bottom',
+  'bottom-left': 'bottom',
+  'bottom-right': 'bottom',
+  left: 'left',
+  right: 'right',
+  top: 'top',
+  'top-left': 'top',
+  'top-right': 'top',
+};
+
+const getPlacementAnchorRect = (rect: DOMRect, placement: TooltipPlacement) => {
+  const horizontalInset = Math.min(16, rect.width / 2);
+  const x = placement.endsWith('-left')
+    ? rect.left + horizontalInset
+    : placement.endsWith('-right')
+      ? rect.right - horizontalInset
+      : rect.left + rect.width / 2;
+  const y = placement.startsWith('top')
+    ? rect.top
+    : placement.startsWith('bottom')
+      ? rect.bottom
+      : rect.top + rect.height / 2;
+
+  return new DOMRect(x, y, 0, 0);
 };
 
 const Tooltip = ({
@@ -35,24 +84,47 @@ const Tooltip = ({
   classNames,
   content,
   delay = 0,
+  placement,
   side = 'top',
   sideOffset = 4,
   styles,
   trigger,
   ...props
 }: TooltipProps) => {
+  const triggerRef = React.useRef<HTMLElement>(null);
+  const setTriggerRef = React.useCallback((element: HTMLElement | null) => {
+    triggerRef.current = element;
+  }, []);
+  const placementAnchor = React.useMemo(() => {
+    if (!placement) return undefined;
+
+    return {
+      get contextElement() {
+        return triggerRef.current ?? undefined;
+      },
+      getBoundingClientRect() {
+        const rect = triggerRef.current?.getBoundingClientRect();
+        return rect
+          ? getPlacementAnchorRect(rect, placement)
+          : new DOMRect(0, 0, 0, 0);
+      },
+    };
+  }, [placement]);
+
   return (
     <TooltipPrimitive.Provider delay={delay}>
       <TooltipPrimitive.Root data-slot="tooltip" {...props}>
         <TooltipPrimitive.Trigger
           data-slot="tooltip-trigger"
+          ref={setTriggerRef}
           render={trigger}
         />
         <TooltipPrimitive.Portal>
           <TooltipPrimitive.Positioner
-            align={align}
+            align={placement ? 'center' : align}
             alignOffset={alignOffset}
-            side={side}
+            anchor={placementAnchor}
+            side={placement ? placementSides[placement] : side}
             sideOffset={sideOffset}
             className="isolate z-50"
           >
@@ -77,6 +149,7 @@ const Tooltip = ({
 export {
   Tooltip,
   type TooltipClassNames,
+  type TooltipPlacement,
   type TooltipProps,
   type TooltipStyles,
 };

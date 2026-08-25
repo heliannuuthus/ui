@@ -6477,9 +6477,9 @@ a {
 .display-tooltip-placements {
   display: grid;
   grid-template-areas:
-    '. top .'
+    'top-left top top-right'
     'left reference right'
-    '. bottom .';
+    'bottom-left bottom bottom-right';
   grid-template-columns: repeat(3, minmax(82px, 112px));
   grid-template-rows: auto minmax(104px, auto) auto;
   place-content: center;
@@ -6502,8 +6502,16 @@ a {
   grid-area: var(--tooltip-placement);
 }
 
+.display-tooltip-placement[data-placement='top-left'] {
+  --tooltip-placement: top-left;
+}
+
 .display-tooltip-placement[data-placement='top'] {
   --tooltip-placement: top;
+}
+
+.display-tooltip-placement[data-placement='top-right'] {
+  --tooltip-placement: top-right;
 }
 
 .display-tooltip-placement[data-placement='left'] {
@@ -6516,6 +6524,14 @@ a {
 
 .display-tooltip-placement[data-placement='bottom'] {
   --tooltip-placement: bottom;
+}
+
+.display-tooltip-placement[data-placement='bottom-left'] {
+  --tooltip-placement: bottom-left;
+}
+
+.display-tooltip-placement[data-placement='bottom-right'] {
+  --tooltip-placement: bottom-right;
 }
 
 .display-tooltip-placement button {

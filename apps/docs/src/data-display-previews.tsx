@@ -2753,10 +2753,14 @@ export const TableCellDemo = () => {
 };
 
 const tooltipPlacements = [
-  { label: docsCopy('上方'), placement: 'top', side: 'top' },
-  { label: docsCopy('左侧'), placement: 'left', side: 'left' },
-  { label: docsCopy('右侧'), placement: 'right', side: 'right' },
-  { label: docsCopy('下方'), placement: 'bottom', side: 'bottom' },
+  { label: docsCopy('左上'), placement: 'top-left' },
+  { label: docsCopy('上方'), placement: 'top' },
+  { label: docsCopy('右上'), placement: 'top-right' },
+  { label: docsCopy('左侧'), placement: 'left' },
+  { label: docsCopy('右侧'), placement: 'right' },
+  { label: docsCopy('左下'), placement: 'bottom-left' },
+  { label: docsCopy('下方'), placement: 'bottom' },
+  { label: docsCopy('右下'), placement: 'bottom-right' },
 ] as const;
 
 export const TooltipBasicDemo = () => {
@@ -2772,7 +2776,7 @@ export const TooltipPlacementsDemo = () => {
   return (
     <div
       className="display-tooltip-placements"
-      aria-label={docsCopy('Tooltip 四个方向')}
+      aria-label={docsCopy('Tooltip 八个箭头位置')}
     >
       {tooltipPlacements.map((placement) => (
         <div
@@ -2781,9 +2785,9 @@ export const TooltipPlacementsDemo = () => {
           key={placement.placement}
         >
           <Tooltip
-            content={placement.side}
+            content={placement.placement}
             delay={100}
-            side={placement.side}
+            placement={placement.placement}
             trigger={
               <Button size="sm" variant="outline">
                 {placement.label}
