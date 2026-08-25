@@ -7020,9 +7020,9 @@ const ActionCell = () => {
       previewHeight: 300,
     },
     {
-      title: docsCopy('八个方位'),
+      title: docsCopy('方向与对齐'),
       description: docsCopy(
-        '将常用方位围绕同一参照物完整展示，悬停或聚焦任意按钮即可检查方向和对齐方式。'
+        'side 决定浮层位于触发器的哪一侧，align 决定浮层沿该侧的对齐方式。'
       ),
       preview: <TooltipPlacementsDemo />,
       code: docsCopy(`import { Button, Tooltip } from '@heliannuuthus/ui'

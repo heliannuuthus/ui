@@ -716,7 +716,7 @@ const ActionCell = () => {
     'Expand a piece of auxiliary content on demand; support independent button or entire custom Header triggering, and allow status icons to be replaced.',
   '按需展开一组纵向排列的内容区域。':
     'Expand a set of vertically arranged content areas as needed.',
-  八个方位: 'eight directions',
+  方向与对齐: 'Direction and alignment',
   '把产品入口、资源入口和当前页面放入同一条站点导航，弹层宽度随内容平滑变化。':
     'Put the product entrance, resource entrance and current page into the same site navigation, and the width of the elastic layer will change smoothly with the content.',
   '把抽屉约束在指定父容器内。':
@@ -1547,8 +1547,8 @@ const ActionCell = () => {
     'Continuously place content of different heights into the current shortest column, and allow specified content to occupy the entire row.',
   '将菜单绑定到明确的内容区域，右键或键盘菜单键打开与当前对象相关的操作。':
     'Bind menus to explicit content areas, and right-click or keyboard menu keys to open actions related to the current object.',
-  '将常用方位围绕同一参照物完整展示，悬停或聚焦任意按钮即可检查方向和对齐方式。':
-    'Commonly used directions are displayed completely around the same reference object, and you can hover or focus on any button to check the direction and alignment.',
+  'side 决定浮层位于触发器的哪一侧，align 决定浮层沿该侧的对齐方式。':
+    'side chooses which edge of the trigger the popup uses, while align controls its alignment along that edge.',
   '将错误语义和颜色传递给整个字段。':
     'Pass error semantics and color to the entire field.',
   '将互斥选项扩展为整行可点击的卡片，同时保留原生单选语义。':
@@ -2436,6 +2436,10 @@ const ActionCell = () => {
   '说明当前为什么没有内容；传入 null 可隐藏标题。':
     'Explain why there is currently no content; pass null to hide the title.',
   四个方向: 'four directions',
+  上方靠左: 'Top, aligned left',
+  上方靠右: 'Top, aligned right',
+  下方靠左: 'Bottom, aligned left',
+  下方靠右: 'Bottom, aligned right',
   '从页面边缘承载较长内容和连续操作，同时保留当前页面上下文。':
     'Use the page edge for longer content and continuous actions while preserving the current page context.',
   四种样式与快捷居中: 'Four styles and quick centering',
@@ -3916,7 +3920,7 @@ const ActionCell = () => {
     'Toast will only appear at the top of the current container',
   'Toggle 与 Toggle.Group 使用统一尺寸；通过 items 管理可同时开启的工具状态。':
     'Toggle and Toggle.Group use the same size; use items to manage the status of tools that can be opened at the same time.',
-  'Tooltip 八个方位': 'Tooltip eight directions',
+  'Tooltip 方向与对齐': 'Tooltip direction and alignment',
   'v0.12.0 发布详情': 'v0.12.0 release details',
   'v0.12.0 已部署到生产环境。': 'v0.12.0 has been deployed to production.',
   'variant 只区分信息层级；同一种状态不要在页面内混用多套样式。':
