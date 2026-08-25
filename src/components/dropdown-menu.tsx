@@ -299,6 +299,8 @@ type DropdownMenuProps = OpenStateProps & {
   trigger: React.ReactElement;
 };
 
+type DropdownMenuProviderDefaults = Pick<DropdownMenuProps, 'size'>;
+
 const renderEntries = (items: DropdownMenuEntry[]) => {
   return items.map((item, index) => {
     if (item.type === 'separator') {
@@ -425,6 +427,7 @@ export {
   type DropdownMenuItemEntry,
   type DropdownMenuLabelEntry,
   type DropdownMenuProps,
+  type DropdownMenuProviderDefaults,
   type DropdownMenuRadioEntry,
   type DropdownMenuRadioOption,
   type DropdownMenuSeparatorEntry,

@@ -30,6 +30,8 @@ type AlertDialogProps = OpenStateProps & {
   trigger: React.ReactElement;
 };
 
+type AlertDialogProviderDefaults = Pick<AlertDialogProps, 'size'>;
+
 const AlertDialog = ({
   cancelText = '取消',
   classNames,
@@ -123,5 +125,6 @@ export {
   AlertDialog,
   type AlertDialogClassNames,
   type AlertDialogProps,
+  type AlertDialogProviderDefaults,
   type AlertDialogStyles,
 };

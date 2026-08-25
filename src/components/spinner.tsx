@@ -8,6 +8,8 @@ type SpinnerProps = React.ComponentProps<'svg'> & {
   size?: SpinnerSize;
 };
 
+type SpinnerProviderDefaults = Pick<SpinnerProps, 'size'>;
+
 const spinnerSizes: Record<SpinnerSize, string> = {
   sm: 'size-3.5',
   default: 'size-4',
@@ -34,4 +36,9 @@ const Spinner = ({
   );
 };
 
-export { Spinner, type SpinnerProps, type SpinnerSize };
+export {
+  Spinner,
+  type SpinnerProps,
+  type SpinnerProviderDefaults,
+  type SpinnerSize,
+};

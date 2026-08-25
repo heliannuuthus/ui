@@ -23,6 +23,8 @@ type ProgressProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   value: number | null;
 };
 
+type ProgressProviderDefaults = Pick<ProgressProps, 'effect'>;
+
 const Progress = (progressProps: ProgressProps): React.JSX.Element => {
   const defaults = useComponentDefaults('Progress');
   const {
@@ -138,4 +140,9 @@ const ProgressValue = ({
   );
 };
 
-export { Progress, type ProgressEffect, type ProgressProps };
+export {
+  Progress,
+  type ProgressEffect,
+  type ProgressProps,
+  type ProgressProviderDefaults,
+};

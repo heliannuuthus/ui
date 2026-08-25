@@ -42,6 +42,8 @@ type AlertProps = Omit<React.ComponentProps<'div'>, 'title'> &
     title?: React.ReactNode;
   };
 
+type AlertProviderDefaults = Pick<AlertProps, 'variant'>;
+
 const Alert = (alertProps: AlertProps) => {
   const defaults = useComponentDefaults('Alert');
   const {
@@ -89,4 +91,4 @@ const Alert = (alertProps: AlertProps) => {
   );
 };
 
-export { Alert, type AlertProps };
+export { Alert, type AlertProps, type AlertProviderDefaults };

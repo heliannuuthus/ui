@@ -116,6 +116,7 @@ type ButtonLinkProps = Omit<
   } & NativeButtonOnlyProps;
 
 type ButtonProps = ButtonNativeProps | ButtonLinkProps;
+type ButtonProviderDefaults = Pick<ButtonProps, 'block' | 'size' | 'variant'>;
 type ButtonRef = HTMLAnchorElement | HTMLButtonElement;
 type ButtonGroupProps = StackCompactProps;
 
@@ -230,5 +231,6 @@ export {
   type ButtonLinkProps,
   type ButtonNativeProps,
   type ButtonProps,
+  type ButtonProviderDefaults,
   type ButtonRef,
 };

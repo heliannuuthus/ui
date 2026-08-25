@@ -244,6 +244,8 @@ type MenubarProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   size?: 'default' | 'lg' | 'sm';
 };
 
+type MenubarProviderDefaults = Pick<MenubarProps, 'size'>;
+
 const renderMenubarEntries = (items: DropdownMenuEntry[]) => {
   return items.map((item, index) => {
     if (item.type === 'separator') {
@@ -360,4 +362,9 @@ const Menubar = ({
   );
 };
 
-export { Menubar, type MenubarMenuConfig, type MenubarProps };
+export {
+  Menubar,
+  type MenubarMenuConfig,
+  type MenubarProps,
+  type MenubarProviderDefaults,
+};

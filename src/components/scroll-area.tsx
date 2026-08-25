@@ -18,6 +18,10 @@ type ScrollAreaProps = React.ComponentPropsWithoutRef<'div'> & {
   scrollbar?: ScrollAreaScrollbarConfig;
 };
 
+type ScrollAreaProviderDefaults = {
+  scrollbar?: Pick<ScrollAreaScrollbarConfig, 'size' | 'visibility'>;
+};
+
 const scrollbarSizes = {
   sm: 6,
   md: 10,
@@ -111,6 +115,7 @@ export {
   ScrollArea,
   type ScrollAreaOrientation,
   type ScrollAreaProps,
+  type ScrollAreaProviderDefaults,
   type ScrollAreaScrollbarConfig,
   type ScrollAreaScrollbarSize,
   type ScrollAreaScrollbarVisibility,

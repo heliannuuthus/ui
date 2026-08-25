@@ -32,6 +32,8 @@ type CardProps = React.ComponentProps<'div'> & {
   styles?: CardStyles;
 };
 
+type CardProviderDefaults = Pick<CardProps, 'variant'>;
+
 const Card = (cardProps: CardProps) => {
   const defaults = useComponentDefaults('Card');
   const {
@@ -130,6 +132,7 @@ export {
   type CardHeader,
   type CardClassNames,
   type CardProps,
+  type CardProviderDefaults,
   type CardStyles,
   type CardVariant,
 };

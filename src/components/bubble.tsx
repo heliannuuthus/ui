@@ -75,6 +75,8 @@ type BubbleProps = Omit<React.ComponentProps<'div'>, 'children'> &
     reactionsProps?: BubbleReactionsProps;
   };
 
+type BubbleProviderDefaults = Pick<BubbleProps, 'variant'>;
+
 const Bubble = ({
   align = 'start',
   className,
@@ -171,5 +173,6 @@ const BubbleCompound = Object.assign(Bubble, {
 export {
   BubbleCompound as Bubble,
   type BubbleProps,
+  type BubbleProviderDefaults,
   type BubbleReactionsProps,
 };

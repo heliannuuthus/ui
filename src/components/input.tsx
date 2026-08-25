@@ -51,6 +51,8 @@ type InputOTPProps = Omit<
   className?: string;
 };
 
+type InputOTPProviderDefaults = Pick<InputOTPProps, 'variant'>;
+
 type TextAreaProps = React.ComponentProps<'textarea'>;
 
 const InputOTPShapeContext = React.createContext<InputOTPVariant>('connected');
@@ -397,6 +399,7 @@ export type {
   InputClassNames,
   InputOTPVariant,
   InputOTPProps,
+  InputOTPProviderDefaults,
   InputProps,
   InputStyles,
   TextAreaProps,
@@ -405,6 +408,7 @@ export type {
   InputNumberClassNames,
   InputNumberControls,
   InputNumberProps,
+  InputNumberProviderDefaults,
   InputNumberSize,
   InputNumberStyles,
 } from './input-number';

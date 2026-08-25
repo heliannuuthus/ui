@@ -51,6 +51,8 @@ type CheckboxProps = Omit<
   variant?: CheckboxVariant;
 };
 
+type CheckboxProviderDefaults = Pick<CheckboxProps, 'variant'>;
+
 type CheckboxOption = {
   className?: string;
   disabled?: boolean;
@@ -285,6 +287,7 @@ export type {
   CheckboxGroupProps,
   CheckboxOption,
   CheckboxProps,
+  CheckboxProviderDefaults,
   CheckboxStyles,
   CheckboxVariant,
 };

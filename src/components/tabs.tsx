@@ -76,6 +76,11 @@ type TabsProps = Omit<
     value?: string | null;
   };
 
+type TabsProviderDefaults = Pick<
+  TabsProps,
+  'animation' | 'centered' | 'variant'
+>;
+
 const Tabs = ({
   animation: animationProp,
   centered: centeredProp,
@@ -327,6 +332,7 @@ export {
   type TabsClassNames,
   type TabsItem,
   type TabsProps,
+  type TabsProviderDefaults,
   type TabsScrollLabels,
   type TabsStyles,
 };

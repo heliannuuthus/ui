@@ -4,31 +4,31 @@ import { DirectionProvider as BaseDirectionProvider } from '@base-ui/react/direc
 import * as React from 'react';
 
 import { cn } from '../lib/utils';
-import type { AlertProps } from './alert';
-import type { AlertDialogProps } from './alert-dialog';
-import type { AttachmentProps } from './attachment';
-import type { AvatarProps } from './avatar';
-import type { BreadcrumbProps } from './breadcrumb';
-import type { BubbleProps } from './bubble';
-import type { ButtonProps } from './button';
-import type { CardProps } from './card';
-import type { CheckboxProps } from './checkbox';
-import type { CollapsibleProps } from './collapsible';
-import type { DropdownMenuProps } from './dropdown-menu';
-import type { InputNumberProps } from './input-number';
-import type { InputOTPProps } from './input';
-import type { ItemProps } from './item';
-import type { MarkerProps } from './marker';
-import type { MenubarProps } from './menubar';
-import type { PaginationProps } from './pagination';
-import type { ProgressProps } from './progress';
-import type { ScrollAreaProps } from './scroll-area';
-import type { SliderProps } from './slider';
-import type { SpinnerProps } from './spinner';
-import type { TabsProps } from './tabs';
-import type { TagProps } from './tag';
-import type { ToggleProps } from './toggle';
-import type { TypographyTextProps } from './typography';
+import type { AlertProviderDefaults } from './alert';
+import type { AlertDialogProviderDefaults } from './alert-dialog';
+import type { AttachmentProviderDefaults } from './attachment';
+import type { AvatarProviderDefaults } from './avatar';
+import type { BreadcrumbProviderDefaults } from './breadcrumb';
+import type { BubbleProviderDefaults } from './bubble';
+import type { ButtonProviderDefaults } from './button';
+import type { CardProviderDefaults } from './card';
+import type { CheckboxProviderDefaults } from './checkbox';
+import type { CollapsibleProviderDefaults } from './collapsible';
+import type { DropdownMenuProviderDefaults } from './dropdown-menu';
+import type { InputNumberProviderDefaults } from './input-number';
+import type { InputOTPProviderDefaults } from './input';
+import type { ItemProviderDefaults } from './item';
+import type { MarkerProviderDefaults } from './marker';
+import type { MenubarProviderDefaults } from './menubar';
+import type { PaginationProviderDefaults } from './pagination';
+import type { ProgressProviderDefaults } from './progress';
+import type { ScrollAreaProviderDefaults } from './scroll-area';
+import type { SliderProviderDefaults } from './slider';
+import type { SpinnerProviderDefaults } from './spinner';
+import type { TabsProviderDefaults } from './tabs';
+import type { TagProviderDefaults } from './tag';
+import type { ToggleProviderDefaults } from './toggle';
+import type { TypographyTextProviderDefaults } from './typography';
 
 type TextDirection = 'ltr' | 'rtl';
 type ProviderAppearance = 'dark' | 'light' | 'system';
@@ -65,37 +65,34 @@ type ProviderTheme = {
 };
 
 type ProviderComponents = {
-  Alert?: Pick<AlertProps, 'variant'>;
-  AlertDialog?: Pick<AlertDialogProps, 'size'>;
-  Attachment?: Pick<AttachmentProps, 'size'>;
-  Avatar?: Pick<AvatarProps, 'shape' | 'size'>;
-  Breadcrumb?: Pick<BreadcrumbProps, 'size' | 'variant'>;
-  Bubble?: Pick<BubbleProps, 'variant'>;
-  Button?: Pick<ButtonProps, 'block' | 'size' | 'variant'>;
-  Card?: Pick<CardProps, 'variant'>;
-  Checkbox?: Pick<CheckboxProps, 'variant'>;
-  Collapsible?: Pick<
-    NonNullable<CollapsibleProps['triggerProps']>,
-    'size' | 'variant'
-  >;
-  DropdownMenu?: Pick<DropdownMenuProps, 'size'>;
+  Alert?: AlertProviderDefaults;
+  AlertDialog?: AlertDialogProviderDefaults;
+  Attachment?: AttachmentProviderDefaults;
+  Avatar?: AvatarProviderDefaults;
+  Breadcrumb?: BreadcrumbProviderDefaults;
+  Bubble?: BubbleProviderDefaults;
+  Button?: ButtonProviderDefaults;
+  Card?: CardProviderDefaults;
+  Checkbox?: CheckboxProviderDefaults;
+  Collapsible?: CollapsibleProviderDefaults;
+  DropdownMenu?: DropdownMenuProviderDefaults;
   Input?: {
-    Number?: Pick<InputNumberProps, 'size'>;
-    OTP?: Pick<InputOTPProps, 'variant'>;
+    Number?: InputNumberProviderDefaults;
+    OTP?: InputOTPProviderDefaults;
   };
-  Item?: Pick<ItemProps, 'size' | 'variant'>;
-  Marker?: Pick<MarkerProps, 'variant'>;
-  Menubar?: Pick<MenubarProps, 'size'>;
-  Pagination?: Pick<PaginationProps, 'size'>;
-  Progress?: Pick<ProgressProps, 'effect'>;
-  ScrollArea?: Pick<ScrollAreaProps, 'scrollbar'>;
-  Slider?: Pick<SliderProps<number>, 'effect'>;
-  Spinner?: Pick<SpinnerProps, 'size'>;
-  Tabs?: Pick<TabsProps, 'animation' | 'centered' | 'variant'>;
-  Tag?: Pick<TagProps, 'type'>;
-  Toggle?: Pick<ToggleProps, 'variant'>;
+  Item?: ItemProviderDefaults;
+  Marker?: MarkerProviderDefaults;
+  Menubar?: MenubarProviderDefaults;
+  Pagination?: PaginationProviderDefaults;
+  Progress?: ProgressProviderDefaults;
+  ScrollArea?: ScrollAreaProviderDefaults;
+  Slider?: SliderProviderDefaults;
+  Spinner?: SpinnerProviderDefaults;
+  Tabs?: TabsProviderDefaults;
+  Tag?: TagProviderDefaults;
+  Toggle?: ToggleProviderDefaults;
   Typography?: {
-    Text?: Pick<TypographyTextProps, 'size' | 'tone' | 'weight'>;
+    Text?: TypographyTextProviderDefaults;
   };
 };
 

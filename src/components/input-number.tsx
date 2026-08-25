@@ -85,6 +85,8 @@ type InputNumberProps = Omit<
   styles?: InputNumberStyles;
 };
 
+type InputNumberProviderDefaults = Pick<InputNumberProps, 'size'>;
+
 const InputNumber = ({
   'aria-describedby': ariaDescribedBy,
   'aria-errormessage': ariaErrorMessage,
@@ -264,6 +266,7 @@ export type {
   InputNumberClassNames,
   InputNumberControls,
   InputNumberProps,
+  InputNumberProviderDefaults,
   InputNumberSize,
   InputNumberStyles,
 };

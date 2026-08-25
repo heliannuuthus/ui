@@ -14,6 +14,11 @@ type CollapsibleTriggerProps = Omit<
 > &
   VariantProps<typeof buttonVariants>;
 
+type CollapsibleProviderDefaults = Pick<
+  CollapsibleTriggerProps,
+  'size' | 'variant'
+>;
+
 type CollapsibleClassNames = {
   content?: string;
   header?: string;
@@ -149,6 +154,7 @@ export {
   Collapsible,
   type CollapsibleClassNames,
   type CollapsibleProps,
+  type CollapsibleProviderDefaults,
   type CollapsibleStyles,
   type CollapsibleTriggerProps,
 };

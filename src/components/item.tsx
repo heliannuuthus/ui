@@ -102,6 +102,8 @@ type ItemLinkProps = Omit<
 
 type ItemProps = ItemDivProps | ItemLinkProps;
 
+type ItemProviderDefaults = Pick<ItemProps, 'size' | 'variant'>;
+
 type ItemGroupEntry = ItemProps & {
   key?: React.Key;
 };
@@ -299,5 +301,6 @@ export {
   type ItemGroupProps,
   type ItemLinkProps,
   type ItemProps,
+  type ItemProviderDefaults,
   type ItemStyles,
 };

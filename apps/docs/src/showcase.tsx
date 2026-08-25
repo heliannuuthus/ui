@@ -27,6 +27,31 @@ import {
   Toggle,
   Tooltip,
   Typography,
+  type AlertDialogProviderDefaults,
+  type AlertProviderDefaults,
+  type AttachmentProviderDefaults,
+  type AvatarProviderDefaults,
+  type BreadcrumbProviderDefaults,
+  type BubbleProviderDefaults,
+  type ButtonProviderDefaults,
+  type CardProviderDefaults,
+  type CheckboxProviderDefaults,
+  type CollapsibleProviderDefaults,
+  type DropdownMenuProviderDefaults,
+  type InputNumberProviderDefaults,
+  type InputOTPProviderDefaults,
+  type ItemProviderDefaults,
+  type MarkerProviderDefaults,
+  type MenubarProviderDefaults,
+  type PaginationProviderDefaults,
+  type ProgressProviderDefaults,
+  type ScrollAreaProviderDefaults,
+  type SliderProviderDefaults,
+  type SpinnerProviderDefaults,
+  type TabsProviderDefaults,
+  type TagProviderDefaults,
+  type ToggleProviderDefaults,
+  type TypographyTextProviderDefaults,
 } from '@heliannuuthus/ui';
 import {
   ArrowRight,
@@ -380,32 +405,89 @@ const providerColorTokens = [
   'popoverForeground',
 ] as const;
 
-const providerComponentDefaults = [
-  ['Alert', ['variant']],
-  ['AlertDialog', ['size']],
-  ['Attachment', ['size']],
-  ['Avatar', ['shape', 'size']],
-  ['Breadcrumb', ['size', 'variant']],
-  ['Bubble', ['variant']],
-  ['Button', ['block', 'size', 'variant']],
-  ['Card', ['variant']],
-  ['Checkbox', ['variant']],
-  ['Collapsible', ['size', 'variant']],
-  ['DropdownMenu', ['size']],
-  ['Input.Number', ['size']],
-  ['Input.OTP', ['variant']],
-  ['Item', ['size', 'variant']],
-  ['Marker', ['variant']],
-  ['Menubar', ['size']],
-  ['Pagination', ['size']],
-  ['Progress', ['effect']],
-  ['ScrollArea', ['scrollbar.size', 'scrollbar.visibility']],
-  ['Slider', ['effect']],
-  ['Spinner', ['size']],
-  ['Tabs', ['animation', 'centered', 'variant']],
-  ['Tag', ['type']],
-  ['Toggle', ['variant']],
-  ['Typography.Text', ['size', 'tone', 'weight']],
+type ProviderDefaultKey<Defaults> = Extract<keyof Defaults, string>;
+
+const defineProviderDefaultEntry =
+  <Defaults extends object>() =>
+  <
+    Name extends string,
+    const Keys extends readonly ProviderDefaultKey<Defaults>[],
+  >(
+    name: Name,
+    keys: Exclude<ProviderDefaultKey<Defaults>, Keys[number]> extends never
+      ? Keys
+      : never,
+    prefix?: string
+  ) =>
+    [name, prefix ? keys.map((key) => `${prefix}.${key}`) : keys] as const;
+
+const providerComponentDefaultKeys = [
+  defineProviderDefaultEntry<AlertProviderDefaults>()('Alert', ['variant']),
+  defineProviderDefaultEntry<AlertDialogProviderDefaults>()('AlertDialog', [
+    'size',
+  ]),
+  defineProviderDefaultEntry<AttachmentProviderDefaults>()('Attachment', [
+    'size',
+  ]),
+  defineProviderDefaultEntry<AvatarProviderDefaults>()('Avatar', [
+    'shape',
+    'size',
+  ]),
+  defineProviderDefaultEntry<BreadcrumbProviderDefaults>()('Breadcrumb', [
+    'size',
+    'variant',
+  ]),
+  defineProviderDefaultEntry<BubbleProviderDefaults>()('Bubble', ['variant']),
+  defineProviderDefaultEntry<ButtonProviderDefaults>()('Button', [
+    'block',
+    'size',
+    'variant',
+  ]),
+  defineProviderDefaultEntry<CardProviderDefaults>()('Card', ['variant']),
+  defineProviderDefaultEntry<CheckboxProviderDefaults>()('Checkbox', [
+    'variant',
+  ]),
+  defineProviderDefaultEntry<CollapsibleProviderDefaults>()('Collapsible', [
+    'size',
+    'variant',
+  ]),
+  defineProviderDefaultEntry<DropdownMenuProviderDefaults>()('DropdownMenu', [
+    'size',
+  ]),
+  defineProviderDefaultEntry<InputNumberProviderDefaults>()('Input.Number', [
+    'size',
+  ]),
+  defineProviderDefaultEntry<InputOTPProviderDefaults>()('Input.OTP', [
+    'variant',
+  ]),
+  defineProviderDefaultEntry<ItemProviderDefaults>()('Item', [
+    'size',
+    'variant',
+  ]),
+  defineProviderDefaultEntry<MarkerProviderDefaults>()('Marker', ['variant']),
+  defineProviderDefaultEntry<MenubarProviderDefaults>()('Menubar', ['size']),
+  defineProviderDefaultEntry<PaginationProviderDefaults>()('Pagination', [
+    'size',
+  ]),
+  defineProviderDefaultEntry<ProgressProviderDefaults>()('Progress', [
+    'effect',
+  ]),
+  defineProviderDefaultEntry<
+    NonNullable<ScrollAreaProviderDefaults['scrollbar']>
+  >()('ScrollArea', ['size', 'visibility'], 'scrollbar'),
+  defineProviderDefaultEntry<SliderProviderDefaults>()('Slider', ['effect']),
+  defineProviderDefaultEntry<SpinnerProviderDefaults>()('Spinner', ['size']),
+  defineProviderDefaultEntry<TabsProviderDefaults>()('Tabs', [
+    'animation',
+    'centered',
+    'variant',
+  ]),
+  defineProviderDefaultEntry<TagProviderDefaults>()('Tag', ['type']),
+  defineProviderDefaultEntry<ToggleProviderDefaults>()('Toggle', ['variant']),
+  defineProviderDefaultEntry<TypographyTextProviderDefaults>()(
+    'Typography.Text',
+    ['size', 'tone', 'weight']
+  ),
 ] as const;
 
 const navItems = [
@@ -930,7 +1012,7 @@ const GettingStartedPage = () => {
             </Typography.Text>
           </Stack>
           <dl className="provider-component-defaults">
-            {providerComponentDefaults.map(([component, properties]) => (
+            {providerComponentDefaultKeys.map(([component, properties]) => (
               <div key={component}>
                 <dt>
                   <Typography.Code>{component}</Typography.Code>

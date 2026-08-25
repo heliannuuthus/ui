@@ -78,6 +78,11 @@ type TypographyTextProps<Element extends TypographyTextElement = 'span'> =
       keyof TypographyTextOwnProps<Element>
     >;
 
+type TypographyTextProviderDefaults = Pick<
+  TypographyTextProps,
+  'size' | 'tone' | 'weight'
+>;
+
 type TypographyTextComponent = <Element extends TypographyTextElement = 'span'>(
   props: TypographyTextProps<Element> & RefAttributes<ComponentRef<Element>>
 ) => ReactElement | null;
@@ -185,6 +190,7 @@ export {
   type TypographyCodeProps,
   type TypographyTextElement,
   type TypographyTextProps,
+  type TypographyTextProviderDefaults,
   type TypographyTextSize,
   type TypographyTextTone,
   type TypographyTextWeight,

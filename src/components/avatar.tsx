@@ -39,6 +39,8 @@ type AvatarProps = Omit<React.ComponentProps<'span'>, 'children'> & {
   src?: string;
 };
 
+type AvatarProviderDefaults = Pick<AvatarProps, 'shape' | 'size'>;
+
 const Avatar = ({
   alt,
   badge,
@@ -247,6 +249,7 @@ export type {
   AvatarImageLoadingStatus,
   AvatarImageProps,
   AvatarProps,
+  AvatarProviderDefaults,
   AvatarShape,
   AvatarSize,
 };

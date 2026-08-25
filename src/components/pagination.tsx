@@ -114,6 +114,8 @@ type PaginationBaseProps = Omit<
 
 type PaginationProps = PaginationBaseProps;
 
+type PaginationProviderDefaults = Pick<PaginationProps, 'size'>;
+
 const getVisiblePages = (
   current: number,
   pageCount: number,
@@ -699,6 +701,7 @@ export {
   type PaginationClassNames,
   type PaginationItemType,
   type PaginationProps,
+  type PaginationProviderDefaults,
   type PaginationQuickJumperOptions,
   type PaginationRenderItemProps,
   type PaginationSimpleOptions,

@@ -49,6 +49,8 @@ type ToggleProps = Omit<
     required?: boolean;
   };
 
+type ToggleProviderDefaults = Pick<ToggleProps, 'variant'>;
+
 type ToggleGroupOption<Value extends string = string> = Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   'children' | 'defaultValue' | 'onChange' | 'value'
@@ -205,4 +207,9 @@ registerFormControl(ToggleRoot);
 registerFormControl(ToggleGroup);
 
 export { Toggle, toggleVariants };
-export type { ToggleGroupOption, ToggleGroupProps, ToggleProps };
+export type {
+  ToggleGroupOption,
+  ToggleGroupProps,
+  ToggleProps,
+  ToggleProviderDefaults,
+};

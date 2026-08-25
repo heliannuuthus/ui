@@ -52,6 +52,8 @@ type MarkerLinkProps = Omit<React.ComponentProps<'a'>, 'children' | 'href'> &
 
 type MarkerProps = MarkerDivProps | MarkerLinkProps;
 
+type MarkerProviderDefaults = Pick<MarkerProps, 'variant'>;
+
 const Marker = ({
   className,
   classNames,
@@ -118,5 +120,6 @@ export {
   type MarkerDivProps,
   type MarkerLinkProps,
   type MarkerProps,
+  type MarkerProviderDefaults,
   type MarkerStyles,
 };

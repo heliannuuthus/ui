@@ -42,6 +42,8 @@ type AttachmentProps = Omit<React.ComponentProps<'div'>, 'children' | 'title'> &
     trigger?: React.ReactElement;
   };
 
+type AttachmentProviderDefaults = Pick<AttachmentProps, 'size'>;
+
 const Attachment = ({
   actions,
   className,
@@ -244,4 +246,5 @@ export {
   type AttachmentGroupItem,
   type AttachmentGroupProps,
   type AttachmentProps,
+  type AttachmentProviderDefaults,
 };

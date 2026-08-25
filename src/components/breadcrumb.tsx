@@ -46,6 +46,8 @@ type BreadcrumbProps = Omit<React.ComponentProps<'nav'>, 'children'> & {
   icon?: boolean | React.ReactNode;
 };
 
+type BreadcrumbProviderDefaults = Pick<BreadcrumbProps, 'size' | 'variant'>;
+
 type BreadcrumbEntry =
   | { type: 'item'; item: BreadcrumbItem; index: number }
   | { type: 'collapsed'; items: BreadcrumbItem[] };
@@ -277,5 +279,6 @@ export {
   type BreadcrumbItem,
   type BreadcrumbMenuItem,
   type BreadcrumbProps,
+  type BreadcrumbProviderDefaults,
   type BreadcrumbSeparator,
 };

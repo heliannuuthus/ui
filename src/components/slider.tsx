@@ -53,6 +53,8 @@ type SliderProps<Value extends number | readonly number[]> = Omit<
   value?: Value;
 };
 
+type SliderProviderDefaults = Pick<SliderProps<number>, 'effect'>;
+
 const elasticTransition = {
   type: 'spring',
   stiffness: 320,
@@ -403,4 +405,9 @@ const decay = (value: number, max: number) => {
 
 registerFormControl(Slider);
 
-export { Slider, type SliderEffect, type SliderProps };
+export {
+  Slider,
+  type SliderEffect,
+  type SliderProps,
+  type SliderProviderDefaults,
+};
