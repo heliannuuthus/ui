@@ -2,16 +2,25 @@
 
 Accessible shadcn-style primitives shared by Heliannuuthus products.
 
+Requires React 19 and React DOM 19.
+
 Import the static stylesheet once at the application entry, then use named
 imports from the package root:
 
 ```tsx
 import '@heliannuuthus/ui/styles.css';
-import { Button, Input, Radio } from '@heliannuuthus/ui';
+import { Button, Input, Provider, Radio } from '@heliannuuthus/ui';
 import './app.css';
 
-<Input.OTP maxLength={6} />
-<Radio.Group options={options} />
+<Provider
+  appearance="system"
+  theme={{ colors: { primary: 'oklch(0.55 0.17 155)' } }}
+  components={{ Button: { size: 'sm' } }}
+>
+  <Input.OTP maxLength={6} />
+  <Radio.Group options={options} />
+  <Button>Save</Button>
+</Provider>;
 ```
 
 This integration is independent of the package manager and build tool. Install
@@ -24,8 +33,9 @@ required. The JavaScript root remains style-free and tree-shakeable.
 
 Semantic token defaults live in a named CSS layer, so unlayered application
 styles can override them even when a component is loaded by an asynchronous
-route. The theme has document-wide scope because tokens, reset, focus rules,
-portals, and composed components share the same visual contract.
+route. `Provider` applies appearance and semantic-token overrides to its
+component tree, while the imported stylesheet supplies document-wide defaults,
+reset, focus rules, and portal styles.
 
 Component subpaths are private implementation details. The package build
 verifies every public export, the root and stylesheet integration, tree shaking,
@@ -33,7 +43,9 @@ the packaged component modules, and a gzip size budget for the static CSS.
 
 The package is intentionally domain-neutral. Authentication flows, API calls, routing and product copy stay in Pallas.
 
-The package implements the complete shadcn/ui component catalog for the Radix foundation, including Heliannuuthus-owned recipe exports for Table, Date Picker, Form, Input.Number, and Typography.
+The package implements the domain-neutral shadcn/ui primitives that belong in
+the shared Radix foundation, including Heliannuuthus-owned recipe exports for
+Table, Date Picker, Form, Input.Number, and Typography.
 
 ## Workspace policy
 

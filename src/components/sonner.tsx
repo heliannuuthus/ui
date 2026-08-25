@@ -1,6 +1,5 @@
 'use client';
 
-import { useTheme } from 'next-themes';
 import { Toaster as SonnerPrimitive, type ToasterProps } from 'sonner';
 import {
   CircleCheckIcon,
@@ -10,12 +9,14 @@ import {
   Loader2Icon,
 } from 'lucide-react';
 
+import { useProvider } from './provider';
+
 const Toaster = ({ ...props }: ToasterProps): React.JSX.Element => {
-  const { theme = 'system' } = useTheme();
+  const { resolvedAppearance } = useProvider();
 
   return (
     <SonnerPrimitive
-      theme={theme as ToasterProps['theme']}
+      theme={resolvedAppearance}
       className="toaster group"
       icons={{
         success: <CircleCheckIcon className="size-4" />,

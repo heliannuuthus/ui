@@ -8,7 +8,6 @@ import { Checkbox } from '@heliannuuthus/ui';
 import { Command } from '@heliannuuthus/ui';
 import { ContextMenu } from '@heliannuuthus/ui';
 import { Counter } from '@heliannuuthus/ui';
-import { DirectionProvider } from '@heliannuuthus/ui';
 import { Empty } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
 import { Menubar } from '@heliannuuthus/ui';
@@ -20,15 +19,7 @@ import { Spinner } from '@heliannuuthus/ui';
 import { Switch } from '@heliannuuthus/ui';
 import { Table } from '@heliannuuthus/ui';
 import { Toggle } from '@heliannuuthus/ui';
-import {
-  ArrowLeft,
-  Bold,
-  Copy,
-  FilePlus2,
-  Plus,
-  Settings2,
-  Trash2,
-} from 'lucide-react';
+import { Bold, Copy, FilePlus2, Plus, Settings2, Trash2 } from 'lucide-react';
 import { AspectRatioCoverDemo } from './aspect-ratio-preview';
 import { CardBasicDemo } from './card-preview';
 import { ResizableWorkspaceDemo } from './resizable-preview';
@@ -200,26 +191,12 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
         { destructive: true, icon: <Trash2 />, label: docsCopy('删除项目') },
       ]}
       trigger={
-        <button className="minimal-context-menu-trigger" type="button">
+        <Button className="minimal-context-menu-trigger" variant="outline">
           <span>{docsCopy('组件文档')}</span>
           <small>{docsCopy('在这里单击右键')}</small>
-        </button>
+        </Button>
       }
     />
-  ),
-  direction: (
-    <DirectionProvider direction="rtl">
-      <div className="minimal-direction" dir="rtl">
-        <div>
-          <strong>واجهة عربية</strong>
-          <span>{docsCopy('组件布局会跟随阅读方向排列')}</span>
-        </div>
-        <Button variant="outline">
-          {docsCopy('下一步')}
-          <ArrowLeft />
-        </Button>
-      </div>
-    </DirectionProvider>
   ),
   table: (
     <Table.Primitive classNames={{ table: 'minimal-table' }}>

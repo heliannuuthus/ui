@@ -1,5 +1,5 @@
 import { docsCopy } from './i18n/content';
-import { useRef, useState } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { Alert } from '@heliannuuthus/ui';
 import { AlertDialog } from '@heliannuuthus/ui';
 import { Avatar } from '@heliannuuthus/ui';
@@ -16,6 +16,7 @@ import { Skeleton } from '@heliannuuthus/ui';
 import { Sonner } from '@heliannuuthus/ui';
 import { Spinner } from '@heliannuuthus/ui';
 import { Toast, useToast } from '@heliannuuthus/ui';
+import { toast as sonnerToast } from '@heliannuuthus/ui';
 import {
   ArrowDown,
   ArrowLeft,
@@ -32,7 +33,6 @@ import {
   TriangleAlert,
   Users,
 } from 'lucide-react';
-import { toast as sonnerToast } from 'sonner';
 
 type AlertStatus = 'info' | 'success' | 'warning' | 'error';
 
@@ -149,10 +149,15 @@ export const AlertDialogDeleteDemo = ({
   );
 };
 
-export const DialogReleaseDemo = () => {
+export const DialogReleaseDemo = ({
+  closable = true,
+}: {
+  closable?: boolean | ReactNode;
+}) => {
   return (
     <Dialog
       cancelText={docsCopy('取消')}
+      closable={closable}
       confirmText={docsCopy('确认安排')}
       description={docsCopy('选择发布时间，并为值班成员补充本次发布说明。')}
       title={docsCopy('安排生产环境发布')}
@@ -177,7 +182,11 @@ export const DialogReleaseDemo = () => {
   );
 };
 
-export const DrawerReleaseDemo = () => {
+export const DrawerReleaseDemo = ({
+  chrome = 'default',
+}: {
+  chrome?: 'custom' | 'default' | 'minimal';
+}) => {
   const placements = [
     { side: 'left', label: docsCopy('从左侧'), icon: ArrowRight },
     { side: 'right', label: docsCopy('从右侧'), icon: ArrowLeft },
@@ -196,11 +205,21 @@ export const DrawerReleaseDemo = () => {
         return (
           <Drawer
             behavior="adaptive"
+            closable={
+              chrome === 'custom' ? (
+                <CircleX />
+              ) : chrome === 'minimal' ? (
+                false
+              ) : (
+                true
+              )
+            }
             closeText={docsCopy('关闭')}
             description={docsCopy(
               `${placement.label}打开；窄屏保留触摸拖拽，宽屏使用稳定的边缘面板布局。`
             )}
             footer={<Button>{docsCopy('进入发布中心')}</Button>}
+            handle={chrome === 'minimal' ? false : undefined}
             key={placement.side}
             side={placement.side}
             title={docsCopy('今晚的发布窗口')}
@@ -308,9 +327,9 @@ export const PopoverOwnerPreviewDemo = ({
         triggerMode="hover"
         side={side}
         trigger={
-          <button className="display-inline-person" type="button">
+          <Button className="display-inline-person" size="xs" variant="link">
             @linmo
-          </button>
+          </Button>
         }
         content={
           <>

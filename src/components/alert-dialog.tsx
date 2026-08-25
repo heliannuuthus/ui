@@ -6,6 +6,7 @@ import { AlertDialog as AlertDialogPrimitive } from '@base-ui/react/alert-dialog
 import { cn } from '../lib/utils';
 import { Button } from './button';
 import type { OpenStateProps } from './internal/public-types';
+import { useComponentDefaults } from './provider';
 
 type AlertDialogClassNames = {
   content?: string;
@@ -29,6 +30,8 @@ type AlertDialogProps = OpenStateProps & {
   trigger: React.ReactElement;
 };
 
+type AlertDialogProviderDefaults = Pick<AlertDialogProps, 'size'>;
+
 const AlertDialog = ({
   cancelText = '取消',
   classNames,
@@ -37,12 +40,15 @@ const AlertDialog = ({
   description,
   media,
   onConfirm,
-  size = 'default',
+  size: sizeProp,
   styles,
   title,
   trigger,
   ...props
 }: AlertDialogProps) => {
+  const defaults = useComponentDefaults('AlertDialog');
+  const size = sizeProp ?? defaults.size ?? 'default';
+
   return (
     <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props}>
       <AlertDialogPrimitive.Trigger
@@ -119,5 +125,6 @@ export {
   AlertDialog,
   type AlertDialogClassNames,
   type AlertDialogProps,
+  type AlertDialogProviderDefaults,
   type AlertDialogStyles,
 };

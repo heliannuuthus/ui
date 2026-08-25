@@ -7,6 +7,7 @@ import { CheckIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
 import { Masonry, type MasonryGap, type MasonryLength } from './masonry';
+import { useComponentDefaults } from './provider';
 import {
   FormControlBoundary,
   mergeIds,
@@ -50,6 +51,8 @@ type CheckboxProps = Omit<
   variant?: CheckboxVariant;
 };
 
+type CheckboxProviderDefaults = Pick<CheckboxProps, 'variant'>;
+
 type CheckboxOption = {
   className?: string;
   disabled?: boolean;
@@ -82,25 +85,27 @@ const CheckboxGroupNameContext = React.createContext<string | undefined>(
   undefined
 );
 
-const CheckboxRoot = ({
-  checked,
-  children,
-  className,
-  classNames,
-  defaultChecked,
-  disabled,
-  id,
-  inputRef,
-  name,
-  onBlur,
-  onChange,
-  required,
-  styles,
-  variant = 'default',
-  'aria-describedby': ariaDescribedBy,
-  'aria-invalid': ariaInvalid,
-  ...props
-}: CheckboxProps) => {
+const CheckboxRoot = (checkboxProps: CheckboxProps) => {
+  const defaults = useComponentDefaults('Checkbox');
+  const {
+    checked,
+    children,
+    className,
+    classNames,
+    defaultChecked,
+    disabled,
+    id,
+    inputRef,
+    name,
+    onBlur,
+    onChange,
+    required,
+    styles,
+    variant = defaults.variant ?? 'default',
+    'aria-describedby': ariaDescribedBy,
+    'aria-invalid': ariaInvalid,
+    ...props
+  } = checkboxProps;
   const formControl = useFormControl<boolean>();
   const groupName = React.useContext(CheckboxGroupNameContext);
   const [particleBurst, setParticleBurst] = React.useState(0);
@@ -192,26 +197,28 @@ const CheckboxRoot = ({
   );
 };
 
-const CheckboxGroup = ({
-  'aria-describedby': ariaDescribedBy,
-  'aria-invalid': ariaInvalid,
-  'aria-labelledby': ariaLabelledBy,
-  className,
-  columns = 3,
-  defaultValue,
-  disabled,
-  gap = 12,
-  id,
-  minColumnWidth = 180,
-  name,
-  onBlur,
-  onChange,
-  options,
-  orientation = 'horizontal',
-  value,
-  variant = 'default',
-  ...props
-}: CheckboxGroupProps) => {
+const CheckboxGroup = (checkboxGroupProps: CheckboxGroupProps) => {
+  const defaults = useComponentDefaults('Checkbox');
+  const {
+    'aria-describedby': ariaDescribedBy,
+    'aria-invalid': ariaInvalid,
+    'aria-labelledby': ariaLabelledBy,
+    className,
+    columns = 3,
+    defaultValue,
+    disabled,
+    gap = 12,
+    id,
+    minColumnWidth = 180,
+    name,
+    onBlur,
+    onChange,
+    options,
+    orientation = 'horizontal',
+    value,
+    variant = defaults.variant ?? 'default',
+    ...props
+  } = checkboxGroupProps;
   const formControl = useFormControl<string[]>();
 
   return (
@@ -280,6 +287,7 @@ export type {
   CheckboxGroupProps,
   CheckboxOption,
   CheckboxProps,
+  CheckboxProviderDefaults,
   CheckboxStyles,
   CheckboxVariant,
 };

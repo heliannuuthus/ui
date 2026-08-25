@@ -17,13 +17,13 @@ const props: LayoutSidebarProps = {
   collapsible: true,
   defaultCollapsed: false,
   onBreakpointChange: (below) => below.valueOf(),
-  onCollapsedChange: (collapsed, changeReason) => {
+  onChange: (collapsed, changeReason) => {
     collapsed.valueOf();
     changeReason satisfies LayoutSidebarCollapseReason;
   },
   ref: asideRef,
   side: 'start',
-  triggerLabels: {
+  labels: {
     collapse: 'Collapse workspace navigation',
     expand: 'Expand workspace navigation',
   },

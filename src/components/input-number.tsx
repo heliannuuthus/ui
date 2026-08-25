@@ -9,6 +9,7 @@ import {
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
+import { useComponentDefaults } from './provider';
 
 type InputNumberSize = 'sm' | 'default' | 'lg';
 
@@ -84,6 +85,8 @@ type InputNumberProps = Omit<
   styles?: InputNumberStyles;
 };
 
+type InputNumberProviderDefaults = Pick<InputNumberProps, 'size'>;
+
 const InputNumber = ({
   'aria-describedby': ariaDescribedBy,
   'aria-errormessage': ariaErrorMessage,
@@ -113,12 +116,14 @@ const InputNumber = ({
   readOnly,
   ref,
   required,
-  size = 'default',
+  size: sizeProp,
   suffix,
   styles,
   value,
   ...props
 }: InputNumberProps) => {
+  const defaults = useComponentDefaults('Input');
+  const size = sizeProp ?? defaults.Number?.size ?? 'default';
   const formControl = useFormControl<number | null | undefined>();
   const controlRef = useMergedRefs(
     inputRef,
@@ -261,6 +266,7 @@ export type {
   InputNumberClassNames,
   InputNumberControls,
   InputNumberProps,
+  InputNumberProviderDefaults,
   InputNumberSize,
   InputNumberStyles,
 };

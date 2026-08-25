@@ -41,6 +41,19 @@ assert.doesNotMatch(disabledLinkMarkup, /href=/);
 assert.match(disabledLinkMarkup, /aria-disabled="true"/);
 assert.match(disabledLinkMarkup, /tabindex="-1"/);
 
+const blockGroupMarkup = renderToStaticMarkup(
+  createElement(
+    Button.Group,
+    { block: true },
+    createElement(Button, null, 'Previous'),
+    createElement(Button, null, 'Next')
+  )
+);
+
+assert.match(blockGroupMarkup, /data-slot="button-group"/);
+assert.match(blockGroupMarkup, /w-full/);
+assert.match(blockGroupMarkup, /data-slot=button\]\]:flex-1/);
+
 globalThis.console.log(
-  'Verified href-driven anchor rendering, visual variants, native link attributes, and disabled links.'
+  'Verified href-driven anchor rendering, visual variants, native link attributes, disabled links, and block groups.'
 );

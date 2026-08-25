@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 
 type CardClassNames = {
   header?: string;
@@ -31,16 +32,21 @@ type CardProps = React.ComponentProps<'div'> & {
   styles?: CardStyles;
 };
 
-const Card = ({
-  className,
-  variant = 'elevated',
-  header,
-  footer,
-  classNames,
-  styles,
-  children,
-  ...props
-}: CardProps) => {
+type CardProviderDefaults = Pick<CardProps, 'variant'>;
+
+const Card = (cardProps: CardProps) => {
+  const defaults = useComponentDefaults('Card');
+  const {
+    className,
+    variant = defaults.variant ?? 'elevated',
+    header,
+    footer,
+    classNames,
+    styles,
+    children,
+    ...props
+  } = cardProps;
+
   return (
     <div
       data-slot="card"
@@ -126,6 +132,7 @@ export {
   type CardHeader,
   type CardClassNames,
   type CardProps,
+  type CardProviderDefaults,
   type CardStyles,
   type CardVariant,
 };

@@ -426,7 +426,11 @@ const responsiveTabsItems = [
   },
 ] as const;
 
-export const TabsResponsiveDemo = () => {
+export const TabsResponsiveDemo = ({
+  labels = 'custom',
+}: {
+  labels?: 'custom' | 'default';
+}) => {
   return (
     <div className="tabs-responsive-demo">
       <p>
@@ -455,10 +459,14 @@ export const TabsResponsiveDemo = () => {
             animation="none"
             defaultValue="overview"
             items={responsiveTabsItems}
-            scrollButtonLabels={{
-              end: docsCopy('向后滚动标签'),
-              start: docsCopy('向前滚动标签'),
-            }}
+            scrollLabels={
+              labels === 'custom'
+                ? {
+                    end: docsCopy('向后滚动标签'),
+                    start: docsCopy('向前滚动标签'),
+                  }
+                : undefined
+            }
             variant={width === 320 ? 'soft' : 'line'}
           />
         </section>

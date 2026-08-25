@@ -4,6 +4,7 @@ import { useRender } from '@base-ui/react/use-render';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 
 type AttachmentVariantOptions = {
   class?: never;
@@ -41,6 +42,8 @@ type AttachmentProps = Omit<React.ComponentProps<'div'>, 'children' | 'title'> &
     trigger?: React.ReactElement;
   };
 
+type AttachmentProviderDefaults = Pick<AttachmentProps, 'size'>;
+
 const Attachment = ({
   actions,
   className,
@@ -50,10 +53,13 @@ const Attachment = ({
   title,
   trigger,
   state = 'done',
-  size = 'default',
+  size: sizeProp,
   orientation = 'horizontal',
   ...props
 }: AttachmentProps) => {
+  const defaults = useComponentDefaults('Attachment');
+  const size = sizeProp ?? defaults.size ?? 'default';
+
   return (
     <div
       data-slot="attachment"
@@ -240,4 +246,5 @@ export {
   type AttachmentGroupItem,
   type AttachmentGroupProps,
   type AttachmentProps,
+  type AttachmentProviderDefaults,
 };

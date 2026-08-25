@@ -2,12 +2,15 @@ import { cva } from 'class-variance-authority';
 import { forwardRef, type ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 
 type TagType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error';
 
 type TagProps = ComponentPropsWithoutRef<'span'> & {
   type?: TagType;
 };
+
+type TagProviderDefaults = Pick<TagProps, 'type'>;
 
 const tagVariants = cva(
   'inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-3xl border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&>svg]:pointer-events-none [&>svg]:size-3!',
@@ -28,8 +31,11 @@ const tagVariants = cva(
   }
 );
 
-const Tag = forwardRef<HTMLSpanElement, TagProps>(
-  ({ className, type = 'default', ...props }, ref) => (
+const Tag = forwardRef<HTMLSpanElement, TagProps>((tagProps, ref) => {
+  const defaults = useComponentDefaults('Tag');
+  const { className, type = defaults.type ?? 'default', ...props } = tagProps;
+
+  return (
     <span
       {...props}
       ref={ref}
@@ -37,9 +43,9 @@ const Tag = forwardRef<HTMLSpanElement, TagProps>(
       data-slot="tag"
       data-type={type}
     />
-  )
-);
+  );
+});
 
 Tag.displayName = 'Tag';
 
-export { Tag, type TagProps, type TagType };
+export { Tag, type TagProps, type TagProviderDefaults, type TagType };

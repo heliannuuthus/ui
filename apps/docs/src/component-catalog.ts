@@ -10,7 +10,6 @@ export const componentGroups = [
     items: [
       'Aspect Ratio',
       'Card',
-      'Direction',
       'Layout',
       'Masonry',
       'Resizable',
@@ -62,7 +61,7 @@ export const componentGroups = [
   {
     key: 'dataDisplay',
     title: '数据展示',
-    items: ['Badge', 'Chart', 'Counter', 'Table'],
+    items: ['Badge', 'Counter', 'Table'],
   },
   {
     key: 'overlays',
@@ -129,7 +128,6 @@ export const zhComponentNames = {
   Avatar: '头像',
   Bubble: '气泡',
   Carousel: '轮播',
-  Chart: '图表',
   Collapsible: '折叠',
   Counter: '计数器',
   Empty: '空状态',
@@ -149,7 +147,6 @@ export const zhComponentNames = {
   Toast: '轻提示',
   Command: '命令面板',
   'Context Menu': '右键菜单',
-  Direction: '文字方向',
 } satisfies Record<ComponentName, string>;
 
 export const localizedComponentName = (name: string, locale: 'zh' | 'en') => {

@@ -8,7 +8,6 @@ import { Badge } from '@heliannuuthus/ui';
 import { Tag } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
 import { Carousel, type CarouselRef } from '@heliannuuthus/ui';
-import { Chart, type ChartConfig } from '@heliannuuthus/ui';
 import { Collapsible } from '@heliannuuthus/ui';
 import { Counter } from '@heliannuuthus/ui';
 import { Table } from '@heliannuuthus/ui';
@@ -24,7 +23,6 @@ import { Stack } from '@heliannuuthus/ui';
 import { Switch } from '@heliannuuthus/ui';
 import { Tooltip } from '@heliannuuthus/ui';
 import {
-  Activity,
   Archive,
   ArrowLeft,
   ArrowRight,
@@ -52,7 +50,6 @@ import {
   Sparkles,
   Trash2,
 } from 'lucide-react';
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 export const AccordionReleaseDemo = ({
   mode = 'single',
@@ -993,16 +990,17 @@ export const CarouselCustomPaginationDemo = () => {
                 const selected = currentPage === index + 1;
 
                 return (
-                  <button
+                  <Button
                     aria-current={selected ? 'page' : undefined}
                     aria-label={docsCopy(`前往第 ${index + 1} 页`)}
                     data-selected={selected || undefined}
                     key={index}
                     onClick={() => scrollTo(index)}
-                    type="button"
+                    size="icon-xs"
+                    variant="ghost"
                   >
                     <span />
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -1121,146 +1119,6 @@ export const CarouselRefDemo = () => {
   );
 };
 
-const deploymentData = [
-  { day: '07.21', success: 92.4 },
-  { day: '07.22', success: 94.8 },
-  { day: '07.23', success: 93.6 },
-  { day: '07.24', success: 96.2 },
-  { day: '07.25', success: 95.7 },
-  { day: '07.26', success: 98.1 },
-  { day: docsCopy('今天'), success: 97.4 },
-];
-
-const deploymentChartConfig = {
-  success: { label: docsCopy('发布成功率'), color: 'var(--primary)' },
-} satisfies ChartConfig;
-
-export const ChartDeploymentDemo = () => {
-  return (
-    <section
-      aria-label={docsCopy('发布健康度趋势')}
-      className="display-chart-story"
-    >
-      <header className="display-chart-story-header">
-        <div className="display-chart-story-title">
-          <span className="display-chart-story-mark" aria-hidden="true">
-            <Activity />
-          </span>
-          <div>
-            <span>RELEASE PULSE · 7 DAYS</span>
-            <strong>{docsCopy('发布健康度')}</strong>
-          </div>
-        </div>
-        <Tag>
-          <span className="display-chart-live-dot" aria-hidden="true" />
-          {docsCopy('系统稳定')}
-        </Tag>
-      </header>
-
-      <div className="display-chart-story-summary">
-        <div className="display-chart-story-primary">
-          <span>{docsCopy('生产发布成功率')}</span>
-          <strong>97.4%</strong>
-          <small>
-            <ArrowUpRight aria-hidden="true" />
-            {docsCopy('较上周提升 2.6%')}
-          </small>
-        </div>
-        <dl>
-          <div>
-            <dt>{docsCopy('发布次数')}</dt>
-            <dd>128</dd>
-          </div>
-          <div>
-            <dt>{docsCopy('平均耗时')}</dt>
-            <dd>6m 48s</dd>
-          </div>
-          <div>
-            <dt>{docsCopy('需要回滚')}</dt>
-            <dd>4</dd>
-          </div>
-        </dl>
-      </div>
-
-      <div className="display-chart-story-plot">
-        <div className="display-chart-story-plot-heading">
-          <div>
-            <strong>{docsCopy('成功率趋势')}</strong>
-            <span>{docsCopy('目标线 95%')}</span>
-          </div>
-          <span>{docsCopy('近七日')}</span>
-        </div>
-        <Chart
-          className="display-chart"
-          config={deploymentChartConfig}
-          initialDimension={{ width: 720, height: 280 }}
-        >
-          <AreaChart
-            accessibilityLayer
-            data={deploymentData}
-            margin={{ left: -12, right: 12, top: 12 }}
-          >
-            <defs>
-              <linearGradient
-                id="release-health-gradient"
-                x1="0"
-                x2="0"
-                y1="0"
-                y2="1"
-              >
-                <stop
-                  offset="0%"
-                  stopColor="var(--color-success)"
-                  stopOpacity={0.3}
-                />
-                <stop
-                  offset="88%"
-                  stopColor="var(--color-success)"
-                  stopOpacity={0}
-                />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="4 8" vertical={false} />
-            <XAxis
-              axisLine={false}
-              dataKey="day"
-              tickLine={false}
-              tickMargin={12}
-            />
-            <YAxis
-              axisLine={false}
-              domain={[88, 100]}
-              tickFormatter={(value) => `${value}%`}
-              tickLine={false}
-              width={42}
-            />
-            <Chart.Tooltip
-              content={<Chart.TooltipContent indicator="line" />}
-              cursor={false}
-            />
-            <Area
-              dataKey="success"
-              fill="url(#release-health-gradient)"
-              fillOpacity={1}
-              stroke="var(--color-success)"
-              strokeWidth={2.5}
-              type="monotone"
-            />
-          </AreaChart>
-        </Chart>
-      </div>
-
-      <footer className="display-chart-story-footer">
-        <div>
-          <span className="display-chart-story-legend" aria-hidden="true" />
-          {docsCopy('发布成功率')}
-        </div>
-        <span>{docsCopy('每 5 分钟刷新 · UTC+8')}</span>
-      </footer>
-    </section>
-  );
-};
-
 export const CollapsibleBasicDemo = () => {
   return (
     <Collapsible
@@ -1305,7 +1163,7 @@ const CollapsibleBuildDemo = () => {
           <Tag type="success">{docsCopy('成功')}</Tag>
         </>
       }
-      icon={<ChevronRight />}
+      indicator={<ChevronRight />}
       content={
         <code>
           <span>21:42:08</span> packages/ui build completed
@@ -1336,7 +1194,7 @@ const CollapsiblePolicyDemo = () => {
         header: 'display-build-summary',
       }}
       trigger={docsCopy('配置')}
-      triggerIcon={<ChevronRight />}
+      indicator={<ChevronRight />}
       triggerProps={{ size: 'sm', variant: 'outline' }}
       header={
         <div className="display-build-summary">
@@ -1401,23 +1259,25 @@ export const CollapsibleTriggerModesDemo = ({
   );
 };
 
-export const CollapsibleHeaderIconDemo = ({
-  iconMode = 'default',
+export const CollapsibleIndicatorDemo = ({
+  mode = 'default',
 }: {
-  iconMode?: 'custom' | 'default' | 'hidden';
+  mode?: 'custom' | 'default' | 'hidden';
 }) => {
-  const icon =
-    iconMode === 'custom' ? (
+  const indicator =
+    mode === 'custom' ? (
       <ChevronRight />
-    ) : iconMode === 'hidden' ? null : undefined;
+    ) : mode === 'hidden' ? (
+      false
+    ) : undefined;
 
   return (
     <div className="display-collapsible-icon-demo">
       <section>
         <span>
-          {iconMode === 'custom'
+          {mode === 'custom'
             ? docsCopy('自定义图标')
-            : iconMode === 'hidden'
+            : mode === 'hidden'
               ? docsCopy('隐藏图标')
               : docsCopy('默认图标')}
         </span>
@@ -1425,11 +1285,11 @@ export const CollapsibleHeaderIconDemo = ({
           className="display-collapsible-compact"
           content={
             <p>
-              {iconMode === 'custom'
-                ? docsCopy('通过 icon 替换默认图标，Header 内容保持不变。')
-                : iconMode === 'hidden'
+              {mode === 'custom'
+                ? docsCopy('通过 indicator 替换默认图标，Header 内容保持不变。')
+                : mode === 'hidden'
                   ? docsCopy(
-                      '传入 icon=null，保留 Header 触发能力但不显示指示图标。'
+                      '传入 indicator=false，保留触发能力但不显示指示图标。'
                     )
                   : docsCopy('使用组件内置的方向图标反馈展开状态。')}
             </p>
@@ -1441,7 +1301,7 @@ export const CollapsibleHeaderIconDemo = ({
               <small>{docsCopy('生产环境 · 3 分钟前')}</small>
             </div>
           }
-          icon={icon}
+          indicator={indicator}
         />
       </section>
     </div>
@@ -1748,7 +1608,11 @@ const virtualTableColumns: Table.Column<VirtualTableRecord>[] = [
   },
 ];
 
-export const TableManagedDemo = () => {
+export const TableManagedDemo = ({
+  summary = 'default',
+}: {
+  summary?: 'custom' | 'default' | 'hidden';
+}) => {
   return (
     <div className="display-table-managed">
       <Table
@@ -1770,8 +1634,15 @@ export const TableManagedDemo = () => {
           next: docsCopy('下一页'),
           pageSize: 3,
           previous: docsCopy('上一页'),
-          renderSummary: (total, current, pageCount) =>
-            docsCopy(`共 ${total} 项 · 第 ${current} / ${pageCount} 页`),
+          summary:
+            summary === 'hidden'
+              ? false
+              : summary === 'custom'
+                ? (total, current, pageCount) =>
+                    docsCopy(
+                      `发布 ${current}/${pageCount} · 共 ${total} 条记录`
+                    )
+                : true,
         }}
         classNames={{ table: 'min-w-[820px]' }}
       />
@@ -1779,8 +1650,12 @@ export const TableManagedDemo = () => {
   );
 };
 
-export const TableManagedExpandableDemo = () => {
-  const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>(['v0.12.0']);
+export const TableManagedExpandableDemo = ({
+  mode = 'uncontrolled',
+}: {
+  mode?: 'controlled' | 'restricted' | 'uncontrolled';
+}) => {
+  const [expandedKeys, setExpandedKeys] = useState<Key[]>(['v0.12.0']);
 
   return (
     <div className="display-table-managed">
@@ -1788,11 +1663,20 @@ export const TableManagedExpandableDemo = () => {
         columns={releaseColumns.slice(0, 4)}
         data={releaseRecords}
         expandable={{
-          columnHeader: <span className="sr-only">{docsCopy('展开行')}</span>,
-          expandedRowKeys,
-          getCollapseLabel: (row) => `${docsCopy('收起')} ${row.version}`,
-          getExpandLabel: (row) => `${docsCopy('展开')} ${row.version}`,
-          onExpandedRowKeysChange: setExpandedRowKeys,
+          ...(mode === 'restricted'
+            ? {
+                canExpand: (row: (typeof releaseRecords)[number]) =>
+                  row.status !== docsCopy('回滚'),
+              }
+            : undefined),
+          ...(mode === 'controlled'
+            ? { onChange: setExpandedKeys, value: expandedKeys }
+            : { defaultValue: ['v0.12.0'] }),
+          header: <span className="sr-only">{docsCopy('展开行')}</span>,
+          labels: {
+            collapse: (row) => `${docsCopy('收起')} ${row.version}`,
+            expand: (row) => `${docsCopy('展开')} ${row.version}`,
+          },
           render: (row) => (
             <div className="display-table-managed-expanded">
               <strong>
@@ -1808,7 +1692,6 @@ export const TableManagedExpandableDemo = () => {
               </span>
             </div>
           ),
-          rowExpandable: (row) => row.status !== docsCopy('回滚'),
         }}
         rowKey="version"
         pagination={false}
@@ -1851,14 +1734,14 @@ export const TableManagedVirtualDemo = () => {
 
 export const TableControlledStateDemo = () => {
   const [sort, setSort] = useState<Table.SortState | null>(null);
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<Key[]>([]);
   const [page, setPage] = useState(1);
 
   return (
     <div className="display-table-managed">
       <p className="text-sm text-muted-foreground">
         {docsCopy(
-          `当前排序：${sort ? `${sort.columnKey} ${sort.order}` : '无'} · 已选择 ${selectedRowKeys.length} 行`
+          `当前排序：${sort ? `${sort.columnKey} ${sort.order}` : '无'} · 已选择 ${selectedKeys.length} 行`
         )}
       </p>
       <Table
@@ -1867,12 +1750,13 @@ export const TableControlledStateDemo = () => {
         pagination={{ current: page, onChange: setPage, pageSize: 3 }}
         rowKey="version"
         rowSelection={{
-          getSelectAllLabel: (rows) =>
-            docsCopy(`选择当前页 ${rows.length} 条发布记录`),
-          getSelectLabel: (row) => docsCopy(`选择 ${row.version}`),
-          isRowDisabled: (row) => row.status === docsCopy('运行中'),
-          onChange: setSelectedRowKeys,
-          selectedRowKeys,
+          disabled: (row) => row.status === docsCopy('运行中'),
+          labels: {
+            all: (rows) => docsCopy(`选择当前页 ${rows.length} 条发布记录`),
+            item: (row) => docsCopy(`选择 ${row.version}`),
+          },
+          onChange: setSelectedKeys,
+          value: selectedKeys,
         }}
         sorting={{ onChange: setSort, value: sort }}
       />

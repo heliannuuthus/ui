@@ -10,15 +10,21 @@ export {
   AlertDialog,
   type AlertDialogClassNames,
   type AlertDialogProps,
+  type AlertDialogProviderDefaults,
   type AlertDialogStyles,
 } from './components/alert-dialog';
-export { Alert, type AlertProps } from './components/alert';
+export {
+  Alert,
+  type AlertProps,
+  type AlertProviderDefaults,
+} from './components/alert';
 export { AspectRatio } from './components/aspect-ratio';
 export {
   Attachment,
   type AttachmentGroupItem,
   type AttachmentGroupProps,
   type AttachmentProps,
+  type AttachmentProviderDefaults,
 } from './components/attachment';
 export {
   Avatar,
@@ -28,6 +34,7 @@ export {
   type AvatarImageLoadingStatus,
   type AvatarImageProps,
   type AvatarProps,
+  type AvatarProviderDefaults,
   type AvatarShape,
   type AvatarSize,
 } from './components/avatar';
@@ -43,11 +50,13 @@ export {
   type BreadcrumbItem,
   type BreadcrumbMenuItem,
   type BreadcrumbProps,
+  type BreadcrumbProviderDefaults,
   type BreadcrumbSeparator,
 } from './components/breadcrumb';
 export {
   Bubble,
   type BubbleProps,
+  type BubbleProviderDefaults,
   type BubbleReactionsProps,
 } from './components/bubble';
 export {
@@ -57,6 +66,7 @@ export {
   type ButtonLinkProps,
   type ButtonNativeProps,
   type ButtonProps,
+  type ButtonProviderDefaults,
   type ButtonRef,
 } from './components/button';
 export {
@@ -64,6 +74,7 @@ export {
   type CardClassNames,
   type CardHeader,
   type CardProps,
+  type CardProviderDefaults,
   type CardStyles,
   type CardVariant,
 } from './components/card';
@@ -79,22 +90,12 @@ export {
   useCarousel,
 } from './components/carousel';
 export {
-  Chart,
-  type ChartConfig,
-  type ChartConfigBase,
-  type ChartConfigColor,
-  type ChartConfigItem,
-  type ChartConfigTheme,
-  type ChartInitialDimension,
-  type ChartProps,
-  type ChartStyleProps,
-} from './components/chart';
-export {
   Checkbox,
   type CheckboxClassNames,
   type CheckboxGroupProps,
   type CheckboxOption,
   type CheckboxProps,
+  type CheckboxProviderDefaults,
   type CheckboxStyles,
   type CheckboxVariant,
 } from './components/checkbox';
@@ -102,6 +103,7 @@ export {
   Collapsible,
   type CollapsibleClassNames,
   type CollapsibleProps,
+  type CollapsibleProviderDefaults,
   type CollapsibleStyles,
   type CollapsibleTriggerProps,
 } from './components/collapsible';
@@ -139,12 +141,6 @@ export {
   type DialogStyles,
 } from './components/dialog';
 export {
-  DirectionProvider,
-  useDirection,
-  type DirectionProviderProps,
-  type TextDirection,
-} from './components/direction';
-export {
   Drawer,
   type DrawerBehavior,
   type DrawerClassNames,
@@ -161,6 +157,7 @@ export {
   type DropdownMenuItemEntry,
   type DropdownMenuLabelEntry,
   type DropdownMenuProps,
+  type DropdownMenuProviderDefaults,
   type DropdownMenuRadioEntry,
   type DropdownMenuRadioOption,
   type DropdownMenuSeparatorEntry,
@@ -190,9 +187,11 @@ export {
   type InputNumberClassNames,
   type InputNumberControls,
   type InputNumberProps,
+  type InputNumberProviderDefaults,
   type InputNumberSize,
   type InputNumberStyles,
   type InputOTPProps,
+  type InputOTPProviderDefaults,
   type InputOTPVariant,
   type InputProps,
   type InputStyles,
@@ -206,6 +205,7 @@ export {
   type ItemGroupProps,
   type ItemLinkProps,
   type ItemProps,
+  type ItemProviderDefaults,
   type ItemStyles,
 } from './components/item';
 export { Kbd, type KbdProps } from './components/kbd';
@@ -217,9 +217,9 @@ export {
   type LayoutHeaderProps,
   type LayoutProps,
   type LayoutSidebarCollapseReason,
+  type LayoutSidebarLabels,
   type LayoutSidebarProps,
   type LayoutSidebarSide,
-  type LayoutSidebarTriggerLabels,
 } from './components/layout';
 export {
   Marker,
@@ -228,6 +228,7 @@ export {
   type MarkerDivProps,
   type MarkerLinkProps,
   type MarkerProps,
+  type MarkerProviderDefaults,
   type MarkerStyles,
 } from './components/marker';
 export {
@@ -242,6 +243,7 @@ export {
   Menubar,
   type MenubarMenuConfig,
   type MenubarProps,
+  type MenubarProviderDefaults,
 } from './components/menubar';
 export {
   NavigationMenu,
@@ -259,6 +261,7 @@ export {
   type PaginationClassNames,
   type PaginationItemType,
   type PaginationProps,
+  type PaginationProviderDefaults,
   type PaginationQuickJumperOptions,
   type PaginationRenderItemProps,
   type PaginationSimpleOptions,
@@ -276,7 +279,20 @@ export {
   Progress,
   type ProgressEffect,
   type ProgressProps,
+  type ProgressProviderDefaults,
 } from './components/progress';
+export {
+  Provider,
+  useProvider,
+  type ProviderAppearance,
+  type ProviderComponents,
+  type ProviderProps,
+  type ProviderTheme,
+  type ProviderThemeColors,
+  type ProviderValue,
+  type ResolvedProviderAppearance,
+  type TextDirection,
+} from './components/provider';
 export {
   Radio,
   type RadioClassNames,
@@ -301,6 +317,7 @@ export {
   ScrollArea,
   type ScrollAreaOrientation,
   type ScrollAreaProps,
+  type ScrollAreaProviderDefaults,
   type ScrollAreaScrollbarConfig,
   type ScrollAreaScrollbarSize,
   type ScrollAreaScrollbarVisibility,
@@ -322,11 +339,13 @@ export {
   Slider,
   type SliderEffect,
   type SliderProps,
+  type SliderProviderDefaults,
 } from './components/slider';
 export { Sonner, type SonnerProps } from './components/sonner';
 export {
   Spinner,
   type SpinnerProps,
+  type SpinnerProviderDefaults,
   type SpinnerSize,
 } from './components/spinner';
 export {
@@ -347,10 +366,16 @@ export {
   type TabsClassNames,
   type TabsItem,
   type TabsProps,
-  type TabsScrollButtonLabels,
+  type TabsProviderDefaults,
+  type TabsScrollLabels,
   type TabsStyles,
 } from './components/tabs';
-export { Tag, type TagProps, type TagType } from './components/tag';
+export {
+  Tag,
+  type TagProps,
+  type TagProviderDefaults,
+  type TagType,
+} from './components/tag';
 export {
   Toast,
   toast,
@@ -365,6 +390,7 @@ export {
   type ToggleGroupOption,
   type ToggleGroupProps,
   type ToggleProps,
+  type ToggleProviderDefaults,
 } from './components/toggle';
 export {
   Tooltip,
@@ -378,6 +404,7 @@ export {
   type TypographyCodeProps,
   type TypographyTextElement,
   type TypographyTextProps,
+  type TypographyTextProviderDefaults,
   type TypographyTextSize,
   type TypographyTextTone,
   type TypographyTextWeight,

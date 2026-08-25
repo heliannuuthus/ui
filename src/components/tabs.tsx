@@ -4,6 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 
 type TabsAnimation = 'none' | 'fade' | 'slide';
 
@@ -37,7 +38,7 @@ type TabsItem = {
   value: string;
 };
 
-type TabsScrollButtonLabels = {
+type TabsScrollLabels = {
   end: string;
   start: string;
 };
@@ -70,24 +71,33 @@ type TabsProps = Omit<
     items: readonly TabsItem[];
     onChange?: (value: string | null) => void;
     orientation?: 'horizontal' | 'vertical';
-    scrollButtonLabels?: Partial<TabsScrollButtonLabels>;
+    scrollLabels?: Partial<TabsScrollLabels>;
     styles?: TabsStyles;
     value?: string | null;
   };
 
+type TabsProviderDefaults = Pick<
+  TabsProps,
+  'animation' | 'centered' | 'variant'
+>;
+
 const Tabs = ({
-  animation = 'fade',
-  centered = false,
+  animation: animationProp,
+  centered: centeredProp,
   className,
   classNames,
   items,
   onChange,
   orientation = 'horizontal',
-  scrollButtonLabels,
+  scrollLabels,
   styles,
-  variant = 'default',
+  variant: variantProp,
   ...props
 }: TabsProps) => {
+  const defaults = useComponentDefaults('Tabs');
+  const animation = animationProp ?? defaults.animation ?? 'fade';
+  const centered = centeredProp ?? defaults.centered ?? false;
+  const variant = variantProp ?? defaults.variant ?? 'default';
   const listRef = React.useRef<HTMLDivElement>(null);
   const [overflowState, setOverflowState] = React.useState({
     end: false,
@@ -184,9 +194,9 @@ const Tabs = ({
   };
   const showScrollButtons =
     orientation === 'horizontal' && overflowState.overflow;
-  const resolvedScrollButtonLabels = {
-    end: scrollButtonLabels?.end ?? 'Scroll tabs forward',
-    start: scrollButtonLabels?.start ?? 'Scroll tabs backward',
+  const resolvedScrollLabels = {
+    end: scrollLabels?.end ?? 'Scroll tabs forward',
+    start: scrollLabels?.start ?? 'Scroll tabs backward',
   };
 
   return (
@@ -213,7 +223,7 @@ const Tabs = ({
       >
         {showScrollButtons ? (
           <button
-            aria-label={resolvedScrollButtonLabels.start}
+            aria-label={resolvedScrollLabels.start}
             className="inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-border/70 bg-background/80 text-muted-foreground shadow-xs transition-colors outline-none hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-30 [&_svg]:size-4 rtl:[&_svg]:rotate-180"
             data-side="start"
             data-slot="tabs-scroll-button"
@@ -276,7 +286,7 @@ const Tabs = ({
         </TabsPrimitive.List>
         {showScrollButtons ? (
           <button
-            aria-label={resolvedScrollButtonLabels.end}
+            aria-label={resolvedScrollLabels.end}
             className="inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-border/70 bg-background/80 text-muted-foreground shadow-xs transition-colors outline-none hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-30 [&_svg]:size-4 rtl:[&_svg]:rotate-180"
             data-side="end"
             data-slot="tabs-scroll-button"
@@ -322,6 +332,7 @@ export {
   type TabsClassNames,
   type TabsItem,
   type TabsProps,
-  type TabsScrollButtonLabels,
+  type TabsProviderDefaults,
+  type TabsScrollLabels,
   type TabsStyles,
 };

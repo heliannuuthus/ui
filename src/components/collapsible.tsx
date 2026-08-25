@@ -1,17 +1,23 @@
 import * as React from 'react';
 import { Collapsible as CollapsiblePrimitive } from '@base-ui/react/collapsible';
 import type { VariantProps } from 'class-variance-authority';
-import { ChevronDownIcon } from 'lucide-react';
+import { ChevronDownIcon, ChevronRightIcon } from 'lucide-react';
 
 import { cn } from '../lib/utils';
 import { buttonVariants, type ButtonNativeProps } from './button';
 import type { OpenStateProps } from './internal/public-types';
+import { useComponentDefaults } from './provider';
 
 type CollapsibleTriggerProps = Omit<
   ButtonNativeProps,
   'children' | 'className' | 'href'
 > &
   VariantProps<typeof buttonVariants>;
+
+type CollapsibleProviderDefaults = Pick<
+  CollapsibleTriggerProps,
+  'size' | 'variant'
+>;
 
 type CollapsibleClassNames = {
   content?: string;
@@ -33,10 +39,9 @@ type CollapsibleProps = Omit<
     disabled?: boolean;
     footer?: React.ReactNode;
     header?: React.ReactNode;
-    icon?: React.ReactNode;
+    indicator?: boolean | React.ReactNode;
     styles?: CollapsibleStyles;
     trigger?: React.ReactNode;
-    triggerIcon?: React.ReactNode;
     triggerProps?: CollapsibleTriggerProps;
   };
 
@@ -46,18 +51,30 @@ const Collapsible = ({
   content,
   footer,
   header,
-  icon = <ChevronDownIcon className="size-4" />,
+  indicator = true,
   styles,
   trigger,
-  triggerIcon,
   triggerProps,
   ...props
 }: CollapsibleProps) => {
+  const defaults = useComponentDefaults('Collapsible');
   const {
-    size = 'default',
-    variant = 'outline',
+    size: sizeProp,
+    variant: variantProp,
     ...restTriggerProps
   } = triggerProps ?? {};
+  const size = sizeProp ?? defaults.size ?? 'default';
+  const variant = variantProp ?? defaults.variant ?? 'outline';
+  const resolvedIndicator =
+    indicator === true ? (
+      trigger == null ? (
+        <ChevronDownIcon className="size-4" />
+      ) : (
+        <ChevronRightIcon className="size-4" />
+      )
+    ) : (
+      indicator
+    );
 
   return (
     <CollapsiblePrimitive.Root
@@ -78,13 +95,13 @@ const Collapsible = ({
             {...restTriggerProps}
           >
             {trigger}
-            {triggerIcon != null ? (
+            {resolvedIndicator !== false && resolvedIndicator != null ? (
               <span
                 aria-hidden
                 className="grid size-4 shrink-0 place-items-center text-current transition-transform duration-240 ease-[cubic-bezier(0.16,1,0.3,1)] group-data-open/collapsible:rotate-90 motion-reduce:transition-none"
                 data-slot="collapsible-trigger-indicator"
               >
-                {triggerIcon}
+                {resolvedIndicator}
               </span>
             ) : null}
           </CollapsiblePrimitive.Trigger>
@@ -100,13 +117,13 @@ const Collapsible = ({
           {...restTriggerProps}
         >
           {header}
-          {icon != null ? (
+          {resolvedIndicator !== false && resolvedIndicator != null ? (
             <span
               aria-hidden
               className="ml-auto grid size-5 shrink-0 place-items-center text-muted-foreground transition-transform duration-240 ease-[cubic-bezier(0.16,1,0.3,1)] group-data-open/collapsible:rotate-180 motion-reduce:transition-none"
               data-slot="collapsible-indicator"
             >
-              {icon}
+              {resolvedIndicator}
             </span>
           ) : null}
         </CollapsiblePrimitive.Trigger>
@@ -137,6 +154,7 @@ export {
   Collapsible,
   type CollapsibleClassNames,
   type CollapsibleProps,
+  type CollapsibleProviderDefaults,
   type CollapsibleStyles,
   type CollapsibleTriggerProps,
 };

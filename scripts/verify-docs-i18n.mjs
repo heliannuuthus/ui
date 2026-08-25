@@ -242,10 +242,7 @@ const stripAttributeValues = (source) => {
 
 const exampleCodeCoverage = (documentation, example, allowedApiNames) => {
   const covered = new Set();
-  const rootComponent =
-    documentation.slug === 'direction'
-      ? 'DirectionProvider'
-      : documentation.name.replaceAll(' ', '');
+  const rootComponent = documentation.name.replaceAll(' ', '');
   const rootComponents = new Set([
     rootComponent,
     ...(documentation.slug === 'input-number' ? ['Input.Number'] : []),

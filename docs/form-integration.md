@@ -240,9 +240,8 @@ This keeps custom controls independent of the internal form engine. The
 component remains a normal controlled React component, while `Form.Field`
 continues to own registration, validation and accessible relationships.
 Forwarding the ref is optional; it adds focus management without becoming a
-value-binding requirement. React 18 only receives the injected ref through a
-DOM element or `forwardRef`; React 19 function components can receive it as a
-regular prop.
+value-binding requirement. The package targets React 19, so function components
+can receive the injected ref as a regular prop.
 
 ```ts
 type FormFieldInjectedControlProps<Value> = {

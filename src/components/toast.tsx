@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { useTheme } from 'next-themes';
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -18,6 +17,7 @@ import {
 } from 'sonner';
 
 import { cn } from '../lib/utils';
+import { useProvider } from './provider';
 
 type ToastScope = 'global' | 'local';
 
@@ -106,11 +106,11 @@ const Toaster = ({
   toastOptions,
   ...props
 }: ToasterProps) => {
-  const { theme = 'system' } = useTheme();
+  const { resolvedAppearance } = useProvider();
 
   return (
     <Sonner
-      theme={theme as SonnerToasterProps['theme']}
+      theme={resolvedAppearance}
       position={position}
       className={cn(
         'toaster group',

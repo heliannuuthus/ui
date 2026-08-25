@@ -7,6 +7,7 @@ export const ButtonActionsDemo = () => {
 
   return (
     <form
+      className="flex flex-wrap items-center justify-center gap-3"
       onSubmit={(event) => {
         event.preventDefault();
         setMessage(docsCopy('表单已提交'));

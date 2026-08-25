@@ -46,6 +46,19 @@ if (distributionEntries.includes('vite.js')) {
 const packageJson = JSON.parse(
   await readFile(resolve(packageRoot, 'package.json'), 'utf8')
 );
+const requiredReactPeers = {
+  react: '^19.0.0',
+  'react-dom': '^19.0.0',
+};
+
+for (const [dependency, version] of Object.entries(requiredReactPeers)) {
+  if (packageJson.peerDependencies?.[dependency] !== version) {
+    throw new Error(
+      `The package must require ${dependency}@${version} as a peer dependency.`
+    );
+  }
+}
+
 const exportNames = Object.keys(packageJson.exports ?? {});
 
 if (

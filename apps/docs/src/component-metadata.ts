@@ -181,11 +181,6 @@ export const componentSearchMetadata = {
     ['轮播', '走马灯'],
     ['slides', 'gallery'],
   ],
-  chart: [
-    'Provides responsive containers, theme variables, and consistent tooltips for Recharts.',
-    ['图表', '数据可视化'],
-    ['graph', 'visualization', 'recharts'],
-  ],
   collapsible: [
     'Expands or collapses one content region.',
     ['折叠', '展开'],
@@ -280,11 +275,6 @@ export const componentSearchMetadata = {
     'Provides object-specific actions from a context menu.',
     ['右键菜单', '上下文菜单'],
     ['right click', 'actions'],
-  ],
-  direction: [
-    'Sets the writing direction for a component tree.',
-    ['文字方向', '从右到左'],
-    ['rtl', 'ltr', 'writing direction'],
   ],
 } satisfies Record<
   ComponentSlug,

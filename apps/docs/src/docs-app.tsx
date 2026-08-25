@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, type ComponentType } from 'react';
 import {
   Navigate,
   Route,
@@ -14,12 +14,17 @@ import {
 } from './i18n';
 import { localizedPath } from './i18n/routing';
 import { isDocsLocale } from './i18n/resources';
-import { Showcase } from './showcase';
+import {
+  ComponentPage,
+  ComponentsPage,
+  DesignPage,
+  GettingStartedPage,
+  HomePage,
+} from './pages';
 
-type ShowcasePage =
-  'home' | 'getting-started' | 'design' | 'components' | 'component';
+type LocalizedPage = ComponentType;
 
-const LocalizedShowcase = ({ page }: { page: ShowcasePage }) => {
+const LocalizedRoute = ({ Page }: { Page: LocalizedPage }) => {
   const { locale } = useParams<{ locale: string }>();
 
   useEffect(() => {
@@ -33,7 +38,7 @@ const LocalizedShowcase = ({ page }: { page: ShowcasePage }) => {
     return <Navigate replace to={localizedPath(preferredLocale())} />;
   }
 
-  return <Showcase page={page} />;
+  return <Page />;
 };
 
 const LegacyLocaleRedirect = () => {
@@ -47,22 +52,22 @@ const LegacyLocaleRedirect = () => {
 export const DocsApp = () => {
   return (
     <Routes>
-      <Route path="/:locale" element={<LocalizedShowcase page="home" />} />
+      <Route path="/:locale" element={<LocalizedRoute Page={HomePage} />} />
       <Route
         path="/:locale/docs/getting-started"
-        element={<LocalizedShowcase page="getting-started" />}
+        element={<LocalizedRoute Page={GettingStartedPage} />}
       />
       <Route
         path="/:locale/design"
-        element={<LocalizedShowcase page="design" />}
+        element={<LocalizedRoute Page={DesignPage} />}
       />
       <Route
         path="/:locale/components"
-        element={<LocalizedShowcase page="components" />}
+        element={<LocalizedRoute Page={ComponentsPage} />}
       />
       <Route
         path="/:locale/components/:component"
-        element={<LocalizedShowcase page="component" />}
+        element={<LocalizedRoute Page={ComponentPage} />}
       />
       <Route path="*" element={<LegacyLocaleRedirect />} />
     </Routes>

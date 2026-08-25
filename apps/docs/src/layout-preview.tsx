@@ -206,7 +206,7 @@ export const LayoutCollapsibleSidebarDemo = ({
       collapsible
       defaultCollapsed={defaultCollapsed}
       side={side}
-      triggerLabels={{
+      labels={{
         collapse: docsCopy('收起侧边栏'),
         expand: docsCopy('展开侧边栏'),
       }}
@@ -216,7 +216,7 @@ export const LayoutCollapsibleSidebarDemo = ({
           below ? docsCopy('已进入窄屏断点') : docsCopy('已离开窄屏断点')
         )
       }
-      onCollapsedChange={(collapsed, reason) =>
+      onChange={(collapsed, reason) =>
         setStatus(
           collapsed
             ? docsCopy(`侧边栏已收起（${reason}）`)

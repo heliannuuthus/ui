@@ -174,29 +174,37 @@ interface TableSearchProps<TData> {
   value?: string;
 }
 
+interface TableExpandLabels<TData> {
+  collapse?: (row: TData, index: number) => string;
+  expand?: (row: TData, index: number) => string;
+}
+
 interface TableExpandableProps<TData> {
+  canExpand?: (row: TData, index: number) => boolean;
   className?: string;
-  columnHeader?: React.ReactNode;
-  defaultExpandedRowKeys?: React.Key[];
-  expandedRowKeys?: React.Key[];
-  getCollapseLabel?: (row: TData, index: number) => string;
-  getExpandLabel?: (row: TData, index: number) => string;
-  onExpandedRowKeysChange?: (keys: React.Key[]) => void;
+  defaultValue?: React.Key[];
+  header?: React.ReactNode;
+  labels?: TableExpandLabels<TData>;
+  onChange?: (keys: React.Key[]) => void;
   render: (row: TData, index: number) => React.ReactNode;
-  rowExpandable?: (row: TData, index: number) => boolean;
   style?: React.CSSProperties;
+  value?: React.Key[];
+}
+
+interface TableSelectionLabels<TData> {
+  all?: (rows: readonly TData[]) => string;
+  item?: (row: TData, index: number) => string;
 }
 
 interface TableRowSelectionProps<TData> {
   className?: string;
-  columnHeader?: React.ReactNode;
-  defaultSelectedRowKeys?: React.Key[];
-  getSelectAllLabel?: (rows: readonly TData[]) => string;
-  getSelectLabel?: (row: TData, index: number) => string;
-  isRowDisabled?: (row: TData, index: number) => boolean;
+  defaultValue?: React.Key[];
+  disabled?: (row: TData, index: number) => boolean;
+  header?: React.ReactNode;
+  labels?: TableSelectionLabels<TData>;
   onChange?: (keys: React.Key[], rows: readonly TData[]) => void;
-  selectedRowKeys?: React.Key[];
   style?: React.CSSProperties;
+  value?: React.Key[];
 }
 
 interface TablePaginationBaseProps extends Pick<
@@ -207,12 +215,9 @@ interface TablePaginationBaseProps extends Pick<
   defaultCurrent?: number;
   onChange?: (page: number, pageSize: number) => void;
   pageSize?: number;
-  renderSummary?: (
-    total: number,
-    current: number,
-    pageCount: number
-  ) => React.ReactNode;
-  showSummary?: boolean;
+  summary?:
+    | boolean
+    | ((total: number, current: number, pageCount: number) => React.ReactNode);
 }
 
 type TablePaginationProps = TablePaginationBaseProps &
@@ -446,14 +451,12 @@ const ManagedTable = <TData,>({
     sortingOptions?.value !== undefined
       ? sortingOptions.value
       : uncontrolledSort;
-  const [uncontrolledExpandedRowKeys, setUncontrolledExpandedRowKeys] =
-    React.useState<React.Key[]>(expandable?.defaultExpandedRowKeys ?? []);
-  const expandedRowKeys =
-    expandable?.expandedRowKeys ?? uncontrolledExpandedRowKeys;
-  const [uncontrolledSelectedRowKeys, setUncontrolledSelectedRowKeys] =
-    React.useState<React.Key[]>(rowSelection?.defaultSelectedRowKeys ?? []);
-  const selectedRowKeys =
-    rowSelection?.selectedRowKeys ?? uncontrolledSelectedRowKeys;
+  const [uncontrolledExpandedKeys, setUncontrolledExpandedKeys] =
+    React.useState<React.Key[]>(expandable?.defaultValue ?? []);
+  const expandedKeys = expandable?.value ?? uncontrolledExpandedKeys;
+  const [uncontrolledSelectedKeys, setUncontrolledSelectedKeys] =
+    React.useState<React.Key[]>(rowSelection?.defaultValue ?? []);
+  const selectedKeys = rowSelection?.value ?? uncontrolledSelectedKeys;
 
   const [automaticColumnWidths, setAutomaticColumnWidths] = React.useState<
     ReadonlyMap<string, number>
@@ -601,13 +604,13 @@ const ManagedTable = <TData,>({
     table.getVisibleLeafColumns().length +
     (rowSelection ? 1 : 0) +
     (expandable ? 1 : 0);
-  const expandedRowKeySet = React.useMemo(
-    () => new Set(expandedRowKeys),
-    [expandedRowKeys]
+  const expandedKeySet = React.useMemo(
+    () => new Set(expandedKeys),
+    [expandedKeys]
   );
-  const selectedRowKeySet = React.useMemo(
-    () => new Set(selectedRowKeys),
-    [selectedRowKeys]
+  const selectedKeySet = React.useMemo(
+    () => new Set(selectedKeys),
+    [selectedKeys]
   );
   const resolveRowKey = React.useCallback(
     (row: Row<TData>) => resolveRecordKey(row.original, row.index),
@@ -616,18 +619,18 @@ const ManagedTable = <TData,>({
   const selectableRows = React.useMemo(
     () =>
       visibleRows.filter(
-        (row) => !rowSelection?.isRowDisabled?.(row.original, row.index)
+        (row) => !rowSelection?.disabled?.(row.original, row.index)
       ),
     [rowSelection, visibleRows]
   );
   const visibleSelectedCount = selectableRows.filter((row) =>
-    selectedRowKeySet.has(resolveRowKey(row))
+    selectedKeySet.has(resolveRowKey(row))
   ).length;
 
   const emitSelection = React.useCallback(
     (keys: React.Key[]) => {
-      if (rowSelection?.selectedRowKeys == null) {
-        setUncontrolledSelectedRowKeys(keys);
+      if (rowSelection?.value == null) {
+        setUncontrolledSelectedKeys(keys);
       }
       const keySet = new Set(keys);
       rowSelection?.onChange?.(
@@ -642,11 +645,11 @@ const ManagedTable = <TData,>({
       const key = resolveRowKey(row);
       emitSelection(
         selected
-          ? Array.from(new Set([...selectedRowKeys, key]))
-          : selectedRowKeys.filter((selectedKey) => selectedKey !== key)
+          ? Array.from(new Set([...selectedKeys, key]))
+          : selectedKeys.filter((selectedKey) => selectedKey !== key)
       );
     },
-    [emitSelection, resolveRowKey, selectedRowKeys]
+    [emitSelection, resolveRowKey, selectedKeys]
   );
   const setVisibleRowsSelected = React.useCallback(
     (selected: boolean) => {
@@ -654,25 +657,25 @@ const ManagedTable = <TData,>({
       const visibleKeySet = new Set(visibleKeys);
       emitSelection(
         selected
-          ? Array.from(new Set([...selectedRowKeys, ...visibleKeys]))
-          : selectedRowKeys.filter((key) => !visibleKeySet.has(key))
+          ? Array.from(new Set([...selectedKeys, ...visibleKeys]))
+          : selectedKeys.filter((key) => !visibleKeySet.has(key))
       );
     },
-    [emitSelection, resolveRowKey, selectableRows, selectedRowKeys]
+    [emitSelection, resolveRowKey, selectableRows, selectedKeys]
   );
   const setRowExpanded = React.useCallback(
     (row: Row<TData>, expanded: boolean) => {
       if (!expandable) return;
       const key = resolveRowKey(row);
       const nextKeys = expanded
-        ? Array.from(new Set([...expandedRowKeys, key]))
-        : expandedRowKeys.filter((expandedKey) => expandedKey !== key);
-      if (expandable.expandedRowKeys == null) {
-        setUncontrolledExpandedRowKeys(nextKeys);
+        ? Array.from(new Set([...expandedKeys, key]))
+        : expandedKeys.filter((expandedKey) => expandedKey !== key);
+      if (expandable.value == null) {
+        setUncontrolledExpandedKeys(nextKeys);
       }
-      expandable.onExpandedRowKeysChange?.(nextKeys);
+      expandable.onChange?.(nextKeys);
     },
-    [expandable, expandedRowKeys, resolveRowKey]
+    [expandable, expandedKeys, resolveRowKey]
   );
 
   const renderCells = (row: Row<TData>) =>
@@ -714,14 +717,14 @@ const ManagedTable = <TData,>({
 
   const renderRow = (row: Row<TData>) => {
     const key = resolveRowKey(row);
-    const disabled = rowSelection?.isRowDisabled?.(row.original, row.index);
+    const disabled = rowSelection?.disabled?.(row.original, row.index);
     const resolvedRowProps = rowProps?.(row.original, row.index);
 
     return (
       <TableRow
         {...resolvedRowProps}
         key={String(key)}
-        data-state={selectedRowKeySet.has(key) ? 'selected' : undefined}
+        data-state={selectedKeySet.has(key) ? 'selected' : undefined}
       >
         {rowSelection ? (
           <TableCell
@@ -732,10 +735,10 @@ const ManagedTable = <TData,>({
           >
             <Checkbox
               aria-label={
-                rowSelection.getSelectLabel?.(row.original, row.index) ??
+                rowSelection.labels?.item?.(row.original, row.index) ??
                 `选择 ${String(key)}`
               }
-              checked={selectedRowKeySet.has(key)}
+              checked={selectedKeySet.has(key)}
               disabled={disabled}
               onChange={(checked) => setRowSelected(row, checked)}
             />
@@ -748,16 +751,16 @@ const ManagedTable = <TData,>({
             className={cn('w-12', expandable.className)}
             style={expandable.style}
           >
-            {expandable.rowExpandable?.(row.original, row.index) !== false ? (
+            {expandable.canExpand?.(row.original, row.index) !== false ? (
               <TableExpandButton
                 aria-label={
-                  expandedRowKeySet.has(key)
-                    ? (expandable.getCollapseLabel?.(row.original, row.index) ??
+                  expandedKeySet.has(key)
+                    ? (expandable.labels?.collapse?.(row.original, row.index) ??
                       `收起 ${String(key)}`)
-                    : (expandable.getExpandLabel?.(row.original, row.index) ??
+                    : (expandable.labels?.expand?.(row.original, row.index) ??
                       `展开 ${String(key)}`)
                 }
-                expanded={expandedRowKeySet.has(key)}
+                expanded={expandedKeySet.has(key)}
                 onExpandedChange={(expanded) => setRowExpanded(row, expanded)}
               />
             ) : null}
@@ -887,10 +890,10 @@ const ManagedTable = <TData,>({
                     rowSpan={groups.length}
                     style={rowSelection.style}
                   >
-                    {rowSelection.columnHeader ?? (
+                    {rowSelection.header ?? (
                       <Checkbox
                         aria-label={
-                          rowSelection.getSelectAllLabel?.(
+                          rowSelection.labels?.all?.(
                             selectableRows.map((row) => row.original)
                           ) ?? '选择当前页全部行'
                         }
@@ -915,7 +918,7 @@ const ManagedTable = <TData,>({
                     rowSpan={groups.length}
                     style={expandable.style}
                   >
-                    {expandable.columnHeader ?? (
+                    {expandable.header ?? (
                       <span className="sr-only">展开行</span>
                     )}
                   </TableHead>
@@ -1021,9 +1024,8 @@ const ManagedTable = <TData,>({
               <React.Fragment key={String(resolveRowKey(row))}>
                 {renderRow(row)}
                 {expandable &&
-                expandedRowKeySet.has(resolveRowKey(row)) &&
-                expandable.rowExpandable?.(row.original, row.index) !==
-                  false ? (
+                expandedKeySet.has(resolveRowKey(row)) &&
+                expandable.canExpand?.(row.original, row.index) !== false ? (
                   <TableExpandedRow colSpan={visibleColumnCount}>
                     {expandable.render(row.original, row.index)}
                   </TableExpandedRow>
@@ -1053,13 +1055,11 @@ const ManagedTable = <TData,>({
           )}
           style={styles?.pagination}
         >
-          {paginationOptions.showSummary !== false ? (
+          {paginationOptions.summary !== false ? (
             <span className="text-sm text-muted-foreground">
-              {paginationOptions.renderSummary?.(
-                totalRows,
-                currentPage,
-                pageCount
-              ) ?? (
+              {typeof paginationOptions.summary === 'function' ? (
+                paginationOptions.summary(totalRows, currentPage, pageCount)
+              ) : (
                 <>
                   共 {totalRows} 项 · 第 {currentPage} / {pageCount} 页
                 </>
@@ -1108,6 +1108,7 @@ namespace Table {
   export type ColumnClassNames<TData> = TableColumnClassNames<TData>;
   export type ColumnStyles<TData> = TableColumnStyles<TData>;
   export type Ellipsis = TableEllipsis;
+  export type ExpandLabels<TData> = TableExpandLabels<TData>;
   export type ExpandableProps<TData> = TableExpandableProps<TData>;
   export type HeadProps = TableHeadProps;
   export type PaginationProps = TablePaginationProps;
@@ -1118,6 +1119,7 @@ namespace Table {
   export type Props<TData> = TableProps<TData>;
   export type Render<TData> = TableRender<TData>;
   export type RowSelectionProps<TData> = TableRowSelectionProps<TData>;
+  export type SelectionLabels<TData> = TableSelectionLabels<TData>;
   export type SearchProps<TData> = TableSearchProps<TData>;
   export type SemanticSlot = TableSemanticSlot;
   export type SortingProps = TableSortingProps;
