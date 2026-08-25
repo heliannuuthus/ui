@@ -141,9 +141,13 @@ const Tooltip = ({
               {arrow !== false ? (
                 <TooltipPrimitive.Arrow
                   data-slot="tooltip-arrow"
-                  className="pointer-events-none z-50 size-4 overflow-hidden text-foreground data-[side=bottom]:top-[-15px] data-[side=inline-end]:-rotate-90 data-[side=inline-end]:[inset-inline-start:-15px] data-[side=inline-start]:rotate-90 data-[side=inline-start]:[inset-inline-end:-15px] data-[side=left]:right-[-15px] data-[side=left]:rotate-90 data-[side=right]:left-[-15px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-15px] data-[side=top]:rotate-180 rtl:data-[side=inline-end]:rotate-90 rtl:data-[side=inline-start]:-rotate-90"
+                  className="pointer-events-none z-50 size-4 overflow-hidden text-foreground data-[side=bottom]:top-[-14px] data-[side=inline-end]:-rotate-90 data-[side=inline-end]:[inset-inline-start:-14px] data-[side=inline-start]:rotate-90 data-[side=inline-start]:[inset-inline-end:-14px] data-[side=left]:right-[-14px] data-[side=left]:rotate-90 data-[side=right]:left-[-14px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-14px] data-[side=top]:rotate-180 rtl:data-[side=inline-end]:rotate-90 rtl:data-[side=inline-start]:-rotate-90"
                   style={getArrowEdgeStyle}
                 >
+                  <span
+                    aria-hidden="true"
+                    className="absolute bottom-0 left-0 h-0.5 w-4 bg-current"
+                  />
                   <svg
                     aria-hidden="true"
                     className="absolute bottom-0 left-0 h-2 w-4 fill-current"
