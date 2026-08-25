@@ -19,6 +19,7 @@ import {
   Layout,
   Masonry,
   Popover,
+  Provider,
   Separator,
   Stack,
   Tabs,
@@ -1813,7 +1814,7 @@ export const Showcase = ({ page }: { page: ShowcasePage }) => {
   }, []);
 
   return (
-    <div className={dark ? 'site dark' : 'site'}>
+    <Provider appearance={dark ? 'dark' : 'light'} className="site">
       <SiteHeader
         dark={dark}
         onSearch={() => setSearchOpen(true)}
@@ -1826,6 +1827,6 @@ export const Showcase = ({ page }: { page: ShowcasePage }) => {
       {page === 'components' && <ComponentsOverview />}
       {page === 'component' && <ComponentPage />}
       <SiteFooter />
-    </div>
+    </Provider>
   );
 };

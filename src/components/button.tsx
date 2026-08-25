@@ -8,6 +8,7 @@ import {
 } from 'react';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 import { Stack, type StackCompactProps } from './stack';
 
 type ButtonVariantOptions = {
@@ -119,17 +120,19 @@ type ButtonRef = HTMLAnchorElement | HTMLButtonElement;
 type ButtonGroupProps = StackCompactProps;
 
 const ButtonRender = (props: ButtonProps, ref: ForwardedRef<ButtonRef>) => {
+  const defaults = useComponentDefaults('Button');
+
   if (props.href !== undefined) {
     const {
       'aria-disabled': ariaDisabled,
-      block = false,
+      block = defaults.block ?? false,
       className,
       disabled = false,
       href,
       onClick,
-      size = 'default',
+      size = defaults.size ?? 'default',
       tabIndex,
-      variant = 'default',
+      variant = defaults.variant ?? 'default',
       ...linkProps
     } = props;
 
@@ -138,6 +141,7 @@ const ButtonRender = (props: ButtonProps, ref: ForwardedRef<ButtonRef>) => {
         {...linkProps}
         ref={ref as ForwardedRef<HTMLAnchorElement>}
         data-disabled={disabled ? '' : undefined}
+        data-size={size}
         data-slot="button"
         data-variant={variant}
         aria-disabled={disabled ? true : ariaDisabled}
@@ -162,11 +166,11 @@ const ButtonRender = (props: ButtonProps, ref: ForwardedRef<ButtonRef>) => {
   }
 
   const {
-    block = false,
+    block = defaults.block ?? false,
     className,
-    size = 'default',
+    size = defaults.size ?? 'default',
     type = 'button',
-    variant = 'default',
+    variant = defaults.variant ?? 'default',
     ...buttonProps
   } = props;
 
@@ -175,6 +179,7 @@ const ButtonRender = (props: ButtonProps, ref: ForwardedRef<ButtonRef>) => {
       {...buttonProps}
       ref={ref as ForwardedRef<HTMLButtonElement>}
       data-slot="button"
+      data-size={size}
       data-variant={variant}
       className={cn(
         buttonVariants({ variant, size, className }),

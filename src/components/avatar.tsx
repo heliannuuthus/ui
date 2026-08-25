@@ -4,6 +4,7 @@ import { mergeProps } from '@base-ui/react/merge-props';
 import { useRender } from '@base-ui/react/use-render';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 
 type AvatarSize = 'default' | 'sm' | 'lg';
 type AvatarShape = 'circle' | 'square';
@@ -51,8 +52,9 @@ const Avatar = ({
   ...props
 }: AvatarProps) => {
   const group = React.useContext(AvatarGroupContext);
-  const shape = shapeProp ?? group.shape ?? 'circle';
-  const size = sizeProp ?? group.size ?? 'default';
+  const defaults = useComponentDefaults('Avatar');
+  const shape = shapeProp ?? group.shape ?? defaults.shape ?? 'circle';
+  const size = sizeProp ?? group.size ?? defaults.size ?? 'default';
 
   return (
     <AvatarPrimitive.Root
@@ -160,6 +162,9 @@ const AvatarGroup = ({
   style,
   ...props
 }: AvatarGroupProps) => {
+  const defaults = useComponentDefaults('Avatar');
+  const resolvedShape = shape ?? defaults.shape;
+  const resolvedSize = size ?? defaults.size;
   const limit = max == null ? items.length : Math.max(1, Math.trunc(max) || 1);
   const visibleItems = items.slice(0, limit);
   const overflowCount = Math.max(0, items.length - visibleItems.length);
@@ -175,11 +180,13 @@ const AvatarGroup = ({
     ) : null;
 
   return (
-    <AvatarGroupContext.Provider value={{ shape, size }}>
+    <AvatarGroupContext.Provider
+      value={{ shape: resolvedShape, size: resolvedSize }}
+    >
       <div
         data-slot="avatar-group"
-        data-shape={shape}
-        data-size={size}
+        data-shape={resolvedShape}
+        data-size={resolvedSize}
         className={cn(
           'group/avatar-group flex items-center *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background',
           className
@@ -208,8 +215,10 @@ const AvatarGroupCount = ({
   className,
   ...props
 }: React.ComponentProps<'div'>) => {
-  const { shape = 'circle', size = 'default' } =
-    React.useContext(AvatarGroupContext);
+  const group = React.useContext(AvatarGroupContext);
+  const defaults = useComponentDefaults('Avatar');
+  const shape = group.shape ?? defaults.shape ?? 'circle';
+  const size = group.size ?? defaults.size ?? 'default';
 
   return (
     <div

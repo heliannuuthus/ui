@@ -276,10 +276,10 @@ export const componentSearchMetadata = {
     ['右键菜单', '上下文菜单'],
     ['right click', 'actions'],
   ],
-  direction: [
-    'Sets the writing direction for a component tree.',
-    ['文字方向', '从右到左'],
-    ['rtl', 'ltr', 'writing direction'],
+  provider: [
+    'Configures theme, appearance, direction, and component defaults for a component tree.',
+    ['全局配置', '主题', '配色', '文字方向'],
+    ['theme provider', 'configuration', 'rtl', 'component defaults'],
   ],
 } satisfies Record<
   ComponentSlug,

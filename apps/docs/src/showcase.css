@@ -2214,7 +2214,7 @@ a {
 .minimal-alert,
 .minimal-command,
 .minimal-context-menu-trigger,
-.minimal-direction {
+.minimal-provider {
   width: min(480px, 100%);
 }
 .aspect-ratio-demo {
@@ -3499,25 +3499,26 @@ a {
   color: var(--docs-muted);
   font-size: 11px;
 }
-.minimal-direction {
+.minimal-provider {
+  padding: 18px;
+  border-radius: calc(var(--radius) * 1.4);
+  color: var(--foreground);
+  background: var(--background);
+}
+.minimal-provider-profile {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: var(--surface);
+  gap: 12px;
 }
-.minimal-direction > div {
+.minimal-provider-profile > div {
   display: grid;
-  gap: 4px;
+  gap: 3px;
 }
-.minimal-direction strong {
-  font-size: 15px;
+.minimal-provider-profile strong {
+  font-size: 14px;
 }
-.minimal-direction span {
-  color: var(--docs-muted);
+.minimal-provider-profile span {
+  color: var(--muted-foreground);
   font-size: 11px;
 }
 .demo-code {

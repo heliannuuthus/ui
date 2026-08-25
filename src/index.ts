@@ -128,12 +128,6 @@ export {
   type DialogStyles,
 } from './components/dialog';
 export {
-  DirectionProvider,
-  useDirection,
-  type DirectionProviderProps,
-  type TextDirection,
-} from './components/direction';
-export {
   Drawer,
   type DrawerBehavior,
   type DrawerClassNames,
@@ -266,6 +260,18 @@ export {
   type ProgressEffect,
   type ProgressProps,
 } from './components/progress';
+export {
+  Provider,
+  useProvider,
+  type ProviderAppearance,
+  type ProviderComponents,
+  type ProviderProps,
+  type ProviderTheme,
+  type ProviderThemeColors,
+  type ProviderValue,
+  type ResolvedProviderAppearance,
+  type TextDirection,
+} from './components/provider';
 export {
   Radio,
   type RadioClassNames,

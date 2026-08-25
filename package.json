@@ -35,7 +35,7 @@
     "type-check": "tsc --noEmit && pnpm --filter @heliannuuthus/ui-docs exec tsc --noEmit",
     "prepare": "pnpm build:package",
     "prepack": "pnpm build:package",
-    "verify:package": "node scripts/verify-package.mjs && node scripts/verify-button.mjs && node scripts/verify-pagination.mjs && node scripts/verify-scroll-area.mjs && node scripts/verify-semantic-styles.mjs && node scripts/verify-form-accessibility.mjs && node scripts/verify-typography.mjs && node scripts/verify-badge-tag.mjs"
+    "verify:package": "node scripts/verify-package.mjs && node scripts/verify-button.mjs && node scripts/verify-pagination.mjs && node scripts/verify-scroll-area.mjs && node scripts/verify-semantic-styles.mjs && node scripts/verify-form-accessibility.mjs && node scripts/verify-typography.mjs && node scripts/verify-badge-tag.mjs && node scripts/verify-provider.mjs"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -53,7 +53,6 @@
     "input-otp": "^1.4.2",
     "lucide-react": "^0.468.0",
     "motion": "^12.42.2",
-    "next-themes": "^0.4.6",
     "react-day-picker": "^10.0.1",
     "react-hook-form": "^7.62.0",
     "react-resizable-panels": "^4.12.2",

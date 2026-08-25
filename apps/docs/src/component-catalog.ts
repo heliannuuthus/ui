@@ -2,7 +2,7 @@ export const componentGroups = [
   {
     key: 'general',
     title: '通用',
-    items: ['Button', 'Typography', 'Tag', 'Kbd'],
+    items: ['Provider', 'Button', 'Typography', 'Tag', 'Kbd'],
   },
   {
     key: 'layout',
@@ -10,7 +10,6 @@ export const componentGroups = [
     items: [
       'Aspect Ratio',
       'Card',
-      'Direction',
       'Layout',
       'Masonry',
       'Resizable',
@@ -95,6 +94,7 @@ export type ComponentName = (typeof componentCatalog)[number];
 export type ComponentSlug = KebabCase<ComponentName>;
 
 export const zhComponentNames = {
+  Provider: '全局配置',
   Button: '按钮',
   Typography: '排版',
   Tag: '标签',
@@ -148,7 +148,6 @@ export const zhComponentNames = {
   Toast: '轻提示',
   Command: '命令面板',
   'Context Menu': '右键菜单',
-  Direction: '文字方向',
 } satisfies Record<ComponentName, string>;
 
 export const localizedComponentName = (name: string, locale: 'zh' | 'en') => {

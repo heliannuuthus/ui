@@ -3763,7 +3763,11 @@ const remainingComponents = [
   ['Toast', 'toast', docsCopy('在页面边缘短暂反馈操作结果。')],
   ['Command', 'command', docsCopy('提供可搜索的键盘命令列表。')],
   ['Context Menu', 'context-menu', docsCopy('提供对象相关的上下文操作。')],
-  ['Direction', 'direction', docsCopy('设置组件树的文字书写方向。')],
+  [
+    'Provider',
+    'provider',
+    docsCopy('统一管理组件树的配色、外观、书写方向和组件默认属性。'),
+  ],
 ] as const;
 
 for (const [name, slug, summary] of remainingComponents) {
@@ -3866,15 +3870,28 @@ const minimalExampleCopy: Record<
 
 <Counter value={7.4} fontSize={52} fontWeight={600} />`,
   },
-  direction: {
+  provider: {
     description: docsCopy(
-      'DirectionProvider 为局部组件树声明 ltr 或 rtl 阅读方向。'
+      '在应用根部集中设置语义色、外观、书写方向和组件默认属性；组件自身显式传入的属性始终优先。'
     ),
-    code: `import { DirectionProvider } from '@heliannuuthus/ui'
+    code: `import { Provider } from '@heliannuuthus/ui'
 
-<DirectionProvider direction="rtl">
-  <section dir="rtl">واجهة عربية</section>
-</DirectionProvider>`,
+<Provider
+  appearance="system"
+  direction="ltr"
+  theme={{
+    colors: { primary: 'oklch(0.55 0.17 155)' },
+    darkColors: { primary: 'oklch(0.72 0.15 155)' },
+    radius: '0.75rem',
+  }}
+  components={{
+    Avatar: { shape: 'square' },
+    Button: { size: 'sm' },
+    Card: { variant: 'outline' },
+  }}
+>
+  <App />
+</Provider>`,
   },
   progress: {
     description: docsCopy(
@@ -12424,9 +12441,64 @@ appendMissingApi('spinner', [
   publicProperty(docsCopy('原生属性'), 'ComponentProps<"svg">'),
 ]);
 
-componentDocumentation.direction.api = [
+componentDocumentation.provider.api = [
   publicProperty('children', 'ReactNode'),
-  publicProperty('direction', "'ltr' | 'rtl'"),
+  publicProperty('appearance', "'light' | 'dark' | 'system'", {
+    defaultValue: "'system'",
+  }),
+  publicProperty('components', 'ProviderComponents', { defaultValue: '{}' }),
+  publicProperty('direction', "'ltr' | 'rtl'", { defaultValue: "'ltr'" }),
+  publicProperty('theme', 'ProviderTheme', { defaultValue: '{}' }),
+  publicProperty(docsCopy('原生属性'), 'ComponentProps<"div">'),
+];
+componentDocumentation.provider.typePreviews = [
+  {
+    name: 'ProviderComponents',
+    definition: `type ProviderComponents = {
+  'Avatar'?: Pick<AvatarProps, 'shape' | 'size'>
+  'Button'?: Pick<ButtonProps, 'block' | 'size' | 'variant'>
+  'Card'?: Pick<CardProps, 'variant'>
+}`,
+  },
+  {
+    name: 'ProviderTheme',
+    definition: `type ProviderTheme = {
+  colors?: ProviderThemeColors
+  darkColors?: ProviderThemeColors
+  radius?: string
+}`,
+  },
+  {
+    name: 'ProviderThemeColors',
+    declaration: 'Partial<{',
+    api: [
+      'background',
+      'foreground',
+      'primary',
+      'primaryForeground',
+      'secondary',
+      'secondaryForeground',
+      'muted',
+      'mutedForeground',
+      'accent',
+      'accentForeground',
+      'destructive',
+      'info',
+      'success',
+      'warning',
+      'border',
+      'input',
+      'ring',
+      'card',
+      'cardForeground',
+      'popover',
+      'popoverForeground',
+    ].map((name) => ({
+      name,
+      description: docsCopy('设置语义颜色令牌。'),
+      type: 'string',
+    })),
+  },
 ];
 componentDocumentation.sonner.api = [
   publicProperty(docsCopy('原生属性'), 'SonnerProps'),

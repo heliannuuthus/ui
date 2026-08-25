@@ -20,6 +20,7 @@
 - This repository is the workspace's single source of truth for domain-neutral frontend primitives. Consumers must extend this library instead of creating parallel primitives in product repositories.
 - Preserve accessible Radix semantics, keyboard interaction, focus visibility, disabled states, and narrow layouts.
 - Keep colors and visual decisions in semantic CSS variables; do not add product-domain state to the package.
+- Route cross-cutting appearance, semantic colors, writing direction and component defaults through the root `Provider`. Do not add standalone theme or direction components, parallel providers, or compatibility aliases. Explicit component props must override Provider defaults.
 - Benchmark public API quality against Ant Design: consistent prop names and defaults, complete TypeScript types, controlled and uncontrolled state where appropriate, ref forwarding, stable events, sizes, variants, composition, and deliberate extension points.
 - Ant Design is an API-design reference only. Do not introduce `antd`, copy its implementation, or create an Ant-compatible facade.
 - Do not design a component solely around one current screen. Cover common composition, loading, empty, error and disabled states, long content, accessibility, narrow layouts, and backward-compatible evolution.

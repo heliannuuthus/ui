@@ -4,15 +4,16 @@ import { Alert } from '@heliannuuthus/ui';
 import { Avatar } from '@heliannuuthus/ui';
 import { Breadcrumb } from '@heliannuuthus/ui';
 import { Button } from '@heliannuuthus/ui';
+import { Card } from '@heliannuuthus/ui';
 import { Checkbox } from '@heliannuuthus/ui';
 import { Command } from '@heliannuuthus/ui';
 import { ContextMenu } from '@heliannuuthus/ui';
 import { Counter } from '@heliannuuthus/ui';
-import { DirectionProvider } from '@heliannuuthus/ui';
 import { Empty } from '@heliannuuthus/ui';
 import { Input } from '@heliannuuthus/ui';
 import { Menubar } from '@heliannuuthus/ui';
 import { Progress } from '@heliannuuthus/ui';
+import { Provider } from '@heliannuuthus/ui';
 import { ScrollArea } from '@heliannuuthus/ui';
 import { Skeleton } from '@heliannuuthus/ui';
 import { Slider } from '@heliannuuthus/ui';
@@ -20,15 +21,7 @@ import { Spinner } from '@heliannuuthus/ui';
 import { Switch } from '@heliannuuthus/ui';
 import { Table } from '@heliannuuthus/ui';
 import { Toggle } from '@heliannuuthus/ui';
-import {
-  ArrowLeft,
-  Bold,
-  Copy,
-  FilePlus2,
-  Plus,
-  Settings2,
-  Trash2,
-} from 'lucide-react';
+import { Bold, Copy, FilePlus2, Plus, Settings2, Trash2 } from 'lucide-react';
 import { AspectRatioCoverDemo } from './aspect-ratio-preview';
 import { CardBasicDemo } from './card-preview';
 import { ResizableWorkspaceDemo } from './resizable-preview';
@@ -207,19 +200,40 @@ export const minimalComponentPreviews: Record<string, ReactNode> = {
       }
     />
   ),
-  direction: (
-    <DirectionProvider direction="rtl">
-      <div className="minimal-direction" dir="rtl">
-        <div>
-          <strong>واجهة عربية</strong>
-          <span>{docsCopy('组件布局会跟随阅读方向排列')}</span>
+  provider: (
+    <Provider
+      className="minimal-provider"
+      components={{
+        Avatar: { shape: 'square' },
+        Button: { size: 'sm' },
+        Card: { variant: 'outline' },
+      }}
+      theme={{
+        colors: {
+          accent: 'oklch(0.95 0.04 155)',
+          accentForeground: 'oklch(0.42 0.14 155)',
+          primary: 'oklch(0.55 0.17 155)',
+          primaryForeground: 'white',
+        },
+        radius: '0.75rem',
+      }}
+    >
+      <Card
+        footer={<Button>{docsCopy('保存修改')}</Button>}
+        header={{
+          description: docsCopy('新的主题设置已经应用到当前工作区。'),
+          title: docsCopy('配置已保存'),
+        }}
+      >
+        <div className="minimal-provider-profile">
+          <Avatar alt="Heliannuuthus" fallback="HN" />
+          <div>
+            <strong>Heliannuuthus UI</strong>
+            <span>{docsCopy('组件布局会跟随阅读方向排列')}</span>
+          </div>
         </div>
-        <Button variant="outline">
-          {docsCopy('下一步')}
-          <ArrowLeft />
-        </Button>
-      </div>
-    </DirectionProvider>
+      </Card>
+    </Provider>
   ),
   table: (
     <Table.Primitive classNames={{ table: 'minimal-table' }}>

@@ -9,11 +9,18 @@ imports from the package root:
 
 ```tsx
 import '@heliannuuthus/ui/styles.css';
-import { Button, Input, Radio } from '@heliannuuthus/ui';
+import { Button, Input, Provider, Radio } from '@heliannuuthus/ui';
 import './app.css';
 
-<Input.OTP maxLength={6} />
-<Radio.Group options={options} />
+<Provider
+  appearance="system"
+  theme={{ colors: { primary: 'oklch(0.55 0.17 155)' } }}
+  components={{ Button: { size: 'sm' } }}
+>
+  <Input.OTP maxLength={6} />
+  <Radio.Group options={options} />
+  <Button>Save</Button>
+</Provider>;
 ```
 
 This integration is independent of the package manager and build tool. Install
@@ -26,8 +33,9 @@ required. The JavaScript root remains style-free and tree-shakeable.
 
 Semantic token defaults live in a named CSS layer, so unlayered application
 styles can override them even when a component is loaded by an asynchronous
-route. The theme has document-wide scope because tokens, reset, focus rules,
-portals, and composed components share the same visual contract.
+route. `Provider` applies appearance and semantic-token overrides to its
+component tree, while the imported stylesheet supplies document-wide defaults,
+reset, focus rules, and portal styles.
 
 Component subpaths are private implementation details. The package build
 verifies every public export, the root and stylesheet integration, tree shaking,
