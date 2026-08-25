@@ -2175,6 +2175,24 @@ a {
 .typography-stack > *:last-child {
   margin-bottom: 0;
 }
+.typography-title-levels {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: clamp(16px, 3vw, 40px);
+  padding: 12px 4px;
+  overflow-x: auto;
+}
+.typography-title-levels > * {
+  flex: 0 0 auto;
+  margin: 0;
+  white-space: nowrap;
+}
+.example-card-wide .demo-preview:has(.typography-title-levels) {
+  min-height: 180px;
+  padding-block: 32px;
+}
 .button-loader {
   width: 13px;
   height: 13px;

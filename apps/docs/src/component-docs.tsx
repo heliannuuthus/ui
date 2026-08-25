@@ -724,23 +724,23 @@ export const TypographyStory = () => {
         'level 同时选择 h1–h6 语义元素和对应视觉层级，页面应从 h1 开始保持连续顺序。'
       ),
       preview: (
-        <Stack block gap={16}>
-          <Typography.Title>{docsCopy('一级标题')}</Typography.Title>
-          <Typography.Title level={2}>{docsCopy('二级标题')}</Typography.Title>
-          <Typography.Title level={3}>{docsCopy('三级标题')}</Typography.Title>
-          <Typography.Title level={4}>{docsCopy('四级标题')}</Typography.Title>
-          <Typography.Title level={5}>{docsCopy('五级标题')}</Typography.Title>
-          <Typography.Title level={6}>{docsCopy('六级标题')}</Typography.Title>
-        </Stack>
+        <div className="typography-title-levels">
+          <Typography.Title>H1</Typography.Title>
+          <Typography.Title level={2}>H2</Typography.Title>
+          <Typography.Title level={3}>H3</Typography.Title>
+          <Typography.Title level={4}>H4</Typography.Title>
+          <Typography.Title level={5}>H5</Typography.Title>
+          <Typography.Title level={6}>H6</Typography.Title>
+        </div>
       ),
-      code: docsCopy(`import { Typography } from '@heliannuuthus/ui'
+      code: `import { Typography } from '@heliannuuthus/ui'
 
-<Typography.Title>一级标题</Typography.Title>
-<Typography.Title level={2}>二级标题</Typography.Title>
-<Typography.Title level={3}>三级标题</Typography.Title>
-<Typography.Title level={4}>四级标题</Typography.Title>
-<Typography.Title level={5}>五级标题</Typography.Title>
-<Typography.Title level={6}>六级标题</Typography.Title>`),
+<Typography.Title>H1</Typography.Title>
+<Typography.Title level={2}>H2</Typography.Title>
+<Typography.Title level={3}>H3</Typography.Title>
+<Typography.Title level={4}>H4</Typography.Title>
+<Typography.Title level={5}>H5</Typography.Title>
+<Typography.Title level={6}>H6</Typography.Title>`,
       coveredProperties: [
         'Typography.Title.level',
         'Typography.Title.className',
