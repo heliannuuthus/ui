@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {
-  Tooltip as TooltipPrimitive,
-  type TooltipArrowState,
-} from '@base-ui/react/tooltip';
+import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
 
 import { cn } from '../lib/utils';
+import {
+  getPopupArrowEdgeStyle,
+  RoundedPopupArrow,
+} from './internal/popup-arrow';
 import type {
   OpenStateProps,
   PopupAlign,
@@ -79,25 +80,6 @@ const placementConfig: Record<TooltipPlacement, TooltipPlacementConfig> = {
   topRight: { align: 'end', side: 'top' },
 };
 
-const getArrowEdgeStyle = ({
-  align,
-  side,
-}: TooltipArrowState): React.CSSProperties | undefined => {
-  if (align === 'center') {
-    return undefined;
-  }
-
-  if (side === 'top' || side === 'bottom') {
-    return align === 'start'
-      ? { left: 12, right: 'auto' }
-      : { left: 'auto', right: 12 };
-  }
-
-  return align === 'start'
-    ? { bottom: 'auto', top: 8 }
-    : { bottom: 8, top: 'auto' };
-};
-
 const Tooltip = ({
   align = 'center',
   alignOffset = 0,
@@ -141,17 +123,10 @@ const Tooltip = ({
               {arrow !== false ? (
                 <TooltipPrimitive.Arrow
                   data-slot="tooltip-arrow"
-                  className="pointer-events-none z-50 size-4 overflow-visible text-foreground data-[side=bottom]:top-[-16px] data-[side=inline-end]:-rotate-90 data-[side=inline-end]:[inset-inline-start:-16px] data-[side=inline-start]:rotate-90 data-[side=inline-start]:[inset-inline-end:-16px] data-[side=left]:right-[-16px] data-[side=left]:rotate-90 data-[side=right]:left-[-16px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-16px] data-[side=top]:rotate-180 rtl:data-[side=inline-end]:rotate-90 rtl:data-[side=inline-start]:-rotate-90"
-                  style={getArrowEdgeStyle}
-                >
-                  <svg
-                    aria-hidden="true"
-                    className="absolute bottom-[-2px] left-0 h-[10px] w-4 fill-current"
-                    viewBox="0 0 16 10"
-                  >
-                    <path d="M0 8A4 4 0 0 0 2.83 6.83L6.59 3.07A2 2 0 0 1 9.41 3.07L13.17 6.83A4 4 0 0 0 16 8V10H0Z" />
-                  </svg>
-                </TooltipPrimitive.Arrow>
+                  className="text-foreground"
+                  render={<RoundedPopupArrow />}
+                  style={getPopupArrowEdgeStyle}
+                />
               ) : null}
             </TooltipPrimitive.Popup>
           </TooltipPrimitive.Positioner>
