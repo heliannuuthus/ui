@@ -2816,6 +2816,9 @@ export const TooltipPlacementsDemo = () => {
         >
           <Tooltip
             align={placement.align}
+            classNames={{
+              content: 'min-w-36 justify-center font-mono',
+            }}
             content={`${placement.side} · ${placement.align}`}
             delay={100}
             side={placement.side}
