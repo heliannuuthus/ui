@@ -66,51 +66,52 @@ type TooltipPlacementConfig = {
   side: PopupSide;
 };
 
-const arrowInset = 12;
 const arrowCrossSize = 16;
+const arrowOffsetHorizontal = 12;
+const arrowOffsetVertical = 8;
 const placementConfig: Record<TooltipPlacement, TooltipPlacementConfig> = {
   bottom: { align: 'center', side: 'bottom' },
   bottomLeft: {
     align: 'start',
-    arrowStyle: { left: arrowInset, right: 'auto' },
+    arrowStyle: { left: arrowOffsetHorizontal, right: 'auto' },
     side: 'bottom',
   },
   bottomRight: {
     align: 'end',
-    arrowStyle: { left: 'auto', right: arrowInset },
+    arrowStyle: { left: 'auto', right: arrowOffsetHorizontal },
     side: 'bottom',
   },
   left: { align: 'center', side: 'left' },
   leftBottom: {
     align: 'end',
-    arrowStyle: { bottom: arrowInset, top: 'auto' },
+    arrowStyle: { bottom: arrowOffsetVertical, top: 'auto' },
     side: 'left',
   },
   leftTop: {
     align: 'start',
-    arrowStyle: { bottom: 'auto', top: arrowInset },
+    arrowStyle: { bottom: 'auto', top: arrowOffsetVertical },
     side: 'left',
   },
   right: { align: 'center', side: 'right' },
   rightBottom: {
     align: 'end',
-    arrowStyle: { bottom: arrowInset, top: 'auto' },
+    arrowStyle: { bottom: arrowOffsetVertical, top: 'auto' },
     side: 'right',
   },
   rightTop: {
     align: 'start',
-    arrowStyle: { bottom: 'auto', top: arrowInset },
+    arrowStyle: { bottom: 'auto', top: arrowOffsetVertical },
     side: 'right',
   },
   top: { align: 'center', side: 'top' },
   topLeft: {
     align: 'start',
-    arrowStyle: { left: arrowInset, right: 'auto' },
+    arrowStyle: { left: arrowOffsetHorizontal, right: 'auto' },
     side: 'top',
   },
   topRight: {
     align: 'end',
-    arrowStyle: { left: 'auto', right: arrowInset },
+    arrowStyle: { left: 'auto', right: arrowOffsetHorizontal },
     side: 'top',
   },
 };
@@ -146,10 +147,14 @@ const Tooltip = ({
             resolvedSide === 'top' || resolvedSide === 'bottom'
               ? anchor.width
               : anchor.height;
+          const arrowOffset =
+            resolvedSide === 'top' || resolvedSide === 'bottom'
+              ? arrowOffsetHorizontal
+              : arrowOffsetVertical;
 
           return (
             alignOffset +
-            Math.max(0, anchorSize / 2 - arrowInset - arrowCrossSize / 2)
+            Math.max(0, anchorSize / 2 - arrowOffset - arrowCrossSize / 2)
           );
         }
       : alignOffset;
