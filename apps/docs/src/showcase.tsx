@@ -45,6 +45,7 @@ import {
   PanelLeft,
   Search,
   SearchX,
+  SlidersHorizontal,
   Sparkles,
   Sun,
   X,
@@ -329,6 +330,48 @@ export const ButtonDemo = () => {
 }`);
 const styleImportCode = `import '@heliannuuthus/ui/styles.css'
 import './app.css'`;
+const providerCode = `import { Provider } from '@heliannuuthus/ui'
+
+<Provider
+  appearance="system"
+  direction="ltr"
+  theme={{
+    colors: { primary: 'oklch(0.55 0.17 155)' },
+    darkColors: { primary: 'oklch(0.72 0.15 155)' },
+    radius: '0.75rem',
+  }}
+  components={{
+    Avatar: { shape: 'square' },
+    Button: { size: 'sm' },
+    Card: { variant: 'outline' },
+  }}
+>
+  <App />
+</Provider>`;
+
+const providerColorTokens = [
+  'background',
+  'foreground',
+  'primary',
+  'primaryForeground',
+  'secondary',
+  'secondaryForeground',
+  'muted',
+  'mutedForeground',
+  'accent',
+  'accentForeground',
+  'destructive',
+  'info',
+  'success',
+  'warning',
+  'border',
+  'input',
+  'ring',
+  'card',
+  'cardForeground',
+  'popover',
+  'popoverForeground',
+] as const;
 
 const navItems = [
   { labelKey: 'navigation.gettingStarted', to: '/docs/getting-started' },
@@ -720,6 +763,46 @@ const HomePage = () => {
 const GettingStartedPage = () => {
   const path = useLocalizedPath();
   const { t } = useTranslation();
+  const configurationItems = [
+    {
+      description: t('gettingStarted.appearanceDescription'),
+      name: 'appearance',
+      values: ['light', 'dark', 'system'],
+    },
+    {
+      description: t('gettingStarted.directionDescription'),
+      name: 'direction',
+      values: ['ltr', 'rtl'],
+    },
+    {
+      description: t('gettingStarted.colorsDescription'),
+      name: 'theme.colors',
+      values: providerColorTokens,
+    },
+    {
+      description: t('gettingStarted.darkColorsDescription'),
+      name: 'theme.darkColors',
+    },
+    {
+      description: t('gettingStarted.radiusDescription'),
+      name: 'theme.radius',
+    },
+    {
+      description: t('gettingStarted.avatarDefaultsDescription'),
+      name: 'components.Avatar',
+      values: ['shape', 'size'],
+    },
+    {
+      description: t('gettingStarted.buttonDefaultsDescription'),
+      name: 'components.Button',
+      values: ['block', 'size', 'variant'],
+    },
+    {
+      description: t('gettingStarted.cardDefaultsDescription'),
+      name: 'components.Card',
+      values: ['variant'],
+    },
+  ] as const;
 
   return (
     <DocLayout
@@ -741,6 +824,13 @@ const GettingStartedPage = () => {
           label: t('gettingStarted.usage'),
           href: '#usage',
           icon: <Blocks data-icon="inline-start" strokeWidth={2.5} />,
+        },
+        {
+          label: t('gettingStarted.configuration'),
+          href: '#global-configuration',
+          icon: (
+            <SlidersHorizontal data-icon="inline-start" strokeWidth={2.5} />
+          ),
         },
         {
           label: t('gettingStarted.next'),
@@ -776,6 +866,49 @@ const GettingStartedPage = () => {
       >
         <CodeBlock code={demoCode} fileName="button-example.tsx" />
       </DocSection>
+      <DocSection
+        description={t('gettingStarted.configurationDescription')}
+        icon={<SlidersHorizontal strokeWidth={2.5} />}
+        id="global-configuration"
+        step="04"
+        title={t('gettingStarted.configuration')}
+      >
+        <CodeBlock code={providerCode} fileName="app.tsx" />
+        <Stack block gap={12}>
+          <Typography.Title level={3} className="text-lg">
+            {t('gettingStarted.configurationItems')}
+          </Typography.Title>
+          <dl className="provider-contract">
+            {configurationItems.map((item) => (
+              <div key={item.name}>
+                <dt>
+                  <Typography.Code>{item.name}</Typography.Code>
+                </dt>
+                <dd>
+                  <Typography.Text as="p" size="sm" tone="muted">
+                    {item.description}
+                  </Typography.Text>
+                  {'values' in item && item.values ? (
+                    <div className="provider-contract-values">
+                      {item.values.map((value) => (
+                        <Typography.Code key={value}>{value}</Typography.Code>
+                      ))}
+                    </div>
+                  ) : null}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </Stack>
+        <Item
+          className="provider-boundary"
+          description={t('gettingStarted.configurationBoundaryDescription')}
+          media={<Sparkles strokeWidth={2.5} />}
+          mediaType="icon"
+          title={t('gettingStarted.configurationBoundary')}
+          variant="outline"
+        />
+      </DocSection>
       <Item
         actions={<ArrowRight />}
         className="next-card"
@@ -786,7 +919,7 @@ const GettingStartedPage = () => {
         href={path('/components')}
         title={
           <Stack align="center" gap={8} orientation="horizontal">
-            <Tag type="primary">04</Tag>
+            <Tag type="primary">05</Tag>
             <Typography.Text
               as="div"
               size="lg"

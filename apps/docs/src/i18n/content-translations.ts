@@ -2275,7 +2275,6 @@ const ActionCell = () => {
     'Set decorative status icons and automatically hide accessibility semantics.',
   '设置自动播放间隔、首尾循环和悬停暂停策略。':
     'Set auto-play intervals, start-to-end loops, and hover pause strategies.',
-  '设置语义颜色令牌。': 'Set the semantic color token.',
   社交媒体封面: 'social media cover',
   身份团队: 'identity team',
   深层路径折叠: 'Deep path collapse',
@@ -3501,8 +3500,6 @@ const ActionCell = () => {
   '组合纵向区域；直接包含 Sidebar 时自动切换为横向排列。':
     'Combine vertical areas; automatically switch to horizontal arrangement when directly containing Sidebar.',
   组件: 'components',
-  组件布局会跟随阅读方向排列:
-    'Component layout will follow the reading direction',
   组件发布工作台: 'Component publishing workbench',
   组件范围: 'component scope',
   '组件会根据 orientation 提供对应的分隔方向语义。':
@@ -3612,10 +3609,6 @@ const ActionCell = () => {
   'CSV 表格': 'CSV table',
   'Table 是基于 Table 组装好的默认数据表格：除筛选、排序和分页外，也完整提供固定列、省略 Tooltip、Footer、行展开与虚拟滚动。':
     'Table is a default data table assembled from Table primitives. It also provides fixed columns, ellipsis tooltips, Footer, row expansion, and virtual scrolling.',
-  '统一管理组件树的配色、外观、书写方向和组件默认属性。':
-    'Manage palette, appearance, writing direction, and component defaults for the component tree in one place.',
-  '在应用根部集中设置语义色、外观、书写方向和组件默认属性；组件自身显式传入的属性始终优先。':
-    'Set semantic colors, appearance, writing direction, and component defaults at the application root; explicit component props always take precedence.',
   'Drawer 打开方向': 'Drawer opening direction',
   'ESLint 与 Prettier 已完成': 'ESLint and Prettier completed',
   'expandable 会自动补齐展开列、键盘按钮和跨列详情行；固定在起始侧的业务列会自动避开展开按钮。':

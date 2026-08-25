@@ -491,6 +491,45 @@ a {
 .next-card [data-slot='item-actions'] {
   color: var(--primary);
 }
+.provider-contract {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--background);
+}
+.provider-contract > div {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.34fr) minmax(0, 1fr);
+  gap: 24px;
+  padding: 18px 20px;
+}
+.provider-contract > div + div {
+  border-top: 1px solid var(--line);
+}
+.provider-contract dt,
+.provider-contract dd,
+.provider-contract dd p {
+  margin: 0;
+}
+.provider-contract dt code {
+  white-space: nowrap;
+}
+.provider-contract dd {
+  min-width: 0;
+}
+.provider-contract-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.provider-contract-values code {
+  font-size: 11px;
+}
+.provider-boundary {
+  align-items: flex-start;
+  background: color-mix(in srgb, var(--primary) 4%, var(--background));
+}
 .design-values article {
   display: grid;
   grid-template-columns: 90px 1fr;
@@ -2213,8 +2252,7 @@ a {
 .minimal-table,
 .minimal-alert,
 .minimal-command,
-.minimal-context-menu-trigger,
-.minimal-provider {
+.minimal-context-menu-trigger {
   width: min(480px, 100%);
 }
 .aspect-ratio-demo {
@@ -3499,28 +3537,6 @@ a {
   color: var(--docs-muted);
   font-size: 11px;
 }
-.minimal-provider {
-  padding: 18px;
-  border-radius: calc(var(--radius) * 1.4);
-  color: var(--foreground);
-  background: var(--background);
-}
-.minimal-provider-profile {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.minimal-provider-profile > div {
-  display: grid;
-  gap: 3px;
-}
-.minimal-provider-profile strong {
-  font-size: 14px;
-}
-.minimal-provider-profile span {
-  color: var(--muted-foreground);
-  font-size: 11px;
-}
 .demo-code {
   border-top: 1px solid var(--line);
   animation: demo-code-reveal 180ms ease-out;
@@ -3922,6 +3938,14 @@ a {
   }
   .feature-strip div:nth-child(-n + 2) {
     border-bottom: 1px solid var(--line);
+  }
+  .provider-contract > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    padding: 16px;
+  }
+  .provider-contract dt code {
+    white-space: normal;
   }
   .home-section {
     padding: 75px 20px;

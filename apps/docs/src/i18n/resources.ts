@@ -123,6 +123,23 @@ const zh = {
         '在应用入口导入一次共享样式，确保所有组件都能正确显示。',
       usage: '使用组件',
       usageDescription: '从 @heliannuuthus/ui 导入所需组件并在页面中使用。',
+      configuration: '全局配置',
+      configurationDescription:
+        '在应用根部声明跨组件共享的视觉规则。只有下面列出的属性会被全局管理。',
+      configurationItems: '可配置项',
+      appearanceDescription:
+        '选择 light、dark 或跟随操作系统的 system，默认使用 system。',
+      directionDescription: '设置 ltr 或 rtl，默认使用 ltr。',
+      colorsDescription: '覆盖浅色模式的语义色；只设置需要改变的令牌即可。',
+      darkColorsDescription:
+        '覆盖深色模式的语义色，可配置项与 colors 完全相同；未设置的值继续使用 colors 或默认主题。',
+      radiusDescription: '设置组件共享的基础圆角值。',
+      avatarDefaultsDescription: '可统一设置 shape 与 size。',
+      buttonDefaultsDescription: '可统一设置 block、size 与 variant。',
+      cardDefaultsDescription: '可统一设置 variant。',
+      configurationBoundary: '配置边界',
+      configurationBoundaryDescription:
+        'Provider 只管理跨组件的视觉默认值，不管理文案、事件、业务状态或数据行为。组件显式传入的属性始终优先于全局默认值。',
       next: '下一步',
       nextTitle: '浏览完整组件目录',
       nextDescription: '继续查看组件示例、API 与具体使用建议。',
@@ -285,6 +302,25 @@ const en = {
       usage: 'Use components',
       usageDescription:
         'Import the components you need from @heliannuuthus/ui and use them in your page.',
+      configuration: 'Global configuration',
+      configurationDescription:
+        'Declare shared visual rules at the application root. Only the properties listed below are managed globally.',
+      configurationItems: 'Configurable properties',
+      appearanceDescription:
+        'Choose light, dark, or system to follow the operating system. The default is system.',
+      directionDescription: 'Set ltr or rtl. The default is ltr.',
+      colorsDescription:
+        'Override semantic colors for light mode. Specify only the tokens you need to change.',
+      darkColorsDescription:
+        'Override semantic colors for dark mode with the same token set as colors. Unspecified values continue to use colors or the default theme.',
+      radiusDescription: 'Set the shared base radius for components.',
+      avatarDefaultsDescription: 'Set shared shape and size defaults.',
+      buttonDefaultsDescription:
+        'Set shared block, size, and variant defaults.',
+      cardDefaultsDescription: 'Set the shared variant default.',
+      configurationBoundary: 'Configuration boundary',
+      configurationBoundaryDescription:
+        'Provider manages cross-component visual defaults only. It does not manage copy, events, business state, or data behavior. Explicit component props always override global defaults.',
       next: 'Next step',
       nextTitle: 'Browse the full component catalog',
       nextDescription:

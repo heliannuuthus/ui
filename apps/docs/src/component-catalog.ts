@@ -2,7 +2,7 @@ export const componentGroups = [
   {
     key: 'general',
     title: '通用',
-    items: ['Provider', 'Button', 'Typography', 'Tag', 'Kbd'],
+    items: ['Button', 'Typography', 'Tag', 'Kbd'],
   },
   {
     key: 'layout',
@@ -94,7 +94,6 @@ export type ComponentName = (typeof componentCatalog)[number];
 export type ComponentSlug = KebabCase<ComponentName>;
 
 export const zhComponentNames = {
-  Provider: '全局配置',
   Button: '按钮',
   Typography: '排版',
   Tag: '标签',

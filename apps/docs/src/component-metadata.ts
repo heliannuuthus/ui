@@ -276,11 +276,6 @@ export const componentSearchMetadata = {
     ['右键菜单', '上下文菜单'],
     ['right click', 'actions'],
   ],
-  provider: [
-    'Configures theme, appearance, direction, and component defaults for a component tree.',
-    ['全局配置', '主题', '配色', '文字方向'],
-    ['theme provider', 'configuration', 'rtl', 'component defaults'],
-  ],
 } satisfies Record<
   ComponentSlug,
   readonly [
