@@ -153,6 +153,7 @@ import {
   TableFixedDemo,
   TablePaginationDemo,
   TableReleaseDemo,
+  TooltipArrowDemo,
   TooltipBasicDemo,
   TooltipPlacementsDemo,
 } from './data-display-previews';
@@ -7020,20 +7021,37 @@ const ActionCell = () => {
       previewHeight: 300,
     },
     {
-      title: docsCopy('八个箭头位置'),
+      title: docsCopy('十二个位置'),
       description: docsCopy(
-        'placement 表示箭头落在触发器边缘的位置，浮层会从该位置向外展开。'
+        'placement 表示浮层相对触发器的位置；边缘位置默认保持浮层边缘对齐，arrow 可控制箭头显示或改为指向触发器中心。'
       ),
       preview: <TooltipPlacementsDemo />,
       code: docsCopy(`import { Button, Tooltip } from '@heliannuuthus/ui'
 
 <Tooltip
-  content="左上提示"
+  content="上方靠左提示"
   delay={100}
-  placement="top-left"
-  trigger={<Button>左上</Button>}
+  placement="topLeft"
+  trigger={<Button>上方靠左</Button>}
 />`),
       previewHeight: 440,
+      wide: true,
+    },
+    {
+      title: docsCopy('箭头'),
+      description: docsCopy(
+        '默认显示与边缘位置对应的箭头；可让箭头指向触发器中心，也可将其隐藏。'
+      ),
+      preview: <TooltipArrowDemo />,
+      code: docsCopy(`import { Button, Tooltip } from '@heliannuuthus/ui'
+
+<Tooltip
+  arrow={{ pointAtCenter: true }}
+  content="指向中心"
+  placement="topLeft"
+  trigger={<Button>指向中心</Button>}
+/>`),
+      previewHeight: 300,
       wide: true,
     },
   ],
@@ -11377,7 +11395,15 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       name: 'placement',
       type: 'TooltipPlacement',
       description: docsCopy(
-        '设置箭头落在触发器边缘的位置；使用时无需同时设置 side 或 align。'
+        '设置浮层相对触发器的位置；使用时无需同时设置 side 或 align。'
+      ),
+    },
+    {
+      name: 'arrow',
+      type: 'boolean | TooltipArrowOptions',
+      defaultValue: 'true',
+      description: docsCopy(
+        '设置是否显示箭头；传入 pointAtCenter 可让边缘位置的箭头指向触发器中心。'
       ),
     },
     {
@@ -13370,16 +13396,26 @@ appendTypePreviews('table', [
 
 appendTypePreviews('tooltip', [
   {
+    name: 'TooltipArrowOptions',
+    definition: `type TooltipArrowOptions = {
+  pointAtCenter?: boolean
+}`,
+  },
+  {
     name: 'TooltipPlacement',
     definition: `type TooltipPlacement =
-  | 'top-left'
+  | 'topLeft'
   | 'top'
-  | 'top-right'
+  | 'topRight'
+  | 'leftTop'
+  | 'left'
+  | 'leftBottom'
+  | 'rightTop'
   | 'right'
-  | 'bottom-right'
+  | 'rightBottom'
+  | 'bottomLeft'
   | 'bottom'
-  | 'bottom-left'
-  | 'left'`,
+  | 'bottomRight'`,
   },
 ]);
 

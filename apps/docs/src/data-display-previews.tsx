@@ -2753,14 +2753,18 @@ export const TableCellDemo = () => {
 };
 
 const tooltipPlacements = [
-  { label: docsCopy('左上'), placement: 'top-left' },
+  { label: docsCopy('上方靠左'), placement: 'topLeft' },
   { label: docsCopy('上方'), placement: 'top' },
-  { label: docsCopy('右上'), placement: 'top-right' },
+  { label: docsCopy('上方靠右'), placement: 'topRight' },
+  { label: docsCopy('左侧靠上'), placement: 'leftTop' },
   { label: docsCopy('左侧'), placement: 'left' },
+  { label: docsCopy('左侧靠下'), placement: 'leftBottom' },
+  { label: docsCopy('右侧靠上'), placement: 'rightTop' },
   { label: docsCopy('右侧'), placement: 'right' },
-  { label: docsCopy('左下'), placement: 'bottom-left' },
+  { label: docsCopy('右侧靠下'), placement: 'rightBottom' },
+  { label: docsCopy('下方靠左'), placement: 'bottomLeft' },
   { label: docsCopy('下方'), placement: 'bottom' },
-  { label: docsCopy('右下'), placement: 'bottom-right' },
+  { label: docsCopy('下方靠右'), placement: 'bottomRight' },
 ] as const;
 
 export const TooltipBasicDemo = () => {
@@ -2776,7 +2780,7 @@ export const TooltipPlacementsDemo = () => {
   return (
     <div
       className="display-tooltip-placements"
-      aria-label={docsCopy('Tooltip 八个箭头位置')}
+      aria-label={docsCopy('Tooltip 十二个位置')}
     >
       {tooltipPlacements.map((placement) => (
         <div
@@ -2800,6 +2804,30 @@ export const TooltipPlacementsDemo = () => {
         <span>Tooltip</span>
         <small>{docsCopy('悬停外围按钮')}</small>
       </div>
+    </div>
+  );
+};
+
+export const TooltipArrowDemo = () => {
+  return (
+    <div className="display-tooltip-arrow-options">
+      <Tooltip
+        content={docsCopy('默认箭头')}
+        placement="topLeft"
+        trigger={<Button variant="outline">{docsCopy('边缘对齐')}</Button>}
+      />
+      <Tooltip
+        arrow={{ pointAtCenter: true }}
+        content={docsCopy('指向中心')}
+        placement="topLeft"
+        trigger={<Button variant="outline">{docsCopy('指向中心')}</Button>}
+      />
+      <Tooltip
+        arrow={false}
+        content={docsCopy('隐藏箭头')}
+        placement="topLeft"
+        trigger={<Button variant="outline">{docsCopy('隐藏箭头')}</Button>}
+      />
     </div>
   );
 };

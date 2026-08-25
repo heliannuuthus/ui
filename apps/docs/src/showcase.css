@@ -6478,10 +6478,12 @@ a {
   display: grid;
   grid-template-areas:
     'top-left top top-right'
+    'left-top reference right-top'
     'left reference right'
+    'left-bottom reference right-bottom'
     'bottom-left bottom bottom-right';
   grid-template-columns: repeat(3, minmax(82px, 112px));
-  grid-template-rows: auto minmax(104px, auto) auto;
+  grid-template-rows: repeat(5, auto);
   place-content: center;
   place-items: center;
   gap: 22px 28px;
@@ -6502,7 +6504,7 @@ a {
   grid-area: var(--tooltip-placement);
 }
 
-.display-tooltip-placement[data-placement='top-left'] {
+.display-tooltip-placement[data-placement='topLeft'] {
   --tooltip-placement: top-left;
 }
 
@@ -6510,32 +6512,59 @@ a {
   --tooltip-placement: top;
 }
 
-.display-tooltip-placement[data-placement='top-right'] {
+.display-tooltip-placement[data-placement='topRight'] {
   --tooltip-placement: top-right;
+}
+
+.display-tooltip-placement[data-placement='leftTop'] {
+  --tooltip-placement: left-top;
 }
 
 .display-tooltip-placement[data-placement='left'] {
   --tooltip-placement: left;
 }
 
+.display-tooltip-placement[data-placement='leftBottom'] {
+  --tooltip-placement: left-bottom;
+}
+
+.display-tooltip-placement[data-placement='rightTop'] {
+  --tooltip-placement: right-top;
+}
+
 .display-tooltip-placement[data-placement='right'] {
   --tooltip-placement: right;
+}
+
+.display-tooltip-placement[data-placement='rightBottom'] {
+  --tooltip-placement: right-bottom;
 }
 
 .display-tooltip-placement[data-placement='bottom'] {
   --tooltip-placement: bottom;
 }
 
-.display-tooltip-placement[data-placement='bottom-left'] {
+.display-tooltip-placement[data-placement='bottomLeft'] {
   --tooltip-placement: bottom-left;
 }
 
-.display-tooltip-placement[data-placement='bottom-right'] {
+.display-tooltip-placement[data-placement='bottomRight'] {
   --tooltip-placement: bottom-right;
 }
 
 .display-tooltip-placement button {
   min-width: 72px;
+}
+
+.display-tooltip-arrow-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.display-tooltip-arrow-options button {
+  min-width: 112px;
 }
 
 .display-tooltip-reference {

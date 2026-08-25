@@ -16,15 +16,23 @@ type TooltipStyles = {
   content?: React.CSSProperties;
 };
 
+type TooltipArrowOptions = {
+  pointAtCenter?: boolean;
+};
+
 type TooltipPlacement =
   | 'bottom'
-  | 'bottom-left'
-  | 'bottom-right'
+  | 'bottomLeft'
+  | 'bottomRight'
   | 'left'
+  | 'leftBottom'
+  | 'leftTop'
   | 'right'
+  | 'rightBottom'
+  | 'rightTop'
   | 'top'
-  | 'top-left'
-  | 'top-right';
+  | 'topLeft'
+  | 'topRight';
 
 type TooltipPositionProps =
   | {
@@ -42,6 +50,7 @@ type TooltipPositionProps =
 
 type TooltipProps = OpenStateProps &
   TooltipPositionProps & {
+    arrow?: boolean | TooltipArrowOptions;
     classNames?: TooltipClassNames;
     content: React.ReactNode;
     delay?: number;
@@ -51,36 +60,64 @@ type TooltipProps = OpenStateProps &
     trigger: React.ReactElement;
   };
 
-const placementSides: Record<TooltipPlacement, PopupSide> = {
-  bottom: 'bottom',
-  'bottom-left': 'bottom',
-  'bottom-right': 'bottom',
-  left: 'left',
-  right: 'right',
-  top: 'top',
-  'top-left': 'top',
-  'top-right': 'top',
+type TooltipPlacementConfig = {
+  align: PopupAlign;
+  arrowStyle?: React.CSSProperties;
+  side: PopupSide;
 };
 
-const getPlacementAnchorRect = (rect: DOMRect, placement: TooltipPlacement) => {
-  const horizontalInset = Math.min(16, rect.width / 2);
-  const x = placement.endsWith('-left')
-    ? rect.left + horizontalInset
-    : placement.endsWith('-right')
-      ? rect.right - horizontalInset
-      : rect.left + rect.width / 2;
-  const y = placement.startsWith('top')
-    ? rect.top
-    : placement.startsWith('bottom')
-      ? rect.bottom
-      : rect.top + rect.height / 2;
-
-  return new DOMRect(x, y, 0, 0);
+const arrowInset = 12;
+const placementConfig: Record<TooltipPlacement, TooltipPlacementConfig> = {
+  bottom: { align: 'center', side: 'bottom' },
+  bottomLeft: {
+    align: 'start',
+    arrowStyle: { left: arrowInset, right: 'auto' },
+    side: 'bottom',
+  },
+  bottomRight: {
+    align: 'end',
+    arrowStyle: { left: 'auto', right: arrowInset },
+    side: 'bottom',
+  },
+  left: { align: 'center', side: 'left' },
+  leftBottom: {
+    align: 'end',
+    arrowStyle: { bottom: arrowInset, top: 'auto' },
+    side: 'left',
+  },
+  leftTop: {
+    align: 'start',
+    arrowStyle: { bottom: 'auto', top: arrowInset },
+    side: 'left',
+  },
+  right: { align: 'center', side: 'right' },
+  rightBottom: {
+    align: 'end',
+    arrowStyle: { bottom: arrowInset, top: 'auto' },
+    side: 'right',
+  },
+  rightTop: {
+    align: 'start',
+    arrowStyle: { bottom: 'auto', top: arrowInset },
+    side: 'right',
+  },
+  top: { align: 'center', side: 'top' },
+  topLeft: {
+    align: 'start',
+    arrowStyle: { left: arrowInset, right: 'auto' },
+    side: 'top',
+  },
+  topRight: {
+    align: 'end',
+    arrowStyle: { left: 'auto', right: arrowInset },
+    side: 'top',
+  },
 };
 
 const Tooltip = ({
   align = 'center',
   alignOffset = 0,
+  arrow = true,
   classNames,
   content,
   delay = 0,
@@ -91,40 +128,25 @@ const Tooltip = ({
   trigger,
   ...props
 }: TooltipProps) => {
-  const triggerRef = React.useRef<HTMLElement>(null);
-  const setTriggerRef = React.useCallback((element: HTMLElement | null) => {
-    triggerRef.current = element;
-  }, []);
-  const placementAnchor = React.useMemo(() => {
-    if (!placement) return undefined;
-
-    return {
-      get contextElement() {
-        return triggerRef.current ?? undefined;
-      },
-      getBoundingClientRect() {
-        const rect = triggerRef.current?.getBoundingClientRect();
-        return rect
-          ? getPlacementAnchorRect(rect, placement)
-          : new DOMRect(0, 0, 0, 0);
-      },
-    };
-  }, [placement]);
+  const resolvedPlacement = placement ? placementConfig[placement] : undefined;
+  const arrowPointsAtCenter =
+    typeof arrow === 'object' && arrow.pointAtCenter === true;
+  const arrowStyle = arrowPointsAtCenter
+    ? undefined
+    : resolvedPlacement?.arrowStyle;
 
   return (
     <TooltipPrimitive.Provider delay={delay}>
       <TooltipPrimitive.Root data-slot="tooltip" {...props}>
         <TooltipPrimitive.Trigger
           data-slot="tooltip-trigger"
-          ref={setTriggerRef}
           render={trigger}
         />
         <TooltipPrimitive.Portal>
           <TooltipPrimitive.Positioner
-            align={placement ? 'center' : align}
+            align={resolvedPlacement?.align ?? align}
             alignOffset={alignOffset}
-            anchor={placementAnchor}
-            side={placement ? placementSides[placement] : side}
+            side={resolvedPlacement?.side ?? side}
             sideOffset={sideOffset}
             className="isolate z-50"
           >
@@ -137,7 +159,12 @@ const Tooltip = ({
               style={styles?.content}
             >
               {content}
-              <TooltipPrimitive.Arrow className="z-50 size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground data-[side=bottom]:top-1 data-[side=inline-end]:top-1/2! data-[side=inline-end]:-left-1 data-[side=inline-end]:translate-x-[1.5px] data-[side=inline-end]:-translate-y-1/2 data-[side=inline-start]:top-1/2! data-[side=inline-start]:-right-1 data-[side=inline-start]:translate-x-[-1.5px] data-[side=inline-start]:-translate-y-1/2 data-[side=left]:top-1/2! data-[side=left]:-right-1 data-[side=left]:translate-x-[-1.5px] data-[side=left]:-translate-y-1/2 data-[side=right]:top-1/2! data-[side=right]:-left-1 data-[side=right]:translate-x-[1.5px] data-[side=right]:-translate-y-1/2 data-[side=top]:-bottom-2.5" />
+              {arrow !== false ? (
+                <TooltipPrimitive.Arrow
+                  className="z-50 size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground data-[side=bottom]:top-1 data-[side=inline-end]:top-1/2 data-[side=inline-end]:-left-1 data-[side=inline-end]:translate-x-[1.5px] data-[side=inline-end]:-translate-y-1/2 data-[side=inline-start]:top-1/2 data-[side=inline-start]:-right-1 data-[side=inline-start]:translate-x-[-1.5px] data-[side=inline-start]:-translate-y-1/2 data-[side=left]:top-1/2 data-[side=left]:-right-1 data-[side=left]:translate-x-[-1.5px] data-[side=left]:-translate-y-1/2 data-[side=right]:top-1/2 data-[side=right]:-left-1 data-[side=right]:translate-x-[1.5px] data-[side=right]:-translate-y-1/2 data-[side=top]:-bottom-2.5"
+                  style={arrowStyle}
+                />
+              ) : null}
             </TooltipPrimitive.Popup>
           </TooltipPrimitive.Positioner>
         </TooltipPrimitive.Portal>
@@ -148,6 +175,7 @@ const Tooltip = ({
 
 export {
   Tooltip,
+  type TooltipArrowOptions,
   type TooltipClassNames,
   type TooltipPlacement,
   type TooltipProps,
