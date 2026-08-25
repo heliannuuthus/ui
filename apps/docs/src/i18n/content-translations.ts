@@ -1546,10 +1546,10 @@ const ActionCell = () => {
     'Continuously place content of different heights into the current shortest column, and allow specified content to occupy the entire row.',
   '将菜单绑定到明确的内容区域，右键或键盘菜单键打开与当前对象相关的操作。':
     'Bind menus to explicit content areas, and right-click or keyboard menu keys to open actions related to the current object.',
-  'placement 表示浮层相对触发器的位置；边缘位置保持浮层边缘对齐，箭头始终由定位引擎指向触发器。':
-    'placement defines the popup position relative to the trigger; edge placements align popup edges while the positioning engine keeps the arrow pointed at the trigger.',
-  '箭头默认由定位引擎指向触发器，也可将其隐藏。':
-    'The positioning engine points the arrow at the trigger by default; the arrow can also be hidden.',
+  'placement 表示浮层相对触发器的位置；边缘位置保持浮层边缘对齐，并将箭头固定在对应边缘的安全区。':
+    'placement defines the popup position relative to the trigger; edge placements align popup edges and keep the arrow within the corresponding edge safe area.',
+  '箭头默认匹配 placement 的落点，也可将其隐藏。':
+    'The arrow matches the placement anchor point by default and can also be hidden.',
   '将错误语义和颜色传递给整个字段。':
     'Pass error semantics and color to the entire field.',
   '将互斥选项扩展为整行可点击的卡片，同时保留原生单选语义。':
@@ -2061,12 +2061,12 @@ const ActionCell = () => {
     'Set Tooltip orientation, alignment and spacing.',
   '设置浮层相对触发器的位置；使用时无需同时设置 side 或 align。':
     'Choose the popup position relative to the trigger; do not set side or align at the same time.',
-  '设置是否显示自动指向触发器的箭头。':
-    'Show or hide the arrow that automatically points at the trigger.',
+  '设置是否显示匹配 placement 落点的箭头。':
+    'Show or hide the arrow that matches the placement anchor point.',
   '不使用 placement 时，设置浮层位于触发器的哪一侧。':
     'Choose which side of the trigger contains the popup when placement is not used.',
-  '设置浮层盒子沿 side 方向的交叉轴对齐；箭头仍然指向触发器。':
-    'Align the popup box along the cross axis of side; the arrow still points to the trigger.',
+  '设置浮层盒子沿 side 方向的交叉轴对齐，并匹配箭头的边缘落点。':
+    'Align the popup box along the cross axis of side and match the arrow edge anchor point.',
   '设置浮层与触发器沿 side 方向的间距。':
     'Set the distance between the popup and trigger along side.',
   '设置浮层沿交叉轴的额外偏移。':

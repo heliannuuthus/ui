@@ -7023,7 +7023,7 @@ const ActionCell = () => {
     {
       title: docsCopy('十二个位置'),
       description: docsCopy(
-        'placement 表示浮层相对触发器的位置；边缘位置保持浮层边缘对齐，箭头始终由定位引擎指向触发器。'
+        'placement 表示浮层相对触发器的位置；边缘位置保持浮层边缘对齐，并将箭头固定在对应边缘的安全区。'
       ),
       preview: <TooltipPlacementsDemo />,
       code: docsCopy(`import { Button, Tooltip } from '@heliannuuthus/ui'
@@ -7039,7 +7039,7 @@ const ActionCell = () => {
     },
     {
       title: docsCopy('箭头'),
-      description: docsCopy('箭头默认由定位引擎指向触发器，也可将其隐藏。'),
+      description: docsCopy('箭头默认匹配 placement 的落点，也可将其隐藏。'),
       preview: <TooltipArrowDemo />,
       code: docsCopy(`import { Button, Tooltip } from '@heliannuuthus/ui'
 
@@ -11399,7 +11399,7 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       name: 'arrow',
       type: 'boolean',
       defaultValue: 'true',
-      description: docsCopy('设置是否显示自动指向触发器的箭头。'),
+      description: docsCopy('设置是否显示匹配 placement 落点的箭头。'),
     },
     {
       name: 'side',
@@ -11412,7 +11412,7 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       name: 'align',
       type: "'start' | 'center' | 'end'",
       description: docsCopy(
-        '设置浮层盒子沿 side 方向的交叉轴对齐；箭头仍然指向触发器。'
+        '设置浮层盒子沿 side 方向的交叉轴对齐，并匹配箭头的边缘落点。'
       ),
     },
     {

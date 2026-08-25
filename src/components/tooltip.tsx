@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
+import {
+  Tooltip as TooltipPrimitive,
+  type TooltipArrowState,
+} from '@base-ui/react/tooltip';
 
 import { cn } from '../lib/utils';
 import type {
@@ -76,6 +79,25 @@ const placementConfig: Record<TooltipPlacement, TooltipPlacementConfig> = {
   topRight: { align: 'end', side: 'top' },
 };
 
+const getArrowEdgeStyle = ({
+  align,
+  side,
+}: TooltipArrowState): React.CSSProperties | undefined => {
+  if (align === 'center') {
+    return undefined;
+  }
+
+  if (side === 'top' || side === 'bottom') {
+    return align === 'start'
+      ? { left: 12, right: 'auto' }
+      : { left: 'auto', right: 12 };
+  }
+
+  return align === 'start'
+    ? { bottom: 'auto', top: 8 }
+    : { bottom: 8, top: 'auto' };
+};
+
 const Tooltip = ({
   align = 'center',
   alignOffset = 0,
@@ -85,7 +107,7 @@ const Tooltip = ({
   delay = 0,
   placement,
   side = 'top',
-  sideOffset = 6,
+  sideOffset = 4,
   styles,
   trigger,
   ...props
@@ -120,6 +142,7 @@ const Tooltip = ({
                 <TooltipPrimitive.Arrow
                   data-slot="tooltip-arrow"
                   className="pointer-events-none z-50 size-4 overflow-hidden text-foreground data-[side=bottom]:-top-4 data-[side=inline-end]:-rotate-90 data-[side=inline-end]:[inset-inline-start:-16px] data-[side=inline-start]:rotate-90 data-[side=inline-start]:[inset-inline-end:-16px] data-[side=left]:-right-4 data-[side=left]:rotate-90 data-[side=right]:-left-4 data-[side=right]:-rotate-90 data-[side=top]:-bottom-4 data-[side=top]:rotate-180 rtl:data-[side=inline-end]:rotate-90 rtl:data-[side=inline-start]:-rotate-90"
+                  style={getArrowEdgeStyle}
                 >
                   <svg
                     aria-hidden="true"
