@@ -3723,8 +3723,8 @@ const ActionCell = () => {
     "import { Button, ContextMenu } from '@heliannuuthus/ui'\n\n<ContextMenu\n  trigger={<Button variant=\"outline\">right click here</Button>}\n  items={[\n    { label: 'Copy link' },\n    { type: 'separator' },\n    { label: 'Delete item', destructive: true },\n  ]}\n/>",
   "import { Counter } from '@heliannuuthus/ui'\n\n<Counter\n  value={count}\n  places={[1000, 100, 10, 1]}\n  fontSize={60}\n  fontWeight={600}\n  suffix={<small>次</small>}\n  valueText={`${count} 次构建`}\n/>":
     "import { Counter } from '@heliannuuthus/ui'\n\n<Counter\n  value={count}\n  places={[1000, 100, 10, 1]}\n  fontSize={60}\n  fontWeight={600}\n  suffix={<small>times</small>}\n  valueText={`${count} builds`}\n/>",
-  'import { Dialog } from \'@heliannuuthus/ui\'\n\n<Dialog\n  trigger={<Button>安排发布</Button>}\n  title="安排生产环境发布"\n  description="选择版本和发布时间。"\n  cancelText="取消"\n  confirmText="确认安排"\n>\n  <ReleaseForm />\n</Dialog>':
-    'import { Dialog } from \'@heliannuuthus/ui\'\n\n<Dialog\n  trigger={<Button>Schedule publishing</Button>}\n  title="Scheduling production environment release"\n  description="Select version and release date."\n  cancelText="Cancel"\n  confirmText="Confirm arrangement"\n>\n  <ReleaseForm />\n</Dialog>',
+  'import { Button, Dialog } from \'@heliannuuthus/ui\'\nimport { CircleX } from \'lucide-react\'\n\n<Dialog\n  trigger={<Button>安排发布</Button>}\n  title="安排生产环境发布"\n  description="选择版本和发布时间。"\n  cancelText="取消"\n  confirmText="确认安排"\n>\n  <ReleaseForm />\n</Dialog>':
+    'import { Button, Dialog } from \'@heliannuuthus/ui\'\nimport { CircleX } from \'lucide-react\'\n\n<Dialog\n  trigger={<Button>Schedule publishing</Button>}\n  title="Scheduling production environment release"\n  description="Select version and release date."\n  cancelText="Cancel"\n  confirmText="Confirm arrangement"\n>\n  <ReleaseForm />\n</Dialog>',
   'import { Download, Mail, Plus } from \'lucide-react\'\n\nexport const ButtonWithIcon = () => {\n  return (\n    <>\n      <Button><Plus data-icon="inline-start" />新建项目</Button>\n      <Button variant="outline"><Download data-icon="inline-start" />导出</Button>\n      <Button size="icon" aria-label="发送邮件"><Mail /></Button>\n    </>\n  )\n}':
     'import { Download, Mail, Plus } from \'lucide-react\'\n\nexport const ButtonWithIcon = () => {\n  return (\n    <>\n      <Button><Plus data-icon="inline-start" />New project</Button>\n      <Button variant="outline"><Download data-icon="inline-start" />Export</Button>\n      <Button size="icon" aria-label="Send Mail"><Mail /></Button>\n    </>\n  )\n}',
   'import { Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>从右侧打开</Button>}\n  title="今晚的发布窗口"\n  description="22:00–23:00"\n  closeText="关闭"\n>\n  <ReleaseList />\n</Drawer>':
@@ -4724,6 +4724,8 @@ const ActionCell = () => {
   "'显示完整路径'": "'Show full path'",
   '配置组件的公开状态、行为或扩展点。':
     'Configure the component public state, behavior, or extension point.',
+  '设置右上角关闭控件；true 使用默认图标，ReactNode 自定义图标，false 隐藏控件。':
+    'Configure the top-right close control: true uses the default icon, a ReactNode provides a custom icon, and false hides the control.',
   '由 Form.Field 自动注入自定义控件的字段契约。':
     'Field contract automatically injected into custom controls by Form.Field.',
   '使用 orientation 和 gap 完成最基础的横向间距布局。':

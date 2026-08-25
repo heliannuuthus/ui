@@ -1070,6 +1070,7 @@ const badgeDocumentation: ComponentDocumentation = {
 <Badge indicator={0} />
 <Badge indicator={123} max={99} />`),
       coveredProperties: ['indicator', 'max', 'className', 'style'],
+      previewHeight: 56,
     },
     {
       title: docsCopy('锚点通知'),
@@ -7065,7 +7066,7 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
         {
           isDefault: true,
           label: docsCopy('默认关闭按钮'),
-          properties: { closable: 'true' },
+          properties: {},
           values: { closable: 'default' },
         },
         {
@@ -10024,7 +10025,8 @@ replaceExampleCodes('alert-dialog', [
 ]);
 
 replaceExampleCodes('dialog', [
-  docsCopy(`import { Dialog } from '@heliannuuthus/ui'
+  docsCopy(`import { Button, Dialog } from '@heliannuuthus/ui'
+import { CircleX } from 'lucide-react'
 
 <Dialog
   trigger={<Button>安排发布</Button>}
@@ -11208,6 +11210,14 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       ),
       type: 'ReactNode',
     },
+    {
+      name: 'closable',
+      description: docsCopy(
+        '设置右上角关闭控件；true 使用默认图标，ReactNode 自定义图标，false 隐藏控件。'
+      ),
+      type: 'boolean | ReactNode',
+      defaultValue: 'true',
+    },
     ...[
       { name: 'confirmText', type: 'ReactNode' },
       { name: 'cancelText', type: 'ReactNode' },
@@ -12103,14 +12113,6 @@ appendMissingApi('alert-dialog', [
 appendMissingApi('context-menu', [
   publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
 ]);
-appendMissingApi('dialog', [
-  publicProperty('contentProps', 'ComponentProps<"div">'),
-  publicProperty('disablePointerDismissal', 'boolean', {
-    defaultValue: 'false',
-  }),
-  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
-  publicProperty('closable', 'boolean | ReactNode', { defaultValue: 'true' }),
-]);
 appendMissingApi('drawer', [
   publicProperty('closeText', 'ReactNode'),
   publicProperty('closeVariant', 'ButtonProps["variant"]', {
@@ -12525,7 +12527,6 @@ const prunedPrimitiveApi: Readonly<Record<string, readonly string[]>> = {
     'padding',
     'textColor',
   ],
-  dialog: ['contentProps', 'disablePointerDismissal', 'onOpenChangeComplete'],
   drawer: [
     'contentProps',
     'disablePointerDismissal',
@@ -12892,11 +12893,11 @@ const caseCoverageSnippets: Readonly<Record<string, string>> = {
   open={open}
   onOpenChange={setOpen}
   footer={<Button>Save</Button>}
-  closable
+  closable={<CircleX />}
   classNames={{ content: 'max-w-xl' }}
   styles={{ content: { minHeight: 320 } }}
 />
-<Dialog defaultOpen={false} title="Workspace settings" />`,
+<Dialog closable={false} defaultOpen={false} title="Workspace settings" />`,
   drawer: `<Drawer
   open={open}
   onOpenChange={setOpen}

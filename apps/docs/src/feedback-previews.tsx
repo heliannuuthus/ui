@@ -150,14 +150,14 @@ export const AlertDialogDeleteDemo = ({
 };
 
 export const DialogReleaseDemo = ({
-  closable = true,
+  closable,
 }: {
   closable?: boolean | ReactNode;
 }) => {
   return (
     <Dialog
       cancelText={docsCopy('取消')}
-      closable={closable}
+      {...(closable === undefined ? {} : { closable })}
       confirmText={docsCopy('确认安排')}
       description={docsCopy('选择发布时间，并为值班成员补充本次发布说明。')}
       title={docsCopy('安排生产环境发布')}
