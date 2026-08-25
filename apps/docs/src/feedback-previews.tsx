@@ -178,6 +178,27 @@ export const DialogReleaseDemo = () => {
 };
 
 export const DrawerReleaseDemo = () => {
+  return (
+    <Drawer
+      behavior="adaptive"
+      closeText={docsCopy('关闭')}
+      description={docsCopy('22:00–23:00')}
+      footer={<Button>{docsCopy('进入发布中心')}</Button>}
+      side="right"
+      title={docsCopy('今晚的发布窗口')}
+      trigger={
+        <Button variant="outline">
+          <ArrowLeft />
+          {docsCopy('从右侧')}
+        </Button>
+      }
+    >
+      <DrawerReleaseContent />
+    </Drawer>
+  );
+};
+
+export const DrawerDirectionsDemo = () => {
   const placements = [
     { side: 'left', label: docsCopy('从左侧'), icon: ArrowRight },
     { side: 'right', label: docsCopy('从右侧'), icon: ArrowLeft },
@@ -252,15 +273,11 @@ const ReleaseRow = ({
   );
 };
 
-export const PopoverOwnersDemo = ({
-  side = 'bottom',
-}: {
-  side?: 'bottom' | 'right';
-}) => {
+export const PopoverOwnersDemo = () => {
   return (
     <Popover
       description={docsCopy('发布开始和回滚时会通知以下成员。')}
-      side={side}
+      side="bottom"
       title={docsCopy('发布负责人')}
       trigger={
         <Button variant="outline">
@@ -296,17 +313,13 @@ export const PopoverOwnersDemo = ({
   );
 };
 
-export const PopoverOwnerPreviewDemo = ({
-  side = 'bottom',
-}: {
-  side?: 'bottom' | 'right';
-}) => {
+export const PopoverOwnerPreviewDemo = () => {
   return (
     <div className="display-hover-stage">
       {docsCopy('发布负责人是')}{' '}
       <Popover
         triggerMode="hover"
-        side={side}
+        side="bottom"
         trigger={
           <Button className="display-inline-person" size="xs" variant="link">
             @linmo

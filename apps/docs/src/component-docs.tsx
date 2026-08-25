@@ -153,6 +153,7 @@ import {
   TableFixedDemo,
   TablePaginationDemo,
   TableReleaseDemo,
+  TooltipBasicDemo,
   TooltipPlacementsDemo,
 } from './data-display-previews';
 import {
@@ -160,6 +161,7 @@ import {
   AlertReleaseDemo,
   DialogReleaseDemo,
   DrawerContainedDemo,
+  DrawerDirectionsDemo,
   DrawerReleaseDemo,
   PopoverOwnerPreviewDemo,
   PopoverOwnersDemo,
@@ -7011,6 +7013,13 @@ const ActionCell = () => {
   ],
   tooltip: [
     {
+      title: docsCopy('显示 Tooltip'),
+      description: docsCopy('为控件提供简短补充说明。'),
+      preview: <TooltipBasicDemo />,
+      code: `<Tooltip content={tooltipContent} trigger={trigger} />`,
+      previewHeight: 300,
+    },
+    {
       title: docsCopy('八个方位'),
       description: docsCopy(
         '将常用方位围绕同一参照物完整展示，悬停或聚焦任意按钮即可检查方向和对齐方式。'
@@ -7095,11 +7104,30 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
   ],
   drawer: [
     {
+      title: docsCopy('今晚的发布窗口'),
+      description: docsCopy(
+        '从页面边缘承载较长内容和连续操作，同时保留当前页面上下文。'
+      ),
+      preview: <DrawerReleaseDemo />,
+      code: docsCopy(`import { Button, Drawer } from '@heliannuuthus/ui'
+
+<Drawer
+  behavior="adaptive"
+  side="right"
+  trigger={<Button>从右侧打开</Button>}
+  title="今晚的发布窗口"
+  description="22:00–23:00"
+>
+  <ReleaseWindow />
+</Drawer>`),
+      previewHeight: 340,
+    },
+    {
       title: docsCopy('四个方向'),
       description: docsCopy(
         '统一从上、右、下、左进入；adaptive 模式在窄屏保留手势，在宽屏收敛为稳定的边缘面板。'
       ),
-      preview: <DrawerReleaseDemo />,
+      preview: <DrawerDirectionsDemo />,
       code: docsCopy(`import { Button, Drawer } from '@heliannuuthus/ui'
 
 <Drawer
@@ -7142,23 +7170,7 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description: docsCopy(
         '在触发器附近补充少量关联信息与轻量操作，不打断当前阅读上下文。'
       ),
-      caseLayout: 'segmented',
-      caseAxes: [
-        {
-          name: 'side',
-          label: docsCopy('位置'),
-          defaultValue: 'bottom',
-          options: [
-            { label: docsCopy('下方'), value: 'bottom' },
-            { label: docsCopy('右侧'), value: 'right' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <PopoverOwnersDemo
-          side={values.side === 'right' ? 'right' : 'bottom'}
-        />
-      ),
+      preview: <PopoverOwnersDemo />,
       code: docsCopy(`import { Button, Popover } from '@heliannuuthus/ui'
 
 <Popover
@@ -7175,23 +7187,7 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description: docsCopy(
         '将 trigger 设为 hover 后，鼠标悬停或键盘聚焦都会展示关联信息，适合实体预览。'
       ),
-      caseLayout: 'segmented',
-      caseAxes: [
-        {
-          name: 'side',
-          label: docsCopy('位置'),
-          defaultValue: 'bottom',
-          options: [
-            { label: docsCopy('下方'), value: 'bottom' },
-            { label: docsCopy('右侧'), value: 'right' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <PopoverOwnerPreviewDemo
-          side={values.side === 'right' ? 'right' : 'bottom'}
-        />
-      ),
+      preview: <PopoverOwnerPreviewDemo />,
       code: docsCopy(`import { Button, Popover } from '@heliannuuthus/ui'
 
 <Popover

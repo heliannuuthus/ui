@@ -2788,6 +2788,15 @@ const tooltipPlacements = [
   },
 ] as const;
 
+export const TooltipBasicDemo = () => {
+  return (
+    <Tooltip
+      content={docsCopy('键盘快捷键')}
+      trigger={<Button variant="outline">{docsCopy('保存')}</Button>}
+    />
+  );
+};
+
 export const TooltipPlacementsDemo = () => {
   return (
     <div

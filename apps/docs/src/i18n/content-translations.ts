@@ -2436,6 +2436,8 @@ const ActionCell = () => {
   '说明当前为什么没有内容；传入 null 可隐藏标题。':
     'Explain why there is currently no content; pass null to hide the title.',
   四个方向: 'four directions',
+  '从页面边缘承载较长内容和连续操作，同时保留当前页面上下文。':
+    'Use the page edge for longer content and continuous actions while preserving the current page context.',
   四种样式与快捷居中: 'Four styles and quick centering',
   宋: 'Song',
   '宋雨 · 运营': 'Song Yu·Operation',
