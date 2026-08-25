@@ -67,7 +67,7 @@ type TooltipPlacementConfig = {
 };
 
 const arrowInset = 12;
-const arrowCrossSize = 12;
+const arrowCrossSize = 16;
 const placementConfig: Record<TooltipPlacement, TooltipPlacementConfig> = {
   bottom: { align: 'center', side: 'bottom' },
   bottomLeft: {
@@ -180,9 +180,18 @@ const Tooltip = ({
               {content}
               {arrow !== false ? (
                 <TooltipPrimitive.Arrow
-                  className="z-50 bg-foreground data-[side=bottom]:-top-1.5 data-[side=bottom]:h-1.5 data-[side=bottom]:w-3 data-[side=bottom]:[clip-path:polygon(50%_0,100%_100%,0_100%)] data-[side=inline-end]:h-3 data-[side=inline-end]:w-1.5 data-[side=inline-end]:[clip-path:polygon(100%_0,0_50%,100%_100%)] data-[side=inline-end]:[inset-inline-start:-6px] data-[side=inline-start]:h-3 data-[side=inline-start]:w-1.5 data-[side=inline-start]:[clip-path:polygon(0_0,100%_50%,0_100%)] data-[side=inline-start]:[inset-inline-end:-6px] data-[side=left]:-right-1.5 data-[side=left]:h-3 data-[side=left]:w-1.5 data-[side=left]:[clip-path:polygon(0_0,100%_50%,0_100%)] data-[side=right]:-left-1.5 data-[side=right]:h-3 data-[side=right]:w-1.5 data-[side=right]:[clip-path:polygon(100%_0,0_50%,100%_100%)] data-[side=top]:-bottom-1.5 data-[side=top]:h-1.5 data-[side=top]:w-3 data-[side=top]:[clip-path:polygon(0_0,100%_0,50%_100%)] rtl:data-[side=inline-end]:[clip-path:polygon(0_0,100%_50%,0_100%)] rtl:data-[side=inline-start]:[clip-path:polygon(100%_0,0_50%,100%_100%)]"
+                  data-slot="tooltip-arrow"
+                  className="pointer-events-none z-50 size-4 overflow-hidden text-foreground data-[side=bottom]:-top-4 data-[side=inline-end]:-rotate-90 data-[side=inline-end]:[inset-inline-start:-16px] data-[side=inline-start]:rotate-90 data-[side=inline-start]:[inset-inline-end:-16px] data-[side=left]:-right-4 data-[side=left]:rotate-90 data-[side=right]:-left-4 data-[side=right]:-rotate-90 data-[side=top]:-bottom-4 data-[side=top]:rotate-180 rtl:data-[side=inline-end]:rotate-90 rtl:data-[side=inline-start]:-rotate-90"
                   style={arrowStyle}
-                />
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="absolute bottom-0 left-0 h-2 w-4 fill-current"
+                    viewBox="0 0 16 8"
+                  >
+                    <path d="M0 8A4 4 0 0 0 2.83 6.83L6.59 3.07A2 2 0 0 1 9.41 3.07L13.17 6.83A4 4 0 0 0 16 8Z" />
+                  </svg>
+                </TooltipPrimitive.Arrow>
               ) : null}
             </TooltipPrimitive.Popup>
           </TooltipPrimitive.Positioner>
