@@ -67,6 +67,7 @@ type TooltipPlacementConfig = {
 };
 
 const arrowInset = 12;
+const arrowSize = 10;
 const placementConfig: Record<TooltipPlacement, TooltipPlacementConfig> = {
   bottom: { align: 'center', side: 'bottom' },
   bottomLeft: {
@@ -131,9 +132,27 @@ const Tooltip = ({
   const resolvedPlacement = placement ? placementConfig[placement] : undefined;
   const arrowPointsAtCenter =
     typeof arrow === 'object' && arrow.pointAtCenter === true;
-  const arrowStyle = arrowPointsAtCenter
-    ? undefined
-    : resolvedPlacement?.arrowStyle;
+  const arrowStyle = resolvedPlacement?.arrowStyle;
+  const resolvedAlignOffset =
+    arrowPointsAtCenter && arrowStyle
+      ? ({
+          anchor,
+          side: resolvedSide,
+        }: {
+          anchor: { height: number; width: number };
+          side: PopupSide;
+        }) => {
+          const anchorSize =
+            resolvedSide === 'top' || resolvedSide === 'bottom'
+              ? anchor.width
+              : anchor.height;
+
+          return (
+            alignOffset +
+            Math.max(0, anchorSize / 2 - arrowInset - arrowSize / 2)
+          );
+        }
+      : alignOffset;
 
   return (
     <TooltipPrimitive.Provider delay={delay}>
@@ -145,7 +164,7 @@ const Tooltip = ({
         <TooltipPrimitive.Portal>
           <TooltipPrimitive.Positioner
             align={resolvedPlacement?.align ?? align}
-            alignOffset={alignOffset}
+            alignOffset={resolvedAlignOffset}
             side={resolvedPlacement?.side ?? side}
             sideOffset={sideOffset}
             className="isolate z-50"
