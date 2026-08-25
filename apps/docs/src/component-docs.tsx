@@ -6001,33 +6001,7 @@ import { ChevronRight } from 'lucide-react'
       description: docsCopy(
         '默认组合搜索、排序、固定列、操作列、Footer 和 Pagination；业务只需要提供 data 与 Table.Column。'
       ),
-      cases: [
-        {
-          isDefault: true,
-          label: docsCopy('默认摘要'),
-          properties: { pagination: '{ pageSize: 3, summary: true }' },
-          values: { summary: 'default' },
-        },
-        {
-          label: docsCopy('自定义摘要'),
-          properties: { pagination: '{ pageSize: 3, summary: customSummary }' },
-          values: { summary: 'custom' },
-        },
-        {
-          label: docsCopy('隐藏摘要'),
-          properties: { pagination: '{ pageSize: 3, summary: false }' },
-          values: { summary: 'hidden' },
-        },
-      ],
-      preview: (values) => (
-        <TableManagedDemo
-          summary={
-            values.summary === 'custom' || values.summary === 'hidden'
-              ? values.summary
-              : 'default'
-          }
-        />
-      ),
+      preview: <TableManagedDemo />,
       code: docsCopy(`import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 import { DropdownMenu } from '@heliannuuthus/ui'
@@ -6082,7 +6056,7 @@ const columns: Table.Column<Release>[] = [
   classNames={{ table: 'min-w-[820px]' }}
 />`),
       wide: true,
-      previewHeight: 580,
+      previewHeight: 420,
     },
     {
       title: docsCopy('行展开'),
@@ -6092,16 +6066,11 @@ const columns: Table.Column<Release>[] = [
       cases: [
         {
           isDefault: true,
-          label: docsCopy('非受控'),
+          label: docsCopy('默认'),
           properties: {
             expandable: '{ defaultValue, labels, render }',
           },
-          values: { mode: 'uncontrolled' },
-        },
-        {
-          label: docsCopy('受控'),
-          properties: { expandable: '{ value, onChange, labels, render }' },
-          values: { mode: 'controlled' },
+          values: { mode: 'default' },
         },
         {
           label: docsCopy('限制展开'),
@@ -6111,13 +6080,10 @@ const columns: Table.Column<Release>[] = [
           values: { mode: 'restricted' },
         },
       ],
+      caseLayout: 'segmented',
       preview: (values) => (
         <TableManagedExpandableDemo
-          mode={
-            values.mode === 'controlled' || values.mode === 'restricted'
-              ? values.mode
-              : 'uncontrolled'
-          }
+          mode={values.mode === 'restricted' ? 'restricted' : 'default'}
         />
       ),
       code: docsCopy(`import { Table } from '@heliannuuthus/ui'
@@ -6133,7 +6099,7 @@ const columns: Table.Column<Release>[] = [
   pagination={false}
 />`),
       wide: true,
-      previewHeight: 560,
+      previewHeight: 500,
     },
     {
       title: docsCopy('分组表头'),
@@ -6221,6 +6187,57 @@ const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
 />`,
       wide: true,
       previewHeight: 600,
+    },
+    {
+      title: docsCopy('分页摘要'),
+      description: docsCopy('显示数据总数，或根据总数与当前范围自定义摘要。'),
+      cases: [
+        {
+          isDefault: true,
+          label: docsCopy('默认摘要'),
+          properties: { pagination: '{ pageSize: 3, summary: true }' },
+          values: { summary: 'default' },
+        },
+        {
+          label: docsCopy('自定义摘要'),
+          properties: { pagination: '{ pageSize: 3, summary: customSummary }' },
+          values: { summary: 'custom' },
+        },
+        {
+          label: docsCopy('隐藏摘要'),
+          properties: { pagination: '{ pageSize: 3, summary: false }' },
+          values: { summary: 'hidden' },
+        },
+      ],
+      caseLayout: 'segmented',
+      preview: (values) => (
+        <TableManagedDemo
+          summary={
+            values.summary === 'custom' || values.summary === 'hidden'
+              ? values.summary
+              : 'default'
+          }
+        />
+      ),
+      code: `<Table
+  columns={columns}
+  data={releaseRecords}
+  pagination={{ pageSize: 3, summary: true }}
+/>
+
+<Table
+  columns={columns}
+  data={releaseRecords}
+  pagination={{ pageSize: 3, summary: customSummary }}
+/>
+
+<Table
+  columns={columns}
+  data={releaseRecords}
+  pagination={{ pageSize: 3, summary: false }}
+/>`,
+      wide: true,
+      previewHeight: 460,
     },
     {
       title: docsCopy('加载与外部状态组合'),

@@ -4612,6 +4612,7 @@ const ActionCell = () => {
   '在 Table.Column 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。':
     'Nest columns in Table.Column to create grouped headers; Table calculates spans, levels, and empty-state width.',
   '受控排序、分页与行选择': 'Controlled sorting, pagination, and row selection',
+  分页摘要: 'Pagination summary',
   'Primitive 行展开': 'Primitive row expansion',
   服务端数据模式: 'Server data mode',
   'search、sorting 与 pagination 的 manual 模式只管理公开状态，不在客户端二次处理服务端返回的数据。':

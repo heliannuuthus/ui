@@ -1651,12 +1651,10 @@ export const TableManagedDemo = ({
 };
 
 export const TableManagedExpandableDemo = ({
-  mode = 'uncontrolled',
+  mode = 'default',
 }: {
-  mode?: 'controlled' | 'restricted' | 'uncontrolled';
+  mode?: 'default' | 'restricted';
 }) => {
-  const [expandedKeys, setExpandedKeys] = useState<Key[]>(['v0.12.0']);
-
   return (
     <div className="display-table-managed">
       <Table
@@ -1669,9 +1667,7 @@ export const TableManagedExpandableDemo = ({
                   row.status !== docsCopy('回滚'),
               }
             : undefined),
-          ...(mode === 'controlled'
-            ? { onChange: setExpandedKeys, value: expandedKeys }
-            : { defaultValue: ['v0.12.0'] }),
+          defaultValue: ['v0.12.0'],
           header: <span className="sr-only">{docsCopy('展开行')}</span>,
           labels: {
             collapse: (row) => `${docsCopy('收起')} ${row.version}`,
