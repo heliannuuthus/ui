@@ -4,6 +4,7 @@ import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
 import { cn } from '../lib/utils';
 import {
   getPopupArrowEdgeStyle,
+  popupArrowDepth,
   RoundedPopupArrow,
 } from './internal/popup-arrow';
 import type {
@@ -108,7 +109,7 @@ const Tooltip = ({
             align={resolvedPlacement?.align ?? align}
             alignOffset={alignOffset}
             side={resolvedPlacement?.side ?? side}
-            sideOffset={sideOffset}
+            sideOffset={sideOffset + (arrow !== false ? popupArrowDepth : 0)}
             className="isolate z-50"
           >
             <TooltipPrimitive.Popup

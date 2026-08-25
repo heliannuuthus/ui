@@ -8,6 +8,8 @@ type PopupArrowState = {
   side: PopupSide;
 };
 
+const popupArrowDepth = 8;
+
 const getPopupArrowEdgeStyle = ({
   align,
   side,
@@ -34,7 +36,7 @@ const RoundedPopupArrow = ({
   return (
     <div
       className={cn(
-        'pointer-events-none z-50 h-2 w-4 overflow-hidden data-[side=bottom]:top-[-7px] data-[side=inline-end]:-rotate-90 data-[side=inline-end]:[inset-inline-start:-11px] data-[side=inline-start]:rotate-90 data-[side=inline-start]:[inset-inline-end:-11px] data-[side=left]:right-[-11px] data-[side=left]:rotate-90 data-[side=right]:left-[-11px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-7px] data-[side=top]:rotate-180 rtl:data-[side=inline-end]:rotate-90 rtl:data-[side=inline-start]:-rotate-90',
+        'pointer-events-none z-50 h-2 w-4 overflow-hidden data-[side=bottom]:top-[-8px] data-[side=inline-end]:-rotate-90 data-[side=inline-end]:[inset-inline-start:-12px] data-[side=inline-start]:rotate-90 data-[side=inline-start]:[inset-inline-end:-12px] data-[side=left]:right-[-12px] data-[side=left]:rotate-90 data-[side=right]:left-[-12px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180 rtl:data-[side=inline-end]:rotate-90 rtl:data-[side=inline-start]:-rotate-90',
         className
       )}
       {...props}
@@ -50,5 +52,5 @@ const RoundedPopupArrow = ({
   );
 };
 
-export { getPopupArrowEdgeStyle, RoundedPopupArrow };
+export { getPopupArrowEdgeStyle, popupArrowDepth, RoundedPopupArrow };
 export type { PopupArrowState };
