@@ -7023,7 +7023,7 @@ const ActionCell = () => {
     {
       title: docsCopy('十二个位置'),
       description: docsCopy(
-        'placement 表示浮层相对触发器的位置；边缘位置默认保持浮层边缘对齐，arrow 可控制箭头显示或改为指向触发器中心。'
+        'placement 表示浮层相对触发器的位置；边缘位置保持浮层边缘对齐，箭头始终由定位引擎指向触发器。'
       ),
       preview: <TooltipPlacementsDemo />,
       code: docsCopy(`import { Button, Tooltip } from '@heliannuuthus/ui'
@@ -7039,17 +7039,14 @@ const ActionCell = () => {
     },
     {
       title: docsCopy('箭头'),
-      description: docsCopy(
-        '默认显示与边缘位置对应的箭头；可让箭头指向触发器中心，也可将其隐藏。'
-      ),
+      description: docsCopy('箭头默认由定位引擎指向触发器，也可将其隐藏。'),
       preview: <TooltipArrowDemo />,
       code: docsCopy(`import { Button, Tooltip } from '@heliannuuthus/ui'
 
 <Tooltip
-  arrow={{ pointAtCenter: true }}
-  content="指向中心"
+  content="默认箭头"
   placement="topLeft"
-  trigger={<Button>指向中心</Button>}
+  trigger={<Button>显示箭头</Button>}
 />`),
       previewHeight: 300,
       wide: true,
@@ -11400,11 +11397,9 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     },
     {
       name: 'arrow',
-      type: 'boolean | TooltipArrowOptions',
+      type: 'boolean',
       defaultValue: 'true',
-      description: docsCopy(
-        '设置是否显示箭头；传入 pointAtCenter 可让边缘位置的箭头指向触发器中心。'
-      ),
+      description: docsCopy('设置是否显示自动指向触发器的箭头。'),
     },
     {
       name: 'side',
@@ -13395,12 +13390,6 @@ appendTypePreviews('table', [
 ]);
 
 appendTypePreviews('tooltip', [
-  {
-    name: 'TooltipArrowOptions',
-    definition: `type TooltipArrowOptions = {
-  pointAtCenter?: boolean
-}`,
-  },
   {
     name: 'TooltipPlacement',
     definition: `type TooltipPlacement =

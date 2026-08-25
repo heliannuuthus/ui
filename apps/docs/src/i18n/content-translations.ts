@@ -1546,10 +1546,10 @@ const ActionCell = () => {
     'Continuously place content of different heights into the current shortest column, and allow specified content to occupy the entire row.',
   '将菜单绑定到明确的内容区域，右键或键盘菜单键打开与当前对象相关的操作。':
     'Bind menus to explicit content areas, and right-click or keyboard menu keys to open actions related to the current object.',
-  'placement 表示浮层相对触发器的位置；边缘位置默认保持浮层边缘对齐，arrow 可控制箭头显示或改为指向触发器中心。':
-    'placement defines the popup position relative to the trigger; edge placements align popup edges by default, while arrow controls visibility or pointing at the trigger center.',
-  '默认显示与边缘位置对应的箭头；可让箭头指向触发器中心，也可将其隐藏。':
-    'Show an arrow matching the edge placement by default; point it at the trigger center or hide it when needed.',
+  'placement 表示浮层相对触发器的位置；边缘位置保持浮层边缘对齐，箭头始终由定位引擎指向触发器。':
+    'placement defines the popup position relative to the trigger; edge placements align popup edges while the positioning engine keeps the arrow pointed at the trigger.',
+  '箭头默认由定位引擎指向触发器，也可将其隐藏。':
+    'The positioning engine points the arrow at the trigger by default; the arrow can also be hidden.',
   '将错误语义和颜色传递给整个字段。':
     'Pass error semantics and color to the entire field.',
   '将互斥选项扩展为整行可点击的卡片，同时保留原生单选语义。':
@@ -2061,8 +2061,8 @@ const ActionCell = () => {
     'Set Tooltip orientation, alignment and spacing.',
   '设置浮层相对触发器的位置；使用时无需同时设置 side 或 align。':
     'Choose the popup position relative to the trigger; do not set side or align at the same time.',
-  '设置是否显示箭头；传入 pointAtCenter 可让边缘位置的箭头指向触发器中心。':
-    'Show or hide the arrow; pass pointAtCenter to make edge placements point at the trigger center.',
+  '设置是否显示自动指向触发器的箭头。':
+    'Show or hide the arrow that automatically points at the trigger.',
   '不使用 placement 时，设置浮层位于触发器的哪一侧。':
     'Choose which side of the trigger contains the popup when placement is not used.',
   '设置浮层盒子沿 side 方向的交叉轴对齐；箭头仍然指向触发器。':
@@ -2452,8 +2452,7 @@ const ActionCell = () => {
   十二个位置: 'Twelve placements',
   箭头: 'Arrow',
   默认箭头: 'Default arrow',
-  边缘对齐: 'Edge aligned',
-  指向中心: 'Point at center',
+  显示箭头: 'Show arrow',
   隐藏箭头: 'Hide arrow',
   上方靠左: 'Top left',
   上方靠右: 'Top right',
@@ -3730,8 +3729,8 @@ const ActionCell = () => {
     'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button variant="outline">3 persons in charge</Button>}\n  title="Release Manager"\n  description="These members will be notified when publishing and rolling back."\n  content={<OwnerList />}\n  side="bottom"\n/>',
   'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="上方靠左提示"\n  delay={100}\n  placement="topLeft"\n  trigger={<Button>上方靠左</Button>}\n/>':
     'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Top-left tooltip"\n  delay={100}\n  placement="topLeft"\n  trigger={<Button>Top left</Button>}\n/>',
-  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  arrow={{ pointAtCenter: true }}\n  content="指向中心"\n  placement="topLeft"\n  trigger={<Button>指向中心</Button>}\n/>':
-    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  arrow={{ pointAtCenter: true }}\n  content="Point at center"\n  placement="topLeft"\n  trigger={<Button>Point at center</Button>}\n/>',
+  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="默认箭头"\n  placement="topLeft"\n  trigger={<Button>显示箭头</Button>}\n/>':
+    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Default arrow"\n  placement="topLeft"\n  trigger={<Button>Show arrow</Button>}\n/>',
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: '读取', value: 'read' },\n    { label: '编辑', value: 'write' },\n    { label: '管理', value: 'admin' },\n  ]}\n/>":
     "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: 'read', value: 'read' },\n    { label: 'edit', value: 'write' },\n    { label: 'admin', value: 'admin' },\n  ]}\n/>",
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  name=\"permission\"\n  value={selected}\n  onChange={setSelected}\n  options={[\n    { label: '查看项目', value: 'read' },\n    { label: '参与评论', value: 'comment' },\n    { label: '管理项目', value: 'manage' },\n  ]}\n/>":

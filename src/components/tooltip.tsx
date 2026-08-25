@@ -16,10 +16,6 @@ type TooltipStyles = {
   content?: React.CSSProperties;
 };
 
-type TooltipArrowOptions = {
-  pointAtCenter?: boolean;
-};
-
 type TooltipPlacement =
   | 'bottom'
   | 'bottomLeft'
@@ -50,7 +46,7 @@ type TooltipPositionProps =
 
 type TooltipProps = OpenStateProps &
   TooltipPositionProps & {
-    arrow?: boolean | TooltipArrowOptions;
+    arrow?: boolean;
     classNames?: TooltipClassNames;
     content: React.ReactNode;
     delay?: number;
@@ -62,58 +58,22 @@ type TooltipProps = OpenStateProps &
 
 type TooltipPlacementConfig = {
   align: PopupAlign;
-  arrowStyle?: React.CSSProperties;
   side: PopupSide;
 };
 
-const arrowCrossSize = 16;
-const arrowOffsetHorizontal = 12;
-const arrowOffsetVertical = 8;
 const placementConfig: Record<TooltipPlacement, TooltipPlacementConfig> = {
   bottom: { align: 'center', side: 'bottom' },
-  bottomLeft: {
-    align: 'start',
-    arrowStyle: { left: arrowOffsetHorizontal, right: 'auto' },
-    side: 'bottom',
-  },
-  bottomRight: {
-    align: 'end',
-    arrowStyle: { left: 'auto', right: arrowOffsetHorizontal },
-    side: 'bottom',
-  },
+  bottomLeft: { align: 'start', side: 'bottom' },
+  bottomRight: { align: 'end', side: 'bottom' },
   left: { align: 'center', side: 'left' },
-  leftBottom: {
-    align: 'end',
-    arrowStyle: { bottom: arrowOffsetVertical, top: 'auto' },
-    side: 'left',
-  },
-  leftTop: {
-    align: 'start',
-    arrowStyle: { bottom: 'auto', top: arrowOffsetVertical },
-    side: 'left',
-  },
+  leftBottom: { align: 'end', side: 'left' },
+  leftTop: { align: 'start', side: 'left' },
   right: { align: 'center', side: 'right' },
-  rightBottom: {
-    align: 'end',
-    arrowStyle: { bottom: arrowOffsetVertical, top: 'auto' },
-    side: 'right',
-  },
-  rightTop: {
-    align: 'start',
-    arrowStyle: { bottom: 'auto', top: arrowOffsetVertical },
-    side: 'right',
-  },
+  rightBottom: { align: 'end', side: 'right' },
+  rightTop: { align: 'start', side: 'right' },
   top: { align: 'center', side: 'top' },
-  topLeft: {
-    align: 'start',
-    arrowStyle: { left: arrowOffsetHorizontal, right: 'auto' },
-    side: 'top',
-  },
-  topRight: {
-    align: 'end',
-    arrowStyle: { left: 'auto', right: arrowOffsetHorizontal },
-    side: 'top',
-  },
+  topLeft: { align: 'start', side: 'top' },
+  topRight: { align: 'end', side: 'top' },
 };
 
 const Tooltip = ({
@@ -125,39 +85,12 @@ const Tooltip = ({
   delay = 0,
   placement,
   side = 'top',
-  sideOffset = 4,
+  sideOffset = 6,
   styles,
   trigger,
   ...props
 }: TooltipProps) => {
   const resolvedPlacement = placement ? placementConfig[placement] : undefined;
-  const arrowPointsAtCenter =
-    typeof arrow === 'object' && arrow.pointAtCenter === true;
-  const arrowStyle = resolvedPlacement?.arrowStyle;
-  const resolvedAlignOffset =
-    arrowPointsAtCenter && arrowStyle
-      ? ({
-          anchor,
-          side: resolvedSide,
-        }: {
-          anchor: { height: number; width: number };
-          side: PopupSide;
-        }) => {
-          const anchorSize =
-            resolvedSide === 'top' || resolvedSide === 'bottom'
-              ? anchor.width
-              : anchor.height;
-          const arrowOffset =
-            resolvedSide === 'top' || resolvedSide === 'bottom'
-              ? arrowOffsetHorizontal
-              : arrowOffsetVertical;
-
-          return (
-            alignOffset +
-            Math.max(0, anchorSize / 2 - arrowOffset - arrowCrossSize / 2)
-          );
-        }
-      : alignOffset;
 
   return (
     <TooltipPrimitive.Provider delay={delay}>
@@ -169,7 +102,7 @@ const Tooltip = ({
         <TooltipPrimitive.Portal>
           <TooltipPrimitive.Positioner
             align={resolvedPlacement?.align ?? align}
-            alignOffset={resolvedAlignOffset}
+            alignOffset={alignOffset}
             side={resolvedPlacement?.side ?? side}
             sideOffset={sideOffset}
             className="isolate z-50"
@@ -187,7 +120,6 @@ const Tooltip = ({
                 <TooltipPrimitive.Arrow
                   data-slot="tooltip-arrow"
                   className="pointer-events-none z-50 size-4 overflow-hidden text-foreground data-[side=bottom]:-top-4 data-[side=inline-end]:-rotate-90 data-[side=inline-end]:[inset-inline-start:-16px] data-[side=inline-start]:rotate-90 data-[side=inline-start]:[inset-inline-end:-16px] data-[side=left]:-right-4 data-[side=left]:rotate-90 data-[side=right]:-left-4 data-[side=right]:-rotate-90 data-[side=top]:-bottom-4 data-[side=top]:rotate-180 rtl:data-[side=inline-end]:rotate-90 rtl:data-[side=inline-start]:-rotate-90"
-                  style={arrowStyle}
                 >
                   <svg
                     aria-hidden="true"
@@ -208,7 +140,6 @@ const Tooltip = ({
 
 export {
   Tooltip,
-  type TooltipArrowOptions,
   type TooltipClassNames,
   type TooltipPlacement,
   type TooltipProps,

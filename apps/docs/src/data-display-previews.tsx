@@ -2814,13 +2814,7 @@ export const TooltipArrowDemo = () => {
       <Tooltip
         content={docsCopy('默认箭头')}
         placement="topLeft"
-        trigger={<Button variant="outline">{docsCopy('边缘对齐')}</Button>}
-      />
-      <Tooltip
-        arrow={{ pointAtCenter: true }}
-        content={docsCopy('指向中心')}
-        placement="topLeft"
-        trigger={<Button variant="outline">{docsCopy('指向中心')}</Button>}
+        trigger={<Button variant="outline">{docsCopy('显示箭头')}</Button>}
       />
       <Tooltip
         arrow={false}

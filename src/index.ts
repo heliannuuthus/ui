@@ -394,7 +394,6 @@ export {
 } from './components/toggle';
 export {
   Tooltip,
-  type TooltipArrowOptions,
   type TooltipClassNames,
   type TooltipPlacement,
   type TooltipProps,
