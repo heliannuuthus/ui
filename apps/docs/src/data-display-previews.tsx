@@ -2753,44 +2753,10 @@ export const TableCellDemo = () => {
 };
 
 const tooltipPlacements = [
-  {
-    label: docsCopy('上方靠左'),
-    placement: 'top-start',
-    side: 'top',
-    align: 'start',
-  },
-  { label: docsCopy('上方'), placement: 'top', side: 'top', align: 'center' },
-  {
-    label: docsCopy('上方靠右'),
-    placement: 'top-end',
-    side: 'top',
-    align: 'end',
-  },
-  { label: docsCopy('左侧'), placement: 'left', side: 'left', align: 'center' },
-  {
-    label: docsCopy('右侧'),
-    placement: 'right',
-    side: 'right',
-    align: 'center',
-  },
-  {
-    label: docsCopy('下方靠左'),
-    placement: 'bottom-start',
-    side: 'bottom',
-    align: 'start',
-  },
-  {
-    label: docsCopy('下方'),
-    placement: 'bottom',
-    side: 'bottom',
-    align: 'center',
-  },
-  {
-    label: docsCopy('下方靠右'),
-    placement: 'bottom-end',
-    side: 'bottom',
-    align: 'end',
-  },
+  { label: docsCopy('上方'), placement: 'top', side: 'top' },
+  { label: docsCopy('左侧'), placement: 'left', side: 'left' },
+  { label: docsCopy('右侧'), placement: 'right', side: 'right' },
+  { label: docsCopy('下方'), placement: 'bottom', side: 'bottom' },
 ] as const;
 
 export const TooltipBasicDemo = () => {
@@ -2806,7 +2772,7 @@ export const TooltipPlacementsDemo = () => {
   return (
     <div
       className="display-tooltip-placements"
-      aria-label={docsCopy('Tooltip 方向与对齐')}
+      aria-label={docsCopy('Tooltip 四个方向')}
     >
       {tooltipPlacements.map((placement) => (
         <div
@@ -2815,11 +2781,7 @@ export const TooltipPlacementsDemo = () => {
           key={placement.placement}
         >
           <Tooltip
-            align={placement.align}
-            classNames={{
-              content: 'min-w-36 justify-center font-mono',
-            }}
-            content={`${placement.side} · ${placement.align}`}
+            content={placement.side}
             delay={100}
             side={placement.side}
             trigger={

@@ -7020,19 +7020,18 @@ const ActionCell = () => {
       previewHeight: 300,
     },
     {
-      title: docsCopy('方向与对齐'),
+      title: docsCopy('四个方向'),
       description: docsCopy(
-        'side 决定浮层位于触发器的哪一侧，align 决定浮层沿该侧的对齐方式。'
+        'side 决定浮层位于触发器的哪一侧；箭头始终指向触发器，align 只调整浮层沿该侧的对齐。'
       ),
       preview: <TooltipPlacementsDemo />,
       code: docsCopy(`import { Button, Tooltip } from '@heliannuuthus/ui'
 
 <Tooltip
-  align="start"
-  content="左上提示"
+  content="上方提示"
   delay={100}
   side="top"
-  trigger={<Button>左上</Button>}
+  trigger={<Button>上方</Button>}
 />`),
       previewHeight: 440,
       wide: true,
@@ -9953,18 +9952,6 @@ replaceExampleCodes('select', [
 />`),
 ]);
 
-replaceExampleCodes('tooltip', [
-  docsCopy(`import { Tooltip } from '@heliannuuthus/ui'
-
-<Tooltip
-  delay={100}
-  side="top"
-  align="start"
-  content="左上提示"
-  trigger={<Button>左上</Button>}
-/>`),
-]);
-
 replaceExampleCodes('alert-dialog', [
   docsCopy(`import { AlertDialog } from '@heliannuuthus/ui'
 
@@ -11386,15 +11373,28 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       ...property,
       description: docsCopy('设置需要补充说明的交互元素和简短提示内容。'),
     })),
-    ...[
-      { name: 'side', type: "'top' | 'right' | 'bottom' | 'left'" },
-      { name: 'align', type: "'start' | 'center' | 'end'" },
-      { name: 'sideOffset', type: 'number' },
-      { name: 'alignOffset', type: 'number' },
-    ].map((property) => ({
-      ...property,
-      description: docsCopy('设置 Tooltip 方向、对齐和间距。'),
-    })),
+    {
+      name: 'side',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+      description: docsCopy('设置浮层位于触发器的哪一侧。'),
+    },
+    {
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+      description: docsCopy(
+        '设置浮层盒子沿 side 方向的交叉轴对齐；箭头仍然指向触发器。'
+      ),
+    },
+    {
+      name: 'sideOffset',
+      type: 'number',
+      description: docsCopy('设置浮层与触发器沿 side 方向的间距。'),
+    },
+    {
+      name: 'alignOffset',
+      type: 'number',
+      description: docsCopy('设置浮层沿交叉轴的额外偏移。'),
+    },
     ...[
       { name: 'delay', type: 'number' },
       { name: 'disabled', type: 'boolean' },

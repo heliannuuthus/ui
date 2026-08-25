@@ -716,7 +716,6 @@ const ActionCell = () => {
     'Expand a piece of auxiliary content on demand; support independent button or entire custom Header triggering, and allow status icons to be replaced.',
   '按需展开一组纵向排列的内容区域。':
     'Expand a set of vertically arranged content areas as needed.',
-  方向与对齐: 'Direction and alignment',
   '把产品入口、资源入口和当前页面放入同一条站点导航，弹层宽度随内容平滑变化。':
     'Put the product entrance, resource entrance and current page into the same site navigation, and the width of the elastic layer will change smoothly with the content.',
   '把抽屉约束在指定父容器内。':
@@ -1547,8 +1546,8 @@ const ActionCell = () => {
     'Continuously place content of different heights into the current shortest column, and allow specified content to occupy the entire row.',
   '将菜单绑定到明确的内容区域，右键或键盘菜单键打开与当前对象相关的操作。':
     'Bind menus to explicit content areas, and right-click or keyboard menu keys to open actions related to the current object.',
-  'side 决定浮层位于触发器的哪一侧，align 决定浮层沿该侧的对齐方式。':
-    'side chooses which edge of the trigger the popup uses, while align controls its alignment along that edge.',
+  'side 决定浮层位于触发器的哪一侧；箭头始终指向触发器，align 只调整浮层沿该侧的对齐。':
+    'side chooses which edge of the trigger the popup uses; the arrow always points to the trigger, while align only adjusts the popup along that edge.',
   '将错误语义和颜色传递给整个字段。':
     'Pass error semantics and color to the entire field.',
   '将互斥选项扩展为整行可点击的卡片，同时保留原生单选语义。':
@@ -2058,6 +2057,14 @@ const ActionCell = () => {
     'Sets the horizontal and vertical spacing between Radio.Group options.',
   '设置 Tooltip 方向、对齐和间距。':
     'Set Tooltip orientation, alignment and spacing.',
+  '设置浮层位于触发器的哪一侧。':
+    'Choose which side of the trigger contains the popup.',
+  '设置浮层盒子沿 side 方向的交叉轴对齐；箭头仍然指向触发器。':
+    'Align the popup box along the cross axis of side; the arrow still points to the trigger.',
+  '设置浮层与触发器沿 side 方向的间距。':
+    'Set the distance between the popup and trigger along side.',
+  '设置浮层沿交叉轴的额外偏移。':
+    'Set an additional popup offset along the cross axis.',
   '设置 vertical 后可调整上下区域，适合编辑器与终端、预览与日志等场景。':
     'After setting vertical, the upper and lower areas can be adjusted, which is suitable for scenarios such as editor and terminal, preview and log.',
   '设置按钮组水平或垂直拼接。':
@@ -2436,10 +2443,6 @@ const ActionCell = () => {
   '说明当前为什么没有内容；传入 null 可隐藏标题。':
     'Explain why there is currently no content; pass null to hide the title.',
   四个方向: 'four directions',
-  上方靠左: 'Top, aligned left',
-  上方靠右: 'Top, aligned right',
-  下方靠左: 'Bottom, aligned left',
-  下方靠右: 'Bottom, aligned right',
   '从页面边缘承载较长内容和连续操作，同时保留当前页面上下文。':
     'Use the page edge for longer content and continuous actions while preserving the current page context.',
   四种样式与快捷居中: 'Four styles and quick centering',
@@ -3705,8 +3708,8 @@ const ActionCell = () => {
     'import { Button, Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>Open from the right</Button>}\n  title="Tonight\'s release window"\n  description="22:00–23:00"\n>\n  <ReleaseWindow />\n</Drawer>',
   'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button variant="outline">3 位负责人</Button>}\n  title="发布负责人"\n  description="发布和回滚时会通知这些成员。"\n  content={<OwnerList />}\n  side="bottom"\n/>':
     'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button variant="outline">3 persons in charge</Button>}\n  title="Release Manager"\n  description="These members will be notified when publishing and rolling back."\n  content={<OwnerList />}\n  side="bottom"\n/>',
-  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  align="start"\n  content="左上提示"\n  delay={100}\n  side="top"\n  trigger={<Button>左上</Button>}\n/>':
-    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  align="start"\n  content="Top left tip"\n  delay={100}\n  side="top"\n  trigger={<Button>Top left</Button>}\n/>',
+  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="上方提示"\n  delay={100}\n  side="top"\n  trigger={<Button>上方</Button>}\n/>':
+    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Top tooltip"\n  delay={100}\n  side="top"\n  trigger={<Button>Top</Button>}\n/>',
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: '读取', value: 'read' },\n    { label: '编辑', value: 'write' },\n    { label: '管理', value: 'admin' },\n  ]}\n/>":
     "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: 'read', value: 'read' },\n    { label: 'edit', value: 'write' },\n    { label: 'admin', value: 'admin' },\n  ]}\n/>",
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  name=\"permission\"\n  value={selected}\n  onChange={setSelected}\n  options={[\n    { label: '查看项目', value: 'read' },\n    { label: '参与评论', value: 'comment' },\n    { label: '管理项目', value: 'manage' },\n  ]}\n/>":
@@ -3837,8 +3840,6 @@ const ActionCell = () => {
     "import { Toggle } from '@heliannuuthus/ui'\n\n<Toggle.Group\n  defaultValue={['bold']}\n  items={[\n    { value: 'bold', label: <Bold />, 'aria-label': 'bold' },\n    { value: 'italic', label: <Italic />, 'aria-label': 'italic' },\n  ]}\n/>",
   "import { Toggle } from '@heliannuuthus/ui'\n\n<Toggle.Group\n  value={formats}\n  onChange={setFormats}\n  multiple\n  variant=\"outline\"\n  items={[\n    { value: 'bold', label: <Bold />, 'aria-label': '粗体' },\n    { value: 'italic', label: <Italic />, 'aria-label': '斜体' },\n    { value: 'underline', label: <Underline />, 'aria-label': '下划线' },\n  ]}\n/>":
     "import { Toggle } from '@heliannuuthus/ui'\n\n<Toggle.Group\n  value={formats}\n  onChange={setFormats}\n  multiple\n  variant=\"outline\"\n  items={[\n    { value: 'bold', label: <Bold />, 'aria-label': 'bold' },\n    { value: 'italic', label: <Italic />, 'aria-label': 'italic' },\n    { value: 'underline', label: <Underline />, 'aria-label': 'underline' },\n  ]}\n/>",
-  'import { Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  delay={100}\n  side="top"\n  align="start"\n  content="左上提示"\n  trigger={<Button>左上</Button>}\n/>':
-    'import { Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  delay={100}\n  side="top"\n  align="start"\n  content="Top left tip"\n  trigger={<Button>Top left</Button>}\n/>',
   'import { Typography } from \'@heliannuuthus/ui\'\n\nexport const TypographyStory = () => {\n  return (\n    <article>\n      <Typography.Title level={2}>让界面语言保持清晰</Typography.Title>\n      <Typography.Text as="p" size="xl" tone="muted">稳定的排版让用户先理解内容，再自然地注意到设计。</Typography.Text>\n      <Typography.Text as="p">一致的标题层级和正文节奏，让内容清晰、可信且易于阅读。</Typography.Text>\n      <Typography.Blockquote>一致的界面，来自每一次一致的内容决策。</Typography.Blockquote>\n      <Typography.Text as="p">\n        使用 <Typography.Code>@heliannuuthus/ui</Typography.Code> 组合内容。\n      </Typography.Text>\n      <Typography.Text as="p" size="sm" tone="muted">设计系统札记 · 5 分钟阅读</Typography.Text>\n    </article>\n  )\n}':
     'import { Typography } from \'@heliannuuthus/ui\'\n\nexport const TypographyStory = () => {\n  return (\n    <article>\n      <Typography.Title level={2}>Keep the interface language clear</Typography.Title>\n      <Typography.Text as="p" size="xl" tone="muted">Stable typography allows users to understand the content first and then naturally notice the design. </Typography.Text>\n      <Typography.Text as="p">Consistent heading hierarchy and body rhythm make content clear, believable, and easy to read. </Typography.Text>\n      <Typography.Blockquote>A consistent interface comes from consistent content decisions every time. </Typography.Blockquote>\n      <Typography.Text as="p">\n        Use <Typography.Code>@heliannuuthus/ui</Typography.Code> to combine content.\n      </Typography.Text>\n      <Typography.Text as="p" size="sm" tone="muted">Notes on Design Systems · 5 minutes to read</Typography.Text>\n    </article>\n  )\n}',
   "import { useState } from 'react'\nimport { AspectRatio } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\n\nconst ratios = [\n  { label: '16:9', value: 16 / 9 },\n  { label: '4:3', value: 4 / 3 },\n  { label: '1:1', value: 1 },\n]\n\nexport const CoverEditor = () => {\n  const [ratio, setRatio] = useState(ratios[0])\n\n  return (\n    <div>\n      <AspectRatio ratio={ratio.value}>\n        <img src=\"/cover.jpg\" alt=\"内容封面\" />\n      </AspectRatio>\n      {ratios.map((option) => (\n        <Button key={option.label} onClick={() => setRatio(option)}>\n          {option.label}\n        </Button>\n      ))}\n    </div>\n  )\n}":
@@ -3920,7 +3921,7 @@ const ActionCell = () => {
     'Toast will only appear at the top of the current container',
   'Toggle 与 Toggle.Group 使用统一尺寸；通过 items 管理可同时开启的工具状态。':
     'Toggle and Toggle.Group use the same size; use items to manage the status of tools that can be opened at the same time.',
-  'Tooltip 方向与对齐': 'Tooltip direction and alignment',
+  'Tooltip 四个方向': 'Tooltip four directions',
   'v0.12.0 发布详情': 'v0.12.0 release details',
   'v0.12.0 已部署到生产环境。': 'v0.12.0 has been deployed to production.',
   'variant 只区分信息层级；同一种状态不要在页面内混用多套样式。':
