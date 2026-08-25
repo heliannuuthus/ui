@@ -4,6 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 
 type TabsAnimation = 'none' | 'fade' | 'slide';
 
@@ -76,8 +77,8 @@ type TabsProps = Omit<
   };
 
 const Tabs = ({
-  animation = 'fade',
-  centered = false,
+  animation: animationProp,
+  centered: centeredProp,
   className,
   classNames,
   items,
@@ -85,9 +86,13 @@ const Tabs = ({
   orientation = 'horizontal',
   scrollLabels,
   styles,
-  variant = 'default',
+  variant: variantProp,
   ...props
 }: TabsProps) => {
+  const defaults = useComponentDefaults('Tabs');
+  const animation = animationProp ?? defaults.animation ?? 'fade';
+  const centered = centeredProp ?? defaults.centered ?? false;
+  const variant = variantProp ?? defaults.variant ?? 'default';
   const listRef = React.useRef<HTMLDivElement>(null);
   const [overflowState, setOverflowState] = React.useState({
     end: false,

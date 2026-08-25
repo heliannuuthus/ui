@@ -3,6 +3,7 @@
 import { Progress as ProgressPrimitive } from '@base-ui/react/progress';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 
 type ProgressEffect = 'none' | 'sparkle';
 
@@ -22,15 +23,18 @@ type ProgressProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   value: number | null;
 };
 
-const Progress = ({
-  className,
-  children,
-  effect = 'none',
-  label,
-  showValue = false,
-  value,
-  ...props
-}: ProgressProps): React.JSX.Element => {
+const Progress = (progressProps: ProgressProps): React.JSX.Element => {
+  const defaults = useComponentDefaults('Progress');
+  const {
+    className,
+    children,
+    effect = defaults.effect ?? 'none',
+    label,
+    showValue = false,
+    value,
+    ...props
+  } = progressProps;
+
   return (
     <ProgressPrimitive.Root
       value={value}

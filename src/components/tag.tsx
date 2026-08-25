@@ -2,6 +2,7 @@ import { cva } from 'class-variance-authority';
 import { forwardRef, type ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 
 type TagType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error';
 
@@ -28,8 +29,11 @@ const tagVariants = cva(
   }
 );
 
-const Tag = forwardRef<HTMLSpanElement, TagProps>(
-  ({ className, type = 'default', ...props }, ref) => (
+const Tag = forwardRef<HTMLSpanElement, TagProps>((tagProps, ref) => {
+  const defaults = useComponentDefaults('Tag');
+  const { className, type = defaults.type ?? 'default', ...props } = tagProps;
+
+  return (
     <span
       {...props}
       ref={ref}
@@ -37,8 +41,8 @@ const Tag = forwardRef<HTMLSpanElement, TagProps>(
       data-slot="tag"
       data-type={type}
     />
-  )
-);
+  );
+});
 
 Tag.displayName = 'Tag';
 

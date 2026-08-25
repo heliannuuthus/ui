@@ -2,6 +2,7 @@ import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 
 type AlertVariantOptions = {
   class?: never;
@@ -41,19 +42,23 @@ type AlertProps = Omit<React.ComponentProps<'div'>, 'title'> &
     title?: React.ReactNode;
   };
 
-const Alert = ({
-  action,
-  children,
-  className,
-  description,
-  icon,
-  title,
-  variant,
-  ...props
-}: AlertProps) => {
+const Alert = (alertProps: AlertProps) => {
+  const defaults = useComponentDefaults('Alert');
+  const {
+    action,
+    children,
+    className,
+    description,
+    icon,
+    title,
+    variant = defaults.variant ?? 'default',
+    ...props
+  } = alertProps;
+
   return (
     <div
       data-slot="alert"
+      data-variant={variant}
       role="alert"
       className={cn(alertVariants({ variant }), className)}
       {...props}

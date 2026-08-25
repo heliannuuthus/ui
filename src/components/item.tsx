@@ -2,6 +2,7 @@ import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 import { Separator } from './separator';
 
 type ItemVariantOptions = {
@@ -121,12 +122,15 @@ const Item = ({
   header,
   media,
   mediaType = 'default',
-  size = 'default',
+  size: sizeProp,
   styles,
   title,
-  variant = 'default',
+  variant: variantProp,
   ...props
 }: ItemProps) => {
+  const defaults = useComponentDefaults('Item');
+  const size = sizeProp ?? defaults.size ?? 'default';
+  const variant = variantProp ?? defaults.variant ?? 'default';
   const hasContent = title != null || description != null || content != null;
 
   const children = (

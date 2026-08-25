@@ -12,6 +12,7 @@ import {
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
+import { useComponentDefaults } from './provider';
 
 type ToggleVariantOptions = {
   class?: never;
@@ -82,9 +83,11 @@ const ToggleRoot = ({
   onBlur,
   required,
   value,
-  variant = 'default',
+  variant: variantProp,
   ...props
 }: ToggleProps) => {
+  const defaults = useComponentDefaults('Toggle');
+  const variant = variantProp ?? defaults.variant ?? 'default';
   const formControl = useFormControl<boolean>();
   const controlRef = useMergedRefs(
     inputRef,
@@ -134,9 +137,11 @@ const ToggleGroup = <Value extends string = string>({
   onBlur,
   orientation = 'horizontal',
   value,
-  variant = 'default',
+  variant: variantProp,
   ...props
 }: ToggleGroupProps<Value>) => {
+  const defaults = useComponentDefaults('Toggle');
+  const variant = variantProp ?? defaults.variant ?? 'default';
   const formControl = useFormControl<Value[]>();
 
   return (

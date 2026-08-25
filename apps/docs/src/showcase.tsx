@@ -341,9 +341,16 @@ const providerCode = `import { Provider } from '@heliannuuthus/ui'
     radius: '0.75rem',
   }}
   components={{
+    AlertDialog: { size: 'sm' },
+    Attachment: { size: 'sm' },
     Avatar: { shape: 'square' },
     Button: { size: 'sm' },
     Card: { variant: 'outline' },
+    Input: {
+      Number: { size: 'sm' },
+      OTP: { variant: 'separated' },
+    },
+    Tabs: { animation: 'slide', variant: 'line' },
   }}
 >
   <App />
@@ -371,6 +378,34 @@ const providerColorTokens = [
   'cardForeground',
   'popover',
   'popoverForeground',
+] as const;
+
+const providerComponentDefaults = [
+  ['Alert', ['variant']],
+  ['AlertDialog', ['size']],
+  ['Attachment', ['size']],
+  ['Avatar', ['shape', 'size']],
+  ['Breadcrumb', ['size', 'variant']],
+  ['Bubble', ['variant']],
+  ['Button', ['block', 'size', 'variant']],
+  ['Card', ['variant']],
+  ['Checkbox', ['variant']],
+  ['Collapsible', ['size', 'variant']],
+  ['DropdownMenu', ['size']],
+  ['Input.Number', ['size']],
+  ['Input.OTP', ['variant']],
+  ['Item', ['size', 'variant']],
+  ['Marker', ['variant']],
+  ['Menubar', ['size']],
+  ['Pagination', ['size']],
+  ['Progress', ['effect']],
+  ['ScrollArea', ['scrollbar.size', 'scrollbar.visibility']],
+  ['Slider', ['effect']],
+  ['Spinner', ['size']],
+  ['Tabs', ['animation', 'centered', 'variant']],
+  ['Tag', ['type']],
+  ['Toggle', ['variant']],
+  ['Typography.Text', ['size', 'tone', 'weight']],
 ] as const;
 
 const navItems = [
@@ -787,21 +822,6 @@ const GettingStartedPage = () => {
       description: t('gettingStarted.radiusDescription'),
       name: 'theme.radius',
     },
-    {
-      description: t('gettingStarted.avatarDefaultsDescription'),
-      name: 'components.Avatar',
-      values: ['shape', 'size'],
-    },
-    {
-      description: t('gettingStarted.buttonDefaultsDescription'),
-      name: 'components.Button',
-      values: ['block', 'size', 'variant'],
-    },
-    {
-      description: t('gettingStarted.cardDefaultsDescription'),
-      name: 'components.Card',
-      values: ['variant'],
-    },
   ] as const;
 
   return (
@@ -895,6 +915,30 @@ const GettingStartedPage = () => {
                       ))}
                     </div>
                   ) : null}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </Stack>
+        <Stack block gap={12}>
+          <Stack block gap={4}>
+            <Typography.Title level={3} className="text-lg">
+              {t('gettingStarted.componentDefaults')}
+            </Typography.Title>
+            <Typography.Text as="p" size="sm" tone="muted">
+              {t('gettingStarted.componentDefaultsDescription')}
+            </Typography.Text>
+          </Stack>
+          <dl className="provider-component-defaults">
+            {providerComponentDefaults.map(([component, properties]) => (
+              <div key={component}>
+                <dt>
+                  <Typography.Code>{component}</Typography.Code>
+                </dt>
+                <dd>
+                  {properties.map((property) => (
+                    <Typography.Code key={property}>{property}</Typography.Code>
+                  ))}
                 </dd>
               </div>
             ))}

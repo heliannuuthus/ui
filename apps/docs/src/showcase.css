@@ -526,6 +526,46 @@ a {
 .provider-contract-values code {
   font-size: 11px;
 }
+.provider-component-defaults {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--background);
+}
+.provider-component-defaults > div {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(110px, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.provider-component-defaults > div:nth-child(odd) {
+  border-right: 1px solid var(--line);
+}
+.provider-component-defaults > div:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+.provider-component-defaults > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  border-right: 0;
+}
+.provider-component-defaults dt,
+.provider-component-defaults dd {
+  min-width: 0;
+  margin: 0;
+}
+.provider-component-defaults dd {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.provider-component-defaults code {
+  font-size: 11px;
+}
 .provider-boundary {
   align-items: flex-start;
   background: color-mix(in srgb, var(--primary) 4%, var(--background));
@@ -3946,6 +3986,19 @@ a {
   }
   .provider-contract dt code {
     white-space: normal;
+  }
+  .provider-component-defaults {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .provider-component-defaults > div {
+    grid-template-columns: minmax(120px, 0.8fr) minmax(0, 1.2fr);
+    border-right: 0;
+  }
+  .provider-component-defaults > div:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+  .provider-component-defaults > div:nth-last-child(2) {
+    border-bottom: 1px solid var(--line);
   }
   .home-section {
     padding: 75px 20px;

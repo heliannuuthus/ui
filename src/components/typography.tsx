@@ -10,6 +10,7 @@ import {
 } from 'react';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 
 type TypographyTitleLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -110,16 +111,25 @@ const TypographyTextRender = <Element extends TypographyTextElement = 'span'>(
   {
     as,
     className,
-    size = 'md',
-    tone = 'default',
-    weight = 'normal',
+    size: sizeProp,
+    tone: toneProp,
+    weight: weightProp,
     ...props
   }: TypographyTextProps<Element>,
   ref: ForwardedRef<ComponentRef<Element>>
 ) => {
+  const defaults = useComponentDefaults('Typography').Text;
+  const size = sizeProp ?? defaults?.size ?? 'md';
+  const tone = toneProp ?? defaults?.tone ?? 'default';
+  const weight = weightProp ?? defaults?.weight ?? 'normal';
+
+  // eslint-disable-next-line react-hooks/refs -- Forward the ref to React without reading it during render.
   return createElement(as ?? 'span', {
     ...props,
     ref,
+    'data-size': size,
+    'data-tone': tone,
+    'data-weight': weight,
     className: cn(textVariants({ size, tone, weight }), className),
   });
 };

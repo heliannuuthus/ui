@@ -4,9 +4,31 @@ import { DirectionProvider as BaseDirectionProvider } from '@base-ui/react/direc
 import * as React from 'react';
 
 import { cn } from '../lib/utils';
+import type { AlertProps } from './alert';
+import type { AlertDialogProps } from './alert-dialog';
+import type { AttachmentProps } from './attachment';
 import type { AvatarProps } from './avatar';
+import type { BreadcrumbProps } from './breadcrumb';
+import type { BubbleProps } from './bubble';
 import type { ButtonProps } from './button';
 import type { CardProps } from './card';
+import type { CheckboxProps } from './checkbox';
+import type { CollapsibleProps } from './collapsible';
+import type { DropdownMenuProps } from './dropdown-menu';
+import type { InputNumberProps } from './input-number';
+import type { InputOTPProps } from './input';
+import type { ItemProps } from './item';
+import type { MarkerProps } from './marker';
+import type { MenubarProps } from './menubar';
+import type { PaginationProps } from './pagination';
+import type { ProgressProps } from './progress';
+import type { ScrollAreaProps } from './scroll-area';
+import type { SliderProps } from './slider';
+import type { SpinnerProps } from './spinner';
+import type { TabsProps } from './tabs';
+import type { TagProps } from './tag';
+import type { ToggleProps } from './toggle';
+import type { TypographyTextProps } from './typography';
 
 type TextDirection = 'ltr' | 'rtl';
 type ProviderAppearance = 'dark' | 'light' | 'system';
@@ -43,9 +65,38 @@ type ProviderTheme = {
 };
 
 type ProviderComponents = {
+  Alert?: Pick<AlertProps, 'variant'>;
+  AlertDialog?: Pick<AlertDialogProps, 'size'>;
+  Attachment?: Pick<AttachmentProps, 'size'>;
   Avatar?: Pick<AvatarProps, 'shape' | 'size'>;
+  Breadcrumb?: Pick<BreadcrumbProps, 'size' | 'variant'>;
+  Bubble?: Pick<BubbleProps, 'variant'>;
   Button?: Pick<ButtonProps, 'block' | 'size' | 'variant'>;
   Card?: Pick<CardProps, 'variant'>;
+  Checkbox?: Pick<CheckboxProps, 'variant'>;
+  Collapsible?: Pick<
+    NonNullable<CollapsibleProps['triggerProps']>,
+    'size' | 'variant'
+  >;
+  DropdownMenu?: Pick<DropdownMenuProps, 'size'>;
+  Input?: {
+    Number?: Pick<InputNumberProps, 'size'>;
+    OTP?: Pick<InputOTPProps, 'variant'>;
+  };
+  Item?: Pick<ItemProps, 'size' | 'variant'>;
+  Marker?: Pick<MarkerProps, 'variant'>;
+  Menubar?: Pick<MenubarProps, 'size'>;
+  Pagination?: Pick<PaginationProps, 'size'>;
+  Progress?: Pick<ProgressProps, 'effect'>;
+  ScrollArea?: Pick<ScrollAreaProps, 'scrollbar'>;
+  Slider?: Pick<SliderProps<number>, 'effect'>;
+  Spinner?: Pick<SpinnerProps, 'size'>;
+  Tabs?: Pick<TabsProps, 'animation' | 'centered' | 'variant'>;
+  Tag?: Pick<TagProps, 'type'>;
+  Toggle?: Pick<ToggleProps, 'variant'>;
+  Typography?: {
+    Text?: Pick<TypographyTextProps, 'size' | 'tone' | 'weight'>;
+  };
 };
 
 type ProviderProps = Omit<React.ComponentProps<'div'>, 'dir'> & {
@@ -108,11 +159,52 @@ const mergeTheme = (
 const mergeComponents = (
   parent: ProviderComponents | undefined,
   components: ProviderComponents | undefined
-): ProviderComponents => ({
-  Avatar: { ...parent?.Avatar, ...components?.Avatar },
-  Button: { ...parent?.Button, ...components?.Button },
-  Card: { ...parent?.Card, ...components?.Card },
-});
+): ProviderComponents => {
+  const merged: Record<string, object> = { ...parent };
+
+  for (const [name, defaults] of Object.entries(components ?? {})) {
+    const parentDefaults = merged[name] ?? {};
+    merged[name] = { ...parentDefaults, ...defaults };
+
+    if (name === 'ScrollArea') {
+      type ScrollAreaDefaults = NonNullable<ProviderComponents['ScrollArea']>;
+      const parentScrollbar = (parentDefaults as ScrollAreaDefaults).scrollbar;
+      const scrollbar = (defaults as ScrollAreaDefaults).scrollbar;
+      (merged[name] as ScrollAreaDefaults).scrollbar = {
+        ...parentScrollbar,
+        ...scrollbar,
+      };
+    }
+
+    if (name === 'Input') {
+      type InputDefaults = NonNullable<ProviderComponents['Input']>;
+      const parentNumber = (parentDefaults as InputDefaults).Number;
+      const number = (defaults as InputDefaults).Number;
+      const parentOTP = (parentDefaults as InputDefaults).OTP;
+      const otp = (defaults as InputDefaults).OTP;
+      (merged[name] as InputDefaults).Number = {
+        ...parentNumber,
+        ...number,
+      };
+      (merged[name] as InputDefaults).OTP = {
+        ...parentOTP,
+        ...otp,
+      };
+    }
+
+    if (name === 'Typography') {
+      type TypographyDefaults = NonNullable<ProviderComponents['Typography']>;
+      const parentText = (parentDefaults as TypographyDefaults).Text;
+      const text = (defaults as TypographyDefaults).Text;
+      (merged[name] as TypographyDefaults).Text = {
+        ...parentText,
+        ...text,
+      };
+    }
+  }
+
+  return merged as ProviderComponents;
+};
 
 const colorVariables = {
   accent: '--accent',

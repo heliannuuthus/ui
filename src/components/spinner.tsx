@@ -1,4 +1,5 @@
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 import { Loader2Icon } from 'lucide-react';
 
 type SpinnerSize = 'sm' | 'default' | 'lg';
@@ -15,11 +16,15 @@ const spinnerSizes: Record<SpinnerSize, string> = {
 
 const Spinner = ({
   className,
-  size = 'default',
+  size: sizeProp,
   ...props
 }: SpinnerProps): React.JSX.Element => {
+  const defaults = useComponentDefaults('Spinner');
+  const size = sizeProp ?? defaults.size ?? 'default';
+
   return (
     <Loader2Icon
+      data-size={size}
       data-slot="spinner"
       role="status"
       aria-label="Loading"

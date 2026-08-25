@@ -2,6 +2,7 @@ import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 
 type MarkerVariantOptions = {
   class?: never;
@@ -57,9 +58,11 @@ const Marker = ({
   content,
   icon,
   styles,
-  variant = 'default',
+  variant: variantProp,
   ...props
 }: MarkerProps) => {
+  const defaults = useComponentDefaults('Marker');
+  const variant = variantProp ?? defaults.variant ?? 'default';
   const children = (
     <>
       {icon != null ? (

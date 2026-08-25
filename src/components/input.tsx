@@ -11,6 +11,7 @@ import {
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
+import { useComponentDefaults } from './provider';
 import { InputNumber } from './input-number';
 
 type InputOTPVariant = 'connected' | 'separated';
@@ -122,7 +123,7 @@ const OTPSeparator = () => {
 const OTPField = ({
   className,
   maxLength = 6,
-  variant = 'connected',
+  variant: variantProp,
   autoComplete = 'one-time-code',
   defaultValue,
   disabled,
@@ -137,6 +138,8 @@ const OTPField = ({
   'aria-invalid': ariaInvalid,
   ...props
 }: InputOTPProps) => {
+  const defaults = useComponentDefaults('Input');
+  const variant = variantProp ?? defaults.OTP?.variant ?? 'connected';
   const formControl = useFormControl<string>();
   const inputRef = useMergedRefs(
     ref,

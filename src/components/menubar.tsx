@@ -4,6 +4,7 @@ import { Menubar as MenubarPrimitive } from '@base-ui/react/menubar';
 
 import { cn } from '../lib/utils';
 import type { DropdownMenuEntry } from './dropdown-menu';
+import { useComponentDefaults } from './provider';
 import { CheckIcon, ChevronRightIcon } from 'lucide-react';
 
 const MenubarRoot = ({ className, ...props }: MenubarPrimitive.Props) => {
@@ -328,10 +329,13 @@ const renderMenubarEntries = (items: DropdownMenuEntry[]) => {
 
 const Menubar = ({
   menus,
-  size = 'default',
+  size: sizeProp,
   className,
   ...props
 }: MenubarProps) => {
+  const defaults = useComponentDefaults('Menubar');
+  const size = sizeProp ?? defaults.size ?? 'default';
+
   return (
     <MenubarRoot
       data-size={size}

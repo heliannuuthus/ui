@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ScrollArea as ScrollAreaPrimitive } from '@base-ui/react/scroll-area';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 
 type ScrollAreaOrientation = 'vertical' | 'horizontal' | 'both';
 type ScrollAreaScrollbarVisibility = 'auto' | 'always' | 'hidden';
@@ -62,7 +63,9 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
     },
     ref
   ) => {
-    const { size = 'md', visibility = 'auto' } = scrollbar ?? {};
+    const defaults = useComponentDefaults('ScrollArea');
+    const resolvedScrollbar = { ...defaults.scrollbar, ...scrollbar };
+    const { size = 'md', visibility = 'auto' } = resolvedScrollbar;
     const showsScrollbar = visibility !== 'hidden';
 
     return (

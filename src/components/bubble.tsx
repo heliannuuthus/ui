@@ -5,6 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
 import type { DataAttributes } from './internal/public-types';
+import { useComponentDefaults } from './provider';
 
 type BubbleVariantOptions = {
   class?: never;
@@ -81,9 +82,12 @@ const Bubble = ({
   contentProps,
   reactions,
   reactionsProps,
-  variant = 'default',
+  variant: variantProp,
   ...props
 }: BubbleProps) => {
+  const defaults = useComponentDefaults('Bubble');
+  const variant = variantProp ?? defaults.variant ?? 'default';
+
   return (
     <div
       data-slot="bubble"

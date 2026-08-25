@@ -9,6 +9,7 @@ import {
 
 import { cn } from '../lib/utils';
 import { buttonVariants } from './button';
+import { useComponentDefaults } from './provider';
 import { Select } from './select';
 
 type PaginationSize = 'sm' | 'default' | 'lg';
@@ -193,7 +194,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       showTotal = false,
       siblings = 1,
       simple = false,
-      size = 'default',
+      size: sizeProp,
       style,
       styles,
       total,
@@ -201,6 +202,8 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
     },
     ref
   ) => {
+    const defaults = useComponentDefaults('Pagination');
+    const size = sizeProp ?? defaults.size ?? 'default';
     const [uncontrolledCurrent, setUncontrolledCurrent] = React.useState(
       Math.max(1, Math.trunc(defaultCurrent))
     );

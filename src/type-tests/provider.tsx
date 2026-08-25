@@ -9,9 +9,30 @@ import {
 } from '..';
 
 const components = {
+  Alert: { variant: 'success' },
+  AlertDialog: { size: 'sm' },
+  Attachment: { size: 'sm' },
   Avatar: { shape: 'square', size: 'sm' },
+  Breadcrumb: { size: 'sm', variant: 'underline' },
+  Bubble: { variant: 'muted' },
   Button: { size: 'sm', variant: 'outline' },
   Card: { variant: 'outline' },
+  Checkbox: { variant: 'task' },
+  Collapsible: { size: 'sm', variant: 'ghost' },
+  DropdownMenu: { size: 'sm' },
+  Input: { Number: { size: 'sm' }, OTP: { variant: 'separated' } },
+  Item: { size: 'sm', variant: 'muted' },
+  Marker: { variant: 'separator' },
+  Menubar: { size: 'sm' },
+  Pagination: { size: 'sm' },
+  Progress: { effect: 'sparkle' },
+  ScrollArea: { scrollbar: { size: 'sm', visibility: 'always' } },
+  Slider: { effect: 'none' },
+  Spinner: { size: 'sm' },
+  Tabs: { animation: 'slide', centered: true, variant: 'line' },
+  Tag: { type: 'primary' },
+  Toggle: { variant: 'outline' },
+  Typography: { Text: { size: 'sm', tone: 'muted', weight: 'medium' } },
 } satisfies ProviderComponents;
 
 const theme = {

@@ -7,6 +7,7 @@ import type {
   PopupAlign,
   PopupSide,
 } from './internal/public-types';
+import { useComponentDefaults } from './provider';
 import { ChevronRightIcon, CheckIcon } from 'lucide-react';
 
 const DropdownMenuRoot = ({ ...props }: MenuPrimitive.Root.Props) => {
@@ -386,11 +387,14 @@ const DropdownMenu = ({
   items,
   align = 'start',
   side = 'bottom',
-  size = 'default',
+  size: sizeProp,
   classNames,
   styles,
   ...props
 }: DropdownMenuProps) => {
+  const defaults = useComponentDefaults('DropdownMenu');
+  const size = sizeProp ?? defaults.size ?? 'default';
+
   return (
     <DropdownMenuRoot {...props}>
       <DropdownMenuTrigger render={trigger} />

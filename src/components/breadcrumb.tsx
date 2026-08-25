@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 import { DropdownMenu, type DropdownMenuEntry } from './dropdown-menu';
 
 type BreadcrumbMenuItem = {
@@ -163,14 +164,17 @@ const CollapsedItems = ({
 
 const Breadcrumb = ({
   items,
-  variant = 'default',
+  variant: variantProp,
   separator = 'chevron',
-  size = 'default',
+  size: sizeProp,
   collapse,
   icon = false,
   className,
   ...props
 }: BreadcrumbProps) => {
+  const defaults = useComponentDefaults('Breadcrumb');
+  const size = sizeProp ?? defaults.size ?? 'default';
+  const variant = variantProp ?? defaults.variant ?? 'default';
   const collapseOptions =
     typeof collapse === 'number' ? { maxItems: collapse } : collapse;
   const entries = getEntries(

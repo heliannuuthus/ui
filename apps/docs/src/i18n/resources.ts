@@ -134,9 +134,9 @@ const zh = {
       darkColorsDescription:
         '覆盖深色模式的语义色，可配置项与 colors 完全相同；未设置的值继续使用 colors 或默认主题。',
       radiusDescription: '设置组件共享的基础圆角值。',
-      avatarDefaultsDescription: '可统一设置 shape 与 size。',
-      buttonDefaultsDescription: '可统一设置 block、size 与 variant。',
-      cardDefaultsDescription: '可统一设置 variant。',
+      componentDefaults: '组件默认属性',
+      componentDefaultsDescription:
+        '下面列出当前支持统一管理的全部组件和展示属性；未列出的状态、内容与事件仍由组件实例明确传入。',
       configurationBoundary: '配置边界',
       configurationBoundaryDescription:
         'Provider 只管理跨组件的视觉默认值，不管理文案、事件、业务状态或数据行为。组件显式传入的属性始终优先于全局默认值。',
@@ -314,10 +314,9 @@ const en = {
       darkColorsDescription:
         'Override semantic colors for dark mode with the same token set as colors. Unspecified values continue to use colors or the default theme.',
       radiusDescription: 'Set the shared base radius for components.',
-      avatarDefaultsDescription: 'Set shared shape and size defaults.',
-      buttonDefaultsDescription:
-        'Set shared block, size, and variant defaults.',
-      cardDefaultsDescription: 'Set the shared variant default.',
+      componentDefaults: 'Component defaults',
+      componentDefaultsDescription:
+        'This is the complete list of components and presentation props that can currently be managed globally. Unlisted state, content, and events remain explicit on each component instance.',
       configurationBoundary: 'Configuration boundary',
       configurationBoundaryDescription:
         'Provider manages cross-component visual defaults only. It does not manage copy, events, business state, or data behavior. Explicit component props always override global defaults.',

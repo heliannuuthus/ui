@@ -10,6 +10,7 @@ import {
 } from 'motion/react';
 
 import { cn } from '../lib/utils';
+import { useComponentDefaults } from './provider';
 import {
   mergeIds,
   registerFormControl,
@@ -59,30 +60,34 @@ const elasticTransition = {
   mass: 0.7,
 } as const;
 
-const Slider = <Value extends number | readonly number[]>({
-  'aria-describedby': ariaDescribedBy,
-  'aria-invalid': ariaInvalid,
-  'aria-labelledby': ariaLabelledBy,
-  className,
-  defaultValue,
-  disabled,
-  effect = 'elastic',
-  endIcon,
-  endLabel,
-  id,
-  inputRef,
-  max = 100,
-  min = 0,
-  name,
-  onBlur,
-  onChange,
-  onChangeComplete,
-  orientation = 'horizontal',
-  startIcon,
-  startLabel,
-  value,
-  ...props
-}: SliderProps<Value>) => {
+const Slider = <Value extends number | readonly number[]>(
+  sliderProps: SliderProps<Value>
+) => {
+  const defaults = useComponentDefaults('Slider');
+  const {
+    'aria-describedby': ariaDescribedBy,
+    'aria-invalid': ariaInvalid,
+    'aria-labelledby': ariaLabelledBy,
+    className,
+    defaultValue,
+    disabled,
+    effect = defaults.effect ?? 'elastic',
+    endIcon,
+    endLabel,
+    id,
+    inputRef,
+    max = 100,
+    min = 0,
+    name,
+    onBlur,
+    onChange,
+    onChangeComplete,
+    orientation = 'horizontal',
+    startIcon,
+    startLabel,
+    value,
+    ...props
+  } = sliderProps;
   const formControl = useFormControl<Value>();
   const formInputRef = useMergedRefs(
     inputRef,

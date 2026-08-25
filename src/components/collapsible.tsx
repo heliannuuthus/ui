@@ -6,6 +6,7 @@ import { ChevronDownIcon, ChevronRightIcon } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { buttonVariants, type ButtonNativeProps } from './button';
 import type { OpenStateProps } from './internal/public-types';
+import { useComponentDefaults } from './provider';
 
 type CollapsibleTriggerProps = Omit<
   ButtonNativeProps,
@@ -51,11 +52,14 @@ const Collapsible = ({
   triggerProps,
   ...props
 }: CollapsibleProps) => {
+  const defaults = useComponentDefaults('Collapsible');
   const {
-    size = 'default',
-    variant = 'outline',
+    size: sizeProp,
+    variant: variantProp,
     ...restTriggerProps
   } = triggerProps ?? {};
+  const size = sizeProp ?? defaults.size ?? 'default';
+  const variant = variantProp ?? defaults.variant ?? 'outline';
   const resolvedIndicator =
     indicator === true ? (
       trigger == null ? (

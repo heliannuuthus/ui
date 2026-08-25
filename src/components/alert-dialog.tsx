@@ -6,6 +6,7 @@ import { AlertDialog as AlertDialogPrimitive } from '@base-ui/react/alert-dialog
 import { cn } from '../lib/utils';
 import { Button } from './button';
 import type { OpenStateProps } from './internal/public-types';
+import { useComponentDefaults } from './provider';
 
 type AlertDialogClassNames = {
   content?: string;
@@ -37,12 +38,15 @@ const AlertDialog = ({
   description,
   media,
   onConfirm,
-  size = 'default',
+  size: sizeProp,
   styles,
   title,
   trigger,
   ...props
 }: AlertDialogProps) => {
+  const defaults = useComponentDefaults('AlertDialog');
+  const size = sizeProp ?? defaults.size ?? 'default';
+
   return (
     <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props}>
       <AlertDialogPrimitive.Trigger

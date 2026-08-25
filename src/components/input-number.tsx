@@ -9,6 +9,7 @@ import {
   useMergedRefs,
   useFormControl,
 } from './internal/form-control';
+import { useComponentDefaults } from './provider';
 
 type InputNumberSize = 'sm' | 'default' | 'lg';
 
@@ -113,12 +114,14 @@ const InputNumber = ({
   readOnly,
   ref,
   required,
-  size = 'default',
+  size: sizeProp,
   suffix,
   styles,
   value,
   ...props
 }: InputNumberProps) => {
+  const defaults = useComponentDefaults('Input');
+  const size = sizeProp ?? defaults.Number?.size ?? 'default';
   const formControl = useFormControl<number | null | undefined>();
   const controlRef = useMergedRefs(
     inputRef,
