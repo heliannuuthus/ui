@@ -47,7 +47,8 @@
 @layer components {
   [data-popup-arrow] {
     --popup-arrow-depth: 5px;
-    --popup-arrow-side-offset: -7.5px;
+    --popup-arrow-overlap: 1px;
+    --popup-arrow-side-offset: -6.5px;
 
     position: relative;
     z-index: 50;
@@ -60,12 +61,12 @@
   }
 
   [data-popup-arrow][data-side='top'] {
-    bottom: calc(-1 * var(--popup-arrow-depth));
+    bottom: calc(var(--popup-arrow-overlap) - var(--popup-arrow-depth));
     rotate: 180deg;
   }
 
   [data-popup-arrow][data-side='bottom'] {
-    top: calc(-1 * var(--popup-arrow-depth));
+    top: calc(var(--popup-arrow-overlap) - var(--popup-arrow-depth));
   }
 
   [data-popup-arrow][data-side='left'] {
