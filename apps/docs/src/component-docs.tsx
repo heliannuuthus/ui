@@ -206,7 +206,6 @@ import { minimalComponentPreviews } from './minimal-previews';
 import {
   type ComponentHarnessCase,
   type ComponentHarnessCaseAxis,
-  type ComponentHarnessLayout,
   type ComponentHarnessValues,
 } from './component-harness';
 import { createCasesFromAxes } from './component-harness-cases';
@@ -245,7 +244,6 @@ export type ComponentExample = {
   code: string;
   coveredProperties?: string[];
   caseAxes?: ComponentHarnessCaseAxis[];
-  caseLayout?: ComponentHarnessLayout;
   caseMinWidth?: number;
   cases?: ComponentHarnessCase[];
   wide?: boolean;
@@ -1637,7 +1635,6 @@ export const StackGapExample = () => {
       description: docsCopy(
         'Compact 不只组合按钮，也可以拼接 Input、Select、Slider 与操作控件。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'orientation',
@@ -1697,7 +1694,6 @@ export const SliderCompactExample = () => {
       description: docsCopy(
         'align 控制交叉轴对齐，justify 控制主轴分布；对应属性和值在示例代码中完整展示。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'axis',
@@ -1916,7 +1912,6 @@ const cardDocumentation: ComponentDocumentation = {
     {
       title: docsCopy('基础卡片'),
       description: docsCopy('只提供标题和内容，即可快速组织一组相关信息。'),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'variant',
@@ -3223,7 +3218,6 @@ const tabsDocumentation: ComponentDocumentation = {
       description: docsCopy(
         '320px 与 480px 只是代表性的测试容器，不是组件断点；空间不足时隐藏原生滚动条、显示两侧导航按钮，同时保留触摸与触控板横向滑动。'
       ),
-      caseLayout: 'segmented',
       cases: [
         {
           label: docsCopy('默认名称'),
@@ -3505,7 +3499,6 @@ const layoutDocumentation: ComponentDocumentation = {
         'Sidebar 在 lg 以下自动折叠，也可以通过内置触发器手动切换；collapsedWidth 决定折叠后保留的宽度。'
       ),
       previewHeight: 370,
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'defaultCollapsed',
@@ -4083,7 +4076,6 @@ componentDocumentation['context-menu'].examples = [
     description: docsCopy(
       '比较默认非受控、通过 open 与 onOpenChange 管理的受控模式，以及 disabled 阻止触发的状态。'
     ),
-    caseLayout: 'segmented',
     caseMinWidth: 250,
     cases: [
       {
@@ -4307,7 +4299,6 @@ componentDocumentation.avatar.examples = [
     description: docsCopy(
       'shape 在圆形和圆角方形之间切换，每种形状作为独立 case 展示。'
     ),
-    caseLayout: 'segmented',
     caseAxes: [
       {
         name: 'shape',
@@ -4335,7 +4326,6 @@ componentDocumentation.avatar.examples = [
     description: docsCopy(
       'size 提供小、中、大三档尺寸，并同步调整文字与状态标记。'
     ),
-    caseLayout: 'segmented',
     caseAxes: [
       {
         name: 'size',
@@ -4365,7 +4355,6 @@ componentDocumentation.avatar.examples = [
     description: docsCopy(
       'src 提供头像图片；加载失败时显示 fallback，并通过 imageProps 与 fallbackProps 配置加载回调和延迟。'
     ),
-    caseLayout: 'segmented',
     caseAxes: [
       {
         name: 'source',
@@ -4416,7 +4405,6 @@ componentDocumentation.avatar.examples = [
     description: docsCopy(
       'renderCount 接收未展示数量并替换默认 +N，同时继承分组的 shape 与 size。'
     ),
-    caseLayout: 'segmented',
     caseAxes: [
       {
         name: 'count',
@@ -4847,7 +4835,6 @@ const form = Form.useForm<Values>({
       description: docsCopy(
         '使用 Input 的 variant 切换连接方块与独立方块，并通过分段控件逐项预览。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'variant',
@@ -4937,7 +4924,6 @@ const form = Form.useForm<Values>({
       description: docsCopy(
         '比较常用尺寸、隐藏步进按钮、只读、禁用和校验失败状态。'
       ),
-      caseLayout: 'segmented',
       caseMinWidth: 220,
       cases: [
         {
@@ -5033,7 +5019,6 @@ const form = Form.useForm<Values>({
       description: docsCopy(
         '将互斥选项扩展为整行可点击的卡片，同时保留原生单选语义。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'orientation',
@@ -5074,7 +5059,6 @@ const form = Form.useForm<Values>({
       description: docsCopy(
         '候选项较多且用户知道关键词时，直接输入过滤、清除并重新选择。'
       ),
-      caseLayout: 'segmented',
       cases: [
         {
           isDefault: true,
@@ -5235,7 +5219,6 @@ export const ControlledToggle = () => {
       description: docsCopy(
         'Toggle 与 Toggle.Group 使用统一尺寸；通过 items 管理可同时开启的工具状态。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'variant',
@@ -5455,7 +5438,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         '默认关闭时卸载面板；keepMounted 保留内部状态；hiddenUntilFound 保留内容并允许浏览器页内查找定位。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'strategy',
@@ -5505,7 +5487,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'mediaType 明确声明 media 是图标还是图片，让缩略图获得正确的尺寸、裁切与状态样式。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'mediaType',
@@ -5542,7 +5523,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'state 分别表达等待、上传、处理、失败和完成阶段；状态文案仍由 description 明确说明。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'state',
@@ -5581,7 +5561,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'size 只控制单个附件的整体密度；不同尺寸通过分段控件逐项预览。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'size',
@@ -5613,7 +5592,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'horizontal 适合文件列表，vertical 以缩略卡形式突出媒体内容。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'orientation',
@@ -5686,7 +5664,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'Carousel 始终使用景深过渡；paginationPosition 控制默认点位位于内容前方或后方。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'dotPosition',
@@ -5719,7 +5696,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'controls 决定是否渲染上一项和下一项按钮；按钮属性通过 previousButtonProps 与 nextButtonProps 独立扩展。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'controls',
@@ -5749,7 +5725,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'pagination 控制默认点位或隐藏分页，renderDot 只改写单个点位的内容。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'pagination',
@@ -5866,7 +5841,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         '默认由整个 Header 触发；传入 trigger 后，Header 保持静态，只由独立按钮控制展开。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'triggerMode',
@@ -5907,7 +5881,6 @@ import { ChevronRight } from 'lucide-react'
       description: docsCopy(
         'header 可以组合任意摘要内容；indicator 在两种触发模式下统一控制状态图标，传 false 时隐藏。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'indicator',
@@ -5950,7 +5923,6 @@ import { ChevronRight } from 'lucide-react'
       description: docsCopy(
         'open 与 onOpenChange 管理受控展开状态；disabled 阻止触发器改变状态。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'mode',
@@ -6083,7 +6055,6 @@ const columns: Table.Column<Release>[] = [
           values: { mode: 'restricted' },
         },
       ],
-      caseLayout: 'segmented',
       preview: (values) => (
         <TableManagedExpandableDemo
           mode={values.mode === 'restricted' ? 'restricted' : 'default'}
@@ -6212,7 +6183,6 @@ const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
           values: { summary: 'hidden' },
         },
       ],
-      caseLayout: 'segmented',
       preview: (values) => (
         <TableManagedDemo
           summary={
@@ -6259,7 +6229,6 @@ const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
           ],
         },
       ],
-      caseLayout: 'segmented',
       preview: (values) => (
         <TableStatusDemo
           state={
@@ -6341,7 +6310,6 @@ if (!request.pending && records.length === 0) {
       description: docsCopy(
         'icon 默认使用通用收件箱图标，也可以替换为场景图标或传 null 隐藏。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'icon',
@@ -6466,7 +6434,6 @@ if (!request.pending && records.length === 0) {
     {
       title: docsCopy('列表项尺寸'),
       description: docsCopy('size 分别提供默认、小和超小三档内容密度。'),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'size',
@@ -6498,7 +6465,6 @@ if (!request.pending && records.length === 0) {
       description: docsCopy(
         'mediaType 明确区分普通内容、图标和图片，避免调用方依赖节点形态推断样式。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'mediaType',
@@ -6529,7 +6495,6 @@ if (!request.pending && records.length === 0) {
       description: docsCopy(
         'header、content、actions 与 footer 各自占据独立语义区域，不再把多个结构字段塞进同一行说明。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'slot',
@@ -6577,7 +6542,6 @@ if (!request.pending && records.length === 0) {
       description: docsCopy(
         'Item.Group 通过 items 渲染集合，separator 独立控制无分隔、默认分隔线或自定义分隔内容。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'separator',
@@ -6611,8 +6575,8 @@ if (!request.pending && records.length === 0) {
       preview: <ItemGroupRenderDemo />,
       code: `<Item.Group
   items={items}
-  renderItem={(item, index) => (
-    <Item {...item} actions={<Tag>0{index + 1}</Tag>} />
+  renderItem={({ key, ...item }, index) => (
+    <Item key={key} {...item} actions={<Tag>0{index + 1}</Tag>} />
   )}
 />`,
       previewHeight: 'auto',
@@ -6701,7 +6665,6 @@ import { Archive } from 'lucide-react'
       description: docsCopy(
         'variant 的每种语义外观都作为独立 case 展示，避免在同一个预览区域混合比较。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'variant',
@@ -6749,7 +6712,6 @@ import { Archive } from 'lucide-react'
       description: docsCopy(
         'align 只控制单个气泡位于消息流的起始侧或末端，不隐含发送者身份。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'align',
@@ -6773,7 +6735,6 @@ import { Archive } from 'lucide-react'
       description: docsCopy(
         'reactionsProps 的 side 与 align 分别控制回应位于气泡上下侧和左右边缘。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'position',
@@ -7105,7 +7066,6 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description: docsCopy(
         '仅用于必须由用户确认的警告或危险操作；成功和普通信息应使用 Alert 或 Toast。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'size',
@@ -7279,7 +7239,6 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description: docsCopy(
         '加载前复刻最终内容的层级和密度，避免数据出现时产生明显布局跳动。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'density',

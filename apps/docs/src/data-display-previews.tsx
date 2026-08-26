@@ -2120,8 +2120,13 @@ export const ItemGroupRenderDemo = () => (
       { key: 'preflight', title: docsCopy('预检完成') },
       { key: 'release', title: docsCopy('发布完成') },
     ]}
-    renderItem={(item, index) => (
-      <Item {...item} actions={<Tag>0{index + 1}</Tag>} variant="outline" />
+    renderItem={({ key, ...item }, index) => (
+      <Item
+        {...item}
+        actions={<Tag>0{index + 1}</Tag>}
+        key={key}
+        variant="outline"
+      />
     )}
   />
 );

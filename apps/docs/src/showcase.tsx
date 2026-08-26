@@ -1852,7 +1852,6 @@ const ComponentExampleCard = ({
         {example.cases ? (
           <ComponentHarness
             cases={example.cases}
-            layout={example.caseLayout}
             minCaseWidth={example.caseMinWidth}
           >
             {(values) =>
@@ -1864,7 +1863,6 @@ const ComponentExampleCard = ({
         ) : example.caseAxes ? (
           <ComponentHarness
             axes={example.caseAxes}
-            layout={example.caseLayout}
             minCaseWidth={example.caseMinWidth}
           >
             {(values) =>

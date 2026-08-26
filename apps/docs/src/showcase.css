@@ -1151,22 +1151,16 @@ a {
     auto-fit,
     minmax(min(var(--component-harness-case-min-width, 280px), 100%), 1fr)
   );
-  gap: 32px;
-}
-.component-harness-segmented [data-slot='tabs'] {
-  width: 100%;
-  gap: 20px;
-}
-.component-harness-segmented [data-slot='tabs-list-shell'] {
-  max-width: 100%;
-}
-.component-harness-segmented-panel {
-  min-width: 0;
+  gap: 24px;
 }
 .component-harness-case {
   min-width: 0;
   display: grid;
   grid-template-rows: auto 1fr;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
 }
 .component-harness-case-header {
   min-height: 74px;
@@ -1174,7 +1168,7 @@ a {
   align-items: start;
   justify-content: space-between;
   gap: 16px;
-  padding: 4px 4px 16px;
+  padding: 16px 18px;
 }
 .component-harness-case-copy {
   min-width: 0;
@@ -1204,7 +1198,7 @@ a {
   overflow-x: auto;
   overflow-y: clip;
   overscroll-behavior-inline: contain;
-  padding: 22px 4px 4px;
+  padding: 20px 18px;
   border-top: 1px solid color-mix(in srgb, var(--line) 62%, transparent);
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--docs-muted) 28%, transparent)
@@ -1217,11 +1211,10 @@ a {
 }
 .component-harness-case-standalone {
   grid-template-rows: 1fr;
-}
-.component-harness-case-segmented .component-harness-case-stage {
-  min-height: 0;
-  padding: 0;
-  border-top: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 .example-card-wide .demo-preview {
   min-height: var(--demo-preview-height, 420px);
@@ -2414,12 +2407,6 @@ a {
 .card-basic-demo {
   width: min(480px, 100%);
   border: 1px solid rgb(105 115 134 / 12%);
-}
-.demo-preview-card
-  .component-harness-case-segmented
-  .component-harness-case-stage {
-  overflow: visible;
-  padding: 16px 12px;
 }
 .card-basic-demo p {
   max-width: 42ch;
