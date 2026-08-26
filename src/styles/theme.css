@@ -46,42 +46,45 @@
 
 @layer components {
   [data-popup-arrow] {
+    --popup-arrow-depth: 5px;
+    --popup-arrow-side-offset: -7.5px;
+
     position: relative;
     z-index: 50;
     display: block;
-    width: 12px;
-    height: 6px;
+    width: 10px;
+    height: var(--popup-arrow-depth);
     overflow: clip;
     color: var(--foreground);
     pointer-events: none;
   }
 
   [data-popup-arrow][data-side='top'] {
-    bottom: -6px;
+    bottom: calc(-1 * var(--popup-arrow-depth));
     rotate: 180deg;
   }
 
   [data-popup-arrow][data-side='bottom'] {
-    top: -6px;
+    top: calc(-1 * var(--popup-arrow-depth));
   }
 
   [data-popup-arrow][data-side='left'] {
-    right: -9px;
+    right: var(--popup-arrow-side-offset);
     rotate: 90deg;
   }
 
   [data-popup-arrow][data-side='right'] {
-    left: -9px;
+    left: var(--popup-arrow-side-offset);
     rotate: -90deg;
   }
 
   [data-popup-arrow][data-side='inline-start'] {
-    inset-inline-end: -9px;
+    inset-inline-end: var(--popup-arrow-side-offset);
     rotate: 90deg;
   }
 
   [data-popup-arrow][data-side='inline-end'] {
-    inset-inline-start: -9px;
+    inset-inline-start: var(--popup-arrow-side-offset);
     rotate: -90deg;
   }
 
@@ -99,9 +102,9 @@
     left: 50%;
     display: block;
     box-sizing: border-box;
-    width: calc(6px * sqrt(2));
-    height: calc(6px * sqrt(2));
-    border-radius: 1px;
+    width: calc(var(--popup-arrow-depth) * sqrt(2));
+    height: calc(var(--popup-arrow-depth) * sqrt(2));
+    border-radius: 0.75px;
     background: currentColor;
     content: '';
     transform: translate(-50%, 50%) rotate(45deg);
