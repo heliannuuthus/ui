@@ -13596,7 +13596,7 @@ appendTypePreviews('tooltip', [
   {
     name: 'TooltipContentProps',
     definition:
-      "type TooltipContentProps = Omit<ComponentPropsWithRef<'div'>, 'children'> & DataAttributes",
+      "type TooltipContentProps = Omit<ComponentPropsWithRef<'div'>, 'children' | 'dangerouslySetInnerHTML'> & DataAttributes",
   },
   {
     name: 'DataAttributes',

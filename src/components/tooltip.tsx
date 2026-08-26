@@ -3,13 +3,16 @@ import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
 
 import { cn } from '../lib/utils';
 import { getPopupArrowEdgeStyle } from './internal/popup-arrow';
-import type {
-  DataAttributes,
-  PopupAlign,
-  PopupSide,
-  PortalContainer,
-} from './internal/public-types';
+import type { DataAttributes } from './internal/public-types';
 import { useComponentDefaults } from './provider';
+
+type TooltipPrimitiveRootProps = TooltipPrimitive.Root.Props;
+type TooltipPrimitiveTriggerProps = TooltipPrimitive.Trigger.Props;
+type TooltipPrimitivePortalProps = TooltipPrimitive.Portal.Props;
+type TooltipPrimitivePositionerProps = TooltipPrimitive.Positioner.Props;
+
+type TooltipAlign = NonNullable<TooltipPrimitivePositionerProps['align']>;
+type TooltipSide = NonNullable<TooltipPrimitivePositionerProps['side']>;
 
 type TooltipClassNames = {
   arrow?: string;
@@ -36,7 +39,7 @@ type TooltipPlacement =
   | 'topRight';
 
 type TooltipPositioning = Pick<
-  TooltipPrimitive.Positioner.Props,
+  TooltipPrimitivePositionerProps,
   | 'alignOffset'
   | 'arrowPadding'
   | 'collisionAvoidance'
@@ -50,21 +53,14 @@ type TooltipPositioning = Pick<
 
 type TooltipContentProps = Omit<
   React.ComponentPropsWithRef<'div'>,
-  'children'
+  'children' | 'dangerouslySetInnerHTML'
 > &
   DataAttributes;
 
-type TooltipOpenChangeDetails = TooltipPrimitive.Root.ChangeEventDetails;
+type TooltipOpenChangeDetails = Parameters<
+  NonNullable<TooltipPrimitiveRootProps['onOpenChange']>
+>[1];
 type TooltipActions = TooltipPrimitive.Root.Actions;
-
-type TooltipProviderDefaults = {
-  arrow?: boolean;
-  closeDelay?: number;
-  interactive?: boolean;
-  openDelay?: number;
-  placement?: TooltipPlacement;
-  skipDelayDuration?: number;
-};
 
 type TooltipTriggerProps =
   | {
@@ -90,54 +86,71 @@ type TooltipPositionProps =
       placement?: never;
       positioning?: never;
       /** @deprecated Use placement, or positioning for advanced offsets. */
-      align?: PopupAlign;
+      align?: TooltipAlign;
       /** @deprecated Use positioning.alignOffset. */
       alignOffset?: number;
       /** @deprecated Use placement. */
-      side?: PopupSide;
+      side?: TooltipSide;
       /** @deprecated Use positioning.sideOffset. */
       sideOffset?: number;
     };
 
 type TooltipTrackingProps =
   | {
-      container?: PortalContainer;
+      container?: TooltipPrimitivePortalProps['container'];
       followCursor?: false;
     }
   | {
       container?: never;
-      followCursor: true | 'x' | 'y';
+      followCursor:
+        | true
+        | Exclude<
+            NonNullable<TooltipPrimitiveRootProps['trackCursorAxis']>,
+            'both' | 'none'
+          >;
     };
 
 type TooltipProps = Omit<
   React.ComponentPropsWithRef<'div'>,
-  'children' | 'content' | 'defaultOpen'
+  'children' | 'content' | 'dangerouslySetInnerHTML'
 > &
+  Pick<
+    TooltipPrimitiveRootProps,
+    | 'actionsRef'
+    | 'defaultOpen'
+    | 'disabled'
+    | 'onOpenChange'
+    | 'onOpenChangeComplete'
+    | 'open'
+  > &
   TooltipTriggerProps &
   TooltipPositionProps & {
-    actionsRef?: React.RefObject<TooltipActions | null>;
     arrow?: boolean;
     classNames?: TooltipClassNames;
-    closeDelay?: number;
-    closeOnClick?: boolean;
+    closeDelay?: TooltipPrimitiveTriggerProps['closeDelay'];
+    closeOnClick?: TooltipPrimitiveTriggerProps['closeOnClick'];
     content: React.ReactNode;
     contentProps?: TooltipContentProps;
     /** @deprecated Use openDelay. */
-    delay?: number;
-    defaultOpen?: boolean;
-    disabled?: boolean;
+    delay?: TooltipPrimitiveTriggerProps['delay'];
     interactive?: boolean;
-    keepMounted?: boolean;
-    onOpenChange?: (open: boolean, details: TooltipOpenChangeDetails) => void;
-    onOpenChangeComplete?: (open: boolean) => void;
-    open?: boolean;
-    openDelay?: number;
+    keepMounted?: TooltipPrimitivePortalProps['keepMounted'];
+    openDelay?: TooltipPrimitiveTriggerProps['delay'];
     styles?: TooltipStyles;
   } & TooltipTrackingProps;
 
+type TooltipProviderDefaults = {
+  arrow?: TooltipProps['arrow'];
+  closeDelay?: TooltipProps['closeDelay'];
+  interactive?: TooltipProps['interactive'];
+  openDelay?: TooltipProps['openDelay'];
+  placement?: TooltipProps['placement'];
+  skipDelayDuration?: TooltipPrimitive.Provider.Props['timeout'];
+};
+
 type TooltipPlacementConfig = {
-  align: PopupAlign;
-  side: PopupSide;
+  align: TooltipAlign;
+  side: TooltipSide;
 };
 
 const placementConfig: Record<TooltipPlacement, TooltipPlacementConfig> = {
