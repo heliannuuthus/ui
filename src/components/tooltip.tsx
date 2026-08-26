@@ -2,11 +2,7 @@ import * as React from 'react';
 import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
 
 import { cn } from '../lib/utils';
-import {
-  getPopupArrowEdgeStyle,
-  popupArrowDepth,
-  RoundedPopupArrow,
-} from './internal/popup-arrow';
+import { getPopupArrowEdgeStyle } from './internal/popup-arrow';
 import type {
   OpenStateProps,
   PopupAlign,
@@ -90,7 +86,7 @@ const Tooltip = ({
   delay = 0,
   placement,
   side = 'top',
-  sideOffset = 4,
+  sideOffset = 11,
   styles,
   trigger,
   ...props
@@ -109,7 +105,7 @@ const Tooltip = ({
             align={resolvedPlacement?.align ?? align}
             alignOffset={alignOffset}
             side={resolvedPlacement?.side ?? side}
-            sideOffset={sideOffset + (arrow !== false ? popupArrowDepth : 0)}
+            sideOffset={sideOffset}
             className="isolate z-50"
           >
             <TooltipPrimitive.Popup
@@ -123,9 +119,8 @@ const Tooltip = ({
               {content}
               {arrow !== false ? (
                 <TooltipPrimitive.Arrow
+                  data-popup-arrow=""
                   data-slot="tooltip-arrow"
-                  className="text-foreground"
-                  render={<RoundedPopupArrow />}
                   style={getPopupArrowEdgeStyle}
                 />
               ) : null}

@@ -11418,10 +11418,8 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     {
       name: 'sideOffset',
       type: 'number',
-      defaultValue: '4',
-      description: docsCopy(
-        '设置箭头尖端与触发器沿 side 方向的间距；隐藏箭头时从浮层边缘计算。'
-      ),
+      defaultValue: '11',
+      description: docsCopy('设置浮层边缘与触发器沿 side 方向的间距。'),
     },
     {
       name: 'alignOffset',

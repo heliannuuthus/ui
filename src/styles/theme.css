@@ -45,6 +45,68 @@
 }
 
 @layer components {
+  [data-popup-arrow] {
+    position: relative;
+    z-index: 50;
+    display: block;
+    width: 12px;
+    height: 6px;
+    overflow: clip;
+    color: var(--foreground);
+    pointer-events: none;
+  }
+
+  [data-popup-arrow][data-side='top'] {
+    bottom: -6px;
+    rotate: 180deg;
+  }
+
+  [data-popup-arrow][data-side='bottom'] {
+    top: -6px;
+  }
+
+  [data-popup-arrow][data-side='left'] {
+    right: -9px;
+    rotate: 90deg;
+  }
+
+  [data-popup-arrow][data-side='right'] {
+    left: -9px;
+    rotate: -90deg;
+  }
+
+  [data-popup-arrow][data-side='inline-start'] {
+    inset-inline-end: -9px;
+    rotate: 90deg;
+  }
+
+  [data-popup-arrow][data-side='inline-end'] {
+    inset-inline-start: -9px;
+    rotate: -90deg;
+  }
+
+  :dir(rtl) [data-popup-arrow][data-side='inline-start'] {
+    rotate: -90deg;
+  }
+
+  :dir(rtl) [data-popup-arrow][data-side='inline-end'] {
+    rotate: 90deg;
+  }
+
+  [data-popup-arrow]::before {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    display: block;
+    box-sizing: border-box;
+    width: calc(6px * sqrt(2));
+    height: calc(6px * sqrt(2));
+    border-radius: 1px;
+    background: currentColor;
+    content: '';
+    transform: translate(-50%, 50%) rotate(45deg);
+  }
+
   [data-slot='scroll-area']:has(
     > [data-slot='scroll-area-viewport']:focus-visible
   ) {

@@ -2067,8 +2067,8 @@ const ActionCell = () => {
     'Choose which side of the trigger contains the popup when placement is not used.',
   '设置浮层盒子沿 side 方向的交叉轴对齐，并匹配箭头的边缘落点。':
     'Align the popup box along the cross axis of side and match the arrow edge anchor point.',
-  '设置箭头尖端与触发器沿 side 方向的间距；隐藏箭头时从浮层边缘计算。':
-    'Set the distance between the arrow tip and trigger along side; when the arrow is hidden, measure from the popup edge.',
+  '设置浮层边缘与触发器沿 side 方向的间距。':
+    'Set the distance between the popup edge and the trigger along side.',
   '设置浮层沿交叉轴的额外偏移。':
     'Set an additional popup offset along the cross axis.',
   '设置 vertical 后可调整上下区域，适合编辑器与终端、预览与日志等场景。':
