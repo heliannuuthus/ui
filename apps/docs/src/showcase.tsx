@@ -1234,19 +1234,14 @@ const ComponentOverviewCard = ({ item }: { item: string }) => {
   }, [summary]);
 
   return (
-    <Tooltip
-      content={summary}
-      delay={300}
-      disabled={!overflowing}
-      trigger={
-        <NavLink to={path(`/components/${componentSlug(item)}`)}>
-          <strong>{localizedComponentName(item, locale)}</strong>
-          <p ref={summaryRef} data-overflowing={overflowing || undefined}>
-            {summary}
-          </p>
-        </NavLink>
-      }
-    />
+    <Tooltip content={summary} disabled={!overflowing} openDelay={300}>
+      <NavLink to={path(`/components/${componentSlug(item)}`)}>
+        <strong>{localizedComponentName(item, locale)}</strong>
+        <p ref={summaryRef} data-overflowing={overflowing || undefined}>
+          {summary}
+        </p>
+      </NavLink>
+    </Tooltip>
   );
 };
 
@@ -1763,82 +1758,68 @@ const ComponentExampleCard = ({
           <div className="demo-actions">
             <Tooltip
               content={t(copied ? 'demo.copied' : 'demo.copyCode')}
-              delay={300}
-              trigger={
-                <Button
-                  size="icon-sm"
-                  variant="ghost"
-                  onClick={copy}
-                  aria-label={t(copied ? 'actions.copied' : 'demo.copyCode')}
-                >
-                  {copied ? <Check /> : <Copy />}
-                </Button>
-              }
-            />
-            <Tooltip
-              content={t('actions.viewOnGitHub')}
-              delay={300}
-              trigger={
-                <Button
-                  href={`${repositoryUrl}/blob/main/src/components/${component}.tsx`}
-                  size="icon-sm"
-                  variant="ghost"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={t('actions.viewOnGitHub')}
-                >
-                  <Github />
-                </Button>
-              }
-            />
-            <Tooltip
-              content={t('demo.openCodeSandbox')}
-              delay={300}
-              trigger={
-                <Button
-                  href="https://codesandbox.io/p/github/heliannuuthus/ui/main"
-                  size="icon-sm"
-                  variant="ghost"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={t('demo.openCodeSandbox')}
-                >
-                  <Box />
-                </Button>
-              }
-            />
-            <Tooltip
-              content={t('demo.openStackBlitz')}
-              delay={300}
-              trigger={
-                <Button
-                  href="https://stackblitz.com/github/heliannuuthus/ui"
-                  size="icon-sm"
-                  variant="ghost"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={t('demo.openStackBlitz')}
-                >
-                  <Zap />
-                </Button>
-              }
-            />
+              openDelay={300}
+            >
+              <Button
+                size="icon-sm"
+                variant="ghost"
+                onClick={copy}
+                aria-label={t(copied ? 'actions.copied' : 'demo.copyCode')}
+              >
+                {copied ? <Check /> : <Copy />}
+              </Button>
+            </Tooltip>
+            <Tooltip content={t('actions.viewOnGitHub')} openDelay={300}>
+              <Button
+                href={`${repositoryUrl}/blob/main/src/components/${component}.tsx`}
+                size="icon-sm"
+                variant="ghost"
+                target="_blank"
+                rel="noreferrer"
+                aria-label={t('actions.viewOnGitHub')}
+              >
+                <Github />
+              </Button>
+            </Tooltip>
+            <Tooltip content={t('demo.openCodeSandbox')} openDelay={300}>
+              <Button
+                href="https://codesandbox.io/p/github/heliannuuthus/ui/main"
+                size="icon-sm"
+                variant="ghost"
+                target="_blank"
+                rel="noreferrer"
+                aria-label={t('demo.openCodeSandbox')}
+              >
+                <Box />
+              </Button>
+            </Tooltip>
+            <Tooltip content={t('demo.openStackBlitz')} openDelay={300}>
+              <Button
+                href="https://stackblitz.com/github/heliannuuthus/ui"
+                size="icon-sm"
+                variant="ghost"
+                target="_blank"
+                rel="noreferrer"
+                aria-label={t('demo.openStackBlitz')}
+              >
+                <Zap />
+              </Button>
+            </Tooltip>
             <Tooltip
               content={t(expanded ? 'demo.collapseCode' : 'demo.expandCode')}
-              delay={300}
-              trigger={
-                <Toggle
-                  className="demo-expand-toggle size-8 min-w-8 p-0"
-                  aria-label={t(
-                    expanded ? 'demo.collapseCode' : 'demo.expandCode'
-                  )}
-                  value={expanded}
-                  onChange={setExpanded}
-                >
-                  <Code2 />
-                </Toggle>
-              }
-            />
+              openDelay={300}
+            >
+              <Toggle
+                className="demo-expand-toggle size-8 min-w-8 p-0"
+                aria-label={t(
+                  expanded ? 'demo.collapseCode' : 'demo.expandCode'
+                )}
+                value={expanded}
+                onChange={setExpanded}
+              >
+                <Code2 />
+              </Toggle>
+            </Tooltip>
           </div>
           {expanded && (
             <SyntaxCode

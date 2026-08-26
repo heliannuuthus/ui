@@ -155,6 +155,7 @@ import {
   TableReleaseDemo,
   TooltipArrowDemo,
   TooltipBasicDemo,
+  TooltipBehaviorDemo,
   TooltipPlacementsDemo,
 } from './data-display-previews';
 import {
@@ -7017,7 +7018,7 @@ const ActionCell = () => {
       title: docsCopy('显示 Tooltip'),
       description: docsCopy('为控件提供简短补充说明。'),
       preview: <TooltipBasicDemo />,
-      code: `<Tooltip content={tooltipContent} trigger={trigger} />`,
+      code: `<Tooltip content={tooltipContent}>{trigger}</Tooltip>`,
       previewHeight: 300,
     },
     {
@@ -7030,10 +7031,11 @@ const ActionCell = () => {
 
 <Tooltip
   content="上方靠左提示"
-  delay={100}
+  openDelay={100}
   placement="topLeft"
-  trigger={<Button>上方靠左</Button>}
-/>`),
+>
+  <Button>上方靠左</Button>
+</Tooltip>`),
       previewHeight: 440,
       wide: true,
     },
@@ -7046,9 +7048,58 @@ const ActionCell = () => {
 <Tooltip
   content="默认箭头"
   placement="topLeft"
-  trigger={<Button>显示箭头</Button>}
-/>`),
+>
+  <Button>显示箭头</Button>
+</Tooltip>`),
       previewHeight: 300,
+      wide: true,
+    },
+    {
+      title: docsCopy('交互与生命周期'),
+      description: docsCopy(
+        '分别控制开关延迟、指针跟随、Portal 容器和关闭生命周期；命令式操作只用于外部协调。'
+      ),
+      preview: <TooltipBehaviorDemo />,
+      code: docsCopy(`import { Button, Tooltip, type TooltipActions } from '@heliannuuthus/ui'
+import { useRef, useState } from 'react'
+
+const actionsRef = useRef<TooltipActions | null>(null)
+const [container, setContainer] = useState<HTMLDivElement | null>(null)
+
+<div ref={setContainer}>
+  <Tooltip
+    closeDelay={250}
+    closeOnClick={false}
+    content="跟随水平指针"
+    followCursor="x"
+    interactive
+  >
+    <Button>移动指针</Button>
+  </Tooltip>
+  <Tooltip
+    actionsRef={actionsRef}
+    container={container}
+    content="局部容器提示"
+    contentProps={{ 'aria-live': 'polite' }}
+    keepMounted
+    onOpenChangeComplete={handleOpenChangeComplete}
+  >
+    <Button>局部 Portal</Button>
+  </Tooltip>
+  <Button onClick={() => actionsRef.current?.close()}>关闭提示</Button>
+</div>`),
+      coveredProperties: [
+        'actionsRef',
+        'closeDelay',
+        'closeOnClick',
+        'container',
+        'contentProps',
+        'followCursor',
+        'interactive',
+        'keepMounted',
+        'onOpenChangeComplete',
+      ],
+      previewHeight: 320,
       wide: true,
     },
   ],
@@ -11381,19 +11432,23 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     },
   ],
   tooltip: [
-    ...[
-      { name: 'trigger', type: 'ReactElement' },
-      { name: 'content', type: 'ReactNode' },
-    ].map((property) => ({
-      ...property,
-      description: docsCopy('设置需要补充说明的交互元素和简短提示内容。'),
-    })),
+    {
+      name: 'children',
+      description: docsCopy('设置需要补充说明的单个触发元素。'),
+      type: 'ReactElement',
+      required: true,
+    },
+    {
+      name: 'content',
+      description: docsCopy('设置简短提示内容；内容为空时不显示浮层。'),
+      type: 'ReactNode',
+      required: true,
+    },
     {
       name: 'placement',
       type: 'TooltipPlacement',
-      description: docsCopy(
-        '设置浮层相对触发器的位置；使用时无需同时设置 side 或 align。'
-      ),
+      defaultValue: "'top'",
+      description: docsCopy('设置浮层相对触发器的位置。'),
     },
     {
       name: 'arrow',
@@ -11402,51 +11457,108 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       description: docsCopy('设置是否显示匹配 placement 落点的箭头。'),
     },
     {
-      name: 'side',
-      type: "'top' | 'right' | 'bottom' | 'left'",
+      name: 'openDelay',
+      type: 'number',
+      defaultValue: '100',
+      description: docsCopy('设置打开提示前的等待时间，单位为毫秒。'),
+    },
+    {
+      name: 'closeDelay',
+      type: 'number',
+      defaultValue: '100',
+      description: docsCopy('设置关闭提示前的等待时间，单位为毫秒。'),
+    },
+    {
+      name: 'closeOnClick',
+      type: 'boolean',
+      defaultValue: 'true',
+      description: docsCopy('设置单击触发元素后是否关闭提示。'),
+    },
+    {
+      name: 'disabled',
+      type: 'boolean',
+      defaultValue: 'false',
+      description: docsCopy('临时禁用提示及其触发行为。'),
+    },
+    {
+      name: 'interactive',
+      type: 'boolean',
+      defaultValue: 'true',
+      description: docsCopy('允许指针移入提示内容而不立即关闭。'),
+    },
+    {
+      name: 'followCursor',
+      type: "boolean | 'x' | 'y'",
+      defaultValue: 'false',
       description: docsCopy(
-        '不使用 placement 时，设置浮层位于触发器的哪一侧。'
+        '让提示沿双轴或指定轴跟随指针，并使用默认 Portal。'
       ),
     },
     {
-      name: 'align',
-      type: "'start' | 'center' | 'end'",
+      name: 'positioning',
+      type: 'TooltipPositioning',
+      description: docsCopy('配置偏移、碰撞避让、边界与定位策略。'),
+    },
+    {
+      name: 'container',
+      type: 'HTMLElement | RefObject<HTMLElement | null>',
       description: docsCopy(
-        '设置浮层盒子沿 side 方向的交叉轴对齐，并匹配箭头的边缘落点。'
+        '将提示 Portal 挂载到指定容器；不与 followCursor 同时使用。'
       ),
     },
     {
-      name: 'sideOffset',
-      type: 'number',
-      defaultValue: '11',
-      description: docsCopy('设置浮层边缘与触发器沿 side 方向的间距。'),
+      name: 'keepMounted',
+      type: 'boolean',
+      defaultValue: 'false',
+      description: docsCopy('关闭后仍将提示 Portal 保留在 DOM 中。'),
     },
     {
-      name: 'alignOffset',
-      type: 'number',
-      description: docsCopy('设置浮层沿交叉轴的额外偏移。'),
+      name: 'open',
+      type: 'boolean',
+      description: docsCopy('以受控方式管理提示是否打开。'),
     },
-    ...[
-      { name: 'delay', type: 'number' },
-      { name: 'disabled', type: 'boolean' },
-    ].map((property) => ({
-      ...property,
-      description: docsCopy('设置打开延迟，或临时禁用提示。'),
-    })),
-    ...[
-      { name: 'open', type: 'boolean' },
-      { name: 'defaultOpen', type: 'boolean', defaultValue: 'false' },
-      { name: 'onOpenChange', type: '(open: boolean) => void' },
-    ].map((property) => ({
-      ...property,
-      description: docsCopy('以受控或非受控方式管理打开状态。'),
-    })),
+    {
+      name: 'defaultOpen',
+      type: 'boolean',
+      defaultValue: 'false',
+      description: docsCopy('设置非受控模式下的初始打开状态。'),
+    },
+    {
+      name: 'onOpenChange',
+      type: '(open: boolean, details: TooltipOpenChangeDetails) => void',
+      description: docsCopy('打开状态变化时返回新状态、原生事件和触发原因。'),
+    },
+    {
+      name: 'onOpenChangeComplete',
+      type: '(open: boolean) => void',
+      description: docsCopy('打开或关闭动画结束后调用。'),
+    },
+    {
+      name: 'actionsRef',
+      type: 'RefObject<TooltipActions | null>',
+      description: docsCopy('获取关闭和卸载提示的命令式操作。'),
+    },
     {
       name: 'contentProps',
       description: docsCopy(
         '向提示内容 div 传递标准 HTML、ARIA、data 属性和事件。'
       ),
-      type: 'ComponentProps<"div">',
+      type: 'TooltipContentProps',
+    },
+    {
+      name: 'className',
+      type: 'string',
+      description: docsCopy('扩展提示定位根节点的 className。'),
+    },
+    {
+      name: 'style',
+      type: 'CSSProperties',
+      description: docsCopy('设置提示定位根节点的行内样式。'),
+    },
+    {
+      name: 'ref',
+      type: 'Ref<HTMLDivElement>',
+      description: docsCopy('引用提示定位根节点。'),
     },
   ],
 };
@@ -11999,7 +12111,7 @@ const semanticStyleContracts = {
     componentName: 'Tabs',
     slots: ['indicator', 'list', 'panel', 'tab', 'viewport'],
   },
-  tooltip: { componentName: 'Tooltip', slots: ['content'] },
+  tooltip: { componentName: 'Tooltip', slots: ['arrow', 'content'] },
 } as const;
 
 for (const [slug, contract] of Object.entries(semanticStyleContracts)) {
@@ -12130,11 +12242,6 @@ appendMissingApi('navigation-menu', [
 appendMissingApi('popover', [
   publicProperty('modal', "boolean | 'trap-focus'"),
   publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
-]);
-appendMissingApi('tooltip', [
-  publicProperty('disableHoverablePopup', 'boolean'),
-  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
-  publicProperty('trackCursorAxis', "'both' | 'none' | 'x' | 'y'"),
 ]);
 
 componentDocumentation.menubar.api = componentDocumentation.menubar.api.filter(
@@ -12531,12 +12638,7 @@ const prunedPrimitiveApi: Readonly<Record<string, readonly string[]>> = {
     'openOnInputClick',
   ],
   toggle: ['Toggle.Group.loopFocus'],
-  tooltip: [
-    'contentProps',
-    'disableHoverablePopup',
-    'onOpenChangeComplete',
-    'trackCursorAxis',
-  ],
+  tooltip: ['disableHoverablePopup', 'trackCursorAxis', 'trigger'],
 };
 
 for (const [slug, names] of Object.entries(prunedPrimitiveApi)) {
@@ -12854,11 +12956,10 @@ const caseCoverageSnippets: Readonly<Record<string, string>> = {
 </Table.Primitive>`,
   tooltip: `<Tooltip
   content="Keyboard shortcut"
-  sideOffset={8}
-  alignOffset={4}
+  positioning={{ sideOffset: 8, alignOffset: 4 }}
   disabled={disabled}
   open={open}
-  onOpenChange={setOpen}
+  onOpenChange={(nextOpen) => setOpen(nextOpen)}
   classNames={{ content: 'max-w-64' }}
   styles={{ content: { textAlign: 'start' } }}
 >
@@ -13406,6 +13507,112 @@ appendTypePreviews('tooltip', [
   | 'bottomLeft'
   | 'bottom'
   | 'bottomRight'`,
+  },
+  {
+    name: 'TooltipPositioning',
+    definition: `type TooltipPositioning = {
+  alignOffset?: number | TooltipOffsetFunction
+  arrowPadding?: number
+  collisionAvoidance?: TooltipCollisionAvoidance
+  collisionBoundary?: 'clipping-ancestors' | Element | Element[] | TooltipBoundaryRect
+  collisionPadding?: number | Partial<Record<'top' | 'right' | 'bottom' | 'left', number>>
+  disableAnchorTracking?: boolean
+  positionMethod?: 'absolute' | 'fixed'
+  sideOffset?: number | TooltipOffsetFunction
+  sticky?: boolean
+}`,
+  },
+  {
+    name: 'TooltipOffsetFunction',
+    definition:
+      'type TooltipOffsetFunction = (data: TooltipPositionData) => number',
+  },
+  {
+    name: 'TooltipPositionData',
+    definition: `type TooltipPositionData = {
+  side: 'top' | 'right' | 'bottom' | 'left'
+  align: 'start' | 'center' | 'end'
+  anchor: TooltipPositionSize
+  positioner: TooltipPositionSize
+}`,
+  },
+  {
+    name: 'TooltipPositionSize',
+    definition: `type TooltipPositionSize = {
+  width: number
+  height: number
+}`,
+  },
+  {
+    name: 'TooltipBoundaryRect',
+    definition: `type TooltipBoundaryRect = {
+  x: number
+  y: number
+  width: number
+  height: number
+}`,
+  },
+  {
+    name: 'TooltipCollisionAvoidance',
+    definition:
+      'type TooltipCollisionAvoidance = TooltipFlipCollisionAvoidance | TooltipShiftCollisionAvoidance',
+  },
+  {
+    name: 'TooltipFlipCollisionAvoidance',
+    definition: `type TooltipFlipCollisionAvoidance = {
+  side?: 'flip' | 'none'
+  align?: 'flip' | 'shift' | 'none'
+  fallbackAxisSide?: 'start' | 'end' | 'none'
+}`,
+  },
+  {
+    name: 'TooltipShiftCollisionAvoidance',
+    definition: `type TooltipShiftCollisionAvoidance = {
+  side?: 'shift'
+  align?: 'shift' | 'none'
+  fallbackAxisSide?: 'start' | 'end' | 'none'
+}`,
+  },
+  {
+    name: 'TooltipOpenChangeDetails',
+    definition: `type TooltipOpenChangeDetails = {
+  reason: 'trigger-hover' | 'trigger-focus' | 'trigger-press' | 'outside-press' | 'escape-key' | 'disabled' | 'imperative-action' | 'none'
+  event: Event
+  trigger?: Element
+  cancel: () => void
+  allowPropagation: () => void
+  isCanceled: boolean
+  isPropagationAllowed: boolean
+  preventUnmountOnClose: () => void
+}`,
+  },
+  {
+    name: 'TooltipActions',
+    definition: `type TooltipActions = {
+  close: () => void
+  unmount: () => void
+}`,
+  },
+  {
+    name: 'TooltipContentProps',
+    definition:
+      "type TooltipContentProps = Omit<ComponentPropsWithRef<'div'>, 'children'> & DataAttributes",
+  },
+  {
+    name: 'DataAttributes',
+    definition:
+      'type DataAttributes = {\n  [key: `data-${string}`]: boolean | number | string | undefined\n}',
+  },
+  {
+    name: 'TooltipProviderDefaults',
+    definition: `type TooltipProviderDefaults = {
+  arrow?: boolean
+  closeDelay?: number
+  interactive?: boolean
+  openDelay?: number
+  placement?: TooltipPlacement
+  skipDelayDuration?: number
+}`,
   },
 ]);
 

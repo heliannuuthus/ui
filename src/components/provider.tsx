@@ -1,6 +1,7 @@
 'use client';
 
 import { DirectionProvider as BaseDirectionProvider } from '@base-ui/react/direction-provider';
+import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
 import * as React from 'react';
 
 import { cn } from '../lib/utils';
@@ -28,6 +29,7 @@ import type { SpinnerProviderDefaults } from './spinner';
 import type { TabsProviderDefaults } from './tabs';
 import type { TagProviderDefaults } from './tag';
 import type { ToggleProviderDefaults } from './toggle';
+import type { TooltipProviderDefaults } from './tooltip';
 import type { TypographyTextProviderDefaults } from './typography';
 
 type TextDirection = 'ltr' | 'rtl';
@@ -91,6 +93,7 @@ type ProviderComponents = {
   Tabs?: TabsProviderDefaults;
   Tag?: TagProviderDefaults;
   Toggle?: ToggleProviderDefaults;
+  Tooltip?: TooltipProviderDefaults;
   Typography?: {
     Text?: TypographyTextProviderDefaults;
   };
@@ -303,24 +306,31 @@ const Provider = ({
       resolvedTheme,
     ]
   );
+  const tooltipDefaults = resolvedComponents.Tooltip;
 
   return (
     <ProviderContext.Provider value={contextValue}>
       <BaseDirectionProvider direction={resolvedDirection}>
-        <div
-          {...props}
-          className={cn(resolvedAppearance === 'dark' && 'dark', className)}
-          data-appearance={resolvedAppearance}
-          data-slot="provider"
-          dir={resolvedDirection}
-          style={{
-            ...getThemeStyle(resolvedTheme, resolvedAppearance),
-            colorScheme: resolvedAppearance,
-            ...style,
-          }}
+        <TooltipPrimitive.Provider
+          closeDelay={tooltipDefaults?.closeDelay ?? 100}
+          delay={tooltipDefaults?.openDelay ?? 100}
+          timeout={tooltipDefaults?.skipDelayDuration ?? 400}
         >
-          {children}
-        </div>
+          <div
+            {...props}
+            className={cn(resolvedAppearance === 'dark' && 'dark', className)}
+            data-appearance={resolvedAppearance}
+            data-slot="provider"
+            dir={resolvedDirection}
+            style={{
+              ...getThemeStyle(resolvedTheme, resolvedAppearance),
+              colorScheme: resolvedAppearance,
+              ...style,
+            }}
+          >
+            {children}
+          </div>
+        </TooltipPrimitive.Provider>
       </BaseDirectionProvider>
     </ProviderContext.Provider>
   );

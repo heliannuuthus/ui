@@ -2059,6 +2059,55 @@ const ActionCell = () => {
     'Sets the horizontal and vertical spacing between Radio.Group options.',
   '设置 Tooltip 方向、对齐和间距。':
     'Set Tooltip orientation, alignment and spacing.',
+  '设置需要补充说明的单个触发元素。':
+    'Set the single trigger element that needs a short explanation.',
+  '设置简短提示内容；内容为空时不显示浮层。':
+    'Set concise tooltip content; empty content does not open a popup.',
+  '设置浮层相对触发器的位置。':
+    'Set the popup position relative to the trigger.',
+  '设置打开提示前的等待时间，单位为毫秒。':
+    'Set the delay before opening the tooltip, in milliseconds.',
+  '设置关闭提示前的等待时间，单位为毫秒。':
+    'Set the delay before closing the tooltip, in milliseconds.',
+  '设置单击触发元素后是否关闭提示。':
+    'Set whether clicking the trigger closes the tooltip.',
+  '临时禁用提示及其触发行为。':
+    'Temporarily disable the tooltip and its trigger behavior.',
+  '允许指针移入提示内容而不立即关闭。':
+    'Allow the pointer to enter the tooltip content without closing it immediately.',
+  '让提示沿双轴或指定轴跟随指针，并使用默认 Portal。':
+    'Make the tooltip follow the pointer on both axes or one selected axis while using the default portal.',
+  '配置偏移、碰撞避让、边界与定位策略。':
+    'Configure offsets, collision avoidance, boundaries, and positioning strategy.',
+  '将提示 Portal 挂载到指定容器；不与 followCursor 同时使用。':
+    'Mount the tooltip portal in a specified container; do not combine it with followCursor.',
+  '关闭后仍将提示 Portal 保留在 DOM 中。':
+    'Keep the tooltip portal mounted in the DOM while closed.',
+  '以受控方式管理提示是否打开。': 'Control whether the tooltip is open.',
+  '设置非受控模式下的初始打开状态。':
+    'Set the initial open state in uncontrolled mode.',
+  '打开状态变化时返回新状态、原生事件和触发原因。':
+    'Receive the next state, native event, and reason when the open state changes.',
+  '打开或关闭动画结束后调用。':
+    'Called after the opening or closing animation completes.',
+  '获取关闭和卸载提示的命令式操作。':
+    'Get imperative actions for closing and unmounting the tooltip.',
+  等待悬停: 'Waiting for hover',
+  跟随水平指针: 'Follow the pointer horizontally',
+  局部容器提示: 'Tooltip in a local container',
+  '局部 Portal': 'Local portal',
+  提示已打开: 'Tooltip opened',
+  提示已关闭: 'Tooltip closed',
+  移动指针: 'Move the pointer',
+  关闭提示: 'Close tooltip',
+  交互与生命周期: 'Interaction and lifecycle',
+  '分别控制开关延迟、指针跟随、Portal 容器和关闭生命周期；命令式操作只用于外部协调。':
+    'Control open and close delays, pointer tracking, the portal container, and the closing lifecycle independently; use imperative actions only for external coordination.',
+  '扩展提示定位根节点的 className。':
+    'Extend the className of the tooltip positioning root.',
+  '设置提示定位根节点的行内样式。':
+    'Set inline styles on the tooltip positioning root.',
+  '引用提示定位根节点。': 'Reference the tooltip positioning root.',
   '设置浮层相对触发器的位置；使用时无需同时设置 side 或 align。':
     'Choose the popup position relative to the trigger; do not set side or align at the same time.',
   '设置是否显示匹配 placement 落点的箭头。':
@@ -3727,10 +3776,12 @@ const ActionCell = () => {
     'import { Button, Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>Open from the right</Button>}\n  title="Tonight\'s release window"\n  description="22:00–23:00"\n>\n  <ReleaseWindow />\n</Drawer>',
   'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button variant="outline">3 位负责人</Button>}\n  title="发布负责人"\n  description="发布和回滚时会通知这些成员。"\n  content={<OwnerList />}\n  side="bottom"\n/>':
     'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button variant="outline">3 persons in charge</Button>}\n  title="Release Manager"\n  description="These members will be notified when publishing and rolling back."\n  content={<OwnerList />}\n  side="bottom"\n/>',
-  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="上方靠左提示"\n  delay={100}\n  placement="topLeft"\n  trigger={<Button>上方靠左</Button>}\n/>':
-    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Top-left tooltip"\n  delay={100}\n  placement="topLeft"\n  trigger={<Button>Top left</Button>}\n/>',
-  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="默认箭头"\n  placement="topLeft"\n  trigger={<Button>显示箭头</Button>}\n/>':
-    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Default arrow"\n  placement="topLeft"\n  trigger={<Button>Show arrow</Button>}\n/>',
+  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="上方靠左提示"\n  openDelay={100}\n  placement="topLeft"\n>\n  <Button>上方靠左</Button>\n</Tooltip>':
+    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Top-left tooltip"\n  openDelay={100}\n  placement="topLeft"\n>\n  <Button>Top left</Button>\n</Tooltip>',
+  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="默认箭头"\n  placement="topLeft"\n>\n  <Button>显示箭头</Button>\n</Tooltip>':
+    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Default arrow"\n  placement="topLeft"\n>\n  <Button>Show arrow</Button>\n</Tooltip>',
+  "import { Button, Tooltip, type TooltipActions } from '@heliannuuthus/ui'\nimport { useRef, useState } from 'react'\n\nconst actionsRef = useRef<TooltipActions | null>(null)\nconst [container, setContainer] = useState<HTMLDivElement | null>(null)\n\n<div ref={setContainer}>\n  <Tooltip\n    closeDelay={250}\n    closeOnClick={false}\n    content=\"跟随水平指针\"\n    followCursor=\"x\"\n    interactive\n  >\n    <Button>移动指针</Button>\n  </Tooltip>\n  <Tooltip\n    actionsRef={actionsRef}\n    container={container}\n    content=\"局部容器提示\"\n    contentProps={{ 'aria-live': 'polite' }}\n    keepMounted\n    onOpenChangeComplete={handleOpenChangeComplete}\n  >\n    <Button>局部 Portal</Button>\n  </Tooltip>\n  <Button onClick={() => actionsRef.current?.close()}>关闭提示</Button>\n</div>":
+    "import { Button, Tooltip, type TooltipActions } from '@heliannuuthus/ui'\nimport { useRef, useState } from 'react'\n\nconst actionsRef = useRef<TooltipActions | null>(null)\nconst [container, setContainer] = useState<HTMLDivElement | null>(null)\n\n<div ref={setContainer}>\n  <Tooltip\n    closeDelay={250}\n    closeOnClick={false}\n    content=\"Follow the pointer horizontally\"\n    followCursor=\"x\"\n    interactive\n  >\n    <Button>Move the pointer</Button>\n  </Tooltip>\n  <Tooltip\n    actionsRef={actionsRef}\n    container={container}\n    content=\"Tooltip in a local container\"\n    contentProps={{ 'aria-live': 'polite' }}\n    keepMounted\n    onOpenChangeComplete={handleOpenChangeComplete}\n  >\n    <Button>Local portal</Button>\n  </Tooltip>\n  <Button onClick={() => actionsRef.current?.close()}>Close tooltip</Button>\n</div>",
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: '读取', value: 'read' },\n    { label: '编辑', value: 'write' },\n    { label: '管理', value: 'admin' },\n  ]}\n/>":
     "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: 'read', value: 'read' },\n    { label: 'edit', value: 'write' },\n    { label: 'admin', value: 'admin' },\n  ]}\n/>",
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  name=\"permission\"\n  value={selected}\n  onChange={setSelected}\n  options={[\n    { label: '查看项目', value: 'read' },\n    { label: '参与评论', value: 'comment' },\n    { label: '管理项目', value: 'manage' },\n  ]}\n/>":

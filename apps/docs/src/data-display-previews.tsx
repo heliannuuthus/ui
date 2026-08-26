@@ -21,7 +21,7 @@ import { ScrollArea } from '@heliannuuthus/ui';
 import { Slider } from '@heliannuuthus/ui';
 import { Stack } from '@heliannuuthus/ui';
 import { Switch } from '@heliannuuthus/ui';
-import { Tooltip } from '@heliannuuthus/ui';
+import { Tooltip, type TooltipActions } from '@heliannuuthus/ui';
 import {
   Archive,
   ArrowLeft,
@@ -2769,10 +2769,9 @@ const tooltipPlacements = [
 
 export const TooltipBasicDemo = () => {
   return (
-    <Tooltip
-      content={docsCopy('键盘快捷键')}
-      trigger={<Button variant="outline">{docsCopy('保存')}</Button>}
-    />
+    <Tooltip content={docsCopy('键盘快捷键')}>
+      <Button variant="outline">{docsCopy('保存')}</Button>
+    </Tooltip>
   );
 };
 
@@ -2790,14 +2789,13 @@ export const TooltipPlacementsDemo = () => {
         >
           <Tooltip
             content={placement.placement}
-            delay={100}
+            openDelay={100}
             placement={placement.placement}
-            trigger={
-              <Button size="sm" variant="outline">
-                {placement.label}
-              </Button>
-            }
-          />
+          >
+            <Button size="sm" variant="outline">
+              {placement.label}
+            </Button>
+          </Tooltip>
         </div>
       ))}
       <div className="display-tooltip-reference" aria-hidden="true">
@@ -2811,17 +2809,54 @@ export const TooltipPlacementsDemo = () => {
 export const TooltipArrowDemo = () => {
   return (
     <div className="display-tooltip-arrow-options">
+      <Tooltip content={docsCopy('默认箭头')} placement="topLeft">
+        <Button variant="outline">{docsCopy('显示箭头')}</Button>
+      </Tooltip>
+      <Tooltip arrow={false} content={docsCopy('隐藏箭头')} placement="topLeft">
+        <Button variant="outline">{docsCopy('隐藏箭头')}</Button>
+      </Tooltip>
+    </div>
+  );
+};
+
+export const TooltipBehaviorDemo = () => {
+  const actionsRef = useRef<TooltipActions | null>(null);
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
+  const [status, setStatus] = useState(docsCopy('等待悬停'));
+
+  return (
+    <div
+      ref={setContainer}
+      className="flex min-h-40 flex-wrap items-center justify-center gap-3 rounded-2xl border bg-background p-6"
+    >
       <Tooltip
-        content={docsCopy('默认箭头')}
-        placement="topLeft"
-        trigger={<Button variant="outline">{docsCopy('显示箭头')}</Button>}
-      />
+        closeDelay={250}
+        closeOnClick={false}
+        content={docsCopy('跟随水平指针')}
+        followCursor="x"
+        interactive
+      >
+        <Button variant="outline">{docsCopy('移动指针')}</Button>
+      </Tooltip>
       <Tooltip
-        arrow={false}
-        content={docsCopy('隐藏箭头')}
-        placement="topLeft"
-        trigger={<Button variant="outline">{docsCopy('隐藏箭头')}</Button>}
-      />
+        actionsRef={actionsRef}
+        container={container}
+        content={docsCopy('局部容器提示')}
+        contentProps={{ 'aria-live': 'polite', 'data-demo': 'behavior' }}
+        interactive
+        keepMounted
+        onOpenChangeComplete={(nextOpen) =>
+          setStatus(docsCopy(nextOpen ? '提示已打开' : '提示已关闭'))
+        }
+      >
+        <Button variant="outline">{docsCopy('局部 Portal')}</Button>
+      </Tooltip>
+      <Button onClick={() => actionsRef.current?.close()} variant="ghost">
+        {docsCopy('关闭提示')}
+      </Button>
+      <span className="text-sm text-muted-foreground" aria-live="polite">
+        {status}
+      </span>
     </div>
   );
 };

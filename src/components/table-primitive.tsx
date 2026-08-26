@@ -133,22 +133,17 @@ const TableEllipsisContent = ({
   }, [children]);
 
   return (
-    <Tooltip
-      content={tooltipContent}
-      delay={300}
-      disabled={!overflowing}
-      trigger={
-        <span
-          ref={contentRef}
-          data-slot="table-ellipsis-content"
-          data-overflowing={overflowing || undefined}
-          className="block truncate outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
-          tabIndex={overflowing ? 0 : undefined}
-        >
-          {children}
-        </span>
-      }
-    />
+    <Tooltip content={tooltipContent} disabled={!overflowing} openDelay={300}>
+      <span
+        ref={contentRef}
+        data-slot="table-ellipsis-content"
+        data-overflowing={overflowing || undefined}
+        className="block truncate outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+        tabIndex={overflowing ? 0 : undefined}
+      >
+        {children}
+      </span>
+    </Tooltip>
   );
 };
 
