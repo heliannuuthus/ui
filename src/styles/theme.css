@@ -45,6 +45,72 @@
 }
 
 @layer components {
+  [data-popup-arrow] {
+    --popup-arrow-depth: 5px;
+    --popup-arrow-overlap: 1px;
+    --popup-arrow-side-offset: -6.5px;
+
+    position: relative;
+    z-index: 50;
+    display: block;
+    width: 10px;
+    height: var(--popup-arrow-depth);
+    overflow: clip;
+    color: var(--foreground);
+    pointer-events: none;
+  }
+
+  [data-popup-arrow][data-side='top'] {
+    bottom: calc(var(--popup-arrow-overlap) - var(--popup-arrow-depth));
+    rotate: 180deg;
+  }
+
+  [data-popup-arrow][data-side='bottom'] {
+    top: calc(var(--popup-arrow-overlap) - var(--popup-arrow-depth));
+  }
+
+  [data-popup-arrow][data-side='left'] {
+    right: var(--popup-arrow-side-offset);
+    rotate: 90deg;
+  }
+
+  [data-popup-arrow][data-side='right'] {
+    left: var(--popup-arrow-side-offset);
+    rotate: -90deg;
+  }
+
+  [data-popup-arrow][data-side='inline-start'] {
+    inset-inline-end: var(--popup-arrow-side-offset);
+    rotate: 90deg;
+  }
+
+  [data-popup-arrow][data-side='inline-end'] {
+    inset-inline-start: var(--popup-arrow-side-offset);
+    rotate: -90deg;
+  }
+
+  :dir(rtl) [data-popup-arrow][data-side='inline-start'] {
+    rotate: -90deg;
+  }
+
+  :dir(rtl) [data-popup-arrow][data-side='inline-end'] {
+    rotate: 90deg;
+  }
+
+  [data-popup-arrow]::before {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    display: block;
+    box-sizing: border-box;
+    width: calc(var(--popup-arrow-depth) * sqrt(2));
+    height: calc(var(--popup-arrow-depth) * sqrt(2));
+    border-radius: 0.75px;
+    background: currentColor;
+    content: '';
+    transform: translate(-50%, 50%) rotate(45deg);
+  }
+
   [data-slot='scroll-area']:has(
     > [data-slot='scroll-area-viewport']:focus-visible
   ) {

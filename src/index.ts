@@ -395,7 +395,9 @@ export {
 export {
   Tooltip,
   type TooltipClassNames,
+  type TooltipPlacement,
   type TooltipProps,
+  type TooltipProviderDefaults,
   type TooltipStyles,
 } from './components/tooltip';
 export {

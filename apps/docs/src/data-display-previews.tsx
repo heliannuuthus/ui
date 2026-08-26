@@ -1651,12 +1651,10 @@ export const TableManagedDemo = ({
 };
 
 export const TableManagedExpandableDemo = ({
-  mode = 'uncontrolled',
+  mode = 'default',
 }: {
-  mode?: 'controlled' | 'restricted' | 'uncontrolled';
+  mode?: 'default' | 'restricted';
 }) => {
-  const [expandedKeys, setExpandedKeys] = useState<Key[]>(['v0.12.0']);
-
   return (
     <div className="display-table-managed">
       <Table
@@ -1669,9 +1667,7 @@ export const TableManagedExpandableDemo = ({
                   row.status !== docsCopy('回滚'),
               }
             : undefined),
-          ...(mode === 'controlled'
-            ? { onChange: setExpandedKeys, value: expandedKeys }
-            : { defaultValue: ['v0.12.0'] }),
+          defaultValue: ['v0.12.0'],
           header: <span className="sr-only">{docsCopy('展开行')}</span>,
           labels: {
             collapse: (row) => `${docsCopy('收起')} ${row.version}`,
@@ -2124,8 +2120,13 @@ export const ItemGroupRenderDemo = () => (
       { key: 'preflight', title: docsCopy('预检完成') },
       { key: 'release', title: docsCopy('发布完成') },
     ]}
-    renderItem={(item, index) => (
-      <Item {...item} actions={<Tag>0{index + 1}</Tag>} variant="outline" />
+    renderItem={({ key, ...item }, index) => (
+      <Item
+        {...item}
+        actions={<Tag>0{index + 1}</Tag>}
+        key={key}
+        variant="outline"
+      />
     )}
   />
 );
@@ -2757,46 +2758,33 @@ export const TableCellDemo = () => {
 };
 
 const tooltipPlacements = [
-  {
-    label: docsCopy('左上'),
-    placement: 'top-start',
-    side: 'top',
-    align: 'start',
-  },
-  { label: docsCopy('上方'), placement: 'top', side: 'top', align: 'center' },
-  { label: docsCopy('右上'), placement: 'top-end', side: 'top', align: 'end' },
-  { label: docsCopy('左侧'), placement: 'left', side: 'left', align: 'center' },
-  {
-    label: docsCopy('右侧'),
-    placement: 'right',
-    side: 'right',
-    align: 'center',
-  },
-  {
-    label: docsCopy('左下'),
-    placement: 'bottom-start',
-    side: 'bottom',
-    align: 'start',
-  },
-  {
-    label: docsCopy('下方'),
-    placement: 'bottom',
-    side: 'bottom',
-    align: 'center',
-  },
-  {
-    label: docsCopy('右下'),
-    placement: 'bottom-end',
-    side: 'bottom',
-    align: 'end',
-  },
+  { label: docsCopy('上方靠左'), placement: 'topLeft' },
+  { label: docsCopy('上方'), placement: 'top' },
+  { label: docsCopy('上方靠右'), placement: 'topRight' },
+  { label: docsCopy('左侧靠上'), placement: 'leftTop' },
+  { label: docsCopy('左侧'), placement: 'left' },
+  { label: docsCopy('左侧靠下'), placement: 'leftBottom' },
+  { label: docsCopy('右侧靠上'), placement: 'rightTop' },
+  { label: docsCopy('右侧'), placement: 'right' },
+  { label: docsCopy('右侧靠下'), placement: 'rightBottom' },
+  { label: docsCopy('下方靠左'), placement: 'bottomLeft' },
+  { label: docsCopy('下方'), placement: 'bottom' },
+  { label: docsCopy('下方靠右'), placement: 'bottomRight' },
 ] as const;
+
+export const TooltipBasicDemo = () => {
+  return (
+    <Tooltip content={docsCopy('键盘快捷键')}>
+      <Button variant="outline">{docsCopy('保存')}</Button>
+    </Tooltip>
+  );
+};
 
 export const TooltipPlacementsDemo = () => {
   return (
     <div
       className="display-tooltip-placements"
-      aria-label={docsCopy('Tooltip 八个方位')}
+      aria-label={docsCopy('Tooltip 十二个位置')}
     >
       {tooltipPlacements.map((placement) => (
         <div
@@ -2805,26 +2793,62 @@ export const TooltipPlacementsDemo = () => {
           key={placement.placement}
         >
           <Tooltip
-            align={placement.align}
-            content={docsCopy(`${placement.label}提示`)}
-            delay={100}
-            side={placement.side}
-            trigger={
-              <Button
-                aria-label={docsCopy(`在${placement.label}显示 Tooltip`)}
-                size="sm"
-                variant="outline"
-              >
-                {placement.label}
-              </Button>
-            }
-          />
+            content={placement.placement}
+            openDelay={100}
+            placement={placement.placement}
+          >
+            <Button size="sm" variant="outline">
+              {placement.label}
+            </Button>
+          </Tooltip>
         </div>
       ))}
       <div className="display-tooltip-reference" aria-hidden="true">
         <span>Tooltip</span>
         <small>{docsCopy('悬停外围按钮')}</small>
       </div>
+    </div>
+  );
+};
+
+export const TooltipArrowDemo = () => {
+  return (
+    <div className="display-tooltip-arrow-options">
+      <Tooltip content={docsCopy('默认箭头')} placement="topLeft">
+        <Button variant="outline">{docsCopy('显示箭头')}</Button>
+      </Tooltip>
+      <Tooltip arrow={false} content={docsCopy('隐藏箭头')} placement="topLeft">
+        <Button variant="outline">{docsCopy('隐藏箭头')}</Button>
+      </Tooltip>
+    </div>
+  );
+};
+
+export const TooltipBehaviorDemo = () => {
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div
+      ref={setContainer}
+      className="flex min-h-40 flex-wrap items-center justify-center gap-3 rounded-2xl border bg-background p-6"
+    >
+      <Tooltip
+        closeDelay={150}
+        container={container}
+        content={docsCopy('受控提示')}
+        onOpenChange={setOpen}
+        open={open}
+        openDelay={250}
+      >
+        <Button variant="outline">{docsCopy('悬停或聚焦')}</Button>
+      </Tooltip>
+      <Button onClick={() => setOpen((value) => !value)} variant="ghost">
+        {docsCopy(open ? '关闭提示' : '打开提示')}
+      </Button>
+      <span className="text-sm text-muted-foreground" aria-live="polite">
+        {docsCopy(open ? '提示已打开' : '提示已关闭')}
+      </span>
     </div>
   );
 };

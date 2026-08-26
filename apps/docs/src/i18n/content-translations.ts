@@ -716,7 +716,6 @@ const ActionCell = () => {
     'Expand a piece of auxiliary content on demand; support independent button or entire custom Header triggering, and allow status icons to be replaced.',
   '按需展开一组纵向排列的内容区域。':
     'Expand a set of vertically arranged content areas as needed.',
-  八个方位: 'eight directions',
   '把产品入口、资源入口和当前页面放入同一条站点导航，弹层宽度随内容平滑变化。':
     'Put the product entrance, resource entrance and current page into the same site navigation, and the width of the elastic layer will change smoothly with the content.',
   '把抽屉约束在指定父容器内。':
@@ -1547,8 +1546,10 @@ const ActionCell = () => {
     'Continuously place content of different heights into the current shortest column, and allow specified content to occupy the entire row.',
   '将菜单绑定到明确的内容区域，右键或键盘菜单键打开与当前对象相关的操作。':
     'Bind menus to explicit content areas, and right-click or keyboard menu keys to open actions related to the current object.',
-  '将常用方位围绕同一参照物完整展示，悬停或聚焦任意按钮即可检查方向和对齐方式。':
-    'Commonly used directions are displayed completely around the same reference object, and you can hover or focus on any button to check the direction and alignment.',
+  'placement 表示浮层相对触发器的位置；边缘位置保持浮层边缘对齐，并将箭头固定在对应边缘的安全区。':
+    'placement defines the popup position relative to the trigger; edge placements align popup edges and keep the arrow within the corresponding edge safe area.',
+  '箭头默认匹配 placement 的落点，也可将其隐藏。':
+    'The arrow matches the placement anchor point by default and can also be hidden.',
   '将错误语义和颜色传递给整个字段。':
     'Pass error semantics and color to the entire field.',
   '将互斥选项扩展为整行可点击的卡片，同时保留原生单选语义。':
@@ -2058,6 +2059,51 @@ const ActionCell = () => {
     'Sets the horizontal and vertical spacing between Radio.Group options.',
   '设置 Tooltip 方向、对齐和间距。':
     'Set Tooltip orientation, alignment and spacing.',
+  '设置需要补充说明的单个触发元素。':
+    'Set the single trigger element that needs a short explanation.',
+  '设置简短提示内容；内容为空时不显示浮层。':
+    'Set concise tooltip content; empty content does not open a popup.',
+  '设置浮层相对触发器的位置。':
+    'Set the popup position relative to the trigger.',
+  '设置打开提示前的等待时间，单位为毫秒。':
+    'Set the delay before opening the tooltip, in milliseconds.',
+  '设置关闭提示前的等待时间，单位为毫秒。':
+    'Set the delay before closing the tooltip, in milliseconds.',
+  '临时禁用提示及其触发行为。':
+    'Temporarily disable the tooltip and its trigger behavior.',
+  '将提示 Portal 挂载到指定容器。':
+    'Mount the tooltip portal in a specified container.',
+  '以受控方式管理提示是否打开。': 'Control whether the tooltip is open.',
+  '设置非受控模式下的初始打开状态。':
+    'Set the initial open state in uncontrolled mode.',
+  '打开状态变化时返回新的显隐状态。':
+    'Receive the next visibility state when the open state changes.',
+  受控提示: 'Controlled tooltip',
+  悬停或聚焦: 'Hover or focus',
+  打开提示: 'Open tooltip',
+  提示已打开: 'Tooltip opened',
+  提示已关闭: 'Tooltip closed',
+  关闭提示: 'Close tooltip',
+  受控状态与容器: 'Controlled state and container',
+  '通过 open 与 onOpenChange 管理显隐，并可设置延迟和 Portal 容器。':
+    'Control visibility with open and onOpenChange, and configure delays and the portal container.',
+  '扩展提示定位根节点的 className。':
+    'Extend the className of the tooltip positioning root.',
+  '设置提示定位根节点的行内样式。':
+    'Set inline styles on the tooltip positioning root.',
+  '引用提示定位根节点。': 'Reference the tooltip positioning root.',
+  '设置浮层相对触发器的位置；使用时无需同时设置 side 或 align。':
+    'Choose the popup position relative to the trigger; do not set side or align at the same time.',
+  '设置是否显示匹配 placement 落点的箭头。':
+    'Show or hide the arrow that matches the placement anchor point.',
+  '不使用 placement 时，设置浮层位于触发器的哪一侧。':
+    'Choose which side of the trigger contains the popup when placement is not used.',
+  '设置浮层盒子沿 side 方向的交叉轴对齐，并匹配箭头的边缘落点。':
+    'Align the popup box along the cross axis of side and match the arrow edge anchor point.',
+  '设置浮层边缘与触发器沿 side 方向的间距。':
+    'Set the distance between the popup edge and the trigger along side.',
+  '设置浮层沿交叉轴的额外偏移。':
+    'Set an additional popup offset along the cross axis.',
   '设置 vertical 后可调整上下区域，适合编辑器与终端、预览与日志等场景。':
     'After setting vertical, the upper and lower areas can be adjusted, which is suitable for scenarios such as editor and terminal, preview and log.',
   '设置按钮组水平或垂直拼接。':
@@ -2436,6 +2482,21 @@ const ActionCell = () => {
   '说明当前为什么没有内容；传入 null 可隐藏标题。':
     'Explain why there is currently no content; pass null to hide the title.',
   四个方向: 'four directions',
+  十二个位置: 'Twelve placements',
+  箭头: 'Arrow',
+  默认箭头: 'Default arrow',
+  显示箭头: 'Show arrow',
+  隐藏箭头: 'Hide arrow',
+  上方靠左: 'Top left',
+  上方靠右: 'Top right',
+  左侧靠上: 'Left top',
+  左侧靠下: 'Left bottom',
+  右侧靠上: 'Right top',
+  右侧靠下: 'Right bottom',
+  下方靠左: 'Bottom left',
+  下方靠右: 'Bottom right',
+  '从页面边缘承载较长内容和连续操作，同时保留当前页面上下文。':
+    'Use the page edge for longer content and continuous actions while preserving the current page context.',
   四种样式与快捷居中: 'Four styles and quick centering',
   宋: 'Song',
   '宋雨 · 运营': 'Song Yu·Operation',
@@ -3699,8 +3760,12 @@ const ActionCell = () => {
     'import { Button, Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>Open from the right</Button>}\n  title="Tonight\'s release window"\n  description="22:00–23:00"\n>\n  <ReleaseWindow />\n</Drawer>',
   'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button variant="outline">3 位负责人</Button>}\n  title="发布负责人"\n  description="发布和回滚时会通知这些成员。"\n  content={<OwnerList />}\n  side="bottom"\n/>':
     'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button variant="outline">3 persons in charge</Button>}\n  title="Release Manager"\n  description="These members will be notified when publishing and rolling back."\n  content={<OwnerList />}\n  side="bottom"\n/>',
-  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  align="start"\n  content="左上提示"\n  delay={100}\n  side="top"\n  trigger={<Button>左上</Button>}\n/>':
-    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  align="start"\n  content="Top left tip"\n  delay={100}\n  side="top"\n  trigger={<Button>Top left</Button>}\n/>',
+  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="上方靠左提示"\n  openDelay={100}\n  placement="topLeft"\n>\n  <Button>上方靠左</Button>\n</Tooltip>':
+    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Top-left tooltip"\n  openDelay={100}\n  placement="topLeft"\n>\n  <Button>Top left</Button>\n</Tooltip>',
+  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="默认箭头"\n  placement="topLeft"\n>\n  <Button>显示箭头</Button>\n</Tooltip>':
+    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Default arrow"\n  placement="topLeft"\n>\n  <Button>Show arrow</Button>\n</Tooltip>',
+  "import { Button, Tooltip } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nconst [container, setContainer] = useState<HTMLDivElement | null>(null)\nconst [open, setOpen] = useState(false)\n\n<div ref={setContainer}>\n  <Tooltip\n    closeDelay={150}\n    container={container}\n    content=\"受控提示\"\n    onOpenChange={setOpen}\n    open={open}\n    openDelay={250}\n  >\n    <Button>悬停或聚焦</Button>\n  </Tooltip>\n  <Button onClick={() => setOpen((value) => !value)}>\n    {open ? '关闭提示' : '打开提示'}\n  </Button>\n</div>":
+    "import { Button, Tooltip } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nconst [container, setContainer] = useState<HTMLDivElement | null>(null)\nconst [open, setOpen] = useState(false)\n\n<div ref={setContainer}>\n  <Tooltip\n    closeDelay={150}\n    container={container}\n    content=\"Controlled tooltip\"\n    onOpenChange={setOpen}\n    open={open}\n    openDelay={250}\n  >\n    <Button>Hover or focus</Button>\n  </Tooltip>\n  <Button onClick={() => setOpen((value) => !value)}>\n    {open ? 'Close tooltip' : 'Open tooltip'}\n  </Button>\n</div>",
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: '读取', value: 'read' },\n    { label: '编辑', value: 'write' },\n    { label: '管理', value: 'admin' },\n  ]}\n/>":
     "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: 'read', value: 'read' },\n    { label: 'edit', value: 'write' },\n    { label: 'admin', value: 'admin' },\n  ]}\n/>",
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  name=\"permission\"\n  value={selected}\n  onChange={setSelected}\n  options={[\n    { label: '查看项目', value: 'read' },\n    { label: '参与评论', value: 'comment' },\n    { label: '管理项目', value: 'manage' },\n  ]}\n/>":
@@ -3723,8 +3788,8 @@ const ActionCell = () => {
     "import { Button, ContextMenu } from '@heliannuuthus/ui'\n\n<ContextMenu\n  trigger={<Button variant=\"outline\">right click here</Button>}\n  items={[\n    { label: 'Copy link' },\n    { type: 'separator' },\n    { label: 'Delete item', destructive: true },\n  ]}\n/>",
   "import { Counter } from '@heliannuuthus/ui'\n\n<Counter\n  value={count}\n  places={[1000, 100, 10, 1]}\n  fontSize={60}\n  fontWeight={600}\n  suffix={<small>次</small>}\n  valueText={`${count} 次构建`}\n/>":
     "import { Counter } from '@heliannuuthus/ui'\n\n<Counter\n  value={count}\n  places={[1000, 100, 10, 1]}\n  fontSize={60}\n  fontWeight={600}\n  suffix={<small>times</small>}\n  valueText={`${count} builds`}\n/>",
-  'import { Dialog } from \'@heliannuuthus/ui\'\n\n<Dialog\n  trigger={<Button>安排发布</Button>}\n  title="安排生产环境发布"\n  description="选择版本和发布时间。"\n  cancelText="取消"\n  confirmText="确认安排"\n>\n  <ReleaseForm />\n</Dialog>':
-    'import { Dialog } from \'@heliannuuthus/ui\'\n\n<Dialog\n  trigger={<Button>Schedule publishing</Button>}\n  title="Scheduling production environment release"\n  description="Select version and release date."\n  cancelText="Cancel"\n  confirmText="Confirm arrangement"\n>\n  <ReleaseForm />\n</Dialog>',
+  'import { Button, Dialog } from \'@heliannuuthus/ui\'\nimport { CircleX } from \'lucide-react\'\n\n<Dialog\n  trigger={<Button>安排发布</Button>}\n  title="安排生产环境发布"\n  description="选择版本和发布时间。"\n  cancelText="取消"\n  confirmText="确认安排"\n>\n  <ReleaseForm />\n</Dialog>':
+    'import { Button, Dialog } from \'@heliannuuthus/ui\'\nimport { CircleX } from \'lucide-react\'\n\n<Dialog\n  trigger={<Button>Schedule publishing</Button>}\n  title="Scheduling production environment release"\n  description="Select version and release date."\n  cancelText="Cancel"\n  confirmText="Confirm arrangement"\n>\n  <ReleaseForm />\n</Dialog>',
   'import { Download, Mail, Plus } from \'lucide-react\'\n\nexport const ButtonWithIcon = () => {\n  return (\n    <>\n      <Button><Plus data-icon="inline-start" />新建项目</Button>\n      <Button variant="outline"><Download data-icon="inline-start" />导出</Button>\n      <Button size="icon" aria-label="发送邮件"><Mail /></Button>\n    </>\n  )\n}':
     'import { Download, Mail, Plus } from \'lucide-react\'\n\nexport const ButtonWithIcon = () => {\n  return (\n    <>\n      <Button><Plus data-icon="inline-start" />New project</Button>\n      <Button variant="outline"><Download data-icon="inline-start" />Export</Button>\n      <Button size="icon" aria-label="Send Mail"><Mail /></Button>\n    </>\n  )\n}',
   'import { Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>从右侧打开</Button>}\n  title="今晚的发布窗口"\n  description="22:00–23:00"\n  closeText="关闭"\n>\n  <ReleaseList />\n</Drawer>':
@@ -3831,8 +3896,6 @@ const ActionCell = () => {
     "import { Toggle } from '@heliannuuthus/ui'\n\n<Toggle.Group\n  defaultValue={['bold']}\n  items={[\n    { value: 'bold', label: <Bold />, 'aria-label': 'bold' },\n    { value: 'italic', label: <Italic />, 'aria-label': 'italic' },\n  ]}\n/>",
   "import { Toggle } from '@heliannuuthus/ui'\n\n<Toggle.Group\n  value={formats}\n  onChange={setFormats}\n  multiple\n  variant=\"outline\"\n  items={[\n    { value: 'bold', label: <Bold />, 'aria-label': '粗体' },\n    { value: 'italic', label: <Italic />, 'aria-label': '斜体' },\n    { value: 'underline', label: <Underline />, 'aria-label': '下划线' },\n  ]}\n/>":
     "import { Toggle } from '@heliannuuthus/ui'\n\n<Toggle.Group\n  value={formats}\n  onChange={setFormats}\n  multiple\n  variant=\"outline\"\n  items={[\n    { value: 'bold', label: <Bold />, 'aria-label': 'bold' },\n    { value: 'italic', label: <Italic />, 'aria-label': 'italic' },\n    { value: 'underline', label: <Underline />, 'aria-label': 'underline' },\n  ]}\n/>",
-  'import { Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  delay={100}\n  side="top"\n  align="start"\n  content="左上提示"\n  trigger={<Button>左上</Button>}\n/>':
-    'import { Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  delay={100}\n  side="top"\n  align="start"\n  content="Top left tip"\n  trigger={<Button>Top left</Button>}\n/>',
   'import { Typography } from \'@heliannuuthus/ui\'\n\nexport const TypographyStory = () => {\n  return (\n    <article>\n      <Typography.Title level={2}>让界面语言保持清晰</Typography.Title>\n      <Typography.Text as="p" size="xl" tone="muted">稳定的排版让用户先理解内容，再自然地注意到设计。</Typography.Text>\n      <Typography.Text as="p">一致的标题层级和正文节奏，让内容清晰、可信且易于阅读。</Typography.Text>\n      <Typography.Blockquote>一致的界面，来自每一次一致的内容决策。</Typography.Blockquote>\n      <Typography.Text as="p">\n        使用 <Typography.Code>@heliannuuthus/ui</Typography.Code> 组合内容。\n      </Typography.Text>\n      <Typography.Text as="p" size="sm" tone="muted">设计系统札记 · 5 分钟阅读</Typography.Text>\n    </article>\n  )\n}':
     'import { Typography } from \'@heliannuuthus/ui\'\n\nexport const TypographyStory = () => {\n  return (\n    <article>\n      <Typography.Title level={2}>Keep the interface language clear</Typography.Title>\n      <Typography.Text as="p" size="xl" tone="muted">Stable typography allows users to understand the content first and then naturally notice the design. </Typography.Text>\n      <Typography.Text as="p">Consistent heading hierarchy and body rhythm make content clear, believable, and easy to read. </Typography.Text>\n      <Typography.Blockquote>A consistent interface comes from consistent content decisions every time. </Typography.Blockquote>\n      <Typography.Text as="p">\n        Use <Typography.Code>@heliannuuthus/ui</Typography.Code> to combine content.\n      </Typography.Text>\n      <Typography.Text as="p" size="sm" tone="muted">Notes on Design Systems · 5 minutes to read</Typography.Text>\n    </article>\n  )\n}',
   "import { useState } from 'react'\nimport { AspectRatio } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\n\nconst ratios = [\n  { label: '16:9', value: 16 / 9 },\n  { label: '4:3', value: 4 / 3 },\n  { label: '1:1', value: 1 },\n]\n\nexport const CoverEditor = () => {\n  const [ratio, setRatio] = useState(ratios[0])\n\n  return (\n    <div>\n      <AspectRatio ratio={ratio.value}>\n        <img src=\"/cover.jpg\" alt=\"内容封面\" />\n      </AspectRatio>\n      {ratios.map((option) => (\n        <Button key={option.label} onClick={() => setRatio(option)}>\n          {option.label}\n        </Button>\n      ))}\n    </div>\n  )\n}":
@@ -3914,7 +3977,7 @@ const ActionCell = () => {
     'Toast will only appear at the top of the current container',
   'Toggle 与 Toggle.Group 使用统一尺寸；通过 items 管理可同时开启的工具状态。':
     'Toggle and Toggle.Group use the same size; use items to manage the status of tools that can be opened at the same time.',
-  'Tooltip 八个方位': 'Tooltip eight directions',
+  'Tooltip 十二个位置': 'Tooltip twelve placements',
   'v0.12.0 发布详情': 'v0.12.0 release details',
   'v0.12.0 已部署到生产环境。': 'v0.12.0 has been deployed to production.',
   'variant 只区分信息层级；同一种状态不要在页面内混用多套样式。':
@@ -4612,6 +4675,7 @@ const ActionCell = () => {
   '在 Table.Column 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。':
     'Nest columns in Table.Column to create grouped headers; Table calculates spans, levels, and empty-state width.',
   '受控排序、分页与行选择': 'Controlled sorting, pagination, and row selection',
+  分页摘要: 'Pagination summary',
   'Primitive 行展开': 'Primitive row expansion',
   服务端数据模式: 'Server data mode',
   'search、sorting 与 pagination 的 manual 模式只管理公开状态，不在客户端二次处理服务端返回的数据。':
@@ -4724,6 +4788,8 @@ const ActionCell = () => {
   "'显示完整路径'": "'Show full path'",
   '配置组件的公开状态、行为或扩展点。':
     'Configure the component public state, behavior, or extension point.',
+  '设置右上角关闭控件；true 使用默认图标，ReactNode 自定义图标，false 隐藏控件。':
+    'Configure the top-right close control: true uses the default icon, a ReactNode provides a custom icon, and false hides the control.',
   '由 Form.Field 自动注入自定义控件的字段契约。':
     'Field contract automatically injected into custom controls by Form.Field.',
   '使用 orientation 和 gap 完成最基础的横向间距布局。':
@@ -5179,11 +5245,6 @@ import { ScrollArea } from '@heliannuuthus/ui'
   自定义摘要: 'Custom summary',
   隐藏摘要: 'Hidden summary',
   限制展开: 'Restricted expansion',
-  默认关闭按钮: 'Default close button',
-  自定义关闭按钮: 'Custom close button',
-  隐藏关闭按钮: 'Hidden close button',
-  默认控件: 'Default controls',
-  精简控件: 'Minimal controls',
   '统一设置 Header 或独立触发按钮的状态图标；true 使用默认图标，false 隐藏，也可传入自定义节点。':
     'Sets the status icon for either the Header or a separate trigger; true uses the default icon, false hides it, and a custom node replaces it.',
   '控制右上角关闭操作；true 使用默认图标，false 隐藏，也可传入自定义节点。':

@@ -14,7 +14,6 @@ import { Typography } from '@heliannuuthus/ui';
 import {
   ArrowRight,
   Bold,
-  CircleX,
   Download,
   Italic,
   Mail,
@@ -154,6 +153,9 @@ import {
   TableFixedDemo,
   TablePaginationDemo,
   TableReleaseDemo,
+  TooltipArrowDemo,
+  TooltipBasicDemo,
+  TooltipBehaviorDemo,
   TooltipPlacementsDemo,
 } from './data-display-previews';
 import {
@@ -161,6 +163,7 @@ import {
   AlertReleaseDemo,
   DialogReleaseDemo,
   DrawerContainedDemo,
+  DrawerDirectionsDemo,
   DrawerReleaseDemo,
   PopoverOwnerPreviewDemo,
   PopoverOwnersDemo,
@@ -203,7 +206,6 @@ import { minimalComponentPreviews } from './minimal-previews';
 import {
   type ComponentHarnessCase,
   type ComponentHarnessCaseAxis,
-  type ComponentHarnessLayout,
   type ComponentHarnessValues,
 } from './component-harness';
 import { createCasesFromAxes } from './component-harness-cases';
@@ -242,7 +244,6 @@ export type ComponentExample = {
   code: string;
   coveredProperties?: string[];
   caseAxes?: ComponentHarnessCaseAxis[];
-  caseLayout?: ComponentHarnessLayout;
   caseMinWidth?: number;
   cases?: ComponentHarnessCase[];
   wide?: boolean;
@@ -1070,6 +1071,7 @@ const badgeDocumentation: ComponentDocumentation = {
 <Badge indicator={0} />
 <Badge indicator={123} max={99} />`),
       coveredProperties: ['indicator', 'max', 'className', 'style'],
+      previewHeight: 56,
     },
     {
       title: docsCopy('锚点通知'),
@@ -1633,7 +1635,6 @@ export const StackGapExample = () => {
       description: docsCopy(
         'Compact 不只组合按钮，也可以拼接 Input、Select、Slider 与操作控件。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'orientation',
@@ -1693,7 +1694,6 @@ export const SliderCompactExample = () => {
       description: docsCopy(
         'align 控制交叉轴对齐，justify 控制主轴分布；对应属性和值在示例代码中完整展示。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'axis',
@@ -1912,7 +1912,6 @@ const cardDocumentation: ComponentDocumentation = {
     {
       title: docsCopy('基础卡片'),
       description: docsCopy('只提供标题和内容，即可快速组织一组相关信息。'),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'variant',
@@ -3219,7 +3218,6 @@ const tabsDocumentation: ComponentDocumentation = {
       description: docsCopy(
         '320px 与 480px 只是代表性的测试容器，不是组件断点；空间不足时隐藏原生滚动条、显示两侧导航按钮，同时保留触摸与触控板横向滑动。'
       ),
-      caseLayout: 'segmented',
       cases: [
         {
           label: docsCopy('默认名称'),
@@ -3501,7 +3499,6 @@ const layoutDocumentation: ComponentDocumentation = {
         'Sidebar 在 lg 以下自动折叠，也可以通过内置触发器手动切换；collapsedWidth 决定折叠后保留的宽度。'
       ),
       previewHeight: 370,
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'defaultCollapsed',
@@ -4079,7 +4076,6 @@ componentDocumentation['context-menu'].examples = [
     description: docsCopy(
       '比较默认非受控、通过 open 与 onOpenChange 管理的受控模式，以及 disabled 阻止触发的状态。'
     ),
-    caseLayout: 'segmented',
     caseMinWidth: 250,
     cases: [
       {
@@ -4303,7 +4299,6 @@ componentDocumentation.avatar.examples = [
     description: docsCopy(
       'shape 在圆形和圆角方形之间切换，每种形状作为独立 case 展示。'
     ),
-    caseLayout: 'segmented',
     caseAxes: [
       {
         name: 'shape',
@@ -4331,7 +4326,6 @@ componentDocumentation.avatar.examples = [
     description: docsCopy(
       'size 提供小、中、大三档尺寸，并同步调整文字与状态标记。'
     ),
-    caseLayout: 'segmented',
     caseAxes: [
       {
         name: 'size',
@@ -4361,7 +4355,6 @@ componentDocumentation.avatar.examples = [
     description: docsCopy(
       'src 提供头像图片；加载失败时显示 fallback，并通过 imageProps 与 fallbackProps 配置加载回调和延迟。'
     ),
-    caseLayout: 'segmented',
     caseAxes: [
       {
         name: 'source',
@@ -4412,7 +4405,6 @@ componentDocumentation.avatar.examples = [
     description: docsCopy(
       'renderCount 接收未展示数量并替换默认 +N，同时继承分组的 shape 与 size。'
     ),
-    caseLayout: 'segmented',
     caseAxes: [
       {
         name: 'count',
@@ -4843,7 +4835,6 @@ const form = Form.useForm<Values>({
       description: docsCopy(
         '使用 Input 的 variant 切换连接方块与独立方块，并通过分段控件逐项预览。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'variant',
@@ -4933,7 +4924,6 @@ const form = Form.useForm<Values>({
       description: docsCopy(
         '比较常用尺寸、隐藏步进按钮、只读、禁用和校验失败状态。'
       ),
-      caseLayout: 'segmented',
       caseMinWidth: 220,
       cases: [
         {
@@ -5029,7 +5019,6 @@ const form = Form.useForm<Values>({
       description: docsCopy(
         '将互斥选项扩展为整行可点击的卡片，同时保留原生单选语义。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'orientation',
@@ -5070,7 +5059,6 @@ const form = Form.useForm<Values>({
       description: docsCopy(
         '候选项较多且用户知道关键词时，直接输入过滤、清除并重新选择。'
       ),
-      caseLayout: 'segmented',
       cases: [
         {
           isDefault: true,
@@ -5231,7 +5219,6 @@ export const ControlledToggle = () => {
       description: docsCopy(
         'Toggle 与 Toggle.Group 使用统一尺寸；通过 items 管理可同时开启的工具状态。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'variant',
@@ -5451,7 +5438,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         '默认关闭时卸载面板；keepMounted 保留内部状态；hiddenUntilFound 保留内容并允许浏览器页内查找定位。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'strategy',
@@ -5501,7 +5487,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'mediaType 明确声明 media 是图标还是图片，让缩略图获得正确的尺寸、裁切与状态样式。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'mediaType',
@@ -5538,7 +5523,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'state 分别表达等待、上传、处理、失败和完成阶段；状态文案仍由 description 明确说明。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'state',
@@ -5577,7 +5561,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'size 只控制单个附件的整体密度；不同尺寸通过分段控件逐项预览。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'size',
@@ -5609,7 +5592,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'horizontal 适合文件列表，vertical 以缩略卡形式突出媒体内容。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'orientation',
@@ -5682,7 +5664,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'Carousel 始终使用景深过渡；paginationPosition 控制默认点位位于内容前方或后方。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'dotPosition',
@@ -5715,7 +5696,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'controls 决定是否渲染上一项和下一项按钮；按钮属性通过 previousButtonProps 与 nextButtonProps 独立扩展。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'controls',
@@ -5745,7 +5725,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         'pagination 控制默认点位或隐藏分页，renderDot 只改写单个点位的内容。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'pagination',
@@ -5862,7 +5841,6 @@ import { Minus, Plus } from 'lucide-react'
       description: docsCopy(
         '默认由整个 Header 触发；传入 trigger 后，Header 保持静态，只由独立按钮控制展开。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'triggerMode',
@@ -5903,7 +5881,6 @@ import { ChevronRight } from 'lucide-react'
       description: docsCopy(
         'header 可以组合任意摘要内容；indicator 在两种触发模式下统一控制状态图标，传 false 时隐藏。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'indicator',
@@ -5946,7 +5923,6 @@ import { ChevronRight } from 'lucide-react'
       description: docsCopy(
         'open 与 onOpenChange 管理受控展开状态；disabled 阻止触发器改变状态。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'mode',
@@ -6000,33 +5976,7 @@ import { ChevronRight } from 'lucide-react'
       description: docsCopy(
         '默认组合搜索、排序、固定列、操作列、Footer 和 Pagination；业务只需要提供 data 与 Table.Column。'
       ),
-      cases: [
-        {
-          isDefault: true,
-          label: docsCopy('默认摘要'),
-          properties: { pagination: '{ pageSize: 3, summary: true }' },
-          values: { summary: 'default' },
-        },
-        {
-          label: docsCopy('自定义摘要'),
-          properties: { pagination: '{ pageSize: 3, summary: customSummary }' },
-          values: { summary: 'custom' },
-        },
-        {
-          label: docsCopy('隐藏摘要'),
-          properties: { pagination: '{ pageSize: 3, summary: false }' },
-          values: { summary: 'hidden' },
-        },
-      ],
-      preview: (values) => (
-        <TableManagedDemo
-          summary={
-            values.summary === 'custom' || values.summary === 'hidden'
-              ? values.summary
-              : 'default'
-          }
-        />
-      ),
+      preview: <TableManagedDemo />,
       code: docsCopy(`import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 import { DropdownMenu } from '@heliannuuthus/ui'
@@ -6081,7 +6031,7 @@ const columns: Table.Column<Release>[] = [
   classNames={{ table: 'min-w-[820px]' }}
 />`),
       wide: true,
-      previewHeight: 580,
+      previewHeight: 420,
     },
     {
       title: docsCopy('行展开'),
@@ -6091,16 +6041,11 @@ const columns: Table.Column<Release>[] = [
       cases: [
         {
           isDefault: true,
-          label: docsCopy('非受控'),
+          label: docsCopy('默认'),
           properties: {
             expandable: '{ defaultValue, labels, render }',
           },
-          values: { mode: 'uncontrolled' },
-        },
-        {
-          label: docsCopy('受控'),
-          properties: { expandable: '{ value, onChange, labels, render }' },
-          values: { mode: 'controlled' },
+          values: { mode: 'default' },
         },
         {
           label: docsCopy('限制展开'),
@@ -6112,11 +6057,7 @@ const columns: Table.Column<Release>[] = [
       ],
       preview: (values) => (
         <TableManagedExpandableDemo
-          mode={
-            values.mode === 'controlled' || values.mode === 'restricted'
-              ? values.mode
-              : 'uncontrolled'
-          }
+          mode={values.mode === 'restricted' ? 'restricted' : 'default'}
         />
       ),
       code: docsCopy(`import { Table } from '@heliannuuthus/ui'
@@ -6132,7 +6073,7 @@ const columns: Table.Column<Release>[] = [
   pagination={false}
 />`),
       wide: true,
-      previewHeight: 560,
+      previewHeight: 500,
     },
     {
       title: docsCopy('分组表头'),
@@ -6222,6 +6163,56 @@ const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
       previewHeight: 600,
     },
     {
+      title: docsCopy('分页摘要'),
+      description: docsCopy('显示数据总数，或根据总数与当前范围自定义摘要。'),
+      cases: [
+        {
+          isDefault: true,
+          label: docsCopy('默认摘要'),
+          properties: { pagination: '{ pageSize: 3, summary: true }' },
+          values: { summary: 'default' },
+        },
+        {
+          label: docsCopy('自定义摘要'),
+          properties: { pagination: '{ pageSize: 3, summary: customSummary }' },
+          values: { summary: 'custom' },
+        },
+        {
+          label: docsCopy('隐藏摘要'),
+          properties: { pagination: '{ pageSize: 3, summary: false }' },
+          values: { summary: 'hidden' },
+        },
+      ],
+      preview: (values) => (
+        <TableManagedDemo
+          summary={
+            values.summary === 'custom' || values.summary === 'hidden'
+              ? values.summary
+              : 'default'
+          }
+        />
+      ),
+      code: `<Table
+  columns={columns}
+  data={releaseRecords}
+  pagination={{ pageSize: 3, summary: true }}
+/>
+
+<Table
+  columns={columns}
+  data={releaseRecords}
+  pagination={{ pageSize: 3, summary: customSummary }}
+/>
+
+<Table
+  columns={columns}
+  data={releaseRecords}
+  pagination={{ pageSize: 3, summary: false }}
+/>`,
+      wide: true,
+      previewHeight: 460,
+    },
+    {
       title: docsCopy('加载与外部状态组合'),
       description: docsCopy(
         'Table 只内置布尔 loading；定制空结果和请求错误分别组合 Empty 与 Alert。'
@@ -6238,7 +6229,6 @@ const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
           ],
         },
       ],
-      caseLayout: 'segmented',
       preview: (values) => (
         <TableStatusDemo
           state={
@@ -6320,7 +6310,6 @@ if (!request.pending && records.length === 0) {
       description: docsCopy(
         'icon 默认使用通用收件箱图标，也可以替换为场景图标或传 null 隐藏。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'icon',
@@ -6445,7 +6434,6 @@ if (!request.pending && records.length === 0) {
     {
       title: docsCopy('列表项尺寸'),
       description: docsCopy('size 分别提供默认、小和超小三档内容密度。'),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'size',
@@ -6477,7 +6465,6 @@ if (!request.pending && records.length === 0) {
       description: docsCopy(
         'mediaType 明确区分普通内容、图标和图片，避免调用方依赖节点形态推断样式。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'mediaType',
@@ -6508,7 +6495,6 @@ if (!request.pending && records.length === 0) {
       description: docsCopy(
         'header、content、actions 与 footer 各自占据独立语义区域，不再把多个结构字段塞进同一行说明。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'slot',
@@ -6556,7 +6542,6 @@ if (!request.pending && records.length === 0) {
       description: docsCopy(
         'Item.Group 通过 items 渲染集合，separator 独立控制无分隔、默认分隔线或自定义分隔内容。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'separator',
@@ -6590,8 +6575,8 @@ if (!request.pending && records.length === 0) {
       preview: <ItemGroupRenderDemo />,
       code: `<Item.Group
   items={items}
-  renderItem={(item, index) => (
-    <Item {...item} actions={<Tag>0{index + 1}</Tag>} />
+  renderItem={({ key, ...item }, index) => (
+    <Item key={key} {...item} actions={<Tag>0{index + 1}</Tag>} />
   )}
 />`,
       previewHeight: 'auto',
@@ -6680,7 +6665,6 @@ import { Archive } from 'lucide-react'
       description: docsCopy(
         'variant 的每种语义外观都作为独立 case 展示，避免在同一个预览区域混合比较。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'variant',
@@ -6728,7 +6712,6 @@ import { Archive } from 'lucide-react'
       description: docsCopy(
         'align 只控制单个气泡位于消息流的起始侧或末端，不隐含发送者身份。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'align',
@@ -6752,7 +6735,6 @@ import { Archive } from 'lucide-react'
       description: docsCopy(
         'reactionsProps 的 side 与 align 分别控制回应位于气泡上下侧和左右边缘。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'position',
@@ -6994,21 +6976,80 @@ const ActionCell = () => {
   ],
   tooltip: [
     {
-      title: docsCopy('八个方位'),
+      title: docsCopy('显示 Tooltip'),
+      description: docsCopy('为控件提供简短补充说明。'),
+      preview: <TooltipBasicDemo />,
+      code: `<Tooltip content={tooltipContent}>{trigger}</Tooltip>`,
+      previewHeight: 300,
+    },
+    {
+      title: docsCopy('十二个位置'),
       description: docsCopy(
-        '将常用方位围绕同一参照物完整展示，悬停或聚焦任意按钮即可检查方向和对齐方式。'
+        'placement 表示浮层相对触发器的位置；边缘位置保持浮层边缘对齐，并将箭头固定在对应边缘的安全区。'
       ),
       preview: <TooltipPlacementsDemo />,
       code: docsCopy(`import { Button, Tooltip } from '@heliannuuthus/ui'
 
 <Tooltip
-  align="start"
-  content="左上提示"
-  delay={100}
-  side="top"
-  trigger={<Button>左上</Button>}
-/>`),
+  content="上方靠左提示"
+  openDelay={100}
+  placement="topLeft"
+>
+  <Button>上方靠左</Button>
+</Tooltip>`),
       previewHeight: 440,
+      wide: true,
+    },
+    {
+      title: docsCopy('箭头'),
+      description: docsCopy('箭头默认匹配 placement 的落点，也可将其隐藏。'),
+      preview: <TooltipArrowDemo />,
+      code: docsCopy(`import { Button, Tooltip } from '@heliannuuthus/ui'
+
+<Tooltip
+  content="默认箭头"
+  placement="topLeft"
+>
+  <Button>显示箭头</Button>
+</Tooltip>`),
+      previewHeight: 300,
+      wide: true,
+    },
+    {
+      title: docsCopy('受控状态与容器'),
+      description: docsCopy(
+        '通过 open 与 onOpenChange 管理显隐，并可设置延迟和 Portal 容器。'
+      ),
+      preview: <TooltipBehaviorDemo />,
+      code: docsCopy(`import { Button, Tooltip } from '@heliannuuthus/ui'
+import { useState } from 'react'
+
+const [container, setContainer] = useState<HTMLDivElement | null>(null)
+const [open, setOpen] = useState(false)
+
+<div ref={setContainer}>
+  <Tooltip
+    closeDelay={150}
+    container={container}
+    content="受控提示"
+    onOpenChange={setOpen}
+    open={open}
+    openDelay={250}
+  >
+    <Button>悬停或聚焦</Button>
+  </Tooltip>
+  <Button onClick={() => setOpen((value) => !value)}>
+    {open ? '关闭提示' : '打开提示'}
+  </Button>
+</div>`),
+      coveredProperties: [
+        'closeDelay',
+        'container',
+        'onOpenChange',
+        'open',
+        'openDelay',
+      ],
+      previewHeight: 320,
       wide: true,
     },
   ],
@@ -7025,7 +7066,6 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description: docsCopy(
         '仅用于必须由用户确认的警告或危险操作；成功和普通信息应使用 Alert 或 Toast。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'size',
@@ -7060,38 +7100,7 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description: docsCopy(
         '在不离开当前页面的情况下完成一项聚焦编辑任务，并保留明确的取消和保存动作。'
       ),
-      caseLayout: 'segmented',
-      cases: [
-        {
-          isDefault: true,
-          label: docsCopy('默认关闭按钮'),
-          properties: { closable: 'true' },
-          values: { closable: 'default' },
-        },
-        {
-          label: docsCopy('自定义关闭按钮'),
-          properties: { closable: '<CircleX />' },
-          values: { closable: 'custom' },
-        },
-        {
-          label: docsCopy('隐藏关闭按钮'),
-          properties: { closable: 'false' },
-          values: { closable: 'hidden' },
-        },
-      ],
-      preview: (values) => (
-        <DialogReleaseDemo
-          closable={
-            values.closable === 'custom' ? (
-              <CircleX />
-            ) : values.closable === 'hidden' ? (
-              false
-            ) : (
-              true
-            )
-          }
-        />
-      ),
+      preview: <DialogReleaseDemo />,
       code: docsCopy(`import { Button, Dialog } from '@heliannuuthus/ui'
 
 <Dialog
@@ -7109,38 +7118,30 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
   ],
   drawer: [
     {
+      title: docsCopy('今晚的发布窗口'),
+      description: docsCopy(
+        '从页面边缘承载较长内容和连续操作，同时保留当前页面上下文。'
+      ),
+      preview: <DrawerReleaseDemo />,
+      code: docsCopy(`import { Button, Drawer } from '@heliannuuthus/ui'
+
+<Drawer
+  behavior="adaptive"
+  side="right"
+  trigger={<Button>从右侧打开</Button>}
+  title="今晚的发布窗口"
+  description="22:00–23:00"
+>
+  <ReleaseWindow />
+</Drawer>`),
+      previewHeight: 340,
+    },
+    {
       title: docsCopy('四个方向'),
       description: docsCopy(
         '统一从上、右、下、左进入；adaptive 模式在窄屏保留手势，在宽屏收敛为稳定的边缘面板。'
       ),
-      caseLayout: 'segmented',
-      cases: [
-        {
-          isDefault: true,
-          label: docsCopy('默认控件'),
-          properties: { closable: 'true', handle: 'undefined' },
-          values: { chrome: 'default' },
-        },
-        {
-          label: docsCopy('自定义关闭按钮'),
-          properties: { closable: '<CircleX />', handle: 'undefined' },
-          values: { chrome: 'custom' },
-        },
-        {
-          label: docsCopy('精简控件'),
-          properties: { closable: 'false', handle: 'false' },
-          values: { chrome: 'minimal' },
-        },
-      ],
-      preview: (values) => (
-        <DrawerReleaseDemo
-          chrome={
-            values.chrome === 'custom' || values.chrome === 'minimal'
-              ? values.chrome
-              : 'default'
-          }
-        />
-      ),
+      preview: <DrawerDirectionsDemo />,
       code: docsCopy(`import { Button, Drawer } from '@heliannuuthus/ui'
 
 <Drawer
@@ -7183,23 +7184,7 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description: docsCopy(
         '在触发器附近补充少量关联信息与轻量操作，不打断当前阅读上下文。'
       ),
-      caseLayout: 'segmented',
-      caseAxes: [
-        {
-          name: 'side',
-          label: docsCopy('位置'),
-          defaultValue: 'bottom',
-          options: [
-            { label: docsCopy('下方'), value: 'bottom' },
-            { label: docsCopy('右侧'), value: 'right' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <PopoverOwnersDemo
-          side={values.side === 'right' ? 'right' : 'bottom'}
-        />
-      ),
+      preview: <PopoverOwnersDemo />,
       code: docsCopy(`import { Button, Popover } from '@heliannuuthus/ui'
 
 <Popover
@@ -7216,23 +7201,7 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description: docsCopy(
         '将 trigger 设为 hover 后，鼠标悬停或键盘聚焦都会展示关联信息，适合实体预览。'
       ),
-      caseLayout: 'segmented',
-      caseAxes: [
-        {
-          name: 'side',
-          label: docsCopy('位置'),
-          defaultValue: 'bottom',
-          options: [
-            { label: docsCopy('下方'), value: 'bottom' },
-            { label: docsCopy('右侧'), value: 'right' },
-          ],
-        },
-      ],
-      preview: (values) => (
-        <PopoverOwnerPreviewDemo
-          side={values.side === 'right' ? 'right' : 'bottom'}
-        />
-      ),
+      preview: <PopoverOwnerPreviewDemo />,
       code: docsCopy(`import { Button, Popover } from '@heliannuuthus/ui'
 
 <Popover
@@ -7270,7 +7239,6 @@ const feedbackExamples: Record<string, ComponentExample[]> = {
       description: docsCopy(
         '加载前复刻最终内容的层级和密度，避免数据出现时产生明显布局跳动。'
       ),
-      caseLayout: 'segmented',
       caseAxes: [
         {
           name: 'density',
@@ -9998,18 +9966,6 @@ replaceExampleCodes('select', [
 />`),
 ]);
 
-replaceExampleCodes('tooltip', [
-  docsCopy(`import { Tooltip } from '@heliannuuthus/ui'
-
-<Tooltip
-  delay={100}
-  side="top"
-  align="start"
-  content="左上提示"
-  trigger={<Button>左上</Button>}
-/>`),
-]);
-
 replaceExampleCodes('alert-dialog', [
   docsCopy(`import { AlertDialog } from '@heliannuuthus/ui'
 
@@ -10024,7 +9980,8 @@ replaceExampleCodes('alert-dialog', [
 ]);
 
 replaceExampleCodes('dialog', [
-  docsCopy(`import { Dialog } from '@heliannuuthus/ui'
+  docsCopy(`import { Button, Dialog } from '@heliannuuthus/ui'
+import { CircleX } from 'lucide-react'
 
 <Dialog
   trigger={<Button>安排发布</Button>}
@@ -11208,6 +11165,14 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
       ),
       type: 'ReactNode',
     },
+    {
+      name: 'closable',
+      description: docsCopy(
+        '设置右上角关闭控件；true 使用默认图标，ReactNode 自定义图标，false 隐藏控件。'
+      ),
+      type: 'boolean | ReactNode',
+      defaultValue: 'true',
+    },
     ...[
       { name: 'confirmText', type: 'ReactNode' },
       { name: 'cancelText', type: 'ReactNode' },
@@ -11415,43 +11380,83 @@ const publicWrapperApi: Partial<Record<string, ApiProperty[]>> = {
     },
   ],
   tooltip: [
-    ...[
-      { name: 'trigger', type: 'ReactElement' },
-      { name: 'content', type: 'ReactNode' },
-    ].map((property) => ({
-      ...property,
-      description: docsCopy('设置需要补充说明的交互元素和简短提示内容。'),
-    })),
-    ...[
-      { name: 'side', type: "'top' | 'right' | 'bottom' | 'left'" },
-      { name: 'align', type: "'start' | 'center' | 'end'" },
-      { name: 'sideOffset', type: 'number' },
-      { name: 'alignOffset', type: 'number' },
-    ].map((property) => ({
-      ...property,
-      description: docsCopy('设置 Tooltip 方向、对齐和间距。'),
-    })),
-    ...[
-      { name: 'delay', type: 'number' },
-      { name: 'disabled', type: 'boolean' },
-    ].map((property) => ({
-      ...property,
-      description: docsCopy('设置打开延迟，或临时禁用提示。'),
-    })),
-    ...[
-      { name: 'open', type: 'boolean' },
-      { name: 'defaultOpen', type: 'boolean', defaultValue: 'false' },
-      { name: 'onOpenChange', type: '(open: boolean) => void' },
-    ].map((property) => ({
-      ...property,
-      description: docsCopy('以受控或非受控方式管理打开状态。'),
-    })),
     {
-      name: 'contentProps',
-      description: docsCopy(
-        '向提示内容 div 传递标准 HTML、ARIA、data 属性和事件。'
-      ),
-      type: 'ComponentProps<"div">',
+      name: 'children',
+      description: docsCopy('设置需要补充说明的单个触发元素。'),
+      type: 'ReactElement',
+      required: true,
+    },
+    {
+      name: 'content',
+      description: docsCopy('设置简短提示内容；内容为空时不显示浮层。'),
+      type: 'ReactNode',
+      required: true,
+    },
+    {
+      name: 'placement',
+      type: 'TooltipPlacement',
+      defaultValue: "'top'",
+      description: docsCopy('设置浮层相对触发器的位置。'),
+    },
+    {
+      name: 'arrow',
+      type: 'boolean',
+      defaultValue: 'true',
+      description: docsCopy('设置是否显示匹配 placement 落点的箭头。'),
+    },
+    {
+      name: 'openDelay',
+      type: 'number',
+      defaultValue: '100',
+      description: docsCopy('设置打开提示前的等待时间，单位为毫秒。'),
+    },
+    {
+      name: 'closeDelay',
+      type: 'number',
+      defaultValue: '100',
+      description: docsCopy('设置关闭提示前的等待时间，单位为毫秒。'),
+    },
+    {
+      name: 'disabled',
+      type: 'boolean',
+      defaultValue: 'false',
+      description: docsCopy('临时禁用提示及其触发行为。'),
+    },
+    {
+      name: 'container',
+      type: 'HTMLElement | RefObject<HTMLElement | null>',
+      description: docsCopy('将提示 Portal 挂载到指定容器。'),
+    },
+    {
+      name: 'open',
+      type: 'boolean',
+      description: docsCopy('以受控方式管理提示是否打开。'),
+    },
+    {
+      name: 'defaultOpen',
+      type: 'boolean',
+      defaultValue: 'false',
+      description: docsCopy('设置非受控模式下的初始打开状态。'),
+    },
+    {
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+      description: docsCopy('打开状态变化时返回新的显隐状态。'),
+    },
+    {
+      name: 'className',
+      type: 'string',
+      description: docsCopy('扩展提示定位根节点的 className。'),
+    },
+    {
+      name: 'style',
+      type: 'CSSProperties',
+      description: docsCopy('设置提示定位根节点的行内样式。'),
+    },
+    {
+      name: 'ref',
+      type: 'Ref<HTMLDivElement>',
+      description: docsCopy('引用提示定位根节点。'),
     },
   ],
 };
@@ -12004,7 +12009,7 @@ const semanticStyleContracts = {
     componentName: 'Tabs',
     slots: ['indicator', 'list', 'panel', 'tab', 'viewport'],
   },
-  tooltip: { componentName: 'Tooltip', slots: ['content'] },
+  tooltip: { componentName: 'Tooltip', slots: ['arrow', 'content'] },
 } as const;
 
 for (const [slug, contract] of Object.entries(semanticStyleContracts)) {
@@ -12103,14 +12108,6 @@ appendMissingApi('alert-dialog', [
 appendMissingApi('context-menu', [
   publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
 ]);
-appendMissingApi('dialog', [
-  publicProperty('contentProps', 'ComponentProps<"div">'),
-  publicProperty('disablePointerDismissal', 'boolean', {
-    defaultValue: 'false',
-  }),
-  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
-  publicProperty('closable', 'boolean | ReactNode', { defaultValue: 'true' }),
-]);
 appendMissingApi('drawer', [
   publicProperty('closeText', 'ReactNode'),
   publicProperty('closeVariant', 'ButtonProps["variant"]', {
@@ -12143,11 +12140,6 @@ appendMissingApi('navigation-menu', [
 appendMissingApi('popover', [
   publicProperty('modal', "boolean | 'trap-focus'"),
   publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
-]);
-appendMissingApi('tooltip', [
-  publicProperty('disableHoverablePopup', 'boolean'),
-  publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
-  publicProperty('trackCursorAxis', "'both' | 'none' | 'x' | 'y'"),
 ]);
 
 componentDocumentation.menubar.api = componentDocumentation.menubar.api.filter(
@@ -12525,7 +12517,6 @@ const prunedPrimitiveApi: Readonly<Record<string, readonly string[]>> = {
     'padding',
     'textColor',
   ],
-  dialog: ['contentProps', 'disablePointerDismissal', 'onOpenChangeComplete'],
   drawer: [
     'contentProps',
     'disablePointerDismissal',
@@ -12545,12 +12536,7 @@ const prunedPrimitiveApi: Readonly<Record<string, readonly string[]>> = {
     'openOnInputClick',
   ],
   toggle: ['Toggle.Group.loopFocus'],
-  tooltip: [
-    'contentProps',
-    'disableHoverablePopup',
-    'onOpenChangeComplete',
-    'trackCursorAxis',
-  ],
+  tooltip: ['disableHoverablePopup', 'trackCursorAxis', 'trigger'],
 };
 
 for (const [slug, names] of Object.entries(prunedPrimitiveApi)) {
@@ -12868,11 +12854,9 @@ const caseCoverageSnippets: Readonly<Record<string, string>> = {
 </Table.Primitive>`,
   tooltip: `<Tooltip
   content="Keyboard shortcut"
-  sideOffset={8}
-  alignOffset={4}
   disabled={disabled}
   open={open}
-  onOpenChange={setOpen}
+  onOpenChange={(nextOpen) => setOpen(nextOpen)}
   classNames={{ content: 'max-w-64' }}
   styles={{ content: { textAlign: 'start' } }}
 >
@@ -12892,11 +12876,11 @@ const caseCoverageSnippets: Readonly<Record<string, string>> = {
   open={open}
   onOpenChange={setOpen}
   footer={<Button>Save</Button>}
-  closable
+  closable={<CircleX />}
   classNames={{ content: 'max-w-xl' }}
   styles={{ content: { minHeight: 320 } }}
 />
-<Dialog defaultOpen={false} title="Workspace settings" />`,
+<Dialog closable={false} defaultOpen={false} title="Workspace settings" />`,
   drawer: `<Drawer
   open={open}
   onOpenChange={setOpen}
@@ -13400,6 +13384,34 @@ appendTypePreviews('table', [
   containerHeight?: number | string
   overscan?: number
   rowHeight?: number
+}`,
+  },
+]);
+
+appendTypePreviews('tooltip', [
+  {
+    name: 'TooltipPlacement',
+    definition: `type TooltipPlacement =
+  | 'topLeft'
+  | 'top'
+  | 'topRight'
+  | 'leftTop'
+  | 'left'
+  | 'leftBottom'
+  | 'rightTop'
+  | 'right'
+  | 'rightBottom'
+  | 'bottomLeft'
+  | 'bottom'
+  | 'bottomRight'`,
+  },
+  {
+    name: 'TooltipProviderDefaults',
+    definition: `type TooltipProviderDefaults = {
+  arrow?: boolean
+  closeDelay?: number
+  openDelay?: number
+  placement?: TooltipPlacement
 }`,
   },
 ]);
