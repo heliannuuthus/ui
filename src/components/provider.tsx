@@ -314,7 +314,7 @@ const Provider = ({
         <TooltipPrimitive.Provider
           closeDelay={tooltipDefaults?.closeDelay ?? 100}
           delay={tooltipDefaults?.openDelay ?? 100}
-          timeout={tooltipDefaults?.skipDelayDuration ?? 400}
+          timeout={400}
         >
           <div
             {...props}

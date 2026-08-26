@@ -394,12 +394,8 @@ export {
 } from './components/toggle';
 export {
   Tooltip,
-  type TooltipActions,
   type TooltipClassNames,
-  type TooltipContentProps,
-  type TooltipOpenChangeDetails,
   type TooltipPlacement,
-  type TooltipPositioning,
   type TooltipProps,
   type TooltipProviderDefaults,
   type TooltipStyles,

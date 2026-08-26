@@ -21,7 +21,7 @@ import { ScrollArea } from '@heliannuuthus/ui';
 import { Slider } from '@heliannuuthus/ui';
 import { Stack } from '@heliannuuthus/ui';
 import { Switch } from '@heliannuuthus/ui';
-import { Tooltip, type TooltipActions } from '@heliannuuthus/ui';
+import { Tooltip } from '@heliannuuthus/ui';
 import {
   Archive,
   ArrowLeft,
@@ -2820,9 +2820,8 @@ export const TooltipArrowDemo = () => {
 };
 
 export const TooltipBehaviorDemo = () => {
-  const actionsRef = useRef<TooltipActions | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
-  const [status, setStatus] = useState(docsCopy('等待悬停'));
+  const [open, setOpen] = useState(false);
 
   return (
     <div
@@ -2830,32 +2829,20 @@ export const TooltipBehaviorDemo = () => {
       className="flex min-h-40 flex-wrap items-center justify-center gap-3 rounded-2xl border bg-background p-6"
     >
       <Tooltip
-        closeDelay={250}
-        closeOnClick={false}
-        content={docsCopy('跟随水平指针')}
-        followCursor="x"
-        interactive
-      >
-        <Button variant="outline">{docsCopy('移动指针')}</Button>
-      </Tooltip>
-      <Tooltip
-        actionsRef={actionsRef}
+        closeDelay={150}
         container={container}
-        content={docsCopy('局部容器提示')}
-        contentProps={{ 'aria-live': 'polite', 'data-demo': 'behavior' }}
-        interactive
-        keepMounted
-        onOpenChangeComplete={(nextOpen) =>
-          setStatus(docsCopy(nextOpen ? '提示已打开' : '提示已关闭'))
-        }
+        content={docsCopy('受控提示')}
+        onOpenChange={setOpen}
+        open={open}
+        openDelay={250}
       >
-        <Button variant="outline">{docsCopy('局部 Portal')}</Button>
+        <Button variant="outline">{docsCopy('悬停或聚焦')}</Button>
       </Tooltip>
-      <Button onClick={() => actionsRef.current?.close()} variant="ghost">
-        {docsCopy('关闭提示')}
+      <Button onClick={() => setOpen((value) => !value)} variant="ghost">
+        {docsCopy(open ? '关闭提示' : '打开提示')}
       </Button>
       <span className="text-sm text-muted-foreground" aria-live="polite">
-        {status}
+        {docsCopy(open ? '提示已打开' : '提示已关闭')}
       </span>
     </div>
   );
