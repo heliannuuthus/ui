@@ -24,39 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Use label, value, and showValue to simultaneously describe the progress object, completion percentage, and remaining range."}
 
-```tsx title="showcases/progress/cases/basic-usage.tsx"
-import { Progress } from '@heliannuuthus/ui';
+```tsx title="showcases/progress/cases/basic-usage.tsx" file="<root>/showcases/progress/cases/basic-usage.tsx"
 
-<Progress
-  effect="sparkle"
-  value={68}
-  label="Production environment"
-  showValue
-/>;
 ```
 
 ### Deployment progress
 
 {"Putting the completion percentage alongside the current stage lets users know what the task is doing and how much is left."}
 
-```tsx title="showcases/progress/cases/deployment-progress.tsx"
-import { Progress } from '@heliannuuthus/ui'
+```tsx title="showcases/progress/cases/deployment-progress.tsx" file="<root>/showcases/progress/cases/deployment-progress.tsx"
 
-<Progress
-  effect="sparkle"
-  label="production environment"
-  showValue
-  value={68}
-/>
-
-<Progress
-  value={completed}
-  min={0}
-  max={200}
-  locale="en-US"
-  format={{ style: 'percent' }}
-  getAriaValueText={(value, maximum) => value + ' of ' + maximum}
-/>
 ```
 
 ## Component parts

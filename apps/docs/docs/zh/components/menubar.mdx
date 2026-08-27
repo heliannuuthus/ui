@@ -24,102 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"文件和编辑菜单包含分组、图标、快捷键、禁用状态与危险操作，并提供实际反馈。"}
 
-```tsx title="showcases/menubar/cases/basic-usage.tsx"
-import { Menubar } from '@heliannuuthus/ui';
+```tsx title="showcases/menubar/cases/basic-usage.tsx" file="<root>/showcases/menubar/cases/basic-usage.tsx"
 
-<Menubar
-  menus={[
-    {
-      label: '文件',
-      items: [
-        { type: 'label', label: '文档' },
-        { label: '新建文档', shortcut: '⌘N', onSelect: createDocument },
-        { label: '保存', shortcut: '⌘S', onSelect: saveDocument },
-        { type: 'separator' },
-        { label: '移至废纸篓', destructive: true, onSelect: removeDocument },
-      ],
-    },
-    {
-      label: '编辑',
-      items: [
-        { label: '撤销', shortcut: '⌘Z', onSelect: undo },
-        { label: '重做', shortcut: '⇧⌘Z', disabled: true },
-      ],
-    },
-  ]}
-/>;
 ```
 
 ### 可选视图状态
 
 {"checkbox 控制可独立开关的视图项，radio 管理互斥主题，并把状态同步到内容区。"}
 
-```tsx title="showcases/menubar/cases/optional-view-state.tsx"
-import { useState } from 'react';
-import { Menubar } from '@heliannuuthus/ui';
+```tsx title="showcases/menubar/cases/optional-view-state.tsx" file="<root>/showcases/menubar/cases/optional-view-state.tsx"
 
-export const ViewMenubar = () => {
-  const [sidebar, setSidebar] = useState(true);
-  const [theme, setTheme] = useState('system');
-
-  return (
-    <Menubar
-      menus={[
-        {
-          label: '视图',
-          items: [
-            {
-              type: 'checkbox',
-              label: '显示侧栏',
-              checked: sidebar,
-              onChange: setSidebar,
-            },
-            { type: 'separator' },
-            {
-              type: 'radio',
-              value: theme,
-              onChange: setTheme,
-              items: [
-                { label: '跟随系统', value: 'system' },
-                { label: '浅色', value: 'light' },
-                { label: '深色', value: 'dark' },
-              ],
-            },
-          ],
-        },
-      ]}
-    />
-  );
-};
 ```
 
 ### 二级菜单与顶层状态
 
 {"在组件文档工作台中用 children 组织最近组件与导出格式，顶层菜单同时支持禁用状态。"}
 
-```tsx title="showcases/menubar/cases/secondary-menu-and-top-level-status.tsx"
-import { Menubar } from '@heliannuuthus/ui'
+```tsx title="showcases/menubar/cases/secondary-menu-and-top-level-status.tsx" file="<root>/showcases/menubar/cases/secondary-menu-and-top-level-status.tsx"
 
-<Menubar
-  size="lg"
-  menus={[
-    {
-      label: '组件',
-      items: [
-        {
-          label: '最近编辑',
-          children: [
-            { label: 'Menubar', onSelect: openMenubarDocs },
-            { label: 'Navigation Menu', onSelect: openNavigationDocs },
-          ],
-        },
-      ],
-    },
-    { label: '发布', disabled: true, items: [] },
-  ]}
-/>
-
-<Menubar disabled items={items} />
 ```
 
 ## 组成部分

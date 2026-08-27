@@ -24,73 +24,40 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Each semantic variant is shown as an independent case instead of mixing multiple appearances in one preview."}
 
-```tsx title="showcases/bubble/cases/basic-usage.tsx"
-import { Bubble } from '@heliannuuthus/ui';
+```tsx title="showcases/bubble/cases/basic-usage.tsx" file="<root>/showcases/bubble/cases/basic-usage.tsx"
 
-<Bubble
-  align="end"
-  content="The update is complete and ready for another review."
-  reactions="✓ 2"
-  variant="elevated"
-/>;
 ```
 
 ### Message alignment
 
 {"align only places a bubble at the start or end of the message flow and does not imply sender identity."}
 
-```tsx title="showcases/bubble/cases/message-alignment.tsx"
-<Bubble align="start" content="Incoming message" />
-<Bubble align="end" content="Outgoing message" />
+```tsx title="showcases/bubble/cases/message-alignment.tsx" file="<root>/showcases/bubble/cases/message-alignment.tsx"
+
 ```
 
 ### Reaction position
 
 {"The side and align fields in reactionsProps place reactions on the top or bottom and at either horizontal edge."}
 
-```tsx title="showcases/bubble/cases/reaction-position.tsx"
-<Bubble
-  content="Ready for review"
-  reactions="👍 2"
-  reactionsProps={{ side: 'top', align: 'start' }}
-/>
+```tsx title="showcases/bubble/cases/reaction-position.tsx" file="<root>/showcases/bubble/cases/reaction-position.tsx"
+
 ```
 
 ### Content node properties
 
 {"contentProps passes standard HTML, ARIA, data attributes, events, and className to the inner content node."}
 
-```tsx title="showcases/bubble/cases/content-node-properties.tsx"
-<Bubble
-  content="Build completed"
-  contentProps={{ role: 'status', 'aria-live': 'polite' }}
-/>
+```tsx title="showcases/bubble/cases/content-node-properties.tsx" file="<root>/showcases/bubble/cases/content-node-properties.tsx"
+
 ```
 
 ### Avatars and scrollable conversations
 
 {"Without introducing additional Message abstraction, directly combine Bubble, Avatar and ScrollArea to build a two-way conversation."}
 
-```tsx title="showcases/bubble/cases/avatars-and-scrollable-conversations.tsx"
-import { Bubble } from '@heliannuuthus/ui';
-import { Avatar } from '@heliannuuthus/ui';
-import { ScrollArea } from '@heliannuuthus/ui';
+```tsx title="showcases/bubble/cases/avatars-and-scrollable-conversations.tsx" file="<root>/showcases/bubble/cases/avatars-and-scrollable-conversations.tsx"
 
-<ScrollArea className="h-80" scrollbar={{ size: 'sm', visibility: 'auto' }}>
-  <div role="list" aria-label="Collaboration messages">
-    {messages.map((message) => (
-      <div className="flex gap-2" role="listitem">
-        <Avatar alt={message.author} fallback={message.avatar} />
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <span>
-            {message.author} · {message.time}
-          </span>
-          <Bubble content={message.content} variant="elevated" />
-        </div>
-      </div>
-    ))}
-  </div>
-</ScrollArea>;
 ```
 
 ## Component parts

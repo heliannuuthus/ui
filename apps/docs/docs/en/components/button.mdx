@@ -25,182 +25,64 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Use visual hierarchy to express operational priorities. An operating area usually only retains one main button."}
 
-```tsx title="showcases/button/cases/basic-usage.tsx"
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/button/cases/basic-usage.tsx" file="<root>/showcases/button/cases/basic-usage.tsx"
 
-export const ButtonVariants = () => {
-  return (
-    <div className="flex flex-wrap gap-3">
-      <Button>Primary action</Button>
-      <Button variant="secondary">Secondary action</Button>
-      <Button variant="outline">Outline button</Button>
-      <Button variant="ghost">Ghost button</Button>
-      <Button variant="link">Text button</Button>
-      <Button variant="destructive">Destructive action</Button>
-    </div>
-  );
-};
 ```
 
 ### different sizes
 
 {"Size follows container density; it does not express the importance of an action."}
 
-```tsx title="showcases/button/cases/different-sizes.tsx"
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/button/cases/different-sizes.tsx" file="<root>/showcases/button/cases/different-sizes.tsx"
 
-export const ButtonSizes = () => {
-  return (
-    <div className="flex items-end gap-3">
-      <Button size="xs">Extra small button</Button>
-      <Button size="sm">Small button</Button>
-      <Button>Default Button</Button>
-      <Button size="lg">Big button</Button>
-    </div>
-  );
-};
 ```
 
 ### Combination button
 
 {"Group closely related operations into the same visual group and keep the operation semantics single."}
 
-```tsx title="showcases/button/cases/combination-button.tsx"
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/button/cases/combination-button.tsx" file="<root>/showcases/button/cases/combination-button.tsx"
 
-export const GroupedButtons = () => {
-  return (
-    <div className="mx-auto w-80 max-w-full">
-      <Button.Group
-        aria-label="Pagination actions"
-        block
-        orientation="horizontal"
-      >
-        <Button variant="outline">Previous</Button>
-        <Button>Next</Button>
-      </Button.Group>
-    </div>
-  );
-};
 ```
 
 ### Fill container
 
 {"Use block to make one button fill the available width of its parent."}
 
-```tsx title="showcases/button/cases/fill-container.tsx"
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/button/cases/fill-container.tsx" file="<root>/showcases/button/cases/fill-container.tsx"
 
-<Button block>Continue</Button>;
 ```
 
 ### Form and click events
 
 {"Native type preserves form semantics; use onClick for immediate actions that do not depend on form submission."}
 
-```tsx title="showcases/button/cases/form-and-click-events.tsx"
-import { Button } from '@heliannuuthus/ui';
-import { useState } from 'react';
+```tsx title="showcases/button/cases/form-and-click-events.tsx" file="<root>/showcases/button/cases/form-and-click-events.tsx"
 
-export const FormActions = () => {
-  const [message, setMessage] = useState('No action yet');
-
-  return (
-    <form
-      className="flex flex-wrap items-center justify-center gap-3"
-      onSubmit={(event) => {
-        event.preventDefault();
-        setMessage('Form submitted');
-      }}
-    >
-      <Button type="submit">Save</Button>
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => setMessage('Draft previewed')}
-      >
-        Preview
-      </Button>
-      <output aria-live="polite">{message}</output>
-    </form>
-  );
-};
 ```
 
 ### button with icon
 
 {"Icons are used to help identify actions. Only icon mode requires an aria-label to indicate its purpose."}
 
-```tsx title="showcases/button/cases/button-with-icon.tsx"
-import { Button } from '@heliannuuthus/ui';
-import { Download, Mail, Plus } from 'lucide-react';
+```tsx title="showcases/button/cases/button-with-icon.tsx" file="<root>/showcases/button/cases/button-with-icon.tsx"
 
-export const ButtonWithIcon = () => {
-  return (
-    <>
-      <Button>
-        <Plus data-icon="inline-start" />
-        New project
-      </Button>
-      <Button variant="outline">
-        <Download data-icon="inline-start" />
-        Export
-      </Button>
-      <Button size="icon" aria-label="Send Mail">
-        <Mail />
-      </Button>
-    </>
-  );
-};
 ```
 
 ### state
 
 {"Disabled means temporarily unavailable; loading keeps the original width and communicates progress."}
 
-```tsx title="showcases/button/cases/state.tsx"
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/button/cases/state.tsx" file="<root>/showcases/button/cases/state.tsx"
 
-export const ButtonStates = () => {
-  return (
-    <>
-      <Button disabled>Not available</Button>
-      <Button aria-busy="true" disabled>
-        Processing
-      </Button>
-      <Button aria-invalid="true" variant="outline">
-        Verification failed
-      </Button>
-    </>
-  );
-};
 ```
 
 ### Link mode
 
 {"href switches the root to a native a element; target, rel, and download are native link attributes, while variant and size only control visual styling."}
 
-```tsx title="showcases/button/cases/link-mode.tsx"
-import { Button } from '@heliannuuthus/ui'
-import { ArrowRight } from 'lucide-react'
+```tsx title="showcases/button/cases/link-mode.tsx" file="<root>/showcases/button/cases/link-mode.tsx"
 
-<Button href="/components/card" variant="outline">
-  View Card documentation
-  <ArrowRight data-icon="inline-end" />
-</Button>
-
-<Button
-  href="https://ui.heliannuuthus.com"
-  target="_blank"
-  rel="noreferrer"
-  variant="outline"
->
-  Open in a new window
-</Button>
-
-<Button href="/styles.css" download="heliannuuthus-ui.css">
-  Download stylesheet
-</Button>
 ```
 
 ## Component parts

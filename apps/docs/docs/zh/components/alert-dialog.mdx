@@ -24,27 +24,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"仅用于必须由用户确认的警告或危险操作；成功和普通信息应使用 Alert 或 Toast。"}
 
-```tsx title="showcases/alert-dialog/cases/basic-usage.tsx"
-import { AlertDialog } from '@heliannuuthus/ui'
+```tsx title="showcases/alert-dialog/cases/basic-usage.tsx" file="<root>/showcases/alert-dialog/cases/basic-usage.tsx"
 
-<AlertDialog
-  trigger={<Button variant="destructive">删除预览环境</Button>}
-  title="删除 preview-142？"
-  description="此操作无法撤销。"
-  cancelText="保留环境"
-  confirmText="确认删除"
-  confirmVariant="destructive"
-/>
-
-<AlertDialog
-  open={open}
-  onOpenChange={setOpen}
-  title="Delete project?"
-  description="This action cannot be undone."
-  classNames={{ content: 'max-w-lg' }}
-  styles={{ content: { minHeight: 240 } }}
-/>
-<AlertDialog defaultOpen={false} title="Archive project?" />
 ```
 
 ## 组成部分

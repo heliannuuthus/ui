@@ -25,178 +25,64 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"使用视觉层级表达操作优先级。一个操作区域通常只保留一个主要按钮。"}
 
-```tsx title="showcases/button/cases/basic-usage.tsx"
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/button/cases/basic-usage.tsx" file="<root>/showcases/button/cases/basic-usage.tsx"
 
-export const ButtonVariants = () => {
-  return (
-    <div className="flex flex-wrap gap-3">
-      <Button>主要操作</Button>
-      <Button variant="secondary">次要操作</Button>
-      <Button variant="outline">描边按钮</Button>
-      <Button variant="ghost">幽灵按钮</Button>
-      <Button variant="link">文字按钮</Button>
-      <Button variant="destructive">危险操作</Button>
-    </div>
-  );
-};
 ```
 
 ### 不同尺寸
 
 {"尺寸跟随容器密度，不用于表达操作的重要程度。"}
 
-```tsx title="showcases/button/cases/different-sizes.tsx"
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/button/cases/different-sizes.tsx" file="<root>/showcases/button/cases/different-sizes.tsx"
 
-export const ButtonSizes = () => {
-  return (
-    <div className="flex items-end gap-3">
-      <Button size="xs">超小按钮</Button>
-      <Button size="sm">小按钮</Button>
-      <Button>默认按钮</Button>
-      <Button size="lg">大按钮</Button>
-    </div>
-  );
-};
 ```
 
 ### 组合按钮
 
 {"将紧密相关的操作收进同一个视觉组，并保持操作语义单一。"}
 
-```tsx title="showcases/button/cases/combination-button.tsx"
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/button/cases/combination-button.tsx" file="<root>/showcases/button/cases/combination-button.tsx"
 
-export const GroupedButtons = () => {
-  return (
-    <div className="mx-auto w-80 max-w-full">
-      <Button.Group aria-label="分页操作" block orientation="horizontal">
-        <Button variant="outline">上一项</Button>
-        <Button>下一项</Button>
-      </Button.Group>
-    </div>
-  );
-};
 ```
 
 ### 填满容器
 
 {"使用 block 让单个按钮占满父容器的可用宽度。"}
 
-```tsx title="showcases/button/cases/fill-container.tsx"
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/button/cases/fill-container.tsx" file="<root>/showcases/button/cases/fill-container.tsx"
 
-<Button block>继续</Button>;
 ```
 
 ### 表单与点击事件
 
 {"原生 type 保留表单语义；onClick 适合处理不依赖表单提交的即时操作。"}
 
-```tsx title="showcases/button/cases/form-and-click-events.tsx"
-import { Button } from '@heliannuuthus/ui';
-import { useState } from 'react';
+```tsx title="showcases/button/cases/form-and-click-events.tsx" file="<root>/showcases/button/cases/form-and-click-events.tsx"
 
-export const FormActions = () => {
-  const [message, setMessage] = useState('尚未执行操作');
-
-  return (
-    <form
-      className="flex flex-wrap items-center justify-center gap-3"
-      onSubmit={(event) => {
-        event.preventDefault();
-        setMessage('表单已提交');
-      }}
-    >
-      <Button type="submit">保存</Button>
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => setMessage('草稿已预览')}
-      >
-        预览
-      </Button>
-      <output aria-live="polite">{message}</output>
-    </form>
-  );
-};
 ```
 
 ### 带图标的按钮
 
 {"图标用于帮助识别动作。仅图标模式需要通过 aria-label 说明用途。"}
 
-```tsx title="showcases/button/cases/button-with-icon.tsx"
-import { Button } from '@heliannuuthus/ui';
-import { Download, Mail, Plus } from 'lucide-react';
+```tsx title="showcases/button/cases/button-with-icon.tsx" file="<root>/showcases/button/cases/button-with-icon.tsx"
 
-export const ButtonWithIcon = () => {
-  return (
-    <>
-      <Button>
-        <Plus data-icon="inline-start" />
-        新建项目
-      </Button>
-      <Button variant="outline">
-        <Download data-icon="inline-start" />
-        导出
-      </Button>
-      <Button size="icon" aria-label="发送邮件">
-        <Mail />
-      </Button>
-    </>
-  );
-};
 ```
 
 ### 状态
 
 {"禁用表示暂不可用；加载状态保留原有宽度并说明进度。"}
 
-```tsx title="showcases/button/cases/state.tsx"
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/button/cases/state.tsx" file="<root>/showcases/button/cases/state.tsx"
 
-export const ButtonStates = () => {
-  return (
-    <>
-      <Button disabled>不可用</Button>
-      <Button aria-busy="true" disabled>
-        处理中
-      </Button>
-      <Button aria-invalid="true" variant="outline">
-        校验失败
-      </Button>
-    </>
-  );
-};
 ```
 
 ### 链接模式
 
 {"href 会把根节点切换为原生 a 元素；target、rel 与 download 都是原生链接属性，variant 和 size 只负责视觉样式。"}
 
-```tsx title="showcases/button/cases/link-mode.tsx"
-import { Button } from '@heliannuuthus/ui'
-import { ArrowRight } from 'lucide-react'
+```tsx title="showcases/button/cases/link-mode.tsx" file="<root>/showcases/button/cases/link-mode.tsx"
 
-<Button href="/components/card" variant="outline">
-  查看 Card 文档
-  <ArrowRight data-icon="inline-end" />
-</Button>
-
-<Button
-  href="https://ui.heliannuuthus.com"
-  target="_blank"
-  rel="noreferrer"
-  variant="outline"
->
-  新窗口打开
-</Button>
-
-<Button href="/styles.css" download="heliannuuthus-ui.css">
-  下载样式文件
-</Button>
 ```
 
 ## 组成部分

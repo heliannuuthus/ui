@@ -24,73 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"A single Checkbox represents an independently selectable Boolean item, and the entire row of labels and controls remains clickable."}
 
-```tsx title="showcases/checkbox/cases/basic-usage.tsx"
-import { Checkbox } from '@heliannuuthus/ui';
+```tsx title="showcases/checkbox/cases/basic-usage.tsx" file="<root>/showcases/checkbox/cases/basic-usage.tsx"
 
-<Checkbox>Receive product updates</Checkbox>;
 ```
 
 ### Task completed status
 
 {"Use the task variant to express what can be accomplished; the label will automatically weaken and add a strikethrough when selected, and will be restored after deselecting."}
 
-```tsx title="showcases/checkbox/cases/task-completed-status.tsx"
-import { Checkbox } from '@heliannuuthus/ui';
+```tsx title="showcases/checkbox/cases/task-completed-status.tsx" file="<root>/showcases/checkbox/cases/task-completed-status.tsx"
 
-<Checkbox.Group
-  defaultValue={['read']}
-  onChange={setPermissions}
-  options={[
-    { label: 'read', value: 'read' },
-    { label: 'edit', value: 'write' },
-    { label: 'admin', value: 'admin' },
-  ]}
-/>;
 ```
 
 ### Permission combination
 
 {"Use Checkbox.Group to manage multiple permission values ​​and provide instant feedback on the selected quantity."}
 
-```tsx title="showcases/checkbox/cases/permission-combination.tsx"
-import { Checkbox } from '@heliannuuthus/ui';
+```tsx title="showcases/checkbox/cases/permission-combination.tsx" file="<root>/showcases/checkbox/cases/permission-combination.tsx"
 
-<Checkbox.Group
-  name="permission"
-  value={selected}
-  onChange={setSelected}
-  options={[
-    { label: 'View project', value: 'read' },
-    { label: 'Participate in comments', value: 'comment' },
-    { label: 'Manage project', value: 'manage' },
-  ]}
-/>;
 ```
 
 ### Select status
 
 {"When selected, the operation is confirmed with particles exploding outward. When unselected, only the check mark is withdrawn; both the uncertain and disabled states are displayed."}
 
-```tsx title="showcases/checkbox/cases/select-status.tsx"
-import { Checkbox } from '@heliannuuthus/ui'
+```tsx title="showcases/checkbox/cases/select-status.tsx" file="<root>/showcases/checkbox/cases/select-status.tsx"
 
-<Checkbox>Not selected</Checkbox>
-<Checkbox defaultChecked>Selected</Checkbox>
-<Checkbox indeterminate>Partial selection</Checkbox>
-<Checkbox disabled>Not available</Checkbox>
-
-<Checkbox
-  checked={checked}
-  onChange={setChecked}
-  variant="card"
-  uncheckedValue="off"
-  classNames={{ control: 'border-primary' }}
-  styles={{ label: { fontWeight: 600 } }}
->
-  Release notifications
-</Checkbox>
-<Checkbox parent checked={allChecked} onChange={setAllChecked}>All permissions</Checkbox>
-<Checkbox.Group allValues={allValues} disabled options={options} />
 ```
 
 ## Component parts

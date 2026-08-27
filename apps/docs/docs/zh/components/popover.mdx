@@ -24,40 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"在触发器附近补充少量关联信息与轻量操作，不打断当前阅读上下文。"}
 
-```tsx title="showcases/popover/cases/basic-usage.tsx"
-import { Button, Popover } from '@heliannuuthus/ui';
+```tsx title="showcases/popover/cases/basic-usage.tsx" file="<root>/showcases/popover/cases/basic-usage.tsx"
 
-<Popover
-  trigger={<Button>3 位负责人</Button>}
-  title="发布负责人"
-  description="发布和回滚时会通知这些成员。"
-  content={<OwnerList />}
-/>;
 ```
 
 ### 悬停预览负责人
 
 {"将 trigger 设为 hover 后，鼠标悬停或键盘聚焦都会展示关联信息，适合实体预览。"}
 
-```tsx title="showcases/popover/cases/hover-preview-manager.tsx"
-import { Button, Popover } from '@heliannuuthus/ui'
+```tsx title="showcases/popover/cases/hover-preview-manager.tsx" file="<root>/showcases/popover/cases/hover-preview-manager.tsx"
 
-<Popover
-  triggerMode="hover"
-  trigger={<Button variant="link">@linmo</Button>}
-  content={<OwnerProfile />}
-/>
-
-<Popover
-  open={open}
-  onOpenChange={setOpen}
-  align="start"
-  sideOffset={8}
-  alignOffset={4}
-  classNames={{ content: 'w-80' }}
-  styles={{ content: { padding: 16 } }}
-/>
-<Popover defaultOpen={false} trigger={<Button>Open</Button>} />
 ```
 
 ## 组成部分

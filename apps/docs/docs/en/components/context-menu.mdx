@@ -24,83 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"items demonstrates group labels, icons, shortcuts, disabled entries, separators, and destructive actions; the selected result appears below the trigger area."}
 
-```tsx title="showcases/context-menu/cases/basic-usage.tsx"
-import { ContextMenu } from '@heliannuuthus/ui';
+```tsx title="showcases/context-menu/cases/basic-usage.tsx" file="<root>/showcases/context-menu/cases/basic-usage.tsx"
 
-<ContextMenu
-  trigger={<div tabIndex={0}>Right-click here</div>}
-  items={[
-    { type: 'label', label: 'Page actions' },
-    { label: 'Copy link', shortcut: '⌘C', onSelect: copyLink },
-    { label: 'Copy internal link', disabled: true },
-    { type: 'separator' },
-    { label: 'Delete page', destructive: true, onSelect: deletePage },
-  ]}
-/>;
 ```
 
 ### Checkbox and radio states
 
 {"A checkbox entry manages an independent boolean state, while a radio entry manages mutually exclusive options; the result remains visible in the trigger area after the menu closes."}
 
-```tsx title="showcases/context-menu/cases/checkbox-and-radio-states.tsx"
-<ContextMenu
-  trigger={<div tabIndex={0}>Page visibility</div>}
-  items={[
-    {
-      type: 'checkbox',
-      label: 'Show comments',
-      checked: showComments,
-      onChange: setShowComments,
-    },
-    {
-      type: 'radio',
-      value: access,
-      onChange: setAccess,
-      items: [
-        { label: 'Only me', value: 'private' },
-        { label: 'Team members', value: 'team' },
-      ],
-    },
-  ]}
-/>
+```tsx title="showcases/context-menu/cases/checkbox-and-radio-states.tsx" file="<root>/showcases/context-menu/cases/checkbox-and-radio-states.tsx"
+
 ```
 
 ### Nested submenu
 
 {"A regular item with children becomes a submenu, suitable for placing multiple formats or targets of the same action in a second level."}
 
-```tsx title="showcases/context-menu/cases/nested-submenu.tsx"
-<ContextMenu
-  trigger={<div tabIndex={0}>File preview</div>}
-  items={[
-    {
-      label: 'Export as',
-      children: [
-        { label: 'PDF document', onSelect: exportPdf },
-        { label: 'PNG image', onSelect: exportPng },
-        { label: 'CSV spreadsheet', onSelect: exportCsv },
-      ],
-    },
-  ]}
-/>
+```tsx title="showcases/context-menu/cases/nested-submenu.tsx" file="<root>/showcases/context-menu/cases/nested-submenu.tsx"
+
 ```
 
 ### Open state and disabled
 
 {"Compare the default uncontrolled mode, controlled mode managed through open and onOpenChange, and the state where disabled prevents triggering."}
 
-```tsx title="showcases/context-menu/cases/open-state-and-disabled.tsx"
-<ContextMenu defaultOpen={false} items={items} trigger={target} />
-<ContextMenu open={open} onOpenChange={setOpen} items={items} trigger={target} />
-<ContextMenu disabled items={items} trigger={target} />
+```tsx title="showcases/context-menu/cases/open-state-and-disabled.tsx" file="<root>/showcases/context-menu/cases/open-state-and-disabled.tsx"
 
-<ContextMenu
-  trigger={target}
-  items={items}
-  classNames={{ content: 'min-w-48' }}
-  styles={{ content: { padding: 4 } }}
-/>
 ```
 
 ## Component parts

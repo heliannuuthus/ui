@@ -24,40 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Spinner represents a short load where the completion ratio cannot be determined and is used with visible status text."}
 
-```tsx title="showcases/spinner/cases/basic-usage.tsx"
-import { Spinner } from '@heliannuuthus/ui';
+```tsx title="showcases/spinner/cases/basic-usage.tsx" file="<root>/showcases/spinner/cases/basic-usage.tsx"
 
-<div>
-  <Spinner />
-  Loading components...
-</div>;
 ```
 
 ### icon size
 
 {"Large, medium, and small directly display the original loading icon, and the size does not imply button height or other container styles."}
 
-```tsx title="showcases/spinner/cases/icon-size.tsx"
-import { Spinner } from '@heliannuuthus/ui'
+```tsx title="showcases/spinner/cases/icon-size.tsx" file="<root>/showcases/spinner/cases/icon-size.tsx"
 
-<Spinner aria-label="small size loading" size="sm" />
-<Spinner aria-label="Loading" />
-<Spinner aria-label="Large size loading" size="lg" />
 ```
 
 ### Partial loading status
 
 {"Only place icons and status descriptions in the content area being updated, and keep other parts of the page readable and operable."}
 
-```tsx title="showcases/spinner/cases/partial-loading-status.tsx"
-import { Spinner } from '@heliannuuthus/ui';
+```tsx title="showcases/spinner/cases/partial-loading-status.tsx" file="<root>/showcases/spinner/cases/partial-loading-status.tsx"
 
-<section aria-busy="true" aria-label="Synchronizing environment status">
-  <div>
-    <span>Preview environment</span>
-    <Spinner aria-label="Preview environment synchronizing" size="sm" />
-  </div>
-</section>;
 ```
 
 ## API

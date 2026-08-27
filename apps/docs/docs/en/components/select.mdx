@@ -24,49 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"When there are many candidates and the user knows the keywords, they can directly enter to filter, clear and re-select."}
 
-```tsx title="showcases/select/cases/basic-usage.tsx"
-import { Select } from '@heliannuuthus/ui';
+```tsx title="showcases/select/cases/basic-usage.tsx" file="<root>/showcases/select/cases/basic-usage.tsx"
 
-<Select
-  value={value}
-  onChange={setValue}
-  placeholder="Search for members…"
-  showClear
-  emptyText="Member not found"
-  options={members.map((member) => ({ label: member, value: member }))}
-/>;
 ```
 
 ### Group selection
 
 {"The same Select is used when candidates are fixed, with groupings, separators, and disabled items clarifying the list structure."}
 
-```tsx title="showcases/select/cases/group-selection.tsx"
-import { Select } from '@heliannuuthus/ui'
+```tsx title="showcases/select/cases/group-selection.tsx" file="<root>/showcases/select/cases/group-selection.tsx"
 
-<Select
-  value={value}
-  onChange={setValue}
-  placeholder="Select workspace"
-  options={groups.map((group) => ({
-    label: group.label,
-    options: group.items.map((item) => ({
-      label: item.label,
-      value: item,
-      disabled: item.disabled,
-    })),
-  }))}
-/>
-
-<Select
-  searchValue={query}
-  onSearch={setQuery}
-  multiple
-  disabled={loading}
-  locale="en-US"
-  options={options}
-/>
-<Select defaultOpen defaultSearchValue="platform" options={options} />
 ```
 
 ## Component parts

@@ -24,49 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"候选项较多且用户知道关键词时，直接输入过滤、清除并重新选择。"}
 
-```tsx title="showcases/select/cases/basic-usage.tsx"
-import { Select } from '@heliannuuthus/ui';
+```tsx title="showcases/select/cases/basic-usage.tsx" file="<root>/showcases/select/cases/basic-usage.tsx"
 
-<Select
-  value={value}
-  onChange={setValue}
-  placeholder="搜索成员…"
-  showClear
-  emptyText="没有找到成员"
-  options={members.map((member) => ({ label: member, value: member }))}
-/>;
 ```
 
 ### 分组选择
 
 {"候选项固定时仍使用同一 Select，通过分组、分隔线和禁用项明确列表结构。"}
 
-```tsx title="showcases/select/cases/group-selection.tsx"
-import { Select } from '@heliannuuthus/ui'
+```tsx title="showcases/select/cases/group-selection.tsx" file="<root>/showcases/select/cases/group-selection.tsx"
 
-<Select
-  value={value}
-  onChange={setValue}
-  placeholder="选择工作区"
-  options={groups.map((group) => ({
-    label: group.label,
-    options: group.items.map((item) => ({
-      label: item.label,
-      value: item,
-      disabled: item.disabled,
-    })),
-  }))}
-/>
-
-<Select
-  searchValue={query}
-  onSearch={setQuery}
-  multiple
-  disabled={loading}
-  locale="en-US"
-  options={options}
-/>
-<Select defaultOpen defaultSearchValue="platform" options={options} />
 ```
 
 ## 组成部分

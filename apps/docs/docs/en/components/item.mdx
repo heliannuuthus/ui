@@ -24,136 +24,80 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Use Item.Group to organize related activity and separators to maintain the reading rhythm of a continuous list."}
 
-```tsx title="showcases/item/cases/basic-usage.tsx"
-import { Tag, Item } from '@heliannuuthus/ui';
+```tsx title="showcases/item/cases/basic-usage.tsx" file="<root>/showcases/item/cases/basic-usage.tsx"
 
-<Item.Group
-  separator
-  items={[
-    {
-      media: <MessageCircle />,
-      mediaType: 'icon',
-      title: 'Lin Mo replied to the review item',
-      description: 'Confirmed that the index change will not lock the table.',
-      actions: <Tag>2 minutes ago</Tag>,
-    },
-  ]}
-/>;
 ```
 
 ### Member directory
 
 {"Keep avatars, role descriptions, and member status aligned on one row; the outlined appearance makes each member’s hit area explicit."}
 
-```tsx title="showcases/item/cases/member-directory.tsx"
-import { Avatar, Tag, Item } from '@heliannuuthus/ui';
+```tsx title="showcases/item/cases/member-directory.tsx" file="<root>/showcases/item/cases/member-directory.tsx"
 
-<Item
-  variant="outline"
-  media={<Avatar alt="Lin Mo" fallback="L" />}
-  title="Lin Mo"
-  description="Platform engineering · Release administrator"
-  actions={<Tag type="success">Online</Tag>}
-/>;
 ```
 
 ### Settings list
 
 {"Place the switch in actions so the title names the setting and the description explains its scope; the row itself does not duplicate the click behavior."}
 
-```tsx title="showcases/item/cases/settings-list.tsx"
-import { Item, Switch } from '@heliannuuthus/ui';
+```tsx title="showcases/item/cases/settings-list.tsx" file="<root>/showcases/item/cases/settings-list.tsx"
 
-<Item
-  variant="muted"
-  media={<Cloud />}
-  mediaType="icon"
-  title="Automatically deploy preview environment"
-  description="Update the preview environment after merging into main."
-  actions={<Switch aria-label="Automatically deploy preview environment" />}
-/>;
 ```
 
 ### Resource entry
 
 {"Use href to make the entire resource item a native link; header and footer carry supporting metadata."}
 
-```tsx title="showcases/item/cases/resource-entry.tsx"
-import { Tag, Item } from '@heliannuuthus/ui';
+```tsx title="showcases/item/cases/resource-entry.tsx" file="<root>/showcases/item/cases/resource-entry.tsx"
 
-<Item
-  href="/release-notes/v0.12.0"
-  variant="outline"
-  header={<Tag>Release notes</Tag>}
-  media={<FileText />}
-  mediaType="icon"
-  title="v0.12.0-release-notes.md"
-  description="Markdown · 18 KB"
-  footer={<span>Maintained by Xu Cheng · Updated 8 minutes ago</span>}
-/>;
 ```
 
 ### Item sizes
 
 {"size provides default, small, and extra-small content densities."}
 
-```tsx title="showcases/item/cases/item-sizes.tsx"
-<Item size="default" title="Release notes" />
-<Item size="sm" title="Release notes" />
-<Item size="xs" title="Release notes" />
+```tsx title="showcases/item/cases/item-sizes.tsx" file="<root>/showcases/item/cases/item-sizes.tsx"
+
 ```
 
 ### Media content type
 
 {"mediaType explicitly distinguishes plain content, icons, and images so callers do not rely on node-shape inference."}
 
-```tsx title="showcases/item/cases/media-content-type.tsx"
-<Item media={<FileText />} mediaType="icon" title="Release notes" />
-<Item media={<img alt="Cover" src="/cover.jpg" />} mediaType="image" title="Cover" />
+```tsx title="showcases/item/cases/media-content-type.tsx" file="<root>/showcases/item/cases/media-content-type.tsx"
+
 ```
 
 ### Content slots
 
 {"header, content, actions, and footer each occupy an independent semantic region instead of being compressed into one combined property row."}
 
-```tsx title="showcases/item/cases/content-slots.tsx"
-<Item
-  header={<Status />}
-  title="Production release"
-  content={<Metadata />}
-  actions={<Button>View</Button>}
-  footer={<UpdatedAt />}
-/>
+```tsx title="showcases/item/cases/content-slots.tsx" file="<root>/showcases/item/cases/content-slots.tsx"
+
 ```
 
 ### Linked item
 
 {"When href is provided, Item uses a native anchor for whole-item navigation; otherwise it remains a regular div."}
 
-```tsx title="showcases/item/cases/linked-item.tsx"
-<Item href="/releases/1842" title="View release details" />
+```tsx title="showcases/item/cases/linked-item.tsx" file="<root>/showcases/item/cases/linked-item.tsx"
+
 ```
 
 ### Item group
 
 {"Item.Group renders a collection from items, while separator independently selects no separator, the default divider, or custom content."}
 
-```tsx title="showcases/item/cases/item-group.tsx"
-<Item.Group items={items} separator />
-<Item.Group items={items} separator={<Marker content="Production" />} />
+```tsx title="showcases/item/cases/item-group.tsx" file="<root>/showcases/item/cases/item-group.tsx"
+
 ```
 
 ### Custom item rendering
 
 {"renderItem receives the current ItemGroupEntry and index to replace whole-item rendering without changing the base Item contract."}
 
-```tsx title="showcases/item/cases/custom-item-rendering.tsx"
-<Item.Group
-  items={items}
-  renderItem={({ key, ...item }, index) => (
-    <Item key={key} {...item} actions={<Tag>0{index + 1}</Tag>} />
-  )}
-/>
+```tsx title="showcases/item/cases/custom-item-rendering.tsx" file="<root>/showcases/item/cases/custom-item-rendering.tsx"
+
 ```
 
 ## Component parts

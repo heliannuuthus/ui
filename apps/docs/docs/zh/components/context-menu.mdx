@@ -24,83 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"items 同时体现分组标题、图标、快捷键、禁用项、分隔线和危险操作；选择后结果会显示在触发区域下方。"}
 
-```tsx title="showcases/context-menu/cases/basic-usage.tsx"
-import { ContextMenu } from '@heliannuuthus/ui';
+```tsx title="showcases/context-menu/cases/basic-usage.tsx" file="<root>/showcases/context-menu/cases/basic-usage.tsx"
 
-<ContextMenu
-  trigger={<div tabIndex={0}>Right-click here</div>}
-  items={[
-    { type: 'label', label: 'Page actions' },
-    { label: 'Copy link', shortcut: '⌘C', onSelect: copyLink },
-    { label: 'Copy internal link', disabled: true },
-    { type: 'separator' },
-    { label: 'Delete page', destructive: true, onSelect: deletePage },
-  ]}
-/>;
 ```
 
 ### 勾选与单选状态
 
 {"checkbox entry 管理独立布尔状态，radio entry 管理互斥选项；关闭菜单后结果仍保留在触发区域中。"}
 
-```tsx title="showcases/context-menu/cases/checkbox-and-radio-states.tsx"
-<ContextMenu
-  trigger={<div tabIndex={0}>Page visibility</div>}
-  items={[
-    {
-      type: 'checkbox',
-      label: 'Show comments',
-      checked: showComments,
-      onChange: setShowComments,
-    },
-    {
-      type: 'radio',
-      value: access,
-      onChange: setAccess,
-      items: [
-        { label: 'Only me', value: 'private' },
-        { label: 'Team members', value: 'team' },
-      ],
-    },
-  ]}
-/>
+```tsx title="showcases/context-menu/cases/checkbox-and-radio-states.tsx" file="<root>/showcases/context-menu/cases/checkbox-and-radio-states.tsx"
+
 ```
 
 ### 嵌套子菜单
 
 {"普通 item 提供 children 时形成子菜单，适合将同一动作的多个格式或目标收进第二层。"}
 
-```tsx title="showcases/context-menu/cases/nested-submenu.tsx"
-<ContextMenu
-  trigger={<div tabIndex={0}>File preview</div>}
-  items={[
-    {
-      label: 'Export as',
-      children: [
-        { label: 'PDF document', onSelect: exportPdf },
-        { label: 'PNG image', onSelect: exportPng },
-        { label: 'CSV spreadsheet', onSelect: exportCsv },
-      ],
-    },
-  ]}
-/>
+```tsx title="showcases/context-menu/cases/nested-submenu.tsx" file="<root>/showcases/context-menu/cases/nested-submenu.tsx"
+
 ```
 
 ### 开关状态与禁用
 
 {"比较默认非受控、通过 open 与 onOpenChange 管理的受控模式，以及 disabled 阻止触发的状态。"}
 
-```tsx title="showcases/context-menu/cases/open-state-and-disabled.tsx"
-<ContextMenu defaultOpen={false} items={items} trigger={target} />
-<ContextMenu open={open} onOpenChange={setOpen} items={items} trigger={target} />
-<ContextMenu disabled items={items} trigger={target} />
+```tsx title="showcases/context-menu/cases/open-state-and-disabled.tsx" file="<root>/showcases/context-menu/cases/open-state-and-disabled.tsx"
 
-<ContextMenu
-  trigger={target}
-  items={items}
-  classNames={{ content: 'min-w-48' }}
-  styles={{ content: { padding: 4 } }}
-/>
 ```
 
 ## 组成部分

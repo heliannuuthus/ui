@@ -24,24 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Switch 用于立即生效的二元设置，标签应直接说明开启后会发生什么。"}
 
-```tsx title="showcases/switch/cases/basic-usage.tsx"
-import { Switch } from '@heliannuuthus/ui';
+```tsx title="showcases/switch/cases/basic-usage.tsx" file="<root>/showcases/switch/cases/basic-usage.tsx"
 
-<label>
-  <Switch defaultChecked />
-  启用通知
-</label>;
 ```
 
 ### 设置列表
 
 {"Switch 使用统一的舒展尺寸；开关立即更新设置，不可关闭的系统项通过禁用状态解释约束。"}
 
-```tsx title="showcases/switch/cases/settings-list.tsx"
-<Switch checked={enabled} onChange={setEnabled} />
-<Switch checked disabled />
+```tsx title="showcases/switch/cases/settings-list.tsx" file="<root>/showcases/switch/cases/settings-list.tsx"
 
-<Switch value="enabled" uncheckedValue="disabled">Notifications</Switch>
 ```
 
 ## API

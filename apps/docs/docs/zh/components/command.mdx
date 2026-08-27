@@ -25,116 +25,40 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"通过 groups 和 options 创建可搜索的命令列表，选项负责图标、快捷键与执行回调。"}
 
-```tsx title="showcases/command/cases/basic-usage.tsx"
-import { Command } from '@heliannuuthus/ui';
+```tsx title="showcases/command/cases/basic-usage.tsx" file="<root>/showcases/command/cases/basic-usage.tsx"
 
-<Command
-  groups={[
-    {
-      heading: '常用命令',
-      options: [
-        { label: '新建文件', shortcut: '⌘N', value: 'new-file' },
-        { label: '打开设置', shortcut: '⌘,', value: 'settings' },
-      ],
-    },
-  ]}
-/>;
 ```
 
 ### 分组与选项
 
 {"每个 group 使用 heading 标记分组标题，并通过 options 配置命令值、标签、检索关键词、图标、快捷键、禁用状态和执行回调。"}
 
-```tsx title="showcases/command/cases/groups-and-options.tsx"
-import { Command, type CommandGroup } from '@heliannuuthus/ui'
+```tsx title="showcases/command/cases/groups-and-options.tsx" file="<root>/showcases/command/cases/groups-and-options.tsx"
 
-const groups: CommandGroup[] = [
-  {
-    heading: 'Files',
-    options: [
-      {
-        value: 'new-file',
-        label: 'New file',
-        keywords: ['create', 'document'],
-        shortcut: '⌘N',
-        onSelect: () => createFile(),
-      },
-      { value: 'open-file', label: 'Open file', disabled: true },
-    ],
-  },
-  {
-    heading: 'Preferences',
-    options: [{ value: 'settings', label: 'Open settings' }],
-  },
-]
-
-<Command groups={groups} />
 ```
 
 ### 搜索输入提示
 
 {"placeholder 只描述搜索输入框尚未输入内容时的预期查询，不负责空结果反馈。"}
 
-```tsx title="showcases/command/cases/search-input-placeholder.tsx"
-<Command groups={groups} placeholder="Search pages, files, or settings…" />
+```tsx title="showcases/command/cases/search-input-placeholder.tsx" file="<root>/showcases/command/cases/search-input-placeholder.tsx"
+
 ```
 
 ### 空结果内容
 
 {"emptyText 仅在过滤后没有匹配命令时显示，可以是纯文本，也可以是包含图标、标题和建议的 ReactNode。"}
 
-```tsx title="showcases/command/cases/empty-result-content.tsx"
-const [query, setQuery] = useState('missing command')
+```tsx title="showcases/command/cases/empty-result-content.tsx" file="<root>/showcases/command/cases/empty-result-content.tsx"
 
-<Command
-  groups={groups}
-  inputProps={{ value: query, onChange: setQuery }}
-  emptyText="No matching command"
-/>
 ```
 
 ### 命令弹窗
 
 {"dialog 是 Command 对通用 Dialog 的组合入口，用来把同一份命令列表放入模态层；它负责触发器、标题、说明和开关状态，groups 仍负责命令内容。"}
 
-```tsx title="showcases/command/cases/command-dialog.tsx"
-import { Button, Command } from '@heliannuuthus/ui'
+```tsx title="showcases/command/cases/command-dialog.tsx" file="<root>/showcases/command/cases/command-dialog.tsx"
 
-<Command
-  dialog={{
-    trigger: <Button>Open command palette</Button>,
-    title: 'Quick actions',
-    description: 'Search and run a workspace action.',
-  }}
-  groups={groups}
-/>
-
-<Command
-  value={query}
-  onChange={setQuery}
-  filter={filterCommand}
-  label="Quick actions"
-  loop
-  vimBindings
-  disablePointerSelection
-  groups={[
-    {
-      heading: 'Workspace',
-      options: [
-        {
-          value: 'open-settings',
-          label: 'Open settings',
-          keywords: ['preferences'],
-          icon: <Settings />,
-          shortcut: '⌘,',
-          disabled: false,
-          onSelect: openSettings,
-        },
-      ],
-    },
-  ]}
-/>
-<Command defaultValue="settings" groups={groups} />
 ```
 
 ## 组成部分

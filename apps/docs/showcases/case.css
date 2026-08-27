@@ -1,5 +1,6 @@
 @reference '../../../src/styles/theme.css';
 @import 'tailwindcss/utilities.css' layer(utilities) source(none);
+@import './case-layouts.css';
 
 @source './';
 
@@ -32,6 +33,22 @@
   min-height: 8rem;
   place-items: center;
   color: var(--muted-foreground);
+}
+
+.data-field-hint {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+}
+
+.release-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.release-row > div {
+  display: grid;
+  gap: 0.5rem;
 }
 
 .component-case > h3 {

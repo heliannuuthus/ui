@@ -24,24 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Switch is used for binary settings that take effect immediately, and the label should directly explain what will happen when turned on."}
 
-```tsx title="showcases/switch/cases/basic-usage.tsx"
-import { Switch } from '@heliannuuthus/ui';
+```tsx title="showcases/switch/cases/basic-usage.tsx" file="<root>/showcases/switch/cases/basic-usage.tsx"
 
-<label>
-  <Switch defaultChecked />
-  Enable notification
-</label>;
 ```
 
 ### Settings list
 
 {"Switch uses a uniform stretch size; switches update settings immediately, and system items that cannot be turned off interpret constraints through the disabled state."}
 
-```tsx title="showcases/switch/cases/settings-list.tsx"
-<Switch checked={enabled} onChange={setEnabled} />
-<Switch checked disabled />
+```tsx title="showcases/switch/cases/settings-list.tsx" file="<root>/showcases/switch/cases/settings-list.tsx"
 
-<Switch value="enabled" uncheckedValue="disabled">Notifications</Switch>
 ```
 
 ## API

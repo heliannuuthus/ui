@@ -1,6 +1,4 @@
-import type { ComponentDocumentation } from './component-docs';
 import type { ComponentSlug } from './component-catalog';
-import type { DocsLocale } from './i18n/resources';
 
 export const componentSearchMetadata = {
   button: [
@@ -284,54 +282,3 @@ export const componentSearchMetadata = {
     enAliases: readonly string[],
   ]
 >;
-
-const collectDocumentationText = (documentation: ComponentDocumentation) => {
-  return [
-    documentation.summary,
-    ...documentation.whenToUse,
-    ...documentation.examples.flatMap((example) => [
-      example.title,
-      typeof example.description === 'string' ? example.description : '',
-    ]),
-    ...(documentation.parts ?? []).flatMap((part) => [
-      part.name,
-      part.description,
-    ]),
-    ...(documentation.relatedComponents ?? []).flatMap((related) => [
-      related.name,
-      related.description,
-    ]),
-    documentation.semanticDom?.description ?? '',
-    ...documentation.api.flatMap((property) => [
-      property.name,
-      property.description,
-      property.type,
-    ]),
-    ...documentation.accessibility,
-    ...documentation.pitfalls,
-  ].filter(Boolean);
-};
-
-export const localizedComponentMetadata = (
-  slug: string,
-  locale: DocsLocale,
-  documentation: ComponentDocumentation | undefined
-) => {
-  const entry =
-    componentSearchMetadata[slug as keyof typeof componentSearchMetadata];
-  const summary =
-    locale === 'en'
-      ? (entry?.[0] ?? documentation?.summary ?? '')
-      : (documentation?.summary ?? '');
-  const aliases = locale === 'en' ? (entry?.[2] ?? []) : (entry?.[1] ?? []);
-  const searchText =
-    locale === 'zh' && documentation
-      ? collectDocumentationText(documentation)
-      : [summary, ...aliases];
-
-  return {
-    aliases,
-    searchText,
-    summary,
-  };
-};

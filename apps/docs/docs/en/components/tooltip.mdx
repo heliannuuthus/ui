@@ -24,72 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Provides a brief additional description for the control."}
 
-```tsx title="showcases/tooltip/cases/basic-usage.tsx"
-<Tooltip content={tooltipContent}>{trigger}</Tooltip>
+```tsx title="showcases/tooltip/cases/basic-usage.tsx" file="<root>/showcases/tooltip/cases/basic-usage.tsx"
+
 ```
 
 ### Twelve placements
 
 {"placement defines the popup position relative to the trigger; edge placements align popup edges and keep the arrow within the corresponding edge safe area."}
 
-```tsx title="showcases/tooltip/cases/twelve-placements.tsx"
-import { Button, Tooltip } from '@heliannuuthus/ui';
+```tsx title="showcases/tooltip/cases/twelve-placements.tsx" file="<root>/showcases/tooltip/cases/twelve-placements.tsx"
 
-<Tooltip content="Top-left tooltip" openDelay={100} placement="topLeft">
-  <Button>Top left</Button>
-</Tooltip>;
 ```
 
 ### Arrow
 
 {"The arrow matches the placement anchor point by default and can also be hidden."}
 
-```tsx title="showcases/tooltip/cases/arrow.tsx"
-import { Button, Tooltip } from '@heliannuuthus/ui';
+```tsx title="showcases/tooltip/cases/arrow.tsx" file="<root>/showcases/tooltip/cases/arrow.tsx"
 
-<Tooltip content="Default arrow" placement="topLeft">
-  <Button>Show arrow</Button>
-</Tooltip>;
 ```
 
 ### Controlled state and container
 
 {"Control visibility with open and onOpenChange, and configure delays and the portal container."}
 
-```tsx title="showcases/tooltip/cases/controlled-state-and-container.tsx"
-import { Button, Tooltip } from '@heliannuuthus/ui'
-import { useState } from 'react'
+```tsx title="showcases/tooltip/cases/controlled-state-and-container.tsx" file="<root>/showcases/tooltip/cases/controlled-state-and-container.tsx"
 
-const [container, setContainer] = useState<HTMLDivElement | null>(null)
-const [open, setOpen] = useState(false)
-
-<div ref={setContainer}>
-  <Tooltip
-    closeDelay={150}
-    container={container}
-    content="Controlled tooltip"
-    onOpenChange={setOpen}
-    open={open}
-    openDelay={250}
-  >
-    <Button>Hover or focus</Button>
-  </Tooltip>
-  <Button onClick={() => setOpen((value) => !value)}>
-    {open ? 'Close tooltip' : 'Open tooltip'}
-  </Button>
-</div>
-
-<Tooltip
-  content="Keyboard shortcut"
-  disabled={disabled}
-  open={open}
-  onOpenChange={(nextOpen) => setOpen(nextOpen)}
-  classNames={{ content: 'max-w-64' }}
-  styles={{ content: { textAlign: 'start' } }}
->
-  <Button>Save</Button>
-</Tooltip>
-<Tooltip defaultOpen content="Pinned hint"><Button>Help</Button></Tooltip>
 ```
 
 ## Component parts

@@ -24,136 +24,80 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"用 Item.Group 组织同类动态，并通过分隔线维持连续列表的阅读节奏。"}
 
-```tsx title="showcases/item/cases/basic-usage.tsx"
-import { Tag, Item } from '@heliannuuthus/ui';
+```tsx title="showcases/item/cases/basic-usage.tsx" file="<root>/showcases/item/cases/basic-usage.tsx"
 
-<Item.Group
-  separator
-  items={[
-    {
-      media: <MessageCircle />,
-      mediaType: 'icon',
-      title: '林默回复了检查项',
-      description: '确认索引变更不会锁表。',
-      actions: <Tag>2 分钟前</Tag>,
-    },
-  ]}
-/>;
 ```
 
 ### 成员目录
 
 {"头像、身份说明和成员状态保持同一行对齐，描边外观明确每个成员的点击区域。"}
 
-```tsx title="showcases/item/cases/member-directory.tsx"
-import { Avatar, Tag, Item } from '@heliannuuthus/ui';
+```tsx title="showcases/item/cases/member-directory.tsx" file="<root>/showcases/item/cases/member-directory.tsx"
 
-<Item
-  variant="outline"
-  media={<Avatar alt="林默" fallback="林" />}
-  title="林默"
-  description="平台工程 · 发布管理员"
-  actions={<Tag type="success">在线</Tag>}
-/>;
 ```
 
 ### 设置列表
 
 {"把开关放入 actions，让标题解释设置、描述说明影响范围，整行本身不重复承担点击行为。"}
 
-```tsx title="showcases/item/cases/settings-list.tsx"
-import { Item, Switch } from '@heliannuuthus/ui';
+```tsx title="showcases/item/cases/settings-list.tsx" file="<root>/showcases/item/cases/settings-list.tsx"
 
-<Item
-  variant="muted"
-  media={<Cloud />}
-  mediaType="icon"
-  title="自动部署预览环境"
-  description="合并到 main 后自动更新预览环境。"
-  actions={<Switch aria-label="自动部署预览环境" />}
-/>;
 ```
 
 ### 资源入口
 
 {"使用 href 把整个资源项变成原生链接；header 和 footer 承载辅助元数据。"}
 
-```tsx title="showcases/item/cases/resource-entry.tsx"
-import { Tag, Item } from '@heliannuuthus/ui';
+```tsx title="showcases/item/cases/resource-entry.tsx" file="<root>/showcases/item/cases/resource-entry.tsx"
 
-<Item
-  href="/release-notes/v0.12.0"
-  variant="outline"
-  header={<Tag>发布说明</Tag>}
-  media={<FileText />}
-  mediaType="icon"
-  title="v0.12.0-release-notes.md"
-  description="Markdown · 18 KB"
-  footer={<span>许澄维护 · 8 分钟前更新</span>}
-/>;
 ```
 
 ### 列表项尺寸
 
 {"size 分别提供默认、小和超小三档内容密度。"}
 
-```tsx title="showcases/item/cases/item-sizes.tsx"
-<Item size="default" title="Release notes" />
-<Item size="sm" title="Release notes" />
-<Item size="xs" title="Release notes" />
+```tsx title="showcases/item/cases/item-sizes.tsx" file="<root>/showcases/item/cases/item-sizes.tsx"
+
 ```
 
 ### 媒体内容类型
 
 {"mediaType 明确区分普通内容、图标和图片，避免调用方依赖节点形态推断样式。"}
 
-```tsx title="showcases/item/cases/media-content-type.tsx"
-<Item media={<FileText />} mediaType="icon" title="Release notes" />
-<Item media={<img alt="Cover" src="/cover.jpg" />} mediaType="image" title="Cover" />
+```tsx title="showcases/item/cases/media-content-type.tsx" file="<root>/showcases/item/cases/media-content-type.tsx"
+
 ```
 
 ### 内容槽位
 
 {"header、content、actions 与 footer 各自占据独立语义区域，不再把多个结构字段塞进同一行说明。"}
 
-```tsx title="showcases/item/cases/content-slots.tsx"
-<Item
-  header={<Status />}
-  title="Production release"
-  content={<Metadata />}
-  actions={<Button>View</Button>}
-  footer={<UpdatedAt />}
-/>
+```tsx title="showcases/item/cases/content-slots.tsx" file="<root>/showcases/item/cases/content-slots.tsx"
+
 ```
 
 ### 链接列表项
 
 {"传入 href 时 Item 使用原生 a 元素承载整项导航，未传时保持普通 div。"}
 
-```tsx title="showcases/item/cases/linked-item.tsx"
-<Item href="/releases/1842" title="View release details" />
+```tsx title="showcases/item/cases/linked-item.tsx" file="<root>/showcases/item/cases/linked-item.tsx"
+
 ```
 
 ### 列表项集合
 
 {"Item.Group 通过 items 渲染集合，separator 独立控制无分隔、默认分隔线或自定义分隔内容。"}
 
-```tsx title="showcases/item/cases/item-group.tsx"
-<Item.Group items={items} separator />
-<Item.Group items={items} separator={<Marker content="Production" />} />
+```tsx title="showcases/item/cases/item-group.tsx" file="<root>/showcases/item/cases/item-group.tsx"
+
 ```
 
 ### 自定义列表项渲染
 
 {"renderItem 接收当前 ItemGroupEntry 和索引，用于改写整项渲染，而不是修改 Item 的基础属性。"}
 
-```tsx title="showcases/item/cases/custom-item-rendering.tsx"
-<Item.Group
-  items={items}
-  renderItem={({ key, ...item }, index) => (
-    <Item key={key} {...item} actions={<Tag>0{index + 1}</Tag>} />
-  )}
-/>
+```tsx title="showcases/item/cases/custom-item-rendering.tsx" file="<root>/showcases/item/cases/custom-item-rendering.tsx"
+
 ```
 
 ## 组成部分

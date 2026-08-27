@@ -24,38 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"水平线分隔上下排列的章节、列表分组或信息层级。"}
 
-```tsx title="showcases/separator/cases/basic-usage.tsx"
-import { Separator } from '@heliannuuthus/ui'
+```tsx title="showcases/separator/cases/basic-usage.tsx" file="<root>/showcases/separator/cases/basic-usage.tsx"
 
-<section>上方内容</section>
-<Separator />
-<section>下方内容</section>
 ```
 
 ### 垂直分隔
 
 {"垂直线分隔同一行内并列的操作、状态或元信息。"}
 
-```tsx title="showcases/separator/cases/vertical-separation.tsx"
-import { Separator } from '@heliannuuthus/ui';
+```tsx title="showcases/separator/cases/vertical-separation.tsx" file="<root>/showcases/separator/cases/vertical-separation.tsx"
 
-<div className="flex items-stretch gap-4">
-  <div>状态</div>
-  <Separator orientation="vertical" />
-  <div>负责人</div>
-</div>;
 ```
 
 ### 自定义分隔线
 
 {"通过 className 或 style 自定义粗细、颜色、虚线和渐变效果。"}
 
-```tsx title="showcases/separator/cases/custom-divider.tsx"
-import { Separator } from '@heliannuuthus/ui'
+```tsx title="showcases/separator/cases/custom-divider.tsx" file="<root>/showcases/separator/cases/custom-divider.tsx"
 
-<Separator className="h-0.5 bg-primary" />
-<Separator className="h-0 border-t border-dashed bg-transparent" />
-<Separator className="h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
 ```
 
 ## API

@@ -24,63 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Manage storage capacity with a controlled value, minimum, maximum, and step while text input, keyboard interactions, and step controls share one numeric state."}
 
-```tsx title="showcases/input-number/cases/basic-usage.tsx"
-import { Input } from '@heliannuuthus/ui';
+```tsx title="showcases/input-number/cases/basic-usage.tsx" file="<root>/showcases/input-number/cases/basic-usage.tsx"
 
-<Input.Number
-  value={capacity}
-  onChange={setCapacity}
-  min={1}
-  max={256}
-  step={1}
-  suffix="GB"
-/>;
 ```
 
 ### Localized formatting
 
 {"Use Intl.NumberFormat to display currency while onChange always returns the unformatted number or null."}
 
-```tsx title="showcases/input-number/cases/localized-formatting.tsx"
-import { Input } from '@heliannuuthus/ui';
+```tsx title="showcases/input-number/cases/localized-formatting.tsx" file="<root>/showcases/input-number/cases/localized-formatting.tsx"
 
-<Input.Number
-  value={price}
-  onChange={setPrice}
-  min={0}
-  step={10}
-  smallStep={0.01}
-  locale="zh-CN"
-  format={{
-    style: 'currency',
-    currency: 'CNY',
-    minimumFractionDigits: 2,
-  }}
-/>;
 ```
 
 ### Sizes and states
 
 {"Compare common sizes, hidden step controls, read-only, disabled, and invalid states."}
 
-```tsx title="showcases/input-number/cases/sizes-and-states.tsx"
-<Input.Number size="sm" defaultValue={8} />
-<Input.Number controls={false} defaultValue={8} />
-<Input.Number value={8} readOnly />
-<Input.Number value={8} disabled />
-<Input.Number aria-invalid defaultValue={8} />
+```tsx title="showcases/input-number/cases/sizes-and-states.tsx" file="<root>/showcases/input-number/cases/sizes-and-states.tsx"
 
-<Input.Number
-  defaultValue={10}
-  onChangeComplete={setCommittedValue}
-  largeStep={25}
-  prefix="¥"
-  placeholder="Amount"
-  allowWheelScrub
-  snapOnStep
-  classNames={{ input: 'tabular-nums' }}
-  styles={{ controls: { opacity: 0.9 } }}
-/>
 ```
 
 ## Component parts

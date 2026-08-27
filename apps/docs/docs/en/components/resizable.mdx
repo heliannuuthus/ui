@@ -24,106 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Drag the separator line between the file area and preview area, or use the arrow keys to adjust the width after focusing on the separator line."}
 
-```tsx title="showcases/resizable/cases/basic-usage.tsx"
-import { Resizable } from '@heliannuuthus/ui';
-import { GripVertical } from 'lucide-react';
+```tsx title="showcases/resizable/cases/basic-usage.tsx" file="<root>/showcases/resizable/cases/basic-usage.tsx"
 
-export const Workspace = () => {
-  return (
-    <Resizable
-      orientation="horizontal"
-      separator={<GripVertical aria-hidden />}
-      items={[
-        { key: 'files', panel: 'file list', size: ['34', '24'] },
-        { key: 'preview', panel: 'content preview', size: ['66', '40'] },
-      ]}
-    />
-  );
-};
 ```
 
 ### vertical area
 
 {"After setting vertical, the upper and lower areas can be adjusted, which is suitable for scenarios such as editor and terminal, preview and log."}
 
-```tsx title="showcases/resizable/cases/vertical-area.tsx"
-import { Resizable } from '@heliannuuthus/ui';
-import { GripHorizontal } from 'lucide-react';
+```tsx title="showcases/resizable/cases/vertical-area.tsx" file="<root>/showcases/resizable/cases/vertical-area.tsx"
 
-export const EditorWithTerminal = () => {
-  return (
-    <Resizable
-      className="h-96"
-      orientation="vertical"
-      separator={<GripHorizontal aria-hidden />}
-      items={[
-        {
-          key: 'editor',
-          panel: <section>Editor</section>,
-          size: ['64', '38'],
-        },
-        {
-          key: 'terminal',
-          panel: <section>Terminal</section>,
-          size: ['36', '20'],
-        },
-      ]}
-    />
-  );
-};
 ```
 
 ### Size constraints and divider overrides
 
 {"size centrally expresses the initial, minimum and maximum sizes; item can override the default divider and obtain the real-time size through onResize."}
 
-```tsx title="showcases/resizable/cases/size-constraints-and-divider-overrides.tsx"
-import { useState } from 'react';
-import { Resizable } from '@heliannuuthus/ui';
-import { GripVertical } from 'lucide-react';
+```tsx title="showcases/resizable/cases/size-constraints-and-divider-overrides.tsx" file="<root>/showcases/resizable/cases/size-constraints-and-divider-overrides.tsx"
 
-export const ConstrainedWorkspace = () => {
-  const [navigationSize, setNavigationSize] = useState(24);
-
-  return (
-    <Resizable
-      className="h-80"
-      separator={({ index }) => <span>{index + 1}</span>}
-      items={[
-        {
-          key: 'navigation',
-          panel: <aside>Navigation · {navigationSize}%</aside>,
-          size: ['24', '18', '34'],
-          collapsible: true,
-          collapsedSize: 0,
-          separator: <GripVertical aria-hidden />,
-          onResize: (size) => setNavigationSize(Math.round(size.asPercentage)),
-        },
-        {
-          key: 'canvas',
-          panel: <main>canvas</main>,
-          size: ['52', '36'],
-        },
-        {
-          key: 'inspector',
-          panel: <aside>Properties</aside>,
-          size: ['24', '18', '34'],
-          collapsible: true,
-          collapsedSize: 0,
-        },
-      ]}
-    />
-  );
-};
-
-<Resizable
-  items={items}
-  separator={({ itemKey, nextItemKey, orientation }) => (
-    <span>
-      {itemKey} · {nextItemKey} · {orientation}
-    </span>
-  )}
-/>;
 ```
 
 ## API

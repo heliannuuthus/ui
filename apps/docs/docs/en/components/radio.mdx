@@ -24,45 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Conventional text options use options first, and Radio.Group generates labels and values ​​uniformly."}
 
-```tsx title="showcases/radio/cases/basic-usage.tsx"
-import { Radio } from '@heliannuuthus/ui';
+```tsx title="showcases/radio/cases/basic-usage.tsx" file="<root>/showcases/radio/cases/basic-usage.tsx"
 
-<Radio.Group
-  value={delivery}
-  onChange={setDelivery}
-  options={[
-    { label: 'email notification', value: 'email' },
-    { label: 'in-site notification', value: 'inbox' },
-    { label: 'No notification', value: 'none' },
-  ]}
-/>;
 ```
 
 ### Plan radio button
 
 {"Expand mutually exclusive options into an entire row of clickable cards while retaining native radio-select semantics."}
 
-```tsx title="showcases/radio/cases/plan-radio-button.tsx"
-import { Radio } from '@heliannuuthus/ui'
+```tsx title="showcases/radio/cases/plan-radio-button.tsx" file="<root>/showcases/radio/cases/plan-radio-button.tsx"
 
-<Radio.Group
-  value={delivery}
-  onChange={setDelivery}
-  options={[
-    { label: 'email notification', value: 'email' },
-    { label: 'in-site notification', value: 'inbox' },
-  ]}
-/>
-
-<Radio
-  value="daily"
-  disabled
-  classNames={{ control: 'border-primary' }}
-  styles={{ label: { fontWeight: 600 } }}
->
-  Daily
-</Radio>
-<Radio.Group defaultValue="daily" disabled gap={16} options={options} />
 ```
 
 ## Component parts

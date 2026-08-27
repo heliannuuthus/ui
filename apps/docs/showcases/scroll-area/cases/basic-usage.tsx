@@ -1,12 +1,27 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { ScrollArea } from '@heliannuuthus/ui';
 
-export default function ScrollAreaCase01({
+export default function ScrollAreaBasicCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const itemLabel = locale === 'en' ? 'Scrollable content' : '可滚动内容';
+
   return (
-    <MigratedExampleCase exampleIndex={0} locale={locale} slug="scroll-area" />
+    <div className="demo-preview demo-preview-scroll-area">
+      <ScrollArea
+        className="h-72 w-full max-w-xl rounded-3xl border bg-card"
+        scrollbar={{ size: 'sm', visibility: 'auto' }}
+      >
+        <div className="divide-y px-5">
+          {Array.from({ length: 12 }, (_, index) => (
+            <p className="py-4 text-sm text-muted-foreground" key={index}>
+              {itemLabel} {index + 1}
+            </p>
+          ))}
+        </div>
+      </ScrollArea>
+    </div>
   );
 }

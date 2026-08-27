@@ -24,27 +24,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Use only for warnings or dangerous actions that must be acknowledged by the user; success and general messages should use Alert or Toast."}
 
-```tsx title="showcases/alert-dialog/cases/basic-usage.tsx"
-import { AlertDialog } from '@heliannuuthus/ui'
+```tsx title="showcases/alert-dialog/cases/basic-usage.tsx" file="<root>/showcases/alert-dialog/cases/basic-usage.tsx"
 
-<AlertDialog
-  trigger={<Button variant="destructive">Delete preview environment</Button>}
-  title="Delete preview-142?"
-  description="This action cannot be undone."
-  cancelText="Keep environment"
-  confirmText="Confirm deletion"
-  confirmVariant="destructive"
-/>
-
-<AlertDialog
-  open={open}
-  onOpenChange={setOpen}
-  title="Delete project?"
-  description="This action cannot be undone."
-  classNames={{ content: 'max-w-lg' }}
-  styles={{ content: { minHeight: 240 } }}
-/>
-<AlertDialog defaultOpen={false} title="Archive project?" />
 ```
 
 ## Component parts

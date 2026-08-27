@@ -24,39 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"在应用根部放置 Provider，后代组件通过 useToast 调用 success、info、warning 或 error；默认显示在页面顶部。"}
 
-```tsx title="showcases/toast/cases/basic-usage.tsx"
-import { Toast, useToast } from '@heliannuuthus/ui';
+```tsx title="showcases/toast/cases/basic-usage.tsx" file="<root>/showcases/toast/cases/basic-usage.tsx"
 
-const PublishAction = () => {
-  const { toast } = useToast();
-
-  return <Button onClick={() => toast.success('发布已完成')}>发布</Button>;
-};
-
-<Toast.Provider>
-  <App />
-</Toast.Provider>;
 ```
 
 ### 局部通知
 
 {"局部 Provider 会创建独立通知通道，并将 Toast 约束在最近的定位容器中，不覆盖整个页面。"}
 
-```tsx title="showcases/toast/cases/local-notification.tsx"
-import { Toast, useToast } from '@heliannuuthus/ui'
+```tsx title="showcases/toast/cases/local-notification.tsx" file="<root>/showcases/toast/cases/local-notification.tsx"
 
-const WorkspaceAction = () => {
-  const { toast } = useToast()
-  return <Button onClick={() => toast.info('预览已刷新')}>刷新</Button>
-}
-
-<div className="relative overflow-hidden">
-  <Toast.Provider scope="local">
-    <WorkspaceAction />
-  </Toast.Provider>
-</div>
-
-<Toast.Toaster position="top-right" richColors scope="local" />
 ```
 
 ## 组成部分

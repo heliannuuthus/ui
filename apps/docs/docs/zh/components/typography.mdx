@@ -25,80 +25,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"用标题、导语、正文、引用、行内代码和辅助信息组织一段连贯、可阅读的内容。"}
 
-```tsx title="showcases/typography/cases/basic-usage.tsx"
-import { Typography } from '@heliannuuthus/ui';
+```tsx title="showcases/typography/cases/basic-usage.tsx" file="<root>/showcases/typography/cases/basic-usage.tsx"
 
-export const TypographyStory = () => {
-  return (
-    <article className="grid gap-4">
-      <Typography.Title level={2}>让界面语言保持清晰</Typography.Title>
-      <Typography.Text as="p" size="xl" tone="muted">
-        稳定的排版让用户先理解内容，再自然地注意到设计。
-      </Typography.Text>
-      <Typography.Text as="p">
-        一致的标题层级和正文节奏，让内容清晰、可信且易于阅读。
-      </Typography.Text>
-      <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
-        一致的界面，来自每一次一致的内容决策。
-      </Typography.Blockquote>
-      <Typography.Text as="p">
-        使用 <Typography.Code>@heliannuuthus/ui</Typography.Code> 组合内容。
-      </Typography.Text>
-      <Typography.Text as="small" size="sm" tone="muted">
-        设计系统札记 · 5 分钟阅读
-      </Typography.Text>
-    </article>
-  );
-};
 ```
 
 ### 标题层级
 
 {"level 同时选择 h1–h6 语义元素和对应视觉层级，页面应从 h1 开始保持连续顺序。"}
 
-```tsx title="showcases/typography/cases/heading-levels.tsx"
-import { Typography } from '@heliannuuthus/ui'
+```tsx title="showcases/typography/cases/heading-levels.tsx" file="<root>/showcases/typography/cases/heading-levels.tsx"
 
-<Typography.Title>H1</Typography.Title>
-<Typography.Title level={2}>H2</Typography.Title>
-<Typography.Title level={3}>H3</Typography.Title>
-<Typography.Title level={4}>H4</Typography.Title>
-<Typography.Title level={5}>H5</Typography.Title>
-<Typography.Title level={6}>H6</Typography.Title>
 ```
 
 ### 文本定制
 
 {"as 选择真实语义元素；size、tone 与 weight 分别控制字号、颜色层级和字重，可以按内容需要自由组合。"}
 
-```tsx title="showcases/typography/cases/text-customization.tsx"
-import { Typography } from '@heliannuuthus/ui'
+```tsx title="showcases/typography/cases/text-customization.tsx" file="<root>/showcases/typography/cases/text-customization.tsx"
 
-<Typography.Text>默认行内正文</Typography.Text>
-<Typography.Text as="p" size="xl" tone="muted">
-  大号次要段落适合承载页面导语。
-</Typography.Text>
-<Typography.Text as="div" size="lg" weight="semibold">
-  块级强调文字
-</Typography.Text>
-<Typography.Text as="small" size="sm" tone="muted" weight="medium">
-  较小的辅助信息
-</Typography.Text>
 ```
 
 ### 引用与行内代码
 
 {"Blockquote 保留引用来源，Code 在正文中标记短代码；多行代码块应使用独立的 pre 与 code 结构。"}
 
-```tsx title="showcases/typography/cases/quotations-and-inline-code.tsx"
-import { Typography } from '@heliannuuthus/ui'
+```tsx title="showcases/typography/cases/quotations-and-inline-code.tsx" file="<root>/showcases/typography/cases/quotations-and-inline-code.tsx"
 
-<Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
-  语义先于视觉，视觉服务于内容层级。
-</Typography.Blockquote>
-<Typography.Text as="p">
-  安装命令为 <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>
-</Typography.Text>
 ```
 
 ## 组成部分

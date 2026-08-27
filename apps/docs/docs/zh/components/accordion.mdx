@@ -24,160 +24,72 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"默认一次只展开一个条目，打开新条目时关闭前一个。"}
 
-```tsx title="showcases/accordion/cases/single-item-expansion.tsx"
-import { Accordion } from '@heliannuuthus/ui';
+```tsx title="showcases/accordion/cases/single-item-expansion.tsx" file="<root>/showcases/accordion/cases/single-item-expansion.tsx"
 
-<Accordion
-  defaultValue={['preflight']}
-  items={[
-    {
-      value: 'preflight',
-      title: '预检结果',
-      content: '42 项检查均已通过。',
-    },
-    {
-      value: 'rollback',
-      title: '回滚方案',
-      content: '异常时切回上一版本。',
-    },
-  ]}
-/>;
 ```
 
 ### 多项展开
 
 {"设置 multiple 后允许多个条目同时保持展开。"}
 
-```tsx title="showcases/accordion/cases/multiple-expansion.tsx"
-import { Accordion } from '@heliannuuthus/ui';
+```tsx title="showcases/accordion/cases/multiple-expansion.tsx" file="<root>/showcases/accordion/cases/multiple-expansion.tsx"
 
-<Accordion
-  defaultValue={['preflight', 'rollback']}
-  multiple
-  items={[
-    {
-      value: 'preflight',
-      title: '预检结果',
-      content: '42 项检查均已通过。',
-    },
-    {
-      value: 'rollback',
-      title: '回滚方案',
-      content: '异常时切回上一版本。',
-    },
-  ]}
-/>;
 ```
 
 ### 受控状态
 
 {"value 表示当前展开条目，onChange 接收用户操作后的完整值数组。"}
 
-```tsx title="showcases/accordion/cases/controlled-state.tsx"
-import { Accordion } from '@heliannuuthus/ui';
+```tsx title="showcases/accordion/cases/controlled-state.tsx" file="<root>/showcases/accordion/cases/controlled-state.tsx"
 
-<Accordion items={items} value={value} onChange={setValue} />;
 ```
 
 ### 默认指示器
 
 {"省略 indicator 时在标题末端显示默认箭头，并随展开状态旋转。"}
 
-```tsx title="showcases/accordion/cases/default-indicator.tsx"
-import { Accordion } from '@heliannuuthus/ui';
+```tsx title="showcases/accordion/cases/default-indicator.tsx" file="<root>/showcases/accordion/cases/default-indicator.tsx"
 
-<Accordion
-  defaultValue={['deployment']}
-  items={[
-    {
-      value: 'deployment',
-      title: '部署策略',
-      content: '先灰度 10%，观察后全量发布。',
-    },
-  ]}
-/>;
 ```
 
 ### 起始位置
 
 {"通过 Accordion.Indicator 的 position 将默认箭头放到标题起始侧。"}
 
-```tsx title="showcases/accordion/cases/start-position.tsx"
-import { Accordion } from '@heliannuuthus/ui';
+```tsx title="showcases/accordion/cases/start-position.tsx" file="<root>/showcases/accordion/cases/start-position.tsx"
 
-<Accordion
-  indicator={<Accordion.Indicator position="start" />}
-  items={items}
-/>;
 ```
 
 ### 状态函数指示器
 
 {"使用 Accordion.Indicator 统一设置位置；children 状态函数接收当前条目的 open、disabled 和 value，由调用方决定展示内容。"}
 
-```tsx title="showcases/accordion/cases/state-function-indicator.tsx"
-import { Accordion } from '@heliannuuthus/ui';
-import { Minus, Plus } from 'lucide-react';
+```tsx title="showcases/accordion/cases/state-function-indicator.tsx" file="<root>/showcases/accordion/cases/state-function-indicator.tsx"
 
-<Accordion
-  defaultValue={['deployment']}
-  indicator={
-    <Accordion.Indicator position="start">
-      {({ open }) => (open ? <Minus /> : <Plus />)}
-    </Accordion.Indicator>
-  }
-  items={[
-    {
-      value: 'deployment',
-      title: '部署策略',
-      content: '先灰度 10%，观察后全量发布。',
-    },
-  ]}
-/>;
 ```
 
 ### 禁用单个条目
 
 {"在 AccordionItem 上设置 disabled，仅阻止该条目的触发交互。"}
 
-```tsx title="showcases/accordion/cases/disable-one-item.tsx"
-import { Accordion } from '@heliannuuthus/ui';
+```tsx title="showcases/accordion/cases/disable-one-item.tsx" file="<root>/showcases/accordion/cases/disable-one-item.tsx"
 
-<Accordion
-  items={[
-    {
-      value: 'preflight',
-      title: '预检结果',
-      content: '42 项检查均已通过。',
-      disabled: true,
-    },
-    {
-      value: 'rollback',
-      title: '回滚方案',
-      content: '异常时切回上一版本。',
-    },
-  ]}
-/>;
 ```
 
 ### 禁用整个组件
 
 {"在 Accordion 上设置 disabled，统一阻止所有条目的展开与收起。"}
 
-```tsx title="showcases/accordion/cases/disable-the-entire-component.tsx"
-import { Accordion } from '@heliannuuthus/ui';
+```tsx title="showcases/accordion/cases/disable-the-entire-component.tsx" file="<root>/showcases/accordion/cases/disable-the-entire-component.tsx"
 
-<Accordion disabled items={items} />;
 ```
 
 ### 关闭面板保留策略
 
 {"默认关闭时卸载面板；keepMounted 保留内部状态；hiddenUntilFound 保留内容并允许浏览器页内查找定位。"}
 
-```tsx title="showcases/accordion/cases/closed-panel-retention.tsx"
-<Accordion items={items} />
-<Accordion items={items} keepMounted />
-<Accordion items={items} hiddenUntilFound />
+```tsx title="showcases/accordion/cases/closed-panel-retention.tsx" file="<root>/showcases/accordion/cases/closed-panel-retention.tsx"
+
 ```
 
 ## 组成部分

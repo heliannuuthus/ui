@@ -24,43 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Place the Provider at the root of the application, and descendant components call success, info, warning, or error through useToast; they are displayed at the top of the page by default."}
 
-```tsx title="showcases/toast/cases/basic-usage.tsx"
-import { Toast, useToast } from '@heliannuuthus/ui';
+```tsx title="showcases/toast/cases/basic-usage.tsx" file="<root>/showcases/toast/cases/basic-usage.tsx"
 
-const PublishAction = () => {
-  const { toast } = useToast();
-
-  return (
-    <Button onClick={() => toast.success('Publishing completed')}>
-      publish
-    </Button>
-  );
-};
-
-<Toast.Provider>
-  <App />
-</Toast.Provider>;
 ```
 
 ### local notification
 
 {"The local Provider will create an independent notification channel and constrain the Toast to the nearest positioning container without covering the entire page."}
 
-```tsx title="showcases/toast/cases/local-notification.tsx"
-import { Toast, useToast } from '@heliannuuthus/ui'
+```tsx title="showcases/toast/cases/local-notification.tsx" file="<root>/showcases/toast/cases/local-notification.tsx"
 
-const WorkspaceAction = () => {
-  const { toast } = useToast()
-  return <Button onClick={() => toast.info('Preview has been refreshed')}>Refresh</Button>
-}
-
-<div className="relative overflow-hidden">
-  <Toast.Provider scope="local">
-    <WorkspaceAction />
-  </Toast.Provider>
-</div>
-
-<Toast.Toaster position="top-right" richColors scope="local" />
 ```
 
 ## Component parts

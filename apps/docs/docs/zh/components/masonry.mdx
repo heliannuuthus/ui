@@ -24,49 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"通过 items 提供稳定 key 与内容，Masonry 会为每一项创建并测量布局节点。"}
 
-```tsx title="showcases/masonry/cases/basic-usage.tsx"
-import { Masonry, type MasonryItem } from '@heliannuuthus/ui';
+```tsx title="showcases/masonry/cases/basic-usage.tsx" file="<root>/showcases/masonry/cases/basic-usage.tsx"
 
-const items = cards.map((card) => ({
-  key: card.id,
-  content: <Card {...card} />,
-})) satisfies readonly MasonryItem[];
-
-<Masonry columns={3} minColumnWidth={180} gap={[14, 20]} items={items} />;
 ```
 
 ### 自适应列数
 
 {"拖动滑块设置一行允许的最大列数；实际列数根据容器宽度与最小列宽自动回落，最多显示六列。"}
 
-```tsx title="showcases/masonry/cases/adaptive-number-of-columns.tsx"
-import { Masonry } from '@heliannuuthus/ui';
+```tsx title="showcases/masonry/cases/adaptive-number-of-columns.tsx" file="<root>/showcases/masonry/cases/adaptive-number-of-columns.tsx"
 
-<Masonry columns={6} minColumnWidth={140} gap={14} items={cards} />;
 ```
 
 ### 跨列内容
 
 {"在单项配置中设置 span=\"full\"；该项会等待前面所有列结束并独占整行，后续内容再从统一位置继续排列。"}
 
-```tsx title="showcases/masonry/cases/cross-column-content.tsx"
-import { Masonry } from '@heliannuuthus/ui';
+```tsx title="showcases/masonry/cases/cross-column-content.tsx" file="<root>/showcases/masonry/cases/cross-column-content.tsx"
 
-<Masonry
-  columns={3}
-  minColumnWidth={180}
-  gap={14}
-  items={[
-    { key: 'a', content: <Card>A</Card> },
-    { key: 'b', content: <Card>B</Card> },
-    {
-      key: 'release',
-      content: <ReleaseNotice />,
-      span: 'full',
-    },
-    { key: 'c', content: <Card>C</Card> },
-  ]}
-/>;
 ```
 
 ## 组成部分

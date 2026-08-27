@@ -24,114 +24,64 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Use title, description, and media for the file name, supporting information, and file-type icon."}
 
-```tsx title="showcases/attachment/cases/basic-usage.tsx"
-import { Attachment } from '@heliannuuthus/ui';
+```tsx title="showcases/attachment/cases/basic-usage.tsx" file="<root>/showcases/attachment/cases/basic-usage.tsx"
 
-<Attachment
-  title="web-console.tgz"
-  description="8.4 MB · Verifying"
-  media={<FileArchive />}
-  state="processing"
-/>;
 ```
 
 ### Media content type
 
 {"mediaType declares whether media is an icon or an image so thumbnails receive the correct size, crop, and state styling."}
 
-```tsx title="showcases/attachment/cases/media-content-type.tsx"
-import { Attachment } from '@heliannuuthus/ui'
+```tsx title="showcases/attachment/cases/media-content-type.tsx" file="<root>/showcases/attachment/cases/media-content-type.tsx"
 
-<Attachment
-  media={<FileArchive />}
-  mediaType="icon"
-  title="web-console.tgz"
-/>
-
-<Attachment
-  media={<img alt="Attachment thumbnail" src="/cover.jpg" />}
-  mediaType="image"
-  title="cover.jpg"
-/>
 ```
 
 ### Processing states
 
 {"state represents waiting, uploading, processing, failed, and completed phases; use description to state the status explicitly."}
 
-```tsx title="showcases/attachment/cases/processing-states.tsx"
-const states = ['idle', 'uploading', 'processing', 'error', 'done'] as const;
+```tsx title="showcases/attachment/cases/processing-states.tsx" file="<root>/showcases/attachment/cases/processing-states.tsx"
 
-{
-  states.map((state) => (
-    <Attachment key={state} state={state} title="web-console.tgz" />
-  ));
-}
 ```
 
 ### Attachment sizes
 
 {"size controls the density of one attachment; preview each size individually with the segmented control."}
 
-```tsx title="showcases/attachment/cases/attachment-sizes.tsx"
-<Attachment size="default" title="web-console.tgz" />
-<Attachment size="sm" title="web-console.tgz" />
-<Attachment size="xs" title="web-console.tgz" />
+```tsx title="showcases/attachment/cases/attachment-sizes.tsx" file="<root>/showcases/attachment/cases/attachment-sizes.tsx"
+
 ```
 
 ### Attachment orientation
 
 {"horizontal suits file lists, while vertical emphasizes media in a thumbnail card."}
 
-```tsx title="showcases/attachment/cases/attachment-orientation.tsx"
-<Attachment orientation="horizontal" title="web-console.tgz" />
-<Attachment orientation="vertical" title="web-console.tgz" />
+```tsx title="showcases/attachment/cases/attachment-orientation.tsx" file="<root>/showcases/attachment/cases/attachment-orientation.tsx"
+
 ```
 
 ### Attachment actions
 
 {"Use actions only for download, retry, or remove operations that directly affect the current attachment."}
 
-```tsx title="showcases/attachment/cases/attachment-actions.tsx"
-<Attachment
-  actions={
-    <Button aria-label="Download attachment">
-      <Download />
-    </Button>
-  }
-  title="web-console.tgz"
-/>
+```tsx title="showcases/attachment/cases/attachment-actions.tsx" file="<root>/showcases/attachment/cases/attachment-actions.tsx"
+
 ```
 
 ### Full-card trigger
 
 {"trigger accepts a link or button element and makes the whole attachment clickable while preserving the correct element semantics."}
 
-```tsx title="showcases/attachment/cases/full-card-trigger.tsx"
-<Attachment
-  title="release-notes.md"
-  trigger={
-    <a aria-label="Preview release-notes.md" href="/files/release-notes.md" />
-  }
-/>
+```tsx title="showcases/attachment/cases/full-card-trigger.tsx" file="<root>/showcases/attachment/cases/full-card-trigger.tsx"
+
 ```
 
 ### Attachment collection
 
 {"Attachment.Group renders a collection from items and provides scrolling and snapping for horizontal overflow."}
 
-```tsx title="showcases/attachment/cases/attachment-collection.tsx"
-import { Attachment } from '@heliannuuthus/ui';
+```tsx title="showcases/attachment/cases/attachment-collection.tsx" file="<root>/showcases/attachment/cases/attachment-collection.tsx"
 
-<Attachment.Group
-  items={files.map((file) => ({
-    key: file.id,
-    title: file.name,
-    description: file.size,
-    media: <FileArchive />,
-    state: file.state,
-  }))}
-/>;
 ```
 
 ## Component parts

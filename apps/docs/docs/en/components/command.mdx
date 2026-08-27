@@ -25,116 +25,40 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Create a searchable command list through groups and options, which are responsible for icons, shortcut keys and execution callbacks."}
 
-```tsx title="showcases/command/cases/basic-usage.tsx"
-import { Command } from '@heliannuuthus/ui';
+```tsx title="showcases/command/cases/basic-usage.tsx" file="<root>/showcases/command/cases/basic-usage.tsx"
 
-<Command
-  groups={[
-    {
-      heading: 'Common commands',
-      options: [
-        { label: 'New File', shortcut: '⌘N', value: 'new-file' },
-        { label: 'Open settings', shortcut: '⌘,', value: 'settings' },
-      ],
-    },
-  ]}
-/>;
 ```
 
 ### Groups and options
 
 {"Each group uses heading for its title and options to configure command values, labels, search keywords, icons, shortcuts, disabled states, and execution callbacks."}
 
-```tsx title="showcases/command/cases/groups-and-options.tsx"
-import { Command, type CommandGroup } from '@heliannuuthus/ui'
+```tsx title="showcases/command/cases/groups-and-options.tsx" file="<root>/showcases/command/cases/groups-and-options.tsx"
 
-const groups: CommandGroup[] = [
-  {
-    heading: 'Files',
-    options: [
-      {
-        value: 'new-file',
-        label: 'New file',
-        keywords: ['create', 'document'],
-        shortcut: '⌘N',
-        onSelect: () => createFile(),
-      },
-      { value: 'open-file', label: 'Open file', disabled: true },
-    ],
-  },
-  {
-    heading: 'Preferences',
-    options: [{ value: 'settings', label: 'Open settings' }],
-  },
-]
-
-<Command groups={groups} />
 ```
 
 ### Search input placeholder
 
 {"placeholder describes the expected query before anything is entered; it does not provide empty-result feedback."}
 
-```tsx title="showcases/command/cases/search-input-placeholder.tsx"
-<Command groups={groups} placeholder="Search pages, files, or settings…" />
+```tsx title="showcases/command/cases/search-input-placeholder.tsx" file="<root>/showcases/command/cases/search-input-placeholder.tsx"
+
 ```
 
 ### Empty result content
 
 {"emptyText appears only when filtering finds no matching command and can be plain text or a ReactNode with an icon, title, and suggestion."}
 
-```tsx title="showcases/command/cases/empty-result-content.tsx"
-const [query, setQuery] = useState('missing command')
+```tsx title="showcases/command/cases/empty-result-content.tsx" file="<root>/showcases/command/cases/empty-result-content.tsx"
 
-<Command
-  groups={groups}
-  inputProps={{ value: query, onChange: setQuery }}
-  emptyText="No matching command"
-/>
 ```
 
 ### Command dialog
 
 {"dialog composes Command with the shared Dialog to place the same command list in a modal layer; it owns the trigger, title, description, and open state while groups still define the commands."}
 
-```tsx title="showcases/command/cases/command-dialog.tsx"
-import { Button, Command } from '@heliannuuthus/ui'
+```tsx title="showcases/command/cases/command-dialog.tsx" file="<root>/showcases/command/cases/command-dialog.tsx"
 
-<Command
-  dialog={{
-    trigger: <Button>Open command palette</Button>,
-    title: 'Quick actions',
-    description: 'Search and run a workspace action.',
-  }}
-  groups={groups}
-/>
-
-<Command
-  value={query}
-  onChange={setQuery}
-  filter={filterCommand}
-  label="Quick actions"
-  loop
-  vimBindings
-  disablePointerSelection
-  groups={[
-    {
-      heading: 'Workspace',
-      options: [
-        {
-          value: 'open-settings',
-          label: 'Open settings',
-          keywords: ['preferences'],
-          icon: <Settings />,
-          shortcut: '⌘,',
-          disabled: false,
-          onSelect: openSettings,
-        },
-      ],
-    },
-  ]}
-/>
-<Command defaultValue="settings" groups={groups} />
 ```
 
 ## Component parts

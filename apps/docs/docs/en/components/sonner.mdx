@@ -24,16 +24,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Use the same notification to undertake the loading, success or failure stages of an asynchronous task to avoid repeated stacking of messages."}
 
-```tsx title="showcases/sonner/cases/basic-usage.tsx"
-import { Sonner, toast } from '@heliannuuthus/ui'
+```tsx title="showcases/sonner/cases/basic-usage.tsx" file="<root>/showcases/sonner/cases/basic-usage.tsx"
 
-toast.promise(publish(), {
-  loading: 'Publishing to production environment...',
-  success: 'v0.12.0 released',
-  error: 'Publishing failed, please check the build log',
-})
-
-<Sonner position="bottom-right" richColors />
 ```
 
 ## API

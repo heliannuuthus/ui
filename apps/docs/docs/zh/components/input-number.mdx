@@ -24,63 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"通过受控值、最小值、最大值和步长管理存储容量，文本输入、键盘与增减按钮共享同一数值状态。"}
 
-```tsx title="showcases/input-number/cases/basic-usage.tsx"
-import { Input } from '@heliannuuthus/ui';
+```tsx title="showcases/input-number/cases/basic-usage.tsx" file="<root>/showcases/input-number/cases/basic-usage.tsx"
 
-<Input.Number
-  value={capacity}
-  onChange={setCapacity}
-  min={1}
-  max={256}
-  step={1}
-  suffix="GB"
-/>;
 ```
 
 ### 本地化格式
 
 {"使用 Intl.NumberFormat 配置显示货币，同时让 onChange 始终返回未格式化的 number 或 null。"}
 
-```tsx title="showcases/input-number/cases/localized-formatting.tsx"
-import { Input } from '@heliannuuthus/ui';
+```tsx title="showcases/input-number/cases/localized-formatting.tsx" file="<root>/showcases/input-number/cases/localized-formatting.tsx"
 
-<Input.Number
-  value={price}
-  onChange={setPrice}
-  min={0}
-  step={10}
-  smallStep={0.01}
-  locale="zh-CN"
-  format={{
-    style: 'currency',
-    currency: 'CNY',
-    minimumFractionDigits: 2,
-  }}
-/>;
 ```
 
 ### 尺寸与状态
 
 {"比较常用尺寸、隐藏步进按钮、只读、禁用和校验失败状态。"}
 
-```tsx title="showcases/input-number/cases/sizes-and-states.tsx"
-<Input.Number size="sm" defaultValue={8} />
-<Input.Number controls={false} defaultValue={8} />
-<Input.Number value={8} readOnly />
-<Input.Number value={8} disabled />
-<Input.Number aria-invalid defaultValue={8} />
+```tsx title="showcases/input-number/cases/sizes-and-states.tsx" file="<root>/showcases/input-number/cases/sizes-and-states.tsx"
 
-<Input.Number
-  defaultValue={10}
-  onChangeComplete={setCommittedValue}
-  largeStep={25}
-  prefix="¥"
-  placeholder="Amount"
-  allowWheelScrub
-  snapOnStep
-  classNames={{ input: 'tabular-nums' }}
-  styles={{ controls: { opacity: 0.9 } }}
-/>
 ```
 
 ## 组成部分

@@ -24,67 +24,40 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Use labels to explain the purpose of the input and keep default, hover, and focus states clearly identifiable."}
 
-```tsx title="showcases/input/cases/basic-usage.tsx"
-import { Input } from '@heliannuuthus/ui';
+```tsx title="showcases/input/cases/basic-usage.tsx" file="<root>/showcases/input/cases/basic-usage.tsx"
 
-<Input type="email" placeholder="name@example.com" />;
 ```
 
 ### Field status
 
 {"Compare default, failed validation, read-only and disabled inputs in the same group to avoid confusing semantics."}
 
-```tsx title="showcases/input/cases/field-status.tsx"
-<Input defaultValue="Design system migration" />
-<Input aria-invalid defaultValue="my workspace" />
-<Input value="UI-2048" readOnly />
-<Input value="Project in progress" disabled />
+```tsx title="showcases/input/cases/field-status.tsx" file="<root>/showcases/input/cases/field-status.tsx"
+
 ```
 
 ### Prefixes, suffixes and block-level appends
 
 {"Combine fixed prefixes, copy actions, and text counts; additional content always serves the same input task."}
 
-```tsx title="showcases/input/cases/prefixes-suffixes-and-block-level-appends.tsx"
-<Input defaultValue="docs" prefix="ui.dev/" suffix={<Button>Copy</Button>} />
+```tsx title="showcases/input/cases/prefixes-suffixes-and-block-level-appends.tsx" file="<root>/showcases/input/cases/prefixes-suffixes-and-block-level-appends.tsx"
+
 ```
 
 ### Verification code form
 
 {"Use the Input variant to switch between connected and separated blocks, previewing one option at a time with the segmented control."}
 
-```tsx title="showcases/input/cases/verification-code-form.tsx"
-<Input.OTP
-  maxLength={6}
-  value={value}
-  onChange={setValue}
-  variant="connected"
-/>
+```tsx title="showcases/input/cases/verification-code-form.tsx" file="<root>/showcases/input/cases/verification-code-form.tsx"
 
-<Input.OTP maxLength={6} variant="separated" />
 ```
 
 ### Instructions with word count feedback
 
 {"Provide clear labels, character limits, current count, and submission conditions for long text."}
 
-```tsx title="showcases/input/cases/instructions-with-word-count-feedback.tsx"
-import { Input } from '@heliannuuthus/ui'
+```tsx title="showcases/input/cases/instructions-with-word-count-feedback.tsx" file="<root>/showcases/input/cases/instructions-with-word-count-feedback.tsx"
 
-<Input.TextArea
-  value={value}
-  maxLength={120}
-  onChange={(event) => setValue(event.target.value)}
-/>
-
-<Input
-  addonBefore="https://"
-  addonAfter=".com"
-  classNames={{ input: 'font-mono' }}
-  styles={{ prefix: { color: 'var(--muted-foreground)' } }}
-/>
-<Input.OTP defaultValue="123456" maxLength={6} pattern="[0-9]*" />
-<Input.TextArea defaultValue="Release notes" rows={4} />
 ```
 
 ## Component parts

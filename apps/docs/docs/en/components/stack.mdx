@@ -25,111 +25,40 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Use orientation and gap to create the simplest horizontal layout with consistent spacing."}
 
-```tsx title="showcases/stack/cases/basic-usage.tsx"
-import { Button, Stack } from '@heliannuuthus/ui';
+```tsx title="showcases/stack/cases/basic-usage.tsx" file="<root>/showcases/stack/cases/basic-usage.tsx"
 
-<Stack gap={8} orientation="horizontal">
-  <Button>Save</Button>
-  <Button variant="outline">Cancel</Button>
-</Stack>;
 ```
 
 ### Value spacing
 
 {"gap accepts a numerical value; drag the slider to adjust it between 0–12px, in increments or decrements of 3px."}
 
-```tsx title="showcases/stack/cases/value-spacing.tsx"
-import { useState } from 'react';
-import { Slider, Stack } from '@heliannuuthus/ui';
+```tsx title="showcases/stack/cases/value-spacing.tsx" file="<root>/showcases/stack/cases/value-spacing.tsx"
 
-export const StackGapExample = () => {
-  const [gap, setGap] = useState(6);
-
-  return (
-    <>
-      <Slider min={0} max={12} step={3} value={gap} onChange={setGap} />
-      <Stack block gap={gap} orientation="horizontal" wrap>
-        {Array.from({ length: 24 }, (_, index) => (
-          <span key={index}>{index + 1}</span>
-        ))}
-      </Stack>
-    </>
-  );
-};
 ```
 
 ### Compact combination across controls
 
 {"Compact not only combines buttons, but can also splice Input, Select, Slider and operation controls."}
 
-```tsx title="showcases/stack/cases/compact-combination-across-controls.tsx"
-import { useState } from 'react';
-import { Input } from '@heliannuuthus/ui';
-import { Slider } from '@heliannuuthus/ui';
-import { Stack } from '@heliannuuthus/ui';
+```tsx title="showcases/stack/cases/compact-combination-across-controls.tsx" file="<root>/showcases/stack/cases/compact-combination-across-controls.tsx"
 
-export const SliderCompactExample = () => {
-  const [quality, setQuality] = useState(68);
-
-  return (
-    <Stack block gap={8}>
-      <Stack.Compact block aria-label="Compression quality">
-        <div className="flex min-h-9 flex-1 items-center border px-4">
-          <Slider
-            aria-label="Compression quality slider"
-            value={quality}
-            onChange={setQuality}
-            min={0}
-            max={100}
-          />
-        </div>
-        <Input
-          aria-label="Compression quality value"
-          className="w-24"
-          suffix="%"
-          type="number"
-          value={quality}
-          onChange={(event) => setQuality(Number(event.target.value))}
-        />
-      </Stack.Compact>
-      <span aria-live="polite">Current compression quality: {quality}%</span>
-    </Stack>
-  );
-};
 ```
 
 ### Cross axis aligned with main axis
 
 {"align controls cross-axis alignment, and justify controls main-axis distribution; the example code shows the corresponding properties and values in full."}
 
-```tsx title="showcases/stack/cases/cross-axis-aligned-with-main-axis.tsx"
-import { Stack } from '@heliannuuthus/ui'
+```tsx title="showcases/stack/cases/cross-axis-aligned-with-main-axis.tsx" file="<root>/showcases/stack/cases/cross-axis-aligned-with-main-axis.tsx"
 
-<Stack orientation="horizontal" gap={6} align="center">
-  <Filter />
-  <Sort />
-  <Availability />
-</Stack>
-
-<Stack block orientation="horizontal" gap={6} justify="between">
-  <Filter />
-  <Sort />
-  <Availability />
-</Stack>
 ```
 
 ### Item separators
 
 {"separator inserts a consistent visual divider between adjacent items without repeating it on every child."}
 
-```tsx title="showcases/stack/cases/item-separators.tsx"
-import { Stack } from '@heliannuuthus/ui';
+```tsx title="showcases/stack/cases/item-separators.tsx" file="<root>/showcases/stack/cases/item-separators.tsx"
 
-<Stack orientation="horizontal" separator={<span aria-hidden>·</span>}>
-  <span>Overview</span>
-  <span>Activity</span>
-  <span>Settings</span>
-</Stack>;
 ```
 
 ## Component parts

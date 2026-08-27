@@ -24,84 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"The default style carries overview, dynamic and member data, and the content area remains stable after switching."}
 
-```tsx title="showcases/tabs/cases/basic-usage.tsx"
-import { Tabs } from '@heliannuuthus/ui';
+```tsx title="showcases/tabs/cases/basic-usage.tsx" file="<root>/showcases/tabs/cases/basic-usage.tsx"
 
-<Tabs
-  defaultValue="overview"
-  items={[
-    { value: 'overview', label: 'Overview', content: <Overview /> },
-    { value: 'activity', label: 'dynamic', content: <Activity /> },
-    { value: 'members', label: 'members', content: <Members /> },
-  ]}
-/>;
 ```
 
 ### Four styles and quick centering
 
 {"Capsule, line, stroke and soft styles cover different levels; centered can directly center the label list."}
 
-```tsx title="showcases/tabs/cases/four-styles-and-quick-centering.tsx"
-import { Tabs } from '@heliannuuthus/ui';
+```tsx title="showcases/tabs/cases/four-styles-and-quick-centering.tsx" file="<root>/showcases/tabs/cases/four-styles-and-quick-centering.tsx"
 
-<Tabs
-  defaultValue="preview"
-  variant="line"
-  centered
-  items={[
-    {
-      value: 'preview',
-      label: 'Preview',
-      content: 'Preview the current component in real time. ',
-    },
-    {
-      value: 'code',
-      label: 'code',
-      content: 'View component implementation code. ',
-    },
-  ]}
-/>;
 ```
 
 ### Narrow vessel pressure testing
 
 {"320px and 480px are just representative test containers, not component breakpoints; when there is insufficient space, the native scroll bar is hidden and the navigation buttons on both sides are displayed, while horizontal sliding of touch and trackpad is retained."}
 
-```tsx title="showcases/tabs/cases/narrow-vessel-pressure-testing.tsx"
-import { Tabs } from '@heliannuuthus/ui';
+```tsx title="showcases/tabs/cases/narrow-vessel-pressure-testing.tsx" file="<root>/showcases/tabs/cases/narrow-vessel-pressure-testing.tsx"
 
-<Tabs
-  animation="slide"
-  defaultValue="design"
-  items={[
-    { value: 'design', label: 'design', content: <Design /> },
-    { value: 'code', label: 'Development', content: <Development /> },
-  ]}
-/>;
 ```
 
 ### Content switching animation
 
 {"A stable content viewport keeps its borders and dimensions unchanged; fade-in or directional sliding only affects panel content, and the system automatically degrades when reducing dynamic effects."}
 
-```tsx title="showcases/tabs/cases/content-switching-animation.tsx"
-<Tabs
-  animation="slide"
-  centered
-  classNames={{
-    panel: 'p-8',
-    viewport: 'mt-4 min-h-48 rounded-xl border',
-  }}
-  defaultValue="design"
-  variant="soft"
-  items={[
-    { value: 'design', label: 'Design', content: 'Organizing component visual specifications' },
-    { value: 'code', label: 'Development', content: 'Connect components and business status' },
-    { value: 'release', label: 'release', content: 'Complete verification and release' },
-  ]}
-/>
+```tsx title="showcases/tabs/cases/content-switching-animation.tsx" file="<root>/showcases/tabs/cases/content-switching-animation.tsx"
 
-<Tabs value={value} onChange={setValue} items={items} orientation="vertical" />
 ```
 
 ## Component parts

@@ -24,72 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Use the page edge for longer content and continuous actions while preserving the current page context."}
 
-```tsx title="showcases/drawer/cases/basic-usage.tsx"
-import { Drawer } from '@heliannuuthus/ui';
+```tsx title="showcases/drawer/cases/basic-usage.tsx" file="<root>/showcases/drawer/cases/basic-usage.tsx"
 
-<Drawer
-  behavior="adaptive"
-  side="right"
-  trigger={<Button>Open from the right</Button>}
-  title="Tonight's release window"
-  description="22:00–23:00"
-  closeText="Close"
->
-  <ReleaseList />
-</Drawer>;
 ```
 
 ### four directions
 
 {"Unified entry from top, right, bottom, and left; adaptive mode retains gestures in narrow screens and converges to a stable edge panel in wide screens."}
 
-```tsx title="showcases/drawer/cases/four-directions.tsx"
-import { Drawer } from '@heliannuuthus/ui';
+```tsx title="showcases/drawer/cases/four-directions.tsx" file="<root>/showcases/drawer/cases/four-directions.tsx"
 
-<Drawer
-  behavior="panel"
-  container={containerRef}
-  side="left"
-  trigger={<Button>Open from left</Button>}
-  title="Partial filtering"
->
-  <Filters />
-</Drawer>;
 ```
 
 ### Bind parent container
 
 {"After passing in container, the portal, viewport and panel are all limited to the specified parent container, and the four directions remain consistent."}
 
-```tsx title="showcases/drawer/cases/bind-parent-container.tsx"
-const containerRef = useRef<HTMLDivElement>(null)
+```tsx title="showcases/drawer/cases/bind-parent-container.tsx" file="<root>/showcases/drawer/cases/bind-parent-container.tsx"
 
-<div ref={containerRef} className="relative overflow-hidden">
-  <Drawer
-    behavior="panel"
-    container={containerRef}
-    side="left"
-    title="Partial filtering"
-    trigger={<Button>Open from left</Button>}
-  >
-    <FilterFields />
-  </Drawer>
-</div>
-
-<Drawer
-  open={open}
-  onOpenChange={setOpen}
-  snapPoints={[0.25, 0.5, 1]}
-  snapPoint={snapPoint}
-  onSnapChange={setSnapPoint}
-  closable
-  handle
-  sequential
-  swipeDirection="down"
-  classNames={{ content: 'max-h-screen' }}
-  styles={{ content: { minHeight: 320 } }}
-/>
-<Drawer defaultOpen={false} defaultSnapPoint={0.5} />
 ```
 
 ## Component parts

@@ -25,84 +25,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Organize a coherent, readable piece of content using a title, lead, text, quotes, inline code, and supporting information."}
 
-```tsx title="showcases/typography/cases/basic-usage.tsx"
-import { Typography } from '@heliannuuthus/ui';
+```tsx title="showcases/typography/cases/basic-usage.tsx" file="<root>/showcases/typography/cases/basic-usage.tsx"
 
-export const TypographyStory = () => {
-  return (
-    <article className="grid gap-4">
-      <Typography.Title level={2}>
-        Keep interface language clear
-      </Typography.Title>
-      <Typography.Text as="p" size="xl" tone="muted">
-        Stable typography lets users understand content before noticing design.
-      </Typography.Text>
-      <Typography.Text as="p">
-        Consistent heading hierarchy and body rhythm make content clear and
-        readable.
-      </Typography.Text>
-      <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
-        A consistent interface comes from consistent content decisions.
-      </Typography.Blockquote>
-      <Typography.Text as="p">
-        Compose content with{' '}
-        <Typography.Code>@heliannuuthus/ui</Typography.Code>.
-      </Typography.Text>
-      <Typography.Text as="small" size="sm" tone="muted">
-        Design system notes · 5 min read
-      </Typography.Text>
-    </article>
-  );
-};
 ```
 
 ### Heading levels
 
 {"level selects both the h1–h6 semantic element and its visual hierarchy. Start with h1 and keep the page order continuous."}
 
-```tsx title="showcases/typography/cases/heading-levels.tsx"
-import { Typography } from '@heliannuuthus/ui'
+```tsx title="showcases/typography/cases/heading-levels.tsx" file="<root>/showcases/typography/cases/heading-levels.tsx"
 
-<Typography.Title>H1</Typography.Title>
-<Typography.Title level={2}>H2</Typography.Title>
-<Typography.Title level={3}>H3</Typography.Title>
-<Typography.Title level={4}>H4</Typography.Title>
-<Typography.Title level={5}>H5</Typography.Title>
-<Typography.Title level={6}>H6</Typography.Title>
 ```
 
 ### Text customization
 
 {"as selects the semantic element, while size, tone, and weight independently control font size, color hierarchy, and font weight."}
 
-```tsx title="showcases/typography/cases/text-customization.tsx"
-import { Typography } from '@heliannuuthus/ui'
+```tsx title="showcases/typography/cases/text-customization.tsx" file="<root>/showcases/typography/cases/text-customization.tsx"
 
-<Typography.Text>Default inline text</Typography.Text>
-<Typography.Text as="p" size="xl" tone="muted">
-  Large muted paragraphs work well for page introductions.
-</Typography.Text>
-<Typography.Text as="div" size="lg" weight="semibold">
-  Emphasized block text
-</Typography.Text>
-<Typography.Text as="small" size="sm" tone="muted" weight="medium">
-  Small supporting text
-</Typography.Text>
 ```
 
 ### Quotations and inline code
 
 {"Blockquote preserves the citation source, while Code marks short inline code. Use a separate pre and code structure for multiline blocks."}
 
-```tsx title="showcases/typography/cases/quotations-and-inline-code.tsx"
-import { Typography } from '@heliannuuthus/ui'
+```tsx title="showcases/typography/cases/quotations-and-inline-code.tsx" file="<root>/showcases/typography/cases/quotations-and-inline-code.tsx"
 
-<Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
-  Semantics come before visuals, and visuals serve the content hierarchy.
-</Typography.Blockquote>
-<Typography.Text as="p">
-  Install with <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>
-</Typography.Text>
 ```
 
 ## Component parts

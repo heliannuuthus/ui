@@ -24,40 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Add a small amount of relevant information and light operations near the trigger without interrupting the current reading context."}
 
-```tsx title="showcases/popover/cases/basic-usage.tsx"
-import { Button, Popover } from '@heliannuuthus/ui';
+```tsx title="showcases/popover/cases/basic-usage.tsx" file="<root>/showcases/popover/cases/basic-usage.tsx"
 
-<Popover
-  trigger={<Button>3 persons in charge</Button>}
-  title="Release Manager"
-  description="These members will be notified when publishing and rolling back."
-  content={<OwnerList />}
-/>;
 ```
 
 ### Hover preview manager
 
 {"After setting the trigger to hover, related information will be displayed on mouse hover or keyboard focus, which is suitable for entity preview."}
 
-```tsx title="showcases/popover/cases/hover-preview-manager.tsx"
-import { Button, Popover } from '@heliannuuthus/ui'
+```tsx title="showcases/popover/cases/hover-preview-manager.tsx" file="<root>/showcases/popover/cases/hover-preview-manager.tsx"
 
-<Popover
-  triggerMode="hover"
-  trigger={<Button variant="link">@linmo</Button>}
-  content={<OwnerProfile />}
-/>
-
-<Popover
-  open={open}
-  onOpenChange={setOpen}
-  align="start"
-  sideOffset={8}
-  alignOffset={4}
-  classNames={{ content: 'w-80' }}
-  styles={{ content: { padding: 16 } }}
-/>
-<Popover defaultOpen={false} trigger={<Button>Open</Button>} />
 ```
 
 ## Component parts

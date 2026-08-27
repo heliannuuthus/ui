@@ -24,103 +24,56 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Carousel always uses a depth of field transition; paginationPosition controls the default point in front or behind content."}
 
-```tsx title="showcases/carousel/cases/basic-usage.tsx"
-import { Carousel } from '@heliannuuthus/ui';
+```tsx title="showcases/carousel/cases/basic-usage.tsx" file="<root>/showcases/carousel/cases/basic-usage.tsx"
 
-<Carousel
-  controls
-  items={highlights}
-  pagination="dots"
-  paginationPosition="after"
-  renderItem={(item) => <HighlightCard item={item} />}
-/>;
 ```
 
 ### Navigation buttons
 
 {"controls determines whether previous and next buttons are rendered; previousButtonProps and nextButtonProps extend each button independently."}
 
-```tsx title="showcases/carousel/cases/navigation-buttons.tsx"
-<Carousel
-  controls={false}
-  items={items}
-  previousButtonProps={{ 'aria-label': 'Previous release' }}
-  nextButtonProps={{ 'aria-label': 'Next release' }}
-/>
+```tsx title="showcases/carousel/cases/navigation-buttons.tsx" file="<root>/showcases/carousel/cases/navigation-buttons.tsx"
+
 ```
 
 ### Pagination dots
 
 {"pagination enables the default dots or hides pagination, while renderDot replaces only the content of each dot."}
 
-```tsx title="showcases/carousel/cases/pagination-dots.tsx"
-<Carousel
-  items={items}
-  pagination="dots"
-  renderDot={({ index, isSelected }) => (isSelected ? index + 1 : '·')}
-/>
+```tsx title="showcases/carousel/cases/pagination-dots.tsx" file="<root>/showcases/carousel/cases/pagination-dots.tsx"
+
 ```
 
 ### Track and item styles
 
 {"classNames extends the carousel track and items through the content and item semantic slots."}
 
-```tsx title="showcases/carousel/cases/track-and-item-styles.tsx"
-<Carousel
-  items={items}
-  classNames={{ content: 'gap-3', item: 'basis-2/3 pl-3' }}
-/>
+```tsx title="showcases/carousel/cases/track-and-item-styles.tsx" file="<root>/showcases/carousel/cases/track-and-item-styles.tsx"
+
 ```
 
 ### Custom page turner
 
 {"Pagination provides page number status and control methods when receiving functions, and can directly combine a complete page turner that matches the current page."}
 
-```tsx title="showcases/carousel/cases/custom-page-turner.tsx"
-import { Button, Carousel } from '@heliannuuthus/ui';
+```tsx title="showcases/carousel/cases/custom-page-turner.tsx" file="<root>/showcases/carousel/cases/custom-page-turner.tsx"
 
-<Carousel
-  items={highlights}
-  renderItem={(item) => <HighlightCard item={item} />}
-  pagination={({ currentPage, pageCount, scrollNext, scrollPrev }) => (
-    <div role="group" aria-label="Carousel paging">
-      <Button onClick={scrollPrev}>Previous page</Button>
-      <span aria-live="polite">
-        {currentPage} / {pageCount}
-      </span>
-      <Button onClick={scrollNext}>Next page</Button>
-    </div>
-  )}
-/>;
 ```
 
 ### Autoplay
 
 {"Autoplay passes true to use the default interval, and passes a number to directly set the number of seconds; the loop loop always crosses the beginning and end along the next page."}
 
-```tsx title="showcases/carousel/cases/autoplay.tsx"
-import { Carousel } from '@heliannuuthus/ui';
+```tsx title="showcases/carousel/cases/autoplay.tsx" file="<root>/showcases/carousel/cases/autoplay.tsx"
 
-<Carousel
-  autoplay={3}
-  controls
-  items={highlights}
-  loop
-  pagination="dots"
-  renderItem={(item) => <HighlightCard item={item} />}
-/>;
 ```
 
 ### External control
 
 {"Use the ref to call scrollPrev, scrollNext, scrollTo, play, and pause without exposing the underlying carousel instance."}
 
-```tsx title="showcases/carousel/cases/external-control.tsx"
-const carouselRef = useRef<CarouselRef>(null)
+```tsx title="showcases/carousel/cases/external-control.tsx" file="<root>/showcases/carousel/cases/external-control.tsx"
 
-<Carousel ref={carouselRef} items={items} />
-<Button onClick={() => carouselRef.current?.scrollPrev()}>Previous</Button>
-<Button onClick={() => carouselRef.current?.scrollNext()}>Next</Button>
 ```
 
 ## Component parts

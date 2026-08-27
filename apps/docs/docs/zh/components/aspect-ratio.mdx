@@ -24,33 +24,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"切换常用封面比例，观察同一张图片如何随容器宽高变化保持稳定布局。"}
 
-```tsx title="showcases/aspect-ratio/cases/basic-usage.tsx"
-import { useState } from 'react';
-import { AspectRatio } from '@heliannuuthus/ui';
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/aspect-ratio/cases/basic-usage.tsx" file="<root>/showcases/aspect-ratio/cases/basic-usage.tsx"
 
-const ratios = [
-  { label: '16:9', value: 16 / 9 },
-  { label: '4:3', value: 4 / 3 },
-  { label: '1:1', value: 1 },
-];
-
-export const CoverEditor = () => {
-  const [ratio, setRatio] = useState(ratios[0]);
-
-  return (
-    <div>
-      <AspectRatio ratio={ratio.value}>
-        <img src="/cover.jpg" alt="内容封面" />
-      </AspectRatio>
-      {ratios.map((option) => (
-        <Button key={option.label} onClick={() => setRatio(option)}>
-          {option.label}
-        </Button>
-      ))}
-    </div>
-  );
-};
 ```
 
 ## API

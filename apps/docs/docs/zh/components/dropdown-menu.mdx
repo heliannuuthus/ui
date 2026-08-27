@@ -24,90 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"一个 items 数组同时描述图标、快捷键、禁用状态和危险操作。"}
 
-```tsx title="showcases/dropdown-menu/cases/basic-usage.tsx"
-import { Button } from '@heliannuuthus/ui';
-import { DropdownMenu } from '@heliannuuthus/ui';
-import { FilePlus2, Trash2 } from 'lucide-react';
+```tsx title="showcases/dropdown-menu/cases/basic-usage.tsx" file="<root>/showcases/dropdown-menu/cases/basic-usage.tsx"
 
-<DropdownMenu
-  trigger={<Button variant="outline">文件操作</Button>}
-  items={[
-    { type: 'label', label: '文件操作' },
-    { label: '新建文件', icon: <FilePlus2 />, shortcut: '⌘N' },
-    { label: '创建副本', disabled: true },
-    { type: 'separator' },
-    { label: '移至废纸篓', icon: <Trash2 />, destructive: true },
-  ]}
-/>;
 ```
 
 ### 选择与状态
 
 {"checkbox 表达可独立切换的设置，radio 表达一组互斥选项。"}
 
-```tsx title="showcases/dropdown-menu/cases/choices-and-status.tsx"
-import { useState } from 'react';
-import { Button } from '@heliannuuthus/ui';
-import { DropdownMenu } from '@heliannuuthus/ui';
+```tsx title="showcases/dropdown-menu/cases/choices-and-status.tsx" file="<root>/showcases/dropdown-menu/cases/choices-and-status.tsx"
 
-export const ViewSettings = () => {
-  const [sidebar, setSidebar] = useState(true);
-  const [density, setDensity] = useState('comfortable');
-
-  return (
-    <DropdownMenu
-      trigger={<Button variant="outline">视图设置</Button>}
-      items={[
-        {
-          type: 'checkbox',
-          label: '显示侧栏',
-          checked: sidebar,
-          onChange: setSidebar,
-        },
-        { type: 'separator' },
-        {
-          type: 'radio',
-          value: density,
-          onChange: setDensity,
-          items: [
-            { label: '紧凑', value: 'compact' },
-            { label: '舒适', value: 'comfortable' },
-          ],
-        },
-      ]}
-    />
-  );
-};
 ```
 
 ### 子菜单与尺寸
 
 {"带 children 的操作自动形成子菜单；size 统一控制菜单的密度和宽度。"}
 
-```tsx title="showcases/dropdown-menu/cases/submenus-and-dimensions.tsx"
-import { Button } from '@heliannuuthus/ui'
-import { DropdownMenu } from '@heliannuuthus/ui'
+```tsx title="showcases/dropdown-menu/cases/submenus-and-dimensions.tsx" file="<root>/showcases/dropdown-menu/cases/submenus-and-dimensions.tsx"
 
-<DropdownMenu
-  size="lg"
-  align="end"
-  trigger={<Button>导出</Button>}
-  items={[
-    {
-      label: '导出为',
-      children: [
-        { label: 'PDF 文档', onSelect: exportPdf },
-        { label: 'PNG 图片', onSelect: exportPng },
-        { label: 'CSV 表格', onSelect: exportCsv },
-      ],
-    },
-    { type: 'separator' },
-    { label: '下载原始文件', onSelect: downloadOriginal },
-  ]}
-/>
-
-<DropdownMenu defaultOpen={false} disabled items={items} side="right" trigger={trigger} />
-<DropdownMenu open={open} onOpenChange={setOpen} items={items} trigger={trigger} />
 ```
 
 ## 组成部分

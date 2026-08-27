@@ -25,93 +25,40 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"The most basic vertical combination: Header and Footer maintain a fixed area, and Content occupies the remaining space in the middle."}
 
-```tsx title="showcases/layout/cases/basic-usage.tsx"
-import { Layout } from '@heliannuuthus/ui';
+```tsx title="showcases/layout/cases/basic-usage.tsx" file="<root>/showcases/layout/cases/basic-usage.tsx"
 
-<Layout>
-  <Layout.Header>Project Navigation</Layout.Header>
-  <Layout.Content>Page content</Layout.Content>
-  <Layout.Footer>Footer information</Layout.Footer>
-</Layout>;
 ```
 
 ### Left navigation
 
 {"Sidebar is arranged horizontally with a nested Layout; the nested area continues to be responsible for the vertical relationship between Header and Content."}
 
-```tsx title="showcases/layout/cases/left-navigation.tsx"
-import { Layout } from '@heliannuuthus/ui';
+```tsx title="showcases/layout/cases/left-navigation.tsx" file="<root>/showcases/layout/cases/left-navigation.tsx"
 
-<Layout>
-  <Layout.Sidebar width={240}>Project Navigation</Layout.Sidebar>
-  <Layout.Content>Workspace Content</Layout.Content>
-</Layout>;
 ```
 
 ### Details on the right
 
 {"Placing Sidebar after content creates a right-side auxiliary area suitable for directories, properties, and contextual details."}
 
-```tsx title="showcases/layout/cases/details-on-the-right.tsx"
-import { Layout } from '@heliannuuthus/ui';
+```tsx title="showcases/layout/cases/details-on-the-right.tsx" file="<root>/showcases/layout/cases/details-on-the-right.tsx"
 
-<Layout>
-  <Layout.Content>Workspace Content</Layout.Content>
-  <Layout.Sidebar width={280}>Details panel</Layout.Sidebar>
-</Layout>;
 ```
 
 ### Complete application framework
 
 {"Header and Footer span the entire page, and Sidebar and Content are nested in the middle area, making it suitable for the backend and workbench."}
 
-```tsx title="showcases/layout/cases/complete-application-framework.tsx"
-import { Layout } from '@heliannuuthus/ui';
+```tsx title="showcases/layout/cases/complete-application-framework.tsx" file="<root>/showcases/layout/cases/complete-application-framework.tsx"
 
-<Layout>
-  <Layout.Header>Header</Layout.Header>
-  <Layout>
-    <Layout.Sidebar>Sidebar</Layout.Sidebar>
-    <Layout.Content>Content</Layout.Content>
-  </Layout>
-  <Layout.Footer>Footer</Layout.Footer>
-</Layout>;
 ```
 
 ### Responsive collapse
 
 {"The Sidebar collapses automatically below lg and can also be toggled manually with its built-in trigger; collapsedWidth controls the remaining width."}
 
-```tsx title="showcases/layout/cases/responsive-collapse.tsx"
-import { Layout } from '@heliannuuthus/ui';
-import { useState } from 'react';
+```tsx title="showcases/layout/cases/responsive-collapse.tsx" file="<root>/showcases/layout/cases/responsive-collapse.tsx"
 
-export const ResponsiveLayout = () => {
-  const [status, setStatus] = useState('');
-
-  return (
-    <Layout>
-      <Layout.Sidebar
-        breakpoint="lg"
-        collapsible
-        collapsedWidth={64}
-        defaultCollapsed={false}
-        side="start"
-        labels={{
-          collapse: 'Collapse sidebar',
-          expand: 'Expand sidebar',
-        }}
-        onBreakpointChange={(below) => setStatus(below ? 'Narrow' : 'Wide')}
-        onChange={(collapsed, reason) =>
-          setStatus((collapsed ? 'Collapsed' : 'Expanded') + ': ' + reason)
-        }
-      >
-        Navigation
-      </Layout.Sidebar>
-      <Layout.Content>{status}</Layout.Content>
-    </Layout>
-  );
-};
 ```
 
 ## Component parts

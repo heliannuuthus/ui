@@ -25,422 +25,104 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"The default composition includes search, sorting, fixed columns, actions, Footer, and Pagination; applications only provide data and Table.Column."}
 
-```tsx title="showcases/table/cases/basic-usage.tsx"
-import { Table } from '@heliannuuthus/ui'
-import { Button } from '@heliannuuthus/ui'
-import { DropdownMenu } from '@heliannuuthus/ui'
-import { Stack } from '@heliannuuthus/ui'
-import { MoreHorizontal } from 'lucide-react'
+```tsx title="showcases/table/cases/basic-usage.tsx" file="<root>/showcases/table/cases/basic-usage.tsx"
 
-const columns: Table.Column<Release>[] = [
-  {
-    accessor: 'version',
-    header: 'version',
-    sortable: true,
-  },
-  {
-    key: 'actions',
-    align: 'center',
-    fixed: 'end',
-    header: 'operation',
-    width: 144,
-    render: (_, row) => (
-      <Stack align="center" aria-label={row.version + 'Actions'} gap={4} justify="center" orientation="horizontal" role="group">
-        <Button variant="ghost">View</Button>
-        <DropdownMenu
-          align="end"
-          trigger={
-            <Button
-              aria-label={row.version + 'More operations'}
-              size="icon-sm"
-              variant="ghost"
-            >
-              <MoreHorizontal />
-            </Button>
-          }
-          items={[
-            { label: 'Download log' },
-            { label: 'Archive record' },
-            { type: 'separator' },
-            { label: 'Delete record', destructive: true },
-          ]}
-        />
-      </Stack>
-    ),
-  },
-]
-
-<Table
-  columns={columns}
-  data={releaseRecords}
-  search={{ columnKeys: ['version'], placeholder: 'Filter versions…' }}
-  footer={(rows) => `Current page ${rows.length} published records`}
-  rowKey="version"
-  pagination={{ pageSize: 3 }}
-  classNames={{ table: 'min-w-[820px]' }}
-/>
 ```
 
 ### Row expansion
 
 {"expandable will automatically complete expandable columns, keyboard buttons, and cross-column detail rows; business columns fixed to the starting side will automatically avoid expandable buttons."}
 
-```tsx title="showcases/table/cases/row-expansion.tsx"
-import { Table } from '@heliannuuthus/ui';
+```tsx title="showcases/table/cases/row-expansion.tsx" file="<root>/showcases/table/cases/row-expansion.tsx"
 
-<Table
-  columns={columns}
-  data={releaseRecords}
-  expandable={{
-    defaultValue: ['v0.12.0'],
-    render: (row) => <ReleaseDetail release={row} />,
-  }}
-  rowKey="version"
-  pagination={false}
-/>;
 ```
 
 ### Group header
 
 {"Nest columns in Table.Column to create grouped headers; Table calculates spans, levels, and empty-state width."}
 
-```tsx title="showcases/table/cases/group-header.tsx"
-import { Table } from '@heliannuuthus/ui'
+```tsx title="showcases/table/cases/group-header.tsx" file="<root>/showcases/table/cases/group-header.tsx"
 
-const columns: Table.Column<Release>[] = [
-  {
-    header: 'Publish information',
-    columns: [
-      { accessor: 'version', header: 'version', sortable: true },
-      { accessor: 'environment', header: 'environment' },
-    ],
-  },
-  {
-    header: 'Execution status',
-    columns: [
-      { accessor: 'owner', header: 'person in charge' },
-      { accessor: 'status', header: 'status' },
-    ],
-  },
-  {
-    header: 'operation',
-    columns: [
-      {
-        key: 'detail',
-        header: 'record',
-        align: 'center',
-        render: (_, row) => <Button>{row.version} details</Button>,
-      },
-    ],
-  },
-]
-
-<Table columns={columns} data={releaseRecords} />
 ```
 
 ### virtual scrolling
 
 {"virtual scrolls and virtualizes only the table body. Header stays pinned to the top of the container, while fixed columns, horizontal scrolling, and custom render continue to work."}
 
-```tsx title="showcases/table/cases/virtual-scrolling.tsx"
-import { Table } from '@heliannuuthus/ui';
+```tsx title="showcases/table/cases/virtual-scrolling.tsx" file="<root>/showcases/table/cases/virtual-scrolling.tsx"
 
-<Table
-  columns={columns}
-  data={records}
-  rowKey="id"
-  pagination={false}
-  classNames={{ table: 'min-w-[900px]' }}
-  virtual={{
-    containerHeight: 320,
-    overscan: 8,
-    rowHeight: 48,
-  }}
-/>;
 ```
 
 ### Controlled sorting, pagination, and row selection
 
 {"Applications can control sorting, pagination, and rowSelection; every interaction returns public state without exposing the underlying table instance."}
 
-```tsx title="showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx"
-import { useState, type Key } from 'react'
-import { Table } from '@heliannuuthus/ui'
+```tsx title="showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx" file="<root>/showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx"
 
-const [sort, setSort] = useState<Table.SortState | null>(null)
-const [page, setPage] = useState(1)
-const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
-
-<Table
-  columns={columns}
-  data={records}
-  rowKey="id"
-  sorting={{ value: sort, onChange: setSort }}
-  pagination={{ current: page, onChange: setPage, pageSize: 20 }}
-  rowSelection={{ value: selectedKeys, onChange: setSelectedKeys }}
-/>
 ```
 
 ### Pagination summary
 
 {"Shows the total item count or renders a custom summary from the total and current range."}
 
-```tsx title="showcases/table/cases/pagination-summary.tsx"
-<Table
-  columns={columns}
-  data={releaseRecords}
-  pagination={{ pageSize: 3, summary: true }}
-/>
+```tsx title="showcases/table/cases/pagination-summary.tsx" file="<root>/showcases/table/cases/pagination-summary.tsx"
 
-<Table
-  columns={columns}
-  data={releaseRecords}
-  pagination={{ pageSize: 3, summary: customSummary }}
-/>
-
-<Table
-  columns={columns}
-  data={releaseRecords}
-  pagination={{ pageSize: 3, summary: false }}
-/>
 ```
 
 ### Loading and external state composition
 
 {"Table only provides boolean loading; compose Empty and Alert for custom empty results and request errors."}
 
-```tsx title="showcases/table/cases/loading-and-external-state-composition.tsx"
-import { Alert, Empty, Table } from '@heliannuuthus/ui';
+```tsx title="showcases/table/cases/loading-and-external-state-composition.tsx" file="<root>/showcases/table/cases/loading-and-external-state-composition.tsx"
 
-if (request.error) {
-  return <Alert variant="error" title="Failed to load release records" />;
-}
-
-if (!request.pending && records.length === 0) {
-  return <Empty title="No matching records" />;
-}
-
-<Table columns={columns} data={records} loading={request.pending} />;
 ```
 
 ### Server data mode
 
 {"The manual modes for search, sorting, and pagination manage only public state and do not process server-returned data again on the client."}
 
-```tsx title="showcases/table/cases/server-data-mode.tsx"
-import { Table } from '@heliannuuthus/ui';
+```tsx title="showcases/table/cases/server-data-mode.tsx" file="<root>/showcases/table/cases/server-data-mode.tsx"
 
-<Table
-  columns={columns}
-  data={request.pageRows}
-  rowKey="id"
-  search={{ mode: 'manual', value: query, onChange: setQuery }}
-  sorting={{ mode: 'manual', value: sort, onChange: setSort }}
-  pagination={{
-    mode: 'manual',
-    current: page,
-    pageSize: 20,
-    total: request.total,
-    onChange: setPage,
-  }}
-/>;
 ```
 
 ### Custom table
 
 {"When data is already prepared or the structure needs full control, compose Header, Body, and Footer directly. Footer contains column summaries."}
 
-```tsx title="showcases/table/cases/custom-table.tsx"
-import { Table } from '@heliannuuthus/ui';
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/table/cases/custom-table.tsx" file="<root>/showcases/table/cases/custom-table.tsx"
 
-<Table.Primitive>
-  <Table.Header>
-    <Table.Row>
-      <Table.Head>Services</Table.Head>
-      <Table.Head align="center">Operation</Table.Head>
-    </Table.Row>
-  </Table.Header>
-  <Table.Body>
-    <Table.Row>
-      <Table.Cell>Web Console</Table.Cell>
-      <Table.Cell align="center">
-        <Button aria-label="View Web Console" size="xs" variant="ghost">
-          View
-        </Button>
-      </Table.Cell>
-    </Table.Row>
-  </Table.Body>
-  <Table.Footer>
-    <Table.Row>
-      <Table.Cell colSpan={2}>1 item in total</Table.Cell>
-    </Table.Row>
-  </Table.Footer>
-</Table.Primitive>;
 ```
 
 ### Fixed columns and horizontal scrolling
 
 {"CorrespondingHeadandCellSet simultaneously fixed=\"start\"Fixed starting column, or set fixed=\"end\"Fixed end column; give againTable.Primitive set upclassName=\"min-w-[960px]\" If it is larger than the minimum width of the container, the middle column can be scrolled horizontally."}
 
-```tsx title="showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx"
-import { Table } from '@heliannuuthus/ui';
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx" file="<root>/showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx"
 
-<Table.Primitive classNames={{ table: 'min-w-[960px] table-fixed' }}>
-  <Table.Header>
-    <Table.Row>
-      <Table.Head fixed="start" className="w-40">
-        Service
-      </Table.Head>
-      <Table.Head className="w-28">Version</Table.Head>
-      <Table.Head className="w-28">Region</Table.Head>
-      <Table.Head className="w-32">Recently deployed</Table.Head>
-      <Table.Head fixed="end" align="center" className="w-24">
-        Operation
-      </Table.Head>
-    </Table.Row>
-  </Table.Header>
-  <Table.Body>
-    <Table.Row>
-      <Table.Cell fixed="start">Web Console</Table.Cell>
-      <Table.Cell>v0.12.0</Table.Cell>
-      <Table.Cell fixed="end" align="center">
-        <Button aria-label="Monitoring Web Console" size="xs" variant="ghost">
-          Monitor
-        </Button>
-      </Table.Cell>
-    </Table.Row>
-  </Table.Body>
-</Table.Primitive>;
 ```
 
 ### Combined with Pagination
 
 {"Table is only responsible for the semantic structure of the current page, and Pagination manages the page number; local arrays or server-side data use the same controlled combination."}
 
-```tsx title="showcases/table/cases/combined-with-pagination.tsx"
-import { useState } from 'react'
-import { Table } from '@heliannuuthus/ui'
-import { Button } from '@heliannuuthus/ui'
-import { Pagination } from '@heliannuuthus/ui'
+```tsx title="showcases/table/cases/combined-with-pagination.tsx" file="<root>/showcases/table/cases/combined-with-pagination.tsx"
 
-const [page, setPage] = useState(1)
-const visibleRows = rows.slice((page - 1) * 10, page * 10)
-
-<>
-  <Table.Primitive>
-    {/* render visibleRows, and provide viewing, approval and other operations Button in the last column */}
-  </Table.Primitive>
-  <Pagination
-    current={page}
-    pageCount={Math.ceil(rows.length / 10)}
-    onChange={setPage}
-  />
-</>
 ```
 
 ### Primitive row expansion
 
 {"Use a regular Button to control aria-expanded and render details with Row and a spanning Cell; no table-specific component is needed."}
 
-```tsx title="showcases/table/cases/primitive-row-expansion.tsx"
-import { Fragment, useState } from 'react'
-import { Button, Table } from '@heliannuuthus/ui'
-import { ChevronRight } from 'lucide-react'
+```tsx title="showcases/table/cases/primitive-row-expansion.tsx" file="<root>/showcases/table/cases/primitive-row-expansion.tsx"
 
-const [expandedId, setExpandedId] = useState<string | null>(null)
-
-<Table.Primitive>
-  <Table.Body>
-    {rows.map((row) => {
-      const expanded = row.id === expandedId
-      return (
-        <Fragment key={row.id}>
-          <Table.Row>
-            <Table.Cell>
-              <Button
-                aria-expanded={expanded}
-                aria-label={`${expanded ? 'Collapse' : 'Expand'} ${row.id}`}
-                size="icon-xs"
-                variant="ghost"
-                onClick={() => setExpandedId(expanded ? null : row.id)}
-              >
-                <ChevronRight className={expanded ? 'rotate-90' : ''} />
-              </Button>
-            </Table.Cell>
-            <Table.Cell>{row.name}</Table.Cell>
-          </Table.Row>
-          {expanded && (
-            <Table.Row>
-              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>
-            </Table.Row>
-          )}
-        </Fragment>
-      )
-    })}
-  </Table.Body>
-</Table.Primitive>
 ```
 
 ### Column alignment, super long omission and custom Cell
 
 {"align uniformly controls the start, center and end alignment; the ellipsis of Head and Cell provides full-text Tooltip when overflowing, and the custom component directly acts as a Cell child node."}
 
-```tsx title="showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx"
-import { Table } from '@heliannuuthus/ui'
-import { Button } from '@heliannuuthus/ui'
-import { ArrowUpRight } from 'lucide-react'
+```tsx title="showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx" file="<root>/showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx"
 
-const ActionCell = () => {
-  return (
-    <Button
-      aria-label="Configure Realtime Gateway"
-      size="xs"
-      variant="ghost"
-    >
-      Configure <ArrowUpRight data-icon="inline-end" />
-    </Button>
-  )
-}
-
-<Table.Primitive classNames={{ table: 'table-fixed' }}>
-  <Table.Header>
-    <Table.Row>
-      <Table.Head align="start">Service</Table.Head>
-      <Table.Head ellipsis="Service description, latest production deployment context and exception reasons">Service description, latest production deployment context and exception reasons</Table.Head>
-      <Table.Head align="end">Success rate</Table.Head>
-      <Table.Head align="center">Operation</Table.Head>
-    </Table.Row>
-  </Table.Header>
-  <Table.Body>
-    <Table.Row>
-      <Table.Cell>Realtime Gateway</Table.Cell>
-      <Table.Cell ellipsis>{description}</Table.Cell>
-      <Table.Cell align="end">99.98%</Table.Cell>
-      <Table.Cell align="center"><ActionCell /></Table.Cell>
-    </Table.Row>
-  </Table.Body>
-</Table.Primitive>
-
-<Table
-  columns={columns}
-  data={rows}
-  showHeader={false}
-  rowProps={(row) => ({ 'data-row-id': row.id })}
-/>
-<Table.Primitive>
-  <Table.Header>
-    <Table.Row>
-      <Table.Head fixedOffset={48}>Name</Table.Head>
-    </Table.Row>
-  </Table.Header>
-  <Table.Body>
-    <Table.Row>
-      <Table.Cell fixedOffset={48}>Atlas</Table.Cell>
-    </Table.Row>
-  </Table.Body>
-</Table.Primitive>
 ```
 
 ## Component parts

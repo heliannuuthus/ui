@@ -24,16 +24,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"用同一条通知承接异步任务的加载、成功或失败阶段，避免重复堆叠消息。"}
 
-```tsx title="showcases/sonner/cases/basic-usage.tsx"
-import { Sonner, toast } from '@heliannuuthus/ui'
+```tsx title="showcases/sonner/cases/basic-usage.tsx" file="<root>/showcases/sonner/cases/basic-usage.tsx"
 
-toast.promise(publish(), {
-  loading: '正在发布到生产环境…',
-  success: 'v0.12.0 已发布',
-  error: '发布失败，请检查构建日志',
-})
-
-<Sonner position="bottom-right" richColors />
 ```
 
 ## API

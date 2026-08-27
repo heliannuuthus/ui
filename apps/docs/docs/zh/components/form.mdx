@@ -24,231 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"同时展示标签、说明、错误信息，以及适合设置项的水平字段。"}
 
-```tsx title="showcases/form/cases/basic-usage.tsx"
-import { Form, Input } from '@heliannuuthus/ui';
+```tsx title="showcases/form/cases/basic-usage.tsx" file="<root>/showcases/form/cases/basic-usage.tsx"
 
-<Form.Field
-  name="handle"
-  label="个人标识"
-  description="用于生成公开资料地址。"
-  rules={{ pattern: /^[a-z0-9-]+$/ }}
->
-  <Input />
-</Form.Field>;
 ```
 
 ### 标签关联与必要性
 
 {"Form.Field 自动关联标签与真实控件，并统一生成必填标记和辅助说明。"}
 
-```tsx title="showcases/form/cases/label-association-and-necessity.tsx"
-import { Form, Input } from '@heliannuuthus/ui'
+```tsx title="showcases/form/cases/label-association-and-necessity.tsx" file="<root>/showcases/form/cases/label-association-and-necessity.tsx"
 
-<Form.Field name="teamName" label="团队名称" required>
-  <Input />
-</Form.Field>
-
-<Form.Field name="role" label="职位" description="可选">
-  <Input />
-</Form.Field>
 ```
 
 ### 完整组件表单
 
 {"在一个表单中验证全部受支持控件的值绑定、校验状态与无障碍关系。"}
 
-```tsx title="showcases/form/cases/complete-component-form.tsx"
-import {
-  Button,
-  Checkbox,
-  DatePicker,
-  Form,
-  Input,
-  Radio,
-  Select,
-  Slider,
-  Switch,
-  Toggle,
-} from '@heliannuuthus/ui'
+```tsx title="showcases/form/cases/complete-component-form.tsx" file="<root>/showcases/form/cases/complete-component-form.tsx"
 
-const form = Form.useForm({
-  defaultValues: {
-    confirmation: false,
-    formats: ['markdown'],
-    inviteCode: '',
-    launchDate: undefined,
-    name: '',
-    notifications: true,
-    permissions: ['read'],
-    pinned: false,
-    region: 'asia',
-    reviewThreshold: 2,
-    retryLimit: 3,
-    summary: '',
-    visibility: 'team',
-    workspace: null,
-  },
-})
-
-<Form form={form} onSubmit={onSubmit}>
-  <Form.Field
-    name="name"
-    label={t('workspace.name')}
-    rules={{ required: t('validation.required') }}
-  >
-    <Input />
-  </Form.Field>
-
-  <Form.Field name="summary" label={t('workspace.description')}>
-    <Input.TextArea />
-  </Form.Field>
-
-  <Form.Field name="inviteCode" label={t('workspace.inviteCode')}>
-    <Input.OTP maxLength={6} />
-  </Form.Field>
-
-  <Form.Field name="region" label={t('workspace.region')}>
-    <Select options={regionOptions} />
-  </Form.Field>
-
-  <Form.Field name="workspace" label={t('workspace.parent')}>
-    <Select options={workspaceOptions} showClear />
-  </Form.Field>
-
-  <Form.Field name="notifications" label={t('workspace.notifications')}>
-    <Switch />
-  </Form.Field>
-
-  <Form.Field
-    name="confirmation"
-    rules={{ required: t('validation.confirm') }}
-  >
-    <Checkbox>{t('workspace.confirm')}</Checkbox>
-  </Form.Field>
-
-  <Form.Field name="permissions" label={t('workspace.permissions')}>
-    <Checkbox.Group options={permissionOptions} />
-  </Form.Field>
-
-  <Form.Field name="visibility" label={t('workspace.visibility')}>
-    <Radio.Group options={visibilityOptions} />
-  </Form.Field>
-
-  <Form.Field name="launchDate" label={t('workspace.launchDate')}>
-    <DatePicker />
-  </Form.Field>
-
-  <Form.Field name="reviewThreshold" label={t('workspace.reviewThreshold')}>
-    <Slider min={1} max={5} />
-  </Form.Field>
-
-  <Form.Field name="retryLimit" label={t('workspace.retryLimit')}>
-    <Input.Number min={0} max={10} />
-  </Form.Field>
-
-  <Form.Field name="pinned" label={t('workspace.pinned')}>
-    <Toggle>{t('actions.pin')}</Toggle>
-  </Form.Field>
-
-  <Form.Field name="formats" label={t('workspace.formats')}>
-    <Toggle.Group multiple items={formatOptions} />
-  </Form.Field>
-
-  <Button type="submit">{t('actions.save')}</Button>
-</Form>
 ```
 
 ### 自定义控件接入
 
 {"对比只实现值绑定的最小控件，以及额外支持错误聚焦和完整字段属性的控件。"}
 
-```tsx title="showcases/form/cases/custom-control-integration.tsx"
-import { forwardRef } from 'react'
-import {
-  Button,
-  Form,
-  Radio,
-  type FormFieldInjectedControlProps,
-} from '@heliannuuthus/ui'
+```tsx title="showcases/form/cases/custom-control-integration.tsx" file="<root>/showcases/form/cases/custom-control-integration.tsx"
 
-type Priority = '' | 'routine' | 'important' | 'urgent'
-
-type PriorityControlProps = FormFieldInjectedControlProps<Priority>
-
-const options = [
-  { label: t('priority.routine'), value: 'routine' },
-  { label: t('priority.important'), value: 'important' },
-  { label: t('priority.urgent'), value: 'urgent' },
-] as const
-
-// Minimum: value binding with a regular function component
-const MinimalPriorityControl = ({
-  onChange,
-  ...props
-}: PriorityControlProps) => (
-  <Radio.Group
-    {...props}
-    columns={3}
-    minColumnWidth={0}
-    onChange={onChange}
-    options={options}
-  />
-)
-
-// Complete: forward the ref to enable validation-error focus
-const CompletePriorityControl = forwardRef<
-  HTMLInputElement,
-  PriorityControlProps
->(
-  ({ onChange, ...props }, ref) => (
-    <Radio.Group
-      {...props}
-      columns={3}
-      inputRef={ref}
-      minColumnWidth={0}
-      onChange={onChange}
-      options={options}
-    />
-  )
-)
-
-type Values = {
-  completePriority: Priority
-  minimalPriority: Priority
-}
-
-const form = Form.useForm<Values>({
-  defaultValues: {
-    completePriority: '',
-    minimalPriority: 'routine',
-  },
-})
-
-<Form form={form} onSubmit={onSubmit}>
-  <Form.Field<Values, 'minimalPriority'>
-    name="minimalPriority"
-    label={t('priority.minimal')}
-  >
-    <MinimalPriorityControl />
-  </Form.Field>
-
-  <Form.Field<Values, 'completePriority'>
-    name="completePriority"
-    label={t('priority.complete')}
-    description={t('priority.description')}
-    rules={{ required: t('priority.required') }}
-  >
-    <CompletePriorityControl />
-  </Form.Field>
-
-  <Button type="submit">{t('actions.save')}</Button>
-</Form>
-
-<Form form={form} onInvalid={handleInvalid} onSubmit={handleSubmit}>
-  <Form.Field name="team" defaultValue="platform" disabled>
-    <Input />
-  </Form.Field>
-</Form>
 ```
 
 ## 组成部分

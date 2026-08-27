@@ -25,21 +25,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"The component creates the scrollable viewport and required scrollbars internally; applications only provide dimensions, scrollbar configuration, and content."}
 
-```tsx title="showcases/scroll-area/cases/basic-usage.tsx"
-import { ScrollArea } from '@heliannuuthus/ui'
+```tsx title="showcases/scroll-area/cases/basic-usage.tsx" file="<root>/showcases/scroll-area/cases/basic-usage.tsx"
 
-<ScrollArea
-  className="h-72 rounded-3xl border"
-  scrollbar={{ size: 'sm', visibility: 'auto' }}
->
-  <div className="divide-y px-5">
-    {items.map((item) => (
-      <p className="py-4" key={item.id}>{item.label}</p>
-    ))}
-  </div>
-</ScrollArea>
-
-<ScrollArea orientation="both" className="h-80 w-80">{content}</ScrollArea>
 ```
 
 ## Component parts

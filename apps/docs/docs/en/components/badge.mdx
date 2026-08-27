@@ -24,57 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Without children, the notification renders independently. Zero remains visible and values above max use capped text."}
 
-```tsx title="showcases/badge/cases/basic-usage.tsx"
-import { Badge } from '@heliannuuthus/ui'
+```tsx title="showcases/badge/cases/basic-usage.tsx" file="<root>/showcases/badge/cases/basic-usage.tsx"
 
-<Badge indicator={5} />
-<Badge indicator={0} />
-<Badge indicator={123} max={99} />
 ```
 
 ### Anchored notifications
 
 {"With children, the notification is positioned at the inline-end top corner; offset fine-tunes its logical position."}
 
-```tsx title="showcases/badge/cases/anchored-notifications.tsx"
-import { Badge, Button } from '@heliannuuthus/ui'
-import { Mail } from 'lucide-react'
+```tsx title="showcases/badge/cases/anchored-notifications.tsx" file="<root>/showcases/badge/cases/anchored-notifications.tsx"
 
-<Badge indicator={5} indicatorLabel="5 unread messages">
-  <Button aria-label="View messages" size="icon" variant="outline">
-    <Mail />
-  </Button>
-</Badge>
-
-<Badge dir="rtl" indicator={12} offset={[3, -2]}>
-  <Button variant="outline">Inbox</Button>
-</Badge>
 ```
 
 ### Status dot
 
 {"When indicator is true, only a dot is displayed. Because it has no visible content, indicatorLabel is required."}
 
-```tsx title="showcases/badge/cases/status-dot.tsx"
-import { Badge, Button } from '@heliannuuthus/ui';
+```tsx title="showcases/badge/cases/status-dot.tsx" file="<root>/showcases/badge/cases/status-dot.tsx"
 
-<Badge indicator indicatorLabel="New system notification">
-  <Button variant="outline">System notifications</Button>
-</Badge>;
 ```
 
 ### Style extensions
 
 {"Use className and style for the root, and the matching classNames and styles slot for the indicator."}
 
-```tsx title="showcases/badge/cases/style-extensions.tsx"
-import { Badge } from '@heliannuuthus/ui';
+```tsx title="showcases/badge/cases/style-extensions.tsx" file="<root>/showcases/badge/cases/style-extensions.tsx"
 
-<Badge
-  classNames={{ indicator: 'bg-primary' }}
-  indicator={8}
-  styles={{ indicator: { fontVariantNumeric: 'tabular-nums' } }}
-/>;
 ```
 
 ## API

@@ -24,50 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Quickly organize a set of related information by providing just a title and content."}
 
-```tsx title="showcases/card/cases/basic-usage.tsx"
-import { Card } from '@heliannuuthus/ui'
+```tsx title="showcases/card/cases/basic-usage.tsx" file="<root>/showcases/card/cases/basic-usage.tsx"
 
-export const UpdateCard = () => {
-  return (
-    <Card header={{ title: 'Design system update' }} variant="elevated">
-      <p>This week adds component examples and accessibility guidance.</p>
-    </Card>
-  )
-}
-
-<Card header={{ title: 'Outlined card' }} variant="outline" />
-<Card header={{ title: 'Ghost card' }} variant="ghost" />
 ```
 
 ### Header, Content and Footer
 
 {"Header is responsible for the title and auxiliary operations, Content carries the main body, and Footer places operations related to the entire card."}
 
-```tsx title="showcases/card/cases/header-content-and-footer.tsx"
-import { Button, Card, Input } from '@heliannuuthus/ui';
+```tsx title="showcases/card/cases/header-content-and-footer.tsx" file="<root>/showcases/card/cases/header-content-and-footer.tsx"
 
-export const WorkspaceCard = () => {
-  return (
-    <Card
-      header={{
-        title: 'Workspace information',
-        description: 'Change the workspace name visible to members.',
-        action: <Button variant="ghost">More actions</Button>,
-      }}
-      footer={
-        <>
-          <span>Last saved at 10:24</span>
-          <Button>Save changes</Button>
-        </>
-      }
-    >
-      <label>
-        Workspace name
-        <Input defaultValue="Heliannuuthus UI" />
-      </label>
-    </Card>
-  );
-};
 ```
 
 ## Semantic DOM

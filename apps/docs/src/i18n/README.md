@@ -23,17 +23,16 @@ palette. Component display names use the `zhComponentNames` map in the same
 catalog, while the canonical catalog name remains the English API name. Adding
 a component without either localization entry fails the i18n verifier.
 
-Detailed component guidance and demo copy remain part of the documentation
-content. Wrap canonical Chinese copy in `docsCopy()` and add the corresponding
-English value to `content-translations.ts`. This applies to rendered examples,
-API descriptions, accessibility guidance, code samples, placeholders, and
-accessible names. Pure implementation refactors, styles, and test-only changes
-do not require locale updates unless they change visible behavior or search
-terminology.
+Detailed guidance is authored directly in the bilingual MDX routes. Every
+interactive example owns its localized copy in the matching single-case TSX
+file; shared canonical translations that a case reuses remain in
+`content-translations.ts`. Pure implementation refactors, styles, and test-only
+changes do not require locale updates unless they change visible behavior or
+search terminology.
 
 Run `pnpm --filter @heliannuuthus/ui-docs verify:i18n` to execute the
 project-local documentation i18n verifier directly. It rejects missing locale
-keys, untranslated content values, uncovered `docsCopy()` source, and
-user-facing Chinese literals that bypass localization. It also runs
-automatically before every documentation production build. The reusable Agent
-workflow lives in the root workspace `ui-docs-harness` skill.
+keys, incomplete shared translations, catalog gaps, and invalid localized
+paths. It also runs automatically before every documentation production build.
+The reusable Agent workflow lives in the root workspace `ui-docs-harness`
+skill.

@@ -24,29 +24,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Complete a focused editing task without leaving the current page and retain clear cancel and save actions."}
 
-```tsx title="showcases/dialog/cases/basic-usage.tsx"
-import { Button, Dialog } from '@heliannuuthus/ui'
-import { CircleX } from 'lucide-react'
+```tsx title="showcases/dialog/cases/basic-usage.tsx" file="<root>/showcases/dialog/cases/basic-usage.tsx"
 
-<Dialog
-  trigger={<Button>Schedule publishing</Button>}
-  title="Scheduling production environment release"
-  description="Select version and release date."
-  cancelText="Cancel"
-  confirmText="Confirm arrangement"
->
-  <ReleaseForm />
-</Dialog>
-
-<Dialog
-  open={open}
-  onOpenChange={setOpen}
-  footer={<Button>Save</Button>}
-  closable={<CircleX />}
-  classNames={{ content: 'max-w-xl' }}
-  styles={{ content: { minHeight: 320 } }}
-/>
-<Dialog closable={false} defaultOpen={false} title="Workspace settings" />
 ```
 
 ## Component parts

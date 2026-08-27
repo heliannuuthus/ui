@@ -24,50 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"只提供标题和内容，即可快速组织一组相关信息。"}
 
-```tsx title="showcases/card/cases/basic-usage.tsx"
-import { Button, Card, Input } from '@heliannuuthus/ui'
+```tsx title="showcases/card/cases/basic-usage.tsx" file="<root>/showcases/card/cases/basic-usage.tsx"
 
-export const UpdateCard = () => {
-  return (
-    <Card header={{ title: '设计系统更新' }} variant="elevated">
-      <p>本周补充了组件示例与无障碍说明。</p>
-    </Card>
-  )
-}
-
-<Card header={{ title: '描边卡片' }} variant="outline" />
-<Card header={{ title: '透明卡片' }} variant="ghost" />
 ```
 
 ### Header、Content 与 Footer
 
 {"Header 负责标题与辅助操作，Content 承载主体，Footer 放置与整张卡片相关的操作。"}
 
-```tsx title="showcases/card/cases/header-content-and-footer.tsx"
-import { Card } from '@heliannuuthus/ui';
+```tsx title="showcases/card/cases/header-content-and-footer.tsx" file="<root>/showcases/card/cases/header-content-and-footer.tsx"
 
-export const WorkspaceCard = () => {
-  return (
-    <Card
-      header={{
-        title: '工作区资料',
-        description: '修改成员看到的工作区名称。',
-        action: <Button variant="ghost">更多操作</Button>,
-      }}
-      footer={
-        <>
-          <span>上次保存于 10:24</span>
-          <Button>保存修改</Button>
-        </>
-      }
-    >
-      <label>
-        工作区名称
-        <Input defaultValue="Heliannuuthus UI" />
-      </label>
-    </Card>
-  );
-};
 ```
 
 ## Semantic DOM

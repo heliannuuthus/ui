@@ -24,36 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"传入 value 即可展示带逐位滚动反馈的数值。"}
 
-```tsx title="showcases/counter/cases/basic-usage.tsx"
-import { Counter } from '@heliannuuthus/ui';
+```tsx title="showcases/counter/cases/basic-usage.tsx" file="<root>/showcases/counter/cases/basic-usage.tsx"
 
-<Counter value={7.4} fontSize={52} fontWeight={600} />;
 ```
 
 ### 构建计数
 
 {"数值变化时只滚动发生变化的位；固定 places 可以避免位数变化导致布局跳动。"}
 
-```tsx title="showcases/counter/cases/build-count.tsx"
-import { Counter } from '@heliannuuthus/ui'
+```tsx title="showcases/counter/cases/build-count.tsx" file="<root>/showcases/counter/cases/build-count.tsx"
 
-<Counter
-  value={count}
-  places={[1000, 100, 10, 1]}
-  fontSize={60}
-  fontWeight={600}
-  suffix={<small>次</small>}
-  valueText={`${count} 次构建`}
-/>
-
-<Counter
-  value={1280}
-  gap={2}
-  prefix="¥"
-  springOptions={{ damping: 24, stiffness: 180 }}
-  classNames={{ digit: 'tabular-nums' }}
-  styles={{ visual: { minWidth: 12 } }}
-/>
 ```
 
 ## 组成部分

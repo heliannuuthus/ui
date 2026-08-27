@@ -24,90 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"An items array simultaneously describes icons, shortcut keys, disabled states, and dangerous actions."}
 
-```tsx title="showcases/dropdown-menu/cases/basic-usage.tsx"
-import { Button } from '@heliannuuthus/ui';
-import { DropdownMenu } from '@heliannuuthus/ui';
-import { FilePlus2, Trash2 } from 'lucide-react';
+```tsx title="showcases/dropdown-menu/cases/basic-usage.tsx" file="<root>/showcases/dropdown-menu/cases/basic-usage.tsx"
 
-<DropdownMenu
-  trigger={<Button variant="outline">File operation</Button>}
-  items={[
-    { type: 'label', label: 'File operation' },
-    { label: 'New File', icon: <FilePlus2 />, shortcut: '⌘N' },
-    { label: 'Create a copy', disabled: true },
-    { type: 'separator' },
-    { label: 'Move to Trash', icon: <Trash2 />, destructive: true },
-  ]}
-/>;
 ```
 
 ### Choices and Status
 
 {"checkbox expresses settings that can be toggled independently, and radio expresses a set of mutually exclusive options."}
 
-```tsx title="showcases/dropdown-menu/cases/choices-and-status.tsx"
-import { useState } from 'react';
-import { Button } from '@heliannuuthus/ui';
-import { DropdownMenu } from '@heliannuuthus/ui';
+```tsx title="showcases/dropdown-menu/cases/choices-and-status.tsx" file="<root>/showcases/dropdown-menu/cases/choices-and-status.tsx"
 
-export const ViewSettings = () => {
-  const [sidebar, setSidebar] = useState(true);
-  const [density, setDensity] = useState('comfortable');
-
-  return (
-    <DropdownMenu
-      trigger={<Button variant="outline">View settings</Button>}
-      items={[
-        {
-          type: 'checkbox',
-          label: 'Show sidebar',
-          checked: sidebar,
-          onChange: setSidebar,
-        },
-        { type: 'separator' },
-        {
-          type: 'radio',
-          value: density,
-          onChange: setDensity,
-          items: [
-            { label: 'compact', value: 'compact' },
-            { label: 'comfortable', value: 'comfortable' },
-          ],
-        },
-      ]}
-    />
-  );
-};
 ```
 
 ### Submenus and dimensions
 
 {"Operations with children automatically form submenus; size uniformly controls the density and width of the menu."}
 
-```tsx title="showcases/dropdown-menu/cases/submenus-and-dimensions.tsx"
-import { Button } from '@heliannuuthus/ui'
-import { DropdownMenu } from '@heliannuuthus/ui'
+```tsx title="showcases/dropdown-menu/cases/submenus-and-dimensions.tsx" file="<root>/showcases/dropdown-menu/cases/submenus-and-dimensions.tsx"
 
-<DropdownMenu
-  size="lg"
-  align="end"
-  trigger={<Button>Export</Button>}
-  items={[
-    {
-      label: 'Export as',
-      children: [
-        { label: 'PDF document', onSelect: exportPdf },
-        { label: 'PNG picture', onSelect: exportPng },
-        { label: 'CSV table', onSelect: exportCsv },
-      ],
-    },
-    { type: 'separator' },
-    { label: 'Download original file', onSelect: downloadOriginal },
-  ]}
-/>
-
-<DropdownMenu defaultOpen={false} disabled items={items} side="right" trigger={trigger} />
-<DropdownMenu open={open} onOpenChange={setOpen} items={items} trigger={trigger} />
 ```
 
 ## Component parts

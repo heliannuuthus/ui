@@ -24,73 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"单个 Checkbox 表达一个可独立选择的布尔项，标签与控件保持整行可点击。"}
 
-```tsx title="showcases/checkbox/cases/basic-usage.tsx"
-import { Checkbox } from '@heliannuuthus/ui';
+```tsx title="showcases/checkbox/cases/basic-usage.tsx" file="<root>/showcases/checkbox/cases/basic-usage.tsx"
 
-<Checkbox>接收产品更新</Checkbox>;
 ```
 
 ### 任务完成态
 
 {"使用 task 变体表达可完成事项；选中后标签自动弱化并添加删除线，取消选中后恢复。"}
 
-```tsx title="showcases/checkbox/cases/task-completed-status.tsx"
-import { Checkbox } from '@heliannuuthus/ui';
+```tsx title="showcases/checkbox/cases/task-completed-status.tsx" file="<root>/showcases/checkbox/cases/task-completed-status.tsx"
 
-<Checkbox.Group
-  defaultValue={['read']}
-  onChange={setPermissions}
-  options={[
-    { label: '读取', value: 'read' },
-    { label: '编辑', value: 'write' },
-    { label: '管理', value: 'admin' },
-  ]}
-/>;
 ```
 
 ### 权限组合
 
 {"使用 Checkbox.Group 管理多个权限值，并即时反馈已选数量。"}
 
-```tsx title="showcases/checkbox/cases/permission-combination.tsx"
-import { Checkbox } from '@heliannuuthus/ui';
+```tsx title="showcases/checkbox/cases/permission-combination.tsx" file="<root>/showcases/checkbox/cases/permission-combination.tsx"
 
-<Checkbox.Group
-  name="permission"
-  value={selected}
-  onChange={setSelected}
-  options={[
-    { label: '查看项目', value: 'read' },
-    { label: '参与评论', value: 'comment' },
-    { label: '管理项目', value: 'manage' },
-  ]}
-/>;
 ```
 
 ### 选择状态
 
 {"选中时以向外爆开的粒子确认操作，取消选中时仅收回勾选标记；同时展示不确定和禁用状态。"}
 
-```tsx title="showcases/checkbox/cases/select-status.tsx"
-import { Checkbox } from '@heliannuuthus/ui'
+```tsx title="showcases/checkbox/cases/select-status.tsx" file="<root>/showcases/checkbox/cases/select-status.tsx"
 
-<Checkbox>未选择</Checkbox>
-<Checkbox defaultChecked>已选择</Checkbox>
-<Checkbox indeterminate>部分选择</Checkbox>
-<Checkbox disabled>不可用</Checkbox>
-
-<Checkbox
-  checked={checked}
-  onChange={setChecked}
-  variant="card"
-  uncheckedValue="off"
-  classNames={{ control: 'border-primary' }}
-  styles={{ label: { fontWeight: 600 } }}
->
-  Release notifications
-</Checkbox>
-<Checkbox parent checked={allChecked} onChange={setAllChecked}>All permissions</Checkbox>
-<Checkbox.Group allValues={allValues} disabled options={options} />
 ```
 
 ## 组成部分

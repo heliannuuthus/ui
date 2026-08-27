@@ -24,80 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Pass in header and content to create an expandable area; when trigger is omitted, the entire Header is responsible for switching states."}
 
-```tsx title="showcases/collapsible/cases/basic.tsx"
-import { Collapsible } from '@heliannuuthus/ui';
+```tsx title="showcases/collapsible/cases/basic.tsx" file="<root>/showcases/collapsible/cases/basic.tsx"
 
-<Collapsible
-  defaultOpen
-  header={<strong>This release contains 6 changes</strong>}
-  content={
-    <p>
-      Optimize the filter response speed, and fix the animation of the first and
-      last switching of the carousel.{' '}
-    </p>
-  }
-/>;
 ```
 
 ### Different triggering methods
 
 {"By default, it is triggered by the entire Header; after passing in the trigger, the Header remains static and is only expanded by independent buttons."}
 
-```tsx title="showcases/collapsible/cases/trigger.tsx"
-import { Collapsible } from '@heliannuuthus/ui';
-import { ChevronRight } from 'lucide-react';
+```tsx title="showcases/collapsible/cases/trigger.tsx" file="<root>/showcases/collapsible/cases/trigger.tsx"
 
-{
-  /* The entire Header is triggered */
-}
-<Collapsible header={<BuildSummary />} content={<BuildOutput />} />;
-
-{
-  /* Independent button trigger */
-}
-<Collapsible
-  header={<PolicySummary />}
-  trigger="configuration"
-  indicator={<ChevronRight />}
-  triggerProps={{ size: 'sm', variant: 'outline' }}
-  content={<PolicySettings />}
-/>;
 ```
 
 ### Header and Icon
 
 {"The header can compose any summary content; indicator controls the status icon in both trigger modes, and false hides it."}
 
-```tsx title="showcases/collapsible/cases/indicator.tsx"
-import { Collapsible } from '@heliannuuthus/ui'
-import { ChevronRight } from 'lucide-react'
+```tsx title="showcases/collapsible/cases/indicator.tsx" file="<root>/showcases/collapsible/cases/indicator.tsx"
 
-<Collapsible
-  header={<BuildSummary />}
-  content={<BuildOutput />}
-  indicator={<ChevronRight />}
-/>
-
-<Collapsible
-  header={<PlainSummary />}
-  content={<Details />}
-  indicator={false}
-/>
 ```
 
 ### Controlled and disabled states
 
 {"open and onOpenChange manage controlled expansion, while disabled prevents the trigger from changing state."}
 
-```tsx title="showcases/collapsible/cases/controlled.tsx"
-<Collapsible
-  open={open}
-  onOpenChange={setOpen}
-  header={<Summary />}
-  content={<Details />}
-/>
+```tsx title="showcases/collapsible/cases/controlled.tsx" file="<root>/showcases/collapsible/cases/controlled.tsx"
 
-<Collapsible disabled header={<Summary />} content={<Details />} />
 ```
 
 ## Component parts

@@ -24,63 +24,40 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"在消息、动态或更新记录中分隔日期，让标签成为内容边界而不是时间线节点。"}
 
-```tsx title="showcases/marker/cases/basic-usage.tsx"
-import { Marker } from '@heliannuuthus/ui'
+```tsx title="showcases/marker/cases/basic-usage.tsx" file="<root>/showcases/marker/cases/basic-usage.tsx"
 
-<article>昨天的更新内容</article>
-<Marker content="今天" variant="separator" />
-<article>今天的更新内容</article>
 ```
 
 ### 未读边界
 
 {"把未读数量放在已读与未读内容之间；图标强化状态，底边框保持紧凑。"}
 
-```tsx title="showcases/marker/cases/unread-boundary.tsx"
-import { Marker } from '@heliannuuthus/ui';
-import { CircleDot } from 'lucide-react';
+```tsx title="showcases/marker/cases/unread-boundary.tsx" file="<root>/showcases/marker/cases/unread-boundary.tsx"
 
-<Marker variant="border" icon={<CircleDot />} content="2 条未读消息" />;
 ```
 
 ### 状态说明
 
 {"在一组相关设置之间说明后续内容的共同状态，不把 Marker 当作警告或通知容器。"}
 
-```tsx title="showcases/marker/cases/status-note.tsx"
-import { Marker } from '@heliannuuthus/ui';
-import { CheckCircle2 } from 'lucide-react';
+```tsx title="showcases/marker/cases/status-note.tsx" file="<root>/showcases/marker/cases/status-note.tsx"
 
-<Marker icon={<CheckCircle2 />} content="以下设置已同步到生产环境" />;
 ```
 
 ### 链接标记
 
 {"传入 href 后，标记可以指向文档锚点或另一段连续内容，并保留原生链接语义。"}
 
-```tsx title="showcases/marker/cases/linked-marker.tsx"
-import { Marker } from '@heliannuuthus/ui';
-import { Archive } from 'lucide-react';
+```tsx title="showcases/marker/cases/linked-marker.tsx" file="<root>/showcases/marker/cases/linked-marker.tsx"
 
-<Marker
-  href="#archived-release-notes"
-  icon={<Archive />}
-  content="定位到归档说明"
-  variant="separator"
-/>;
 ```
 
 ### 链接与槽位样式
 
 {"href 让整个 Marker 使用原生链接语义，classNames 分别扩展 icon 与 content 槽位。"}
 
-```tsx title="showcases/marker/cases/link-and-slot-styles.tsx"
-<Marker
-  href="/releases/history"
-  icon={<ArrowUpRight />}
-  content="View release history"
-  classNames={{ icon: 'text-primary', content: 'font-medium' }}
-/>
+```tsx title="showcases/marker/cases/link-and-slot-styles.tsx" file="<root>/showcases/marker/cases/link-and-slot-styles.tsx"
+
 ```
 
 ## 组成部分

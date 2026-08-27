@@ -24,45 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"常规文本选项优先使用 options，由 Radio.Group 统一生成标签与值。"}
 
-```tsx title="showcases/radio/cases/basic-usage.tsx"
-import { Radio } from '@heliannuuthus/ui';
+```tsx title="showcases/radio/cases/basic-usage.tsx" file="<root>/showcases/radio/cases/basic-usage.tsx"
 
-<Radio.Group
-  value={delivery}
-  onChange={setDelivery}
-  options={[
-    { label: '邮件通知', value: 'email' },
-    { label: '站内通知', value: 'inbox' },
-    { label: '不通知', value: 'none' },
-  ]}
-/>;
 ```
 
 ### 方案单选卡
 
 {"将互斥选项扩展为整行可点击的卡片，同时保留原生单选语义。"}
 
-```tsx title="showcases/radio/cases/plan-radio-button.tsx"
-import { Radio } from '@heliannuuthus/ui'
+```tsx title="showcases/radio/cases/plan-radio-button.tsx" file="<root>/showcases/radio/cases/plan-radio-button.tsx"
 
-<Radio.Group
-  value={delivery}
-  onChange={setDelivery}
-  options={[
-    { label: '邮件通知', value: 'email' },
-    { label: '站内通知', value: 'inbox' },
-  ]}
-/>
-
-<Radio
-  value="daily"
-  disabled
-  classNames={{ control: 'border-primary' }}
-  styles={{ label: { fontWeight: 600 } }}
->
-  Daily
-</Radio>
-<Radio.Group defaultValue="daily" disabled gap={16} options={options} />
 ```
 
 ## 组成部分

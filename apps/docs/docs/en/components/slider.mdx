@@ -24,68 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Use a single slider to select a value between clear minimum and maximum values."}
 
-```tsx title="showcases/slider/cases/basic-usage.tsx"
-import { Slider } from '@heliannuuthus/ui';
+```tsx title="showcases/slider/cases/basic-usage.tsx" file="<root>/showcases/slider/cases/basic-usage.tsx"
 
-<Slider aria-label="Volume" defaultValue={64} min={0} max={100} />;
 ```
 
 ### Elastic feedback
 
 {"The transparent safe area reserves space for slight zooming and cross-border rebound, and icons and text at both ends always provide consistent feedback."}
 
-```tsx title="showcases/slider/cases/elastic-feedback.tsx"
-import { Slider } from '@heliannuuthus/ui';
-import { Volume1, Volume2 } from 'lucide-react';
+```tsx title="showcases/slider/cases/elastic-feedback.tsx" file="<root>/showcases/slider/cases/elastic-feedback.tsx"
 
-<Slider
-  aria-label="Player volume"
-  startIcon={<Volume1 />}
-  endIcon={<Volume2 />}
-  startLabel="Mute"
-  endLabel="Max"
-  value={volume}
-  onChange={setVolume}
-  min={0}
-  max={100}
-  step={2}
-/>;
 ```
 
 ### Range selection
 
 {"Use the dual sliders to select a budget range and display the current value and range boundaries directly."}
 
-```tsx title="showcases/slider/cases/range-selection.tsx"
-<Slider value={range} onChange={setRange} min={0} max={100} step={2} />
+```tsx title="showcases/slider/cases/range-selection.tsx" file="<root>/showcases/slider/cases/range-selection.tsx"
+
 ```
 
 ### vertical direction
 
 {"After providing the container with an explicit height, build vertical parameter control via orientation=\"vertical\" ."}
 
-```tsx title="showcases/slider/cases/vertical-direction.tsx"
-<Slider
-  aria-label="Vocal level"
-  className="h-56"
-  orientation="vertical"
-  value={level}
-  onChange={setLevel}
-  min={0}
-  max={100}
-  step={2}
-/>
+```tsx title="showcases/slider/cases/vertical-direction.tsx" file="<root>/showcases/slider/cases/vertical-direction.tsx"
 
-<Slider
-  defaultValue={[20, 80]}
-  disabled={loading}
-  format={{ style: 'percent' }}
-  locale="en-US"
-  largeStep={10}
-  minStepsBetweenValues={2}
-  thumbCollisionBehavior="push"
-  onChangeComplete={setCommittedValue}
-/>
 ```
 
 ## API

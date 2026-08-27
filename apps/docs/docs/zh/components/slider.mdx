@@ -24,68 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"使用单个滑块在明确的最小值和最大值之间选择数值。"}
 
-```tsx title="showcases/slider/cases/basic-usage.tsx"
-import { Slider } from '@heliannuuthus/ui';
+```tsx title="showcases/slider/cases/basic-usage.tsx" file="<root>/showcases/slider/cases/basic-usage.tsx"
 
-<Slider aria-label="音量" defaultValue={64} min={0} max={100} />;
 ```
 
 ### 弹性反馈
 
 {"透明安全区为轻微缩放与越界回弹预留空间，两端图标和文字始终保持一致反馈。"}
 
-```tsx title="showcases/slider/cases/elastic-feedback.tsx"
-import { Slider } from '@heliannuuthus/ui';
-import { Volume1, Volume2 } from 'lucide-react';
+```tsx title="showcases/slider/cases/elastic-feedback.tsx" file="<root>/showcases/slider/cases/elastic-feedback.tsx"
 
-<Slider
-  aria-label="播放器音量"
-  startIcon={<Volume1 />}
-  endIcon={<Volume2 />}
-  startLabel="静音"
-  endLabel="最大"
-  value={volume}
-  onChange={setVolume}
-  min={0}
-  max={100}
-  step={2}
-/>;
 ```
 
 ### 范围选择
 
 {"使用双滑块选择预算区间，并把当前值与范围边界直接展示出来。"}
 
-```tsx title="showcases/slider/cases/range-selection.tsx"
-<Slider value={range} onChange={setRange} min={0} max={100} step={2} />
+```tsx title="showcases/slider/cases/range-selection.tsx" file="<root>/showcases/slider/cases/range-selection.tsx"
+
 ```
 
 ### 垂直方向
 
 {"为容器提供明确高度后，通过 orientation=\"vertical\" 构建纵向参数控制。"}
 
-```tsx title="showcases/slider/cases/vertical-direction.tsx"
-<Slider
-  aria-label="人声电平"
-  className="h-56"
-  orientation="vertical"
-  value={level}
-  onChange={setLevel}
-  min={0}
-  max={100}
-  step={2}
-/>
+```tsx title="showcases/slider/cases/vertical-direction.tsx" file="<root>/showcases/slider/cases/vertical-direction.tsx"
 
-<Slider
-  defaultValue={[20, 80]}
-  disabled={loading}
-  format={{ style: 'percent' }}
-  locale="en-US"
-  largeStep={10}
-  minStepsBetweenValues={2}
-  thumbCollisionBehavior="push"
-  onChangeComplete={setCommittedValue}
-/>
 ```
 
 ## API

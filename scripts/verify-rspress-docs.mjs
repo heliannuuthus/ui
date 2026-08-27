@@ -124,7 +124,10 @@ for (const locale of ['zh', 'en']) {
 
     const caseFiles = Array.from(
       source.matchAll(
-        new RegExp(`title="showcases/${slug}/cases/([^"]+\\.tsx)"`, 'g')
+        new RegExp(
+          `title="showcases/${slug}/cases/([^"]+\\.tsx)" file="<root>/showcases/${slug}/cases/\\1"\\n\\n\\x60\\x60\\x60`,
+          'g'
+        )
       ),
       (match) => match[1]
     );
@@ -188,8 +191,18 @@ for (const slug of slugs) {
     );
     assert.match(
       source,
-      /@heliannuuthus\/ui/,
-      `${slug}/${file} must consume a public package entry.`
+      /import(?: type)? \{[^}]+\} from ['"]@heliannuuthus\/ui['"]/u,
+      `${slug}/${file} must import components from the public package root.`
+    );
+    assert.doesNotMatch(
+      source,
+      /MigratedExampleCase|migrated-example-case|component-docs|showcase\.css/u,
+      `${slug}/${file} must not delegate rendering to the legacy docs runtime.`
+    );
+    assert.doesNotMatch(
+      source,
+      /from ['"](?:\.\.\/)+src\//u,
+      `${slug}/${file} must not import private docs component helpers.`
     );
     assert.ok(
       indexSource.includes(`./cases/${file.replace(/\.tsx$/, '')}`),
@@ -216,6 +229,23 @@ const assertMissing = async (path) => {
 
 await assertMissing(resolve(docsAppRoot, 'src/rspress/legacy-docs-page.tsx'));
 await assertMissing(resolve(docsAppRoot, 'src/showcase.tsx'));
+await assertMissing(
+  resolve(docsAppRoot, 'showcases/_shared/migrated-example-case.tsx')
+);
+await assertMissing(resolve(docsAppRoot, 'src/showcase.css'));
+await assertMissing(resolve(docsAppRoot, 'src/component-docs.tsx'));
+
+const legacyPreviewSources = (
+  await readdir(resolve(docsAppRoot, 'src'))
+).filter(
+  (file) =>
+    /(?:^|-)previews?\.tsx$/u.test(file) || /^component-harness/u.test(file)
+);
+assert.deepEqual(
+  legacyPreviewSources,
+  [],
+  'The Rspress docs must not retain a centralized preview implementation.'
+);
 
 const themeIndex = await readFile(
   resolve(docsAppRoot, 'theme/index.tsx'),

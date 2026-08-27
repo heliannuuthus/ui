@@ -24,45 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Breadcrumbs are placed before the page title, and the last level only indicates the current location and no longer provides a link."}
 
-```tsx title="showcases/breadcrumb/cases/basic-usage.tsx"
-import { Breadcrumb } from '@heliannuuthus/ui';
+```tsx title="showcases/breadcrumb/cases/basic-usage.tsx" file="<root>/showcases/breadcrumb/cases/basic-usage.tsx"
 
-const items = [
-  { label: 'Home', href: '/' },
-  { label: 'component', href: '/components' },
-  { label: 'Navigation', href: '/components/navigation-menu' },
-  { label: 'Breadcrumb' },
-];
-
-export const PageBreadcrumb = () => {
-  return <Breadcrumb items={items} icon />;
-};
 ```
 
 ### Deep path collapse
 
 {"When the path is too long, only the middle level will be collapsed, and the starting point, direct parent, and current page will be retained as positioning anchor points."}
 
-```tsx title="showcases/breadcrumb/cases/deep-path-collapse.tsx"
-import { Breadcrumb } from '@heliannuuthus/ui';
+```tsx title="showcases/breadcrumb/cases/deep-path-collapse.tsx" file="<root>/showcases/breadcrumb/cases/deep-path-collapse.tsx"
 
-<Breadcrumb
-  items={releasePath}
-  icon
-  collapse={{ maxItems: 4, before: 1, after: 2 }}
-/>;
 ```
 
 ### Node menus and visual styles
 
 {"Drop-down nodes are used to switch sibling positions; separators and styles only change the visual expression, not the path semantics."}
 
-```tsx title="showcases/breadcrumb/cases/node-menus-and-visual-styles.tsx"
-import { Breadcrumb } from '@heliannuuthus/ui'
+```tsx title="showcases/breadcrumb/cases/node-menus-and-visual-styles.tsx" file="<root>/showcases/breadcrumb/cases/node-menus-and-visual-styles.tsx"
 
-<Breadcrumb items={itemsWithMenu} />
-<Breadcrumb items={items} variant="underline" separator="slash" />
-<Breadcrumb items={items} variant="pill" separator="dot" size="sm" />
 ```
 
 ## API

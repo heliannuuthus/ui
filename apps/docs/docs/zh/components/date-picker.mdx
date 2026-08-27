@@ -24,25 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"需要持续查看月份与排期上下文时，使用 inline 展示形式并同步反馈选择结果。"}
 
-```tsx title="showcases/date-picker/cases/basic-usage.tsx"
-const [date, setDate] = useState<Date>()
+```tsx title="showcases/date-picker/cases/basic-usage.tsx" file="<root>/showcases/date-picker/cases/basic-usage.tsx"
 
-<DatePicker display="inline" value={date} onChange={setDate} />
 ```
 
 ### 定时发布
 
 {"在紧凑设置行中选择或清除发布日期，适合表单和筛选器。"}
 
-```tsx title="showcases/date-picker/cases/release-regularly.tsx"
-<DatePicker
-  value={date}
-  onChange={setDate}
-  placeholder="选择发布日期"
-/>
+```tsx title="showcases/date-picker/cases/release-regularly.tsx" file="<root>/showcases/date-picker/cases/release-regularly.tsx"
 
-<DatePicker defaultValue={new Date()} disabled />
-<DatePicker calendarProps={{ fixedWeeks: true }} />
 ```
 
 ## API

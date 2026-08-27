@@ -24,49 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Put the product entrance, resource entrance and current page into the same site navigation, and the width of the elastic layer will change smoothly with the content."}
 
-```tsx title="showcases/navigation-menu/cases/basic-usage.tsx"
-import { NavigationMenu } from '@heliannuuthus/ui';
+```tsx title="showcases/navigation-menu/cases/basic-usage.tsx" file="<root>/showcases/navigation-menu/cases/basic-usage.tsx"
 
-<NavigationMenu
-  items={[
-    {
-      label: 'product',
-      content: ({ Link }) => (
-        <div>
-          <Link href="/components">Component Library</Link>
-          <Link href="/tokens">Design Tokens</Link>
-        </div>
-      ),
-    },
-    { label: 'components', href: '/components', active: true },
-  ]}
-/>;
 ```
 
 ### Local navigation and alignment
 
 {"Use a smaller content panel on the right side of the toolbar, and use align to control the alignment of the popup relative to the navigation."}
 
-```tsx title="showcases/navigation-menu/cases/local-navigation-and-alignment.tsx"
-import { NavigationMenu } from '@heliannuuthus/ui'
+```tsx title="showcases/navigation-menu/cases/local-navigation-and-alignment.tsx" file="<root>/showcases/navigation-menu/cases/local-navigation-and-alignment.tsx"
 
-<NavigationMenu
-  align="end"
-  items={[
-    { label: 'Product', content: ({ Link }) => <Link href="/components">Component Library</Link> },
-    { label: 'component', href: '/components' },
-  ]}
-/>
-
-<NavigationMenu
-  items={items}
-  orientation="vertical"
-  value={value}
-  onChange={setValue}
-  delay={100}
-  closeDelay={200}
-/>
-<NavigationMenu defaultValue="docs" items={items} />
 ```
 
 ## Component parts

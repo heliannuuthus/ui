@@ -24,49 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Provide stable keys and content through items, and Masonry will create and measure layout nodes for each item."}
 
-```tsx title="showcases/masonry/cases/basic-usage.tsx"
-import { Masonry, type MasonryItem } from '@heliannuuthus/ui';
+```tsx title="showcases/masonry/cases/basic-usage.tsx" file="<root>/showcases/masonry/cases/basic-usage.tsx"
 
-const items = cards.map((card) => ({
-  key: card.id,
-  content: <Card {...card} />,
-})) satisfies readonly MasonryItem[];
-
-<Masonry columns={3} minColumnWidth={180} gap={[14, 20]} items={items} />;
 ```
 
 ### Adaptive number of columns
 
 {"Drag the slider to set the maximum number of columns allowed in a row; the actual number of columns automatically drops back based on the container width and the minimum column width, with a maximum of six columns displayed."}
 
-```tsx title="showcases/masonry/cases/adaptive-number-of-columns.tsx"
-import { Masonry } from '@heliannuuthus/ui';
+```tsx title="showcases/masonry/cases/adaptive-number-of-columns.tsx" file="<root>/showcases/masonry/cases/adaptive-number-of-columns.tsx"
 
-<Masonry columns={6} minColumnWidth={140} gap={14} items={cards} />;
 ```
 
 ### Cross-column content
 
 {"Set span=\"full\" in a single item configuration; this item will wait for all previous columns to end and occupy the entire row, and subsequent content will continue to be arranged from the same position."}
 
-```tsx title="showcases/masonry/cases/cross-column-content.tsx"
-import { Masonry } from '@heliannuuthus/ui';
+```tsx title="showcases/masonry/cases/cross-column-content.tsx" file="<root>/showcases/masonry/cases/cross-column-content.tsx"
 
-<Masonry
-  columns={3}
-  minColumnWidth={180}
-  gap={14}
-  items={[
-    { key: 'a', content: <Card>A</Card> },
-    { key: 'b', content: <Card>B</Card> },
-    {
-      key: 'release',
-      content: <ReleaseNotice />,
-      span: 'full',
-    },
-    { key: 'c', content: <Card>C</Card> },
-  ]}
-/>;
 ```
 
 ## Component parts

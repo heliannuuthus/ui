@@ -24,106 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"拖动文件区和预览区之间的分隔线，或聚焦分隔线后使用方向键调整宽度。"}
 
-```tsx title="showcases/resizable/cases/basic-usage.tsx"
-import { Resizable } from '@heliannuuthus/ui';
-import { GripVertical } from 'lucide-react';
+```tsx title="showcases/resizable/cases/basic-usage.tsx" file="<root>/showcases/resizable/cases/basic-usage.tsx"
 
-export const Workspace = () => {
-  return (
-    <Resizable
-      orientation="horizontal"
-      separator={<GripVertical aria-hidden />}
-      items={[
-        { key: 'files', panel: '文件列表', size: ['34', '24'] },
-        { key: 'preview', panel: '内容预览', size: ['66', '40'] },
-      ]}
-    />
-  );
-};
 ```
 
 ### 纵向区域
 
 {"设置 vertical 后可调整上下区域，适合编辑器与终端、预览与日志等场景。"}
 
-```tsx title="showcases/resizable/cases/vertical-area.tsx"
-import { Resizable } from '@heliannuuthus/ui';
-import { GripHorizontal } from 'lucide-react';
+```tsx title="showcases/resizable/cases/vertical-area.tsx" file="<root>/showcases/resizable/cases/vertical-area.tsx"
 
-export const EditorWithTerminal = () => {
-  return (
-    <Resizable
-      className="h-96"
-      orientation="vertical"
-      separator={<GripHorizontal aria-hidden />}
-      items={[
-        {
-          key: 'editor',
-          panel: <section>编辑器</section>,
-          size: ['64', '38'],
-        },
-        {
-          key: 'terminal',
-          panel: <section>终端</section>,
-          size: ['36', '20'],
-        },
-      ]}
-    />
-  );
-};
 ```
 
 ### 尺寸约束与分隔线覆盖
 
 {"size 集中表达初始、最小和最大尺寸；item 可覆盖默认分隔线，并通过 onResize 获取实时尺寸。"}
 
-```tsx title="showcases/resizable/cases/size-constraints-and-divider-overrides.tsx"
-import { useState } from 'react';
-import { Resizable } from '@heliannuuthus/ui';
-import { GripVertical } from 'lucide-react';
+```tsx title="showcases/resizable/cases/size-constraints-and-divider-overrides.tsx" file="<root>/showcases/resizable/cases/size-constraints-and-divider-overrides.tsx"
 
-export const ConstrainedWorkspace = () => {
-  const [navigationSize, setNavigationSize] = useState(24);
-
-  return (
-    <Resizable
-      className="h-80"
-      separator={({ index }) => <span>{index + 1}</span>}
-      items={[
-        {
-          key: 'navigation',
-          panel: <aside>导航 · {navigationSize}%</aside>,
-          size: ['24', '18', '34'],
-          collapsible: true,
-          collapsedSize: 0,
-          separator: <GripVertical aria-hidden />,
-          onResize: (size) => setNavigationSize(Math.round(size.asPercentage)),
-        },
-        {
-          key: 'canvas',
-          panel: <main>画布</main>,
-          size: ['52', '36'],
-        },
-        {
-          key: 'inspector',
-          panel: <aside>属性</aside>,
-          size: ['24', '18', '34'],
-          collapsible: true,
-          collapsedSize: 0,
-        },
-      ]}
-    />
-  );
-};
-
-<Resizable
-  items={items}
-  separator={({ itemKey, nextItemKey, orientation }) => (
-    <span>
-      {itemKey} · {nextItemKey} · {orientation}
-    </span>
-  )}
-/>;
 ```
 
 ## API

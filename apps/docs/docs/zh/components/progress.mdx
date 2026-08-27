@@ -24,34 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"用 label、value 和 showValue 同时说明进度对象、完成比例和剩余范围。"}
 
-```tsx title="showcases/progress/cases/basic-usage.tsx"
-import { Progress } from '@heliannuuthus/ui';
+```tsx title="showcases/progress/cases/basic-usage.tsx" file="<root>/showcases/progress/cases/basic-usage.tsx"
 
-<Progress effect="sparkle" value={68} label="生产环境" showValue />;
 ```
 
 ### 部署进度
 
 {"把完成比例与当前阶段放在一起，让用户知道任务正在做什么以及还剩多少。"}
 
-```tsx title="showcases/progress/cases/deployment-progress.tsx"
-import { Progress } from '@heliannuuthus/ui'
+```tsx title="showcases/progress/cases/deployment-progress.tsx" file="<root>/showcases/progress/cases/deployment-progress.tsx"
 
-<Progress
-  effect="sparkle"
-  label="生产环境"
-  showValue
-  value={68}
-/>
-
-<Progress
-  value={completed}
-  min={0}
-  max={200}
-  locale="en-US"
-  format={{ style: 'percent' }}
-  getAriaValueText={(value, maximum) => value + ' of ' + maximum}
-/>
 ```
 
 ## 组成部分

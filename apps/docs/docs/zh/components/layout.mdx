@@ -25,93 +25,40 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"最基础的纵向组合：Header 和 Footer 保持固定区域，Content 占据中间剩余空间。"}
 
-```tsx title="showcases/layout/cases/basic-usage.tsx"
-import { Layout } from '@heliannuuthus/ui';
+```tsx title="showcases/layout/cases/basic-usage.tsx" file="<root>/showcases/layout/cases/basic-usage.tsx"
 
-<Layout>
-  <Layout.Header>项目导航</Layout.Header>
-  <Layout.Content>页面内容</Layout.Content>
-  <Layout.Footer>页脚信息</Layout.Footer>
-</Layout>;
 ```
 
 ### 左侧导航
 
 {"Sidebar 与一个嵌套 Layout 横向排列；嵌套区域继续负责 Header 和 Content 的纵向关系。"}
 
-```tsx title="showcases/layout/cases/left-navigation.tsx"
-import { Layout } from '@heliannuuthus/ui';
+```tsx title="showcases/layout/cases/left-navigation.tsx" file="<root>/showcases/layout/cases/left-navigation.tsx"
 
-<Layout>
-  <Layout.Sidebar width={240}>项目导航</Layout.Sidebar>
-  <Layout.Content>工作区内容</Layout.Content>
-</Layout>;
 ```
 
 ### 右侧详情
 
 {"将 Sidebar 放在内容之后即可形成右侧辅助区，适合目录、属性和上下文详情。"}
 
-```tsx title="showcases/layout/cases/details-on-the-right.tsx"
-import { Layout } from '@heliannuuthus/ui';
+```tsx title="showcases/layout/cases/details-on-the-right.tsx" file="<root>/showcases/layout/cases/details-on-the-right.tsx"
 
-<Layout>
-  <Layout.Content>工作区内容</Layout.Content>
-  <Layout.Sidebar width={280}>详情面板</Layout.Sidebar>
-</Layout>;
 ```
 
 ### 完整应用框架
 
 {"Header 和 Footer 跨越整页，中间区域再嵌套 Sidebar 与 Content，适合后台和工作台。"}
 
-```tsx title="showcases/layout/cases/complete-application-framework.tsx"
-import { Layout } from '@heliannuuthus/ui';
+```tsx title="showcases/layout/cases/complete-application-framework.tsx" file="<root>/showcases/layout/cases/complete-application-framework.tsx"
 
-<Layout>
-  <Layout.Header>Header</Layout.Header>
-  <Layout>
-    <Layout.Sidebar>Sidebar</Layout.Sidebar>
-    <Layout.Content>Content</Layout.Content>
-  </Layout>
-  <Layout.Footer>Footer</Layout.Footer>
-</Layout>;
 ```
 
 ### 响应式折叠
 
 {"Sidebar 在 lg 以下自动折叠，也可以通过内置触发器手动切换；collapsedWidth 决定折叠后保留的宽度。"}
 
-```tsx title="showcases/layout/cases/responsive-collapse.tsx"
-import { Layout } from '@heliannuuthus/ui';
-import { useState } from 'react';
+```tsx title="showcases/layout/cases/responsive-collapse.tsx" file="<root>/showcases/layout/cases/responsive-collapse.tsx"
 
-export const ResponsiveLayout = () => {
-  const [status, setStatus] = useState('');
-
-  return (
-    <Layout>
-      <Layout.Sidebar
-        breakpoint="lg"
-        collapsible
-        collapsedWidth={64}
-        defaultCollapsed={false}
-        side="start"
-        labels={{
-          collapse: '收起侧边栏',
-          expand: '展开侧边栏',
-        }}
-        onBreakpointChange={(below) => setStatus(below ? '窄屏' : '宽屏')}
-        onChange={(collapsed, reason) =>
-          setStatus((collapsed ? '已收起' : '已展开') + '：' + reason)
-        }
-      >
-        Navigation
-      </Layout.Sidebar>
-      <Layout.Content>{status}</Layout.Content>
-    </Layout>
-  );
-};
 ```
 
 ## 组成部分

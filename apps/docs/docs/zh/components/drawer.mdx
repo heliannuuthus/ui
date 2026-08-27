@@ -24,72 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"从页面边缘承载较长内容和连续操作，同时保留当前页面上下文。"}
 
-```tsx title="showcases/drawer/cases/basic-usage.tsx"
-import { Drawer } from '@heliannuuthus/ui';
+```tsx title="showcases/drawer/cases/basic-usage.tsx" file="<root>/showcases/drawer/cases/basic-usage.tsx"
 
-<Drawer
-  behavior="adaptive"
-  side="right"
-  trigger={<Button>从右侧打开</Button>}
-  title="今晚的发布窗口"
-  description="22:00–23:00"
-  closeText="关闭"
->
-  <ReleaseList />
-</Drawer>;
 ```
 
 ### 四个方向
 
 {"统一从上、右、下、左进入；adaptive 模式在窄屏保留手势，在宽屏收敛为稳定的边缘面板。"}
 
-```tsx title="showcases/drawer/cases/four-directions.tsx"
-import { Drawer } from '@heliannuuthus/ui';
+```tsx title="showcases/drawer/cases/four-directions.tsx" file="<root>/showcases/drawer/cases/four-directions.tsx"
 
-<Drawer
-  behavior="panel"
-  container={containerRef}
-  side="left"
-  trigger={<Button>从左侧打开</Button>}
-  title="局部筛选"
->
-  <Filters />
-</Drawer>;
 ```
 
 ### 绑定父容器
 
 {"传入 container 后，Portal、视口与面板都限制在指定父容器内，四个方向仍保持一致。"}
 
-```tsx title="showcases/drawer/cases/bind-parent-container.tsx"
-const containerRef = useRef<HTMLDivElement>(null)
+```tsx title="showcases/drawer/cases/bind-parent-container.tsx" file="<root>/showcases/drawer/cases/bind-parent-container.tsx"
 
-<div ref={containerRef} className="relative overflow-hidden">
-  <Drawer
-    behavior="panel"
-    container={containerRef}
-    side="left"
-    title="局部筛选"
-    trigger={<Button>从左侧打开</Button>}
-  >
-    <FilterFields />
-  </Drawer>
-</div>
-
-<Drawer
-  open={open}
-  onOpenChange={setOpen}
-  snapPoints={[0.25, 0.5, 1]}
-  snapPoint={snapPoint}
-  onSnapChange={setSnapPoint}
-  closable
-  handle
-  sequential
-  swipeDirection="down"
-  classNames={{ content: 'max-h-screen' }}
-  styles={{ content: { minHeight: 320 } }}
-/>
-<Drawer defaultOpen={false} defaultSnapPoint={0.5} />
 ```
 
 ## 组成部分

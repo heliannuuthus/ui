@@ -24,72 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"为控件提供简短补充说明。"}
 
-```tsx title="showcases/tooltip/cases/basic-usage.tsx"
-<Tooltip content={tooltipContent}>{trigger}</Tooltip>
+```tsx title="showcases/tooltip/cases/basic-usage.tsx" file="<root>/showcases/tooltip/cases/basic-usage.tsx"
+
 ```
 
 ### 十二个位置
 
 {"placement 表示浮层相对触发器的位置；边缘位置保持浮层边缘对齐，并将箭头固定在对应边缘的安全区。"}
 
-```tsx title="showcases/tooltip/cases/twelve-placements.tsx"
-import { Button, Tooltip } from '@heliannuuthus/ui';
+```tsx title="showcases/tooltip/cases/twelve-placements.tsx" file="<root>/showcases/tooltip/cases/twelve-placements.tsx"
 
-<Tooltip content="上方靠左提示" openDelay={100} placement="topLeft">
-  <Button>上方靠左</Button>
-</Tooltip>;
 ```
 
 ### 箭头
 
 {"箭头默认匹配 placement 的落点，也可将其隐藏。"}
 
-```tsx title="showcases/tooltip/cases/arrow.tsx"
-import { Button, Tooltip } from '@heliannuuthus/ui';
+```tsx title="showcases/tooltip/cases/arrow.tsx" file="<root>/showcases/tooltip/cases/arrow.tsx"
 
-<Tooltip content="默认箭头" placement="topLeft">
-  <Button>显示箭头</Button>
-</Tooltip>;
 ```
 
 ### 受控状态与容器
 
 {"通过 open 与 onOpenChange 管理显隐，并可设置延迟和 Portal 容器。"}
 
-```tsx title="showcases/tooltip/cases/controlled-state-and-container.tsx"
-import { Button, Tooltip } from '@heliannuuthus/ui'
-import { useState } from 'react'
+```tsx title="showcases/tooltip/cases/controlled-state-and-container.tsx" file="<root>/showcases/tooltip/cases/controlled-state-and-container.tsx"
 
-const [container, setContainer] = useState<HTMLDivElement | null>(null)
-const [open, setOpen] = useState(false)
-
-<div ref={setContainer}>
-  <Tooltip
-    closeDelay={150}
-    container={container}
-    content="受控提示"
-    onOpenChange={setOpen}
-    open={open}
-    openDelay={250}
-  >
-    <Button>悬停或聚焦</Button>
-  </Tooltip>
-  <Button onClick={() => setOpen((value) => !value)}>
-    {open ? '关闭提示' : '打开提示'}
-  </Button>
-</div>
-
-<Tooltip
-  content="Keyboard shortcut"
-  disabled={disabled}
-  open={open}
-  onOpenChange={(nextOpen) => setOpen(nextOpen)}
-  classNames={{ content: 'max-w-64' }}
-  styles={{ content: { textAlign: 'start' } }}
->
-  <Button>Save</Button>
-</Tooltip>
-<Tooltip defaultOpen content="Pinned hint"><Button>Help</Button></Tooltip>
 ```
 
 ## 组成部分

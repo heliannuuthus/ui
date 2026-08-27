@@ -24,45 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"面包屑放在页面标题之前，最后一级只表示当前位置，不再提供链接。"}
 
-```tsx title="showcases/breadcrumb/cases/basic-usage.tsx"
-import { Breadcrumb } from '@heliannuuthus/ui';
+```tsx title="showcases/breadcrumb/cases/basic-usage.tsx" file="<root>/showcases/breadcrumb/cases/basic-usage.tsx"
 
-const items = [
-  { label: '首页', href: '/' },
-  { label: '组件', href: '/components' },
-  { label: '导航', href: '/components/navigation-menu' },
-  { label: 'Breadcrumb' },
-];
-
-export const PageBreadcrumb = () => {
-  return <Breadcrumb items={items} icon />;
-};
 ```
 
 ### 深层路径折叠
 
 {"路径过长时只收起中间层级，保留起点、直接父级和当前页面作为定位锚点。"}
 
-```tsx title="showcases/breadcrumb/cases/deep-path-collapse.tsx"
-import { Breadcrumb } from '@heliannuuthus/ui';
+```tsx title="showcases/breadcrumb/cases/deep-path-collapse.tsx" file="<root>/showcases/breadcrumb/cases/deep-path-collapse.tsx"
 
-<Breadcrumb
-  items={releasePath}
-  icon
-  collapse={{ maxItems: 4, before: 1, after: 2 }}
-/>;
 ```
 
 ### 节点菜单与视觉样式
 
 {"下拉节点用于切换同级位置；分隔符和样式只改变视觉表达，不改变路径语义。"}
 
-```tsx title="showcases/breadcrumb/cases/node-menus-and-visual-styles.tsx"
-import { Breadcrumb } from '@heliannuuthus/ui'
+```tsx title="showcases/breadcrumb/cases/node-menus-and-visual-styles.tsx" file="<root>/showcases/breadcrumb/cases/node-menus-and-visual-styles.tsx"
 
-<Breadcrumb items={itemsWithMenu} />
-<Breadcrumb items={items} variant="underline" separator="slash" />
-<Breadcrumb items={items} variant="pill" separator="dot" size="sm" />
 ```
 
 ## API

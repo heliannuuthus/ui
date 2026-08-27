@@ -24,29 +24,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"在不离开当前页面的情况下完成一项聚焦编辑任务，并保留明确的取消和保存动作。"}
 
-```tsx title="showcases/dialog/cases/basic-usage.tsx"
-import { Button, Dialog } from '@heliannuuthus/ui'
-import { CircleX } from 'lucide-react'
+```tsx title="showcases/dialog/cases/basic-usage.tsx" file="<root>/showcases/dialog/cases/basic-usage.tsx"
 
-<Dialog
-  trigger={<Button>安排发布</Button>}
-  title="安排生产环境发布"
-  description="选择版本和发布时间。"
-  cancelText="取消"
-  confirmText="确认安排"
->
-  <ReleaseForm />
-</Dialog>
-
-<Dialog
-  open={open}
-  onOpenChange={setOpen}
-  footer={<Button>Save</Button>}
-  closable={<CircleX />}
-  classNames={{ content: 'max-w-xl' }}
-  styles={{ content: { minHeight: 320 } }}
-/>
-<Dialog closable={false} defaultOpen={false} title="Workspace settings" />
 ```
 
 ## 组成部分

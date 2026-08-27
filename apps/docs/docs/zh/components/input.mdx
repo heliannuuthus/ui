@@ -24,67 +24,40 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"使用标签说明输入目的，并保持默认、悬停和聚焦状态清晰可辨。"}
 
-```tsx title="showcases/input/cases/basic-usage.tsx"
-import { Input } from '@heliannuuthus/ui';
+```tsx title="showcases/input/cases/basic-usage.tsx" file="<root>/showcases/input/cases/basic-usage.tsx"
 
-<Input type="email" placeholder="name@example.com" />;
 ```
 
 ### 字段状态
 
 {"在同一组中比较默认、校验失败、只读和禁用输入，避免混淆语义。"}
 
-```tsx title="showcases/input/cases/field-status.tsx"
-<Input defaultValue="设计系统迁移" />
-<Input aria-invalid defaultValue="my workspace" />
-<Input value="UI-2048" readOnly />
-<Input value="项目进行中" disabled />
+```tsx title="showcases/input/cases/field-status.tsx" file="<root>/showcases/input/cases/field-status.tsx"
+
 ```
 
 ### 前后缀与块级附加内容
 
 {"组合固定前缀、复制动作和文本计数；附加内容始终服务于同一输入任务。"}
 
-```tsx title="showcases/input/cases/prefixes-suffixes-and-block-level-appends.tsx"
-<Input defaultValue="docs" prefix="ui.dev/" suffix={<Button>复制</Button>} />
+```tsx title="showcases/input/cases/prefixes-suffixes-and-block-level-appends.tsx" file="<root>/showcases/input/cases/prefixes-suffixes-and-block-level-appends.tsx"
+
 ```
 
 ### 验证码形态
 
 {"使用 Input 的 variant 切换连接方块与独立方块，并通过分段控件逐项预览。"}
 
-```tsx title="showcases/input/cases/verification-code-form.tsx"
-<Input.OTP
-  maxLength={6}
-  value={value}
-  onChange={setValue}
-  variant="connected"
-/>
+```tsx title="showcases/input/cases/verification-code-form.tsx" file="<root>/showcases/input/cases/verification-code-form.tsx"
 
-<Input.OTP maxLength={6} variant="separated" />
 ```
 
 ### 带字数反馈的说明
 
 {"为长文本提供清楚的标签、字符上限、当前计数和提交条件。"}
 
-```tsx title="showcases/input/cases/instructions-with-word-count-feedback.tsx"
-import { Input } from '@heliannuuthus/ui'
+```tsx title="showcases/input/cases/instructions-with-word-count-feedback.tsx" file="<root>/showcases/input/cases/instructions-with-word-count-feedback.tsx"
 
-<Input.TextArea
-  value={value}
-  maxLength={120}
-  onChange={(event) => setValue(event.target.value)}
-/>
-
-<Input
-  addonBefore="https://"
-  addonAfter=".com"
-  classNames={{ input: 'font-mono' }}
-  styles={{ prefix: { color: 'var(--muted-foreground)' } }}
-/>
-<Input.OTP defaultValue="123456" maxLength={6} pattern="[0-9]*" />
-<Input.TextArea defaultValue="Release notes" rows={4} />
 ```
 
 ## 组成部分

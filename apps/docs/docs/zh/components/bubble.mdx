@@ -24,73 +24,40 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"variant 的每种语义外观都作为独立 case 展示，避免在同一个预览区域混合比较。"}
 
-```tsx title="showcases/bubble/cases/basic-usage.tsx"
-import { Bubble } from '@heliannuuthus/ui';
+```tsx title="showcases/bubble/cases/basic-usage.tsx" file="<root>/showcases/bubble/cases/basic-usage.tsx"
 
-<Bubble
-  align="end"
-  content="已经补充完成，可以重新评审。"
-  reactions="✓ 2"
-  variant="elevated"
-/>;
 ```
 
 ### 消息对齐
 
 {"align 只控制单个气泡位于消息流的起始侧或末端，不隐含发送者身份。"}
 
-```tsx title="showcases/bubble/cases/message-alignment.tsx"
-<Bubble align="start" content="Incoming message" />
-<Bubble align="end" content="Outgoing message" />
+```tsx title="showcases/bubble/cases/message-alignment.tsx" file="<root>/showcases/bubble/cases/message-alignment.tsx"
+
 ```
 
 ### 回应位置
 
 {"reactionsProps 的 side 与 align 分别控制回应位于气泡上下侧和左右边缘。"}
 
-```tsx title="showcases/bubble/cases/reaction-position.tsx"
-<Bubble
-  content="Ready for review"
-  reactions="👍 2"
-  reactionsProps={{ side: 'top', align: 'start' }}
-/>
+```tsx title="showcases/bubble/cases/reaction-position.tsx" file="<root>/showcases/bubble/cases/reaction-position.tsx"
+
 ```
 
 ### 内容节点属性
 
 {"contentProps 向内部内容节点传递标准 HTML、ARIA、data 属性、事件和 className。"}
 
-```tsx title="showcases/bubble/cases/content-node-properties.tsx"
-<Bubble
-  content="Build completed"
-  contentProps={{ role: 'status', 'aria-live': 'polite' }}
-/>
+```tsx title="showcases/bubble/cases/content-node-properties.tsx" file="<root>/showcases/bubble/cases/content-node-properties.tsx"
+
 ```
 
 ### 头像与可滚动会话
 
 {"不引入额外 Message 抽象，直接组合 Bubble、Avatar 与 ScrollArea 构建双向会话。"}
 
-```tsx title="showcases/bubble/cases/avatars-and-scrollable-conversations.tsx"
-import { Bubble } from '@heliannuuthus/ui';
-import { Avatar } from '@heliannuuthus/ui';
-import { ScrollArea } from '@heliannuuthus/ui';
+```tsx title="showcases/bubble/cases/avatars-and-scrollable-conversations.tsx" file="<root>/showcases/bubble/cases/avatars-and-scrollable-conversations.tsx"
 
-<ScrollArea className="h-80" scrollbar={{ size: 'sm', visibility: 'auto' }}>
-  <div role="list" aria-label="协作消息">
-    {messages.map((message) => (
-      <div className="flex gap-2" role="listitem">
-        <Avatar alt={message.author} fallback={message.avatar} />
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <span>
-            {message.author} · {message.time}
-          </span>
-          <Bubble content={message.content} variant="elevated" />
-        </div>
-      </div>
-    ))}
-  </div>
-</ScrollArea>;
 ```
 
 ## 组成部分

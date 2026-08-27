@@ -24,71 +24,24 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"The page number, previous page and next page together update the current state and stop at the boundary."}
 
-```tsx title="showcases/pagination/cases/basic-usage.tsx"
-import { Pagination } from '@heliannuuthus/ui';
+```tsx title="showcases/pagination/cases/basic-usage.tsx" file="<root>/showcases/pagination/cases/basic-usage.tsx"
 
-<Pagination current={page} pageCount={5} onChange={setPage} />;
 ```
 
 ### Complete data pagination
 
 {"Derive the page count from the total and page size, then keep the visible range, page controls, page-size selection, and quick jump on one line."}
 
-```tsx title="showcases/pagination/cases/complete-data-pagination.tsx"
-import { Pagination } from '@heliannuuthus/ui';
+```tsx title="showcases/pagination/cases/complete-data-pagination.tsx" file="<root>/showcases/pagination/cases/complete-data-pagination.tsx"
 
-<Pagination
-  align="start"
-  boundaries={2}
-  siblings={1}
-  current={24}
-  total={2480}
-  pageSize={20}
-  onChange={setPage}
-  onPageSizeChange={(page, size) => {
-    setPage(page);
-    setPageSize(size);
-  }}
-  pageSizeOptions={[10, 20, 50, 100]}
-  pageSizeLabel={(size) => `${size} items / page`}
-  showTotal={(total, range) => `${range[0]}–${range[1]} / ${total} items`}
-  showSizeChanger
-  showQuickJumper={{ goButton: 'Go', label: 'Jump to', suffix: 'page' }}
-  first
-  last
-  previous="Previous"
-  next="Next"
-  showTitle
-  getItemAriaLabel={({ page }) => `Page ${page}`}
-  getItemHref={(page) => `#page-${page}`}
-  renderItem={({ originalElement }) => originalElement}
-  classNames={{ summary: 'font-medium' }}
-  styles={{ summary: { minWidth: 120 } }}
-/>;
 ```
 
 ### Simple and disabled states
 
 {"Simple mode uses a page input for long-range jumps; the disabled state preserves pagination context while preventing every action."}
 
-```tsx title="showcases/pagination/cases/simple-and-disabled-states.tsx"
-<Pagination
-  defaultCurrent={6}
-  defaultPageSize={10}
-  total={120}
-  simple
-  size="sm"
-/>
+```tsx title="showcases/pagination/cases/simple-and-disabled-states.tsx" file="<root>/showcases/pagination/cases/simple-and-disabled-states.tsx"
 
-<Pagination
-  defaultCurrent={3}
-  pageCount={8}
-  disabled
-  previous={false}
-  next={false}
-/>
-
-<Pagination pageCount={1} hideOnSinglePage />
 ```
 
 ## Component parts

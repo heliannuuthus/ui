@@ -25,111 +25,40 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"使用 orientation 和 gap 完成最基础的横向间距布局。"}
 
-```tsx title="showcases/stack/cases/basic-usage.tsx"
-import { Button, Stack } from '@heliannuuthus/ui';
+```tsx title="showcases/stack/cases/basic-usage.tsx" file="<root>/showcases/stack/cases/basic-usage.tsx"
 
-<Stack gap={8} orientation="horizontal">
-  <Button>保存</Button>
-  <Button variant="outline">取消</Button>
-</Stack>;
 ```
 
 ### 数值间距
 
 {"gap 接收数值；拖动滑块在 0–12px 之间调整，每次递增或递减 3px。"}
 
-```tsx title="showcases/stack/cases/value-spacing.tsx"
-import { useState } from 'react';
-import { Slider, Stack } from '@heliannuuthus/ui';
+```tsx title="showcases/stack/cases/value-spacing.tsx" file="<root>/showcases/stack/cases/value-spacing.tsx"
 
-export const StackGapExample = () => {
-  const [gap, setGap] = useState(6);
-
-  return (
-    <>
-      <Slider min={0} max={12} step={3} value={gap} onChange={setGap} />
-      <Stack block gap={gap} orientation="horizontal" wrap>
-        {Array.from({ length: 24 }, (_, index) => (
-          <span key={index}>{index + 1}</span>
-        ))}
-      </Stack>
-    </>
-  );
-};
 ```
 
 ### 跨控件紧凑组合
 
 {"Compact 不只组合按钮，也可以拼接 Input、Select、Slider 与操作控件。"}
 
-```tsx title="showcases/stack/cases/compact-combination-across-controls.tsx"
-import { useState } from 'react';
-import { Input } from '@heliannuuthus/ui';
-import { Slider } from '@heliannuuthus/ui';
-import { Stack } from '@heliannuuthus/ui';
+```tsx title="showcases/stack/cases/compact-combination-across-controls.tsx" file="<root>/showcases/stack/cases/compact-combination-across-controls.tsx"
 
-export const SliderCompactExample = () => {
-  const [quality, setQuality] = useState(68);
-
-  return (
-    <Stack block gap={8}>
-      <Stack.Compact block aria-label="压缩质量">
-        <div className="flex min-h-9 flex-1 items-center border px-4">
-          <Slider
-            aria-label="压缩质量滑块"
-            value={quality}
-            onChange={setQuality}
-            min={0}
-            max={100}
-          />
-        </div>
-        <Input
-          aria-label="压缩质量数值"
-          className="w-24"
-          suffix="%"
-          type="number"
-          value={quality}
-          onChange={(event) => setQuality(Number(event.target.value))}
-        />
-      </Stack.Compact>
-      <span aria-live="polite">当前压缩质量：{quality}%</span>
-    </Stack>
-  );
-};
 ```
 
 ### 交叉轴与主轴对齐
 
 {"align 控制交叉轴对齐，justify 控制主轴分布；对应属性和值在示例代码中完整展示。"}
 
-```tsx title="showcases/stack/cases/cross-axis-aligned-with-main-axis.tsx"
-import { Stack } from '@heliannuuthus/ui'
+```tsx title="showcases/stack/cases/cross-axis-aligned-with-main-axis.tsx" file="<root>/showcases/stack/cases/cross-axis-aligned-with-main-axis.tsx"
 
-<Stack orientation="horizontal" gap={6} align="center">
-  <Filter />
-  <Sort />
-  <Availability />
-</Stack>
-
-<Stack block orientation="horizontal" gap={6} justify="between">
-  <Filter />
-  <Sort />
-  <Availability />
-</Stack>
 ```
 
 ### 元素分隔
 
 {"separator 在相邻元素之间插入一致的视觉分隔，不需要为每个子元素重复编写。"}
 
-```tsx title="showcases/stack/cases/item-separators.tsx"
-import { Stack } from '@heliannuuthus/ui';
+```tsx title="showcases/stack/cases/item-separators.tsx" file="<root>/showcases/stack/cases/item-separators.tsx"
 
-<Stack orientation="horizontal" separator={<span aria-hidden>·</span>}>
-  <span>概览</span>
-  <span>活动</span>
-  <span>设置</span>
-</Stack>;
 ```
 
 ## 组成部分

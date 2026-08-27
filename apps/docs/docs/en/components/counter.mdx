@@ -24,36 +24,16 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"Pass in value to display values ​​with bit-by-bit scrolling feedback."}
 
-```tsx title="showcases/counter/cases/basic-usage.tsx"
-import { Counter } from '@heliannuuthus/ui';
+```tsx title="showcases/counter/cases/basic-usage.tsx" file="<root>/showcases/counter/cases/basic-usage.tsx"
 
-<Counter value={7.4} fontSize={52} fontWeight={600} />;
 ```
 
 ### build count
 
 {"When the value changes, only the changed digits are scrolled; fixing places can avoid layout jumps caused by changes in digits."}
 
-```tsx title="showcases/counter/cases/build-count.tsx"
-import { Counter } from '@heliannuuthus/ui'
+```tsx title="showcases/counter/cases/build-count.tsx" file="<root>/showcases/counter/cases/build-count.tsx"
 
-<Counter
-  value={count}
-  places={[1000, 100, 10, 1]}
-  fontSize={60}
-  fontWeight={600}
-  suffix={<small>times</small>}
-  valueText={`${count} builds`}
-/>
-
-<Counter
-  value={1280}
-  gap={2}
-  prefix="¥"
-  springOptions={{ damping: 24, stiffness: 180 }}
-  classNames={{ digit: 'tabular-nums' }}
-  styles={{ visual: { minWidth: 12 } }}
-/>
 ```
 
 ## Component parts

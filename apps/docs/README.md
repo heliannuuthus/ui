@@ -32,21 +32,23 @@ import '@heliannuuthus/ui/styles.css';
 import { Example } from '@heliannuuthus/ui';
 ```
 
-Show the owning case source beside the live showcase:
+`showcases/case-layouts.css` only arranges realistic demo scenes around those
+components. It must use the package's semantic tokens and must not restyle the
+component internals or replace package components with docs-only facades.
+
+Show the owning case source beside the live showcase with Rspress's file code
+block syntax. Do not copy the implementation into MDX:
 
 ````mdx
-```tsx title="showcases/example/cases/basic.tsx"
-import '@heliannuuthus/ui/styles.css';
-import { Example } from '@heliannuuthus/ui';
+```tsx title="showcases/example/cases/basic.tsx" file="<root>/showcases/example/cases/basic.tsx"
 
-export default function BasicExample() {
-  return <Example />;
-}
 ```
 ````
 
 All public components follow this structure. Add or change examples directly
-in their owning case file and keep both locale pages synchronized.
+in their owning case file and keep both locale pages synchronized. Do not add a
+central preview registry or a compatibility component that looks up examples by
+slug and index.
 
 ## Commands
 

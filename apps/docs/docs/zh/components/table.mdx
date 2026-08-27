@@ -25,422 +25,104 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"默认组合搜索、排序、固定列、操作列、Footer 和 Pagination；业务只需要提供 data 与 Table.Column。"}
 
-```tsx title="showcases/table/cases/basic-usage.tsx"
-import { Table } from '@heliannuuthus/ui'
-import { Button } from '@heliannuuthus/ui'
-import { DropdownMenu } from '@heliannuuthus/ui'
-import { Stack } from '@heliannuuthus/ui'
-import { MoreHorizontal } from 'lucide-react'
+```tsx title="showcases/table/cases/basic-usage.tsx" file="<root>/showcases/table/cases/basic-usage.tsx"
 
-const columns: Table.Column<Release>[] = [
-  {
-    accessor: 'version',
-    header: '版本',
-    sortable: true,
-  },
-  {
-    key: 'actions',
-    align: 'center',
-    fixed: 'end',
-    header: '操作',
-    width: 144,
-    render: (_, row) => (
-      <Stack align="center" aria-label={row.version + ' 操作'} gap={4} justify="center" orientation="horizontal" role="group">
-        <Button variant="ghost">查看</Button>
-        <DropdownMenu
-          align="end"
-          trigger={
-            <Button
-              aria-label={row.version + ' 更多操作'}
-              size="icon-sm"
-              variant="ghost"
-            >
-              <MoreHorizontal />
-            </Button>
-          }
-          items={[
-            { label: '下载日志' },
-            { label: '归档记录' },
-            { type: 'separator' },
-            { label: '删除记录', destructive: true },
-          ]}
-        />
-      </Stack>
-    ),
-  },
-]
-
-<Table
-  columns={columns}
-  data={releaseRecords}
-  search={{ columnKeys: ['version'], placeholder: '筛选版本…' }}
-  footer={(rows) => `当前页 ${rows.length} 条发布记录`}
-  rowKey="version"
-  pagination={{ pageSize: 3 }}
-  classNames={{ table: 'min-w-[820px]' }}
-/>
 ```
 
 ### 行展开
 
 {"expandable 会自动补齐展开列、键盘按钮和跨列详情行；固定在起始侧的业务列会自动避开展开按钮。"}
 
-```tsx title="showcases/table/cases/row-expansion.tsx"
-import { Table } from '@heliannuuthus/ui';
+```tsx title="showcases/table/cases/row-expansion.tsx" file="<root>/showcases/table/cases/row-expansion.tsx"
 
-<Table
-  columns={columns}
-  data={releaseRecords}
-  expandable={{
-    defaultValue: ['v0.12.0'],
-    render: (row) => <ReleaseDetail release={row} />,
-  }}
-  rowKey="version"
-  pagination={false}
-/>;
 ```
 
 ### 分组表头
 
 {"在 Table.Column 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。"}
 
-```tsx title="showcases/table/cases/group-header.tsx"
-import { Table } from '@heliannuuthus/ui'
+```tsx title="showcases/table/cases/group-header.tsx" file="<root>/showcases/table/cases/group-header.tsx"
 
-const columns: Table.Column<Release>[] = [
-  {
-    header: '发布信息',
-    columns: [
-      { accessor: 'version', header: '版本', sortable: true },
-      { accessor: 'environment', header: '环境' },
-    ],
-  },
-  {
-    header: '执行情况',
-    columns: [
-      { accessor: 'owner', header: '负责人' },
-      { accessor: 'status', header: '状态' },
-    ],
-  },
-  {
-    header: '操作',
-    columns: [
-      {
-        key: 'detail',
-        header: '记录',
-        align: 'center',
-        render: (_, row) => <Button>{row.version} 详情</Button>,
-      },
-    ],
-  },
-]
-
-<Table columns={columns} data={releaseRecords} />
 ```
 
 ### 虚拟滚动
 
 {"virtual 只滚动并虚拟化表体；Header 固定在容器顶部，固定列、横向滚动和自定义 render 会继续生效。"}
 
-```tsx title="showcases/table/cases/virtual-scrolling.tsx"
-import { Table } from '@heliannuuthus/ui';
+```tsx title="showcases/table/cases/virtual-scrolling.tsx" file="<root>/showcases/table/cases/virtual-scrolling.tsx"
 
-<Table
-  columns={columns}
-  data={records}
-  rowKey="id"
-  pagination={false}
-  classNames={{ table: 'min-w-[900px]' }}
-  virtual={{
-    containerHeight: 320,
-    overscan: 8,
-    rowHeight: 48,
-  }}
-/>;
 ```
 
 ### 受控排序、分页与行选择
 
 {"sorting、pagination 和 rowSelection 都可以由业务受控；每次交互都会返回公开状态，不暴露底层表格实例。"}
 
-```tsx title="showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx"
-import { useState, type Key } from 'react'
-import { Table } from '@heliannuuthus/ui'
+```tsx title="showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx" file="<root>/showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx"
 
-const [sort, setSort] = useState<Table.SortState | null>(null)
-const [page, setPage] = useState(1)
-const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
-
-<Table
-  columns={columns}
-  data={records}
-  rowKey="id"
-  sorting={{ value: sort, onChange: setSort }}
-  pagination={{ current: page, onChange: setPage, pageSize: 20 }}
-  rowSelection={{ value: selectedKeys, onChange: setSelectedKeys }}
-/>
 ```
 
 ### 分页摘要
 
 {"显示数据总数，或根据总数与当前范围自定义摘要。"}
 
-```tsx title="showcases/table/cases/pagination-summary.tsx"
-<Table
-  columns={columns}
-  data={releaseRecords}
-  pagination={{ pageSize: 3, summary: true }}
-/>
+```tsx title="showcases/table/cases/pagination-summary.tsx" file="<root>/showcases/table/cases/pagination-summary.tsx"
 
-<Table
-  columns={columns}
-  data={releaseRecords}
-  pagination={{ pageSize: 3, summary: customSummary }}
-/>
-
-<Table
-  columns={columns}
-  data={releaseRecords}
-  pagination={{ pageSize: 3, summary: false }}
-/>
 ```
 
 ### 加载与外部状态组合
 
 {"Table 只内置布尔 loading；定制空结果和请求错误分别组合 Empty 与 Alert。"}
 
-```tsx title="showcases/table/cases/loading-and-external-state-composition.tsx"
-import { Alert, Empty, Table } from '@heliannuuthus/ui';
+```tsx title="showcases/table/cases/loading-and-external-state-composition.tsx" file="<root>/showcases/table/cases/loading-and-external-state-composition.tsx"
 
-if (request.error) {
-  return <Alert variant="error" title="发布记录加载失败" />;
-}
-
-if (!request.pending && records.length === 0) {
-  return <Empty title="没有匹配记录" />;
-}
-
-<Table columns={columns} data={records} loading={request.pending} />;
 ```
 
 ### 服务端数据模式
 
 {"search、sorting 与 pagination 的 manual 模式只管理公开状态，不在客户端二次处理服务端返回的数据。"}
 
-```tsx title="showcases/table/cases/server-data-mode.tsx"
-import { Table } from '@heliannuuthus/ui';
+```tsx title="showcases/table/cases/server-data-mode.tsx" file="<root>/showcases/table/cases/server-data-mode.tsx"
 
-<Table
-  columns={columns}
-  data={request.pageRows}
-  rowKey="id"
-  search={{ mode: 'manual', value: query, onChange: setQuery }}
-  sorting={{ mode: 'manual', value: sort, onChange: setSort }}
-  pagination={{
-    mode: 'manual',
-    current: page,
-    pageSize: 20,
-    total: request.total,
-    onChange: setPage,
-  }}
-/>;
 ```
 
 ### 自定义表格
 
 {"数据已经完成加工，或需要完全控制结构时，直接组合 Header、Body 和 Footer；Footer 承载列汇总。"}
 
-```tsx title="showcases/table/cases/custom-table.tsx"
-import { Table } from '@heliannuuthus/ui';
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/table/cases/custom-table.tsx" file="<root>/showcases/table/cases/custom-table.tsx"
 
-<Table.Primitive>
-  <Table.Header>
-    <Table.Row>
-      <Table.Head>服务</Table.Head>
-      <Table.Head align="center">操作</Table.Head>
-    </Table.Row>
-  </Table.Header>
-  <Table.Body>
-    <Table.Row>
-      <Table.Cell>Web Console</Table.Cell>
-      <Table.Cell align="center">
-        <Button aria-label="查看 Web Console" size="xs" variant="ghost">
-          查看
-        </Button>
-      </Table.Cell>
-    </Table.Row>
-  </Table.Body>
-  <Table.Footer>
-    <Table.Row>
-      <Table.Cell colSpan={2}>共 1 项</Table.Cell>
-    </Table.Row>
-  </Table.Footer>
-</Table.Primitive>;
 ```
 
 ### 固定列与横向滚动
 
 {"对应的Head与Cell同时设置 fixed=\"start\"固定起始列，或设置 fixed=\"end\"固定末尾列；再给Table.Primitive 设置className=\"min-w-[960px]\" 等大于容器的最小宽度，中间列即可横向滚动。"}
 
-```tsx title="showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx"
-import { Table } from '@heliannuuthus/ui';
-import { Button } from '@heliannuuthus/ui';
+```tsx title="showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx" file="<root>/showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx"
 
-<Table.Primitive classNames={{ table: 'min-w-[960px] table-fixed' }}>
-  <Table.Header>
-    <Table.Row>
-      <Table.Head fixed="start" className="w-40">
-        服务
-      </Table.Head>
-      <Table.Head className="w-28">版本</Table.Head>
-      <Table.Head className="w-28">区域</Table.Head>
-      <Table.Head className="w-32">最近部署</Table.Head>
-      <Table.Head fixed="end" align="center" className="w-24">
-        操作
-      </Table.Head>
-    </Table.Row>
-  </Table.Header>
-  <Table.Body>
-    <Table.Row>
-      <Table.Cell fixed="start">Web Console</Table.Cell>
-      <Table.Cell>v0.12.0</Table.Cell>
-      <Table.Cell fixed="end" align="center">
-        <Button aria-label="监控 Web Console" size="xs" variant="ghost">
-          监控
-        </Button>
-      </Table.Cell>
-    </Table.Row>
-  </Table.Body>
-</Table.Primitive>;
 ```
 
 ### 与 Pagination 组合
 
 {"Table 只负责当前页的语义结构，Pagination 管理页码；本地数组或服务端数据都使用同一受控组合。"}
 
-```tsx title="showcases/table/cases/combined-with-pagination.tsx"
-import { useState } from 'react'
-import { Table } from '@heliannuuthus/ui'
-import { Button } from '@heliannuuthus/ui'
-import { Pagination } from '@heliannuuthus/ui'
+```tsx title="showcases/table/cases/combined-with-pagination.tsx" file="<root>/showcases/table/cases/combined-with-pagination.tsx"
 
-const [page, setPage] = useState(1)
-const visibleRows = rows.slice((page - 1) * 10, page * 10)
-
-<>
-  <Table.Primitive>
-    {/* render visibleRows，并在末列提供查看、审批等操作 Button */}
-  </Table.Primitive>
-  <Pagination
-    current={page}
-    pageCount={Math.ceil(rows.length / 10)}
-    onChange={setPage}
-  />
-</>
 ```
 
 ### Primitive 行展开
 
 {"使用普通 Button 控制 aria-expanded，并通过 Row 与跨列 Cell 承载详情，不需要额外的表格专用组件。"}
 
-```tsx title="showcases/table/cases/primitive-row-expansion.tsx"
-import { Fragment, useState } from 'react'
-import { Button, Table } from '@heliannuuthus/ui'
-import { ChevronRight } from 'lucide-react'
+```tsx title="showcases/table/cases/primitive-row-expansion.tsx" file="<root>/showcases/table/cases/primitive-row-expansion.tsx"
 
-const [expandedId, setExpandedId] = useState<string | null>(null)
-
-<Table.Primitive>
-  <Table.Body>
-    {rows.map((row) => {
-      const expanded = row.id === expandedId
-      return (
-        <Fragment key={row.id}>
-          <Table.Row>
-            <Table.Cell>
-              <Button
-                aria-expanded={expanded}
-                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}
-                size="icon-xs"
-                variant="ghost"
-                onClick={() => setExpandedId(expanded ? null : row.id)}
-              >
-                <ChevronRight className={expanded ? 'rotate-90' : ''} />
-              </Button>
-            </Table.Cell>
-            <Table.Cell>{row.name}</Table.Cell>
-          </Table.Row>
-          {expanded && (
-            <Table.Row>
-              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>
-            </Table.Row>
-          )}
-        </Fragment>
-      )
-    })}
-  </Table.Body>
-</Table.Primitive>
 ```
 
 ### 列对齐、超长省略与自定义 Cell
 
 {"align 统一控制起始、居中和末端对齐；Head 与 Cell 的 ellipsis 在溢出时提供全文 Tooltip，自定义组件直接作为 Cell 子节点。"}
 
-```tsx title="showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx"
-import { Table } from '@heliannuuthus/ui'
-import { Button } from '@heliannuuthus/ui'
-import { ArrowUpRight } from 'lucide-react'
+```tsx title="showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx" file="<root>/showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx"
 
-const ActionCell = () => {
-  return (
-    <Button
-      aria-label="配置 Realtime Gateway"
-      size="xs"
-      variant="ghost"
-    >
-      配置 <ArrowUpRight data-icon="inline-end" />
-    </Button>
-  )
-}
-
-<Table.Primitive classNames={{ table: 'table-fixed' }}>
-  <Table.Header>
-    <Table.Row>
-      <Table.Head align="start">服务</Table.Head>
-      <Table.Head ellipsis="服务说明、最近一次生产部署上下文与异常原因">服务说明、最近一次生产部署上下文与异常原因</Table.Head>
-      <Table.Head align="end">成功率</Table.Head>
-      <Table.Head align="center">操作</Table.Head>
-    </Table.Row>
-  </Table.Header>
-  <Table.Body>
-    <Table.Row>
-      <Table.Cell>Realtime Gateway</Table.Cell>
-      <Table.Cell ellipsis>{description}</Table.Cell>
-      <Table.Cell align="end">99.98%</Table.Cell>
-      <Table.Cell align="center"><ActionCell /></Table.Cell>
-    </Table.Row>
-  </Table.Body>
-</Table.Primitive>
-
-<Table
-  columns={columns}
-  data={rows}
-  showHeader={false}
-  rowProps={(row) => ({ 'data-row-id': row.id })}
-/>
-<Table.Primitive>
-  <Table.Header>
-    <Table.Row>
-      <Table.Head fixedOffset={48}>Name</Table.Head>
-    </Table.Row>
-  </Table.Header>
-  <Table.Body>
-    <Table.Row>
-      <Table.Cell fixedOffset={48}>Atlas</Table.Cell>
-    </Table.Row>
-  </Table.Body>
-</Table.Primitive>
 ```
 
 ## 组成部分

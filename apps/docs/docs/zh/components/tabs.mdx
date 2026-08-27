@@ -24,76 +24,32 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 {"默认样式承载概览、动态与成员数据，切换后内容区域保持稳定。"}
 
-```tsx title="showcases/tabs/cases/basic-usage.tsx"
-import { Tabs } from '@heliannuuthus/ui';
+```tsx title="showcases/tabs/cases/basic-usage.tsx" file="<root>/showcases/tabs/cases/basic-usage.tsx"
 
-<Tabs
-  defaultValue="overview"
-  items={[
-    { value: 'overview', label: '概览', content: <Overview /> },
-    { value: 'activity', label: '动态', content: <Activity /> },
-    { value: 'members', label: '成员', content: <Members /> },
-  ]}
-/>;
 ```
 
 ### 四种样式与快捷居中
 
 {"胶囊、线型、描边和柔和样式覆盖不同层级；centered 可直接让标签列表居中。"}
 
-```tsx title="showcases/tabs/cases/four-styles-and-quick-centering.tsx"
-import { Tabs } from '@heliannuuthus/ui';
+```tsx title="showcases/tabs/cases/four-styles-and-quick-centering.tsx" file="<root>/showcases/tabs/cases/four-styles-and-quick-centering.tsx"
 
-<Tabs
-  defaultValue="preview"
-  variant="line"
-  centered
-  items={[
-    { value: 'preview', label: '预览', content: '实时预览当前组件。' },
-    { value: 'code', label: '代码', content: '查看组件实现代码。' },
-  ]}
-/>;
 ```
 
 ### 窄容器压力测试
 
 {"320px 与 480px 只是代表性的测试容器，不是组件断点；空间不足时隐藏原生滚动条、显示两侧导航按钮，同时保留触摸与触控板横向滑动。"}
 
-```tsx title="showcases/tabs/cases/narrow-vessel-pressure-testing.tsx"
-import { Tabs } from '@heliannuuthus/ui';
+```tsx title="showcases/tabs/cases/narrow-vessel-pressure-testing.tsx" file="<root>/showcases/tabs/cases/narrow-vessel-pressure-testing.tsx"
 
-<Tabs
-  animation="slide"
-  defaultValue="design"
-  items={[
-    { value: 'design', label: '设计', content: <Design /> },
-    { value: 'code', label: '开发', content: <Development /> },
-  ]}
-/>;
 ```
 
 ### 内容切换动效
 
 {"稳定的内容视口保持边框和尺寸不动；淡入或方向滑动只作用于面板内容，系统减少动态效果时自动降级。"}
 
-```tsx title="showcases/tabs/cases/content-switching-animation.tsx"
-<Tabs
-  animation="slide"
-  centered
-  classNames={{
-    panel: 'p-8',
-    viewport: 'mt-4 min-h-48 rounded-xl border',
-  }}
-  defaultValue="design"
-  variant="soft"
-  items={[
-    { value: 'design', label: '设计', content: '整理组件视觉规范' },
-    { value: 'code', label: '开发', content: '连接组件与业务状态' },
-    { value: 'release', label: '发布', content: '完成验证并发布' },
-  ]}
-/>
+```tsx title="showcases/tabs/cases/content-switching-animation.tsx" file="<root>/showcases/tabs/cases/content-switching-animation.tsx"
 
-<Tabs value={value} onChange={setValue} items={items} orientation="vertical" />
 ```
 
 ## 组成部分
