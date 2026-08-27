@@ -217,6 +217,45 @@ const assertMissing = async (path) => {
 await assertMissing(resolve(docsAppRoot, 'src/rspress/legacy-docs-page.tsx'));
 await assertMissing(resolve(docsAppRoot, 'src/showcase.tsx'));
 
+const themeIndex = await readFile(
+  resolve(docsAppRoot, 'theme/index.tsx'),
+  'utf8'
+);
+const themeLayout = await readFile(
+  resolve(docsAppRoot, 'theme/layout.tsx'),
+  'utf8'
+);
+const themeCodeBlock = await readFile(
+  resolve(docsAppRoot, 'theme/code-block.tsx'),
+  'utf8'
+);
+
+assert.doesNotMatch(
+  themeIndex,
+  /export \* from ['"]@rspress\/core\/theme-original['"]/,
+  'The docs theme must not restore the Rspress default visual theme.'
+);
+assert.doesNotMatch(
+  themeLayout,
+  /OriginalLayout|@rspress\/core\/theme-original/,
+  'The docs shell must be composed from the public UI package.'
+);
+assert.match(
+  themeLayout,
+  /from ['"]@heliannuuthus\/ui['"]/,
+  'The docs shell must consume the public UI package root.'
+);
+assert.match(
+  themeCodeBlock,
+  /import \{ Button \} from ['"]@heliannuuthus\/ui['"]/,
+  'The interactive code block controls must use the public Button.'
+);
+assert.doesNotMatch(
+  themeCodeBlock,
+  /@rspress\/core\/theme-original/,
+  'The code block must not import the Rspress default visual theme.'
+);
+
 const packageJson = JSON.parse(
   await readFile(resolve(docsAppRoot, 'package.json'), 'utf8')
 );

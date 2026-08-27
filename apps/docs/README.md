@@ -1,6 +1,9 @@
 # UI documentation
 
-This app uses Rspress 2 and serves the public component documentation.
+This app uses Rspress 2 for MDX, routing, search-index generation, and static
+build output. The visible documentation shell is implemented in `theme/` with
+public `@heliannuuthus/ui` components; it does not render Rspress's default
+layout or search interface.
 
 ## Authoring a component page
 

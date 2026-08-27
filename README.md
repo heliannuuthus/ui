@@ -58,7 +58,9 @@ instance, including `setValue`, `reset`, `setError`, `trigger` and `getValues`.
 The documentation site in `apps/docs` uses Rspress 2. Chinese and English MDX
 routes live in `apps/docs/docs/zh` and `apps/docs/docs/en`. Component examples
 use one file per meaningful case under `apps/docs/showcases/<slug>/cases`, with
-that component's `index.tsx` composing the full showcase.
+that component's `index.tsx` composing the full showcase. Rspress owns the
+content and build pipeline, while the visible shell, component search, and code
+block controls are composed from the public `@heliannuuthus/ui` package.
 
 Run it locally with `pnpm --filter @heliannuuthus/ui-docs dev`. The site is
 served on `http://localhost:13001`.

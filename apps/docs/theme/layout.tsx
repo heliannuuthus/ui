@@ -1,117 +1,277 @@
-import { Button, Provider } from '@heliannuuthus/ui';
-import { useLocation } from '@rspress/core/runtime';
 import {
-  Layout as OriginalLayout,
-  Link,
-  type LayoutProps,
-} from '@rspress/core/theme-original';
-import { Languages } from 'lucide-react';
-import { useEffect } from 'react';
+  Button,
+  Layout as UiLayout,
+  Provider,
+  ScrollArea,
+} from '@heliannuuthus/ui';
+import {
+  Content,
+  useFrontmatter,
+  useLocation,
+  usePageData,
+} from '@rspress/core/runtime';
+import { ExternalLink, Languages, Menu, PanelLeftClose, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import {
+  componentGroups,
+  componentSlug,
+  localizedComponentName,
+} from '../src/component-catalog';
+import { DocsMdxProvider } from './mdx-content';
+import { Search } from './search';
 
-const routeLocale = (pathname: string) =>
+type Locale = 'en' | 'zh';
+
+const groupNames = {
+  actions: { en: 'Actions and menus', zh: '操作与菜单' },
+  content: { en: 'Content', zh: '内容展示' },
+  dataDisplay: { en: 'Data display', zh: '数据展示' },
+  feedback: { en: 'Feedback', zh: '反馈' },
+  forms: { en: 'Forms', zh: '表单' },
+  general: { en: 'General', zh: '通用' },
+  layout: { en: 'Layout', zh: '布局' },
+  navigation: { en: 'Navigation', zh: '导航' },
+  overlays: { en: 'Overlays', zh: '浮层' },
+} as const;
+
+const routeLocale = (pathname: string): Locale =>
   pathname.split('/').filter(Boolean)[0] === 'en' ? 'en' : 'zh';
 
-const Brand = () => {
-  const { pathname } = useLocation();
-  const locale = routeLocale(pathname);
+const normalizePath = (pathname: string) => pathname.replace(/\/$/, '');
 
-  return (
-    <div className="rp-nav__title docs-brand">
-      <Link className="rp-nav__title__link" href={`/${locale}/`}>
-        <img
-          alt="Heliannuuthus UI"
-          className="rspress-logo rp-nav__title__logo-image"
-          src="/heliannuuthus.png"
-        />
-        <span>Heliannuuthus UI</span>
-      </Link>
-    </div>
-  );
+const isActivePath = (pathname: string, href: string) => {
+  const current = normalizePath(pathname);
+  const target = normalizePath(href);
+  return current === target || current.startsWith(`${target}/`);
 };
 
-const LocaleSwitch = () => {
+const mainLinks = (locale: Locale) => [
+  {
+    href: `/${locale}/docs/getting-started`,
+    label: locale === 'zh' ? '快速开始' : 'Getting started',
+  },
+  {
+    href: `/${locale}/design`,
+    label: locale === 'zh' ? '设计理念' : 'Design',
+  },
+  {
+    href: `/${locale}/components`,
+    label: locale === 'zh' ? '组件' : 'Components',
+  },
+];
+
+export const Layout = () => {
   const location = useLocation();
+  const { frontmatter } = useFrontmatter();
+  const { page } = usePageData();
+  const [navigationOpen, setNavigationOpen] = useState(false);
   const locale = routeLocale(location.pathname);
-  const nextLocale = locale === 'zh' ? 'en' : 'zh';
-  const segments = location.pathname.split('/').filter(Boolean);
-
-  if (segments[0] === 'zh' || segments[0] === 'en') {
-    segments[0] = nextLocale;
-  } else {
-    segments.unshift(nextLocale);
-  }
-
-  const href = `/${segments.join('/')}${
-    location.pathname.endsWith('/') ? '/' : ''
-  }${location.search}${location.hash}`;
-
-  return (
-    <Button
-      aria-label={locale === 'zh' ? 'Switch to English' : '切换到中文'}
-      className="docs-locale-switch"
-      href={href}
-      size="sm"
-      variant="ghost"
-    >
-      <Languages aria-hidden="true" />
-      <span>{locale === 'zh' ? 'EN' : '中文'}</span>
-    </Button>
-  );
-};
-
-const DocsNavigation = () => {
-  const { pathname } = useLocation();
-  const locale = routeLocale(pathname);
-  const links =
-    locale === 'zh'
-      ? [
-          ['快速开始', `/${locale}/docs/getting-started`],
-          ['设计理念', `/${locale}/design`],
-          ['组件', `/${locale}/components`],
-        ]
-      : [
-          ['Getting started', `/${locale}/docs/getting-started`],
-          ['Design', `/${locale}/design`],
-          ['Components', `/${locale}/components`],
-        ];
-
-  return (
-    <nav className="docs-primary-nav">
-      {links.map(([label, href]) => (
-        <Link href={href} key={href}>
-          {label}
-        </Link>
-      ))}
-    </nav>
-  );
-};
-
-export const Layout = (props: LayoutProps) => {
-  const { pathname } = useLocation();
-  const locale = routeLocale(pathname);
+  const componentPage = location.pathname.startsWith(`/${locale}/components`);
 
   useEffect(() => {
-    const language = locale === 'zh' ? 'zh-Hans' : 'en';
-    const root = document.documentElement;
-    const applyLanguage = () => {
-      if (root.lang !== language) root.lang = language;
-    };
-    const observer = new MutationObserver(applyLanguage);
-
-    applyLanguage();
-    observer.observe(root, { attributeFilter: ['lang'], attributes: true });
-
-    return () => observer.disconnect();
+    document.documentElement.lang = locale === 'zh' ? 'zh-Hans' : 'en';
   }, [locale]);
+
+  if (frontmatter.pageType === 'blank') {
+    return (
+      <Provider appearance="system">
+        <Content />
+      </Provider>
+    );
+  }
+
+  const switchLocale = () => {
+    const nextLocale = locale === 'zh' ? 'en' : 'zh';
+    const segments = location.pathname.split('/').filter(Boolean);
+
+    if (segments[0] === 'zh' || segments[0] === 'en') {
+      segments[0] = nextLocale;
+    } else {
+      segments.unshift(nextLocale);
+    }
+
+    window.location.assign(
+      `/${segments.join('/')}${location.pathname.endsWith('/') ? '/' : ''}${location.search}${location.hash}`
+    );
+  };
 
   return (
     <Provider appearance="system">
-      <OriginalLayout
-        {...props}
-        afterNavTitle={<DocsNavigation />}
-        beforeNavMenu={<LocaleSwitch />}
-        navTitle={<Brand />}
-      />
+      <UiLayout className="docs-site-shell">
+        <UiLayout.Header className="docs-header">
+          {componentPage ? (
+            <Button
+              aria-label={
+                navigationOpen
+                  ? locale === 'zh'
+                    ? '关闭导航'
+                    : 'Close navigation'
+                  : locale === 'zh'
+                    ? '打开导航'
+                    : 'Open navigation'
+              }
+              className="docs-mobile-menu"
+              onClick={() => setNavigationOpen((open) => !open)}
+              size="icon"
+              variant="ghost"
+            >
+              {navigationOpen ? (
+                <X aria-hidden="true" />
+              ) : (
+                <Menu aria-hidden="true" />
+              )}
+            </Button>
+          ) : null}
+
+          <a className="docs-brand" href={`/${locale}/`}>
+            <img alt="" src="/heliannuuthus.png" />
+            <span>Heliannuuthus UI</span>
+          </a>
+
+          <nav
+            aria-label={locale === 'zh' ? '主要导航' : 'Main navigation'}
+            className="docs-primary-nav"
+          >
+            {mainLinks(locale).map((link) => (
+              <a
+                aria-current={
+                  isActivePath(location.pathname, link.href)
+                    ? 'page'
+                    : undefined
+                }
+                href={link.href}
+                key={link.href}
+                onClick={() => setNavigationOpen(false)}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="docs-header-actions">
+            <Search />
+            <Button
+              aria-label={locale === 'zh' ? 'Switch to English' : '切换到中文'}
+              className="docs-locale-switch"
+              onClick={switchLocale}
+              size="sm"
+              variant="ghost"
+            >
+              <Languages aria-hidden="true" />
+              <span>{locale === 'zh' ? 'EN' : '中文'}</span>
+            </Button>
+            <Button
+              aria-label="GitHub"
+              href="https://github.com/heliannuuthus/ui"
+              size="icon-sm"
+              target="_blank"
+              variant="ghost"
+            >
+              <ExternalLink aria-hidden="true" />
+            </Button>
+          </div>
+        </UiLayout.Header>
+
+        <UiLayout className="docs-body-layout">
+          {componentPage ? (
+            <aside
+              className="docs-sidebar"
+              data-open={navigationOpen || undefined}
+            >
+              <ScrollArea
+                className="docs-sidebar-scroll"
+                orientation="vertical"
+              >
+                <nav
+                  aria-label={
+                    locale === 'zh' ? '组件导航' : 'Component navigation'
+                  }
+                >
+                  <a
+                    aria-current={
+                      normalizePath(location.pathname) ===
+                      `/${locale}/components`
+                        ? 'page'
+                        : undefined
+                    }
+                    className="docs-sidebar-overview"
+                    href={`/${locale}/components/`}
+                    onClick={() => setNavigationOpen(false)}
+                  >
+                    {locale === 'zh' ? '组件总览' : 'Overview'}
+                  </a>
+                  {componentGroups.map((group) => (
+                    <section className="docs-sidebar-group" key={group.key}>
+                      <h2>{groupNames[group.key][locale]}</h2>
+                      <ul>
+                        {group.items.map((name) => {
+                          const href = `/${locale}/components/${componentSlug(name)}`;
+                          return (
+                            <li key={name}>
+                              <a
+                                aria-current={
+                                  normalizePath(location.pathname) === href
+                                    ? 'page'
+                                    : undefined
+                                }
+                                href={href}
+                                onClick={() => setNavigationOpen(false)}
+                              >
+                                {localizedComponentName(name, locale)}
+                              </a>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </section>
+                  ))}
+                </nav>
+              </ScrollArea>
+              <Button
+                className="docs-sidebar-close"
+                onClick={() => setNavigationOpen(false)}
+                size="sm"
+                variant="ghost"
+              >
+                <PanelLeftClose aria-hidden="true" />
+                {locale === 'zh' ? '收起导航' : 'Close navigation'}
+              </Button>
+            </aside>
+          ) : null}
+
+          {navigationOpen ? (
+            <Button
+              aria-label={locale === 'zh' ? '关闭导航' : 'Close navigation'}
+              className="docs-sidebar-backdrop"
+              onClick={() => setNavigationOpen(false)}
+              variant="ghost"
+            />
+          ) : null}
+
+          <UiLayout.Content className="docs-main">
+            <DocsMdxProvider>
+              <article className="docs-article rspress-doc">
+                <Content />
+              </article>
+            </DocsMdxProvider>
+          </UiLayout.Content>
+
+          {page.toc.length > 0 ? (
+            <aside className="docs-toc">
+              <p>{locale === 'zh' ? '本页内容' : 'On this page'}</p>
+              <nav
+                aria-label={locale === 'zh' ? '本页目录' : 'Table of contents'}
+              >
+                {page.toc.map((item) => (
+                  <a data-depth={item.depth} href={`#${item.id}`} key={item.id}>
+                    {item.text}
+                  </a>
+                ))}
+              </nav>
+            </aside>
+          ) : null}
+        </UiLayout>
+      </UiLayout>
     </Provider>
   );
 };
