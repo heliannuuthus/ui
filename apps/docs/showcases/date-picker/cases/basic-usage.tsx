@@ -1,12 +1,20 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { DatePicker } from '@heliannuuthus/ui';
+import { useState } from 'react';
 
-export default function DatePickerCase01({
-  locale = 'zh',
+const DatePickerExample = () => {
+  const [date, setDate] = useState<Date>();
+  return <DatePicker display="inline" onChange={setDate} value={date} />;
+};
+
+export default function ExampleCase({
+  locale: _locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
   return (
-    <MigratedExampleCase exampleIndex={0} locale={locale} slug="date-picker" />
+    <div className="demo-preview demo-preview-date-picker">
+      <DatePickerExample />
+    </div>
   );
 }

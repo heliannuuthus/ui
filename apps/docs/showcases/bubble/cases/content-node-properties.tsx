@@ -1,10 +1,33 @@
+import { Bubble } from '@heliannuuthus/ui';
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
 
-export default function BubbleCase04({
+const ZhExample = (() => {
+  return () => (
+    <Bubble
+      content="Build completed"
+      contentProps={{ role: 'status', 'aria-live': 'polite' }}
+    />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Bubble
+      content="Build completed"
+      contentProps={{ role: 'status', 'aria-live': 'polite' }}
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={3} locale={locale} slug="bubble" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-bubble">
+      <Example />
+    </div>
+  );
 }

@@ -1,10 +1,33 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Switch } from '@heliannuuthus/ui';
 
-export default function SwitchCase01({
+const ZhExample = (() => {
+  return () => (
+    <label>
+      <Switch defaultChecked />
+      启用通知
+    </label>
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <label>
+      <Switch defaultChecked />
+      Enable notification
+    </label>
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={0} locale={locale} slug="switch" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-switch">
+      <Example />
+    </div>
+  );
 }

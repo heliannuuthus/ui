@@ -1,10 +1,33 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Layout } from '@heliannuuthus/ui';
 
-export default function LayoutCase03({
+const ZhExample = (() => {
+  return () => (
+    <Layout>
+      <Layout.Content>工作区内容</Layout.Content>
+      <Layout.Sidebar width={280}>详情面板</Layout.Sidebar>
+    </Layout>
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Layout>
+      <Layout.Content>Workspace Content</Layout.Content>
+      <Layout.Sidebar width={280}>Details panel</Layout.Sidebar>
+    </Layout>
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={2} locale={locale} slug="layout" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-layout">
+      <Example />
+    </div>
+  );
 }

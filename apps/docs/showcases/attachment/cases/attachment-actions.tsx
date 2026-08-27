@@ -1,12 +1,42 @@
+import { Attachment, Button } from '@heliannuuthus/ui';
+import { Download } from 'lucide-react';
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
 
-export default function AttachmentCase06({
+const ZhExample = (() => {
+  return () => (
+    <Attachment
+      actions={
+        <Button aria-label="下载附件">
+          <Download />
+        </Button>
+      }
+      title="web-console.tgz"
+    />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Attachment
+      actions={
+        <Button aria-label="Download attachment">
+          <Download />
+        </Button>
+      }
+      title="web-console.tgz"
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={5} locale={locale} slug="attachment" />
+    <div className="demo-preview demo-preview-attachment">
+      <Example />
+    </div>
   );
 }

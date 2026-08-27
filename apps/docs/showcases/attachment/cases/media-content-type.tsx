@@ -1,12 +1,50 @@
+import { FileArchive } from 'lucide-react';
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Attachment } from '@heliannuuthus/ui';
 
-export default function AttachmentCase02({
+const ZhExample = (() => {
+  return () => (
+    <>
+      <Attachment
+        media={<FileArchive />}
+        mediaType="icon"
+        title="web-console.tgz"
+      />
+      <Attachment
+        media={<img alt="附件缩略图" src="/cover.jpg" />}
+        mediaType="image"
+        title="cover.jpg"
+      />
+    </>
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <>
+      <Attachment
+        media={<FileArchive />}
+        mediaType="icon"
+        title="web-console.tgz"
+      />
+      <Attachment
+        media={<img alt="Attachment thumbnail" src="/cover.jpg" />}
+        mediaType="image"
+        title="cover.jpg"
+      />
+    </>
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={1} locale={locale} slug="attachment" />
+    <div className="demo-preview demo-preview-attachment">
+      <Example />
+    </div>
   );
 }

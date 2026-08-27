@@ -1,10 +1,33 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Empty } from '@heliannuuthus/ui';
 
-export default function EmptyCase02({
+const ZhExample = (() => {
+  return () => (
+    <Empty
+      title="没有匹配的发布记录"
+      description="尝试缩短关键词或清除当前筛选条件。"
+    />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Empty
+      title="No matching release records"
+      description="Try shortening the keyword or clearing the current filters."
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={1} locale={locale} slug="empty" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-empty">
+      <Example />
+    </div>
+  );
 }

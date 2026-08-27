@@ -1,10 +1,23 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Empty } from '@heliannuuthus/ui';
 
-export default function EmptyCase01({
+const ZhExample = (() => {
+  return () => <Empty title="暂无内容" />;
+})();
+
+const EnExample = (() => {
+  return () => <Empty title="No content" />;
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={0} locale={locale} slug="empty" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-empty">
+      <Example />
+    </div>
+  );
 }

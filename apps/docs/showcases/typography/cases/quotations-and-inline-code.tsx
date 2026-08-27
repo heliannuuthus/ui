@@ -1,12 +1,42 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Typography } from '@heliannuuthus/ui';
 
-export default function TypographyCase04({
+const ZhExample = (() => {
+  return () => (
+    <>
+      <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
+        语义先于视觉，视觉服务于内容层级。
+      </Typography.Blockquote>
+      <Typography.Text as="p">
+        安装命令为 <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>
+      </Typography.Text>
+    </>
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <>
+      <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
+        Semantics come before visuals, and visuals serve the content hierarchy.
+      </Typography.Blockquote>
+      <Typography.Text as="p">
+        Install with{' '}
+        <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>
+      </Typography.Text>
+    </>
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={3} locale={locale} slug="typography" />
+    <div className="demo-preview demo-preview-typography">
+      <Example />
+    </div>
   );
 }

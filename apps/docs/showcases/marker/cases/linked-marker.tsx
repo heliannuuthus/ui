@@ -1,10 +1,38 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Marker } from '@heliannuuthus/ui';
+import { Archive } from 'lucide-react';
 
-export default function MarkerCase04({
+const ZhExample = (() => {
+  return () => (
+    <Marker
+      href="#archived-release-notes"
+      icon={<Archive />}
+      content="定位到归档说明"
+      variant="separator"
+    />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Marker
+      href="#archived-release-notes"
+      icon={<Archive />}
+      content="Jump to archived notes"
+      variant="separator"
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={3} locale={locale} slug="marker" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-marker">
+      <Example />
+    </div>
+  );
 }

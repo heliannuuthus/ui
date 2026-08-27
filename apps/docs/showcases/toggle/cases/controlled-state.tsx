@@ -1,10 +1,40 @@
+import { Bold, Italic } from 'lucide-react';
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Toggle } from '@heliannuuthus/ui';
 
-export default function ToggleCase02({
+const ZhExample = (() => {
+  return () => (
+    <Toggle.Group
+      defaultValue={['bold']}
+      items={[
+        { value: 'bold', label: <Bold />, 'aria-label': '粗体' },
+        { value: 'italic', label: <Italic />, 'aria-label': '斜体' },
+      ]}
+    />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Toggle.Group
+      defaultValue={['bold']}
+      items={[
+        { value: 'bold', label: <Bold />, 'aria-label': 'bold' },
+        { value: 'italic', label: <Italic />, 'aria-label': 'italic' },
+      ]}
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={1} locale={locale} slug="toggle" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-toggle">
+      <Example />
+    </div>
+  );
 }

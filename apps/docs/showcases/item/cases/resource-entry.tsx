@@ -1,10 +1,46 @@
+import { FileText } from 'lucide-react';
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Item, Tag } from '@heliannuuthus/ui';
 
-export default function ItemCase04({
+const ZhExample = (() => {
+  return () => (
+    <Item
+      href="/release-notes/v0.12.0"
+      variant="outline"
+      header={<Tag>发布说明</Tag>}
+      media={<FileText />}
+      mediaType="icon"
+      title="v0.12.0-release-notes.md"
+      description="Markdown · 18 KB"
+      footer={<span>许澄维护 · 8 分钟前更新</span>}
+    />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Item
+      href="/release-notes/v0.12.0"
+      variant="outline"
+      header={<Tag>Release notes</Tag>}
+      media={<FileText />}
+      mediaType="icon"
+      title="v0.12.0-release-notes.md"
+      description="Markdown · 18 KB"
+      footer={<span>Maintained by Xu Cheng · Updated 8 minutes ago</span>}
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={3} locale={locale} slug="item" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-item">
+      <Example />
+    </div>
+  );
 }

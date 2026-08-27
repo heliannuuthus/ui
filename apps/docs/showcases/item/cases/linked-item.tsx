@@ -1,10 +1,23 @@
+import { Item } from '@heliannuuthus/ui';
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
 
-export default function ItemCase08({
+const ZhExample = (() => {
+  return () => <Item href="/releases/1842" title="View release details" />;
+})();
+
+const EnExample = (() => {
+  return () => <Item href="/releases/1842" title="View release details" />;
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={7} locale={locale} slug="item" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-item">
+      <Example />
+    </div>
+  );
 }

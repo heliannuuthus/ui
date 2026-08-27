@@ -1,10 +1,33 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Button, Stack } from '@heliannuuthus/ui';
 
-export default function StackCase01({
+const ZhExample = (() => {
+  return () => (
+    <Stack gap={8} orientation="horizontal">
+      <Button>保存</Button>
+      <Button variant="outline">取消</Button>
+    </Stack>
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Stack gap={8} orientation="horizontal">
+      <Button>Save</Button>
+      <Button variant="outline">Cancel</Button>
+    </Stack>
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={0} locale={locale} slug="stack" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-stack">
+      <Example />
+    </div>
+  );
 }

@@ -1,10 +1,23 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Input } from '@heliannuuthus/ui';
 
-export default function InputCase01({
+const ZhExample = (() => {
+  return () => <Input type="email" placeholder="name@example.com" />;
+})();
+
+const EnExample = (() => {
+  return () => <Input type="email" placeholder="name@example.com" />;
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={0} locale={locale} slug="input" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-input">
+      <Example />
+    </div>
+  );
 }

@@ -1,12 +1,35 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Separator } from '@heliannuuthus/ui';
 
-export default function SeparatorCase02({
+const ZhExample = (() => {
+  return () => (
+    <div className="flex items-stretch gap-4">
+      <div>状态</div>
+      <Separator orientation="vertical" />
+      <div>负责人</div>
+    </div>
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <div className="flex items-stretch gap-4">
+      <div>Status</div>
+      <Separator orientation="vertical" />
+      <div>Responsible person</div>
+    </div>
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={1} locale={locale} slug="separator" />
+    <div className="demo-preview demo-preview-separator">
+      <Example />
+    </div>
   );
 }

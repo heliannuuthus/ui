@@ -1,10 +1,37 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Bubble } from '@heliannuuthus/ui';
 
-export default function BubbleCase01({
+const ZhExample = (() => {
+  return () => (
+    <Bubble
+      align="end"
+      content="已经补充完成，可以重新评审。"
+      reactions="✓ 2"
+      variant="elevated"
+    />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Bubble
+      align="end"
+      content="The update is complete and ready for another review."
+      reactions="✓ 2"
+      variant="elevated"
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={0} locale={locale} slug="bubble" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-bubble">
+      <Example />
+    </div>
+  );
 }

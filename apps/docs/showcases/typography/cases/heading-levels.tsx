@@ -1,12 +1,41 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Typography } from '@heliannuuthus/ui';
 
-export default function TypographyCase02({
+const ZhExample = (() => {
+  return () => (
+    <>
+      <Typography.Title>H1</Typography.Title>
+      <Typography.Title level={2}>H2</Typography.Title>
+      <Typography.Title level={3}>H3</Typography.Title>
+      <Typography.Title level={4}>H4</Typography.Title>
+      <Typography.Title level={5}>H5</Typography.Title>
+      <Typography.Title level={6}>H6</Typography.Title>
+    </>
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <>
+      <Typography.Title>H1</Typography.Title>
+      <Typography.Title level={2}>H2</Typography.Title>
+      <Typography.Title level={3}>H3</Typography.Title>
+      <Typography.Title level={4}>H4</Typography.Title>
+      <Typography.Title level={5}>H5</Typography.Title>
+      <Typography.Title level={6}>H6</Typography.Title>
+    </>
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={1} locale={locale} slug="typography" />
+    <div className="demo-preview demo-preview-typography">
+      <Example />
+    </div>
   );
 }

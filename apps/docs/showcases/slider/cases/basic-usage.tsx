@@ -1,10 +1,25 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Slider } from '@heliannuuthus/ui';
 
-export default function SliderCase01({
+const ZhExample = (() => {
+  return () => <Slider aria-label="音量" defaultValue={64} min={0} max={100} />;
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Slider aria-label="Volume" defaultValue={64} min={0} max={100} />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={0} locale={locale} slug="slider" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-slider">
+      <Example />
+    </div>
+  );
 }

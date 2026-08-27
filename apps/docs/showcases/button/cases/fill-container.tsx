@@ -1,10 +1,23 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Button } from '@heliannuuthus/ui';
 
-export default function ButtonCase04({
+const ZhExample = (() => {
+  return () => <Button block>继续</Button>;
+})();
+
+const EnExample = (() => {
+  return () => <Button block>Continue</Button>;
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={3} locale={locale} slug="button" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-button">
+      <Example />
+    </div>
+  );
 }

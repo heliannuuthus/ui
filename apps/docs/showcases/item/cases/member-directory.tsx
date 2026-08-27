@@ -1,10 +1,39 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Avatar, Item, Tag } from '@heliannuuthus/ui';
 
-export default function ItemCase02({
+const ZhExample = (() => {
+  return () => (
+    <Item
+      variant="outline"
+      media={<Avatar alt="林默" fallback="林" />}
+      title="林默"
+      description="平台工程 · 发布管理员"
+      actions={<Tag type="success">在线</Tag>}
+    />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Item
+      variant="outline"
+      media={<Avatar alt="Lin Mo" fallback="L" />}
+      title="Lin Mo"
+      description="Platform engineering · Release administrator"
+      actions={<Tag type="success">Online</Tag>}
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={1} locale={locale} slug="item" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-item">
+      <Example />
+    </div>
+  );
 }

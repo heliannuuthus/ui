@@ -1,10 +1,35 @@
+import { Button, Input } from '@heliannuuthus/ui';
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
 
-export default function InputCase03({
+const ZhExample = (() => {
+  return () => (
+    <Input
+      defaultValue="docs"
+      prefix="ui.dev/"
+      suffix={<Button>复制</Button>}
+    />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Input
+      defaultValue="docs"
+      prefix="ui.dev/"
+      suffix={<Button>Copy</Button>}
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={2} locale={locale} slug="input" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-input">
+      <Example />
+    </div>
+  );
 }

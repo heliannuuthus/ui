@@ -1,12 +1,33 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Skeleton } from '@heliannuuthus/ui';
 
-export default function SkeletonCase01({
+const ZhExample = (() => {
+  return () => (
+    <div>
+      <Skeleton className="h-10 w-10 rounded-full" />
+      <Skeleton className="h-4 w-44" />
+    </div>
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <div>
+      <Skeleton className="h-10 w-10 rounded-full" />
+      <Skeleton className="h-4 w-44" />
+    </div>
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={0} locale={locale} slug="skeleton" />
+    <div className="demo-preview demo-preview-skeleton">
+      <Example />
+    </div>
   );
 }

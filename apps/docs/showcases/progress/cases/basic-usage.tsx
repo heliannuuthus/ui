@@ -1,12 +1,32 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Progress } from '@heliannuuthus/ui';
 
-export default function ProgressCase01({
+const ZhExample = (() => {
+  return () => (
+    <Progress effect="sparkle" value={68} label="生产环境" showValue />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Progress
+      effect="sparkle"
+      value={68}
+      label="Production environment"
+      showValue
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={0} locale={locale} slug="progress" />
+    <div className="demo-preview demo-preview-progress">
+      <Example />
+    </div>
   );
 }

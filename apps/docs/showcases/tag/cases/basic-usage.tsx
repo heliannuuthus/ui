@@ -1,6 +1,23 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Tag } from '@heliannuuthus/ui';
 
-export default function TagCase01({ locale = 'zh' }: { locale?: 'zh' | 'en' }) {
-  return <MigratedExampleCase exampleIndex={0} locale={locale} slug="tag" />;
+const ZhExample = (() => {
+  return () => <Tag>默认标签</Tag>;
+})();
+
+const EnExample = (() => {
+  return () => <Tag>Default tag</Tag>;
+})();
+
+export default function ExampleCase({
+  locale = 'zh',
+}: {
+  locale?: 'en' | 'zh';
+}) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-tag">
+      <Example />
+    </div>
+  );
 }

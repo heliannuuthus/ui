@@ -1,10 +1,31 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Marker } from '@heliannuuthus/ui';
+import { CheckCircle2 } from 'lucide-react';
 
-export default function MarkerCase03({
+const ZhExample = (() => {
+  return () => (
+    <Marker icon={<CheckCircle2 />} content="以下设置已同步到生产环境" />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Marker
+      icon={<CheckCircle2 />}
+      content="The following settings are synced to production"
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={2} locale={locale} slug="marker" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-marker">
+      <Example />
+    </div>
+  );
 }

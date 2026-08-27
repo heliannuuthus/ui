@@ -1,12 +1,23 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Counter } from '@heliannuuthus/ui';
 
-export default function CounterCase01({
+const ZhExample = (() => {
+  return () => <Counter value={7.4} fontSize={52} fontWeight={600} />;
+})();
+
+const EnExample = (() => {
+  return () => <Counter value={7.4} fontSize={52} fontWeight={600} />;
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={0} locale={locale} slug="counter" />
+    <div className="demo-preview demo-preview-counter">
+      <Example />
+    </div>
   );
 }

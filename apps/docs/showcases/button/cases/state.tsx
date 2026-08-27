@@ -1,10 +1,51 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Button } from '@heliannuuthus/ui';
 
-export default function ButtonCase07({
+const ZhExample = (() => {
+  const ButtonStates = () => {
+    return (
+      <>
+        <Button disabled>不可用</Button>
+        <Button aria-busy="true" disabled>
+          处理中
+        </Button>
+        <Button aria-invalid="true" variant="outline">
+          校验失败
+        </Button>
+      </>
+    );
+  };
+
+  return ButtonStates;
+})();
+
+const EnExample = (() => {
+  const ButtonStates = () => {
+    return (
+      <>
+        <Button disabled>Not available</Button>
+        <Button aria-busy="true" disabled>
+          Processing
+        </Button>
+        <Button aria-invalid="true" variant="outline">
+          Verification failed
+        </Button>
+      </>
+    );
+  };
+
+  return ButtonStates;
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={6} locale={locale} slug="button" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-button">
+      <Example />
+    </div>
+  );
 }

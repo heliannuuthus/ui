@@ -1,10 +1,38 @@
+import { Marker } from '@heliannuuthus/ui';
+import { ArrowUpRight } from 'lucide-react';
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
 
-export default function MarkerCase05({
+const ZhExample = (() => {
+  return () => (
+    <Marker
+      href="/releases/history"
+      icon={<ArrowUpRight />}
+      content="View release history"
+      classNames={{ icon: 'text-primary', content: 'font-medium' }}
+    />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Marker
+      href="/releases/history"
+      icon={<ArrowUpRight />}
+      content="View release history"
+      classNames={{ icon: 'text-primary', content: 'font-medium' }}
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={4} locale={locale} slug="marker" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-marker">
+      <Example />
+    </div>
+  );
 }

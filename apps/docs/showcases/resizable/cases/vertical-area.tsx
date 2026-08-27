@@ -1,12 +1,68 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Resizable } from '@heliannuuthus/ui';
+import { GripHorizontal } from 'lucide-react';
 
-export default function ResizableCase02({
+const ZhExample = (() => {
+  const EditorWithTerminal = () => {
+    return (
+      <Resizable
+        className="h-96"
+        orientation="vertical"
+        separator={<GripHorizontal aria-hidden />}
+        items={[
+          {
+            key: 'editor',
+            panel: <section>编辑器</section>,
+            size: ['64', '38'],
+          },
+          {
+            key: 'terminal',
+            panel: <section>终端</section>,
+            size: ['36', '20'],
+          },
+        ]}
+      />
+    );
+  };
+
+  return EditorWithTerminal;
+})();
+
+const EnExample = (() => {
+  const EditorWithTerminal = () => {
+    return (
+      <Resizable
+        className="h-96"
+        orientation="vertical"
+        separator={<GripHorizontal aria-hidden />}
+        items={[
+          {
+            key: 'editor',
+            panel: <section>Editor</section>,
+            size: ['64', '38'],
+          },
+          {
+            key: 'terminal',
+            panel: <section>Terminal</section>,
+            size: ['36', '20'],
+          },
+        ]}
+      />
+    );
+  };
+
+  return EditorWithTerminal;
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={1} locale={locale} slug="resizable" />
+    <div className="demo-preview demo-preview-resizable">
+      <Example />
+    </div>
   );
 }

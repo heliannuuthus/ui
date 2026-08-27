@@ -1,12 +1,31 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Button, Tooltip } from '@heliannuuthus/ui';
 
-export default function TooltipCase03({
+const ZhExample = (() => {
+  return () => (
+    <Tooltip content="默认箭头" placement="topLeft">
+      <Button>显示箭头</Button>
+    </Tooltip>
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Tooltip content="Default arrow" placement="topLeft">
+      <Button>Show arrow</Button>
+    </Tooltip>
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={2} locale={locale} slug="tooltip" />
+    <div className="demo-preview demo-preview-tooltip">
+      <Example />
+    </div>
   );
 }

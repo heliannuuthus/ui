@@ -1,12 +1,23 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Checkbox } from '@heliannuuthus/ui';
 
-export default function CheckboxCase01({
+const ZhExample = (() => {
+  return () => <Checkbox>接收产品更新</Checkbox>;
+})();
+
+const EnExample = (() => {
+  return () => <Checkbox>Receive product updates</Checkbox>;
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={0} locale={locale} slug="checkbox" />
+    <div className="demo-preview demo-preview-checkbox">
+      <Example />
+    </div>
   );
 }

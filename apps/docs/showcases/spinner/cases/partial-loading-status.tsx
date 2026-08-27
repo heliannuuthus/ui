@@ -1,12 +1,37 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Spinner } from '@heliannuuthus/ui';
 
-export default function SpinnerCase03({
+const ZhExample = (() => {
+  return () => (
+    <section aria-busy="true" aria-label="正在同步环境状态">
+      <div>
+        <span>预览环境</span>
+        <Spinner aria-label="预览环境同步中" size="sm" />
+      </div>
+    </section>
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <section aria-busy="true" aria-label="Synchronizing environment status">
+      <div>
+        <span>Preview environment</span>
+        <Spinner aria-label="Preview environment synchronizing" size="sm" />
+      </div>
+    </section>
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={2} locale={locale} slug="spinner" />
+    <div className="demo-preview demo-preview-spinner">
+      <Example />
+    </div>
   );
 }

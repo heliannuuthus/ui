@@ -1,10 +1,28 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Marker } from '@heliannuuthus/ui';
+import { CircleDot } from 'lucide-react';
 
-export default function MarkerCase02({
+const ZhExample = (() => {
+  return () => (
+    <Marker variant="border" icon={<CircleDot />} content="2 条未读消息" />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Marker variant="border" icon={<CircleDot />} content="2 unread messages" />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={1} locale={locale} slug="marker" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-marker">
+      <Example />
+    </div>
+  );
 }

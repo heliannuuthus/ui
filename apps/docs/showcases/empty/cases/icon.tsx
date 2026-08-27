@@ -1,10 +1,36 @@
+import { Empty } from '@heliannuuthus/ui';
+import { SearchX } from 'lucide-react';
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
 
-export default function EmptyCase03({
+const ZhExample = (() => {
+  return () => (
+    <>
+      <Empty title="No results" />
+      <Empty icon={<SearchX />} title="No results" />
+      <Empty icon={null} title="No results" />
+    </>
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <>
+      <Empty title="No results" />
+      <Empty icon={<SearchX />} title="No results" />
+      <Empty icon={null} title="No results" />
+    </>
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={2} locale={locale} slug="empty" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-empty">
+      <Example />
+    </div>
+  );
 }

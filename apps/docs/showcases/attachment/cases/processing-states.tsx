@@ -1,12 +1,33 @@
+import { Attachment } from '@heliannuuthus/ui';
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
 
-export default function AttachmentCase03({
+const ZhExample = (() => {
+  const states = ['idle', 'uploading', 'processing', 'error', 'done'] as const;
+
+  return () =>
+    states.map((state) => (
+      <Attachment key={state} state={state} title="web-console.tgz" />
+    ));
+})();
+
+const EnExample = (() => {
+  const states = ['idle', 'uploading', 'processing', 'error', 'done'] as const;
+
+  return () =>
+    states.map((state) => (
+      <Attachment key={state} state={state} title="web-console.tgz" />
+    ));
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={2} locale={locale} slug="attachment" />
+    <div className="demo-preview demo-preview-attachment">
+      <Example />
+    </div>
   );
 }

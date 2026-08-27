@@ -1,12 +1,40 @@
+import { Attachment } from '@heliannuuthus/ui';
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
 
-export default function AttachmentCase07({
+const ZhExample = (() => {
+  return () => (
+    <Attachment
+      title="release-notes.md"
+      trigger={
+        <a aria-label="预览 release-notes.md" href="/files/release-notes.md" />
+      }
+    />
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <Attachment
+      title="release-notes.md"
+      trigger={
+        <a
+          aria-label="Preview release-notes.md"
+          href="/files/release-notes.md"
+        />
+      }
+    />
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
+  const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <MigratedExampleCase exampleIndex={6} locale={locale} slug="attachment" />
+    <div className="demo-preview demo-preview-attachment">
+      <Example />
+    </div>
   );
 }

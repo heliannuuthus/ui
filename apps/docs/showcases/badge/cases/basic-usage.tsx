@@ -1,10 +1,35 @@
 import '@heliannuuthus/ui/styles.css';
-import { MigratedExampleCase } from '../../_shared/migrated-example-case';
+import { Badge } from '@heliannuuthus/ui';
 
-export default function BadgeCase01({
+const ZhExample = (() => {
+  return () => (
+    <>
+      <Badge indicator={5} />
+      <Badge indicator={0} />
+      <Badge indicator={123} max={99} />
+    </>
+  );
+})();
+
+const EnExample = (() => {
+  return () => (
+    <>
+      <Badge indicator={5} />
+      <Badge indicator={0} />
+      <Badge indicator={123} max={99} />
+    </>
+  );
+})();
+
+export default function ExampleCase({
   locale = 'zh',
 }: {
-  locale?: 'zh' | 'en';
+  locale?: 'en' | 'zh';
 }) {
-  return <MigratedExampleCase exampleIndex={0} locale={locale} slug="badge" />;
+  const Example = locale === 'en' ? EnExample : ZhExample;
+  return (
+    <div className="demo-preview demo-preview-badge">
+      <Example />
+    </div>
+  );
 }
