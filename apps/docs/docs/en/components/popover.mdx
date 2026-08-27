@@ -1,0 +1,223 @@
+---
+title: 'Popover'
+description: 'Display relevant, interactive content near triggers; click and hover previews share the same content, positioning, and controlled state APIs.'
+lang: en
+---
+
+import PopoverShowcase from '@showcases/popover';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Popover
+
+{"Display relevant, interactive content near triggers; click and hover previews share the same content, positioning, and controlled state APIs."}
+
+## When to use
+
+- A non-modal overlay containing details, forms, or lightweight operations needs to be opened by clicking.
+- It is necessary to preview entity information such as characters and resources through hovering or keyboard focus without leaving the current context.
+
+## Examples
+
+<PopoverShowcase />
+
+### Basic usage
+
+{"Add a small amount of relevant information and light operations near the trigger without interrupting the current reading context."}
+
+```tsx title="showcases/popover/cases/basic-usage.tsx"
+import { Button, Popover } from '@heliannuuthus/ui';
+
+<Popover
+  trigger={<Button>3 persons in charge</Button>}
+  title="Release Manager"
+  description="These members will be notified when publishing and rolling back."
+  content={<OwnerList />}
+/>;
+```
+
+### Hover preview manager
+
+{"After setting the trigger to hover, related information will be displayed on mouse hover or keyboard focus, which is suitable for entity preview."}
+
+```tsx title="showcases/popover/cases/hover-preview-manager.tsx"
+import { Button, Popover } from '@heliannuuthus/ui'
+
+<Popover
+  triggerMode="hover"
+  trigger={<Button variant="link">@linmo</Button>}
+  content={<OwnerProfile />}
+/>
+
+<Popover
+  open={open}
+  onOpenChange={setOpen}
+  align="start"
+  sideOffset={8}
+  alignOffset={4}
+  classNames={{ content: 'w-80' }}
+  styles={{ content: { padding: 16 } }}
+/>
+<Popover defaultOpen={false} trigger={<Button>Open</Button>} />
+```
+
+## Component parts
+
+- **Popover** — Configure content, state, behavior, and extension points through main component props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: 'Set trigger elements, and click or hover preview modes.',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: 'Set trigger elements, and click or hover preview modes.',
+      name: 'triggerMode',
+      type: "'click' | 'hover'",
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description:
+        'Configure the floating layer body and optional title description.',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description:
+        'Configure the floating layer body and optional title description.',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description:
+        'Configure the floating layer body and optional title description.',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: 'Set the overlay direction, alignment and spacing.',
+      name: 'side',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: 'Set the overlay direction, alignment and spacing.',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: 'Set the overlay direction, alignment and spacing.',
+      name: 'sideOffset',
+      type: 'number',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: 'Set the overlay direction, alignment and spacing.',
+      name: 'alignOffset',
+      type: 'number',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: 'Set the wait time before hover mode turns on and off.',
+      name: 'delay',
+      type: 'number',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: 'Set the wait time before hover mode turns on and off.',
+      name: 'closeDelay',
+      type: 'number',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: 'Manage open states in a controlled or uncontrolled manner.',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Popover',
+      defaultValue: 'false',
+      description: 'Manage open states in a controlled or uncontrolled manner.',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: 'Manage open states in a controlled or uncontrolled manner.',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'PopoverClassNames',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'PopoverStyles',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### PopoverClassNames
+
+```ts
+type PopoverClassNames = {
+  content?: string;
+};
+```
+
+### PopoverStyles
+
+```ts
+type PopoverStyles = {
+  content?: React.CSSProperties;
+};
+```
+
+## Accessibility
+
+- Hover mode also turns on when the trigger receives keyboard focus and cannot rely solely on mouse operations.
+- Use click mode for interactive content; use Tooltips first when providing only a brief description.
+
+## Avoid
+
+- Don’t put necessary actions in a hover layer; touch device and keyboard users need a more stable tap entry.
+- Do not maintain two sets of the same content, HoverCard and Popover, at the same time; use trigger="hover" directly for entity preview.

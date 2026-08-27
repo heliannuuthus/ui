@@ -1,0 +1,188 @@
+---
+title: 'Marker 标记'
+description: '标记连续内容中的分段位置或状态。'
+lang: zh-Hans
+---
+
+import MarkerShowcase from '@showcases/marker';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Marker 标记
+
+{"标记连续内容中的分段位置或状态。"}
+
+## 何时使用
+
+- 在连续内容中标记日期、未读边界、状态切换或可跳转位置。
+- 需要一条带文字或图标的轻量分隔规则时使用。
+
+## 示例
+
+<MarkerShowcase />
+
+### 基础用法
+
+{"在消息、动态或更新记录中分隔日期，让标签成为内容边界而不是时间线节点。"}
+
+```tsx title="showcases/marker/cases/basic-usage.tsx"
+import { Marker } from '@heliannuuthus/ui'
+
+<article>昨天的更新内容</article>
+<Marker content="今天" variant="separator" />
+<article>今天的更新内容</article>
+```
+
+### 未读边界
+
+{"把未读数量放在已读与未读内容之间；图标强化状态，底边框保持紧凑。"}
+
+```tsx title="showcases/marker/cases/unread-boundary.tsx"
+import { Marker } from '@heliannuuthus/ui';
+import { CircleDot } from 'lucide-react';
+
+<Marker variant="border" icon={<CircleDot />} content="2 条未读消息" />;
+```
+
+### 状态说明
+
+{"在一组相关设置之间说明后续内容的共同状态，不把 Marker 当作警告或通知容器。"}
+
+```tsx title="showcases/marker/cases/status-note.tsx"
+import { Marker } from '@heliannuuthus/ui';
+import { CheckCircle2 } from 'lucide-react';
+
+<Marker icon={<CheckCircle2 />} content="以下设置已同步到生产环境" />;
+```
+
+### 链接标记
+
+{"传入 href 后，标记可以指向文档锚点或另一段连续内容，并保留原生链接语义。"}
+
+```tsx title="showcases/marker/cases/linked-marker.tsx"
+import { Marker } from '@heliannuuthus/ui';
+import { Archive } from 'lucide-react';
+
+<Marker
+  href="#archived-release-notes"
+  icon={<Archive />}
+  content="定位到归档说明"
+  variant="separator"
+/>;
+```
+
+### 链接与槽位样式
+
+{"href 让整个 Marker 使用原生链接语义，classNames 分别扩展 icon 与 content 槽位。"}
+
+```tsx title="showcases/marker/cases/link-and-slot-styles.tsx"
+<Marker
+  href="/releases/history"
+  icon={<ArrowUpRight />}
+  content="View release history"
+  classNames={{ icon: 'text-primary', content: 'font-medium' }}
+/>
+```
+
+## 组成部分
+
+- **Marker** — 通过 icon、content 与 variant props 配置内容标记。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: '设置可换行的标记文字或链接。',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: '设置装饰性状态图标并自动隐藏可访问语义。',
+      name: 'icon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Marker',
+      defaultValue: "'default'",
+      description: '选择纯文本、两侧分隔线或下边框标记。',
+      name: 'variant',
+      type: "'default' | 'separator' | 'border'",
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: '传入链接地址后使用原生 a 元素，否则渲染为普通 div。',
+      name: 'href',
+      type: 'string',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'MarkerClassNames',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'MarkerStyles',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### MarkerClassNames
+
+```ts
+type MarkerClassNames = {
+  content?: string;
+  icon?: string;
+};
+```
+
+### MarkerStyles
+
+```ts
+type MarkerStyles = {
+  content?: React.CSSProperties;
+  icon?: React.CSSProperties;
+};
+```
+
+## 无障碍
+
+- 装饰性图标会自动从辅助技术中隐藏，状态含义必须同时写入 content。
+- 需要跳转时传入 href，让组件保留原生链接语义和键盘操作。
+
+## 避免事项
+
+- 不要用 Marker 表达具有节点、连接线和顺序关系的完整时间线。
+- 不要用颜色或图标单独表达状态，也不要把长段说明塞进标记文字。

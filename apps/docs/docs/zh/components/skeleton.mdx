@@ -1,0 +1,96 @@
+---
+title: 'Skeleton 骨架屏'
+description: '在加载前维持内容布局。'
+lang: zh-Hans
+---
+
+import SkeletonShowcase from '@showcases/skeleton';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Skeleton 骨架屏
+
+{"在加载前维持内容布局。"}
+
+## 何时使用
+
+- 需要在加载前维持内容布局时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<SkeletonShowcase />
+
+### 基础用法
+
+{"用与最终内容相近的尺寸组合骨架，加载完成前维持页面结构稳定。"}
+
+```tsx title="showcases/skeleton/cases/basic-usage.tsx"
+import { Skeleton } from '@heliannuuthus/ui';
+
+<div>
+  <Skeleton className="h-10 w-10 rounded-full" />
+  <Skeleton className="h-4 w-44" />
+</div>;
+```
+
+### 发布列表骨架
+
+{"加载前复刻最终内容的层级和密度，避免数据出现时产生明显布局跳动。"}
+
+```tsx title="showcases/skeleton/cases/publish-list-skeleton.tsx"
+import { Skeleton } from '@heliannuuthus/ui';
+
+<div className="release-row">
+  <Skeleton className="size-8 rounded-full" effect="shimmer" />
+  <div>
+    <Skeleton className="h-3 w-28" />
+    <Skeleton className="mt-2 h-2.5 w-40" />
+  </div>
+</div>;
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Skeleton',
+      defaultValue: "'shimmer'",
+      description:
+        '选择镜面扫光、明暗呼吸或静态占位；系统要求减少动态效果时，扫光会自动停止。',
+      name: 'effect',
+      type: "'shimmer' | 'pulse' | 'none'",
+    },
+    {
+      component: 'Skeleton',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Skeleton',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

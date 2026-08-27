@@ -1,0 +1,312 @@
+---
+title: 'Avatar'
+description: 'Represents a person, team, or other entity.'
+lang: en
+---
+
+import AvatarShowcase from '@showcases/avatar';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Avatar
+
+{"Represents a person, team, or other entity."}
+
+## When to use
+
+- Primary use: Represents a person, team, or other entity.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<AvatarShowcase />
+
+### Basic usage
+
+{"shape switches between circle and rounded-square avatars, with each shape shown as an independent case."}
+
+```tsx title="showcases/avatar/cases/basic-usage.tsx"
+import { Avatar } from '@heliannuuthus/ui'
+
+<Avatar alt="Lin Mo" fallback="Lin" shape="circle" size="lg" />
+<Avatar alt="Monday" fallback="Week" shape="square" size="lg" />
+```
+
+### Avatar sizes
+
+{"size provides small, medium, and large avatars while scaling text and status indicators with them."}
+
+```tsx title="showcases/avatar/cases/avatar-sizes.tsx"
+<Avatar size="sm" alt="Lin Mo" fallback="L" />
+<Avatar size="default" alt="Lin Mo" fallback="L" />
+<Avatar size="lg" alt="Lin Mo" fallback="L" />
+```
+
+### Image and fallback content
+
+{"src provides the avatar image; fallback is shown when loading fails, while imageProps and fallbackProps configure loading callbacks and delay."}
+
+```tsx title="showcases/avatar/cases/image-and-fallback-content.tsx"
+<Avatar
+  alt="Lin Mo"
+  src="/avatars/lin.png"
+  fallback="L"
+  fallbackProps={{ delay: 200 }}
+  imageProps={{ onLoadingStatusChange: setStatus }}
+/>
+```
+
+### Impression caps and overlap
+
+{"max limits the number of visible avatars and automatically generates +N; overlap uses pixel values ​​to control how compact the grouping is."}
+
+```tsx title="showcases/avatar/cases/impression-caps-and-overlap.tsx"
+import { Avatar } from '@heliannuuthus/ui';
+
+<Avatar.Group
+  items={members.map((member) => ({
+    key: member.id,
+    alt: member.name,
+    fallback: member.initials,
+  }))}
+  max={4}
+  overlap={8}
+  size="lg"
+/>;
+```
+
+### Custom overflow count
+
+{"renderCount receives the hidden count and replaces the default +N while inheriting the group shape and size."}
+
+```tsx title="showcases/avatar/cases/custom-overflow-count.tsx"
+<Avatar.Group
+  items={members}
+  max={3}
+  renderCount={(count) => <Tag>+{count}</Tag>}
+  shape="square"
+  size="lg"
+/>
+```
+
+### Composed with Tag and Badge
+
+{"The badge slot accepts Tag status labels or Badge notification indicators and keeps them anchored to the avatar corner."}
+
+```tsx title="showcases/avatar/cases/composed-with-tag-and-badge.tsx"
+import { Avatar, Badge } from '@heliannuuthus/ui';
+
+<Avatar
+  alt="Chen Xu"
+  badge={<Badge indicator={8} indicatorLabel="8 unread messages" />}
+  fallback="Chen"
+  size="lg"
+/>;
+```
+
+## Component parts
+
+- **Avatar** — Display avatars via images, fallback content, and badge props.
+- **Avatar.Group** — Display the avatar collection through items, max and overlap.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description:
+        'Provide an accessible name for the avatar image and default fallback text.',
+      name: 'alt',
+      type: 'string',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: 'Set the avatar image source URL.',
+      name: 'src',
+      type: 'string',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description:
+        'Set initials or an icon to display when the image is unavailable.',
+      name: 'fallback',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: 'Configure the fallback delay and native span props.',
+      name: 'fallbackProps',
+      type: 'AvatarFallbackProps',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description:
+        'Configure the avatar image loading callback and native img props.',
+      name: 'imageProps',
+      type: 'AvatarImageProps',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description:
+        'Online, authentication and other status nodes are displayed in the lower right corner of the avatar.',
+      name: 'badge',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: "'circle'",
+      description:
+        'Set up a round avatar or a square avatar with rounded corners.',
+      name: 'shape',
+      type: "'circle' | 'square'",
+    },
+    {
+      component: 'Avatar',
+      defaultValue: "'default'",
+      description: 'Set avatar size and sync AvatarBadge with group count.',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description:
+        'Configure the avatar collection and a stable key for each item.',
+      name: 'items',
+      type: 'readonly AvatarGroupItem[]',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description:
+        'Limit the number of visible avatars and automatically display the remaining number as +N.',
+      name: 'max',
+      type: 'number',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: '8',
+      description:
+        'Use pixel values ​​to control how much adjacent avatars overlap.',
+      name: 'overlap',
+      type: 'number',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: 'Customize how the remaining quantity is presented.',
+      name: 'renderCount',
+      type: '(count: number) => ReactNode',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description:
+        'Set a consistent shape for avatars and the generated count item in the group.',
+      name: 'shape',
+      type: "'circle' | 'square'",
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description:
+        'Set a consistent size for avatars and the generated count item in the group.',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### AvatarFallbackProps
+
+```ts
+type AvatarFallbackProps = Omit<ComponentProps<'span'>, 'children'> & {
+  delay?: number;
+};
+```
+
+### AvatarImageProps
+
+```ts
+type AvatarImageProps = Omit<
+  ComponentProps<'img'>,
+  'alt' | 'children' | 'src'
+> & {
+  onLoadingStatusChange?: (status: AvatarImageLoadingStatus) => void;
+};
+```
+
+### AvatarImageLoadingStatus
+
+```ts
+type AvatarImageLoadingStatus = 'error' | 'idle' | 'loaded' | 'loading';
+```
+
+### AvatarGroupItem
+
+```ts
+type AvatarGroupItem = AvatarProps & {
+  key?: React.Key;
+  alt: string;
+  src?: string;
+  fallback?: ReactNode;
+  fallbackProps?: AvatarFallbackProps;
+  imageProps?: AvatarImageProps;
+  badge?: ReactNode;
+  shape?: 'circle' | 'square';
+  size?: 'sm' | 'default' | 'lg';
+};
+```
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

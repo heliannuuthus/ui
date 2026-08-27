@@ -1,0 +1,118 @@
+---
+title: 'Alert'
+description: 'Continuously display important in-page tips.'
+lang: en
+---
+
+import AlertShowcase from '@showcases/alert';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Alert
+
+{"Continuously display important in-page tips."}
+
+## When to use
+
+- Primary use: Continuously display important in-page tips.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<AlertShowcase />
+
+### Basic usage
+
+{"Alert is part of the page content; clicking the button conditionally displays an information, success, warning, or error banner instead of opening an overlay."}
+
+```tsx title="showcases/alert/cases/basic-usage.tsx"
+import { Alert } from '@heliannuuthus/ui';
+
+<Alert
+  variant="warning"
+  icon={<TriangleAlert />}
+  title="The rollback image will expire soon"
+  description="Recommended to rebuild before publishing."
+  action={<Button onClick={close}>Close</Button>}
+/>;
+```
+
+## Component parts
+
+- **Alert** — Configure content, state, behavior, and extension points through main component props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Alert',
+      defaultValue: null,
+      description:
+        'Set prompt titles, supplementary descriptions, and semantic icons.',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert',
+      defaultValue: null,
+      description:
+        'Set prompt titles, supplementary descriptions, and semantic icons.',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert',
+      defaultValue: null,
+      description:
+        'Set prompt titles, supplementary descriptions, and semantic icons.',
+      name: 'icon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert',
+      defaultValue: null,
+      description:
+        'Place a view, retry, or close action directly related to the current prompt.',
+      name: 'action',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert',
+      defaultValue: "'default'",
+      description: 'Sets the semantic state of the prompt.',
+      name: 'variant',
+      type: "'default' | 'info' | 'success' | 'warning' | 'error' | 'destructive'",
+    },
+    {
+      component: 'Alert',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Alert',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

@@ -1,0 +1,188 @@
+---
+title: 'Date Picker 日期选择器'
+description: '通过内联日历或弹出触发器选择单个日期。'
+lang: zh-Hans
+---
+
+import DatePickerShowcase from '@showcases/date-picker';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Date Picker 日期选择器
+
+{"通过内联日历或弹出触发器选择单个日期。"}
+
+## 何时使用
+
+- 需要通过内联日历或弹出触发器选择单个日期时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<DatePickerShowcase />
+
+### 基础用法
+
+{"需要持续查看月份与排期上下文时，使用 inline 展示形式并同步反馈选择结果。"}
+
+```tsx title="showcases/date-picker/cases/basic-usage.tsx"
+const [date, setDate] = useState<Date>()
+
+<DatePicker display="inline" value={date} onChange={setDate} />
+```
+
+### 定时发布
+
+{"在紧凑设置行中选择或清除发布日期，适合表单和筛选器。"}
+
+```tsx title="showcases/date-picker/cases/release-regularly.tsx"
+<DatePicker
+  value={date}
+  onChange={setDate}
+  placeholder="选择发布日期"
+/>
+
+<DatePicker defaultValue={new Date()} disabled />
+<DatePicker calendarProps={{ fixedWeeks: true }} />
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Date Picker',
+      defaultValue: "'popover'",
+      description: '选择内联日历或由按钮触发的弹出日历。',
+      name: 'display',
+      type: "'inline' | 'popover'",
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: '当前选择的日期。',
+      name: 'value',
+      type: 'Date | undefined',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: '选择或清除日期时调用。',
+      name: 'onChange',
+      type: '(date?: Date) => void',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: "'选择日期'",
+      description: '未选择日期时的提示。',
+      name: 'placeholder',
+      type: 'string',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: 'false',
+      description: '禁用触发器与日历日期选择。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: '透传月份导航、禁用日期和本地化等日历配置。',
+      name: 'calendarProps',
+      type: 'CalendarProps',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: "'zh'",
+      description: '同时本地化日历名称、星期、月份和弹出触发器中的日期格式。',
+      name: 'locale',
+      type: "'zh' | 'en'",
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'DatePickerClassNames',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'DatePickerStyles',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'defaultValue',
+      type: 'Date',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLButtonElement>',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: 'false',
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### DatePickerClassNames
+
+```ts
+type DatePickerClassNames = {
+  calendar?: string;
+  trigger?: string;
+};
+```
+
+### DatePickerStyles
+
+```ts
+type DatePickerStyles = {
+  calendar?: React.CSSProperties;
+  trigger?: React.CSSProperties;
+};
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

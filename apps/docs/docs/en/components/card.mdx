@@ -1,0 +1,252 @@
+---
+title: 'Card'
+description: 'Use clear header, content, and footer areas to carry information and actions on the same topic.'
+lang: en
+---
+
+import CardShowcase from '@showcases/card';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Card
+
+{"Use clear header, content, and footer areas to carry information and actions on the same topic."}
+
+## When to use
+
+- A set of related information and actions needs to be organized into independent units of content.
+- It is necessary to clearly distinguish title information, main content and bottom operations.
+
+## Examples
+
+<CardShowcase />
+
+### Basic usage
+
+{"Quickly organize a set of related information by providing just a title and content."}
+
+```tsx title="showcases/card/cases/basic-usage.tsx"
+import { Card } from '@heliannuuthus/ui'
+
+export const UpdateCard = () => {
+  return (
+    <Card header={{ title: 'Design system update' }} variant="elevated">
+      <p>This week adds component examples and accessibility guidance.</p>
+    </Card>
+  )
+}
+
+<Card header={{ title: 'Outlined card' }} variant="outline" />
+<Card header={{ title: 'Ghost card' }} variant="ghost" />
+```
+
+### Header, Content and Footer
+
+{"Header is responsible for the title and auxiliary operations, Content carries the main body, and Footer places operations related to the entire card."}
+
+```tsx title="showcases/card/cases/header-content-and-footer.tsx"
+import { Button, Card, Input } from '@heliannuuthus/ui';
+
+export const WorkspaceCard = () => {
+  return (
+    <Card
+      header={{
+        title: 'Workspace information',
+        description: 'Change the workspace name visible to members.',
+        action: <Button variant="ghost">More actions</Button>,
+      }}
+      footer={
+        <>
+          <span>Last saved at 10:24</span>
+          <Button>Save changes</Button>
+        </>
+      }
+    >
+      <label>
+        Workspace name
+        <Input defaultValue="Heliannuuthus UI" />
+      </label>
+    </Card>
+  );
+};
+```
+
+## Semantic DOM
+
+{"Hover, focus, or click a property row to inspect the root targeted by className/style and the regions targeted by CardClassNames/CardStyles."}
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Card',
+      defaultValue: "'elevated'",
+      description:
+        'Control the hierarchical expression of the Card, you can choose shadow, stroke or transparent container.',
+      name: 'variant',
+      type: "'elevated' | 'outline' | 'ghost'",
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description:
+        'Configure the title, supporting description, and trailing action together without occupying the native title attribute on the root.',
+      name: 'header',
+      type: 'CardHeader',
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description: 'The main content of the card.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description: 'Bottom operation or supplementary information.',
+      name: 'footer',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description: 'Extend the Card root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'CardHeader',
+      defaultValue: null,
+      description: 'The card title; required whenever header is provided.',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CardHeader',
+      defaultValue: null,
+      description: 'Auxiliary instructions below the title.',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CardHeader',
+      defaultValue: null,
+      description: 'Auxiliary operations on the right side of Header.',
+      name: 'action',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CardClassNames',
+      defaultValue: null,
+      description:
+        'Expands the header area containing the title, description, and actions on the right.',
+      name: 'header',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      defaultValue: null,
+      description: 'Expand the card title area.',
+      name: 'title',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      defaultValue: null,
+      description: 'Expand the supporting description area below the title.',
+      name: 'description',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      defaultValue: null,
+      description:
+        'Expand the auxiliary operating area on the right side of the head.',
+      name: 'action',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      defaultValue: null,
+      description: 'Expand the main content area of ​​the card.',
+      name: 'content',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      defaultValue: null,
+      description:
+        'Expand the supplementary information and operation area at the bottom of the card.',
+      name: 'footer',
+      type: 'string',
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'CardClassNames',
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'CardStyles',
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### CardClassNames
+
+```ts
+type CardClassNames = {
+  action?: string;
+  content?: string;
+  description?: string;
+  footer?: string;
+  header?: string;
+  title?: string;
+};
+```
+
+### CardStyles
+
+```ts
+type CardStyles = {
+  action?: React.CSSProperties;
+  content?: React.CSSProperties;
+  description?: React.CSSProperties;
+  footer?: React.CSSProperties;
+  header?: React.CSSProperties;
+  title?: React.CSSProperties;
+};
+```
+
+## Accessibility
+
+- The title should accurately describe the subject of the card and keep the page title hierarchical.
+- Icon buttons in header.action and footer need accessible names.
+
+## Avoid
+
+- Don’t cram unrelated information into the same card just for visual reasons.
+- Don't repeat the same set of main operations in Header, Content, and Footer.

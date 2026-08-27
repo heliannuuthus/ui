@@ -1,0 +1,195 @@
+---
+title: 'Date Picker'
+description: 'Select individual dates via inline calendar or pop-up trigger.'
+lang: en
+---
+
+import DatePickerShowcase from '@showcases/date-picker';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Date Picker
+
+{"Select individual dates via inline calendar or pop-up trigger."}
+
+## When to use
+
+- Primary use: Select individual dates via inline calendar or pop-up trigger.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<DatePickerShowcase />
+
+### Basic usage
+
+{"When you need to continuously view the month and scheduling context, use the inline display format and provide synchronous feedback on the selection results."}
+
+```tsx title="showcases/date-picker/cases/basic-usage.tsx"
+const [date, setDate] = useState<Date>()
+
+<DatePicker display="inline" value={date} onChange={setDate} />
+```
+
+### Release regularly
+
+{"Select or clear Publish Date in the compact settings row, fit form and filter."}
+
+```tsx title="showcases/date-picker/cases/release-regularly.tsx"
+<DatePicker
+  value={date}
+  onChange={setDate}
+  placeholder="Select publication date"
+/>
+
+<DatePicker defaultValue={new Date()} disabled />
+<DatePicker calendarProps={{ fixedWeeks: true }} />
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Date Picker',
+      defaultValue: "'popover'",
+      description:
+        'Choose between an inline calendar or a pop-up calendar triggered by a button.',
+      name: 'display',
+      type: "'inline' | 'popover'",
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: 'The currently selected date.',
+      name: 'value',
+      type: 'Date | undefined',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: 'Called when a date is selected or cleared.',
+      name: 'onChange',
+      type: '(date?: Date) => void',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: "'Select date'",
+      description: 'Prompt when no date is selected.',
+      name: 'placeholder',
+      type: 'string',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: 'false',
+      description: 'Disable trigger and calendar date selection.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description:
+        'Transparently transmit calendar configurations such as month navigation, disabled dates, and localization.',
+      name: 'calendarProps',
+      type: 'CalendarProps',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: "'zh'",
+      description:
+        'Localizes calendar labels, weekdays, months, and the date format shown in the popover trigger.',
+      name: 'locale',
+      type: "'zh' | 'en'",
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'DatePickerClassNames',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'DatePickerStyles',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'defaultValue',
+      type: 'Date',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLButtonElement>',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: 'false',
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Date Picker',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### DatePickerClassNames
+
+```ts
+type DatePickerClassNames = {
+  calendar?: string;
+  trigger?: string;
+};
+```
+
+### DatePickerStyles
+
+```ts
+type DatePickerStyles = {
+  calendar?: React.CSSProperties;
+  trigger?: React.CSSProperties;
+};
+```
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

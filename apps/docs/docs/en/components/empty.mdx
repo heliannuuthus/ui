@@ -1,0 +1,141 @@
+---
+title: 'Empty'
+description: 'Provide stable placeholders for empty collections or missing results, and configure icons, titles, descriptions, and actions via props.'
+lang: en
+---
+
+import EmptyShowcase from '@showcases/empty';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Empty
+
+{"Provide stable placeholders for empty collections or missing results, and configure icons, titles, descriptions, and actions via props."}
+
+## When to use
+
+- There is currently no content to display for lists, tables, searches, or first-time use scenarios.
+- You need to explain the reason for the empty status and provide a clear, actionable next step.
+
+## Examples
+
+<EmptyShowcase />
+
+### Basic usage
+
+{"Pass title explicitly to identify what is empty; the default icon is only a visual aid and does not replace the status text."}
+
+```tsx title="showcases/empty/cases/basic-usage.tsx"
+import { Empty } from '@heliannuuthus/ui';
+
+<Empty title="No content" />;
+```
+
+### Title and description
+
+{"title must identify what is empty, while description adds a reason, filtering suggestion, or next step."}
+
+```tsx title="showcases/empty/cases/title-and-description.tsx"
+import { Empty } from '@heliannuuthus/ui';
+
+<Empty
+  title="No matching release records"
+  description="Try shortening the keyword or clearing the current filters."
+/>;
+```
+
+### Icon
+
+{"icon uses a generic inbox by default; replace it with a contextual icon or pass null to hide it."}
+
+```tsx title="showcases/empty/cases/icon.tsx"
+<Empty title="No results" />
+<Empty icon={<SearchX />} title="No results" />
+<Empty icon={null} title="No results" />
+```
+
+### Action area
+
+{"Actions can host status summaries and action buttons without exposing internal layout components."}
+
+```tsx title="showcases/empty/cases/action-area.tsx"
+import { Empty } from '@heliannuuthus/ui';
+
+<Empty
+  icon={<ShieldCheck />}
+  title="Waiting for security audit"
+  description="There is no release version until the audit is passed."
+  actions={<AuditSummary />}
+/>;
+```
+
+## Component parts
+
+- **Empty** — Configure content, state, behavior, and extension points through main component props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Empty',
+      defaultValue: '<InboxIcon />',
+      description:
+        'Replaces the default Inbox icon; pass null to explicitly hide the icon.',
+      name: 'icon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Empty',
+      defaultValue: null,
+      description: 'Clearly identifies the object or result that is empty.',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Empty',
+      defaultValue: null,
+      description: 'Supplement reasons, screening suggestions, or next steps.',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Empty',
+      defaultValue: null,
+      description: 'Render a main button, link, or set of related actions.',
+      name: 'actions',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Empty',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Empty',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- By default, the decorative icon is hidden from the accessibility tree, and the title and description assume the status expression.
+- Action copy should describe the next step, such as "Clear filters" or "Create project," not just "OK."
+
+## Avoid
+
+- Don’t reassemble internal structures for plain empty states, prefer semantic props.
+- When the operation is more complex, it is first encapsulated into a business node and then passed to actions.
+- Loading, request failure and insufficient permissions are not empty data and should use Skeleton, Alert or specialized permission feedback respectively.

@@ -1,0 +1,386 @@
+---
+title: 'Checkbox 复选框'
+description: '使用 Checkbox 标记单个可提交选择，并通过 Checkbox.Group 管理多选值。'
+lang: zh-Hans
+---
+
+import CheckboxShowcase from '@showcases/checkbox';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Checkbox 复选框
+
+{"使用 Checkbox 标记单个可提交选择，并通过 Checkbox.Group 管理多选值。"}
+
+## 何时使用
+
+- 独立状态需要用户确认后再随表单提交。
+- 一组可见选项允许同时选中多个值。
+
+## 示例
+
+<CheckboxShowcase />
+
+### 基础用法
+
+{"单个 Checkbox 表达一个可独立选择的布尔项，标签与控件保持整行可点击。"}
+
+```tsx title="showcases/checkbox/cases/basic-usage.tsx"
+import { Checkbox } from '@heliannuuthus/ui';
+
+<Checkbox>接收产品更新</Checkbox>;
+```
+
+### 任务完成态
+
+{"使用 task 变体表达可完成事项；选中后标签自动弱化并添加删除线，取消选中后恢复。"}
+
+```tsx title="showcases/checkbox/cases/task-completed-status.tsx"
+import { Checkbox } from '@heliannuuthus/ui';
+
+<Checkbox.Group
+  defaultValue={['read']}
+  onChange={setPermissions}
+  options={[
+    { label: '读取', value: 'read' },
+    { label: '编辑', value: 'write' },
+    { label: '管理', value: 'admin' },
+  ]}
+/>;
+```
+
+### 权限组合
+
+{"使用 Checkbox.Group 管理多个权限值，并即时反馈已选数量。"}
+
+```tsx title="showcases/checkbox/cases/permission-combination.tsx"
+import { Checkbox } from '@heliannuuthus/ui';
+
+<Checkbox.Group
+  name="permission"
+  value={selected}
+  onChange={setSelected}
+  options={[
+    { label: '查看项目', value: 'read' },
+    { label: '参与评论', value: 'comment' },
+    { label: '管理项目', value: 'manage' },
+  ]}
+/>;
+```
+
+### 选择状态
+
+{"选中时以向外爆开的粒子确认操作，取消选中时仅收回勾选标记；同时展示不确定和禁用状态。"}
+
+```tsx title="showcases/checkbox/cases/select-status.tsx"
+import { Checkbox } from '@heliannuuthus/ui'
+
+<Checkbox>未选择</Checkbox>
+<Checkbox defaultChecked>已选择</Checkbox>
+<Checkbox indeterminate>部分选择</Checkbox>
+<Checkbox disabled>不可用</Checkbox>
+
+<Checkbox
+  checked={checked}
+  onChange={setChecked}
+  variant="card"
+  uncheckedValue="off"
+  classNames={{ control: 'border-primary' }}
+  styles={{ label: { fontWeight: 600 } }}
+>
+  Release notifications
+</Checkbox>
+<Checkbox parent checked={allChecked} onChange={setAllChecked}>All permissions</Checkbox>
+<Checkbox.Group allValues={allValues} disabled options={options} />
+```
+
+## 组成部分
+
+- **Checkbox** — 表达单个布尔选择。
+- **Checkbox.Group** — 通过 options props 管理多个选择值。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '设置受控选中状态；状态变化后由调用方传回新值。',
+      name: 'checked',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '设置非受控模式的初始选中状态，仅在初始化时生效。',
+      name: 'defaultChecked',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: 'false',
+      description: '表达子项只被部分选择。',
+      name: 'indeterminate',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '选中状态变化时调用。',
+      name: 'onChange',
+      type: '(checked: boolean) => void',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: "'default'",
+      description: '设置标签的视觉表达；task 在选中后弱化文字并添加删除线。',
+      name: 'variant',
+      type: "'default' | 'task'",
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: 'false',
+      description: '阻止交互并降低视觉强调。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: "'default'",
+      description: '为组内所有选项设置统一变体，单个 option 可单独覆盖。',
+      name: 'variant',
+      type: "'default' | 'task'",
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '设置受控模式下当前选中的值集合。',
+      name: 'value',
+      type: 'string[]',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '设置非受控模式下初始选中的值集合。',
+      name: 'defaultValue',
+      type: 'string[]',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '从标签与值配置生成一组 Checkbox。',
+      name: 'options',
+      type: 'CheckboxOption[]',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'CheckboxClassNames',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'CheckboxStyles',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'uncheckedValue',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'parent',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'allValues',
+      type: 'string[]',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'columns',
+      type: 'number',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'gap',
+      type: 'MasonryLength | MasonryGap',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'minColumnWidth',
+      type: 'MasonryLength | MasonryGap',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'onChange',
+      type: '(value: string[]) => void',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### CheckboxClassNames
+
+```ts
+type CheckboxClassNames = {
+  control?: string;
+  label?: string;
+};
+```
+
+### CheckboxStyles
+
+```ts
+type CheckboxStyles = {
+  control?: React.CSSProperties;
+  label?: React.CSSProperties;
+};
+```
+
+### CheckboxOption
+
+```ts
+type CheckboxOption = {
+  className?: string;
+  disabled?: boolean;
+  label: ReactNode;
+  value: string;
+  variant?: 'default' | 'task';
+};
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

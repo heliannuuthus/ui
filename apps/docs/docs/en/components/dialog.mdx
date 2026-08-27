@@ -1,0 +1,204 @@
+---
+title: 'Dialog'
+description: 'Focusing tasks are completed in the modal layer.'
+lang: en
+---
+
+import DialogShowcase from '@showcases/dialog';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Dialog
+
+{"Focusing tasks are completed in the modal layer."}
+
+## When to use
+
+- Primary use: Focusing tasks are completed in the modal layer.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<DialogShowcase />
+
+### Basic usage
+
+{"Complete a focused editing task without leaving the current page and retain clear cancel and save actions."}
+
+```tsx title="showcases/dialog/cases/basic-usage.tsx"
+import { Button, Dialog } from '@heliannuuthus/ui'
+import { CircleX } from 'lucide-react'
+
+<Dialog
+  trigger={<Button>Schedule publishing</Button>}
+  title="Scheduling production environment release"
+  description="Select version and release date."
+  cancelText="Cancel"
+  confirmText="Confirm arrangement"
+>
+  <ReleaseForm />
+</Dialog>
+
+<Dialog
+  open={open}
+  onOpenChange={setOpen}
+  footer={<Button>Save</Button>}
+  closable={<CircleX />}
+  classNames={{ content: 'max-w-xl' }}
+  styles={{ content: { minHeight: 320 } }}
+/>
+<Dialog closable={false} defaultOpen={false} title="Workspace settings" />
+```
+
+## Component parts
+
+- **Dialog** — Configure content, state, behavior, and extension points through main component props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description:
+        'Optional dialog trigger element; can be omitted for controlled scenes.',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description:
+        'Set the task title, auxiliary instructions and main content.',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description:
+        'Set the task title, auxiliary instructions and main content.',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description:
+        'Set the task title, auxiliary instructions and main content.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description:
+        'Fully customizable bottom action; cancelText and confirmText can be used when omitted.',
+      name: 'footer',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: 'true',
+      description:
+        'Configure the top-right close control: true uses the default icon, a ReactNode provides a custom icon, and false hides the control.',
+      name: 'closable',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description:
+        'Configure the default bottom operation and confirmation callback.',
+      name: 'confirmText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description:
+        'Configure the default bottom operation and confirmation callback.',
+      name: 'cancelText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description:
+        'Configure the default bottom operation and confirmation callback.',
+      name: 'onConfirm',
+      type: '() => void',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: 'Manage open states in a controlled or uncontrolled manner.',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: 'false',
+      description: 'Manage open states in a controlled or uncontrolled manner.',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: 'Manage open states in a controlled or uncontrolled manner.',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'DialogClassNames',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'DialogStyles',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### DialogClassNames
+
+```ts
+type DialogClassNames = {
+  content?: string;
+};
+```
+
+### DialogStyles
+
+```ts
+type DialogStyles = {
+  content?: React.CSSProperties;
+};
+```
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

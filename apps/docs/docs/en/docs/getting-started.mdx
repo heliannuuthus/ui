@@ -1,0 +1,30 @@
+---
+title: Getting started
+description: Install and configure Heliannuuthus UI.
+lang: en
+---
+
+# Getting started
+
+Install the package with your preferred package manager:
+
+```bash
+pnpm add @heliannuuthus/ui
+```
+
+Import the static stylesheet once at your application entry, then use components from the package root:
+
+```tsx
+import '@heliannuuthus/ui/styles.css';
+import { Button, Provider } from '@heliannuuthus/ui';
+
+export function App() {
+  return (
+    <Provider appearance="system">
+      <Button>Continue</Button>
+    </Provider>
+  );
+}
+```
+
+The package targets React 19. Component subpaths are private implementation details.

@@ -1,0 +1,202 @@
+---
+title: 'Bubble'
+description: 'Display the conversation content and freely combine it with the avatar and scroll area.'
+lang: en
+---
+
+import BubbleShowcase from '@showcases/bubble';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Bubble
+
+{"Display the conversation content and freely combine it with the avatar and scroll area."}
+
+## When to use
+
+- Primary use: Display the conversation content and freely combine it with the avatar and scroll area.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<BubbleShowcase />
+
+### Basic usage
+
+{"Each semantic variant is shown as an independent case instead of mixing multiple appearances in one preview."}
+
+```tsx title="showcases/bubble/cases/basic-usage.tsx"
+import { Bubble } from '@heliannuuthus/ui';
+
+<Bubble
+  align="end"
+  content="The update is complete and ready for another review."
+  reactions="✓ 2"
+  variant="elevated"
+/>;
+```
+
+### Message alignment
+
+{"align only places a bubble at the start or end of the message flow and does not imply sender identity."}
+
+```tsx title="showcases/bubble/cases/message-alignment.tsx"
+<Bubble align="start" content="Incoming message" />
+<Bubble align="end" content="Outgoing message" />
+```
+
+### Reaction position
+
+{"The side and align fields in reactionsProps place reactions on the top or bottom and at either horizontal edge."}
+
+```tsx title="showcases/bubble/cases/reaction-position.tsx"
+<Bubble
+  content="Ready for review"
+  reactions="👍 2"
+  reactionsProps={{ side: 'top', align: 'start' }}
+/>
+```
+
+### Content node properties
+
+{"contentProps passes standard HTML, ARIA, data attributes, events, and className to the inner content node."}
+
+```tsx title="showcases/bubble/cases/content-node-properties.tsx"
+<Bubble
+  content="Build completed"
+  contentProps={{ role: 'status', 'aria-live': 'polite' }}
+/>
+```
+
+### Avatars and scrollable conversations
+
+{"Without introducing additional Message abstraction, directly combine Bubble, Avatar and ScrollArea to build a two-way conversation."}
+
+```tsx title="showcases/bubble/cases/avatars-and-scrollable-conversations.tsx"
+import { Bubble } from '@heliannuuthus/ui';
+import { Avatar } from '@heliannuuthus/ui';
+import { ScrollArea } from '@heliannuuthus/ui';
+
+<ScrollArea className="h-80" scrollbar={{ size: 'sm', visibility: 'auto' }}>
+  <div role="list" aria-label="Collaboration messages">
+    {messages.map((message) => (
+      <div className="flex gap-2" role="listitem">
+        <Avatar alt={message.author} fallback={message.avatar} />
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <span>
+            {message.author} · {message.time}
+          </span>
+          <Bubble content={message.content} variant="elevated" />
+        </div>
+      </div>
+    ))}
+  </div>
+</ScrollArea>;
+```
+
+## Component parts
+
+- **Bubble** — Configure bubbles via content, reactions, align and variant.
+- **Bubble.Group** — Arrange a group of message bubbles.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: 'Set the message content inside the bubble.',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description:
+        'Pass standard HTML, ARIA, data attributes and events to the inner content div.',
+      name: 'contentProps',
+      type: 'ComponentProps<"div"> & DataAttributes',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: 'Set reactions, read status, or other edge content.',
+      name: 'reactions',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description:
+        'Control the edge position of reaction content and extend its container props.',
+      name: 'reactionsProps',
+      type: 'BubbleReactionsProps',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: "'default'",
+      description:
+        'Set the emphasis and semantic appearance of message bubbles.',
+      name: 'variant',
+      type: "'default' | 'secondary' | 'muted' | 'elevated' | 'tinted' | 'outline' | 'ghost' | 'destructive'",
+    },
+    {
+      component: 'Bubble',
+      defaultValue: "'start'",
+      description:
+        'Align the bubble to the beginning or end of the message flow.',
+      name: 'align',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### DataAttributes
+
+```ts
+type DataAttributes = {
+  [key: `data-${string}`]: boolean | number | string | undefined;
+};
+```
+
+### BubbleReactionsProps
+
+```ts
+type BubbleReactionsProps = ComponentProps<'div'> & {
+  align?: 'start' | 'end';
+  side?: 'top' | 'bottom';
+};
+```
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

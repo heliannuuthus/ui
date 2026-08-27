@@ -1,0 +1,198 @@
+---
+title: 'Bubble 气泡'
+description: '展示对话内容，并与头像、滚动区域自由组合。'
+lang: zh-Hans
+---
+
+import BubbleShowcase from '@showcases/bubble';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Bubble 气泡
+
+{"展示对话内容，并与头像、滚动区域自由组合。"}
+
+## 何时使用
+
+- 需要展示对话内容，并与头像、滚动区域自由组合时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<BubbleShowcase />
+
+### 基础用法
+
+{"variant 的每种语义外观都作为独立 case 展示，避免在同一个预览区域混合比较。"}
+
+```tsx title="showcases/bubble/cases/basic-usage.tsx"
+import { Bubble } from '@heliannuuthus/ui';
+
+<Bubble
+  align="end"
+  content="已经补充完成，可以重新评审。"
+  reactions="✓ 2"
+  variant="elevated"
+/>;
+```
+
+### 消息对齐
+
+{"align 只控制单个气泡位于消息流的起始侧或末端，不隐含发送者身份。"}
+
+```tsx title="showcases/bubble/cases/message-alignment.tsx"
+<Bubble align="start" content="Incoming message" />
+<Bubble align="end" content="Outgoing message" />
+```
+
+### 回应位置
+
+{"reactionsProps 的 side 与 align 分别控制回应位于气泡上下侧和左右边缘。"}
+
+```tsx title="showcases/bubble/cases/reaction-position.tsx"
+<Bubble
+  content="Ready for review"
+  reactions="👍 2"
+  reactionsProps={{ side: 'top', align: 'start' }}
+/>
+```
+
+### 内容节点属性
+
+{"contentProps 向内部内容节点传递标准 HTML、ARIA、data 属性、事件和 className。"}
+
+```tsx title="showcases/bubble/cases/content-node-properties.tsx"
+<Bubble
+  content="Build completed"
+  contentProps={{ role: 'status', 'aria-live': 'polite' }}
+/>
+```
+
+### 头像与可滚动会话
+
+{"不引入额外 Message 抽象，直接组合 Bubble、Avatar 与 ScrollArea 构建双向会话。"}
+
+```tsx title="showcases/bubble/cases/avatars-and-scrollable-conversations.tsx"
+import { Bubble } from '@heliannuuthus/ui';
+import { Avatar } from '@heliannuuthus/ui';
+import { ScrollArea } from '@heliannuuthus/ui';
+
+<ScrollArea className="h-80" scrollbar={{ size: 'sm', visibility: 'auto' }}>
+  <div role="list" aria-label="协作消息">
+    {messages.map((message) => (
+      <div className="flex gap-2" role="listitem">
+        <Avatar alt={message.author} fallback={message.avatar} />
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <span>
+            {message.author} · {message.time}
+          </span>
+          <Bubble content={message.content} variant="elevated" />
+        </div>
+      </div>
+    ))}
+  </div>
+</ScrollArea>;
+```
+
+## 组成部分
+
+- **Bubble** — 通过 content、reactions、align 与 variant 配置气泡。
+- **Bubble.Group** — 排列一组消息气泡。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: '设置气泡中的消息内容。',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: '向内部内容 div 传递标准 HTML、ARIA、data 属性和事件。',
+      name: 'contentProps',
+      type: 'ComponentProps<"div"> & DataAttributes',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: '设置回应、已读状态或其他边缘内容。',
+      name: 'reactions',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: '控制回应内容的边缘位置并扩展容器属性。',
+      name: 'reactionsProps',
+      type: 'BubbleReactionsProps',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: "'default'",
+      description: '设置消息气泡的强调与语义外观。',
+      name: 'variant',
+      type: "'default' | 'secondary' | 'muted' | 'elevated' | 'tinted' | 'outline' | 'ghost' | 'destructive'",
+    },
+    {
+      component: 'Bubble',
+      defaultValue: "'start'",
+      description: '将气泡对齐到消息流起始侧或末尾侧。',
+      name: 'align',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### DataAttributes
+
+```ts
+type DataAttributes = {
+  [key: `data-${string}`]: boolean | number | string | undefined;
+};
+```
+
+### BubbleReactionsProps
+
+```ts
+type BubbleReactionsProps = ComponentProps<'div'> & {
+  align?: 'start' | 'end';
+  side?: 'top' | 'bottom';
+};
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

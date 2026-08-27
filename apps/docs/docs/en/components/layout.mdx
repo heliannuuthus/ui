@@ -1,0 +1,307 @@
+---
+title: 'Layout'
+description: 'Use Header, Content, Footer, and Sidebar to combine page skeletons to keep common layout relationships clear and nestable.'
+lang: en
+---
+
+import LayoutShowcase from '@showcases/layout';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Layout
+
+{"Use Header, Content, Footer, and Sidebar to combine page skeletons to keep common layout relationships clear and nestable."}
+
+## When to use
+
+- Pages need a stable header, body, and footer structure.
+- Apps need to include navigation, table of contents, or details areas to the left or right of the content.
+- Complex pages require combining vertical and horizontal areas through nested layouts.
+
+## Examples
+
+<LayoutShowcase />
+
+### Basic usage
+
+{"The most basic vertical combination: Header and Footer maintain a fixed area, and Content occupies the remaining space in the middle."}
+
+```tsx title="showcases/layout/cases/basic-usage.tsx"
+import { Layout } from '@heliannuuthus/ui';
+
+<Layout>
+  <Layout.Header>Project Navigation</Layout.Header>
+  <Layout.Content>Page content</Layout.Content>
+  <Layout.Footer>Footer information</Layout.Footer>
+</Layout>;
+```
+
+### Left navigation
+
+{"Sidebar is arranged horizontally with a nested Layout; the nested area continues to be responsible for the vertical relationship between Header and Content."}
+
+```tsx title="showcases/layout/cases/left-navigation.tsx"
+import { Layout } from '@heliannuuthus/ui';
+
+<Layout>
+  <Layout.Sidebar width={240}>Project Navigation</Layout.Sidebar>
+  <Layout.Content>Workspace Content</Layout.Content>
+</Layout>;
+```
+
+### Details on the right
+
+{"Placing Sidebar after content creates a right-side auxiliary area suitable for directories, properties, and contextual details."}
+
+```tsx title="showcases/layout/cases/details-on-the-right.tsx"
+import { Layout } from '@heliannuuthus/ui';
+
+<Layout>
+  <Layout.Content>Workspace Content</Layout.Content>
+  <Layout.Sidebar width={280}>Details panel</Layout.Sidebar>
+</Layout>;
+```
+
+### Complete application framework
+
+{"Header and Footer span the entire page, and Sidebar and Content are nested in the middle area, making it suitable for the backend and workbench."}
+
+```tsx title="showcases/layout/cases/complete-application-framework.tsx"
+import { Layout } from '@heliannuuthus/ui';
+
+<Layout>
+  <Layout.Header>Header</Layout.Header>
+  <Layout>
+    <Layout.Sidebar>Sidebar</Layout.Sidebar>
+    <Layout.Content>Content</Layout.Content>
+  </Layout>
+  <Layout.Footer>Footer</Layout.Footer>
+</Layout>;
+```
+
+### Responsive collapse
+
+{"The Sidebar collapses automatically below lg and can also be toggled manually with its built-in trigger; collapsedWidth controls the remaining width."}
+
+```tsx title="showcases/layout/cases/responsive-collapse.tsx"
+import { Layout } from '@heliannuuthus/ui';
+import { useState } from 'react';
+
+export const ResponsiveLayout = () => {
+  const [status, setStatus] = useState('');
+
+  return (
+    <Layout>
+      <Layout.Sidebar
+        breakpoint="lg"
+        collapsible
+        collapsedWidth={64}
+        defaultCollapsed={false}
+        side="start"
+        labels={{
+          collapse: 'Collapse sidebar',
+          expand: 'Expand sidebar',
+        }}
+        onBreakpointChange={(below) => setStatus(below ? 'Narrow' : 'Wide')}
+        onChange={(collapsed, reason) =>
+          setStatus((collapsed ? 'Collapsed' : 'Expanded') + ': ' + reason)
+        }
+      >
+        Navigation
+      </Layout.Sidebar>
+      <Layout.Content>{status}</Layout.Content>
+    </Layout>
+  );
+};
+```
+
+## Component parts
+
+- **Layout** — Combine vertical areas; automatically switch to horizontal arrangement when directly containing Sidebar.
+- **Layout.Header** — A fixed area at the top of a page or partial layout.
+- **Layout.Content** — Hosts the main content and takes up the remaining space in the layout.
+- **Layout.Footer** — A fixed area at the bottom of a page or partial layout.
+- **Layout.Sidebar** — A side area for navigation, table of contents, or details.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description:
+        'Collapse automatically below the selected viewport breakpoint using tokens aligned with the default Tailwind breakpoints.',
+      name: 'breakpoint',
+      type: "'sm' | 'md' | 'lg' | 'xl' | '2xl'",
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description: 'The controlled collapsed state.',
+      name: 'collapsed',
+      type: 'boolean',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: '80',
+      description:
+        'The collapsed sidebar width; numbers are treated as pixels and 0 hides its content.',
+      name: 'collapsedWidth',
+      type: 'number | string',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: 'false',
+      description:
+        'Enable the built-in collapse trigger; pass a ReactNode to replace the default icon.',
+      name: 'collapsible',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: 'false',
+      description: 'The initial collapsed state in uncontrolled mode.',
+      name: 'defaultCollapsed',
+      type: 'boolean',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description: 'Called when entering or leaving the breakpoint range.',
+      name: 'onBreakpointChange',
+      type: '(below: boolean) => void',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description:
+        'Called when the collapsed state is requested to change, including whether the request came from the breakpoint or trigger.',
+      name: 'onChange',
+      type: "(collapsed: boolean, reason: 'breakpoint' | 'trigger') => void",
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: "'start'",
+      description:
+        'Declare whether the sidebar sits on the logical start or end side so the built-in trigger uses the matching position and icon.',
+      name: 'side',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue:
+        "{ collapse: 'Collapse sidebar', expand: 'Expand sidebar' }",
+      description:
+        'Set the accessible names of the built-in collapse trigger in its expanded and collapsed states.',
+      name: 'labels',
+      type: 'LayoutSidebarLabels',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: '240',
+      description:
+        'Sets the width of the side area; numbers are handled in pixels, or any CSS length can be passed in.',
+      name: 'width',
+      type: 'number | string',
+    },
+    {
+      component: 'Layout',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Layout.Header',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout.Header',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Layout.Content',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout.Content',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Layout.Footer',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout.Footer',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### LayoutSidebarLabels
+
+```ts
+type LayoutSidebarLabels = {
+  collapse: string;
+  expand: string;
+};
+```
+
+## Accessibility
+
+- Header, Content, Footer and Sidebar use header, main, footer and aside semantic elements by default.
+- Only one Content main landmark should be retained on the same page; please use ordinary content containers for local layout to avoid multiple mains.
+- Navigation or detail areas in sidebars need to provide a recognizable aria-label.
+
+## Avoid
+
+- Do not tile all areas in the same Layout; the Header and Footer that span the entire page should wrap the nested Layout in the middle.
+- Text navigation usually should not be compressed into an icon rail on narrow screens; set collapsedWidth to 0 and compose Drawer for complete navigation.

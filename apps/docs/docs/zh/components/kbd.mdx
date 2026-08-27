@@ -1,0 +1,94 @@
+---
+title: 'Kbd 键盘按键'
+description: '以键帽形式展示键盘按键和快捷键组合。'
+lang: zh-Hans
+---
+
+import KbdShowcase from '@showcases/kbd';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Kbd 键盘按键
+
+{"以键帽形式展示键盘按键和快捷键组合。"}
+
+## 何时使用
+
+- 解释键盘快捷方式。
+- 在菜单、提示或命令面板中展示操作按键。
+
+## 示例
+
+<KbdShowcase />
+
+### 基础用法
+
+{"使用用户设备上容易识别的按键名称。"}
+
+```tsx title="showcases/kbd/cases/basic-usage.tsx"
+import { Kbd } from '@heliannuuthus/ui';
+
+<Kbd>Enter</Kbd>;
+```
+
+### 组合快捷键
+
+{"通过 keys 属性统一多个按键之间的间距。"}
+
+```tsx title="showcases/kbd/cases/combination-shortcut-keys.tsx"
+import { Kbd } from '@heliannuuthus/ui'
+
+<Kbd keys={['⌘', 'K']} />
+<Kbd keys={['Ctrl', 'Alt', 'Delete']} separator="·" />
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Kbd',
+      defaultValue: null,
+      description: '通过同一个 Kbd 渲染快捷键组合。',
+      name: 'keys',
+      type: 'ReactNode[]',
+    },
+    {
+      component: 'Kbd',
+      defaultValue: "'+'",
+      description: '组合快捷键之间的分隔内容。',
+      name: 'separator',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Kbd',
+      defaultValue: null,
+      description: '扩展组件样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Kbd',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 同时用文本解释不常见的快捷键用途。
+- 针对 macOS 和 Windows 展示对应的平台按键。
+
+## 避免事项
+
+- Kbd 只用于展示，不应承担实际键盘事件监听。
+- 不要假设所有用户都使用同一种键盘布局。

@@ -1,0 +1,75 @@
+---
+title: 'Sonner 消息通知'
+description: '以非阻塞队列反馈短暂结果。'
+lang: zh-Hans
+---
+
+import SonnerShowcase from '@showcases/sonner';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Sonner 消息通知
+
+{"以非阻塞队列反馈短暂结果。"}
+
+## 何时使用
+
+- 需要以非阻塞队列反馈短暂结果时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<SonnerShowcase />
+
+### 基础用法
+
+{"用同一条通知承接异步任务的加载、成功或失败阶段，避免重复堆叠消息。"}
+
+```tsx title="showcases/sonner/cases/basic-usage.tsx"
+import { Sonner, toast } from '@heliannuuthus/ui'
+
+toast.promise(publish(), {
+  loading: '正在发布到生产环境…',
+  success: 'v0.12.0 已发布',
+  error: '发布失败，请检查构建日志',
+})
+
+<Sonner position="bottom-right" richColors />
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Sonner',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Sonner',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

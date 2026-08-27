@@ -29,7 +29,7 @@
     "build": "pnpm build:package && pnpm --filter @heliannuuthus/ui-docs build",
     "build:package": "tsup && node scripts/build-package.mjs && pnpm verify:package",
     "build:docs": "pnpm --filter @heliannuuthus/ui-docs build",
-    "lint": "eslint src apps/docs/src scripts tsup.config.ts --max-warnings=0",
+    "lint": "eslint src apps/docs/src apps/docs/showcases apps/docs/theme apps/docs/rspress.config.ts scripts tsup.config.ts --max-warnings=0",
     "format": "prettier --write \"{src,apps}/**/*.{ts,tsx,css,json,md}\" \"scripts/**/*.mjs\" tsup.config.ts package.json",
     "format:check": "prettier --check \"{src,apps}/**/*.{ts,tsx,css,json,md}\" \"scripts/**/*.mjs\" tsup.config.ts package.json",
     "type-check": "tsc --noEmit && pnpm --filter @heliannuuthus/ui-docs exec tsc --noEmit",

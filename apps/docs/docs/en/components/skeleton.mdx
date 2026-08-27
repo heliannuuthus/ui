@@ -1,0 +1,96 @@
+---
+title: 'Skeleton'
+description: 'Maintain content layout before loading.'
+lang: en
+---
+
+import SkeletonShowcase from '@showcases/skeleton';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Skeleton
+
+{"Maintain content layout before loading."}
+
+## When to use
+
+- Primary use: Maintain content layout before loading.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<SkeletonShowcase />
+
+### Basic usage
+
+{"Assemble the skeleton with a size similar to the final content to keep the page structure stable until loading is complete."}
+
+```tsx title="showcases/skeleton/cases/basic-usage.tsx"
+import { Skeleton } from '@heliannuuthus/ui';
+
+<div>
+  <Skeleton className="h-10 w-10 rounded-full" />
+  <Skeleton className="h-4 w-44" />
+</div>;
+```
+
+### publish list skeleton
+
+{"Replicate the level and density of the final content before loading to avoid obvious layout jumps when data appears."}
+
+```tsx title="showcases/skeleton/cases/publish-list-skeleton.tsx"
+import { Skeleton } from '@heliannuuthus/ui';
+
+<div className="release-row">
+  <Skeleton className="size-8 rounded-full" effect="shimmer" />
+  <div>
+    <Skeleton className="h-3 w-28" />
+    <Skeleton className="mt-2 h-2.5 w-40" />
+  </div>
+</div>;
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Skeleton',
+      defaultValue: "'shimmer'",
+      description:
+        'Choose mirror sweep, light and dark breathing or static space occupancy; when the system requires reducing dynamic effects, the sweep will automatically stop.',
+      name: 'effect',
+      type: "'shimmer' | 'pulse' | 'none'",
+    },
+    {
+      component: 'Skeleton',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Skeleton',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

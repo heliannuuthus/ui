@@ -1,0 +1,238 @@
+---
+title: 'Toggle 切换按钮'
+description: '使用 Toggle 切换单个工具状态，并通过 Toggle.Group 管理工具组选项。'
+lang: zh-Hans
+---
+
+import ToggleShowcase from '@showcases/toggle';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Toggle 切换按钮
+
+{"使用 Toggle 切换单个工具状态，并通过 Toggle.Group 管理工具组选项。"}
+
+## 何时使用
+
+- 工具栏中的一个状态需要立即开启或关闭。
+- 一组紧密相关的工具需要共享单选或多选状态与键盘导航。
+
+## 示例
+
+<ToggleShowcase />
+
+### 基础用法
+
+{"使用 defaultValue 提供初始状态，后续状态由 Toggle 自身管理。"}
+
+```tsx title="showcases/toggle/cases/basic-usage.tsx"
+import { Toggle } from '@heliannuuthus/ui';
+
+<Toggle defaultValue aria-label="切换粗体">
+  <Bold />
+  粗体
+</Toggle>;
+```
+
+### 受控状态
+
+{"通过 value 读取当前开关状态，并在 onChange 中由业务状态决定下一次渲染。"}
+
+```tsx title="showcases/toggle/cases/controlled-state.tsx"
+import { Toggle } from '@heliannuuthus/ui';
+
+<Toggle.Group
+  defaultValue={['bold']}
+  items={[
+    { value: 'bold', label: <Bold />, 'aria-label': '粗体' },
+    { value: 'italic', label: <Italic />, 'aria-label': '斜体' },
+  ]}
+/>;
+```
+
+### 格式工具组
+
+{"Toggle 与 Toggle.Group 使用统一尺寸；通过 items 管理可同时开启的工具状态。"}
+
+```tsx title="showcases/toggle/cases/format-tool-set.tsx"
+import { Toggle } from '@heliannuuthus/ui'
+
+<Toggle.Group
+  value={formats}
+  onChange={setFormats}
+  multiple
+  variant="outline"
+  items={[
+    { value: 'bold', label: <Bold />, 'aria-label': '粗体' },
+    { value: 'italic', label: <Italic />, 'aria-label': '斜体' },
+    { value: 'underline', label: <Underline />, 'aria-label': '下划线' },
+  ]}
+/>
+
+<Toggle.Group disabled orientation="vertical" items={items} />
+```
+
+## 组成部分
+
+- **Toggle** — 表达单个可按下、可释放的工具状态。
+- **Toggle.Group** — 通过 items props 管理单选或多选工具组。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description: '设置受控按下状态；状态变化后由调用方传回新值。',
+      name: 'value',
+      type: 'boolean',
+    },
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description: '设置非受控模式的初始按下状态。',
+      name: 'defaultValue',
+      type: 'boolean',
+    },
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description: '单个 Toggle 的布尔值变化时调用。',
+      name: 'onChange',
+      type: '(value: boolean) => void',
+    },
+    {
+      component: 'Toggle',
+      defaultValue: "'default'",
+      description: '设置透明或描边外观。',
+      name: 'variant',
+      type: "'default' | 'outline'",
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description: '设置受控模式下当前按下的工具值集合。',
+      name: 'value',
+      type: 'string[]',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description: '设置非受控模式下初始按下的工具值集合。',
+      name: 'defaultValue',
+      type: 'string[]',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description: '通过 props 声明组项的 value、label、禁用状态与可访问名称。',
+      name: 'items',
+      type: 'ToggleGroupOption[]',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description: '组内按下值变化时调用。',
+      name: 'onChange',
+      type: '(value: string[]) => void',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: 'false',
+      description: '允许同时按下多个 Toggle。',
+      name: 'multiple',
+      type: 'boolean',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: "'horizontal'",
+      description: '设置方向并匹配方向键导航。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLButtonElement>',
+    },
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'variant',
+      type: "'default' | 'outline'",
+    },
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### ToggleGroupOption
+
+```ts
+type ToggleGroupOption<Value extends string = string> = {
+  label: ReactNode;
+  value: Value;
+} & ButtonHTMLAttributes<HTMLButtonElement>;
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

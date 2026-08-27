@@ -1,0 +1,192 @@
+---
+title: 'Alert Dialog 确认对话框'
+description: '打断当前流程并确认具有重要后果的操作。'
+lang: zh-Hans
+---
+
+import AlertDialogShowcase from '@showcases/alert-dialog';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Alert Dialog 确认对话框
+
+{"打断当前流程并确认具有重要后果的操作。"}
+
+## 何时使用
+
+- 需要打断当前流程并确认具有重要后果的操作时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<AlertDialogShowcase />
+
+### 基础用法
+
+{"仅用于必须由用户确认的警告或危险操作；成功和普通信息应使用 Alert 或 Toast。"}
+
+```tsx title="showcases/alert-dialog/cases/basic-usage.tsx"
+import { AlertDialog } from '@heliannuuthus/ui'
+
+<AlertDialog
+  trigger={<Button variant="destructive">删除预览环境</Button>}
+  title="删除 preview-142？"
+  description="此操作无法撤销。"
+  cancelText="保留环境"
+  confirmText="确认删除"
+  confirmVariant="destructive"
+/>
+
+<AlertDialog
+  open={open}
+  onOpenChange={setOpen}
+  title="Delete project?"
+  description="This action cannot be undone."
+  classNames={{ content: 'max-w-lg' }}
+  styles={{ content: { minHeight: 240 } }}
+/>
+<AlertDialog defaultOpen={false} title="Archive project?" />
+```
+
+## 组成部分
+
+- **Alert Dialog** — 通过主组件 props 配置内容、状态、行为和扩展点。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: '打开确认对话框的按钮或其他交互元素。',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: '设置确认事项、后果说明和辅助图标。',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: '设置确认事项、后果说明和辅助图标。',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: '设置确认事项、后果说明和辅助图标。',
+      name: 'media',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: '设置确认与取消操作的文字和确认按钮样式。',
+      name: 'confirmText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: '设置确认与取消操作的文字和确认按钮样式。',
+      name: 'cancelText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: '设置确认与取消操作的文字和确认按钮样式。',
+      name: 'confirmVariant',
+      type: 'ButtonProps["variant"]',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: '用户确认操作时调用。',
+      name: 'onConfirm',
+      type: '() => void',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: '以受控或非受控方式管理打开状态。',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: 'false',
+      description: '以受控或非受控方式管理打开状态。',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: '以受控或非受控方式管理打开状态。',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'AlertDialogClassNames',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'AlertDialogStyles',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: "'default'",
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'size',
+      type: "'default' | 'sm'",
+    },
+  ]}
+/>
+
+## 类型定义
+
+### AlertDialogClassNames
+
+```ts
+type AlertDialogClassNames = {
+  content?: string;
+};
+```
+
+### AlertDialogStyles
+
+```ts
+type AlertDialogStyles = {
+  content?: React.CSSProperties;
+};
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

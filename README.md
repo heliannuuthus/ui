@@ -53,6 +53,16 @@ instance with `useForm` or `Form.useForm`, subscribe to a field or selector with
 `useFormInstance`. Programmatic changes use the typed methods on the form
 instance, including `setValue`, `reset`, `setError`, `trigger` and `getValues`.
 
+## Documentation
+
+The documentation site in `apps/docs` uses Rspress 2. Chinese and English MDX
+routes live in `apps/docs/docs/zh` and `apps/docs/docs/en`. Component examples
+use one file per meaningful case under `apps/docs/showcases/<slug>/cases`, with
+that component's `index.tsx` composing the full showcase.
+
+Run it locally with `pnpm --filter @heliannuuthus/ui-docs dev`. The site is
+served on `http://localhost:13001`.
+
 ## Workspace policy
 
 `@heliannuuthus/ui` is the single source of truth for domain-neutral frontend primitives across Heliannuuthus projects. If a product needs a missing base component or a reusable capability, implement and document it here first instead of creating a product-local primitive.

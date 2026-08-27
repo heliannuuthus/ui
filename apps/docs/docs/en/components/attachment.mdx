@@ -1,0 +1,301 @@
+---
+title: 'Attachment'
+description: 'Display attachment information, status and operations.'
+lang: en
+---
+
+import AttachmentShowcase from '@showcases/attachment';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Attachment
+
+{"Display attachment information, status and operations."}
+
+## When to use
+
+- Primary use: Display attachment information, status and operations.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<AttachmentShowcase />
+
+### Basic usage
+
+{"Use title, description, and media for the file name, supporting information, and file-type icon."}
+
+```tsx title="showcases/attachment/cases/basic-usage.tsx"
+import { Attachment } from '@heliannuuthus/ui';
+
+<Attachment
+  title="web-console.tgz"
+  description="8.4 MB · Verifying"
+  media={<FileArchive />}
+  state="processing"
+/>;
+```
+
+### Media content type
+
+{"mediaType declares whether media is an icon or an image so thumbnails receive the correct size, crop, and state styling."}
+
+```tsx title="showcases/attachment/cases/media-content-type.tsx"
+import { Attachment } from '@heliannuuthus/ui'
+
+<Attachment
+  media={<FileArchive />}
+  mediaType="icon"
+  title="web-console.tgz"
+/>
+
+<Attachment
+  media={<img alt="Attachment thumbnail" src="/cover.jpg" />}
+  mediaType="image"
+  title="cover.jpg"
+/>
+```
+
+### Processing states
+
+{"state represents waiting, uploading, processing, failed, and completed phases; use description to state the status explicitly."}
+
+```tsx title="showcases/attachment/cases/processing-states.tsx"
+const states = ['idle', 'uploading', 'processing', 'error', 'done'] as const;
+
+{
+  states.map((state) => (
+    <Attachment key={state} state={state} title="web-console.tgz" />
+  ));
+}
+```
+
+### Attachment sizes
+
+{"size controls the density of one attachment; preview each size individually with the segmented control."}
+
+```tsx title="showcases/attachment/cases/attachment-sizes.tsx"
+<Attachment size="default" title="web-console.tgz" />
+<Attachment size="sm" title="web-console.tgz" />
+<Attachment size="xs" title="web-console.tgz" />
+```
+
+### Attachment orientation
+
+{"horizontal suits file lists, while vertical emphasizes media in a thumbnail card."}
+
+```tsx title="showcases/attachment/cases/attachment-orientation.tsx"
+<Attachment orientation="horizontal" title="web-console.tgz" />
+<Attachment orientation="vertical" title="web-console.tgz" />
+```
+
+### Attachment actions
+
+{"Use actions only for download, retry, or remove operations that directly affect the current attachment."}
+
+```tsx title="showcases/attachment/cases/attachment-actions.tsx"
+<Attachment
+  actions={
+    <Button aria-label="Download attachment">
+      <Download />
+    </Button>
+  }
+  title="web-console.tgz"
+/>
+```
+
+### Full-card trigger
+
+{"trigger accepts a link or button element and makes the whole attachment clickable while preserving the correct element semantics."}
+
+```tsx title="showcases/attachment/cases/full-card-trigger.tsx"
+<Attachment
+  title="release-notes.md"
+  trigger={
+    <a aria-label="Preview release-notes.md" href="/files/release-notes.md" />
+  }
+/>
+```
+
+### Attachment collection
+
+{"Attachment.Group renders a collection from items and provides scrolling and snapping for horizontal overflow."}
+
+```tsx title="showcases/attachment/cases/attachment-collection.tsx"
+import { Attachment } from '@heliannuuthus/ui';
+
+<Attachment.Group
+  items={files.map((file) => ({
+    key: file.id,
+    title: file.name,
+    description: file.size,
+    media: <FileArchive />,
+    state: file.state,
+  }))}
+/>;
+```
+
+## Component parts
+
+- **Attachment** — Display a single attachment via title, description, media, and action props.
+- **Attachment.Group** — Display the attachment collection through items props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: 'Set the attachment name.',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description:
+        'Set supporting details such as file size, processing state, or error reason.',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: 'Set a file-type icon or thumbnail.',
+      name: 'media',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'icon'",
+      description: 'Declare whether the media content is an icon or an image.',
+      name: 'mediaType',
+      type: "'icon' | 'image'",
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: 'Set attachment actions such as download, retry, or remove.',
+      name: 'actions',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description:
+        'Pass in a link or button element to make the entire attachment the corresponding trigger area.',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'horizontal'",
+      description:
+        'Switch between line attachments or vertical thumbnail attachments.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'default'",
+      description: 'Sets the overall density of attachments.',
+      name: 'size',
+      type: "'xs' | 'sm' | 'default'",
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'done'",
+      description:
+        "Expresses the attachment's current processing stage and drives status styles.",
+      name: 'state',
+      type: "'idle' | 'uploading' | 'processing' | 'error' | 'done'",
+    },
+    {
+      component: 'Attachment.Group',
+      defaultValue: null,
+      description: 'Renders a set of Attachments via a configuration array.',
+      name: 'items',
+      type: 'readonly AttachmentGroupItem[]',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Attachment.Group',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Attachment.Group',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### AttachmentProps
+
+```ts
+type AttachmentProps = Omit<ComponentProps<'div'>, 'children' | 'title'> & {
+  title: ReactNode;
+  description?: ReactNode;
+  media?: ReactNode;
+  mediaType?: 'icon' | 'image';
+  actions?: ReactNode;
+  trigger?: ReactElement;
+  orientation?: 'horizontal' | 'vertical';
+  size?: 'xs' | 'sm' | 'default';
+  state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
+};
+```
+
+### AttachmentGroupItem
+
+```ts
+type AttachmentGroupItem = AttachmentProps & {
+  key?: React.Key;
+  title: ReactNode;
+  description?: ReactNode;
+  media?: ReactNode;
+  mediaType?: 'icon' | 'image';
+  actions?: ReactNode;
+  trigger?: ReactElement;
+  orientation?: 'horizontal' | 'vertical';
+  size?: 'xs' | 'sm' | 'default';
+  state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
+};
+```
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

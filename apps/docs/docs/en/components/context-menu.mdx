@@ -1,0 +1,209 @@
+---
+title: 'Context Menu'
+description: 'Provides object-related contextual operations.'
+lang: en
+---
+
+import ContextMenuShowcase from '@showcases/context-menu';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Context Menu
+
+{"Provides object-related contextual operations."}
+
+## When to use
+
+- Primary use: Provides object-related contextual operations.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<ContextMenuShowcase />
+
+### Basic usage
+
+{"items demonstrates group labels, icons, shortcuts, disabled entries, separators, and destructive actions; the selected result appears below the trigger area."}
+
+```tsx title="showcases/context-menu/cases/basic-usage.tsx"
+import { ContextMenu } from '@heliannuuthus/ui';
+
+<ContextMenu
+  trigger={<div tabIndex={0}>Right-click here</div>}
+  items={[
+    { type: 'label', label: 'Page actions' },
+    { label: 'Copy link', shortcut: '⌘C', onSelect: copyLink },
+    { label: 'Copy internal link', disabled: true },
+    { type: 'separator' },
+    { label: 'Delete page', destructive: true, onSelect: deletePage },
+  ]}
+/>;
+```
+
+### Checkbox and radio states
+
+{"A checkbox entry manages an independent boolean state, while a radio entry manages mutually exclusive options; the result remains visible in the trigger area after the menu closes."}
+
+```tsx title="showcases/context-menu/cases/checkbox-and-radio-states.tsx"
+<ContextMenu
+  trigger={<div tabIndex={0}>Page visibility</div>}
+  items={[
+    {
+      type: 'checkbox',
+      label: 'Show comments',
+      checked: showComments,
+      onChange: setShowComments,
+    },
+    {
+      type: 'radio',
+      value: access,
+      onChange: setAccess,
+      items: [
+        { label: 'Only me', value: 'private' },
+        { label: 'Team members', value: 'team' },
+      ],
+    },
+  ]}
+/>
+```
+
+### Nested submenu
+
+{"A regular item with children becomes a submenu, suitable for placing multiple formats or targets of the same action in a second level."}
+
+```tsx title="showcases/context-menu/cases/nested-submenu.tsx"
+<ContextMenu
+  trigger={<div tabIndex={0}>File preview</div>}
+  items={[
+    {
+      label: 'Export as',
+      children: [
+        { label: 'PDF document', onSelect: exportPdf },
+        { label: 'PNG image', onSelect: exportPng },
+        { label: 'CSV spreadsheet', onSelect: exportCsv },
+      ],
+    },
+  ]}
+/>
+```
+
+### Open state and disabled
+
+{"Compare the default uncontrolled mode, controlled mode managed through open and onOpenChange, and the state where disabled prevents triggering."}
+
+```tsx title="showcases/context-menu/cases/open-state-and-disabled.tsx"
+<ContextMenu defaultOpen={false} items={items} trigger={target} />
+<ContextMenu open={open} onOpenChange={setOpen} items={items} trigger={target} />
+<ContextMenu disabled items={items} trigger={target} />
+
+<ContextMenu
+  trigger={target}
+  items={items}
+  classNames={{ content: 'min-w-48' }}
+  styles={{ content: { padding: 4 } }}
+/>
+```
+
+## Component parts
+
+- **Context Menu** — Configure content, state, behavior, and extension points through main component props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description:
+        'The target element that responds to the right click or menu key.',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description:
+        'Configure common actions, dividers, selections, and submenus.',
+      name: 'items',
+      type: 'readonly DropdownMenuEntry[]',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: 'Manage menu status in a controlled or uncontrolled manner.',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: 'false',
+      description: 'Manage menu status in a controlled or uncontrolled manner.',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: 'Manage menu status in a controlled or uncontrolled manner.',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: 'false',
+      description: 'Disable context menu triggering.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'ContextMenuClassNames',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'ContextMenuStyles',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### ContextMenuClassNames
+
+```ts
+type ContextMenuClassNames = {
+  content?: string;
+};
+```
+
+### ContextMenuStyles
+
+```ts
+type ContextMenuStyles = {
+  content?: React.CSSProperties;
+};
+```
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

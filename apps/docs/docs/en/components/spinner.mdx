@@ -1,0 +1,108 @@
+---
+title: 'Spinner'
+description: 'Use a rotating icon to represent a short wait for which the completion time cannot be estimated; the size only controls the icon itself, and the component does not come with buttons or layout containers.'
+lang: en
+---
+
+import SpinnerShowcase from '@showcases/spinner';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Spinner
+
+{"Use a rotating icon to represent a short wait for which the completion time cannot be estimated; the size only controls the icon itself, and the component does not come with buttons or layout containers."}
+
+## When to use
+
+- Partial content is being refreshed, synced, or generated and is expected to be completed soon.
+- Need to provide lightweight wait feedback next to a compact status line, media placeholder, or action.
+
+## Examples
+
+<SpinnerShowcase />
+
+### Basic usage
+
+{"Spinner represents a short load where the completion ratio cannot be determined and is used with visible status text."}
+
+```tsx title="showcases/spinner/cases/basic-usage.tsx"
+import { Spinner } from '@heliannuuthus/ui';
+
+<div>
+  <Spinner />
+  Loading components...
+</div>;
+```
+
+### icon size
+
+{"Large, medium, and small directly display the original loading icon, and the size does not imply button height or other container styles."}
+
+```tsx title="showcases/spinner/cases/icon-size.tsx"
+import { Spinner } from '@heliannuuthus/ui'
+
+<Spinner aria-label="small size loading" size="sm" />
+<Spinner aria-label="Loading" />
+<Spinner aria-label="Large size loading" size="lg" />
+```
+
+### Partial loading status
+
+{"Only place icons and status descriptions in the content area being updated, and keep other parts of the page readable and operable."}
+
+```tsx title="showcases/spinner/cases/partial-loading-status.tsx"
+import { Spinner } from '@heliannuuthus/ui';
+
+<section aria-busy="true" aria-label="Synchronizing environment status">
+  <div>
+    <span>Preview environment</span>
+    <Spinner aria-label="Preview environment synchronizing" size="sm" />
+  </div>
+</section>;
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Spinner',
+      defaultValue: "'default'",
+      description:
+        'Sets the size of the loading icon itself without changing the surrounding container.',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Spinner',
+      defaultValue: null,
+      description: 'Override dimensions, colors, or other SVG styles.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Spinner',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Provide standalone spinners with an aria-label describing the current task, such as "synchronizing environment state".
+- Set aria-busy="true" on the nearest container when a zone is loaded, and keep other zones operational.
+
+## Avoid
+
+- Do not wrap the Spinner into the Button for display size; the button loading state should be composed by the actual operation button.
+- Progress should be used for long-term or quantifiable tasks, and Skeleton should be used first for first-screen structure loading.
+- Do not stack multiple spinners expressing the same state in the same local area at the same time.

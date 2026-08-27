@@ -1,0 +1,196 @@
+---
+title: 'Dialog 对话框'
+description: '在模态层中完成聚焦任务。'
+lang: zh-Hans
+---
+
+import DialogShowcase from '@showcases/dialog';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Dialog 对话框
+
+{"在模态层中完成聚焦任务。"}
+
+## 何时使用
+
+- 需要在模态层中完成聚焦任务时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<DialogShowcase />
+
+### 基础用法
+
+{"在不离开当前页面的情况下完成一项聚焦编辑任务，并保留明确的取消和保存动作。"}
+
+```tsx title="showcases/dialog/cases/basic-usage.tsx"
+import { Button, Dialog } from '@heliannuuthus/ui'
+import { CircleX } from 'lucide-react'
+
+<Dialog
+  trigger={<Button>安排发布</Button>}
+  title="安排生产环境发布"
+  description="选择版本和发布时间。"
+  cancelText="取消"
+  confirmText="确认安排"
+>
+  <ReleaseForm />
+</Dialog>
+
+<Dialog
+  open={open}
+  onOpenChange={setOpen}
+  footer={<Button>Save</Button>}
+  closable={<CircleX />}
+  classNames={{ content: 'max-w-xl' }}
+  styles={{ content: { minHeight: 320 } }}
+/>
+<Dialog closable={false} defaultOpen={false} title="Workspace settings" />
+```
+
+## 组成部分
+
+- **Dialog** — 通过主组件 props 配置内容、状态、行为和扩展点。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: '可选的对话框触发元素；受控场景可省略。',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: '设置任务标题、辅助说明和主体内容。',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: '设置任务标题、辅助说明和主体内容。',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: '设置任务标题、辅助说明和主体内容。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description:
+        '完全自定义底部操作；省略时可使用 cancelText 与 confirmText。',
+      name: 'footer',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: 'true',
+      description:
+        '设置右上角关闭控件；true 使用默认图标，ReactNode 自定义图标，false 隐藏控件。',
+      name: 'closable',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: '配置默认底部操作及确认回调。',
+      name: 'confirmText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: '配置默认底部操作及确认回调。',
+      name: 'cancelText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: '配置默认底部操作及确认回调。',
+      name: 'onConfirm',
+      type: '() => void',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: '以受控或非受控方式管理打开状态。',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: 'false',
+      description: '以受控或非受控方式管理打开状态。',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: '以受控或非受控方式管理打开状态。',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'DialogClassNames',
+    },
+    {
+      component: 'Dialog',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'DialogStyles',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### DialogClassNames
+
+```ts
+type DialogClassNames = {
+  content?: string;
+};
+```
+
+### DialogStyles
+
+```ts
+type DialogStyles = {
+  content?: React.CSSProperties;
+};
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

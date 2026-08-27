@@ -1,0 +1,426 @@
+---
+title: 'Form'
+description: 'Uses Form.Field to connect data-entry controls, validation state, and submission behavior consistently.'
+lang: en
+---
+
+import FormShowcase from '@showcases/form';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Form
+
+{"Uses Form.Field to connect data-entry controls, validation state, and submission behavior consistently."}
+
+## When to use
+
+- Organizes labels, controls, descriptions, and errors consistently.
+- Lets built-in data-entry controls connect field values, validation state, and submission automatically.
+
+## Examples
+
+<FormShowcase />
+
+### Basic usage
+
+{"Also displays labels, descriptions, error messages, and horizontal fields for setting items."}
+
+```tsx title="showcases/form/cases/basic-usage.tsx"
+import { Form, Input } from '@heliannuuthus/ui';
+
+<Form.Field
+  name="handle"
+  label="Handle"
+  description="Used to generate the public profile URL."
+  rules={{ pattern: /^[a-z0-9-]+$/ }}
+>
+  <Input />
+</Form.Field>;
+```
+
+### Label association and necessity
+
+{"Form.Field automatically associates labels with controls and consistently generates required markers and supporting descriptions."}
+
+```tsx title="showcases/form/cases/label-association-and-necessity.tsx"
+import { Form, Input } from '@heliannuuthus/ui'
+
+<Form.Field name="teamName" label="Team name" required>
+  <Input />
+</Form.Field>
+
+<Form.Field name="role" label="Role" description="Optional">
+  <Input />
+</Form.Field>
+```
+
+### Complete component form
+
+{"Validate value binding, validation state, and accessible relationships for every supported control in one form."}
+
+```tsx title="showcases/form/cases/complete-component-form.tsx"
+import {
+  Button,
+  Checkbox,
+  DatePicker,
+  Form,
+  Input,
+  Radio,
+  Select,
+  Slider,
+  Switch,
+  Toggle,
+} from '@heliannuuthus/ui'
+
+const form = Form.useForm({
+  defaultValues: {
+    confirmation: false,
+    formats: ['markdown'],
+    inviteCode: '',
+    launchDate: undefined,
+    name: '',
+    notifications: true,
+    permissions: ['read'],
+    pinned: false,
+    region: 'asia',
+    reviewThreshold: 2,
+    retryLimit: 3,
+    summary: '',
+    visibility: 'team',
+    workspace: null,
+  },
+})
+
+<Form form={form} onSubmit={onSubmit}>
+  <Form.Field
+    name="name"
+    label={t('workspace.name')}
+    rules={{ required: t('validation.required') }}
+  >
+    <Input />
+  </Form.Field>
+
+  <Form.Field name="summary" label={t('workspace.description')}>
+    <Input.TextArea />
+  </Form.Field>
+
+  <Form.Field name="inviteCode" label={t('workspace.inviteCode')}>
+    <Input.OTP maxLength={6} />
+  </Form.Field>
+
+  <Form.Field name="region" label={t('workspace.region')}>
+    <Select options={regionOptions} />
+  </Form.Field>
+
+  <Form.Field name="workspace" label={t('workspace.parent')}>
+    <Select options={workspaceOptions} showClear />
+  </Form.Field>
+
+  <Form.Field name="notifications" label={t('workspace.notifications')}>
+    <Switch />
+  </Form.Field>
+
+  <Form.Field
+    name="confirmation"
+    rules={{ required: t('validation.confirm') }}
+  >
+    <Checkbox>{t('workspace.confirm')}</Checkbox>
+  </Form.Field>
+
+  <Form.Field name="permissions" label={t('workspace.permissions')}>
+    <Checkbox.Group options={permissionOptions} />
+  </Form.Field>
+
+  <Form.Field name="visibility" label={t('workspace.visibility')}>
+    <Radio.Group options={visibilityOptions} />
+  </Form.Field>
+
+  <Form.Field name="launchDate" label={t('workspace.launchDate')}>
+    <DatePicker />
+  </Form.Field>
+
+  <Form.Field name="reviewThreshold" label={t('workspace.reviewThreshold')}>
+    <Slider min={1} max={5} />
+  </Form.Field>
+
+  <Form.Field name="retryLimit" label={t('workspace.retryLimit')}>
+    <Input.Number min={0} max={10} />
+  </Form.Field>
+
+  <Form.Field name="pinned" label={t('workspace.pinned')}>
+    <Toggle>{t('actions.pin')}</Toggle>
+  </Form.Field>
+
+  <Form.Field name="formats" label={t('workspace.formats')}>
+    <Toggle.Group multiple items={formatOptions} />
+  </Form.Field>
+
+  <Button type="submit">{t('actions.save')}</Button>
+</Form>
+```
+
+### Custom control integration
+
+{"Compare a minimal value-bound control with one that also supports error focus and the complete field contract."}
+
+```tsx title="showcases/form/cases/custom-control-integration.tsx"
+import { forwardRef } from 'react'
+import {
+  Button,
+  Form,
+  Radio,
+  type FormFieldInjectedControlProps,
+} from '@heliannuuthus/ui'
+
+type Priority = '' | 'routine' | 'important' | 'urgent'
+
+type PriorityControlProps = FormFieldInjectedControlProps<Priority>
+
+const options = [
+  { label: t('priority.routine'), value: 'routine' },
+  { label: t('priority.important'), value: 'important' },
+  { label: t('priority.urgent'), value: 'urgent' },
+] as const
+
+// Minimum: value binding with a regular function component
+const MinimalPriorityControl = ({
+  onChange,
+  ...props
+}: PriorityControlProps) => (
+  <Radio.Group
+    {...props}
+    columns={3}
+    minColumnWidth={0}
+    onChange={onChange}
+    options={options}
+  />
+)
+
+// Complete: forward the ref to enable validation-error focus
+const CompletePriorityControl = forwardRef<
+  HTMLInputElement,
+  PriorityControlProps
+>(
+  ({ onChange, ...props }, ref) => (
+    <Radio.Group
+      {...props}
+      columns={3}
+      inputRef={ref}
+      minColumnWidth={0}
+      onChange={onChange}
+      options={options}
+    />
+  )
+)
+
+type Values = {
+  completePriority: Priority
+  minimalPriority: Priority
+}
+
+const form = Form.useForm<Values>({
+  defaultValues: {
+    completePriority: '',
+    minimalPriority: 'routine',
+  },
+})
+
+<Form form={form} onSubmit={onSubmit}>
+  <Form.Field<Values, 'minimalPriority'>
+    name="minimalPriority"
+    label={t('priority.minimal')}
+  >
+    <MinimalPriorityControl />
+  </Form.Field>
+
+  <Form.Field<Values, 'completePriority'>
+    name="completePriority"
+    label={t('priority.complete')}
+    description={t('priority.description')}
+    rules={{ required: t('priority.required') }}
+  >
+    <CompletePriorityControl />
+  </Form.Field>
+
+  <Button type="submit">{t('actions.save')}</Button>
+</Form>
+
+<Form form={form} onInvalid={handleInvalid} onSubmit={handleSubmit}>
+  <Form.Field name="team" defaultValue="platform" disabled>
+    <Input />
+  </Form.Field>
+</Form>
+```
+
+## Component parts
+
+- **Form** — Renders a native form and connects a Form.useForm instance.
+- **Form.useForm** — Creates a typed form instance and manages the complete form state.
+- **Form.Field** — Binds built-in controls automatically and organizes labels, descriptions, and validation errors.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: 'Connects the form instance created by Form.useForm.',
+      name: 'form',
+      type: 'FormInstance',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description:
+        'Receives the complete form values after validation succeeds.',
+      name: 'onSubmit',
+      type: '(values) => void | Promise<void>',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Specifies the unique path of the current field in the form data.',
+      name: 'name',
+      type: 'FieldPath',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Sets the field label and automatically associates it with the control.',
+      name: 'label',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Adds field guidance and its accessible description relationship.',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Declare the required fields, formats and custom validation rules for the current field.',
+      name: 'rules',
+      type: 'RegisterOptions',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Accepts one control element; built-in controls bind automatically, while custom controls receive the standard controlled props.',
+      name: 'children',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: "'vertical'",
+      description:
+        'Set the arrangement direction of labels, content and controls.',
+      name: 'orientation',
+      type: "'vertical' | 'horizontal' | 'responsive'",
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'onInvalid',
+      type: 'SubmitErrorHandler',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'defaultValue',
+      type: 'FieldPathValue',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### FormFieldInjectedControlProps&lt;Value&gt;
+
+```ts
+type FormFieldInjectedControlProps<Value> = {
+  'aria-describedby'?: string;
+  'aria-errormessage'?: string;
+  'aria-invalid'?: boolean;
+  'aria-labelledby'?: string;
+  'aria-required'?: boolean;
+  disabled?: boolean;
+  id?: string;
+  name?: string;
+  onBlur?: () => void;
+  onChange?: (value: Value) => void;
+  required?: boolean;
+  value?: Value;
+};
+```
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

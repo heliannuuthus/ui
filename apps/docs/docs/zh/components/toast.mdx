@@ -1,0 +1,161 @@
+---
+title: 'Toast 轻提示'
+description: '在页面顶部短暂反馈操作结果；内置 success、info、warning、error 四种语义样式，并可通过 Provider 隔离全局或局部通知通道。'
+lang: zh-Hans
+---
+
+import ToastShowcase from '@showcases/toast';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Toast 轻提示
+
+{"在页面顶部短暂反馈操作结果；内置 success、info、warning、error 四种语义样式，并可通过 Provider 隔离全局或局部通知通道。"}
+
+## 何时使用
+
+- 操作已经结束，需要短暂确认结果，但不应打断用户当前任务。
+- 组件树中的深层操作需要调用统一的页面级通知，或工作区内部需要独立的局部通知。
+
+## 示例
+
+<ToastShowcase />
+
+### 基础用法
+
+{"在应用根部放置 Provider，后代组件通过 useToast 调用 success、info、warning 或 error；默认显示在页面顶部。"}
+
+```tsx title="showcases/toast/cases/basic-usage.tsx"
+import { Toast, useToast } from '@heliannuuthus/ui';
+
+const PublishAction = () => {
+  const { toast } = useToast();
+
+  return <Button onClick={() => toast.success('发布已完成')}>发布</Button>;
+};
+
+<Toast.Provider>
+  <App />
+</Toast.Provider>;
+```
+
+### 局部通知
+
+{"局部 Provider 会创建独立通知通道，并将 Toast 约束在最近的定位容器中，不覆盖整个页面。"}
+
+```tsx title="showcases/toast/cases/local-notification.tsx"
+import { Toast, useToast } from '@heliannuuthus/ui'
+
+const WorkspaceAction = () => {
+  const { toast } = useToast()
+  return <Button onClick={() => toast.info('预览已刷新')}>刷新</Button>
+}
+
+<div className="relative overflow-hidden">
+  <Toast.Provider scope="local">
+    <WorkspaceAction />
+  </Toast.Provider>
+</div>
+
+<Toast.Toaster position="top-right" richColors scope="local" />
+```
+
+## 组成部分
+
+- **Toast.Provider** — 创建通知 Context，并根据 scope 渲染全局或局部 Toaster。
+- **useToast** — 在 Provider 后代中取得绑定当前通知通道的 toast API。
+- **Toast.Toaster** — 直接配置通知容器的位置、数量、持续时间和局部化方式。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Toast.Provider',
+      defaultValue: "'global'",
+      description: '设置 Provider 创建全局通知通道还是局部通知通道。',
+      name: 'scope',
+      type: "'global' | 'local'",
+    },
+    {
+      component: 'Toast.Toaster',
+      defaultValue: "'global'",
+      description: '设置通知容器相对视口定位还是相对父容器定位。',
+      name: 'scope',
+      type: "'global' | 'local'",
+    },
+    {
+      component: 'Toast.Toaster',
+      defaultValue: "'top-center'",
+      description: '设置通知相对视口或局部容器的出现位置。',
+      name: 'position',
+      type: "'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'",
+    },
+    {
+      component: 'Toast.Toaster',
+      defaultValue: 'true',
+      description: '启用内置语义色；默认已经开启，可按需关闭。',
+      name: 'richColors',
+      type: 'boolean',
+    },
+    {
+      component: 'Toast.Provider',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Toast.Provider',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'id',
+      type: 'string',
+    },
+    {
+      component: 'Toast.Provider',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Toast.Provider',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Toast.Toaster',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Toast.Toaster',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- Toast 使用非阻塞通知区域；消息标题应简短，并在 description 中说明必要上下文。
+- 局部通知的父容器必须可见且尺寸稳定，避免通知被意外裁切到无法阅读。
+
+## 避免事项
+
+- 不要在同一应用根部挂载多个未指定 id 的全局 Provider，否则同一通知可能重复展示。
+- scope="local" 时父容器需要 position: relative 和 overflow: hidden。
+- 需要用户立即确认的危险操作使用 Alert Dialog，持续存在的页面状态使用 Alert。

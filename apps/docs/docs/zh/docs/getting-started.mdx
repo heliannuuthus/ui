@@ -1,0 +1,30 @@
+---
+title: 快速开始
+description: 安装并配置 Heliannuuthus UI。
+lang: zh-Hans
+---
+
+# 快速开始
+
+使用你习惯的包管理器安装：
+
+```bash
+pnpm add @heliannuuthus/ui
+```
+
+在应用入口导入一次静态样式，然后统一从包根入口使用组件：
+
+```tsx
+import '@heliannuuthus/ui/styles.css';
+import { Button, Provider } from '@heliannuuthus/ui';
+
+export function App() {
+  return (
+    <Provider appearance="system">
+      <Button>继续</Button>
+    </Provider>
+  );
+}
+```
+
+组件库只支持 React 19；组件子路径属于私有实现细节。

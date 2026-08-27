@@ -1,0 +1,185 @@
+---
+title: 'Badge 徽标'
+description: '在对象角落或独立位置展示通知数字与状态红点。'
+lang: zh-Hans
+---
+
+import BadgeShowcase from '@showcases/badge';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Badge 徽标
+
+{"在对象角落或独立位置展示通知数字与状态红点。"}
+
+## 何时使用
+
+- 在按钮、头像或其他对象上叠加未读数量。
+- 只需提示存在新内容，或需要独立展示简短计数。
+
+## 示例
+
+<BadgeShowcase />
+
+### 基础用法
+
+{"没有 children 时独立显示通知；数字 0 会保留，超过 max 时显示封顶文案。"}
+
+```tsx title="showcases/badge/cases/basic-usage.tsx"
+import { Badge } from '@heliannuuthus/ui'
+
+<Badge indicator={5} />
+<Badge indicator={0} />
+<Badge indicator={123} max={99} />
+```
+
+### 锚点通知
+
+{"传入 children 后，通知会定位到对象的 inline-end 顶角；offset 可微调逻辑方向位置。"}
+
+```tsx title="showcases/badge/cases/anchored-notifications.tsx"
+import { Badge, Button } from '@heliannuuthus/ui'
+import { Mail } from 'lucide-react'
+
+<Badge indicator={5} indicatorLabel="5 条未读消息">
+  <Button aria-label="查看消息" size="icon" variant="outline">
+    <Mail />
+  </Button>
+</Badge>
+
+<Badge dir="rtl" indicator={12} offset={[3, -2]}>
+  <Button variant="outline">收件箱</Button>
+</Badge>
+```
+
+### 状态红点
+
+{"indicator 为 true 时只显示红点；因为没有可见内容，必须提供 indicatorLabel。"}
+
+```tsx title="showcases/badge/cases/status-dot.tsx"
+import { Badge, Button } from '@heliannuuthus/ui';
+
+<Badge indicator indicatorLabel="有新的系统通知">
+  <Button variant="outline">系统通知</Button>
+</Badge>;
+```
+
+### 样式扩展
+
+{"根节点使用 className 与 style，通知标记使用对应的 classNames 和 styles 插槽。"}
+
+```tsx title="showcases/badge/cases/style-extensions.tsx"
+import { Badge } from '@heliannuuthus/ui';
+
+<Badge
+  classNames={{ indicator: 'bg-primary' }}
+  indicator={8}
+  styles={{ indicator: { fontVariantNumeric: 'tabular-nums' } }}
+/>;
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description:
+        '设置通知内容；true 显示红点，节点显示内容，false、null 或 undefined 隐藏。',
+      name: 'indicator',
+      type: 'true | ReactNode | false | null',
+    },
+    {
+      component: 'Badge',
+      defaultValue: '99',
+      description: '设置数字通知的显示上限，超出时追加加号。',
+      name: 'max',
+      type: 'number',
+    },
+    {
+      component: 'Badge',
+      defaultValue: '[0, 0]',
+      description: '微调通知相对锚点的水平与垂直位置。',
+      name: 'offset',
+      type: 'readonly [horizontal: number, vertical: number]',
+    },
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description: '设置通知的无障碍名称；红点模式必须提供。',
+      name: 'indicatorLabel',
+      type: 'string',
+    },
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description: '设置通知标记的锚点；省略时独立显示。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'BadgeClassNames',
+    },
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'BadgeStyles',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### BadgeClassNames
+
+```ts
+type BadgeClassNames = {
+  indicator?: string;
+};
+```
+
+### BadgeStyles
+
+```ts
+type BadgeStyles = {
+  indicator?: React.CSSProperties;
+};
+```
+
+## 无障碍
+
+- 红点没有可见文字，必须通过 indicatorLabel 说明通知含义。
+- 数字已有可见文本；含义不明确时仍应补充 indicatorLabel。
+- Badge 支持标准 span、ARIA、data 属性和事件，并转发 span ref。
+
+## 避免事项
+
+- Badge 只表示通知；状态、分类和简短属性应使用 Tag。
+- 不要把 Badge 本身当作交互控件，应把 Button 或链接作为 children。

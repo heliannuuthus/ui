@@ -1,0 +1,380 @@
+---
+title: 'Accordion 手风琴'
+description: '按需展开一组纵向排列的内容区域。'
+lang: zh-Hans
+---
+
+import AccordionShowcase from '@showcases/accordion';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Accordion 手风琴
+
+{"按需展开一组纵向排列的内容区域。"}
+
+## 何时使用
+
+- 需要按需展开一组纵向排列的内容区域时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<AccordionShowcase />
+
+### 单项展开
+
+{"默认一次只展开一个条目，打开新条目时关闭前一个。"}
+
+```tsx title="showcases/accordion/cases/single-item-expansion.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion
+  defaultValue={['preflight']}
+  items={[
+    {
+      value: 'preflight',
+      title: '预检结果',
+      content: '42 项检查均已通过。',
+    },
+    {
+      value: 'rollback',
+      title: '回滚方案',
+      content: '异常时切回上一版本。',
+    },
+  ]}
+/>;
+```
+
+### 多项展开
+
+{"设置 multiple 后允许多个条目同时保持展开。"}
+
+```tsx title="showcases/accordion/cases/multiple-expansion.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion
+  defaultValue={['preflight', 'rollback']}
+  multiple
+  items={[
+    {
+      value: 'preflight',
+      title: '预检结果',
+      content: '42 项检查均已通过。',
+    },
+    {
+      value: 'rollback',
+      title: '回滚方案',
+      content: '异常时切回上一版本。',
+    },
+  ]}
+/>;
+```
+
+### 受控状态
+
+{"value 表示当前展开条目，onChange 接收用户操作后的完整值数组。"}
+
+```tsx title="showcases/accordion/cases/controlled-state.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion items={items} value={value} onChange={setValue} />;
+```
+
+### 默认指示器
+
+{"省略 indicator 时在标题末端显示默认箭头，并随展开状态旋转。"}
+
+```tsx title="showcases/accordion/cases/default-indicator.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion
+  defaultValue={['deployment']}
+  items={[
+    {
+      value: 'deployment',
+      title: '部署策略',
+      content: '先灰度 10%，观察后全量发布。',
+    },
+  ]}
+/>;
+```
+
+### 起始位置
+
+{"通过 Accordion.Indicator 的 position 将默认箭头放到标题起始侧。"}
+
+```tsx title="showcases/accordion/cases/start-position.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion
+  indicator={<Accordion.Indicator position="start" />}
+  items={items}
+/>;
+```
+
+### 状态函数指示器
+
+{"使用 Accordion.Indicator 统一设置位置；children 状态函数接收当前条目的 open、disabled 和 value，由调用方决定展示内容。"}
+
+```tsx title="showcases/accordion/cases/state-function-indicator.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+import { Minus, Plus } from 'lucide-react';
+
+<Accordion
+  defaultValue={['deployment']}
+  indicator={
+    <Accordion.Indicator position="start">
+      {({ open }) => (open ? <Minus /> : <Plus />)}
+    </Accordion.Indicator>
+  }
+  items={[
+    {
+      value: 'deployment',
+      title: '部署策略',
+      content: '先灰度 10%，观察后全量发布。',
+    },
+  ]}
+/>;
+```
+
+### 禁用单个条目
+
+{"在 AccordionItem 上设置 disabled，仅阻止该条目的触发交互。"}
+
+```tsx title="showcases/accordion/cases/disable-one-item.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion
+  items={[
+    {
+      value: 'preflight',
+      title: '预检结果',
+      content: '42 项检查均已通过。',
+      disabled: true,
+    },
+    {
+      value: 'rollback',
+      title: '回滚方案',
+      content: '异常时切回上一版本。',
+    },
+  ]}
+/>;
+```
+
+### 禁用整个组件
+
+{"在 Accordion 上设置 disabled，统一阻止所有条目的展开与收起。"}
+
+```tsx title="showcases/accordion/cases/disable-the-entire-component.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion disabled items={items} />;
+```
+
+### 关闭面板保留策略
+
+{"默认关闭时卸载面板；keepMounted 保留内部状态；hiddenUntilFound 保留内容并允许浏览器页内查找定位。"}
+
+```tsx title="showcases/accordion/cases/closed-panel-retention.tsx"
+<Accordion items={items} />
+<Accordion items={items} keepMounted />
+<Accordion items={items} hiddenUntilFound />
+```
+
+## 组成部分
+
+- **Accordion** — 管理展开值并根据 items 渲染一组关联面板。
+- **AccordionItem** — 描述单个条目的标识、标题、面板内容与禁用状态。
+- **Accordion.Indicator** — 读取当前条目状态，并在标题起始侧或末端渲染展开指示器。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Accordion',
+      defaultValue: null,
+      description: '配置每个面板的 value、title、content 与禁用状态。',
+      name: 'items',
+      type: 'readonly AccordionItem[]',
+    },
+    {
+      component: 'AccordionItem',
+      defaultValue: null,
+      description: '设置条目的唯一标识，并用于受控展开值。',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'AccordionItem',
+      defaultValue: null,
+      description: '设置触发按钮中显示的标题内容。',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'AccordionItem',
+      defaultValue: null,
+      description: '设置条目展开后显示的面板内容。',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'AccordionItem',
+      defaultValue: 'false',
+      description: '仅禁用当前条目的展开与收起交互。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: null,
+      description: '以受控或非受控方式指定当前展开项。',
+      name: 'value',
+      type: 'string[]',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: null,
+      description: '以受控或非受控方式指定当前展开项。',
+      name: 'defaultValue',
+      type: 'string[]',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: null,
+      description: '展开项变化时回传完整 value 数组。',
+      name: 'onChange',
+      type: '(value: string[]) => void',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: 'false',
+      description: '允许同时展开多个条目。',
+      name: 'multiple',
+      type: 'boolean',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: 'false',
+      description: '禁用整个 Accordion 的所有条目。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: '<Accordion.Indicator />',
+      description:
+        '设置 Accordion.Indicator；省略时使用位于末端、随展开状态旋转的默认箭头，传入 null 时隐藏。',
+      name: 'indicator',
+      type: 'ReactElement<AccordionIndicatorProps> | null',
+    },
+    {
+      component: 'Accordion.Indicator',
+      defaultValue: null,
+      description:
+        '传入静态节点时随展开状态旋转；传入状态函数时接收 open、disabled 与 value，并完全控制展示内容。',
+      name: 'children',
+      type: 'ReactNode | ((state: AccordionIndicatorState) => ReactNode)',
+    },
+    {
+      component: 'Accordion.Indicator',
+      defaultValue: "'end'",
+      description: '将指示器放在标题起始侧或末端。',
+      name: 'position',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Accordion',
+      defaultValue: 'false',
+      description:
+        '关闭面板后仍保留其 DOM，适合保留内部状态；不能与 hiddenUntilFound 同时使用。',
+      name: 'keepMounted',
+      type: 'boolean',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: 'false',
+      description:
+        '通过 hidden="until-found" 保留关闭面板，使浏览器页内查找可以定位并展开内容；不能与 keepMounted 同时使用。',
+      name: 'hiddenUntilFound',
+      type: 'boolean',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Accordion.Indicator',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Accordion.Indicator',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### AccordionItem
+
+```ts
+type AccordionItem = {
+  value: string;
+  title: ReactNode;
+  content: ReactNode;
+  disabled?: boolean;
+};
+```
+
+### AccordionIndicatorProps
+
+```ts
+type AccordionIndicatorProps = Omit<ComponentProps<'span'>, 'children'> & {
+  children?: ReactNode | ((state: AccordionIndicatorState) => ReactNode);
+  position?: 'start' | 'end';
+};
+```
+
+### AccordionIndicatorState
+
+```ts
+type AccordionIndicatorState = {
+  open?: boolean;
+  disabled?: boolean;
+  value?: string;
+};
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

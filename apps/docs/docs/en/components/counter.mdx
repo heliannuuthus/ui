@@ -1,0 +1,203 @@
+---
+title: 'Counter'
+description: 'Continuously changing numbers are presented with bit-by-bit scrolling animation; the component is only responsible for display, and the values ​​and business operations are controlled by external states.'
+lang: en
+---
+
+import CounterShowcase from '@showcases/counter';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Counter
+
+{"Continuously changing numbers are presented with bit-by-bit scrolling animation; the component is only responsible for display, and the values ​​and business operations are controlled by external states."}
+
+## When to use
+
+- Need to emphasize the changing process of statistical indicators, balances, counts or real-time readings.
+- Numbers need to be updated in fixed digits to reduce visual jitter caused by sudden replacement of the entire text.
+
+## Examples
+
+<CounterShowcase />
+
+### Basic usage
+
+{"Pass in value to display values ​​with bit-by-bit scrolling feedback."}
+
+```tsx title="showcases/counter/cases/basic-usage.tsx"
+import { Counter } from '@heliannuuthus/ui';
+
+<Counter value={7.4} fontSize={52} fontWeight={600} />;
+```
+
+### build count
+
+{"When the value changes, only the changed digits are scrolled; fixing places can avoid layout jumps caused by changes in digits."}
+
+```tsx title="showcases/counter/cases/build-count.tsx"
+import { Counter } from '@heliannuuthus/ui'
+
+<Counter
+  value={count}
+  places={[1000, 100, 10, 1]}
+  fontSize={60}
+  fontWeight={600}
+  suffix={<small>times</small>}
+  valueText={`${count} builds`}
+/>
+
+<Counter
+  value={1280}
+  gap={2}
+  prefix="¥"
+  springOptions={{ damping: 24, stiffness: 180 }}
+  classNames={{ digit: 'tabular-nums' }}
+  styles={{ visual: { minWidth: 12 } }}
+/>
+```
+
+## Component parts
+
+- **Counter** — Renders accessible scrolling values ​​based on value, places, and format attributes, and provides prefixes, suffixes, and style extension points.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description:
+        'Set the value to be displayed and drive bit-by-bit scrolling.',
+      name: 'value',
+      type: 'number',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description:
+        'Fixed the number of digits to be displayed; use a decimal point string to separate the integer and decimal places. If omitted, it will be automatically deduced based on value.',
+      name: 'places',
+      type: "readonly (number | '.')[]",
+    },
+    {
+      component: 'Counter',
+      defaultValue: '64',
+      description: 'Set the numeric font size.',
+      name: 'fontSize',
+      type: 'number',
+    },
+    {
+      component: 'Counter',
+      defaultValue: '700',
+      description: 'Set the numeric font weight.',
+      name: 'fontWeight',
+      type: 'CSSProperties["fontWeight"]',
+    },
+    {
+      component: 'Counter',
+      defaultValue: '4',
+      description: 'Set the spacing between numeric places.',
+      name: 'gap',
+      type: 'number',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description:
+        'Place currency or other visual content before the rolling value.',
+      name: 'prefix',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description:
+        'Place units or other visual content after the rolling value.',
+      name: 'suffix',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description:
+        'Provides complete numeric text including units and context for assistive technologies.',
+      name: 'valueText',
+      type: 'string',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: 'Adjust the spring parameters when scrolling each digit.',
+      name: 'springOptions',
+      type: 'SpringOptions',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'CounterClassNames',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'CounterStyles',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### CounterClassNames
+
+```ts
+type CounterClassNames = {
+  digit?: string;
+  visual?: string;
+};
+```
+
+### CounterStyles
+
+```ts
+type CounterStyles = {
+  digit?: React.CSSProperties;
+  visual?: React.CSSProperties;
+};
+```
+
+## Accessibility
+
+- The visual number is hidden from assistive technology and the full, stable text value is provided via valueText.
+- High-frequency updates are not actively reported by default; when changes are really needed to be reported, set aria-live="polite".
+
+## Avoid
+
+- Counter does not manage addition, subtraction or request status; buttons, timers and business data should be composed by external components.
+- When there are frequent changes, it is recommended to fix places to avoid layout jumps caused by changes in the number of digits.
+- Do not enable assertive reporting for purely decorative or high-frequency real-time data.

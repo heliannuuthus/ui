@@ -1,0 +1,324 @@
+---
+title: 'Drawer'
+description: 'Open a drawer from any edge of the viewport or a specified container, using behavior to choose stable panel or gesture presentation.'
+lang: en
+---
+
+import DrawerShowcase from '@showcases/drawer';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Drawer
+
+{"Open a drawer from any edge of the viewport or a specified container, using behavior to choose stable panel or gesture presentation."}
+
+## When to use
+
+- It is necessary to take over filtering, details, navigation or short-process tasks from the edge of the current viewport.
+- Temporary panels need to be restricted to local parent containers such as workbench, previewer, or cards.
+
+## Examples
+
+<DrawerShowcase />
+
+### Basic usage
+
+{"Use the page edge for longer content and continuous actions while preserving the current page context."}
+
+```tsx title="showcases/drawer/cases/basic-usage.tsx"
+import { Drawer } from '@heliannuuthus/ui';
+
+<Drawer
+  behavior="adaptive"
+  side="right"
+  trigger={<Button>Open from the right</Button>}
+  title="Tonight's release window"
+  description="22:00–23:00"
+  closeText="Close"
+>
+  <ReleaseList />
+</Drawer>;
+```
+
+### four directions
+
+{"Unified entry from top, right, bottom, and left; adaptive mode retains gestures in narrow screens and converges to a stable edge panel in wide screens."}
+
+```tsx title="showcases/drawer/cases/four-directions.tsx"
+import { Drawer } from '@heliannuuthus/ui';
+
+<Drawer
+  behavior="panel"
+  container={containerRef}
+  side="left"
+  trigger={<Button>Open from left</Button>}
+  title="Partial filtering"
+>
+  <Filters />
+</Drawer>;
+```
+
+### Bind parent container
+
+{"After passing in container, the portal, viewport and panel are all limited to the specified parent container, and the four directions remain consistent."}
+
+```tsx title="showcases/drawer/cases/bind-parent-container.tsx"
+const containerRef = useRef<HTMLDivElement>(null)
+
+<div ref={containerRef} className="relative overflow-hidden">
+  <Drawer
+    behavior="panel"
+    container={containerRef}
+    side="left"
+    title="Partial filtering"
+    trigger={<Button>Open from left</Button>}
+  >
+    <FilterFields />
+  </Drawer>
+</div>
+
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  snapPoints={[0.25, 0.5, 1]}
+  snapPoint={snapPoint}
+  onSnapChange={setSnapPoint}
+  closable
+  handle
+  sequential
+  swipeDirection="down"
+  classNames={{ content: 'max-h-screen' }}
+  styles={{ content: { minHeight: 320 } }}
+/>
+<Drawer defaultOpen={false} defaultSnapPoint={0.5} />
+```
+
+## Component parts
+
+- **Drawer** — Configure content, state, behavior, and extension points through main component props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Optional drawer trigger element; can be omitted for controlled scenes.',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Configure the drawer header, body content, and bottom actions.',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Configure the drawer header, body content, and bottom actions.',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Configure the drawer header, body content, and bottom actions.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Configure the drawer header, body content, and bottom actions.',
+      name: 'footer',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Set entry direction and adaptive, gesture, or stable panel behavior.',
+      name: 'side',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Set entry direction and adaptive, gesture, or stable panel behavior.',
+      name: 'behavior',
+      type: "'adaptive' | 'gesture' | 'panel'",
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: 'Constrains the drawer to the specified parent container.',
+      name: 'container',
+      type: 'HTMLElement | RefObject<HTMLElement | null>',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Configure and control the segmented expansion position of the gesture drawer.',
+      name: 'snapPoints',
+      type: '(number | string)[]',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Configure and control the segmented expansion position of the gesture drawer.',
+      name: 'snapPoint',
+      type: 'number | string | null',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Configure and control the segmented expansion position of the gesture drawer.',
+      name: 'onSnapChange',
+      type: '(value: number | string | null) => void',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: 'Manage open states in a controlled or uncontrolled manner.',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: 'false',
+      description: 'Manage open states in a controlled or uncontrolled manner.',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: 'Manage open states in a controlled or uncontrolled manner.',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'DrawerClassNames',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'DrawerStyles',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'closeText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: "'outline'",
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'closeVariant',
+      type: 'ButtonProps["variant"]',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'defaultSnapPoint',
+      type: 'DrawerSnapPoint | null',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: 'true',
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'closable',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'handle',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'sequential',
+      type: 'boolean',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'swipeDirection',
+      type: "'down' | 'left' | 'right' | 'up'",
+    },
+  ]}
+/>
+
+## Type definitions
+
+### DrawerClassNames
+
+```ts
+type DrawerClassNames = {
+  content?: string;
+};
+```
+
+### DrawerStyles
+
+```ts
+type DrawerStyles = {
+  content?: React.CSSProperties;
+};
+```
+
+### DrawerSnapPoint
+
+```ts
+type DrawerSnapPoint = number | string;
+```
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- When using container, the parent container must set position: relative and overflow: hidden.
+- Don't choose a behavior based solely on the device name; use gesture for touch-intensive tasks, panel for stable editing panels, and adaptive when you're not sure.

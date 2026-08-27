@@ -1,0 +1,104 @@
+---
+title: 'Separator'
+description: 'Use horizontal or vertical dividers to organize adjacent but different levels of content.'
+lang: en
+---
+
+import SeparatorShowcase from '@showcases/separator';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Separator
+
+{"Use horizontal or vertical dividers to organize adjacent but different levels of content."}
+
+## When to use
+
+- Chapter boundaries need to be established between vertical content.
+- Grouping boundaries need to be established between horizontal toolbars or meta information.
+
+## Examples
+
+<SeparatorShowcase />
+
+### Basic usage
+
+{"Horizontal lines separate sections, list groups, or information levels that appear above and below each other."}
+
+```tsx title="showcases/separator/cases/basic-usage.tsx"
+import { Separator } from '@heliannuuthus/ui'
+
+<section>Content above</section>
+<Separator />
+<section>Content below</section>
+```
+
+### vertical separation
+
+{"Vertical lines separate operations, status, or metainformation that appear side by side on the same line."}
+
+```tsx title="showcases/separator/cases/vertical-separation.tsx"
+import { Separator } from '@heliannuuthus/ui';
+
+<div className="flex items-stretch gap-4">
+  <div>Status</div>
+  <Separator orientation="vertical" />
+  <div>Responsible person</div>
+</div>;
+```
+
+### Custom divider
+
+{"Customize thickness, color, dashed lines and gradient effects via className or style."}
+
+```tsx title="showcases/separator/cases/custom-divider.tsx"
+import { Separator } from '@heliannuuthus/ui'
+
+<Separator className="h-0.5 bg-primary" />
+<Separator className="h-0 border-t border-dashed bg-transparent" />
+<Separator className="h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Separator',
+      defaultValue: "'horizontal'",
+      description: 'Sets the layout direction of dividers.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Separator',
+      defaultValue: null,
+      description: 'Expand divider size, color, and spacing.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Separator',
+      defaultValue: null,
+      description: 'Extend the separator with inline styles.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- The component will provide corresponding separation direction semantics based on orientation.
+- When used only for decoration, do not let dividers enter the keyboard focus order.
+
+## Avoid
+
+- Vertical dividers require the parent container to have an explicit height or a stretchable height.
+- Don’t use dividers as a substitute for true heading hierarchy and content grouping.

@@ -1,0 +1,246 @@
+---
+title: 'Toggle'
+description: 'Use Toggle to toggle the state of individual tools, and manage tool group options with Toggle.Group.'
+lang: en
+---
+
+import ToggleShowcase from '@showcases/toggle';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Toggle
+
+{"Use Toggle to toggle the state of individual tools, and manage tool group options with Toggle.Group."}
+
+## When to use
+
+- A state in the toolbar needs to be turned on or off immediately.
+- A set of closely related tools needs to share single-select or multiple-select states and keyboard navigation.
+
+## Examples
+
+<ToggleShowcase />
+
+### Basic usage
+
+{"Use defaultValue to provide the initial state, subsequent states are managed by Toggle itself."}
+
+```tsx title="showcases/toggle/cases/basic-usage.tsx"
+import { Toggle } from '@heliannuuthus/ui';
+
+<Toggle defaultValue aria-label="toggle bold">
+  <Bold />
+  Bold
+</Toggle>;
+```
+
+### controlled state
+
+{"Read the current switch status through value, and determine the next rendering based on the business status in onChange."}
+
+```tsx title="showcases/toggle/cases/controlled-state.tsx"
+import { Toggle } from '@heliannuuthus/ui';
+
+<Toggle.Group
+  defaultValue={['bold']}
+  items={[
+    { value: 'bold', label: <Bold />, 'aria-label': 'bold' },
+    { value: 'italic', label: <Italic />, 'aria-label': 'italic' },
+  ]}
+/>;
+```
+
+### Format tool set
+
+{"Toggle and Toggle.Group use the same size; use items to manage the status of tools that can be opened at the same time."}
+
+```tsx title="showcases/toggle/cases/format-tool-set.tsx"
+import { Toggle } from '@heliannuuthus/ui'
+
+<Toggle.Group
+  value={formats}
+  onChange={setFormats}
+  multiple
+  variant="outline"
+  items={[
+    { value: 'bold', label: <Bold />, 'aria-label': 'bold' },
+    { value: 'italic', label: <Italic />, 'aria-label': 'italic' },
+    { value: 'underline', label: <Underline />, 'aria-label': 'underline' },
+  ]}
+/>
+
+<Toggle.Group disabled orientation="vertical" items={items} />
+```
+
+## Component parts
+
+- **Toggle** — Expresses the state of a single pressable and releaseable tool.
+- **Toggle.Group** — Manage single or multi-select tool groups via items props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description:
+        'Sets the controlled pressed state; the new value is returned by the caller after the state changes.',
+      name: 'value',
+      type: 'boolean',
+    },
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description: 'Sets the initial pressed state for uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'boolean',
+    },
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description: 'Called when the boolean value of a single Toggle changes.',
+      name: 'onChange',
+      type: '(value: boolean) => void',
+    },
+    {
+      component: 'Toggle',
+      defaultValue: "'default'",
+      description: 'Set a transparent or stroked appearance.',
+      name: 'variant',
+      type: "'default' | 'outline'",
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description:
+        'Sets the set of tool values ​​currently pressed in controlled mode.',
+      name: 'value',
+      type: 'string[]',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description:
+        'Sets the set of tool values ​​initially pressed in uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'string[]',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description:
+        'Declare the value, label, disabled state, and accessible name of the group item through props.',
+      name: 'items',
+      type: 'ToggleGroupOption[]',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description: 'Called when the pressed value in the group changes.',
+      name: 'onChange',
+      type: '(value: string[]) => void',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: 'false',
+      description: 'Allows multiple Toggles to be pressed simultaneously.',
+      name: 'multiple',
+      type: 'boolean',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: "'horizontal'",
+      description: 'Set the direction and match the arrow keys for navigation.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLButtonElement>',
+    },
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'variant',
+      type: "'default' | 'outline'",
+    },
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Toggle',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### ToggleGroupOption
+
+```ts
+type ToggleGroupOption<Value extends string = string> = {
+  label: ReactNode;
+  value: Value;
+} & ButtonHTMLAttributes<HTMLButtonElement>;
+```
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

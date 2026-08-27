@@ -1,0 +1,215 @@
+---
+title: 'Navigation Menu'
+description: 'Organize the main entrance to your site or product and expand rich navigation panels with descriptions and groupings when needed.'
+lang: en
+---
+
+import NavigationMenuShowcase from '@showcases/navigation-menu';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Navigation Menu
+
+{"Organize the main entrance to your site or product and expand rich navigation panels with descriptions and groupings when needed."}
+
+## When to use
+
+- The first-level entrance needs to display classification, description or recommended content at the same time.
+- Site navigation requires a balance between direct links and expandable content groupings.
+
+## Examples
+
+<NavigationMenuShowcase />
+
+### Basic usage
+
+{"Put the product entrance, resource entrance and current page into the same site navigation, and the width of the elastic layer will change smoothly with the content."}
+
+```tsx title="showcases/navigation-menu/cases/basic-usage.tsx"
+import { NavigationMenu } from '@heliannuuthus/ui';
+
+<NavigationMenu
+  items={[
+    {
+      label: 'product',
+      content: ({ Link }) => (
+        <div>
+          <Link href="/components">Component Library</Link>
+          <Link href="/tokens">Design Tokens</Link>
+        </div>
+      ),
+    },
+    { label: 'components', href: '/components', active: true },
+  ]}
+/>;
+```
+
+### Local navigation and alignment
+
+{"Use a smaller content panel on the right side of the toolbar, and use align to control the alignment of the popup relative to the navigation."}
+
+```tsx title="showcases/navigation-menu/cases/local-navigation-and-alignment.tsx"
+import { NavigationMenu } from '@heliannuuthus/ui'
+
+<NavigationMenu
+  align="end"
+  items={[
+    { label: 'Product', content: ({ Link }) => <Link href="/components">Component Library</Link> },
+    { label: 'component', href: '/components' },
+  ]}
+/>
+
+<NavigationMenu
+  items={items}
+  orientation="vertical"
+  value={value}
+  onChange={setValue}
+  delay={100}
+  closeDelay={200}
+/>
+<NavigationMenu defaultValue="docs" items={items} />
+```
+
+## Component parts
+
+- **Navigation Menu** — Configure content, state, behavior, and extension points through main component props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description:
+        'Configure direct links or top-level navigation entries with pop-up content.',
+      name: 'items',
+      type: 'NavigationMenuItemConfig[]',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: 'Set the popup alignment and navigation direction.',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: 'Set the popup alignment and navigation direction.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description:
+        'Manage the current expansion entry in a controlled or uncontrolled manner.',
+      name: 'value',
+      type: 'string | null',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description:
+        'Manage the current expansion entry in a controlled or uncontrolled manner.',
+      name: 'defaultValue',
+      type: 'string | null',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description:
+        'Manage the current expansion entry in a controlled or uncontrolled manner.',
+      name: 'onChange',
+      type: '(value: string | null) => void',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description:
+        'Set the delay for opening and closing the rich navigation panel.',
+      name: 'delay',
+      type: 'number',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description:
+        'Set the delay for opening and closing the rich navigation panel.',
+      name: 'closeDelay',
+      type: 'number',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### NavigationMenuItemConfig
+
+```ts
+type NavigationMenuItemConfig = {
+  active?: boolean;
+  content?: ReactNode | ((slots: NavigationMenuLinkSlots) => ReactNode);
+  disabled?: boolean;
+  href?: string;
+  label: ReactNode;
+  value?: string;
+};
+```
+
+### NavigationMenuLinkSlots
+
+```ts
+type NavigationMenuLinkSlots = {
+  Link: NavigationMenuLinkComponent;
+};
+```
+
+### NavigationMenuLinkComponent
+
+```ts
+type NavigationMenuLinkComponent = (
+  props: NavigationMenuLinkProps
+) => ReactNode;
+```
+
+### NavigationMenuLinkProps
+
+```ts
+type NavigationMenuLinkProps = Omit<ComponentProps<'a'>, 'children'> & {
+  active?: boolean;
+  children?: ReactNode;
+  closeOnClick?: boolean;
+};
+```
+
+## Accessibility
+
+- Top-level entrances and pop-up links support keyboard focus and arrow key navigation.
+- The current page uses the active state and keeps the link text to express the target independently.
+
+## Avoid
+
+- Don’t hide the only main action with a large menu; high-frequency entries should remain directly visible.
+- Avoid nesting third-level navigation in the pop-up layer.

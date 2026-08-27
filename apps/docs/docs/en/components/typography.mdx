@@ -1,0 +1,267 @@
+---
+title: 'Typography'
+description: 'Provides semantic titles, text, quotations, and inline code while keeping text semantics independent from visual hierarchy.'
+lang: en
+---
+
+import TypographyShowcase from '@showcases/typography';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Typography
+
+{"Provides semantic titles, text, quotations, and inline code while keeping text semantics independent from visual hierarchy."}
+
+## When to use
+
+- The page needs a continuous h1–h6 heading hierarchy.
+- Body text needs to compose semantic elements, size, color hierarchy, and weight independently.
+- Quotations and inline code need to preserve native HTML semantics.
+
+## Examples
+
+<TypographyShowcase />
+
+### Basic usage
+
+{"Organize a coherent, readable piece of content using a title, lead, text, quotes, inline code, and supporting information."}
+
+```tsx title="showcases/typography/cases/basic-usage.tsx"
+import { Typography } from '@heliannuuthus/ui';
+
+export const TypographyStory = () => {
+  return (
+    <article className="grid gap-4">
+      <Typography.Title level={2}>
+        Keep interface language clear
+      </Typography.Title>
+      <Typography.Text as="p" size="xl" tone="muted">
+        Stable typography lets users understand content before noticing design.
+      </Typography.Text>
+      <Typography.Text as="p">
+        Consistent heading hierarchy and body rhythm make content clear and
+        readable.
+      </Typography.Text>
+      <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
+        A consistent interface comes from consistent content decisions.
+      </Typography.Blockquote>
+      <Typography.Text as="p">
+        Compose content with{' '}
+        <Typography.Code>@heliannuuthus/ui</Typography.Code>.
+      </Typography.Text>
+      <Typography.Text as="small" size="sm" tone="muted">
+        Design system notes · 5 min read
+      </Typography.Text>
+    </article>
+  );
+};
+```
+
+### Heading levels
+
+{"level selects both the h1–h6 semantic element and its visual hierarchy. Start with h1 and keep the page order continuous."}
+
+```tsx title="showcases/typography/cases/heading-levels.tsx"
+import { Typography } from '@heliannuuthus/ui'
+
+<Typography.Title>H1</Typography.Title>
+<Typography.Title level={2}>H2</Typography.Title>
+<Typography.Title level={3}>H3</Typography.Title>
+<Typography.Title level={4}>H4</Typography.Title>
+<Typography.Title level={5}>H5</Typography.Title>
+<Typography.Title level={6}>H6</Typography.Title>
+```
+
+### Text customization
+
+{"as selects the semantic element, while size, tone, and weight independently control font size, color hierarchy, and font weight."}
+
+```tsx title="showcases/typography/cases/text-customization.tsx"
+import { Typography } from '@heliannuuthus/ui'
+
+<Typography.Text>Default inline text</Typography.Text>
+<Typography.Text as="p" size="xl" tone="muted">
+  Large muted paragraphs work well for page introductions.
+</Typography.Text>
+<Typography.Text as="div" size="lg" weight="semibold">
+  Emphasized block text
+</Typography.Text>
+<Typography.Text as="small" size="sm" tone="muted" weight="medium">
+  Small supporting text
+</Typography.Text>
+```
+
+### Quotations and inline code
+
+{"Blockquote preserves the citation source, while Code marks short inline code. Use a separate pre and code structure for multiline blocks."}
+
+```tsx title="showcases/typography/cases/quotations-and-inline-code.tsx"
+import { Typography } from '@heliannuuthus/ui'
+
+<Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
+  Semantics come before visuals, and visuals serve the content hierarchy.
+</Typography.Blockquote>
+<Typography.Text as="p">
+  Install with <Typography.Code>pnpm add @heliannuuthus/ui</Typography.Code>
+</Typography.Text>
+```
+
+## Component parts
+
+- **Typography.Title** — Renders h1–h6 semantic headings and their visual hierarchy through level.
+- **Typography.Text** — Composes the text element, size, color hierarchy, and weight.
+- **Typography.Blockquote** — Uses a native blockquote for cited content.
+- **Typography.Code** — Uses a native code element for short inline code.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Typography.Title',
+      defaultValue: '1',
+      description:
+        'Sets the semantic heading element and its visual hierarchy.',
+      name: 'level',
+      type: '1 | 2 | 3 | 4 | 5 | 6',
+    },
+    {
+      component: 'Typography.Title',
+      defaultValue: null,
+      description: 'Heading content.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Typography.Title',
+      defaultValue: null,
+      description: 'Extends the heading element styles.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Typography.Title',
+      defaultValue: null,
+      description: 'Extends the heading element inline styles.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: "'span'",
+      description:
+        'Sets the rendered text element without changing visual properties.',
+      name: 'as',
+      type: "'span' | 'p' | 'div' | 'small'",
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: "'md'",
+      description: 'Sets the font size and matching line height.',
+      name: 'size',
+      type: "'sm' | 'md' | 'lg' | 'xl'",
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: "'default'",
+      description: 'Sets the default or muted text color.',
+      name: 'tone',
+      type: "'default' | 'muted'",
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: "'normal'",
+      description: 'Sets the text font weight.',
+      name: 'weight',
+      type: "'normal' | 'medium' | 'semibold'",
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: null,
+      description: 'Text content.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: null,
+      description: 'Extends the text element styles.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: null,
+      description: 'Extends the text element inline styles.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Typography.Blockquote',
+      defaultValue: null,
+      description: 'Sets the source URL for the quotation.',
+      name: 'cite',
+      type: 'string',
+    },
+    {
+      component: 'Typography.Blockquote',
+      defaultValue: null,
+      description: 'Quotation content.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Typography.Blockquote',
+      defaultValue: null,
+      description: 'Extends the quotation element styles.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Typography.Blockquote',
+      defaultValue: null,
+      description: 'Extends the quotation element inline styles.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Typography.Code',
+      defaultValue: null,
+      description: 'Inline code content.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Typography.Code',
+      defaultValue: null,
+      description: 'Extends the code element styles.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Typography.Code',
+      defaultValue: null,
+      description: 'Extends the code element inline styles.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Start the page at h1 and keep heading levels continuous; do not skip levels for visual size.
+- Choose Text as from content semantics instead of the default appearance.
+- Muted text must still meet contrast requirements; do not communicate information through color alone.
+
+## Avoid
+
+- Do not use Title.level only for font size; heading levels primarily express document structure.
+- Do not use Text.as to change appearance; use the dedicated size, tone, and weight properties.
+- Code is for short inline code; compose native pre and code elements for multiline blocks.

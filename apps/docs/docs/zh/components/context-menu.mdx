@@ -1,0 +1,206 @@
+---
+title: 'Context Menu 右键菜单'
+description: '提供对象相关的上下文操作。'
+lang: zh-Hans
+---
+
+import ContextMenuShowcase from '@showcases/context-menu';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Context Menu 右键菜单
+
+{"提供对象相关的上下文操作。"}
+
+## 何时使用
+
+- 需要提供对象相关的上下文操作时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<ContextMenuShowcase />
+
+### 基础用法
+
+{"items 同时体现分组标题、图标、快捷键、禁用项、分隔线和危险操作；选择后结果会显示在触发区域下方。"}
+
+```tsx title="showcases/context-menu/cases/basic-usage.tsx"
+import { ContextMenu } from '@heliannuuthus/ui';
+
+<ContextMenu
+  trigger={<div tabIndex={0}>Right-click here</div>}
+  items={[
+    { type: 'label', label: 'Page actions' },
+    { label: 'Copy link', shortcut: '⌘C', onSelect: copyLink },
+    { label: 'Copy internal link', disabled: true },
+    { type: 'separator' },
+    { label: 'Delete page', destructive: true, onSelect: deletePage },
+  ]}
+/>;
+```
+
+### 勾选与单选状态
+
+{"checkbox entry 管理独立布尔状态，radio entry 管理互斥选项；关闭菜单后结果仍保留在触发区域中。"}
+
+```tsx title="showcases/context-menu/cases/checkbox-and-radio-states.tsx"
+<ContextMenu
+  trigger={<div tabIndex={0}>Page visibility</div>}
+  items={[
+    {
+      type: 'checkbox',
+      label: 'Show comments',
+      checked: showComments,
+      onChange: setShowComments,
+    },
+    {
+      type: 'radio',
+      value: access,
+      onChange: setAccess,
+      items: [
+        { label: 'Only me', value: 'private' },
+        { label: 'Team members', value: 'team' },
+      ],
+    },
+  ]}
+/>
+```
+
+### 嵌套子菜单
+
+{"普通 item 提供 children 时形成子菜单，适合将同一动作的多个格式或目标收进第二层。"}
+
+```tsx title="showcases/context-menu/cases/nested-submenu.tsx"
+<ContextMenu
+  trigger={<div tabIndex={0}>File preview</div>}
+  items={[
+    {
+      label: 'Export as',
+      children: [
+        { label: 'PDF document', onSelect: exportPdf },
+        { label: 'PNG image', onSelect: exportPng },
+        { label: 'CSV spreadsheet', onSelect: exportCsv },
+      ],
+    },
+  ]}
+/>
+```
+
+### 开关状态与禁用
+
+{"比较默认非受控、通过 open 与 onOpenChange 管理的受控模式，以及 disabled 阻止触发的状态。"}
+
+```tsx title="showcases/context-menu/cases/open-state-and-disabled.tsx"
+<ContextMenu defaultOpen={false} items={items} trigger={target} />
+<ContextMenu open={open} onOpenChange={setOpen} items={items} trigger={target} />
+<ContextMenu disabled items={items} trigger={target} />
+
+<ContextMenu
+  trigger={target}
+  items={items}
+  classNames={{ content: 'min-w-48' }}
+  styles={{ content: { padding: 4 } }}
+/>
+```
+
+## 组成部分
+
+- **Context Menu** — 通过主组件 props 配置内容、状态、行为和扩展点。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: '响应右键或菜单键的目标元素。',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: '配置普通操作、分隔线、选择项和子菜单。',
+      name: 'items',
+      type: 'readonly DropdownMenuEntry[]',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: '以受控或非受控方式管理菜单状态。',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: 'false',
+      description: '以受控或非受控方式管理菜单状态。',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: '以受控或非受控方式管理菜单状态。',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: 'false',
+      description: '禁用上下文菜单触发。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'ContextMenuClassNames',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'ContextMenuStyles',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### ContextMenuClassNames
+
+```ts
+type ContextMenuClassNames = {
+  content?: string;
+};
+```
+
+### ContextMenuStyles
+
+```ts
+type ContextMenuStyles = {
+  content?: React.CSSProperties;
+};
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

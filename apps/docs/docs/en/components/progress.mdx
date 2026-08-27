@@ -1,0 +1,182 @@
+---
+title: 'Progress'
+description: 'Demonstrate progress toward completing a task or process.'
+lang: en
+---
+
+import ProgressShowcase from '@showcases/progress';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Progress
+
+{"Demonstrate progress toward completing a task or process."}
+
+## When to use
+
+- Primary use: Demonstrate progress toward completing a task or process.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<ProgressShowcase />
+
+### Basic usage
+
+{"Use label, value, and showValue to simultaneously describe the progress object, completion percentage, and remaining range."}
+
+```tsx title="showcases/progress/cases/basic-usage.tsx"
+import { Progress } from '@heliannuuthus/ui';
+
+<Progress
+  effect="sparkle"
+  value={68}
+  label="Production environment"
+  showValue
+/>;
+```
+
+### Deployment progress
+
+{"Putting the completion percentage alongside the current stage lets users know what the task is doing and how much is left."}
+
+```tsx title="showcases/progress/cases/deployment-progress.tsx"
+import { Progress } from '@heliannuuthus/ui'
+
+<Progress
+  effect="sparkle"
+  label="production environment"
+  showValue
+  value={68}
+/>
+
+<Progress
+  value={completed}
+  min={0}
+  max={200}
+  locale="en-US"
+  format={{ style: 'percent' }}
+  getAriaValueText={(value, maximum) => value + ' of ' + maximum}
+/>
+```
+
+## Component parts
+
+- **Progress** — Configure content, state, behavior, and extension points through main component props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description:
+        'Set the current progress and value range; when value is null, the progress is unknown.',
+      name: 'value',
+      type: 'number | null',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description:
+        'Set the current progress and value range; when value is null, the progress is unknown.',
+      name: 'min',
+      type: 'number',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description:
+        'Set the current progress and value range; when value is null, the progress is unknown.',
+      name: 'max',
+      type: 'number',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description:
+        'Set the progress name and decide whether or how to display the formatted value.',
+      name: 'label',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description:
+        'Set the progress name and decide whether or how to display the formatted value.',
+      name: 'showValue',
+      type: 'boolean | ((value: number | null) => ReactNode)',
+    },
+    {
+      component: 'Progress',
+      defaultValue: "'none'",
+      description:
+        'Displays brief feedback that converges on the progress front as values ​​advance.',
+      name: 'effect',
+      type: "'none' | 'sparkle'",
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description:
+        'Configure numeric formatting and full progress text for assistive technology reading.',
+      name: 'locale',
+      type: 'Intl.LocalesArgument',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description:
+        'Configure numeric formatting and full progress text for assistive technology reading.',
+      name: 'format',
+      type: 'Intl.NumberFormatOptions',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description:
+        'Configure numeric formatting and full progress text for assistive technology reading.',
+      name: 'getAriaValueText',
+      type: '(value: number, min: number, max: number) => string',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

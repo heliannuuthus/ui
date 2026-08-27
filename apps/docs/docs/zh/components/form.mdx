@@ -1,0 +1,416 @@
+---
+title: 'Form 表单'
+description: '通过 Form.Field 统一连接数据录入组件、校验状态和提交行为。'
+lang: zh-Hans
+---
+
+import FormShowcase from '@showcases/form';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Form 表单
+
+{"通过 Form.Field 统一连接数据录入组件、校验状态和提交行为。"}
+
+## 何时使用
+
+- 使用统一方式组织标签、控件、说明和错误信息。
+- 让内置数据录入组件自动连接字段值、校验状态和提交行为。
+
+## 示例
+
+<FormShowcase />
+
+### 基础用法
+
+{"同时展示标签、说明、错误信息，以及适合设置项的水平字段。"}
+
+```tsx title="showcases/form/cases/basic-usage.tsx"
+import { Form, Input } from '@heliannuuthus/ui';
+
+<Form.Field
+  name="handle"
+  label="个人标识"
+  description="用于生成公开资料地址。"
+  rules={{ pattern: /^[a-z0-9-]+$/ }}
+>
+  <Input />
+</Form.Field>;
+```
+
+### 标签关联与必要性
+
+{"Form.Field 自动关联标签与真实控件，并统一生成必填标记和辅助说明。"}
+
+```tsx title="showcases/form/cases/label-association-and-necessity.tsx"
+import { Form, Input } from '@heliannuuthus/ui'
+
+<Form.Field name="teamName" label="团队名称" required>
+  <Input />
+</Form.Field>
+
+<Form.Field name="role" label="职位" description="可选">
+  <Input />
+</Form.Field>
+```
+
+### 完整组件表单
+
+{"在一个表单中验证全部受支持控件的值绑定、校验状态与无障碍关系。"}
+
+```tsx title="showcases/form/cases/complete-component-form.tsx"
+import {
+  Button,
+  Checkbox,
+  DatePicker,
+  Form,
+  Input,
+  Radio,
+  Select,
+  Slider,
+  Switch,
+  Toggle,
+} from '@heliannuuthus/ui'
+
+const form = Form.useForm({
+  defaultValues: {
+    confirmation: false,
+    formats: ['markdown'],
+    inviteCode: '',
+    launchDate: undefined,
+    name: '',
+    notifications: true,
+    permissions: ['read'],
+    pinned: false,
+    region: 'asia',
+    reviewThreshold: 2,
+    retryLimit: 3,
+    summary: '',
+    visibility: 'team',
+    workspace: null,
+  },
+})
+
+<Form form={form} onSubmit={onSubmit}>
+  <Form.Field
+    name="name"
+    label={t('workspace.name')}
+    rules={{ required: t('validation.required') }}
+  >
+    <Input />
+  </Form.Field>
+
+  <Form.Field name="summary" label={t('workspace.description')}>
+    <Input.TextArea />
+  </Form.Field>
+
+  <Form.Field name="inviteCode" label={t('workspace.inviteCode')}>
+    <Input.OTP maxLength={6} />
+  </Form.Field>
+
+  <Form.Field name="region" label={t('workspace.region')}>
+    <Select options={regionOptions} />
+  </Form.Field>
+
+  <Form.Field name="workspace" label={t('workspace.parent')}>
+    <Select options={workspaceOptions} showClear />
+  </Form.Field>
+
+  <Form.Field name="notifications" label={t('workspace.notifications')}>
+    <Switch />
+  </Form.Field>
+
+  <Form.Field
+    name="confirmation"
+    rules={{ required: t('validation.confirm') }}
+  >
+    <Checkbox>{t('workspace.confirm')}</Checkbox>
+  </Form.Field>
+
+  <Form.Field name="permissions" label={t('workspace.permissions')}>
+    <Checkbox.Group options={permissionOptions} />
+  </Form.Field>
+
+  <Form.Field name="visibility" label={t('workspace.visibility')}>
+    <Radio.Group options={visibilityOptions} />
+  </Form.Field>
+
+  <Form.Field name="launchDate" label={t('workspace.launchDate')}>
+    <DatePicker />
+  </Form.Field>
+
+  <Form.Field name="reviewThreshold" label={t('workspace.reviewThreshold')}>
+    <Slider min={1} max={5} />
+  </Form.Field>
+
+  <Form.Field name="retryLimit" label={t('workspace.retryLimit')}>
+    <Input.Number min={0} max={10} />
+  </Form.Field>
+
+  <Form.Field name="pinned" label={t('workspace.pinned')}>
+    <Toggle>{t('actions.pin')}</Toggle>
+  </Form.Field>
+
+  <Form.Field name="formats" label={t('workspace.formats')}>
+    <Toggle.Group multiple items={formatOptions} />
+  </Form.Field>
+
+  <Button type="submit">{t('actions.save')}</Button>
+</Form>
+```
+
+### 自定义控件接入
+
+{"对比只实现值绑定的最小控件，以及额外支持错误聚焦和完整字段属性的控件。"}
+
+```tsx title="showcases/form/cases/custom-control-integration.tsx"
+import { forwardRef } from 'react'
+import {
+  Button,
+  Form,
+  Radio,
+  type FormFieldInjectedControlProps,
+} from '@heliannuuthus/ui'
+
+type Priority = '' | 'routine' | 'important' | 'urgent'
+
+type PriorityControlProps = FormFieldInjectedControlProps<Priority>
+
+const options = [
+  { label: t('priority.routine'), value: 'routine' },
+  { label: t('priority.important'), value: 'important' },
+  { label: t('priority.urgent'), value: 'urgent' },
+] as const
+
+// Minimum: value binding with a regular function component
+const MinimalPriorityControl = ({
+  onChange,
+  ...props
+}: PriorityControlProps) => (
+  <Radio.Group
+    {...props}
+    columns={3}
+    minColumnWidth={0}
+    onChange={onChange}
+    options={options}
+  />
+)
+
+// Complete: forward the ref to enable validation-error focus
+const CompletePriorityControl = forwardRef<
+  HTMLInputElement,
+  PriorityControlProps
+>(
+  ({ onChange, ...props }, ref) => (
+    <Radio.Group
+      {...props}
+      columns={3}
+      inputRef={ref}
+      minColumnWidth={0}
+      onChange={onChange}
+      options={options}
+    />
+  )
+)
+
+type Values = {
+  completePriority: Priority
+  minimalPriority: Priority
+}
+
+const form = Form.useForm<Values>({
+  defaultValues: {
+    completePriority: '',
+    minimalPriority: 'routine',
+  },
+})
+
+<Form form={form} onSubmit={onSubmit}>
+  <Form.Field<Values, 'minimalPriority'>
+    name="minimalPriority"
+    label={t('priority.minimal')}
+  >
+    <MinimalPriorityControl />
+  </Form.Field>
+
+  <Form.Field<Values, 'completePriority'>
+    name="completePriority"
+    label={t('priority.complete')}
+    description={t('priority.description')}
+    rules={{ required: t('priority.required') }}
+  >
+    <CompletePriorityControl />
+  </Form.Field>
+
+  <Button type="submit">{t('actions.save')}</Button>
+</Form>
+
+<Form form={form} onInvalid={handleInvalid} onSubmit={handleSubmit}>
+  <Form.Field name="team" defaultValue="platform" disabled>
+    <Input />
+  </Form.Field>
+</Form>
+```
+
+## 组成部分
+
+- **Form** — 渲染原生表单并连接 Form.useForm 实例。
+- **Form.useForm** — 创建类型化表单实例并管理完整表单状态。
+- **Form.Field** — 自动绑定内置控件，并组织标签、说明和校验错误。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: '连接 Form.useForm 创建的表单实例。',
+      name: 'form',
+      type: 'FormInstance',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: '校验通过后接收完整表单数据。',
+      name: 'onSubmit',
+      type: '(values) => void | Promise<void>',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '指定当前字段在表单数据中的唯一路径。',
+      name: 'name',
+      type: 'FieldPath',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '设置字段标签并自动关联实际控件。',
+      name: 'label',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '补充字段说明并建立无障碍描述关联。',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '声明当前字段的必填、格式和自定义校验规则。',
+      name: 'rules',
+      type: 'RegisterOptions',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        '接收一个控件元素；内置控件自动绑定，自定义控件自动获得标准受控属性。',
+      name: 'children',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: "'vertical'",
+      description: '设置标签、内容与控件的排列方向。',
+      name: 'orientation',
+      type: "'vertical' | 'horizontal' | 'responsive'",
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'onInvalid',
+      type: 'SubmitErrorHandler',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'defaultValue',
+      type: 'FieldPathValue',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### FormFieldInjectedControlProps&lt;Value&gt;
+
+```ts
+type FormFieldInjectedControlProps<Value> = {
+  'aria-describedby'?: string;
+  'aria-errormessage'?: string;
+  'aria-invalid'?: boolean;
+  'aria-labelledby'?: string;
+  'aria-required'?: boolean;
+  disabled?: boolean;
+  id?: string;
+  name?: string;
+  onBlur?: () => void;
+  onChange?: (value: Value) => void;
+  required?: boolean;
+  value?: Value;
+};
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

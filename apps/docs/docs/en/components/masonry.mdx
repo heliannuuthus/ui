@@ -1,0 +1,205 @@
+---
+title: 'Masonry'
+description: 'Continuously place content of different heights into the current shortest column, and allow specified content to occupy the entire row.'
+lang: en
+---
+
+import MasonryShowcase from '@showcases/masonry';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Masonry
+
+{"Continuously place content of different heights into the current shortest column, and allow specified content to occupy the entire row."}
+
+## When to use
+
+- The card needs to automatically display one or more columns according to the width of the container, and continue to be arranged immediately after the current shortest column.
+- Some summary, banner or end content needs to span all current columns.
+
+## Examples
+
+<MasonryShowcase />
+
+### Basic usage
+
+{"Provide stable keys and content through items, and Masonry will create and measure layout nodes for each item."}
+
+```tsx title="showcases/masonry/cases/basic-usage.tsx"
+import { Masonry, type MasonryItem } from '@heliannuuthus/ui';
+
+const items = cards.map((card) => ({
+  key: card.id,
+  content: <Card {...card} />,
+})) satisfies readonly MasonryItem[];
+
+<Masonry columns={3} minColumnWidth={180} gap={[14, 20]} items={items} />;
+```
+
+### Adaptive number of columns
+
+{"Drag the slider to set the maximum number of columns allowed in a row; the actual number of columns automatically drops back based on the container width and the minimum column width, with a maximum of six columns displayed."}
+
+```tsx title="showcases/masonry/cases/adaptive-number-of-columns.tsx"
+import { Masonry } from '@heliannuuthus/ui';
+
+<Masonry columns={6} minColumnWidth={140} gap={14} items={cards} />;
+```
+
+### Cross-column content
+
+{"Set span=\"full\" in a single item configuration; this item will wait for all previous columns to end and occupy the entire row, and subsequent content will continue to be arranged from the same position."}
+
+```tsx title="showcases/masonry/cases/cross-column-content.tsx"
+import { Masonry } from '@heliannuuthus/ui';
+
+<Masonry
+  columns={3}
+  minColumnWidth={180}
+  gap={14}
+  items={[
+    { key: 'a', content: <Card>A</Card> },
+    { key: 'b', content: <Card>B</Card> },
+    {
+      key: 'release',
+      content: <ReleaseNotice />,
+      span: 'full',
+    },
+    { key: 'c', content: <Card>C</Card> },
+  ]}
+/>;
+```
+
+## Component parts
+
+- **Masonry** — Receive items and uniformly complete content packaging, measurement, shortest column allocation and cross-column layout.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Masonry',
+      defaultValue: null,
+      description:
+        'Provides a configuration list of MasonryItems that require layout.',
+      name: 'items',
+      type: 'readonly MasonryItem[]',
+    },
+    {
+      component: 'Masonry',
+      defaultValue: '3',
+      description:
+        'Sets the maximum number of columns the container is allowed to display; it is the upper limit and the actual number of columns is automatically reduced with the available width.',
+      name: 'columns',
+      type: 'number',
+    },
+    {
+      component: 'Masonry',
+      defaultValue: '240',
+      description:
+        'Set the expected minimum width of a single column, which is used to determine the timing of responsive column folding.',
+      name: 'minColumnWidth',
+      type: 'number | string',
+    },
+    {
+      component: 'Masonry',
+      defaultValue: '16',
+      description:
+        'Set the uniform spacing, and the array represents the horizontal and vertical spacing in turn.',
+      name: 'gap',
+      type: 'number | string | [number | string, number | string]',
+    },
+    {
+      component: 'MasonryItem',
+      defaultValue: null,
+      description:
+        'Provides a stable and unique React key for identifying the current layout item.',
+      name: 'key',
+      type: 'React.Key',
+    },
+    {
+      component: 'MasonryItem',
+      defaultValue: null,
+      description:
+        'Sets the cards, media, or other React content displayed inside the layout item.',
+      name: 'content',
+      type: 'React.ReactNode',
+    },
+    {
+      component: 'MasonryItem',
+      defaultValue: "'auto'",
+      description:
+        'Control single items to be arranged according to normal column width, or wait for the end of each column to occupy the entire row.',
+      name: 'span',
+      type: "'auto' | 'full'",
+    },
+    {
+      component: 'MasonryItem',
+      defaultValue: null,
+      description: 'Extends the style class for the current layout item.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'MasonryItem',
+      defaultValue: null,
+      description:
+        'Extend the current layout item with standard div inline styles, ARIA, data attributes, roles, and events.',
+      name: 'style',
+      type: 'React.CSSProperties',
+    },
+    {
+      component: 'Masonry',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'ref',
+      type: 'React.Ref<HTMLDivElement>',
+    },
+    {
+      component: 'Masonry',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Masonry',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### MasonryLength
+
+```ts
+type MasonryLength = number | string;
+```
+
+### MasonryGap
+
+```ts
+type MasonryGap = MasonryLength | readonly [MasonryLength, MasonryLength];
+```
+
+## Accessibility
+
+- Components only change their visual position; content semantics, keyboard focus, and screen reading order are still preserved in DOM order.
+- When you need to express list, article or grouping semantics, you should provide corresponding elements or roles on content nodes.
+
+## Avoid
+
+- Don’t rely on visual column positions to convey strict order; varying heights may cause subsequent content to appear higher.
+- Don't rely solely on the position of the cards to express the order; narrow screens should still be able to read in source code order after being folded into a single column.

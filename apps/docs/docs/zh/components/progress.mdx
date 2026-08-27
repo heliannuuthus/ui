@@ -1,0 +1,167 @@
+---
+title: 'Progress 进度条'
+description: '展示任务或流程完成进度。'
+lang: zh-Hans
+---
+
+import ProgressShowcase from '@showcases/progress';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Progress 进度条
+
+{"展示任务或流程完成进度。"}
+
+## 何时使用
+
+- 需要展示任务或流程完成进度时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<ProgressShowcase />
+
+### 基础用法
+
+{"用 label、value 和 showValue 同时说明进度对象、完成比例和剩余范围。"}
+
+```tsx title="showcases/progress/cases/basic-usage.tsx"
+import { Progress } from '@heliannuuthus/ui';
+
+<Progress effect="sparkle" value={68} label="生产环境" showValue />;
+```
+
+### 部署进度
+
+{"把完成比例与当前阶段放在一起，让用户知道任务正在做什么以及还剩多少。"}
+
+```tsx title="showcases/progress/cases/deployment-progress.tsx"
+import { Progress } from '@heliannuuthus/ui'
+
+<Progress
+  effect="sparkle"
+  label="生产环境"
+  showValue
+  value={68}
+/>
+
+<Progress
+  value={completed}
+  min={0}
+  max={200}
+  locale="en-US"
+  format={{ style: 'percent' }}
+  getAriaValueText={(value, maximum) => value + ' of ' + maximum}
+/>
+```
+
+## 组成部分
+
+- **Progress** — 通过主组件 props 配置内容、状态、行为和扩展点。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: '设置当前进度与数值范围；value 为 null 时表示进度未知。',
+      name: 'value',
+      type: 'number | null',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: '设置当前进度与数值范围；value 为 null 时表示进度未知。',
+      name: 'min',
+      type: 'number',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: '设置当前进度与数值范围；value 为 null 时表示进度未知。',
+      name: 'max',
+      type: 'number',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: '设置进度名称，并决定是否或如何展示格式化数值。',
+      name: 'label',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: '设置进度名称，并决定是否或如何展示格式化数值。',
+      name: 'showValue',
+      type: 'boolean | ((value: number | null) => ReactNode)',
+    },
+    {
+      component: 'Progress',
+      defaultValue: "'none'",
+      description: '在数值推进时显示聚拢在进度前沿的短暂反馈。',
+      name: 'effect',
+      type: "'none' | 'sparkle'",
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: '配置数值格式和辅助技术读取的完整进度文本。',
+      name: 'locale',
+      type: 'Intl.LocalesArgument',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: '配置数值格式和辅助技术读取的完整进度文本。',
+      name: 'format',
+      type: 'Intl.NumberFormatOptions',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: '配置数值格式和辅助技术读取的完整进度文本。',
+      name: 'getAriaValueText',
+      type: '(value: number, min: number, max: number) => string',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Progress',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

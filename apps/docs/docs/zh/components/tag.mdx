@@ -1,0 +1,98 @@
+---
+title: 'Tag 标签'
+description: '用简短文本表达对象的状态、分类或属性。'
+lang: zh-Hans
+---
+
+import TagShowcase from '@showcases/tag';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Tag 标签
+
+{"用简短文本表达对象的状态、分类或属性。"}
+
+## 何时使用
+
+- 标记对象的状态、分类或稳定属性。
+- 在列表、卡片和详情中提供便于扫描的短文本。
+
+## 示例
+
+<TagShowcase />
+
+### 基础用法
+
+{"Tag 是纯展示元素，始终渲染为 span。"}
+
+```tsx title="showcases/tag/cases/basic-usage.tsx"
+import { Tag } from '@heliannuuthus/ui';
+
+<Tag>默认标签</Tag>;
+```
+
+### 语义类型
+
+{"type 表达标签的语义，不要只为了颜色选择与内容无关的类型。"}
+
+```tsx title="showcases/tag/cases/semantic-types.tsx"
+import { Tag } from '@heliannuuthus/ui'
+
+<Tag>默认</Tag>
+<Tag type="primary">主要</Tag>
+<Tag type="info">信息</Tag>
+<Tag type="success">成功</Tag>
+<Tag type="warning">警告</Tag>
+<Tag type="error">错误</Tag>
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Tag',
+      defaultValue: "'default'",
+      description: '设置标签表达的语义类型。',
+      name: 'type',
+      type: "'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'",
+    },
+    {
+      component: 'Tag',
+      defaultValue: null,
+      description: '标签中的简短文本或辅助图标。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Tag',
+      defaultValue: null,
+      description: '扩展标签样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Tag',
+      defaultValue: null,
+      description: '扩展标签行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 状态不能只依靠颜色表达，标签文本必须保留完整含义。
+- Tag 支持标准 span、ARIA、data 属性和事件，并转发 span ref。
+
+## 避免事项
+
+- 不要把 Tag 用作按钮或链接；交互场景应组合 Button 或原生链接。
+- 避免在 Tag 中放入长句或复杂操作。

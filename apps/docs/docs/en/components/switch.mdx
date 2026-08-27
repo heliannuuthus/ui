@@ -1,0 +1,167 @@
+---
+title: 'Switch'
+description: 'Instantly switch settings on and off.'
+lang: en
+---
+
+import SwitchShowcase from '@showcases/switch';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Switch
+
+{"Instantly switch settings on and off."}
+
+## When to use
+
+- Primary use: Instantly switch settings on and off.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<SwitchShowcase />
+
+### Basic usage
+
+{"Switch is used for binary settings that take effect immediately, and the label should directly explain what will happen when turned on."}
+
+```tsx title="showcases/switch/cases/basic-usage.tsx"
+import { Switch } from '@heliannuuthus/ui';
+
+<label>
+  <Switch defaultChecked />
+  Enable notification
+</label>;
+```
+
+### Settings list
+
+{"Switch uses a uniform stretch size; switches update settings immediately, and system items that cannot be turned off interpret constraints through the disabled state."}
+
+```tsx title="showcases/switch/cases/settings-list.tsx"
+<Switch checked={enabled} onChange={setEnabled} />
+<Switch checked disabled />
+
+<Switch value="enabled" uncheckedValue="disabled">Notifications</Switch>
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description:
+        'Sets the controlled switch state; new value is returned by the caller after change.',
+      name: 'checked',
+      type: 'boolean',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: 'Set the initial on state of uncontrolled mode.',
+      name: 'defaultChecked',
+      type: 'boolean',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: 'Called immediately when the switch state changes.',
+      name: 'onChange',
+      type: '(checked: boolean) => void',
+    },
+    {
+      component: 'Switch',
+      defaultValue: 'false',
+      description: 'Prevents status changes and displays unavailable status.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: 'Set the field name used when submitting the native form.',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description:
+        'Set the field value submitted to the native form when the switch is turned on.',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'uncheckedValue',
+      type: 'string',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

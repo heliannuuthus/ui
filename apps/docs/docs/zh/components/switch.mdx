@@ -1,0 +1,160 @@
+---
+title: 'Switch 开关'
+description: '即时切换设置的开关状态。'
+lang: zh-Hans
+---
+
+import SwitchShowcase from '@showcases/switch';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Switch 开关
+
+{"即时切换设置的开关状态。"}
+
+## 何时使用
+
+- 需要即时切换设置的开关状态时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<SwitchShowcase />
+
+### 基础用法
+
+{"Switch 用于立即生效的二元设置，标签应直接说明开启后会发生什么。"}
+
+```tsx title="showcases/switch/cases/basic-usage.tsx"
+import { Switch } from '@heliannuuthus/ui';
+
+<label>
+  <Switch defaultChecked />
+  启用通知
+</label>;
+```
+
+### 设置列表
+
+{"Switch 使用统一的舒展尺寸；开关立即更新设置，不可关闭的系统项通过禁用状态解释约束。"}
+
+```tsx title="showcases/switch/cases/settings-list.tsx"
+<Switch checked={enabled} onChange={setEnabled} />
+<Switch checked disabled />
+
+<Switch value="enabled" uncheckedValue="disabled">Notifications</Switch>
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: '设置受控开关状态；变化后由调用方传回新值。',
+      name: 'checked',
+      type: 'boolean',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: '设置非受控模式的初始开启状态。',
+      name: 'defaultChecked',
+      type: 'boolean',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: '开关状态变化时立即调用。',
+      name: 'onChange',
+      type: '(checked: boolean) => void',
+    },
+    {
+      component: 'Switch',
+      defaultValue: 'false',
+      description: '阻止状态变化并显示不可用状态。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: '设置原生表单提交时使用的字段名称。',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: '设置开关开启时提交到原生表单的字段值。',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'uncheckedValue',
+      type: 'string',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Switch',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

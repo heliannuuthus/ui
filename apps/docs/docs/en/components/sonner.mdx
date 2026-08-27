@@ -1,0 +1,75 @@
+---
+title: 'Sonner'
+description: 'Feed back transient results in a non-blocking queue.'
+lang: en
+---
+
+import SonnerShowcase from '@showcases/sonner';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Sonner
+
+{"Feed back transient results in a non-blocking queue."}
+
+## When to use
+
+- Primary use: Feed back transient results in a non-blocking queue.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<SonnerShowcase />
+
+### Basic usage
+
+{"Use the same notification to undertake the loading, success or failure stages of an asynchronous task to avoid repeated stacking of messages."}
+
+```tsx title="showcases/sonner/cases/basic-usage.tsx"
+import { Sonner, toast } from '@heliannuuthus/ui'
+
+toast.promise(publish(), {
+  loading: 'Publishing to production environment...',
+  success: 'v0.12.0 released',
+  error: 'Publishing failed, please check the build log',
+})
+
+<Sonner position="bottom-right" richColors />
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Sonner',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Sonner',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

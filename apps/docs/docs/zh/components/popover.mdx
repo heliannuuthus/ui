@@ -1,0 +1,219 @@
+---
+title: 'Popover 气泡卡片'
+description: '在触发器附近展示可交互的关联内容；点击和悬停预览共用同一套内容、定位与受控状态 API。'
+lang: zh-Hans
+---
+
+import PopoverShowcase from '@showcases/popover';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Popover 气泡卡片
+
+{"在触发器附近展示可交互的关联内容；点击和悬停预览共用同一套内容、定位与受控状态 API。"}
+
+## 何时使用
+
+- 需要通过点击打开包含详情、表单或轻量操作的非模态浮层。
+- 需要在不离开当前上下文的前提下，通过悬停或键盘聚焦预览人物、资源等实体信息。
+
+## 示例
+
+<PopoverShowcase />
+
+### 基础用法
+
+{"在触发器附近补充少量关联信息与轻量操作，不打断当前阅读上下文。"}
+
+```tsx title="showcases/popover/cases/basic-usage.tsx"
+import { Button, Popover } from '@heliannuuthus/ui';
+
+<Popover
+  trigger={<Button>3 位负责人</Button>}
+  title="发布负责人"
+  description="发布和回滚时会通知这些成员。"
+  content={<OwnerList />}
+/>;
+```
+
+### 悬停预览负责人
+
+{"将 trigger 设为 hover 后，鼠标悬停或键盘聚焦都会展示关联信息，适合实体预览。"}
+
+```tsx title="showcases/popover/cases/hover-preview-manager.tsx"
+import { Button, Popover } from '@heliannuuthus/ui'
+
+<Popover
+  triggerMode="hover"
+  trigger={<Button variant="link">@linmo</Button>}
+  content={<OwnerProfile />}
+/>
+
+<Popover
+  open={open}
+  onOpenChange={setOpen}
+  align="start"
+  sideOffset={8}
+  alignOffset={4}
+  classNames={{ content: 'w-80' }}
+  styles={{ content: { padding: 16 } }}
+/>
+<Popover defaultOpen={false} trigger={<Button>Open</Button>} />
+```
+
+## 组成部分
+
+- **Popover** — 通过主组件 props 配置内容、状态、行为和扩展点。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '设置触发元素，以及点击或悬停预览模式。',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '设置触发元素，以及点击或悬停预览模式。',
+      name: 'triggerMode',
+      type: "'click' | 'hover'",
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '配置浮层主体和可选标题说明。',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '配置浮层主体和可选标题说明。',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '配置浮层主体和可选标题说明。',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '设置浮层方向、对齐方式和间距。',
+      name: 'side',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '设置浮层方向、对齐方式和间距。',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '设置浮层方向、对齐方式和间距。',
+      name: 'sideOffset',
+      type: 'number',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '设置浮层方向、对齐方式和间距。',
+      name: 'alignOffset',
+      type: 'number',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '设置悬停模式打开与关闭前的等待时间。',
+      name: 'delay',
+      type: 'number',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '设置悬停模式打开与关闭前的等待时间。',
+      name: 'closeDelay',
+      type: 'number',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '以受控或非受控方式管理打开状态。',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Popover',
+      defaultValue: 'false',
+      description: '以受控或非受控方式管理打开状态。',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '以受控或非受控方式管理打开状态。',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'PopoverClassNames',
+    },
+    {
+      component: 'Popover',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'PopoverStyles',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### PopoverClassNames
+
+```ts
+type PopoverClassNames = {
+  content?: string;
+};
+```
+
+### PopoverStyles
+
+```ts
+type PopoverStyles = {
+  content?: React.CSSProperties;
+};
+```
+
+## 无障碍
+
+- hover 模式也会在触发器获得键盘焦点时打开，不能只依赖鼠标操作。
+- 交互式内容使用 click 模式；仅提供一句简短说明时优先使用 Tooltip。
+
+## 避免事项
+
+- 不要在 hover 浮层中放置必须完成的操作，触摸设备和键盘用户需要更稳定的点击入口。
+- 不要同时维护 HoverCard 与 Popover 两套相同内容；实体预览直接使用 trigger="hover"。

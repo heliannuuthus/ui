@@ -1,0 +1,247 @@
+---
+title: 'Card 卡片'
+description: '用清晰的头部、内容和底部区域承载同一主题的信息与操作。'
+lang: zh-Hans
+---
+
+import CardShowcase from '@showcases/card';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Card 卡片
+
+{"用清晰的头部、内容和底部区域承载同一主题的信息与操作。"}
+
+## 何时使用
+
+- 需要将一组相关信息和操作组织成独立内容单元。
+- 需要明确区分标题信息、主体内容和底部操作。
+
+## 示例
+
+<CardShowcase />
+
+### 基础用法
+
+{"只提供标题和内容，即可快速组织一组相关信息。"}
+
+```tsx title="showcases/card/cases/basic-usage.tsx"
+import { Button, Card, Input } from '@heliannuuthus/ui'
+
+export const UpdateCard = () => {
+  return (
+    <Card header={{ title: '设计系统更新' }} variant="elevated">
+      <p>本周补充了组件示例与无障碍说明。</p>
+    </Card>
+  )
+}
+
+<Card header={{ title: '描边卡片' }} variant="outline" />
+<Card header={{ title: '透明卡片' }} variant="ghost" />
+```
+
+### Header、Content 与 Footer
+
+{"Header 负责标题与辅助操作，Content 承载主体，Footer 放置与整张卡片相关的操作。"}
+
+```tsx title="showcases/card/cases/header-content-and-footer.tsx"
+import { Card } from '@heliannuuthus/ui';
+
+export const WorkspaceCard = () => {
+  return (
+    <Card
+      header={{
+        title: '工作区资料',
+        description: '修改成员看到的工作区名称。',
+        action: <Button variant="ghost">更多操作</Button>,
+      }}
+      footer={
+        <>
+          <span>上次保存于 10:24</span>
+          <Button>保存修改</Button>
+        </>
+      }
+    >
+      <label>
+        工作区名称
+        <Input defaultValue="Heliannuuthus UI" />
+      </label>
+    </Card>
+  );
+};
+```
+
+## Semantic DOM
+
+{"悬停、聚焦或点击右侧属性行，查看根节点 className/style 与 CardClassNames/CardStyles 各字段对应的真实区域。"}
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Card',
+      defaultValue: "'elevated'",
+      description: '控制 Card 的层级表达，可选择阴影、描边或透明容器。',
+      name: 'variant',
+      type: "'elevated' | 'outline' | 'ghost'",
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description:
+        '统一配置标题、辅助说明与右侧操作；不再占用根节点原生 title 属性。',
+      name: 'header',
+      type: 'CardHeader',
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description: '卡片主体内容。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description: '底部操作或补充信息。',
+      name: 'footer',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description: '扩展 Card 根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'CardHeader',
+      defaultValue: null,
+      description: '卡片标题；传入 header 时必须提供。',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CardHeader',
+      defaultValue: null,
+      description: '标题下方的辅助说明。',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CardHeader',
+      defaultValue: null,
+      description: 'Header 右侧的辅助操作。',
+      name: 'action',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CardClassNames',
+      defaultValue: null,
+      description: '扩展包含标题、说明与右侧操作的头部区域。',
+      name: 'header',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      defaultValue: null,
+      description: '扩展卡片标题区域。',
+      name: 'title',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      defaultValue: null,
+      description: '扩展标题下方的辅助说明区域。',
+      name: 'description',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      defaultValue: null,
+      description: '扩展头部右侧的辅助操作区域。',
+      name: 'action',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      defaultValue: null,
+      description: '扩展卡片主要内容区域。',
+      name: 'content',
+      type: 'string',
+    },
+    {
+      component: 'CardClassNames',
+      defaultValue: null,
+      description: '扩展卡片底部的补充信息与操作区域。',
+      name: 'footer',
+      type: 'string',
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'CardClassNames',
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'CardStyles',
+    },
+    {
+      component: 'Card',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### CardClassNames
+
+```ts
+type CardClassNames = {
+  action?: string;
+  content?: string;
+  description?: string;
+  footer?: string;
+  header?: string;
+  title?: string;
+};
+```
+
+### CardStyles
+
+```ts
+type CardStyles = {
+  action?: React.CSSProperties;
+  content?: React.CSSProperties;
+  description?: React.CSSProperties;
+  footer?: React.CSSProperties;
+  header?: React.CSSProperties;
+  title?: React.CSSProperties;
+};
+```
+
+## 无障碍
+
+- 标题应准确描述卡片主题，并保持页面标题层级连续。
+- header.action 和 footer 中的图标按钮需要提供可访问名称。
+
+## 避免事项
+
+- 不要把互不相关的信息仅因为视觉需要塞进同一张 Card。
+- 不要在 Header、Content 和 Footer 中重复同一组主要操作。

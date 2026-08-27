@@ -1,0 +1,209 @@
+---
+title: 'Navigation Menu 导航菜单'
+description: '组织站点或产品的主要入口，并在需要时展开带有说明和分组的丰富导航面板。'
+lang: zh-Hans
+---
+
+import NavigationMenuShowcase from '@showcases/navigation-menu';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Navigation Menu 导航菜单
+
+{"组织站点或产品的主要入口，并在需要时展开带有说明和分组的丰富导航面板。"}
+
+## 何时使用
+
+- 一级入口需要同时展示分类、说明或推荐内容。
+- 站点导航需要兼顾直接链接和可展开的内容分组。
+
+## 示例
+
+<NavigationMenuShowcase />
+
+### 基础用法
+
+{"把产品入口、资源入口和当前页面放入同一条站点导航，弹层宽度随内容平滑变化。"}
+
+```tsx title="showcases/navigation-menu/cases/basic-usage.tsx"
+import { NavigationMenu } from '@heliannuuthus/ui';
+
+<NavigationMenu
+  items={[
+    {
+      label: '产品',
+      content: ({ Link }) => (
+        <div>
+          <Link href="/components">组件库</Link>
+          <Link href="/tokens">设计令牌</Link>
+        </div>
+      ),
+    },
+    { label: '组件', href: '/components', active: true },
+  ]}
+/>;
+```
+
+### 局部导航与对齐
+
+{"在工具栏右侧使用较小内容面板，并通过 align 控制弹层相对导航的对齐方式。"}
+
+```tsx title="showcases/navigation-menu/cases/local-navigation-and-alignment.tsx"
+import { NavigationMenu } from '@heliannuuthus/ui'
+
+<NavigationMenu
+  align="end"
+  items={[
+    { label: '产品', content: ({ Link }) => <Link href="/components">组件库</Link> },
+    { label: '组件', href: '/components' },
+  ]}
+/>
+
+<NavigationMenu
+  items={items}
+  orientation="vertical"
+  value={value}
+  onChange={setValue}
+  delay={100}
+  closeDelay={200}
+/>
+<NavigationMenu defaultValue="docs" items={items} />
+```
+
+## 组成部分
+
+- **Navigation Menu** — 通过主组件 props 配置内容、状态、行为和扩展点。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '配置直接链接或带弹层内容的顶级导航入口。',
+      name: 'items',
+      type: 'NavigationMenuItemConfig[]',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '设置弹层对齐方式与导航方向。',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '设置弹层对齐方式与导航方向。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '以受控或非受控方式管理当前展开入口。',
+      name: 'value',
+      type: 'string | null',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '以受控或非受控方式管理当前展开入口。',
+      name: 'defaultValue',
+      type: 'string | null',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '以受控或非受控方式管理当前展开入口。',
+      name: 'onChange',
+      type: '(value: string | null) => void',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '设置打开与关闭富导航面板的延迟。',
+      name: 'delay',
+      type: 'number',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '设置打开与关闭富导航面板的延迟。',
+      name: 'closeDelay',
+      type: 'number',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### NavigationMenuItemConfig
+
+```ts
+type NavigationMenuItemConfig = {
+  active?: boolean;
+  content?: ReactNode | ((slots: NavigationMenuLinkSlots) => ReactNode);
+  disabled?: boolean;
+  href?: string;
+  label: ReactNode;
+  value?: string;
+};
+```
+
+### NavigationMenuLinkSlots
+
+```ts
+type NavigationMenuLinkSlots = {
+  Link: NavigationMenuLinkComponent;
+};
+```
+
+### NavigationMenuLinkComponent
+
+```ts
+type NavigationMenuLinkComponent = (
+  props: NavigationMenuLinkProps
+) => ReactNode;
+```
+
+### NavigationMenuLinkProps
+
+```ts
+type NavigationMenuLinkProps = Omit<ComponentProps<'a'>, 'children'> & {
+  active?: boolean;
+  children?: ReactNode;
+  closeOnClick?: boolean;
+};
+```
+
+## 无障碍
+
+- 顶层入口和弹层链接支持键盘聚焦与方向键导航。
+- 当前页面使用 active 状态，并保持链接文字能独立表达目标。
+
+## 避免事项
+
+- 不要用大菜单隐藏唯一的主要行动；高频入口应保持直接可见。
+- 避免在弹层中继续嵌套第三层导航。

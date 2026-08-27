@@ -1,0 +1,306 @@
+---
+title: 'Drawer 抽屉'
+description: '从视口或指定父容器的任意边缘打开抽屉，并根据 behavior 调整稳定面板与手势呈现。'
+lang: zh-Hans
+---
+
+import DrawerShowcase from '@showcases/drawer';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Drawer 抽屉
+
+{"从视口或指定父容器的任意边缘打开抽屉，并根据 behavior 调整稳定面板与手势呈现。"}
+
+## 何时使用
+
+- 需要从当前视口边缘承接筛选、详情、导航或短流程任务。
+- 需要把临时面板限制在工作台、预览器或卡片等局部父容器中。
+
+## 示例
+
+<DrawerShowcase />
+
+### 基础用法
+
+{"从页面边缘承载较长内容和连续操作，同时保留当前页面上下文。"}
+
+```tsx title="showcases/drawer/cases/basic-usage.tsx"
+import { Drawer } from '@heliannuuthus/ui';
+
+<Drawer
+  behavior="adaptive"
+  side="right"
+  trigger={<Button>从右侧打开</Button>}
+  title="今晚的发布窗口"
+  description="22:00–23:00"
+  closeText="关闭"
+>
+  <ReleaseList />
+</Drawer>;
+```
+
+### 四个方向
+
+{"统一从上、右、下、左进入；adaptive 模式在窄屏保留手势，在宽屏收敛为稳定的边缘面板。"}
+
+```tsx title="showcases/drawer/cases/four-directions.tsx"
+import { Drawer } from '@heliannuuthus/ui';
+
+<Drawer
+  behavior="panel"
+  container={containerRef}
+  side="left"
+  trigger={<Button>从左侧打开</Button>}
+  title="局部筛选"
+>
+  <Filters />
+</Drawer>;
+```
+
+### 绑定父容器
+
+{"传入 container 后，Portal、视口与面板都限制在指定父容器内，四个方向仍保持一致。"}
+
+```tsx title="showcases/drawer/cases/bind-parent-container.tsx"
+const containerRef = useRef<HTMLDivElement>(null)
+
+<div ref={containerRef} className="relative overflow-hidden">
+  <Drawer
+    behavior="panel"
+    container={containerRef}
+    side="left"
+    title="局部筛选"
+    trigger={<Button>从左侧打开</Button>}
+  >
+    <FilterFields />
+  </Drawer>
+</div>
+
+<Drawer
+  open={open}
+  onOpenChange={setOpen}
+  snapPoints={[0.25, 0.5, 1]}
+  snapPoint={snapPoint}
+  onSnapChange={setSnapPoint}
+  closable
+  handle
+  sequential
+  swipeDirection="down"
+  classNames={{ content: 'max-h-screen' }}
+  styles={{ content: { minHeight: 320 } }}
+/>
+<Drawer defaultOpen={false} defaultSnapPoint={0.5} />
+```
+
+## 组成部分
+
+- **Drawer** — 通过主组件 props 配置内容、状态、行为和扩展点。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '可选的抽屉触发元素；受控场景可省略。',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '配置抽屉头部、主体内容和底部操作。',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '配置抽屉头部、主体内容和底部操作。',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '配置抽屉头部、主体内容和底部操作。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '配置抽屉头部、主体内容和底部操作。',
+      name: 'footer',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '设置进入方向以及自适应、手势或稳定面板行为。',
+      name: 'side',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '设置进入方向以及自适应、手势或稳定面板行为。',
+      name: 'behavior',
+      type: "'adaptive' | 'gesture' | 'panel'",
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '把抽屉约束在指定父容器内。',
+      name: 'container',
+      type: 'HTMLElement | RefObject<HTMLElement | null>',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '配置并控制手势抽屉的分段展开位置。',
+      name: 'snapPoints',
+      type: '(number | string)[]',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '配置并控制手势抽屉的分段展开位置。',
+      name: 'snapPoint',
+      type: 'number | string | null',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '配置并控制手势抽屉的分段展开位置。',
+      name: 'onSnapChange',
+      type: '(value: number | string | null) => void',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '以受控或非受控方式管理打开状态。',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: 'false',
+      description: '以受控或非受控方式管理打开状态。',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '以受控或非受控方式管理打开状态。',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'DrawerClassNames',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'DrawerStyles',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'closeText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: "'outline'",
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'closeVariant',
+      type: 'ButtonProps["variant"]',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'defaultSnapPoint',
+      type: 'DrawerSnapPoint | null',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: 'true',
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'closable',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'handle',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'sequential',
+      type: 'boolean',
+    },
+    {
+      component: 'Drawer',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'swipeDirection',
+      type: "'down' | 'left' | 'right' | 'up'",
+    },
+  ]}
+/>
+
+## 类型定义
+
+### DrawerClassNames
+
+```ts
+type DrawerClassNames = {
+  content?: string;
+};
+```
+
+### DrawerStyles
+
+```ts
+type DrawerStyles = {
+  content?: React.CSSProperties;
+};
+```
+
+### DrawerSnapPoint
+
+```ts
+type DrawerSnapPoint = number | string;
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 使用 container 时，父容器必须设置 position: relative 和 overflow: hidden。
+- 不要仅根据设备名称选择行为；触摸密集任务使用 gesture，稳定编辑面板使用 panel，不确定时使用 adaptive。

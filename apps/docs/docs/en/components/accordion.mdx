@@ -1,0 +1,385 @@
+---
+title: 'Accordion'
+description: 'Expand a set of vertically arranged content areas as needed.'
+lang: en
+---
+
+import AccordionShowcase from '@showcases/accordion';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Accordion
+
+{"Expand a set of vertically arranged content areas as needed."}
+
+## When to use
+
+- Primary use: Expand a set of vertically arranged content areas as needed.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<AccordionShowcase />
+
+### Single item expansion
+
+{"By default, only one item is open at a time; opening another item closes the previous one."}
+
+```tsx title="showcases/accordion/cases/single-item-expansion.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion
+  defaultValue={['preflight']}
+  items={[
+    {
+      value: 'preflight',
+      title: 'Preflight results',
+      content: 'All 42 checks passed.',
+    },
+    {
+      value: 'rollback',
+      title: 'Rollback plan',
+      content: 'Switch back to the previous version if an issue occurs.',
+    },
+  ]}
+/>;
+```
+
+### Multiple expansion
+
+{"Set multiple to allow several items to remain open at the same time."}
+
+```tsx title="showcases/accordion/cases/multiple-expansion.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion
+  defaultValue={['preflight', 'rollback']}
+  multiple
+  items={[
+    {
+      value: 'preflight',
+      title: 'Preflight results',
+      content: '42 checks passed. ',
+    },
+    {
+      value: 'rollback',
+      title: 'Rollback plan',
+      content: 'Switch back to the previous version in case of exception. ',
+    },
+  ]}
+/>;
+```
+
+### controlled state
+
+{"value represents the currently expanded items, and onChange receives the complete value array after user interaction."}
+
+```tsx title="showcases/accordion/cases/controlled-state.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion items={items} value={value} onChange={setValue} />;
+```
+
+### Default indicator
+
+{"Omit indicator to show the default arrow at the end of the title and rotate it with the open state."}
+
+```tsx title="showcases/accordion/cases/default-indicator.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion
+  defaultValue={['deployment']}
+  items={[
+    {
+      value: 'deployment',
+      title: 'Deployment strategy',
+      content: 'Roll out to 10% first, observe, then release to everyone.',
+    },
+  ]}
+/>;
+```
+
+### Start position
+
+{"Use Accordion.Indicator position to place the default arrow at the start of the title."}
+
+```tsx title="showcases/accordion/cases/start-position.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion
+  indicator={<Accordion.Indicator position="start" />}
+  items={items}
+/>;
+```
+
+### State function indicator
+
+{"Use Accordion.Indicator to set the position in one place. Its children state function receives the current item’s open, disabled, and value state so the caller controls what is rendered."}
+
+```tsx title="showcases/accordion/cases/state-function-indicator.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+import { Minus, Plus } from 'lucide-react';
+
+<Accordion
+  defaultValue={['deployment']}
+  indicator={
+    <Accordion.Indicator position="start">
+      {({ open }) => (open ? <Minus /> : <Plus />)}
+    </Accordion.Indicator>
+  }
+  items={[
+    {
+      value: 'deployment',
+      title: 'Deployment strategy',
+      content: 'Roll out to 10% first, observe, then release to everyone.',
+    },
+  ]}
+/>;
+```
+
+### Disable one item
+
+{"Set disabled on an AccordionItem to prevent trigger interaction for that item only."}
+
+```tsx title="showcases/accordion/cases/disable-one-item.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion
+  items={[
+    {
+      value: 'preflight',
+      title: 'Preflight results',
+      content: 'All 42 checks passed.',
+      disabled: true,
+    },
+    {
+      value: 'rollback',
+      title: 'Rollback plan',
+      content: 'Switch back to the previous version if an issue occurs.',
+    },
+  ]}
+/>;
+```
+
+### Disable the entire component
+
+{"Set disabled on Accordion to prevent every item from opening or closing."}
+
+```tsx title="showcases/accordion/cases/disable-the-entire-component.tsx"
+import { Accordion } from '@heliannuuthus/ui';
+
+<Accordion disabled items={items} />;
+```
+
+### Closed panel retention
+
+{"Closed panels unmount by default; keepMounted preserves internal state, while hiddenUntilFound retains searchable content for the browser find feature."}
+
+```tsx title="showcases/accordion/cases/closed-panel-retention.tsx"
+<Accordion items={items} />
+<Accordion items={items} keepMounted />
+<Accordion items={items} hiddenUntilFound />
+```
+
+## Component parts
+
+- **Accordion** — Manage open values and render a set of related panels from items.
+- **AccordionItem** — Describe one item’s identifier, title, panel content, and disabled state.
+- **Accordion.Indicator** — Read the current item state and render an expansion indicator at the start or end of the title.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Accordion',
+      defaultValue: null,
+      description:
+        'Configure the value, title, content and disabled state of each panel.',
+      name: 'items',
+      type: 'readonly AccordionItem[]',
+    },
+    {
+      component: 'AccordionItem',
+      defaultValue: null,
+      description:
+        'Set the unique item identifier used by the controlled open value.',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'AccordionItem',
+      defaultValue: null,
+      description: 'Set the title content displayed in the trigger button.',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'AccordionItem',
+      defaultValue: null,
+      description: 'Set the panel content displayed when the item is open.',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'AccordionItem',
+      defaultValue: 'false',
+      description: 'Disable opening and closing for the current item only.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: null,
+      description:
+        'Specifies the current expansion item in a controlled or uncontrolled manner.',
+      name: 'value',
+      type: 'string[]',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: null,
+      description:
+        'Specifies the current expansion item in a controlled or uncontrolled manner.',
+      name: 'defaultValue',
+      type: 'string[]',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: null,
+      description:
+        'Return the complete value array when the expansion item changes.',
+      name: 'onChange',
+      type: '(value: string[]) => void',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: 'false',
+      description: 'Allows multiple entries to be expanded at the same time.',
+      name: 'multiple',
+      type: 'boolean',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: 'false',
+      description: 'Disable every item in the Accordion.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: '<Accordion.Indicator />',
+      description:
+        'Set Accordion.Indicator. When omitted, a default arrow at the end rotates with the open state; pass null to hide it.',
+      name: 'indicator',
+      type: 'ReactElement<AccordionIndicatorProps> | null',
+    },
+    {
+      component: 'Accordion.Indicator',
+      defaultValue: null,
+      description:
+        'A static node rotates with the open state. A state function receives open, disabled, and value and fully controls the rendered content.',
+      name: 'children',
+      type: 'ReactNode | ((state: AccordionIndicatorState) => ReactNode)',
+    },
+    {
+      component: 'Accordion.Indicator',
+      defaultValue: "'end'",
+      description: 'Place the indicator at the start or end of the title.',
+      name: 'position',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Accordion',
+      defaultValue: 'false',
+      description:
+        'Keep a closed panel in the DOM to preserve internal state; it cannot be used together with hiddenUntilFound.',
+      name: 'keepMounted',
+      type: 'boolean',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: 'false',
+      description:
+        'Keep closed panels with hidden="until-found" so the browser’s find-in-page can locate and expand their content; it cannot be used together with keepMounted.',
+      name: 'hiddenUntilFound',
+      type: 'boolean',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Accordion',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Accordion.Indicator',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Accordion.Indicator',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### AccordionItem
+
+```ts
+type AccordionItem = {
+  value: string;
+  title: ReactNode;
+  content: ReactNode;
+  disabled?: boolean;
+};
+```
+
+### AccordionIndicatorProps
+
+```ts
+type AccordionIndicatorProps = Omit<ComponentProps<'span'>, 'children'> & {
+  children?: ReactNode | ((state: AccordionIndicatorState) => ReactNode);
+  position?: 'start' | 'end';
+};
+```
+
+### AccordionIndicatorState
+
+```ts
+type AccordionIndicatorState = {
+  open?: boolean;
+  disabled?: boolean;
+  value?: string;
+};
+```
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

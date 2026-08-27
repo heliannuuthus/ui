@@ -4,7 +4,8 @@
 
 - `src/components/` contains domain-neutral public UI primitives.
 - `apps/docs/` is the documentation and component showcase deployed to `ui.heliannuuthus.com`.
-- Documentation routes live under `apps/docs/src/pages/`; do not place pages under the public package `src/components/` tree.
+- Documentation uses Rspress 2. Routes live under `apps/docs/docs/{zh,en}/`; do not place pages under the public package `src/components/` tree.
+- Component demos live under `apps/docs/showcases/<component-slug>/`. Put each meaningful case in its own `cases/*.tsx` file and compose the complete component display from that directory's `index.tsx`.
 - The package and documentation app must remain independently buildable. The docs app may alias the package root to local source, but documentation code must still import public APIs from `@heliannuuthus/ui`.
 - Every public component is exported from the `@heliannuuthus/ui` package root.
 - The package has exactly two public entries: the component root and
@@ -17,6 +18,7 @@
 
 - Treat shadcn/ui as an open-code recipe, not a runtime namespace or compatibility layer.
 - Build documentation chrome and examples with public `@heliannuuthus/ui` components. Keep native elements for document semantics, routing, and content structure; do not create a parallel docs-only primitive set.
+- Write component documentation directly in bilingual MDX. Do not add a parallel route registry or centralized page shell.
 - This repository is the workspace's single source of truth for domain-neutral frontend primitives. Consumers must extend this library instead of creating parallel primitives in product repositories.
 - Preserve accessible Radix semantics, keyboard interaction, focus visibility, disabled states, and narrow layouts.
 - Keep colors and visual decisions in semantic CSS variables; do not add product-domain state to the package.

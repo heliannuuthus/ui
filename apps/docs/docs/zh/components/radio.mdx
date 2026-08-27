@@ -1,0 +1,308 @@
+---
+title: 'Radio 单选框'
+description: '使用 Radio 表达单个选项，并通过 Radio.Group 组织互斥选择。'
+lang: zh-Hans
+---
+
+import RadioShowcase from '@showcases/radio';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Radio 单选框
+
+{"使用 Radio 表达单个选项，并通过 Radio.Group 组织互斥选择。"}
+
+## 何时使用
+
+- 候选项较少，并希望用户直接看到、比较所有选项。
+- 一组选项只允许选中一个值。
+
+## 示例
+
+<RadioShowcase />
+
+### 基础用法
+
+{"常规文本选项优先使用 options，由 Radio.Group 统一生成标签与值。"}
+
+```tsx title="showcases/radio/cases/basic-usage.tsx"
+import { Radio } from '@heliannuuthus/ui';
+
+<Radio.Group
+  value={delivery}
+  onChange={setDelivery}
+  options={[
+    { label: '邮件通知', value: 'email' },
+    { label: '站内通知', value: 'inbox' },
+    { label: '不通知', value: 'none' },
+  ]}
+/>;
+```
+
+### 方案单选卡
+
+{"将互斥选项扩展为整行可点击的卡片，同时保留原生单选语义。"}
+
+```tsx title="showcases/radio/cases/plan-radio-button.tsx"
+import { Radio } from '@heliannuuthus/ui'
+
+<Radio.Group
+  value={delivery}
+  onChange={setDelivery}
+  options={[
+    { label: '邮件通知', value: 'email' },
+    { label: '站内通知', value: 'inbox' },
+  ]}
+/>
+
+<Radio
+  value="daily"
+  disabled
+  classNames={{ control: 'border-primary' }}
+  styles={{ label: { fontWeight: 600 } }}
+>
+  Daily
+</Radio>
+<Radio.Group defaultValue="daily" disabled gap={16} options={options} />
+```
+
+## 组成部分
+
+- **Radio** — 表达单个互斥选项。
+- **Radio.Group** — 通过 options props 管理互斥选择。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: '标识 Radio 在所属分组中的值。',
+      name: 'value',
+      type: 'string | number',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: '设置受控模式下当前选中的单选值。',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: '设置非受控模式下初始选中的单选值。',
+      name: 'defaultValue',
+      type: 'string',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: '当前单选值变化时调用。',
+      name: 'onChange',
+      type: '(value: string) => void',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: '从标签与值配置生成一组 Radio。',
+      name: 'options',
+      type: 'RadioOption[]',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: '声明键盘导航方向；横向时使用 Stack 自适应换行。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: '3',
+      description: '横向布局允许显示的最大列数。',
+      name: 'columns',
+      type: 'number',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: '180',
+      description: '横向布局中单个选项的期望最小宽度。',
+      name: 'minColumnWidth',
+      type: 'number | string',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: '12',
+      description: '设置 Radio.Group 选项之间的水平与垂直间距。',
+      name: 'gap',
+      type: 'number | string | [number | string, number | string]',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: 'false',
+      description: '禁用整个 Radio.Group 或单个 Radio。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'RadioClassNames',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'RadioStyles',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### RadioClassNames
+
+```ts
+type RadioClassNames = {
+  control?: string;
+  label?: string;
+};
+```
+
+### RadioStyles
+
+```ts
+type RadioStyles = {
+  control?: React.CSSProperties;
+  label?: React.CSSProperties;
+};
+```
+
+### RadioOption
+
+```ts
+type RadioOption<Value = string> = {
+  className?: string;
+  disabled?: boolean;
+  label: ReactNode;
+  value: Value;
+};
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

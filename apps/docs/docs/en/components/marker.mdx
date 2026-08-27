@@ -1,0 +1,195 @@
+---
+title: 'Marker'
+description: 'Mark a boundary, position, or state within continuous content.'
+lang: en
+---
+
+import MarkerShowcase from '@showcases/marker';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Marker
+
+{"Mark a boundary, position, or state within continuous content."}
+
+## When to use
+
+- Mark dates, unread boundaries, state transitions, or navigable positions within continuous content.
+- Use when you need a lightweight dividing rule with text or an icon.
+
+## Examples
+
+<MarkerShowcase />
+
+### Basic usage
+
+{"Separate dates in messages, activity feeds, or update logs so the label reads as a content boundary rather than a timeline node."}
+
+```tsx title="showcases/marker/cases/basic-usage.tsx"
+import { Marker } from '@heliannuuthus/ui'
+
+<article>Yesterday’s updates</article>
+<Marker content="Today" variant="separator" />
+<article>Today’s updates</article>
+```
+
+### Unread boundary
+
+{"Place the unread count between read and unread content; the icon reinforces status while the bottom border keeps the layout compact."}
+
+```tsx title="showcases/marker/cases/unread-boundary.tsx"
+import { Marker } from '@heliannuuthus/ui';
+import { CircleDot } from 'lucide-react';
+
+<Marker variant="border" icon={<CircleDot />} content="2 unread messages" />;
+```
+
+### Status note
+
+{"Describe the shared state of subsequent content within a related settings group without treating Marker as an alert or notification container."}
+
+```tsx title="showcases/marker/cases/status-note.tsx"
+import { Marker } from '@heliannuuthus/ui';
+import { CheckCircle2 } from 'lucide-react';
+
+<Marker
+  icon={<CheckCircle2 />}
+  content="The following settings are synced to production"
+/>;
+```
+
+### Linked marker
+
+{"With href, a marker can point to a document anchor or another section of continuous content while preserving native link semantics."}
+
+```tsx title="showcases/marker/cases/linked-marker.tsx"
+import { Marker } from '@heliannuuthus/ui';
+import { Archive } from 'lucide-react';
+
+<Marker
+  href="#archived-release-notes"
+  icon={<Archive />}
+  content="Jump to archived notes"
+  variant="separator"
+/>;
+```
+
+### Link and slot styles
+
+{"href gives the entire Marker native link semantics, while classNames extends the icon and content slots independently."}
+
+```tsx title="showcases/marker/cases/link-and-slot-styles.tsx"
+<Marker
+  href="/releases/history"
+  icon={<ArrowUpRight />}
+  content="View release history"
+  classNames={{ icon: 'text-primary', content: 'font-medium' }}
+/>
+```
+
+## Component parts
+
+- **Marker** — Configure content markup via icon, content, and variant props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: 'Set wrappable markup text or links.',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description:
+        'Set decorative status icons and automatically hide accessibility semantics.',
+      name: 'icon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Marker',
+      defaultValue: "'default'",
+      description:
+        'Choose from plain text, side dividers, or bottom border markers.',
+      name: 'variant',
+      type: "'default' | 'separator' | 'border'",
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description:
+        'Use the native a element after passing in the link address, otherwise it will be rendered as an ordinary div.',
+      name: 'href',
+      type: 'string',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'MarkerClassNames',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'MarkerStyles',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### MarkerClassNames
+
+```ts
+type MarkerClassNames = {
+  content?: string;
+  icon?: string;
+};
+```
+
+### MarkerStyles
+
+```ts
+type MarkerStyles = {
+  content?: React.CSSProperties;
+  icon?: React.CSSProperties;
+};
+```
+
+## Accessibility
+
+- Decorative icons are hidden from assistive technology automatically; include the state meaning in content as well.
+- Pass href when navigation is needed so the component preserves native link semantics and keyboard behavior.
+
+## Avoid
+
+- Do not use Marker to represent a complete timeline with nodes, connectors, and sequential relationships.
+- Do not communicate status through color or icons alone, and do not put long explanations in marker text.

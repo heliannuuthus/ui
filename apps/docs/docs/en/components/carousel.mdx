@@ -1,0 +1,354 @@
+---
+title: 'Carousel'
+description: 'Browse same-level content horizontally, always provide depth-of-field animation, and support point slots, auto-play, start-to-end loops, and custom page turners.'
+lang: en
+---
+
+import CarouselShowcase from '@showcases/carousel';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Carousel
+
+{"Browse same-level content horizontally, always provide depth-of-field animation, and support point slots, auto-play, start-to-end loops, and custom page turners."}
+
+## When to use
+
+- There are multiple key content cards at the same level, but the current area is only suitable for highlighting one item.
+- It is necessary to carousel marketing highlights, version updates or media content and allow users to actively browse forward and backward.
+
+## Examples
+
+<CarouselShowcase />
+
+### Basic usage
+
+{"Carousel always uses a depth of field transition; paginationPosition controls the default point in front or behind content."}
+
+```tsx title="showcases/carousel/cases/basic-usage.tsx"
+import { Carousel } from '@heliannuuthus/ui';
+
+<Carousel
+  controls
+  items={highlights}
+  pagination="dots"
+  paginationPosition="after"
+  renderItem={(item) => <HighlightCard item={item} />}
+/>;
+```
+
+### Navigation buttons
+
+{"controls determines whether previous and next buttons are rendered; previousButtonProps and nextButtonProps extend each button independently."}
+
+```tsx title="showcases/carousel/cases/navigation-buttons.tsx"
+<Carousel
+  controls={false}
+  items={items}
+  previousButtonProps={{ 'aria-label': 'Previous release' }}
+  nextButtonProps={{ 'aria-label': 'Next release' }}
+/>
+```
+
+### Pagination dots
+
+{"pagination enables the default dots or hides pagination, while renderDot replaces only the content of each dot."}
+
+```tsx title="showcases/carousel/cases/pagination-dots.tsx"
+<Carousel
+  items={items}
+  pagination="dots"
+  renderDot={({ index, isSelected }) => (isSelected ? index + 1 : '·')}
+/>
+```
+
+### Track and item styles
+
+{"classNames extends the carousel track and items through the content and item semantic slots."}
+
+```tsx title="showcases/carousel/cases/track-and-item-styles.tsx"
+<Carousel
+  items={items}
+  classNames={{ content: 'gap-3', item: 'basis-2/3 pl-3' }}
+/>
+```
+
+### Custom page turner
+
+{"Pagination provides page number status and control methods when receiving functions, and can directly combine a complete page turner that matches the current page."}
+
+```tsx title="showcases/carousel/cases/custom-page-turner.tsx"
+import { Button, Carousel } from '@heliannuuthus/ui';
+
+<Carousel
+  items={highlights}
+  renderItem={(item) => <HighlightCard item={item} />}
+  pagination={({ currentPage, pageCount, scrollNext, scrollPrev }) => (
+    <div role="group" aria-label="Carousel paging">
+      <Button onClick={scrollPrev}>Previous page</Button>
+      <span aria-live="polite">
+        {currentPage} / {pageCount}
+      </span>
+      <Button onClick={scrollNext}>Next page</Button>
+    </div>
+  )}
+/>;
+```
+
+### Autoplay
+
+{"Autoplay passes true to use the default interval, and passes a number to directly set the number of seconds; the loop loop always crosses the beginning and end along the next page."}
+
+```tsx title="showcases/carousel/cases/autoplay.tsx"
+import { Carousel } from '@heliannuuthus/ui';
+
+<Carousel
+  autoplay={3}
+  controls
+  items={highlights}
+  loop
+  pagination="dots"
+  renderItem={(item) => <HighlightCard item={item} />}
+/>;
+```
+
+### External control
+
+{"Use the ref to call scrollPrev, scrollNext, scrollTo, play, and pause without exposing the underlying carousel instance."}
+
+```tsx title="showcases/carousel/cases/external-control.tsx"
+const carouselRef = useRef<CarouselRef>(null)
+
+<Carousel ref={carouselRef} items={items} />
+<Button onClick={() => carouselRef.current?.scrollPrev()}>Previous</Button>
+<Button onClick={() => carouselRef.current?.scrollNext()}>Next</Button>
+```
+
+## Component parts
+
+- **Carousel** — Configure content, state, behavior, and extension points through main component props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description:
+        'Provide carousel data or a list of nodes to render directly.',
+      name: 'items',
+      type: 'readonly Item[]',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description:
+        'Render carousel content from the current data item and index.',
+      name: 'renderItem',
+      type: '(item: Item, index: number) => ReactNode',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: 'true',
+      description:
+        'Whether to display the previous page and next page buttons.',
+      name: 'controls',
+      type: 'boolean',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description:
+        'Configure the previous button appearance, accessible name, and native props.',
+      name: 'previousButtonProps',
+      type: 'ButtonNativeProps',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description:
+        'Configure the next button appearance, accessible name, and native props.',
+      name: 'nextButtonProps',
+      type: 'ButtonNativeProps',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: "'dots'",
+      description:
+        'Use default points, turn off paging, or customize the complete page turner through functions.',
+      name: 'pagination',
+      type: "false | 'dots' | ((controls: CarouselControls) => ReactNode)",
+    },
+    {
+      component: 'Carousel',
+      defaultValue: "'after'",
+      description:
+        'Place pagination content before or after the carousel track.',
+      name: 'paginationPosition',
+      type: "'before' | 'after'",
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description:
+        'Customize a pagination dot from its index and selected state.',
+      name: 'renderDot',
+      type: '(props: CarouselDotRenderProps) => ReactNode',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: 'false',
+      description:
+        'Pass true to automatically play at the default 3-second interval, or directly pass in a positive number to set the switching seconds.',
+      name: 'autoplay',
+      type: 'boolean | number',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: 'false',
+      description:
+        'Let the last item be connected to the first item end to end; when the automatic playback spans the beginning and end, it will always continue in the direction of the next page.',
+      name: 'loop',
+      type: 'boolean',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: 'true',
+      description:
+        'During automatic playback, the pointer will pause when entering the carousel area and continue after leaving it.',
+      name: 'pauseOnHover',
+      type: 'boolean',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description:
+        'Scroll, play, or pause from outside the Carousel; the underlying carousel instance is not exposed.',
+      name: 'ref',
+      type: 'React.Ref<CarouselRef>',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'CarouselClassNames',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'CarouselStyles',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### CarouselRef
+
+```ts
+type CarouselRef = {
+  pause: () => void;
+  play: () => void;
+  scrollNext: () => void;
+  scrollPrev: () => void;
+  scrollTo: (index: number) => void;
+};
+```
+
+### CarouselControls
+
+```ts
+type CarouselControls = CarouselRef & {
+  canScrollNext: boolean;
+  canScrollPrev: boolean;
+  currentPage: number;
+  isPlaying: boolean;
+  pageCount: number;
+  selectedIndex: number;
+  scrollSnaps: number[];
+  pause: () => void;
+  play: () => void;
+  scrollNext: () => void;
+  scrollPrev: () => void;
+  scrollTo: (index: number) => void;
+};
+```
+
+### CarouselDotRenderProps
+
+```ts
+type CarouselDotRenderProps = {
+  index: number;
+  isSelected: boolean;
+};
+```
+
+### ButtonNativeProps
+
+```ts
+type ButtonNativeProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'color'
+> & {
+  variant?:
+    'default' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link';
+  size?:
+    'xs' | 'sm' | 'default' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
+  block?: boolean;
+  disabled?: boolean;
+};
+```
+
+### CarouselClassNames
+
+```ts
+type CarouselClassNames = {
+  content?: string;
+  item?: string;
+};
+```
+
+### CarouselStyles
+
+```ts
+type CarouselStyles = {
+  content?: React.CSSProperties;
+  item?: React.CSSProperties;
+};
+```
+
+## Accessibility
+
+- Carousels, slides, front and back buttons, and page points all retain recognizable semantics and keyboard operations.
+- After auto-play is turned on, dynamic content will not continue to trigger screen reading announcements; when the system requires reducing dynamic effects, auto-play and depth-of-field transitions will be stopped.
+
+## Avoid
+
+- Don’t use autoplay for content that must be read or acted upon; users should still be able to actively navigate through arrows and page points.
+- Autoplay pauses on hover by default; if pauseOnHover is turned off, other clear pause methods need to be provided.
+- Cramming too much text into a single screen will make the carousel difficult to scan. Use lists or paging instead when the content is longer.

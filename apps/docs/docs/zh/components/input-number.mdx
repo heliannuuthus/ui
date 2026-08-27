@@ -1,0 +1,391 @@
+---
+title: 'Input Number 数字输入框'
+description: '输入、格式化并通过键盘或步进按钮精确调整数值。'
+lang: zh-Hans
+---
+
+import InputNumberShowcase from '@showcases/input-number';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Input Number 数字输入框
+
+{"输入、格式化并通过键盘或步进按钮精确调整数值。"}
+
+## 何时使用
+
+- 录入数量、金额、百分比或具有明确步长和边界的数值。
+- 需要保留原始 number 值，同时按语言区域格式化显示内容。
+
+## 示例
+
+<InputNumberShowcase />
+
+### 基础用法
+
+{"通过受控值、最小值、最大值和步长管理存储容量，文本输入、键盘与增减按钮共享同一数值状态。"}
+
+```tsx title="showcases/input-number/cases/basic-usage.tsx"
+import { Input } from '@heliannuuthus/ui';
+
+<Input.Number
+  value={capacity}
+  onChange={setCapacity}
+  min={1}
+  max={256}
+  step={1}
+  suffix="GB"
+/>;
+```
+
+### 本地化格式
+
+{"使用 Intl.NumberFormat 配置显示货币，同时让 onChange 始终返回未格式化的 number 或 null。"}
+
+```tsx title="showcases/input-number/cases/localized-formatting.tsx"
+import { Input } from '@heliannuuthus/ui';
+
+<Input.Number
+  value={price}
+  onChange={setPrice}
+  min={0}
+  step={10}
+  smallStep={0.01}
+  locale="zh-CN"
+  format={{
+    style: 'currency',
+    currency: 'CNY',
+    minimumFractionDigits: 2,
+  }}
+/>;
+```
+
+### 尺寸与状态
+
+{"比较常用尺寸、隐藏步进按钮、只读、禁用和校验失败状态。"}
+
+```tsx title="showcases/input-number/cases/sizes-and-states.tsx"
+<Input.Number size="sm" defaultValue={8} />
+<Input.Number controls={false} defaultValue={8} />
+<Input.Number value={8} readOnly />
+<Input.Number value={8} disabled />
+<Input.Number aria-invalid defaultValue={8} />
+
+<Input.Number
+  defaultValue={10}
+  onChangeComplete={setCommittedValue}
+  largeStep={25}
+  prefix="¥"
+  placeholder="Amount"
+  allowWheelScrub
+  snapOnStep
+  classNames={{ input: 'tabular-nums' }}
+  styles={{ controls: { opacity: 0.9 } }}
+/>
+```
+
+## 组成部分
+
+- **Input.Number** — 组合可编辑数值输入、格式化逻辑和可选的增减按钮。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '设置受控原始数值；空输入使用 null。',
+      name: 'value',
+      type: 'number | null',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '设置非受控模式的初始数值；空输入使用 null。',
+      name: 'defaultValue',
+      type: 'number | null',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '数值变化时返回未格式化的 number 或 null。',
+      name: 'onChange',
+      type: '(value: number | null) => void',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '输入失焦、步进结束或键盘提交数值时返回最终值。',
+      name: 'onChangeComplete',
+      type: '(value: number | null) => void',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '限制允许输入和步进到达的最小值。',
+      name: 'min',
+      type: 'number',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '限制允许输入和步进到达的最大值。',
+      name: 'max',
+      type: 'number',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: '1',
+      description: '设置普通步进幅度。',
+      name: 'step',
+      type: "number | 'any'",
+    },
+    {
+      component: 'Input Number',
+      defaultValue: '0.1',
+      description: '设置 Alt 组合键对应的步进幅度。',
+      name: 'smallStep',
+      type: 'number',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: '10',
+      description: '设置 Shift 组合键对应的步进幅度。',
+      name: 'largeStep',
+      type: 'number',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '使用 Intl.NumberFormatOptions 格式化显示值。',
+      name: 'format',
+      type: 'Intl.NumberFormatOptions',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '设置格式化显示值使用的语言区域。',
+      name: 'locale',
+      type: 'Intl.LocalesArgument',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: 'true',
+      description: '显示、隐藏或自定义递增和递减按钮中的图标。',
+      name: 'controls',
+      type: 'boolean | InputNumberControls',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '在同一输入边框内展示固定前缀。',
+      name: 'prefix',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '在同一输入边框内展示固定单位后缀。',
+      name: 'suffix',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '配置原生输入提示。',
+      name: 'placeholder',
+      type: 'string',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '配置原生自动填充提示。',
+      name: 'autoComplete',
+      type: 'string',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '配置软键盘输入模式。',
+      name: 'inputMode',
+      type: 'HTMLAttributes<HTMLInputElement>["inputMode"]',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '本地化递增按钮的可访问名称。',
+      name: 'incrementLabel',
+      type: 'string',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '本地化递减按钮的可访问名称。',
+      name: 'decrementLabel',
+      type: 'string',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: "'default'",
+      description: '设置紧凑、默认或宽松控件高度。',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Input Number',
+      defaultValue: 'false',
+      description: '设置对应的原生表单语义。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: 'false',
+      description: '设置对应的原生表单语义。',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: 'false',
+      description: '设置对应的原生表单语义。',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: 'false',
+      description: '选择是否允许悬停滚轮调整数值。',
+      name: 'allowWheelScrub',
+      type: 'boolean',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: 'false',
+      description: '选择步进时是否吸附到最近倍数。',
+      name: 'snapOnStep',
+      type: 'boolean',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'InputNumberClassNames',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'InputNumberStyles',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'autoFocus',
+      type: 'boolean',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'inputProps',
+      type: 'ComponentProps<"input">',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'onBlur',
+      type: 'FocusEventHandler<HTMLInputElement>',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'onFocus',
+      type: 'FocusEventHandler<HTMLInputElement>',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### InputNumberClassNames
+
+```ts
+type InputNumberClassNames = {
+  controls?: string;
+  decrement?: string;
+  group?: string;
+  increment?: string;
+  input?: string;
+  prefix?: string;
+  suffix?: string;
+};
+```
+
+### InputNumberStyles
+
+```ts
+type InputNumberStyles = {
+  controls?: React.CSSProperties;
+  decrement?: React.CSSProperties;
+  group?: React.CSSProperties;
+  increment?: React.CSSProperties;
+  input?: React.CSSProperties;
+  prefix?: React.CSSProperties;
+  suffix?: React.CSSProperties;
+};
+```
+
+### InputNumberControls
+
+```ts
+type InputNumberControls = {
+  decrement?: ReactNode;
+  increment?: ReactNode;
+};
+```
+
+## 无障碍
+
+- 为独立使用的数字输入提供标签或 aria-label；Form.Field 会自动建立标签与说明关联。
+- 方向键按 step 调整，Alt 和 Shift 分别使用 smallStep 与 largeStep。
+- 增减按钮保持可访问名称，并在到达边界时自动禁用。
+
+## 避免事项
+
+- 不要把格式化后的字符串存入业务状态；onChange 已返回原始 number 或 null。
+- 金额和精度要求较高的场景应明确 format 与 step，并在业务层处理十进制定点规则。
+- 只需要范围内粗略选择时优先使用 Slider。

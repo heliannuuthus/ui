@@ -1,0 +1,1149 @@
+---
+title: 'Table 表格'
+description: 'Table 只负责数据驱动的完整交互；需要完全控制原生表格结构时，从 Table.Primitive 开始并组合 Table.Header、Table.Row 与 Table.Cell。'
+lang: zh-Hans
+---
+
+import TableShowcase from '@showcases/table';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Table 表格
+
+{"Table 只负责数据驱动的完整交互；需要完全控制原生表格结构时，从 Table.Primitive 开始并组合 Table.Header、Table.Row 与 Table.Cell。"}
+
+## 何时使用
+
+- 常规业务数据列表使用 data 与 Table.Column，快速获得搜索、排序、分页、选择、展开和虚拟滚动。
+- 数据已经完成加工，或结构无法由列模型表达时，使用 Table.Primitive 作为根并组合 Table.Header、Table.Body、Table.Row 与 Table.Cell。
+- 既希望沿用统一的表格视觉与无障碍语义，又需要针对业务定制固定列、汇总、操作和详情。
+
+## 示例
+
+<TableShowcase />
+
+### 基础用法
+
+{"默认组合搜索、排序、固定列、操作列、Footer 和 Pagination；业务只需要提供 data 与 Table.Column。"}
+
+```tsx title="showcases/table/cases/basic-usage.tsx"
+import { Table } from '@heliannuuthus/ui'
+import { Button } from '@heliannuuthus/ui'
+import { DropdownMenu } from '@heliannuuthus/ui'
+import { Stack } from '@heliannuuthus/ui'
+import { MoreHorizontal } from 'lucide-react'
+
+const columns: Table.Column<Release>[] = [
+  {
+    accessor: 'version',
+    header: '版本',
+    sortable: true,
+  },
+  {
+    key: 'actions',
+    align: 'center',
+    fixed: 'end',
+    header: '操作',
+    width: 144,
+    render: (_, row) => (
+      <Stack align="center" aria-label={row.version + ' 操作'} gap={4} justify="center" orientation="horizontal" role="group">
+        <Button variant="ghost">查看</Button>
+        <DropdownMenu
+          align="end"
+          trigger={
+            <Button
+              aria-label={row.version + ' 更多操作'}
+              size="icon-sm"
+              variant="ghost"
+            >
+              <MoreHorizontal />
+            </Button>
+          }
+          items={[
+            { label: '下载日志' },
+            { label: '归档记录' },
+            { type: 'separator' },
+            { label: '删除记录', destructive: true },
+          ]}
+        />
+      </Stack>
+    ),
+  },
+]
+
+<Table
+  columns={columns}
+  data={releaseRecords}
+  search={{ columnKeys: ['version'], placeholder: '筛选版本…' }}
+  footer={(rows) => `当前页 ${rows.length} 条发布记录`}
+  rowKey="version"
+  pagination={{ pageSize: 3 }}
+  classNames={{ table: 'min-w-[820px]' }}
+/>
+```
+
+### 行展开
+
+{"expandable 会自动补齐展开列、键盘按钮和跨列详情行；固定在起始侧的业务列会自动避开展开按钮。"}
+
+```tsx title="showcases/table/cases/row-expansion.tsx"
+import { Table } from '@heliannuuthus/ui';
+
+<Table
+  columns={columns}
+  data={releaseRecords}
+  expandable={{
+    defaultValue: ['v0.12.0'],
+    render: (row) => <ReleaseDetail release={row} />,
+  }}
+  rowKey="version"
+  pagination={false}
+/>;
+```
+
+### 分组表头
+
+{"在 Table.Column 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。"}
+
+```tsx title="showcases/table/cases/group-header.tsx"
+import { Table } from '@heliannuuthus/ui'
+
+const columns: Table.Column<Release>[] = [
+  {
+    header: '发布信息',
+    columns: [
+      { accessor: 'version', header: '版本', sortable: true },
+      { accessor: 'environment', header: '环境' },
+    ],
+  },
+  {
+    header: '执行情况',
+    columns: [
+      { accessor: 'owner', header: '负责人' },
+      { accessor: 'status', header: '状态' },
+    ],
+  },
+  {
+    header: '操作',
+    columns: [
+      {
+        key: 'detail',
+        header: '记录',
+        align: 'center',
+        render: (_, row) => <Button>{row.version} 详情</Button>,
+      },
+    ],
+  },
+]
+
+<Table columns={columns} data={releaseRecords} />
+```
+
+### 虚拟滚动
+
+{"virtual 只滚动并虚拟化表体；Header 固定在容器顶部，固定列、横向滚动和自定义 render 会继续生效。"}
+
+```tsx title="showcases/table/cases/virtual-scrolling.tsx"
+import { Table } from '@heliannuuthus/ui';
+
+<Table
+  columns={columns}
+  data={records}
+  rowKey="id"
+  pagination={false}
+  classNames={{ table: 'min-w-[900px]' }}
+  virtual={{
+    containerHeight: 320,
+    overscan: 8,
+    rowHeight: 48,
+  }}
+/>;
+```
+
+### 受控排序、分页与行选择
+
+{"sorting、pagination 和 rowSelection 都可以由业务受控；每次交互都会返回公开状态，不暴露底层表格实例。"}
+
+```tsx title="showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx"
+import { useState, type Key } from 'react'
+import { Table } from '@heliannuuthus/ui'
+
+const [sort, setSort] = useState<Table.SortState | null>(null)
+const [page, setPage] = useState(1)
+const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
+
+<Table
+  columns={columns}
+  data={records}
+  rowKey="id"
+  sorting={{ value: sort, onChange: setSort }}
+  pagination={{ current: page, onChange: setPage, pageSize: 20 }}
+  rowSelection={{ value: selectedKeys, onChange: setSelectedKeys }}
+/>
+```
+
+### 分页摘要
+
+{"显示数据总数，或根据总数与当前范围自定义摘要。"}
+
+```tsx title="showcases/table/cases/pagination-summary.tsx"
+<Table
+  columns={columns}
+  data={releaseRecords}
+  pagination={{ pageSize: 3, summary: true }}
+/>
+
+<Table
+  columns={columns}
+  data={releaseRecords}
+  pagination={{ pageSize: 3, summary: customSummary }}
+/>
+
+<Table
+  columns={columns}
+  data={releaseRecords}
+  pagination={{ pageSize: 3, summary: false }}
+/>
+```
+
+### 加载与外部状态组合
+
+{"Table 只内置布尔 loading；定制空结果和请求错误分别组合 Empty 与 Alert。"}
+
+```tsx title="showcases/table/cases/loading-and-external-state-composition.tsx"
+import { Alert, Empty, Table } from '@heliannuuthus/ui';
+
+if (request.error) {
+  return <Alert variant="error" title="发布记录加载失败" />;
+}
+
+if (!request.pending && records.length === 0) {
+  return <Empty title="没有匹配记录" />;
+}
+
+<Table columns={columns} data={records} loading={request.pending} />;
+```
+
+### 服务端数据模式
+
+{"search、sorting 与 pagination 的 manual 模式只管理公开状态，不在客户端二次处理服务端返回的数据。"}
+
+```tsx title="showcases/table/cases/server-data-mode.tsx"
+import { Table } from '@heliannuuthus/ui';
+
+<Table
+  columns={columns}
+  data={request.pageRows}
+  rowKey="id"
+  search={{ mode: 'manual', value: query, onChange: setQuery }}
+  sorting={{ mode: 'manual', value: sort, onChange: setSort }}
+  pagination={{
+    mode: 'manual',
+    current: page,
+    pageSize: 20,
+    total: request.total,
+    onChange: setPage,
+  }}
+/>;
+```
+
+### 自定义表格
+
+{"数据已经完成加工，或需要完全控制结构时，直接组合 Header、Body 和 Footer；Footer 承载列汇总。"}
+
+```tsx title="showcases/table/cases/custom-table.tsx"
+import { Table } from '@heliannuuthus/ui';
+import { Button } from '@heliannuuthus/ui';
+
+<Table.Primitive>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head>服务</Table.Head>
+      <Table.Head align="center">操作</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Web Console</Table.Cell>
+      <Table.Cell align="center">
+        <Button aria-label="查看 Web Console" size="xs" variant="ghost">
+          查看
+        </Button>
+      </Table.Cell>
+    </Table.Row>
+  </Table.Body>
+  <Table.Footer>
+    <Table.Row>
+      <Table.Cell colSpan={2}>共 1 项</Table.Cell>
+    </Table.Row>
+  </Table.Footer>
+</Table.Primitive>;
+```
+
+### 固定列与横向滚动
+
+{"对应的Head与Cell同时设置 fixed=\"start\"固定起始列，或设置 fixed=\"end\"固定末尾列；再给Table.Primitive 设置className=\"min-w-[960px]\" 等大于容器的最小宽度，中间列即可横向滚动。"}
+
+```tsx title="showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx"
+import { Table } from '@heliannuuthus/ui';
+import { Button } from '@heliannuuthus/ui';
+
+<Table.Primitive classNames={{ table: 'min-w-[960px] table-fixed' }}>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head fixed="start" className="w-40">
+        服务
+      </Table.Head>
+      <Table.Head className="w-28">版本</Table.Head>
+      <Table.Head className="w-28">区域</Table.Head>
+      <Table.Head className="w-32">最近部署</Table.Head>
+      <Table.Head fixed="end" align="center" className="w-24">
+        操作
+      </Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell fixed="start">Web Console</Table.Cell>
+      <Table.Cell>v0.12.0</Table.Cell>
+      <Table.Cell fixed="end" align="center">
+        <Button aria-label="监控 Web Console" size="xs" variant="ghost">
+          监控
+        </Button>
+      </Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table.Primitive>;
+```
+
+### 与 Pagination 组合
+
+{"Table 只负责当前页的语义结构，Pagination 管理页码；本地数组或服务端数据都使用同一受控组合。"}
+
+```tsx title="showcases/table/cases/combined-with-pagination.tsx"
+import { useState } from 'react'
+import { Table } from '@heliannuuthus/ui'
+import { Button } from '@heliannuuthus/ui'
+import { Pagination } from '@heliannuuthus/ui'
+
+const [page, setPage] = useState(1)
+const visibleRows = rows.slice((page - 1) * 10, page * 10)
+
+<>
+  <Table.Primitive>
+    {/* render visibleRows，并在末列提供查看、审批等操作 Button */}
+  </Table.Primitive>
+  <Pagination
+    current={page}
+    pageCount={Math.ceil(rows.length / 10)}
+    onChange={setPage}
+  />
+</>
+```
+
+### Primitive 行展开
+
+{"使用普通 Button 控制 aria-expanded，并通过 Row 与跨列 Cell 承载详情，不需要额外的表格专用组件。"}
+
+```tsx title="showcases/table/cases/primitive-row-expansion.tsx"
+import { Fragment, useState } from 'react'
+import { Button, Table } from '@heliannuuthus/ui'
+import { ChevronRight } from 'lucide-react'
+
+const [expandedId, setExpandedId] = useState<string | null>(null)
+
+<Table.Primitive>
+  <Table.Body>
+    {rows.map((row) => {
+      const expanded = row.id === expandedId
+      return (
+        <Fragment key={row.id}>
+          <Table.Row>
+            <Table.Cell>
+              <Button
+                aria-expanded={expanded}
+                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}
+                size="icon-xs"
+                variant="ghost"
+                onClick={() => setExpandedId(expanded ? null : row.id)}
+              >
+                <ChevronRight className={expanded ? 'rotate-90' : ''} />
+              </Button>
+            </Table.Cell>
+            <Table.Cell>{row.name}</Table.Cell>
+          </Table.Row>
+          {expanded && (
+            <Table.Row>
+              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>
+            </Table.Row>
+          )}
+        </Fragment>
+      )
+    })}
+  </Table.Body>
+</Table.Primitive>
+```
+
+### 列对齐、超长省略与自定义 Cell
+
+{"align 统一控制起始、居中和末端对齐；Head 与 Cell 的 ellipsis 在溢出时提供全文 Tooltip，自定义组件直接作为 Cell 子节点。"}
+
+```tsx title="showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx"
+import { Table } from '@heliannuuthus/ui'
+import { Button } from '@heliannuuthus/ui'
+import { ArrowUpRight } from 'lucide-react'
+
+const ActionCell = () => {
+  return (
+    <Button
+      aria-label="配置 Realtime Gateway"
+      size="xs"
+      variant="ghost"
+    >
+      配置 <ArrowUpRight data-icon="inline-end" />
+    </Button>
+  )
+}
+
+<Table.Primitive classNames={{ table: 'table-fixed' }}>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head align="start">服务</Table.Head>
+      <Table.Head ellipsis="服务说明、最近一次生产部署上下文与异常原因">服务说明、最近一次生产部署上下文与异常原因</Table.Head>
+      <Table.Head align="end">成功率</Table.Head>
+      <Table.Head align="center">操作</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Realtime Gateway</Table.Cell>
+      <Table.Cell ellipsis>{description}</Table.Cell>
+      <Table.Cell align="end">99.98%</Table.Cell>
+      <Table.Cell align="center"><ActionCell /></Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table.Primitive>
+
+<Table
+  columns={columns}
+  data={rows}
+  showHeader={false}
+  rowProps={(row) => ({ 'data-row-id': row.id })}
+/>
+<Table.Primitive>
+  <Table.Header>
+    <Table.Row>
+      <Table.Head fixedOffset={48}>Name</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell fixedOffset={48}>Atlas</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table.Primitive>
+```
+
+## 组成部分
+
+- **Table** — 通过 data、columns 和功能配置组装搜索、排序、分页、选择、展开与虚拟滚动。
+- **Table.Primitive** — 建立不管理数据状态的原生 table 与滚动容器。
+- **Table.Header** — 对应原生表格的表头、表体、表尾、行和单元格语义。
+- **Table.Body** — 对应原生表格的表头、表体、表尾、行和单元格语义。
+- **Table.Footer** — 对应原生表格的表头、表体、表尾、行和单元格语义。
+- **Table.Row** — 对应原生表格的表头、表体、表尾、行和单元格语义。
+- **Table.Head** — 对应原生表格的表头、表体、表尾、行和单元格语义。
+- **Table.Cell** — 对应原生表格的表头、表体、表尾、行和单元格语义。
+
+## Semantic DOM
+
+{"悬停、聚焦或点击右侧属性行，查看根节点 className/style 与内部 classNames/styles 各字段对应的真实数据表区域。"}
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Table',
+      defaultValue: null,
+      description: '使用库自有的列模型定义访问器、表头、单元格和嵌套列组。',
+      name: 'columns',
+      type: 'Table.Column<TData>[]',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: '设置稳定的列标识；使用字段 accessor 时可省略。',
+      name: 'key',
+      type: 'string',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: '读取字段或通过函数计算当前列值。',
+      name: 'accessor',
+      type: 'keyof TData | (row: TData) => unknown',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: '设置列标题。',
+      name: 'header',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: '根据当前值、记录和索引渲染单元格。',
+      name: 'render',
+      type: 'Table.Render<TData>',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: '嵌套子列并生成分组表头。',
+      name: 'columns',
+      type: 'Table.Column<TData>[]',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: '启用默认排序，或提供业务比较函数。',
+      name: 'sortable',
+      type: 'boolean | ((a: TData, b: TData) => number)',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: "'start'",
+      description: '设置表头与单元格内容对齐方式。',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: '将列固定在表格起始侧或末端。',
+      name: 'fixed',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: '设置列宽，并参与固定列偏移计算。',
+      name: 'width',
+      type: 'number',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: 'false',
+      description:
+        '控制整列的文本截断与 Tooltip；设置为 true 时使用当前表头或单元格内容，传入 ReactNode 时使用该节点作为 Tooltip 内容。',
+      name: 'ellipsis',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: '按 header 与 cell 扩展当前列的类名。',
+      name: 'classNames',
+      type: 'Table.ColumnClassNames<TData>',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: '按 header 与 cell 设置当前列的行内样式。',
+      name: 'styles',
+      type: 'Table.ColumnStyles<TData>',
+    },
+    {
+      component: 'Table.ColumnClassNames',
+      defaultValue: null,
+      description: '扩展当前列所有表头单元格的类名。',
+      name: 'header',
+      type: 'string',
+    },
+    {
+      component: 'Table.ColumnClassNames',
+      defaultValue: null,
+      description: '按列或当前记录扩展数据单元格的类名。',
+      name: 'cell',
+      type: 'string | ((row: TData, index: number) => string)',
+    },
+    {
+      component: 'Table.ColumnStyles',
+      defaultValue: null,
+      description: '设置当前列所有表头单元格的行内样式。',
+      name: 'header',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.ColumnStyles',
+      defaultValue: null,
+      description: '按列或当前记录设置数据单元格的行内样式。',
+      name: 'cell',
+      type: 'CSSProperties | ((row: TData, index: number) => CSSProperties)',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: '扩展搜索等表格级操作区域的类名。',
+      name: 'toolbar',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: '扩展滚动、边框与圆角容器的类名。',
+      name: 'container',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: '扩展原生 table 节点的类名。',
+      name: 'table',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: '扩展表头区域的类名。',
+      name: 'header',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: '扩展表体区域的类名。',
+      name: 'body',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: '扩展表尾汇总区域的类名。',
+      name: 'footer',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: '扩展内置加载与空数据状态单元格的类名。',
+      name: 'state',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: '扩展分页摘要与翻页控件容器的类名。',
+      name: 'pagination',
+      type: 'string',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: '设置搜索等表格级操作区域的行内样式。',
+      name: 'toolbar',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: '设置滚动、边框与圆角容器的行内样式。',
+      name: 'container',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: '设置原生 table 节点的行内样式。',
+      name: 'table',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: '设置表头区域的行内样式。',
+      name: 'header',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: '设置表体区域的行内样式。',
+      name: 'body',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: '设置表尾汇总区域的行内样式。',
+      name: 'footer',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: '设置内置加载与空数据状态单元格的行内样式。',
+      name: 'state',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: '设置分页摘要与翻页控件容器的行内样式。',
+      name: 'pagination',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description: '提供表格数据记录。',
+      name: 'data',
+      type: 'readonly TData[]',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description: '渲染表尾汇总；传入函数时会收到当前页可见数据。',
+      name: 'footer',
+      type: 'ReactNode | ((visibleRows: readonly TData[]) => ReactNode)',
+    },
+    {
+      component: 'Table',
+      defaultValue: 'true',
+      description: '控制是否渲染表头。',
+      name: 'showHeader',
+      type: 'boolean',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description:
+        '提供稳定的业务行标识；省略时依次回退到记录的 key 和当前索引。',
+      name: 'rowKey',
+      type: 'keyof TData | ((row: TData, index: number) => Key)',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description: '根据当前记录与索引扩展 Row 的类名、事件和原生属性。',
+      name: 'rowProps',
+      type: "(row: TData, index: number) => Omit<ComponentProps<'tr'>, 'children'>",
+    },
+    {
+      component: 'Table',
+      defaultValue: 'false',
+      description: '配置搜索状态、字段范围与客户端或 manual 服务端模式。',
+      name: 'search',
+      type: 'false | Table.SearchProps<TData>',
+    },
+    {
+      component: 'Table',
+      defaultValue: '{}',
+      description: '配置排序的受控状态，以及客户端或 manual 服务端模式。',
+      name: 'sorting',
+      type: 'false | Table.SortingProps',
+    },
+    {
+      component: 'Table',
+      defaultValue: '{ pageSize: 10 }',
+      description: '配置分页状态与摘要；设置为 false 时关闭分页。',
+      name: 'pagination',
+      type: 'false | Table.PaginationProps',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description: '配置行选择的受控状态、禁用规则和可访问名称。',
+      name: 'rowSelection',
+      type: 'Table.RowSelectionProps<TData>',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description: '配置行展开的受控状态、可展开规则和详情内容。',
+      name: 'expandable',
+      type: 'Table.ExpandableProps<TData>',
+    },
+    {
+      component: 'Table',
+      defaultValue: 'false',
+      description: '启用固定行高的虚拟表体；不能与 expandable 同时使用。',
+      name: 'virtual',
+      type: 'boolean | Table.VirtualProps',
+    },
+    {
+      component: 'Table',
+      defaultValue: 'false',
+      description: '显示内置加载状态；空数据由 Table 自动展示默认提示。',
+      name: 'loading',
+      type: 'boolean',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description:
+        '按 toolbar、container、table、header、body、footer、state 与 pagination 定制内部语义区域。',
+      name: 'classNames',
+      type: 'Table.ClassNames',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'Table.Styles',
+    },
+    {
+      component: 'Table.Primitive',
+      defaultValue: null,
+      description: '扩展原生 table 节点的类名。',
+      name: 'classNames',
+      type: 'Table.PrimitiveClassNames',
+    },
+    {
+      component: 'Table.Primitive',
+      defaultValue: null,
+      description: '设置原生 table 节点的行内样式。',
+      name: 'styles',
+      type: 'Table.PrimitiveStyles',
+    },
+    {
+      component: 'Table.Primitive',
+      defaultValue: null,
+      description: '引用内置滚动容器，用于外部滚动控制或尺寸观测。',
+      name: 'containerRef',
+      type: 'Ref<HTMLDivElement>',
+    },
+    {
+      component: 'Table.PrimitiveClassNames',
+      defaultValue: null,
+      description: '扩展 Table.Primitive 原生 table 节点的类名。',
+      name: 'table',
+      type: 'string',
+    },
+    {
+      component: 'Table.PrimitiveStyles',
+      defaultValue: null,
+      description: '设置 Table.Primitive 原生 table 节点的行内样式。',
+      name: 'table',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Head',
+      defaultValue: "'start'",
+      description: '按文字书写方向设置内容靠起始侧、居中或靠末端。',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Table.Head',
+      defaultValue: null,
+      description: '将当前单元格固定在表格起始侧或末端。',
+      name: 'fixed',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Table.Head',
+      defaultValue: '0',
+      description: '设置当前固定单元格前方同侧固定列的累计偏移。',
+      name: 'fixedOffset',
+      type: 'number | string',
+    },
+    {
+      component: 'Table.Head',
+      defaultValue: 'false',
+      description:
+        '传入 true 时在内容真实溢出后自动显示完整内容 Tooltip；传入 ReactNode 时以该节点作为 Tooltip 内容。',
+      name: 'ellipsis',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Table.Cell',
+      defaultValue: "'start'",
+      description: '按文字书写方向设置内容靠起始侧、居中或靠末端。',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Table.Cell',
+      defaultValue: null,
+      description: '将当前单元格固定在表格起始侧或末端。',
+      name: 'fixed',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Table.Cell',
+      defaultValue: '0',
+      description: '设置当前固定单元格前方同侧固定列的累计偏移。',
+      name: 'fixedOffset',
+      type: 'number | string',
+    },
+    {
+      component: 'Table.Cell',
+      defaultValue: 'false',
+      description:
+        '传入 true 时在内容真实溢出后自动显示完整内容 Tooltip；传入 ReactNode 时以该节点作为 Tooltip 内容。',
+      name: 'ellipsis',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Primitive',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Primitive',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Header',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Header',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Body',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Body',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Footer',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Footer',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Row',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Row',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Head',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Head',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Cell',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Cell',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### Table.Render
+
+```ts
+type Table.Render<TData> = (value: unknown, row: TData, index: number) => ReactNode
+```
+
+### Table.SearchProps
+
+```ts
+type Table.SearchProps<TData> = {
+  'aria-label'?: string
+  columnKeys?: string[]
+  defaultValue?: string
+  mode?: 'client' | 'manual'
+  onChange?: (value: string) => void
+  placeholder?: string
+  predicate?: (row: TData, query: string) => boolean
+  value?: string
+}
+```
+
+### Table.SortingProps
+
+```ts
+type Table.SortingProps = {
+  defaultValue?: Table.SortState | null
+  mode?: 'client' | 'manual'
+  onChange?: (value: Table.SortState | null) => void
+  value?: Table.SortState | null
+}
+```
+
+### Table.SortState
+
+```ts
+type Table.SortState = {
+  columnKey: string
+  order: Table.SortOrder
+}
+```
+
+### Table.SortOrder
+
+```ts
+type Table.SortOrder = 'ascending' | 'descending'
+```
+
+### Table.PaginationProps
+
+```ts
+type Table.PaginationProps = {
+  current?: number
+  defaultCurrent?: number
+  mode?: 'client' | 'manual'
+  onChange?: (page: number, pageSize: number) => void
+  pageSize?: number
+  summary?: boolean | ((total: number, current: number, pageCount: number) => ReactNode)
+  total?: number
+}
+```
+
+### Table.RowSelectionProps
+
+```ts
+type Table.RowSelectionProps<TData> = {
+  defaultValue?: Key[]
+  disabled?: (row: TData, index: number) => boolean
+  header?: ReactNode
+  labels?: Table.SelectionLabels<TData>
+  onChange?: (keys: Key[], rows: readonly TData[]) => void
+  value?: Key[]
+}
+```
+
+### Table.SelectionLabels
+
+```ts
+type Table.SelectionLabels<TData> = {
+  all?: (rows: readonly TData[]) => string
+  item?: (row: TData, index: number) => string
+}
+```
+
+### Table.ExpandableProps
+
+```ts
+type Table.ExpandableProps<TData> = {
+  canExpand?: (row: TData, index: number) => boolean
+  defaultValue?: Key[]
+  header?: ReactNode
+  labels?: Table.ExpandLabels<TData>
+  onChange?: (keys: Key[]) => void
+  render: (row: TData, index: number) => ReactNode
+  value?: Key[]
+}
+```
+
+### Table.ExpandLabels
+
+```ts
+type Table.ExpandLabels<TData> = {
+  collapse?: (row: TData, index: number) => string
+  expand?: (row: TData, index: number) => string
+}
+```
+
+### Table.VirtualProps
+
+```ts
+type Table.VirtualProps = {
+  containerHeight?: number | string
+  overscan?: number
+  rowHeight?: number
+}
+```
+
+## 无障碍
+
+- 分组表头使用 colgroup/col scope，并保留正确的 colSpan 与 rowSpan 关系。
+- 只有图标的行操作必须包含当前记录，例如“v0.12.0 更多操作”，不能让每行都只有“更多”。
+- 展开按钮自动同步 aria-expanded；rowKey 应返回可以辨认且稳定的业务标识。
+- 虚拟滚动会提供 aria-rowcount 和真实 aria-rowindex，业务仍需保证每一行高度固定。
+- 使用 Header 与 Head 明确每列的数据含义；列标题过长时通过 ellipsis 保留可聚焦查看的全文 Tooltip。
+- 行展开按钮使用 aria-expanded 表达状态，并在可访问名称中包含当前记录。
+- Head 与 Cell 的 ellipsis 只在文本真实溢出时启用 Tooltip，并允许键盘聚焦查看全文；传入 ReactNode 可直接替换 Tooltip 内容。
+
+## 避免事项
+
+- 不要在 Table 内硬编码业务操作；通过 Table.Column.render 读取当前 row 后组合业务按钮。
+- 不要为了视觉分区手写两个并列表格；使用嵌套 columns 生成真正关联的数据表头。
+- 不要在 Table 外再包一套表格滚动与圆角容器；通过 classNames 定制现有语义区域。
+- 虚拟滚动只适用于固定高度的单行数据，不与 expandable 同时使用；需要动态详情高度时关闭 virtual。
+- 操作较多时保留一个高频动作，其余收进菜单，避免操作列无限变宽。
+- 固定列需要明确列宽；多列同时固定时使用 fixedOffset 声明前面固定列的累计宽度。
+- 手动分页时只把当前页数据传给 Table.Primitive，由 Pagination 或服务端请求管理页码。
+- 需要搜索、排序、选择或自动分页时使用数据驱动的 Table，不要把这些状态塞进 Table.Primitive。

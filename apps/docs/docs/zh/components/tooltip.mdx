@@ -1,0 +1,282 @@
+---
+title: 'Tooltip 文字提示'
+description: '为控件提供简短补充说明。'
+lang: zh-Hans
+---
+
+import TooltipShowcase from '@showcases/tooltip';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Tooltip 文字提示
+
+{"为控件提供简短补充说明。"}
+
+## 何时使用
+
+- 需要为控件提供简短补充说明时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<TooltipShowcase />
+
+### 基础用法
+
+{"为控件提供简短补充说明。"}
+
+```tsx title="showcases/tooltip/cases/basic-usage.tsx"
+<Tooltip content={tooltipContent}>{trigger}</Tooltip>
+```
+
+### 十二个位置
+
+{"placement 表示浮层相对触发器的位置；边缘位置保持浮层边缘对齐，并将箭头固定在对应边缘的安全区。"}
+
+```tsx title="showcases/tooltip/cases/twelve-placements.tsx"
+import { Button, Tooltip } from '@heliannuuthus/ui';
+
+<Tooltip content="上方靠左提示" openDelay={100} placement="topLeft">
+  <Button>上方靠左</Button>
+</Tooltip>;
+```
+
+### 箭头
+
+{"箭头默认匹配 placement 的落点，也可将其隐藏。"}
+
+```tsx title="showcases/tooltip/cases/arrow.tsx"
+import { Button, Tooltip } from '@heliannuuthus/ui';
+
+<Tooltip content="默认箭头" placement="topLeft">
+  <Button>显示箭头</Button>
+</Tooltip>;
+```
+
+### 受控状态与容器
+
+{"通过 open 与 onOpenChange 管理显隐，并可设置延迟和 Portal 容器。"}
+
+```tsx title="showcases/tooltip/cases/controlled-state-and-container.tsx"
+import { Button, Tooltip } from '@heliannuuthus/ui'
+import { useState } from 'react'
+
+const [container, setContainer] = useState<HTMLDivElement | null>(null)
+const [open, setOpen] = useState(false)
+
+<div ref={setContainer}>
+  <Tooltip
+    closeDelay={150}
+    container={container}
+    content="受控提示"
+    onOpenChange={setOpen}
+    open={open}
+    openDelay={250}
+  >
+    <Button>悬停或聚焦</Button>
+  </Tooltip>
+  <Button onClick={() => setOpen((value) => !value)}>
+    {open ? '关闭提示' : '打开提示'}
+  </Button>
+</div>
+
+<Tooltip
+  content="Keyboard shortcut"
+  disabled={disabled}
+  open={open}
+  onOpenChange={(nextOpen) => setOpen(nextOpen)}
+  classNames={{ content: 'max-w-64' }}
+  styles={{ content: { textAlign: 'start' } }}
+>
+  <Button>Save</Button>
+</Tooltip>
+<Tooltip defaultOpen content="Pinned hint"><Button>Help</Button></Tooltip>
+```
+
+## 组成部分
+
+- **Tooltip** — 通过主组件 props 配置内容、状态、行为和扩展点。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: '设置需要补充说明的单个触发元素。',
+      name: 'children',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: '设置简短提示内容；内容为空时不显示浮层。',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: "'top'",
+      description: '设置浮层相对触发器的位置。',
+      name: 'placement',
+      type: 'TooltipPlacement',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: 'true',
+      description: '设置是否显示匹配 placement 落点的箭头。',
+      name: 'arrow',
+      type: 'boolean',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: '100',
+      description: '设置打开提示前的等待时间，单位为毫秒。',
+      name: 'openDelay',
+      type: 'number',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: '100',
+      description: '设置关闭提示前的等待时间，单位为毫秒。',
+      name: 'closeDelay',
+      type: 'number',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: 'false',
+      description: '临时禁用提示及其触发行为。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: '将提示 Portal 挂载到指定容器。',
+      name: 'container',
+      type: 'HTMLElement | RefObject<HTMLElement | null>',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: '以受控方式管理提示是否打开。',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: 'false',
+      description: '设置非受控模式下的初始打开状态。',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: '打开状态变化时返回新的显隐状态。',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: '扩展提示定位根节点的 className。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: '设置提示定位根节点的行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: '引用提示定位根节点。',
+      name: 'ref',
+      type: 'Ref<HTMLDivElement>',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'TooltipClassNames',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'TooltipStyles',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### TooltipClassNames
+
+```ts
+type TooltipClassNames = {
+  arrow?: string;
+  content?: string;
+};
+```
+
+### TooltipStyles
+
+```ts
+type TooltipStyles = {
+  arrow?: React.CSSProperties;
+  content?: React.CSSProperties;
+};
+```
+
+### TooltipPlacement
+
+```ts
+type TooltipPlacement =
+  | 'topLeft'
+  | 'top'
+  | 'topRight'
+  | 'leftTop'
+  | 'left'
+  | 'leftBottom'
+  | 'rightTop'
+  | 'right'
+  | 'rightBottom'
+  | 'bottomLeft'
+  | 'bottom'
+  | 'bottomRight';
+```
+
+### TooltipProviderDefaults
+
+```ts
+type TooltipProviderDefaults = {
+  arrow?: boolean;
+  closeDelay?: number;
+  openDelay?: number;
+  placement?: TooltipPlacement;
+};
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

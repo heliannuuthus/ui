@@ -1,0 +1,107 @@
+---
+title: 'Spinner 加载图标'
+description: '用旋转图标表示无法预估完成时间的短时等待；尺寸只控制图标本身，组件不会附带按钮或布局容器。'
+lang: zh-Hans
+---
+
+import SpinnerShowcase from '@showcases/spinner';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Spinner 加载图标
+
+{"用旋转图标表示无法预估完成时间的短时等待；尺寸只控制图标本身，组件不会附带按钮或布局容器。"}
+
+## 何时使用
+
+- 局部内容正在刷新、同步或生成，且预计很快完成。
+- 需要在紧凑状态行、媒体占位或操作旁边提供轻量等待反馈。
+
+## 示例
+
+<SpinnerShowcase />
+
+### 基础用法
+
+{"Spinner 表示无法确定完成比例的短时加载，并与可见状态文字一起使用。"}
+
+```tsx title="showcases/spinner/cases/basic-usage.tsx"
+import { Spinner } from '@heliannuuthus/ui';
+
+<div>
+  <Spinner />
+  正在加载组件……
+</div>;
+```
+
+### 图标尺寸
+
+{"大、中、小直接展示原始加载图标，尺寸不会隐含按钮高度或其他容器样式。"}
+
+```tsx title="showcases/spinner/cases/icon-size.tsx"
+import { Spinner } from '@heliannuuthus/ui'
+
+<Spinner aria-label="小号加载" size="sm" />
+<Spinner aria-label="正在加载" />
+<Spinner aria-label="大号加载" size="lg" />
+```
+
+### 局部加载状态
+
+{"只在正在更新的内容区域放置图标与状态说明，页面其他部分保持可阅读、可操作。"}
+
+```tsx title="showcases/spinner/cases/partial-loading-status.tsx"
+import { Spinner } from '@heliannuuthus/ui';
+
+<section aria-busy="true" aria-label="正在同步环境状态">
+  <div>
+    <span>预览环境</span>
+    <Spinner aria-label="预览环境同步中" size="sm" />
+  </div>
+</section>;
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Spinner',
+      defaultValue: "'default'",
+      description: '设置加载图标本身的尺寸，不改变周围容器。',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Spinner',
+      defaultValue: null,
+      description: '覆盖尺寸、颜色或其他 SVG 样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Spinner',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 为独立 Spinner 提供描述当前任务的 aria-label，例如“正在同步环境状态”。
+- 区域加载时在最近的容器设置 aria-busy="true"，并保持其他区域可操作。
+
+## 避免事项
+
+- 不要为了展示尺寸把 Spinner 包进 Button；按钮加载态应由真实操作按钮自行组合。
+- 长时间或可量化任务应使用 Progress，首屏结构加载优先使用 Skeleton。
+- 不要同时在同一局部区域堆叠多个表达相同状态的 Spinner。

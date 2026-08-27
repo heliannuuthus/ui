@@ -1,0 +1,113 @@
+---
+title: 'Scroll Area'
+description: 'Contains long content within a constrained region and provides consistent scrolling through an encapsulated native viewport.'
+lang: en
+---
+
+import ScrollAreaShowcase from '@showcases/scroll-area';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Scroll Area
+
+{"Contains long content within a constrained region and provides consistent scrolling through an encapsulated native viewport."}
+
+## When to use
+
+- Lists, logs, or long text must remain within a fixed height, but still require full access to the entire content.
+- Use it to preserve native scrolling, keyboard access, and touch momentum while keeping scrollbar styling consistent.
+- Use it when content may overflow horizontally or scrollbar size and visibility need configuration.
+
+## Examples
+
+<ScrollAreaShowcase />
+
+### Basic usage
+
+{"The component creates the scrollable viewport and required scrollbars internally; applications only provide dimensions, scrollbar configuration, and content."}
+
+```tsx title="showcases/scroll-area/cases/basic-usage.tsx"
+import { ScrollArea } from '@heliannuuthus/ui'
+
+<ScrollArea
+  className="h-72 rounded-3xl border"
+  scrollbar={{ size: 'sm', visibility: 'auto' }}
+>
+  <div className="divide-y px-5">
+    {items.map((item) => (
+      <p className="py-4" key={item.id}>{item.label}</p>
+    ))}
+  </div>
+</ScrollArea>
+
+<ScrollArea orientation="both" className="h-80 w-80">{content}</ScrollArea>
+```
+
+## Component parts
+
+- **ScrollArea** — Encapsulates the root, focusable scroll viewport, scrollbars, and two-axis corner so applications do not assemble internal parts.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Scroll Area',
+      defaultValue: "'vertical'",
+      description:
+        'Determines whether to render scrollbars in portrait, landscape, or both directions.',
+      name: 'orientation',
+      type: "'vertical' | 'horizontal' | 'both'",
+    },
+    {
+      component: 'Scroll Area',
+      defaultValue: "{ size: 'md', visibility: 'auto' }",
+      description: 'Configures scrollbar size and visibility in one place.',
+      name: 'scrollbar',
+      type: 'ScrollAreaScrollbarConfig',
+    },
+    {
+      component: 'Scroll Area',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Scroll Area',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### ScrollAreaScrollbarConfig
+
+```ts
+type ScrollAreaScrollbarConfig = {
+  size?: 'sm' | 'md' | 'lg' | number;
+  visibility?: 'auto' | 'always' | 'hidden';
+};
+```
+
+## Accessibility
+
+- The internal viewport enters the tab order only when content overflows and preserves native keyboard scrolling.
+- Hiding scroll bars does not disable scrolling; you still need to ensure that all content is reachable by touch, scroll wheel, and keyboard.
+- Declare list, log, and similar content semantics on the child content container without accessing the internal viewport.
+
+## Avoid
+
+- Don’t force nested scrolling areas when the content would naturally stretch the page.
+- Before hiding the scrollbar, ensure the interface still provides enough indication that the content is scrollable.
+- Do not depend on or override the internal viewport, thumb, or corner; they are not public composition APIs.

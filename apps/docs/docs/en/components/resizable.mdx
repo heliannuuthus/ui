@@ -1,0 +1,338 @@
+---
+title: 'Resizable'
+description: 'Resize adjacent content areas with draggable dividers.'
+lang: en
+---
+
+import ResizableShowcase from '@showcases/resizable';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Resizable
+
+{"Resize adjacent content areas with draggable dividers."}
+
+## When to use
+
+- The file tree, list, or navigation needs to share the same workspace as the detail content.
+- Users need to proactively allocate available space in adjacent areas based on current tasks.
+
+## Examples
+
+<ResizableShowcase />
+
+### Basic usage
+
+{"Drag the separator line between the file area and preview area, or use the arrow keys to adjust the width after focusing on the separator line."}
+
+```tsx title="showcases/resizable/cases/basic-usage.tsx"
+import { Resizable } from '@heliannuuthus/ui';
+import { GripVertical } from 'lucide-react';
+
+export const Workspace = () => {
+  return (
+    <Resizable
+      orientation="horizontal"
+      separator={<GripVertical aria-hidden />}
+      items={[
+        { key: 'files', panel: 'file list', size: ['34', '24'] },
+        { key: 'preview', panel: 'content preview', size: ['66', '40'] },
+      ]}
+    />
+  );
+};
+```
+
+### vertical area
+
+{"After setting vertical, the upper and lower areas can be adjusted, which is suitable for scenarios such as editor and terminal, preview and log."}
+
+```tsx title="showcases/resizable/cases/vertical-area.tsx"
+import { Resizable } from '@heliannuuthus/ui';
+import { GripHorizontal } from 'lucide-react';
+
+export const EditorWithTerminal = () => {
+  return (
+    <Resizable
+      className="h-96"
+      orientation="vertical"
+      separator={<GripHorizontal aria-hidden />}
+      items={[
+        {
+          key: 'editor',
+          panel: <section>Editor</section>,
+          size: ['64', '38'],
+        },
+        {
+          key: 'terminal',
+          panel: <section>Terminal</section>,
+          size: ['36', '20'],
+        },
+      ]}
+    />
+  );
+};
+```
+
+### Size constraints and divider overrides
+
+{"size centrally expresses the initial, minimum and maximum sizes; item can override the default divider and obtain the real-time size through onResize."}
+
+```tsx title="showcases/resizable/cases/size-constraints-and-divider-overrides.tsx"
+import { useState } from 'react';
+import { Resizable } from '@heliannuuthus/ui';
+import { GripVertical } from 'lucide-react';
+
+export const ConstrainedWorkspace = () => {
+  const [navigationSize, setNavigationSize] = useState(24);
+
+  return (
+    <Resizable
+      className="h-80"
+      separator={({ index }) => <span>{index + 1}</span>}
+      items={[
+        {
+          key: 'navigation',
+          panel: <aside>Navigation · {navigationSize}%</aside>,
+          size: ['24', '18', '34'],
+          collapsible: true,
+          collapsedSize: 0,
+          separator: <GripVertical aria-hidden />,
+          onResize: (size) => setNavigationSize(Math.round(size.asPercentage)),
+        },
+        {
+          key: 'canvas',
+          panel: <main>canvas</main>,
+          size: ['52', '36'],
+        },
+        {
+          key: 'inspector',
+          panel: <aside>Properties</aside>,
+          size: ['24', '18', '34'],
+          collapsible: true,
+          collapsedSize: 0,
+        },
+      ]}
+    />
+  );
+};
+
+<Resizable
+  items={items}
+  separator={({ itemKey, nextItemKey, orientation }) => (
+    <span>
+      {itemKey} · {nextItemKey} · {orientation}
+    </span>
+  )}
+/>;
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Resizable',
+      defaultValue: null,
+      description:
+        'Define the content, stable identity, dimensional constraints, and divider overrides of each panel.',
+      name: 'items',
+      type: 'ResizableItem[]',
+    },
+    {
+      component: 'Resizable',
+      defaultValue: "'horizontal'",
+      description: 'The arrangement direction of the content area.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Resizable',
+      defaultValue: null,
+      description:
+        'Default content for all dividers; can be passed into ReactNode, or rendered dynamically based on index and orientation.',
+      name: 'separator',
+      type: 'ReactNode | ((props: ResizableSeparatorRenderProps) => ReactNode)',
+    },
+    {
+      component: 'ResizableClassNames',
+      defaultValue: null,
+      description: 'Styles that extend the content area of ​​all panels.',
+      name: 'panel',
+      type: 'string',
+    },
+    {
+      component: 'ResizableClassNames',
+      defaultValue: null,
+      description: 'Extend the style of all draggable dividers.',
+      name: 'separator',
+      type: 'string',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: null,
+      description:
+        'A stable identifier for panels, used both for React rendering and underlying layout associations.',
+      name: 'key',
+      type: 'string | number',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: null,
+      description: 'The React node rendered in the panel.',
+      name: 'panel',
+      type: 'ReactNode',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: null,
+      description:
+        'Sets the initial, minimum, and maximum dimensions in order; numbers are interpreted as pixels, unitless strings are interpreted as percentages.',
+      name: 'size',
+      type: 'readonly [defaultSize, minSize?, maxSize?]',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: 'false',
+      description:
+        'Whether to allow panel collapse when the size is below the minimum value in size.',
+      name: 'collapsible',
+      type: 'boolean',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: "'0%'",
+      description: 'Dimensions of the panel when folded.',
+      name: 'collapsedSize',
+      type: 'number | string',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: null,
+      description:
+        'Overwrites the divider content after the current item; pass null to hide visual content.',
+      name: 'separator',
+      type: 'ResizableSeparator',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: null,
+      description:
+        'Called when the panel size changes, and provides the current size, item key and last size.',
+      name: 'onResize',
+      type: '(size: PanelSize, key: string | number, previousSize?: PanelSize) => void',
+    },
+    {
+      component: 'ResizableSeparatorRenderProps',
+      defaultValue: null,
+      description:
+        'The sequential index of the current separator line among items.',
+      name: 'index',
+      type: 'number',
+    },
+    {
+      component: 'ResizableSeparatorRenderProps',
+      defaultValue: null,
+      description: 'Stable identification of the panel before the divider.',
+      name: 'itemKey',
+      type: 'string | number',
+    },
+    {
+      component: 'ResizableSeparatorRenderProps',
+      defaultValue: null,
+      description: 'Stable identification of a panel behind a divider.',
+      name: 'nextItemKey',
+      type: 'string | number',
+    },
+    {
+      component: 'ResizableSeparatorRenderProps',
+      defaultValue: null,
+      description: 'The arrangement direction of the current panel group.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Resizable',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'ResizableClassNames',
+    },
+    {
+      component: 'Resizable',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'ResizableStyles',
+    },
+    {
+      component: 'Resizable',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Resizable',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### ResizableClassNames
+
+```ts
+type ResizableClassNames = {
+  panel?: string;
+  separator?: string;
+};
+```
+
+### ResizableStyles
+
+```ts
+type ResizableStyles = {
+  panel?: React.CSSProperties;
+  separator?: React.CSSProperties;
+};
+```
+
+### PanelSize
+
+```ts
+type PanelSize = {
+  asPercentage: number;
+  inPixels: number;
+};
+```
+
+### ResizableSeparator
+
+```ts
+type ResizableSeparator =
+  ReactNode | ((props: ResizableSeparatorRenderProps) => ReactNode);
+```
+
+## Accessibility
+
+- Dividers remain focusable and support directional pad resizing of adjacent areas.
+- Purely decorative content provided by a separator should use aria-hidden.
+- Navigation and content within items still need to use their correct semantic structure.
+
+## Avoid
+
+- Do not let any area shrink to the point where the content cannot be understood or manipulated.
+- Do not nest focusable controls such as buttons within a separator to avoid conflicting with the separator's keyboard interaction.
+- When there is insufficient space on the mobile terminal, you should evaluate whether to use vertical arrangement or folding navigation instead.

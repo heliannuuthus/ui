@@ -1,0 +1,302 @@
+---
+title: 'Avatar 头像'
+description: '表示人物、团队或其他实体。'
+lang: zh-Hans
+---
+
+import AvatarShowcase from '@showcases/avatar';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Avatar 头像
+
+{"表示人物、团队或其他实体。"}
+
+## 何时使用
+
+- 需要表示人物、团队或其他实体时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<AvatarShowcase />
+
+### 基础用法
+
+{"shape 在圆形和圆角方形之间切换，每种形状作为独立 case 展示。"}
+
+```tsx title="showcases/avatar/cases/basic-usage.tsx"
+import { Avatar } from '@heliannuuthus/ui'
+
+<Avatar alt="林默" fallback="林" shape="circle" size="lg" />
+<Avatar alt="周一" fallback="周" shape="square" size="lg" />
+```
+
+### 头像尺寸
+
+{"size 提供小、中、大三档尺寸，并同步调整文字与状态标记。"}
+
+```tsx title="showcases/avatar/cases/avatar-sizes.tsx"
+<Avatar size="sm" alt="林默" fallback="林" />
+<Avatar size="default" alt="林默" fallback="林" />
+<Avatar size="lg" alt="林默" fallback="林" />
+```
+
+### 图片与回退内容
+
+{"src 提供头像图片；加载失败时显示 fallback，并通过 imageProps 与 fallbackProps 配置加载回调和延迟。"}
+
+```tsx title="showcases/avatar/cases/image-and-fallback-content.tsx"
+<Avatar
+  alt="林默"
+  src="/avatars/lin.png"
+  fallback="林"
+  fallbackProps={{ delay: 200 }}
+  imageProps={{ onLoadingStatusChange: setStatus }}
+/>
+```
+
+### 展示上限与重叠程度
+
+{"max 限制可见头像数量并自动生成 +N；overlap 使用像素值控制分组的紧凑程度。"}
+
+```tsx title="showcases/avatar/cases/impression-caps-and-overlap.tsx"
+import { Avatar } from '@heliannuuthus/ui';
+
+<Avatar.Group
+  items={members.map((member) => ({
+    key: member.id,
+    alt: member.name,
+    fallback: member.initials,
+  }))}
+  max={4}
+  overlap={8}
+  size="lg"
+/>;
+```
+
+### 自定义剩余数量
+
+{"renderCount 接收未展示数量并替换默认 +N，同时继承分组的 shape 与 size。"}
+
+```tsx title="showcases/avatar/cases/custom-overflow-count.tsx"
+<Avatar.Group
+  items={members}
+  max={3}
+  renderCount={(count) => <Tag>+{count}</Tag>}
+  shape="square"
+  size="lg"
+/>
+```
+
+### 与 Tag 和 Badge 组合
+
+{"badge 插槽可放置 Tag 状态标签或 Badge 通知标记，并始终锚定在头像右下角。"}
+
+```tsx title="showcases/avatar/cases/composed-with-tag-and-badge.tsx"
+import { Avatar, Badge } from '@heliannuuthus/ui';
+
+<Avatar
+  alt="陈序"
+  badge={<Badge indicator={8} indicatorLabel="8 条未读消息" />}
+  fallback="陈"
+  size="lg"
+/>;
+```
+
+## 组成部分
+
+- **Avatar** — 通过图片、回退内容和 badge props 展示头像。
+- **Avatar.Group** — 通过 items、max 与 overlap 展示头像集合。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '为头像图片和默认回退文字提供可访问名称。',
+      name: 'alt',
+      type: 'string',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '设置头像图片资源地址。',
+      name: 'src',
+      type: 'string',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '设置图片不可用时显示的姓名缩写或图标。',
+      name: 'fallback',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '配置回退内容的延迟显示和原生 span 属性。',
+      name: 'fallbackProps',
+      type: 'AvatarFallbackProps',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '配置头像图片的加载状态回调和原生 img 属性。',
+      name: 'imageProps',
+      type: 'AvatarImageProps',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '在头像右下角展示在线、认证等状态节点。',
+      name: 'badge',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: "'circle'",
+      description: '设置圆形头像或圆角方形头像。',
+      name: 'shape',
+      type: "'circle' | 'square'",
+    },
+    {
+      component: 'Avatar',
+      defaultValue: "'default'",
+      description: '设置头像尺寸，并同步 AvatarBadge 与分组计数。',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '配置头像集合及每个项目的稳定 key。',
+      name: 'items',
+      type: 'readonly AvatarGroupItem[]',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '限制可见头像数量，并自动将剩余数量显示为 +N。',
+      name: 'max',
+      type: 'number',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: '8',
+      description: '使用像素值控制相邻头像的重叠程度。',
+      name: 'overlap',
+      type: 'number',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '自定义剩余数量的呈现方式。',
+      name: 'renderCount',
+      type: '(count: number) => ReactNode',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '为组内头像和自动计数项设置统一形状。',
+      name: 'shape',
+      type: "'circle' | 'square'",
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '为组内头像和自动计数项设置统一尺寸。',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### AvatarFallbackProps
+
+```ts
+type AvatarFallbackProps = Omit<ComponentProps<'span'>, 'children'> & {
+  delay?: number;
+};
+```
+
+### AvatarImageProps
+
+```ts
+type AvatarImageProps = Omit<
+  ComponentProps<'img'>,
+  'alt' | 'children' | 'src'
+> & {
+  onLoadingStatusChange?: (status: AvatarImageLoadingStatus) => void;
+};
+```
+
+### AvatarImageLoadingStatus
+
+```ts
+type AvatarImageLoadingStatus = 'error' | 'idle' | 'loaded' | 'loading';
+```
+
+### AvatarGroupItem
+
+```ts
+type AvatarGroupItem = AvatarProps & {
+  key?: React.Key;
+  alt: string;
+  src?: string;
+  fallback?: ReactNode;
+  fallbackProps?: AvatarFallbackProps;
+  imageProps?: AvatarImageProps;
+  badge?: ReactNode;
+  shape?: 'circle' | 'square';
+  size?: 'sm' | 'default' | 'lg';
+};
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

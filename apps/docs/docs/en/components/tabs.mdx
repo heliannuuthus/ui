@@ -1,0 +1,305 @@
+---
+title: 'Tabs'
+description: 'Switch mutually exclusive content within the same context while maintaining page position and task continuity.'
+lang: en
+---
+
+import TabsShowcase from '@showcases/tabs';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Tabs
+
+{"Switch mutually exclusive content within the same context while maintaining page position and task continuity."}
+
+## When to use
+
+- Multiple sets of content are at the same level, and users typically only need to view one set.
+- Switching content should not change the main path of the page or lose the current task context.
+
+## Examples
+
+<TabsShowcase />
+
+### Basic usage
+
+{"The default style carries overview, dynamic and member data, and the content area remains stable after switching."}
+
+```tsx title="showcases/tabs/cases/basic-usage.tsx"
+import { Tabs } from '@heliannuuthus/ui';
+
+<Tabs
+  defaultValue="overview"
+  items={[
+    { value: 'overview', label: 'Overview', content: <Overview /> },
+    { value: 'activity', label: 'dynamic', content: <Activity /> },
+    { value: 'members', label: 'members', content: <Members /> },
+  ]}
+/>;
+```
+
+### Four styles and quick centering
+
+{"Capsule, line, stroke and soft styles cover different levels; centered can directly center the label list."}
+
+```tsx title="showcases/tabs/cases/four-styles-and-quick-centering.tsx"
+import { Tabs } from '@heliannuuthus/ui';
+
+<Tabs
+  defaultValue="preview"
+  variant="line"
+  centered
+  items={[
+    {
+      value: 'preview',
+      label: 'Preview',
+      content: 'Preview the current component in real time. ',
+    },
+    {
+      value: 'code',
+      label: 'code',
+      content: 'View component implementation code. ',
+    },
+  ]}
+/>;
+```
+
+### Narrow vessel pressure testing
+
+{"320px and 480px are just representative test containers, not component breakpoints; when there is insufficient space, the native scroll bar is hidden and the navigation buttons on both sides are displayed, while horizontal sliding of touch and trackpad is retained."}
+
+```tsx title="showcases/tabs/cases/narrow-vessel-pressure-testing.tsx"
+import { Tabs } from '@heliannuuthus/ui';
+
+<Tabs
+  animation="slide"
+  defaultValue="design"
+  items={[
+    { value: 'design', label: 'design', content: <Design /> },
+    { value: 'code', label: 'Development', content: <Development /> },
+  ]}
+/>;
+```
+
+### Content switching animation
+
+{"A stable content viewport keeps its borders and dimensions unchanged; fade-in or directional sliding only affects panel content, and the system automatically degrades when reducing dynamic effects."}
+
+```tsx title="showcases/tabs/cases/content-switching-animation.tsx"
+<Tabs
+  animation="slide"
+  centered
+  classNames={{
+    panel: 'p-8',
+    viewport: 'mt-4 min-h-48 rounded-xl border',
+  }}
+  defaultValue="design"
+  variant="soft"
+  items={[
+    { value: 'design', label: 'Design', content: 'Organizing component visual specifications' },
+    { value: 'code', label: 'Development', content: 'Connect components and business status' },
+    { value: 'release', label: 'release', content: 'Complete verification and release' },
+  ]}
+/>
+
+<Tabs value={value} onChange={setValue} items={items} orientation="vertical" />
+```
+
+## Component parts
+
+- **Tabs** — Configure content, state, behavior, and extension points through main component props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description:
+        'Label configuration list, determines the label, corresponding panel and disabled status. Required.',
+      name: 'items',
+      type: 'readonly TabsItem[]',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description:
+        'The value of the currently activated tag in controlled mode; when null is passed in, the tag is not activated.',
+      name: 'value',
+      type: 'string | null',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: 'first available label',
+      description:
+        'Initial label in uncontrolled mode; automatically selects the first available label when omitted.',
+      name: 'defaultValue',
+      type: 'string | null',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description:
+        'Called when the activation label changes, returning the new value.',
+      name: 'onChange',
+      type: '(value: string | null) => void',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: "'horizontal'",
+      description:
+        'Sets the label list orientation and determines keyboard arrow key behavior.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Tabs',
+      defaultValue: "'default'",
+      description: 'Toggle capsule, line, stroke, or soft indicators.',
+      name: 'variant',
+      type: "'default' | 'line' | 'outline' | 'soft'",
+    },
+    {
+      component: 'Tabs',
+      defaultValue: "'fade'",
+      description:
+        'Set the switching animation of the panel content; reduce the automatic degradation under the dynamic effect preference.',
+      name: 'animation',
+      type: "'none' | 'fade' | 'slide'",
+    },
+    {
+      component: 'Tabs',
+      defaultValue: 'false',
+      description: 'Quickly center a list of tabs on TabsList.',
+      name: 'centered',
+      type: 'boolean',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: 'Built-in English copywriting',
+      description:
+        'Localize the names of the start and end scroll buttons that appear automatically when overflowing horizontally.',
+      name: 'scrollLabels',
+      type: 'Partial<TabsScrollLabels>',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description: 'Extends the Tabs root container style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'TabsItem',
+      defaultValue: null,
+      description:
+        'The unique identifier shared by the label and the corresponding panel.',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'TabsItem',
+      defaultValue: null,
+      description: 'The content displayed in the tag trigger.',
+      name: 'label',
+      type: 'React.ReactNode',
+    },
+    {
+      component: 'TabsItem',
+      defaultValue: null,
+      description: 'The panel content displayed after the label is activated.',
+      name: 'content',
+      type: 'React.ReactNode',
+    },
+    {
+      component: 'TabsItem',
+      defaultValue: 'false',
+      description: 'Disable this label and skip mouse and keyboard activation.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'TabsScrollLabels',
+      defaultValue: "'Scroll tabs backward'",
+      description:
+        'Accessible name of the button that scrolls toward the start of the list.',
+      name: 'start',
+      type: 'string',
+    },
+    {
+      component: 'TabsScrollLabels',
+      defaultValue: "'Scroll tabs forward'",
+      description:
+        'Accessible name of the button that scrolls toward the end of the list.',
+      name: 'end',
+      type: 'string',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'TabsClassNames',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'TabsStyles',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### TabsClassNames
+
+```ts
+type TabsClassNames = {
+  indicator?: string;
+  list?: string;
+  panel?: string;
+  tab?: string;
+  viewport?: string;
+};
+```
+
+### TabsStyles
+
+```ts
+type TabsStyles = {
+  indicator?: React.CSSProperties;
+  list?: React.CSSProperties;
+  panel?: React.CSSProperties;
+  tab?: React.CSSProperties;
+  viewport?: React.CSSProperties;
+};
+```
+
+## Accessibility
+
+- Correct ARIA associations are preserved between tag lists, tags, and panels.
+- Use the left and right arrow keys to move horizontal labels, and use the up and down arrow keys to move vertical labels.
+- When horizontal tabs overflow, the front and rear buttons provide localizable names; touch scrolling and focus auto-bringing are still available.
+
+## Avoid
+
+- Don’t use Tabs to express dependent steps.
+- When there are too many labels, you should reduce the grouping or use navigation instead. They should not be squeezed to the point of being unrecognizable.
+- Don't hardcode device breakpoints for Tabs; make them obey the actual parent container and verify overflow behavior in nested narrow spaces.

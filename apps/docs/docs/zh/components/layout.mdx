@@ -1,0 +1,303 @@
+---
+title: 'Layout 布局'
+description: '使用 Header、Content、Footer 和 Sidebar 组合页面骨架，让常见布局关系保持清晰且可嵌套。'
+lang: zh-Hans
+---
+
+import LayoutShowcase from '@showcases/layout';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Layout 布局
+
+{"使用 Header、Content、Footer 和 Sidebar 组合页面骨架，让常见布局关系保持清晰且可嵌套。"}
+
+## 何时使用
+
+- 页面需要稳定的页头、主体和页脚结构。
+- 应用需要在内容左侧或右侧加入导航、目录或详情区域。
+- 复杂页面需要通过嵌套 Layout 组合纵向与横向区域。
+
+## 示例
+
+<LayoutShowcase />
+
+### 基础用法
+
+{"最基础的纵向组合：Header 和 Footer 保持固定区域，Content 占据中间剩余空间。"}
+
+```tsx title="showcases/layout/cases/basic-usage.tsx"
+import { Layout } from '@heliannuuthus/ui';
+
+<Layout>
+  <Layout.Header>项目导航</Layout.Header>
+  <Layout.Content>页面内容</Layout.Content>
+  <Layout.Footer>页脚信息</Layout.Footer>
+</Layout>;
+```
+
+### 左侧导航
+
+{"Sidebar 与一个嵌套 Layout 横向排列；嵌套区域继续负责 Header 和 Content 的纵向关系。"}
+
+```tsx title="showcases/layout/cases/left-navigation.tsx"
+import { Layout } from '@heliannuuthus/ui';
+
+<Layout>
+  <Layout.Sidebar width={240}>项目导航</Layout.Sidebar>
+  <Layout.Content>工作区内容</Layout.Content>
+</Layout>;
+```
+
+### 右侧详情
+
+{"将 Sidebar 放在内容之后即可形成右侧辅助区，适合目录、属性和上下文详情。"}
+
+```tsx title="showcases/layout/cases/details-on-the-right.tsx"
+import { Layout } from '@heliannuuthus/ui';
+
+<Layout>
+  <Layout.Content>工作区内容</Layout.Content>
+  <Layout.Sidebar width={280}>详情面板</Layout.Sidebar>
+</Layout>;
+```
+
+### 完整应用框架
+
+{"Header 和 Footer 跨越整页，中间区域再嵌套 Sidebar 与 Content，适合后台和工作台。"}
+
+```tsx title="showcases/layout/cases/complete-application-framework.tsx"
+import { Layout } from '@heliannuuthus/ui';
+
+<Layout>
+  <Layout.Header>Header</Layout.Header>
+  <Layout>
+    <Layout.Sidebar>Sidebar</Layout.Sidebar>
+    <Layout.Content>Content</Layout.Content>
+  </Layout>
+  <Layout.Footer>Footer</Layout.Footer>
+</Layout>;
+```
+
+### 响应式折叠
+
+{"Sidebar 在 lg 以下自动折叠，也可以通过内置触发器手动切换；collapsedWidth 决定折叠后保留的宽度。"}
+
+```tsx title="showcases/layout/cases/responsive-collapse.tsx"
+import { Layout } from '@heliannuuthus/ui';
+import { useState } from 'react';
+
+export const ResponsiveLayout = () => {
+  const [status, setStatus] = useState('');
+
+  return (
+    <Layout>
+      <Layout.Sidebar
+        breakpoint="lg"
+        collapsible
+        collapsedWidth={64}
+        defaultCollapsed={false}
+        side="start"
+        labels={{
+          collapse: '收起侧边栏',
+          expand: '展开侧边栏',
+        }}
+        onBreakpointChange={(below) => setStatus(below ? '窄屏' : '宽屏')}
+        onChange={(collapsed, reason) =>
+          setStatus((collapsed ? '已收起' : '已展开') + '：' + reason)
+        }
+      >
+        Navigation
+      </Layout.Sidebar>
+      <Layout.Content>{status}</Layout.Content>
+    </Layout>
+  );
+};
+```
+
+## 组成部分
+
+- **Layout** — 组合纵向区域；直接包含 Sidebar 时自动切换为横向排列。
+- **Layout.Header** — 页面或局部布局顶部的固定区域。
+- **Layout.Content** — 承载主要内容并占据布局中的剩余空间。
+- **Layout.Footer** — 页面或局部布局底部的固定区域。
+- **Layout.Sidebar** — 放置导航、目录或详情的侧边区域。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description:
+        '低于指定视口断点时自动折叠；使用与 Tailwind 默认断点一致的 token。',
+      name: 'breakpoint',
+      type: "'sm' | 'md' | 'lg' | 'xl' | '2xl'",
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description: '受控的折叠状态。',
+      name: 'collapsed',
+      type: 'boolean',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: '80',
+      description: '折叠后的侧边栏宽度；数字按像素处理，设置为 0 时隐藏内容。',
+      name: 'collapsedWidth',
+      type: 'number | string',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: 'false',
+      description: '启用内置折叠触发器；传入 ReactNode 可以替换默认图标。',
+      name: 'collapsible',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: 'false',
+      description: '非受控模式下的初始折叠状态。',
+      name: 'defaultCollapsed',
+      type: 'boolean',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description: '进入或离开 breakpoint 范围时调用。',
+      name: 'onBreakpointChange',
+      type: '(below: boolean) => void',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description: '折叠状态请求变化时调用，并说明变化来自断点还是触发器。',
+      name: 'onChange',
+      type: "(collapsed: boolean, reason: 'breakpoint' | 'trigger') => void",
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: "'start'",
+      description:
+        '声明侧边栏位于逻辑起始侧或结束侧，用于调整内置触发器的位置与图标。',
+      name: 'side',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue:
+        "{ collapse: 'Collapse sidebar', expand: 'Expand sidebar' }",
+      description: '设置内置折叠触发器在展开和折叠状态下的可访问名称。',
+      name: 'labels',
+      type: 'LayoutSidebarLabels',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: '240',
+      description:
+        '设置侧边区域宽度；数字按像素处理，也可以传入任意 CSS 长度。',
+      name: 'width',
+      type: 'number | string',
+    },
+    {
+      component: 'Layout',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Layout.Header',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout.Header',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Layout.Content',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout.Content',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Layout.Footer',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout.Footer',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### LayoutSidebarLabels
+
+```ts
+type LayoutSidebarLabels = {
+  collapse: string;
+  expand: string;
+};
+```
+
+## 无障碍
+
+- Header、Content、Footer 和 Sidebar 默认使用 header、main、footer 和 aside 语义元素。
+- 同一页面只应保留一个 Content 主地标；局部布局请使用普通内容容器，避免出现多个 main。
+- Sidebar 中的导航或详情区域需要提供可辨认的 aria-label。
+
+## 避免事项
+
+- 不要把所有区域平铺在同一个 Layout；跨整页的 Header 和 Footer 应包住中间的嵌套 Layout。
+- 文字导航在窄屏下通常不适合压成图标栏；将 collapsedWidth 设置为 0，并组合 Drawer 提供完整导航。

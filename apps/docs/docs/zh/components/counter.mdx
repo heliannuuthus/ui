@@ -1,0 +1,198 @@
+---
+title: 'Counter 计数器'
+description: '以逐位滚动动画呈现持续变化的数字；组件只负责展示，数值和业务操作由外部状态控制。'
+lang: zh-Hans
+---
+
+import CounterShowcase from '@showcases/counter';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Counter 计数器
+
+{"以逐位滚动动画呈现持续变化的数字；组件只负责展示，数值和业务操作由外部状态控制。"}
+
+## 何时使用
+
+- 需要强调统计指标、余额、计数或实时读数的变化过程。
+- 需要在固定数位中更新数字，减少整段文本突然替换造成的视觉跳动。
+
+## 示例
+
+<CounterShowcase />
+
+### 基础用法
+
+{"传入 value 即可展示带逐位滚动反馈的数值。"}
+
+```tsx title="showcases/counter/cases/basic-usage.tsx"
+import { Counter } from '@heliannuuthus/ui';
+
+<Counter value={7.4} fontSize={52} fontWeight={600} />;
+```
+
+### 构建计数
+
+{"数值变化时只滚动发生变化的位；固定 places 可以避免位数变化导致布局跳动。"}
+
+```tsx title="showcases/counter/cases/build-count.tsx"
+import { Counter } from '@heliannuuthus/ui'
+
+<Counter
+  value={count}
+  places={[1000, 100, 10, 1]}
+  fontSize={60}
+  fontWeight={600}
+  suffix={<small>次</small>}
+  valueText={`${count} 次构建`}
+/>
+
+<Counter
+  value={1280}
+  gap={2}
+  prefix="¥"
+  springOptions={{ damping: 24, stiffness: 180 }}
+  classNames={{ digit: 'tabular-nums' }}
+  styles={{ visual: { minWidth: 12 } }}
+/>
+```
+
+## 组成部分
+
+- **Counter** — 根据 value、places 和格式属性渲染可访问的滚动数值，并提供前后缀与样式扩展点。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: '设置需要展示并驱动逐位滚动的数值。',
+      name: 'value',
+      type: 'number',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description:
+        '固定需要展示的数位；使用小数点字符串分隔整数和小数位，省略时根据 value 自动推导。',
+      name: 'places',
+      type: "readonly (number | '.')[]",
+    },
+    {
+      component: 'Counter',
+      defaultValue: '64',
+      description: '设置数字字号。',
+      name: 'fontSize',
+      type: 'number',
+    },
+    {
+      component: 'Counter',
+      defaultValue: '700',
+      description: '设置数字字重。',
+      name: 'fontWeight',
+      type: 'CSSProperties["fontWeight"]',
+    },
+    {
+      component: 'Counter',
+      defaultValue: '4',
+      description: '设置数字数位间距。',
+      name: 'gap',
+      type: 'number',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: '在滚动数值前组合货币或其他视觉内容。',
+      name: 'prefix',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: '在滚动数值后组合单位或其他视觉内容。',
+      name: 'suffix',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: '为辅助技术提供包含单位和上下文的完整数值文本。',
+      name: 'valueText',
+      type: 'string',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: '调整各数位滚动时的弹簧参数。',
+      name: 'springOptions',
+      type: 'SpringOptions',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'CounterClassNames',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'CounterStyles',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Counter',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### CounterClassNames
+
+```ts
+type CounterClassNames = {
+  digit?: string;
+  visual?: string;
+};
+```
+
+### CounterStyles
+
+```ts
+type CounterStyles = {
+  digit?: React.CSSProperties;
+  visual?: React.CSSProperties;
+};
+```
+
+## 无障碍
+
+- 视觉数字对辅助技术隐藏，并通过 valueText 提供完整、稳定的文本值。
+- 高频更新默认不主动播报；确实需要播报变化时，再设置 aria-live="polite"。
+
+## 避免事项
+
+- Counter 不管理加减或请求状态；按钮、定时器和业务数据应由外部组件组合。
+- 频繁变化时建议固定 places，避免数位数量变化引起布局跳动。
+- 不要为纯装饰或高频实时数据开启 assertive 播报。

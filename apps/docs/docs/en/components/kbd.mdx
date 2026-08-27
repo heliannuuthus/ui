@@ -1,0 +1,94 @@
+---
+title: 'Kbd'
+description: 'Display keyboard keys and shortcut key combinations as keycaps.'
+lang: en
+---
+
+import KbdShowcase from '@showcases/kbd';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Kbd
+
+{"Display keyboard keys and shortcut key combinations as keycaps."}
+
+## When to use
+
+- Keyboard shortcuts explained.
+- Display action keys in a menu, prompt, or command panel.
+
+## Examples
+
+<KbdShowcase />
+
+### Basic usage
+
+{"Use key names that are easily identifiable on the user's device."}
+
+```tsx title="showcases/kbd/cases/basic-usage.tsx"
+import { Kbd } from '@heliannuuthus/ui';
+
+<Kbd>Enter</Kbd>;
+```
+
+### Combination shortcut keys
+
+{"Unify the spacing between multiple keys through the keys attribute."}
+
+```tsx title="showcases/kbd/cases/combination-shortcut-keys.tsx"
+import { Kbd } from '@heliannuuthus/ui'
+
+<Kbd keys={['⌘', 'K']} />
+<Kbd keys={['Ctrl', 'Alt', 'Delete']} separator="·" />
+```
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Kbd',
+      defaultValue: null,
+      description: 'Render shortcut key combinations via the same Kbd.',
+      name: 'keys',
+      type: 'ReactNode[]',
+    },
+    {
+      component: 'Kbd',
+      defaultValue: "'+'",
+      description: 'Separate content between combined shortcut keys.',
+      name: 'separator',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Kbd',
+      defaultValue: null,
+      description: 'Extend component styles.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Kbd',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Also uses text to explain the uses of uncommon shortcut keys.
+- Shows corresponding platform keys for macOS and Windows.
+
+## Avoid
+
+- Kbd is only for display and should not be responsible for actual keyboard event monitoring.
+- Don't assume that all users use the same keyboard layout.

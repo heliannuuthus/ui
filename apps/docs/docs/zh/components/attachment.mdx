@@ -1,0 +1,297 @@
+---
+title: 'Attachment 附件'
+description: '展示附件信息、状态与操作。'
+lang: zh-Hans
+---
+
+import AttachmentShowcase from '@showcases/attachment';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Attachment 附件
+
+{"展示附件信息、状态与操作。"}
+
+## 何时使用
+
+- 需要展示附件信息、状态与操作时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<AttachmentShowcase />
+
+### 基础用法
+
+{"title、description 与 media 分别承载文件名称、辅助信息和类型图标。"}
+
+```tsx title="showcases/attachment/cases/basic-usage.tsx"
+import { Attachment } from '@heliannuuthus/ui';
+
+<Attachment
+  title="web-console.tgz"
+  description="8.4 MB · 正在校验"
+  media={<FileArchive />}
+  state="processing"
+/>;
+```
+
+### 媒体内容类型
+
+{"mediaType 明确声明 media 是图标还是图片，让缩略图获得正确的尺寸、裁切与状态样式。"}
+
+```tsx title="showcases/attachment/cases/media-content-type.tsx"
+import { Attachment } from '@heliannuuthus/ui'
+
+<Attachment
+  media={<FileArchive />}
+  mediaType="icon"
+  title="web-console.tgz"
+/>
+
+<Attachment
+  media={<img alt="附件缩略图" src="/cover.jpg" />}
+  mediaType="image"
+  title="cover.jpg"
+/>
+```
+
+### 处理状态
+
+{"state 分别表达等待、上传、处理、失败和完成阶段；状态文案仍由 description 明确说明。"}
+
+```tsx title="showcases/attachment/cases/processing-states.tsx"
+const states = ['idle', 'uploading', 'processing', 'error', 'done'] as const;
+
+{
+  states.map((state) => (
+    <Attachment key={state} state={state} title="web-console.tgz" />
+  ));
+}
+```
+
+### 附件尺寸
+
+{"size 只控制单个附件的整体密度；不同尺寸通过分段控件逐项预览。"}
+
+```tsx title="showcases/attachment/cases/attachment-sizes.tsx"
+<Attachment size="default" title="web-console.tgz" />
+<Attachment size="sm" title="web-console.tgz" />
+<Attachment size="xs" title="web-console.tgz" />
+```
+
+### 附件方向
+
+{"horizontal 适合文件列表，vertical 以缩略卡形式突出媒体内容。"}
+
+```tsx title="showcases/attachment/cases/attachment-orientation.tsx"
+<Attachment orientation="horizontal" title="web-console.tgz" />
+<Attachment orientation="vertical" title="web-console.tgz" />
+```
+
+### 附件操作
+
+{"actions 只放置与当前附件直接相关的下载、重试或移除操作。"}
+
+```tsx title="showcases/attachment/cases/attachment-actions.tsx"
+<Attachment
+  actions={
+    <Button aria-label="下载附件">
+      <Download />
+    </Button>
+  }
+  title="web-console.tgz"
+/>
+```
+
+### 整卡触发
+
+{"trigger 接收链接或按钮元素，在保留正确元素语义的同时让整个附件可点击。"}
+
+```tsx title="showcases/attachment/cases/full-card-trigger.tsx"
+<Attachment
+  title="release-notes.md"
+  trigger={
+    <a aria-label="预览 release-notes.md" href="/files/release-notes.md" />
+  }
+/>
+```
+
+### 附件集合
+
+{"Attachment.Group 通过 items 渲染一组附件，并为横向溢出提供滚动与吸附行为。"}
+
+```tsx title="showcases/attachment/cases/attachment-collection.tsx"
+import { Attachment } from '@heliannuuthus/ui';
+
+<Attachment.Group
+  items={files.map((file) => ({
+    key: file.id,
+    title: file.name,
+    description: file.size,
+    media: <FileArchive />,
+    state: file.state,
+  }))}
+/>;
+```
+
+## 组成部分
+
+- **Attachment** — 通过标题、说明、媒体和操作 props 展示单个附件。
+- **Attachment.Group** — 通过 items props 展示附件集合。
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '设置附件名称。',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '设置文件大小、处理状态或错误原因等辅助说明。',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '设置文件类型图标或缩略图。',
+      name: 'media',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'icon'",
+      description: '声明媒体内容是图标还是图片。',
+      name: 'mediaType',
+      type: "'icon' | 'image'",
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '设置与附件直接相关的下载、重试或移除操作。',
+      name: 'actions',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '传入链接或按钮元素，使整个附件成为对应触发区域。',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'horizontal'",
+      description: '切换行式附件或纵向缩略附件。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'default'",
+      description: '设置附件的整体密度。',
+      name: 'size',
+      type: "'xs' | 'sm' | 'default'",
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'done'",
+      description: '表达附件当前处理阶段并驱动状态样式。',
+      name: 'state',
+      type: "'idle' | 'uploading' | 'processing' | 'error' | 'done'",
+    },
+    {
+      component: 'Attachment.Group',
+      defaultValue: null,
+      description: '通过配置数组渲染一组 Attachment。',
+      name: 'items',
+      type: 'readonly AttachmentGroupItem[]',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Attachment.Group',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Attachment.Group',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 类型定义
+
+### AttachmentProps
+
+```ts
+type AttachmentProps = Omit<ComponentProps<'div'>, 'children' | 'title'> & {
+  title: ReactNode;
+  description?: ReactNode;
+  media?: ReactNode;
+  mediaType?: 'icon' | 'image';
+  actions?: ReactNode;
+  trigger?: ReactElement;
+  orientation?: 'horizontal' | 'vertical';
+  size?: 'xs' | 'sm' | 'default';
+  state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
+};
+```
+
+### AttachmentGroupItem
+
+```ts
+type AttachmentGroupItem = AttachmentProps & {
+  key?: React.Key;
+  title: ReactNode;
+  description?: ReactNode;
+  media?: ReactNode;
+  mediaType?: 'icon' | 'image';
+  actions?: ReactNode;
+  trigger?: ReactElement;
+  orientation?: 'horizontal' | 'vertical';
+  size?: 'xs' | 'sm' | 'default';
+  state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
+};
+```
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

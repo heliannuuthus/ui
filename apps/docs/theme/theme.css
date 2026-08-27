@@ -1,0 +1,104 @@
+:root {
+  --rp-c-brand: var(--primary);
+  --rp-c-brand-light: color-mix(in oklab, var(--primary), white 18%);
+  --rp-c-brand-lighter: color-mix(in oklab, var(--primary), white 28%);
+  --rp-c-brand-dark: color-mix(in oklab, var(--primary), black 12%);
+  --rp-c-brand-darker: color-mix(in oklab, var(--primary), black 22%);
+  --rp-radius: var(--radius);
+}
+
+.docs-brand .rp-nav__title__link {
+  gap: 0.625rem;
+  font-weight: 680;
+  letter-spacing: -0.025em;
+}
+
+.docs-brand .rp-nav__title__logo-image {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+}
+
+.docs-locale-switch,
+.docs-search-trigger {
+  flex: none;
+}
+
+.docs-primary-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  margin-left: 0.75rem;
+}
+
+.docs-primary-nav a {
+  padding: 0.5rem 0.625rem;
+  border-radius: calc(var(--radius) - 2px);
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  font-weight: 560;
+}
+
+.docs-primary-nav a:hover {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+.docs-search-trigger kbd {
+  margin-left: 0.5rem;
+}
+
+.docs-component-command [data-slot='command-item'] {
+  min-height: 3.25rem;
+}
+
+.docs-search-result {
+  min-width: 0;
+  display: grid;
+  gap: 0.125rem;
+  text-align: left;
+}
+
+.docs-search-result small {
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.docs-search-empty {
+  display: grid;
+  place-items: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  color: var(--muted-foreground);
+}
+
+.rspress-doc .preview-container {
+  border-radius: var(--radius);
+}
+
+.docs-api-table-wrap {
+  overflow-x: auto;
+}
+
+.docs-api-table {
+  min-width: 58rem;
+}
+
+.docs-api-table td:last-child {
+  min-width: 18rem;
+}
+
+@media (max-width: 760px) {
+  .docs-primary-nav {
+    display: none;
+  }
+
+  .docs-search-trigger > span,
+  .docs-search-trigger kbd,
+  .docs-locale-switch > span {
+    display: none;
+  }
+}

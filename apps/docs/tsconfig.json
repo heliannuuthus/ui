@@ -12,9 +12,14 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
+      "@docs/*": ["src/*"],
       "@heliannuuthus/ui": ["../../src/index.ts"],
-      "@heliannuuthus/ui/*": ["../../src/components/*"]
+      "@heliannuuthus/ui/*": ["../../src/components/*"],
+      "@showcases/*": ["showcases/*"]
     }
   },
-  "include": ["src"]
+  "include": ["docs", "showcases", "src", "theme", "rspress.config.ts"],
+  "mdx": {
+    "checkMdx": true
+  }
 }

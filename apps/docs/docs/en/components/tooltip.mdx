@@ -1,0 +1,287 @@
+---
+title: 'Tooltip'
+description: 'Provides a brief additional description for the control.'
+lang: en
+---
+
+import TooltipShowcase from '@showcases/tooltip';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Tooltip
+
+{"Provides a brief additional description for the control."}
+
+## When to use
+
+- Primary use: Provides a brief additional description for the control.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<TooltipShowcase />
+
+### Basic usage
+
+{"Provides a brief additional description for the control."}
+
+```tsx title="showcases/tooltip/cases/basic-usage.tsx"
+<Tooltip content={tooltipContent}>{trigger}</Tooltip>
+```
+
+### Twelve placements
+
+{"placement defines the popup position relative to the trigger; edge placements align popup edges and keep the arrow within the corresponding edge safe area."}
+
+```tsx title="showcases/tooltip/cases/twelve-placements.tsx"
+import { Button, Tooltip } from '@heliannuuthus/ui';
+
+<Tooltip content="Top-left tooltip" openDelay={100} placement="topLeft">
+  <Button>Top left</Button>
+</Tooltip>;
+```
+
+### Arrow
+
+{"The arrow matches the placement anchor point by default and can also be hidden."}
+
+```tsx title="showcases/tooltip/cases/arrow.tsx"
+import { Button, Tooltip } from '@heliannuuthus/ui';
+
+<Tooltip content="Default arrow" placement="topLeft">
+  <Button>Show arrow</Button>
+</Tooltip>;
+```
+
+### Controlled state and container
+
+{"Control visibility with open and onOpenChange, and configure delays and the portal container."}
+
+```tsx title="showcases/tooltip/cases/controlled-state-and-container.tsx"
+import { Button, Tooltip } from '@heliannuuthus/ui'
+import { useState } from 'react'
+
+const [container, setContainer] = useState<HTMLDivElement | null>(null)
+const [open, setOpen] = useState(false)
+
+<div ref={setContainer}>
+  <Tooltip
+    closeDelay={150}
+    container={container}
+    content="Controlled tooltip"
+    onOpenChange={setOpen}
+    open={open}
+    openDelay={250}
+  >
+    <Button>Hover or focus</Button>
+  </Tooltip>
+  <Button onClick={() => setOpen((value) => !value)}>
+    {open ? 'Close tooltip' : 'Open tooltip'}
+  </Button>
+</div>
+
+<Tooltip
+  content="Keyboard shortcut"
+  disabled={disabled}
+  open={open}
+  onOpenChange={(nextOpen) => setOpen(nextOpen)}
+  classNames={{ content: 'max-w-64' }}
+  styles={{ content: { textAlign: 'start' } }}
+>
+  <Button>Save</Button>
+</Tooltip>
+<Tooltip defaultOpen content="Pinned hint"><Button>Help</Button></Tooltip>
+```
+
+## Component parts
+
+- **Tooltip** — Configure content, state, behavior, and extension points through main component props.
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description:
+        'Set the single trigger element that needs a short explanation.',
+      name: 'children',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description:
+        'Set concise tooltip content; empty content does not open a popup.',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: "'top'",
+      description: 'Set the popup position relative to the trigger.',
+      name: 'placement',
+      type: 'TooltipPlacement',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: 'true',
+      description:
+        'Show or hide the arrow that matches the placement anchor point.',
+      name: 'arrow',
+      type: 'boolean',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: '100',
+      description: 'Set the delay before opening the tooltip, in milliseconds.',
+      name: 'openDelay',
+      type: 'number',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: '100',
+      description: 'Set the delay before closing the tooltip, in milliseconds.',
+      name: 'closeDelay',
+      type: 'number',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: 'false',
+      description: 'Temporarily disable the tooltip and its trigger behavior.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: 'Mount the tooltip portal in a specified container.',
+      name: 'container',
+      type: 'HTMLElement | RefObject<HTMLElement | null>',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: 'Control whether the tooltip is open.',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: 'false',
+      description: 'Set the initial open state in uncontrolled mode.',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description:
+        'Receive the next visibility state when the open state changes.',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: 'Extend the className of the tooltip positioning root.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: 'Set inline styles on the tooltip positioning root.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: 'Reference the tooltip positioning root.',
+      name: 'ref',
+      type: 'Ref<HTMLDivElement>',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'TooltipClassNames',
+    },
+    {
+      component: 'Tooltip',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'TooltipStyles',
+    },
+  ]}
+/>
+
+## Type definitions
+
+### TooltipClassNames
+
+```ts
+type TooltipClassNames = {
+  arrow?: string;
+  content?: string;
+};
+```
+
+### TooltipStyles
+
+```ts
+type TooltipStyles = {
+  arrow?: React.CSSProperties;
+  content?: React.CSSProperties;
+};
+```
+
+### TooltipPlacement
+
+```ts
+type TooltipPlacement =
+  | 'topLeft'
+  | 'top'
+  | 'topRight'
+  | 'leftTop'
+  | 'left'
+  | 'leftBottom'
+  | 'rightTop'
+  | 'right'
+  | 'rightBottom'
+  | 'bottomLeft'
+  | 'bottom'
+  | 'bottomRight';
+```
+
+### TooltipProviderDefaults
+
+```ts
+type TooltipProviderDefaults = {
+  arrow?: boolean;
+  closeDelay?: number;
+  openDelay?: number;
+  placement?: TooltipPlacement;
+};
+```
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.
