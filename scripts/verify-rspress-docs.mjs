@@ -275,6 +275,26 @@ const themeCodeBlock = await readFile(
   resolve(docsAppRoot, 'theme/code-block.tsx'),
   'utf8'
 );
+const themeMdxContent = await readFile(
+  resolve(docsAppRoot, 'theme/mdx-content.tsx'),
+  'utf8'
+);
+const themeSearch = await readFile(
+  resolve(docsAppRoot, 'theme/search.tsx'),
+  'utf8'
+);
+const componentShowcase = await readFile(
+  resolve(docsAppRoot, 'showcases/_shared/component-showcase.tsx'),
+  'utf8'
+);
+const apiTable = await readFile(
+  resolve(docsAppRoot, 'src/rspress/api-table.tsx'),
+  'utf8'
+);
+const localeRedirect = await readFile(
+  resolve(docsAppRoot, 'src/rspress/locale-redirect.tsx'),
+  'utf8'
+);
 
 assert.doesNotMatch(
   themeIndex,
@@ -293,13 +313,77 @@ assert.match(
 );
 assert.match(
   themeCodeBlock,
-  /import \{ Button \} from ['"]@heliannuuthus\/ui['"]/,
-  'The interactive code block controls must use the public Button.'
+  /import \{[^}]*Button[^}]*Typography[^}]*\} from ['"]@heliannuuthus\/ui['"]/s,
+  'The code block must use the public Button and Typography components.'
 );
 assert.doesNotMatch(
   themeCodeBlock,
   /@rspress\/core\/theme-original/,
   'The code block must not import the Rspress default visual theme.'
+);
+for (const component of [
+  'Button',
+  'Separator',
+  'Table.Primitive',
+  'Table.Header',
+  'Table.Body',
+  'Table.Row',
+  'Table.Head',
+  'Table.Cell',
+  'Typography.Title',
+  'Typography.Text',
+  'Typography.Blockquote',
+  'Typography.Code',
+]) {
+  assert.ok(
+    themeMdxContent.includes(component),
+    `The MDX renderer must map visible content through public ${component}.`
+  );
+}
+assert.match(
+  componentShowcase,
+  /import \{ Collapsible, Typography \} from ['"]@heliannuuthus\/ui['"]/,
+  'Case cards must use the public Collapsible and Typography components.'
+);
+assert.doesNotMatch(
+  componentShowcase,
+  /<(?:h[1-6]|p)>/u,
+  'Case card text must not bypass the public Typography component.'
+);
+assert.match(
+  apiTable,
+  /import \{ Table, Typography \} from ['"]@heliannuuthus\/ui['"]/,
+  'API tables must use the public Table and Typography components.'
+);
+assert.doesNotMatch(
+  apiTable,
+  /<(?:table|thead|tbody|tfoot|tr|th|td|code)\b/u,
+  'API tables must not retain parallel native table rendering.'
+);
+assert.match(
+  themeLayout,
+  /<UiLayout\.Sidebar/u,
+  'The docs sidebars must use the public Layout.Sidebar.'
+);
+assert.doesNotMatch(
+  themeLayout,
+  /<(?:aside|h[1-6]|p|a)\b/u,
+  'The docs shell must not bypass public components for visible controls and text.'
+);
+assert.match(
+  themeSearch,
+  /Typography\.(?:Text|Title)/u,
+  'Search copy must use the public Typography component.'
+);
+assert.match(
+  localeRedirect,
+  /import \{ Button, Layout, Stack, Typography \} from ['"]@heliannuuthus\/ui['"]/,
+  'The locale fallback must be composed from public UI components.'
+);
+assert.doesNotMatch(
+  localeRedirect,
+  /<(?:main|h[1-6]|p|a)\b/u,
+  'The locale fallback must not retain parallel native UI rendering.'
 );
 
 const packageJson = JSON.parse(

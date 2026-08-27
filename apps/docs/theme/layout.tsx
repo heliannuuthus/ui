@@ -3,6 +3,7 @@ import {
   Layout as UiLayout,
   Provider,
   ScrollArea,
+  Typography,
 } from '@heliannuuthus/ui';
 import {
   Content,
@@ -123,17 +124,24 @@ export const Layout = () => {
             </Button>
           ) : null}
 
-          <a className="docs-brand" href={`/${locale}/`}>
+          <Button
+            className="docs-brand"
+            href={`/${locale}/`}
+            size="sm"
+            variant="ghost"
+          >
             <img alt="" src="/heliannuuthus.png" />
-            <span>Heliannuuthus UI</span>
-          </a>
+            <Typography.Text as="span" weight="semibold">
+              Heliannuuthus UI
+            </Typography.Text>
+          </Button>
 
           <nav
             aria-label={locale === 'zh' ? '主要导航' : 'Main navigation'}
             className="docs-primary-nav"
           >
             {mainLinks(locale).map((link) => (
-              <a
+              <Button
                 aria-current={
                   isActivePath(location.pathname, link.href)
                     ? 'page'
@@ -142,9 +150,11 @@ export const Layout = () => {
                 href={link.href}
                 key={link.href}
                 onClick={() => setNavigationOpen(false)}
+                size="sm"
+                variant="ghost"
               >
                 {link.label}
-              </a>
+              </Button>
             ))}
           </nav>
 
@@ -158,7 +168,9 @@ export const Layout = () => {
               variant="ghost"
             >
               <Languages aria-hidden="true" />
-              <span>{locale === 'zh' ? 'EN' : '中文'}</span>
+              <Typography.Text as="span" size="sm" weight="medium">
+                {locale === 'zh' ? 'EN' : '中文'}
+              </Typography.Text>
             </Button>
             <Button
               aria-label="GitHub"
@@ -174,9 +186,11 @@ export const Layout = () => {
 
         <UiLayout className="docs-body-layout">
           {componentPage ? (
-            <aside
+            <UiLayout.Sidebar
               className="docs-sidebar"
+              collapsible={false}
               data-open={navigationOpen || undefined}
+              width="17rem"
             >
               <ScrollArea
                 className="docs-sidebar-scroll"
@@ -187,38 +201,46 @@ export const Layout = () => {
                     locale === 'zh' ? '组件导航' : 'Component navigation'
                   }
                 >
-                  <a
+                  <Button
                     aria-current={
                       normalizePath(location.pathname) ===
                       `/${locale}/components`
                         ? 'page'
                         : undefined
                     }
+                    block
                     className="docs-sidebar-overview"
                     href={`/${locale}/components/`}
                     onClick={() => setNavigationOpen(false)}
+                    size="sm"
+                    variant="ghost"
                   >
                     {locale === 'zh' ? '组件总览' : 'Overview'}
-                  </a>
+                  </Button>
                   {componentGroups.map((group) => (
                     <section className="docs-sidebar-group" key={group.key}>
-                      <h2>{groupNames[group.key][locale]}</h2>
+                      <Typography.Title level={2}>
+                        {groupNames[group.key][locale]}
+                      </Typography.Title>
                       <ul>
                         {group.items.map((name) => {
                           const href = `/${locale}/components/${componentSlug(name)}`;
                           return (
                             <li key={name}>
-                              <a
+                              <Button
                                 aria-current={
                                   normalizePath(location.pathname) === href
                                     ? 'page'
                                     : undefined
                                 }
+                                block
                                 href={href}
                                 onClick={() => setNavigationOpen(false)}
+                                size="sm"
+                                variant="ghost"
                               >
                                 {localizedComponentName(name, locale)}
-                              </a>
+                              </Button>
                             </li>
                           );
                         })}
@@ -236,7 +258,7 @@ export const Layout = () => {
                 <PanelLeftClose aria-hidden="true" />
                 {locale === 'zh' ? '收起导航' : 'Close navigation'}
               </Button>
-            </aside>
+            </UiLayout.Sidebar>
           ) : null}
 
           {navigationOpen ? (
@@ -257,18 +279,32 @@ export const Layout = () => {
           </UiLayout.Content>
 
           {page.toc.length > 0 ? (
-            <aside className="docs-toc">
-              <p>{locale === 'zh' ? '本页内容' : 'On this page'}</p>
+            <UiLayout.Sidebar
+              className="docs-toc"
+              collapsible={false}
+              side="end"
+              width="14rem"
+            >
+              <Typography.Text as="p" size="sm" weight="semibold">
+                {locale === 'zh' ? '本页内容' : 'On this page'}
+              </Typography.Text>
               <nav
                 aria-label={locale === 'zh' ? '本页目录' : 'Table of contents'}
               >
                 {page.toc.map((item) => (
-                  <a data-depth={item.depth} href={`#${item.id}`} key={item.id}>
+                  <Button
+                    block
+                    data-depth={item.depth}
+                    href={`#${item.id}`}
+                    key={item.id}
+                    size="xs"
+                    variant="link"
+                  >
                     {item.text}
-                  </a>
+                  </Button>
                 ))}
               </nav>
-            </aside>
+            </UiLayout.Sidebar>
           ) : null}
         </UiLayout>
       </UiLayout>

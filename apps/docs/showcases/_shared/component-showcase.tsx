@@ -1,4 +1,4 @@
-import { Collapsible } from '@heliannuuthus/ui';
+import { Collapsible, Typography } from '@heliannuuthus/ui';
 import { useLocation } from '@rspress/core/runtime';
 import {
   Children,
@@ -34,8 +34,12 @@ export const ComponentShowcase = ({
       {cases.map(({ component: Case, description, title }, index) => (
         <section className="component-case" key={title.en}>
           <div className="component-case-copy">
-            <h3>{title[locale]}</h3>
-            {description[locale] ? <p>{description[locale]}</p> : null}
+            <Typography.Title level={3}>{title[locale]}</Typography.Title>
+            {description[locale] ? (
+              <Typography.Text as="p" size="sm" tone="muted">
+                {description[locale]}
+              </Typography.Text>
+            ) : null}
           </div>
           <Case locale={locale} />
           {sources[index] ? (
@@ -48,12 +52,20 @@ export const ComponentShowcase = ({
               content={sources[index]}
               trigger={
                 <span className="component-case-source-label">
-                  <span className="component-case-source-label-closed">
+                  <Typography.Text
+                    as="span"
+                    className="component-case-source-label-closed"
+                    size="sm"
+                  >
                     {locale === 'zh' ? '查看代码' : 'View source'}
-                  </span>
-                  <span className="component-case-source-label-open">
+                  </Typography.Text>
+                  <Typography.Text
+                    as="span"
+                    className="component-case-source-label-open"
+                    size="sm"
+                  >
                     {locale === 'zh' ? '收起代码' : 'Hide source'}
-                  </span>
+                  </Typography.Text>
                 </span>
               }
               triggerProps={{ size: 'sm', variant: 'ghost' }}

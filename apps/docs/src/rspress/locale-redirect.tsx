@@ -1,3 +1,4 @@
+import { Button, Layout, Stack, Typography } from '@heliannuuthus/ui';
 import { useEffect } from 'react';
 
 export const LocaleRedirect = () => {
@@ -19,13 +20,19 @@ export const LocaleRedirect = () => {
   }, []);
 
   return (
-    <main className="locale-redirect">
-      <h1>Heliannuuthus UI</h1>
-      <p>Choose a documentation language.</p>
+    <Layout.Content className="locale-redirect">
+      <Typography.Title level={1}>Heliannuuthus UI</Typography.Title>
+      <Typography.Text as="p" tone="muted">
+        Choose a documentation language.
+      </Typography.Text>
       <nav>
-        <a href="/zh/">中文</a>
-        <a href="/en/">English</a>
+        <Stack orientation="horizontal">
+          <Button href="/zh/">中文</Button>
+          <Button href="/en/" variant="outline">
+            English
+          </Button>
+        </Stack>
       </nav>
-    </main>
+    </Layout.Content>
   );
 };

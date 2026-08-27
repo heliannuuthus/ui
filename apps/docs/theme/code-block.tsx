@@ -1,4 +1,4 @@
-import { Button } from '@heliannuuthus/ui';
+import { Button, Typography } from '@heliannuuthus/ui';
 import { useLocation } from '@rspress/core/runtime';
 import { Check, Copy, WrapText } from 'lucide-react';
 import { type ReactNode, useEffect, useRef, useState } from 'react';
@@ -46,7 +46,16 @@ export const CodeBlock = ({
       data-line-numbers={lineNumbers || undefined}
       data-wrapped={wrapped || undefined}
     >
-      {title ? <div className="docs-code-title">{title}</div> : null}
+      {title ? (
+        <Typography.Text
+          as="div"
+          className="docs-code-title"
+          size="sm"
+          tone="muted"
+        >
+          {title}
+        </Typography.Text>
+      ) : null}
       <div
         className="docs-code-content"
         ref={contentRef}

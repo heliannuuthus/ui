@@ -36,6 +36,13 @@ import { Example } from '@heliannuuthus/ui';
 components. It must use the package's semantic tokens and must not restyle the
 component internals or replace package components with docs-only facades.
 
+The theme-level MDX provider maps headings, paragraphs, prose links, list-item
+text, quotes, inline code, separators, and Markdown tables to public
+`@heliannuuthus/ui` components. Native `article`, `nav`, `section`, list, and
+`pre` elements remain only where they carry document structure with no matching
+public primitive. Extend this shared mapping instead of styling a parallel MDX
+component implementation.
+
 Pass the owning case sources into the showcase with Rspress's file code block
 syntax. `ComponentShowcase` pairs the blocks with cases in order and exposes
 each source behind the case card's expand control. Do not copy implementations

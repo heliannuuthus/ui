@@ -1,4 +1,4 @@
-import { Button, Command, Kbd } from '@heliannuuthus/ui';
+import { Button, Command, Kbd, Typography } from '@heliannuuthus/ui';
 import { useLocation, useNavigate } from '@rspress/core/runtime';
 import { ArrowRight, Box, Search as SearchIcon, SearchX } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -54,7 +54,9 @@ export const Search = () => {
         variant="outline"
       >
         <SearchIcon aria-hidden="true" />
-        <span>{locale === 'zh' ? '搜索组件' : 'Search components'}</span>
+        <Typography.Text as="span" size="sm" weight="medium">
+          {locale === 'zh' ? '搜索组件' : 'Search components'}
+        </Typography.Text>
         <Kbd>
           {typeof navigator !== 'undefined' &&
           navigator.platform.includes('Mac')
@@ -75,10 +77,15 @@ export const Search = () => {
           title: locale === 'zh' ? '搜索组件' : 'Search components',
         }}
         emptyText={
-          <span className="docs-search-empty">
+          <Typography.Text
+            as="span"
+            className="docs-search-empty"
+            size="sm"
+            tone="muted"
+          >
             <SearchX aria-hidden="true" />
             {locale === 'zh' ? '没有匹配的组件' : 'No matching components'}
-          </span>
+          </Typography.Text>
         }
         groups={componentGroups.map((group) => ({
           heading: groupNames[group.key][locale],
@@ -98,8 +105,12 @@ export const Search = () => {
               ],
               label: (
                 <span className="docs-search-result">
-                  <strong>{localizedComponentName(item, locale)}</strong>
-                  <small>{locale === 'en' ? summary : item}</small>
+                  <Typography.Text as="span" size="sm" weight="semibold">
+                    {localizedComponentName(item, locale)}
+                  </Typography.Text>
+                  <Typography.Text as="small" size="sm" tone="muted">
+                    {locale === 'en' ? summary : item}
+                  </Typography.Text>
                 </span>
               ),
               onSelect: () => selectComponent(slug),

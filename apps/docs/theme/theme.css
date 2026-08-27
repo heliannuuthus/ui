@@ -128,14 +128,19 @@ body {
 .docs-sidebar-overview,
 .docs-sidebar-group a {
   display: flex;
+  width: 100%;
+  height: auto;
   min-height: 2rem;
   align-items: center;
+  justify-content: flex-start;
   padding: 0.375rem 0.625rem;
   border-radius: calc(var(--radius) - 3px);
   color: var(--muted-foreground);
   font-size: 0.875rem;
   line-height: 1.25rem;
+  text-align: left;
   text-decoration: none;
+  white-space: normal;
   transition:
     color 150ms ease,
     background-color 150ms ease;
@@ -154,9 +159,11 @@ body {
 .docs-sidebar-group h2 {
   margin: 0;
   padding: 0 0.625rem;
+  border: 0;
   color: var(--foreground);
   font-size: 0.75rem;
   font-weight: 680;
+  line-height: 1rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -255,6 +262,20 @@ body {
   text-decoration-color: currentColor;
 }
 
+.docs-article .docs-mdx-link {
+  display: inline;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  font: inherit;
+  white-space: normal;
+  vertical-align: baseline;
+  transform: none;
+}
+
 .docs-article :not(pre) > code {
   padding: 0.125rem 0.375rem;
   border: 1px solid var(--border);
@@ -276,6 +297,10 @@ body {
   margin: 2.5rem 0;
   border: 0;
   border-top: 1px solid var(--border);
+}
+
+.docs-article .docs-mdx-separator {
+  margin: 2.5rem 0;
 }
 
 .docs-article table {
@@ -305,7 +330,11 @@ body {
   padding: 2.75rem 1.5rem 2rem 0.5rem;
 }
 
-.docs-toc > p {
+.docs-toc > [data-slot='layout-sidebar-content'] {
+  overflow: auto;
+}
+
+.docs-toc > [data-slot='layout-sidebar-content'] > p {
   margin: 0 0 0.75rem;
   color: var(--foreground);
   font-size: 0.75rem;
@@ -323,8 +352,11 @@ body {
   padding: 0.325rem 0.75rem;
   color: var(--muted-foreground);
   font-size: 0.75rem;
+  justify-content: flex-start;
   line-height: 1.25rem;
+  text-align: left;
   text-decoration: none;
+  white-space: normal;
 }
 
 .docs-toc a[data-depth='3'] {
@@ -366,6 +398,16 @@ body {
   line-height: 1.65;
 }
 
+.docs-code-content .docs-mdx-code {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
 .docs-code-block[data-wrapped] .docs-code-content pre,
 .docs-code-block[data-wrapped] .docs-code-content code {
   min-width: 0;
@@ -395,6 +437,12 @@ body {
 
 .docs-api-table td:last-child {
   min-width: 18rem;
+}
+
+.docs-api-table [data-slot='table-cell'],
+.docs-mdx-table [data-slot='table-cell'] {
+  vertical-align: top;
+  white-space: normal;
 }
 
 .docs-component-command [data-slot='command-item'] {
