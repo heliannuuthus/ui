@@ -28,7 +28,7 @@ export default function ExampleCase({
 }) {
   const Example = locale === 'en' ? EnExample : ZhExample;
   return (
-    <div className="demo-preview demo-preview-separator">
+    <div className="demo-preview demo-preview-flow demo-preview-separator">
       <Example />
     </div>
   );

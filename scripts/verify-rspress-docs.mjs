@@ -38,9 +38,75 @@ const loadCatalog = async () => {
   );
 };
 
+const loadSourceLocalizer = async () => {
+  const result = await build({
+    absWorkingDir: packageRoot,
+    bundle: true,
+    format: 'esm',
+    logLevel: 'silent',
+    platform: 'node',
+    stdin: {
+      contents: `
+        export { localizeShowcaseSource } from './apps/docs/theme/localized-source.ts'
+      `,
+      loader: 'ts',
+      resolveDir: packageRoot,
+      sourcefile: 'verify-localized-source-entry.ts',
+    },
+    write: false,
+  });
+  const [output] = result.outputFiles;
+
+  assert.ok(output, 'The localized source verifier must produce JavaScript.');
+
+  return import(
+    `data:text/javascript;base64,${Buffer.from(output.contents).toString('base64')}`
+  );
+};
+
+const loadApiTypeDefinitions = async () => {
+  const result = await build({
+    absWorkingDir: packageRoot,
+    bundle: true,
+    format: 'esm',
+    logLevel: 'silent',
+    platform: 'node',
+    stdin: {
+      contents: `
+        export { apiTypeDefinitions } from './apps/docs/src/rspress/api-type-definitions.ts'
+      `,
+      loader: 'ts',
+      resolveDir: packageRoot,
+      sourcefile: 'verify-api-type-definitions-entry.ts',
+    },
+    write: false,
+  });
+  const [output] = result.outputFiles;
+
+  assert.ok(output, 'The API type verifier must produce JavaScript.');
+
+  return import(
+    `data:text/javascript;base64,${Buffer.from(output.contents).toString('base64')}`
+  );
+};
+
 const catalog = await loadCatalog();
+const sourceLocalizer = await loadSourceLocalizer();
+const { apiTypeDefinitions } = await loadApiTypeDefinitions();
 const slugs = catalog.componentCatalog.map(catalog.componentSlug);
 const casesBySlug = new Map();
+
+assert.ok(
+  Object.keys(apiTypeDefinitions).length > 0,
+  'The shared API type registry must not be empty.'
+);
+for (const [name, declaration] of Object.entries(apiTypeDefinitions)) {
+  assert.ok(name.trim(), 'Every shared API type needs a name.');
+  assert.ok(
+    declaration.includes(name.replace(/\..*$/, '')) || declaration.length > 0,
+    `${name} must have a non-empty declaration.`
+  );
+}
 
 for (const locale of ['zh', 'en']) {
   for (const relativePath of [
@@ -122,16 +188,11 @@ for (const locale of ['zh', 'en']) {
       );
     }
 
-    const typeSectionHeading =
-      locale === 'zh' ? '## 类型定义' : '## Type definitions';
-    const typeSection = source.split(typeSectionHeading)[1];
-    if (typeSection) {
-      assert.doesNotMatch(
-        typeSection,
-        /```ts\n(?:\{|[^\n]* & \{)\n```/u,
-        `${pagePath} contains an incomplete type definition.`
-      );
-    }
+    assert.doesNotMatch(
+      source,
+      /^## (?:类型定义|Type definitions)$/mu,
+      `${pagePath} must reference shared API type tooltips instead of rendering a type-definition section.`
+    );
 
     const caseFiles = Array.from(
       showcaseSection[1].matchAll(
@@ -279,8 +340,16 @@ const themeMdxContent = await readFile(
   resolve(docsAppRoot, 'theme/mdx-content.tsx'),
   'utf8'
 );
+const themeInternalLink = await readFile(
+  resolve(docsAppRoot, 'theme/internal-link.tsx'),
+  'utf8'
+);
 const themeSearch = await readFile(
   resolve(docsAppRoot, 'theme/search.tsx'),
+  'utf8'
+);
+const componentsOverview = await readFile(
+  resolve(docsAppRoot, 'src/pages/components.tsx'),
   'utf8'
 );
 const componentShowcase = await readFile(
@@ -295,6 +364,35 @@ const localeRedirect = await readFile(
   resolve(docsAppRoot, 'src/rspress/locale-redirect.tsx'),
   'utf8'
 );
+const localizedSourceFixture = await readFile(
+  resolve(docsAppRoot, 'showcases/button/cases/combination-button.tsx'),
+  'utf8'
+);
+const localizedChineseSource = sourceLocalizer.localizeShowcaseSource(
+  localizedSourceFixture,
+  'zh'
+);
+const localizedEnglishSource = sourceLocalizer.localizeShowcaseSource(
+  localizedSourceFixture,
+  'en'
+);
+
+for (const source of [localizedChineseSource, localizedEnglishSource]) {
+  assert.doesNotMatch(
+    source,
+    /ZhExample|EnExample|locale\s*[?:=]/u,
+    'Visible case source must not expose bilingual runtime wrappers.'
+  );
+  assert.match(
+    source,
+    /export default Example;/u,
+    'Visible case source must export one directly copyable example.'
+  );
+}
+assert.match(localizedChineseSource, /分页操作/u);
+assert.doesNotMatch(localizedChineseSource, /Pagination actions/u);
+assert.match(localizedEnglishSource, /Pagination actions/u);
+assert.doesNotMatch(localizedEnglishSource, /分页操作/u);
 
 assert.doesNotMatch(
   themeIndex,
@@ -312,9 +410,44 @@ assert.match(
   'The docs shell must consume the public UI package root.'
 );
 assert.match(
+  themeLayout,
+  /InternalButtonLink/u,
+  'The docs shell must route internal controls without full-page reloads.'
+);
+assert.match(
+  themeInternalLink,
+  /import \{ Link \} from ['"]@rspress\/core\/theme-original['"]/u,
+  'Internal button links must use the Rspress client router.'
+);
+assert.match(
+  themeInternalLink,
+  /buttonVariants/u,
+  'Internal links must preserve the public Button visual contract.'
+);
+assert.match(
   themeCodeBlock,
   /import \{[^}]*Button[^}]*Typography[^}]*\} from ['"]@heliannuuthus\/ui['"]/s,
   'The code block must use the public Button and Typography components.'
+);
+assert.match(
+  themeCodeBlock,
+  /localizeShowcaseSource/u,
+  'Case source blocks must render only the active locale example.'
+);
+assert.match(
+  themeCodeBlock,
+  /wrapCode = true/u,
+  'Code blocks must wrap long lines by default.'
+);
+assert.match(
+  themeCodeBlock,
+  /https:\/\/stackblitz\.com\/fork\/github\/heliannuuthus\/ui/u,
+  'Case source blocks must link to the public StackBlitz project.'
+);
+assert.match(
+  themeCodeBlock,
+  /https:\/\/codesandbox\.io\/p\/github\/heliannuuthus\/ui\/main/u,
+  'Case source blocks must link to the public CodeSandbox project.'
 );
 assert.doesNotMatch(
   themeCodeBlock,
@@ -341,9 +474,34 @@ for (const component of [
   );
 }
 assert.match(
+  themeMdxContent,
+  /InternalButtonLink/u,
+  'MDX links must use the Rspress client router.'
+);
+assert.match(
+  componentsOverview,
+  /import \{ Link \} from ['"]@rspress\/core\/theme-original['"]/u,
+  'Component catalog cards must use the Rspress client router.'
+);
+assert.match(
   componentShowcase,
-  /import \{ Collapsible, Typography \} from ['"]@heliannuuthus\/ui['"]/,
-  'Case cards must use the public Collapsible and Typography components.'
+  /import \{ Button, Typography \} from ['"]@heliannuuthus\/ui['"]/,
+  'Case cards must use the public Button and Typography components.'
+);
+assert.match(
+  componentShowcase,
+  /aria-expanded=\{sourceExpanded\}/u,
+  'Case source must use an explicit disclosure button.'
+);
+assert.doesNotMatch(
+  componentShowcase,
+  /<Toggle(?:\.|\s)/u,
+  'One-shot case source actions must not be modeled as toggles.'
+);
+assert.doesNotMatch(
+  componentShowcase,
+  /<Collapsible/u,
+  'Case source must not fall back to the legacy text-triggered Collapsible.'
 );
 assert.doesNotMatch(
   componentShowcase,
@@ -352,8 +510,8 @@ assert.doesNotMatch(
 );
 assert.match(
   apiTable,
-  /import \{ Table, Typography \} from ['"]@heliannuuthus\/ui['"]/,
-  'API tables must use the public Table and Typography components.'
+  /import \{ Table, Tooltip, Typography \} from ['"]@heliannuuthus\/ui['"]/,
+  'API tables must use the public Table, Tooltip, and Typography components.'
 );
 assert.doesNotMatch(
   apiTable,

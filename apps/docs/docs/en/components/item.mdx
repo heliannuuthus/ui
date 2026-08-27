@@ -228,56 +228,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## Type definitions
-
-### ItemGroupEntry
-
-```ts
-type ItemGroupEntry = ItemProps & {
-  key?: React.Key;
-  variant?: 'default' | 'outline' | 'muted';
-  size?: 'xs' | 'sm' | 'default';
-  href?: string;
-  media?: ReactNode;
-  mediaType?: 'default' | 'icon' | 'image';
-  title?: ReactNode;
-  description?: ReactNode;
-  content?: ReactNode;
-  actions?: ReactNode;
-  header?: ReactNode;
-  footer?: ReactNode;
-  classNames?: ItemClassNames;
-};
-```
-
-### ItemClassNames
-
-```ts
-type ItemClassNames = {
-  actions?: string;
-  content?: string;
-  description?: string;
-  footer?: string;
-  header?: string;
-  media?: string;
-  title?: string;
-};
-```
-
-### ItemStyles
-
-```ts
-type ItemStyles = {
-  actions?: React.CSSProperties;
-  content?: React.CSSProperties;
-  description?: React.CSSProperties;
-  footer?: React.CSSProperties;
-  header?: React.CSSProperties;
-  media?: React.CSSProperties;
-  title?: React.CSSProperties;
-};
-```
-
 ## Accessibility
 
 - Item.Group provides list and list-item semantics by default; preserve equivalent semantics when using renderItem.

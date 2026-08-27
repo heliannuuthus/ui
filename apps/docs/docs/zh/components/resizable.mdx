@@ -190,42 +190,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## 类型定义
-
-### ResizableClassNames
-
-```ts
-type ResizableClassNames = {
-  panel?: string;
-  separator?: string;
-};
-```
-
-### ResizableStyles
-
-```ts
-type ResizableStyles = {
-  panel?: React.CSSProperties;
-  separator?: React.CSSProperties;
-};
-```
-
-### PanelSize
-
-```ts
-type PanelSize = {
-  asPercentage: number;
-  inPixels: number;
-};
-```
-
-### ResizableSeparator
-
-```ts
-type ResizableSeparator =
-  ReactNode | ((props: ResizableSeparatorRenderProps) => ReactNode);
-```
-
 ## 无障碍
 
 - 分隔线保持可聚焦，并支持方向键调整相邻区域尺寸。

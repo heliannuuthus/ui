@@ -249,30 +249,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## Type definitions
-
-### CommandInputProps
-
-```ts
-type CommandInputProps = Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  'children' | 'defaultValue' | 'onChange' | 'value'
-> & {
-  value?: string;
-  onChange?: (value: string) => void;
-};
-```
-
-### CommandFilter
-
-```ts
-type CommandFilter = (
-  value: string,
-  search: string,
-  keywords?: string[]
-) => number;
-```
-
 ## Accessibility
 
 - Use label to provide a clear accessible name for the command list.

@@ -1,17 +1,29 @@
 import {
   Button,
+  DropdownMenu,
   Layout as UiLayout,
   Provider,
   ScrollArea,
+  Toggle,
   Typography,
 } from '@heliannuuthus/ui';
 import {
   Content,
   useFrontmatter,
   useLocation,
+  useNavigate,
   usePageData,
 } from '@rspress/core/runtime';
-import { ExternalLink, Languages, Menu, PanelLeftClose, X } from 'lucide-react';
+import {
+  ExternalLink,
+  Languages,
+  Menu,
+  Monitor,
+  Moon,
+  PanelLeftClose,
+  Sun,
+  X,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import {
   componentGroups,
@@ -19,7 +31,9 @@ import {
   localizedComponentName,
 } from '../src/component-catalog';
 import { DocsMdxProvider } from './mdx-content';
+import { InternalButtonLink } from './internal-link';
 import { Search } from './search';
+import { isThemePreference, useThemeState } from './theme-state';
 
 type Locale = 'en' | 'zh';
 
@@ -63,11 +77,19 @@ const mainLinks = (locale: Locale) => [
 
 export const Layout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { frontmatter } = useFrontmatter();
   const { page } = usePageData();
   const [navigationOpen, setNavigationOpen] = useState(false);
+  const [theme, setTheme, resolvedTheme] = useThemeState();
   const locale = routeLocale(location.pathname);
   const componentPage = location.pathname.startsWith(`/${locale}/components`);
+  const navigationLinks = mainLinks(locale);
+  const activeNavigationPath = navigationLinks.find((link) =>
+    isActivePath(location.pathname, link.href)
+  )?.href;
+  const pageType =
+    typeof frontmatter.pageType === 'string' ? frontmatter.pageType : 'article';
 
   useEffect(() => {
     document.documentElement.lang = locale === 'zh' ? 'zh-Hans' : 'en';
@@ -75,7 +97,7 @@ export const Layout = () => {
 
   if (frontmatter.pageType === 'blank') {
     return (
-      <Provider appearance="system">
+      <Provider appearance={theme}>
         <Content />
       </Provider>
     );
@@ -91,14 +113,22 @@ export const Layout = () => {
       segments.unshift(nextLocale);
     }
 
-    window.location.assign(
+    void navigate(
       `/${segments.join('/')}${location.pathname.endsWith('/') ? '/' : ''}${location.search}${location.hash}`
     );
   };
 
   return (
-    <Provider appearance="system">
+    <Provider appearance={theme}>
       <UiLayout className="docs-site-shell">
+        <Button
+          className="docs-skip-link"
+          href="#main-content"
+          size="sm"
+          variant="ghost"
+        >
+          {locale === 'zh' ? '跳到正文' : 'Skip to content'}
+        </Button>
         <UiLayout.Header className="docs-header">
           {componentPage ? (
             <Button
@@ -124,42 +154,107 @@ export const Layout = () => {
             </Button>
           ) : null}
 
-          <Button
+          <InternalButtonLink
             className="docs-brand"
             href={`/${locale}/`}
             size="sm"
             variant="ghost"
           >
-            <img alt="" src="/heliannuuthus.png" />
+            <img alt="" height="30" src="/heliannuuthus.png" width="30" />
             <Typography.Text as="span" weight="semibold">
               Heliannuuthus UI
             </Typography.Text>
-          </Button>
+          </InternalButtonLink>
 
-          <nav
+          <Toggle.Group
             aria-label={locale === 'zh' ? '主要导航' : 'Main navigation'}
             className="docs-primary-nav"
-          >
-            {mainLinks(locale).map((link) => (
-              <Button
-                aria-current={
-                  isActivePath(location.pathname, link.href)
-                    ? 'page'
-                    : undefined
-                }
-                href={link.href}
-                key={link.href}
-                onClick={() => setNavigationOpen(false)}
-                size="sm"
-                variant="ghost"
-              >
-                {link.label}
-              </Button>
-            ))}
-          </nav>
+            items={navigationLinks.map((link) => ({
+              'aria-label': link.label,
+              label: link.label,
+              value: link.href,
+            }))}
+            onChange={(paths) => {
+              const nextPath = paths[paths.length - 1];
+              if (nextPath && nextPath !== activeNavigationPath) {
+                setNavigationOpen(false);
+                void navigate(nextPath);
+              }
+            }}
+            value={activeNavigationPath ? [activeNavigationPath] : []}
+          />
 
           <div className="docs-header-actions">
             <Search />
+            <DropdownMenu
+              align="end"
+              classNames={{ content: 'docs-theme-menu' }}
+              items={[
+                {
+                  type: 'label',
+                  label: locale === 'zh' ? '外观' : 'Appearance',
+                },
+                {
+                  type: 'radio',
+                  value: theme,
+                  onChange: (value) => {
+                    if (isThemePreference(value)) setTheme(value);
+                  },
+                  items: [
+                    {
+                      label: (
+                        <span className="docs-theme-option">
+                          <Sun aria-hidden="true" />
+                          {locale === 'zh' ? '浅色' : 'Light'}
+                        </span>
+                      ),
+                      value: 'light',
+                    },
+                    {
+                      label: (
+                        <span className="docs-theme-option">
+                          <Moon aria-hidden="true" />
+                          {locale === 'zh' ? '深色' : 'Dark'}
+                        </span>
+                      ),
+                      value: 'dark',
+                    },
+                    {
+                      label: (
+                        <span className="docs-theme-option">
+                          <Monitor aria-hidden="true" />
+                          {locale === 'zh' ? '跟随系统' : 'System'}
+                        </span>
+                      ),
+                      value: 'system',
+                    },
+                  ],
+                },
+              ]}
+              side="bottom"
+              size="sm"
+              trigger={
+                <Button
+                  aria-label={
+                    locale === 'zh'
+                      ? `切换外观，当前为${theme === 'system' ? '跟随系统' : resolvedTheme === 'dark' ? '深色' : '浅色'}`
+                      : `Change appearance, currently ${theme === 'system' ? 'system' : resolvedTheme}`
+                  }
+                  className="docs-theme-switch"
+                  size="icon-sm"
+                  title={locale === 'zh' ? '切换外观' : 'Change appearance'}
+                  variant="ghost"
+                >
+                  {theme === 'system' ? (
+                    <Monitor aria-hidden="true" />
+                  ) : resolvedTheme === 'dark' ? (
+                    <Moon aria-hidden="true" />
+                  ) : (
+                    <Sun aria-hidden="true" />
+                  )}
+                </Button>
+              }
+            />
             <Button
               aria-label={locale === 'zh' ? 'Switch to English' : '切换到中文'}
               className="docs-locale-switch"
@@ -195,13 +290,14 @@ export const Layout = () => {
               <ScrollArea
                 className="docs-sidebar-scroll"
                 orientation="vertical"
+                scrollbar={{ size: 'sm', visibility: 'auto' }}
               >
                 <nav
                   aria-label={
                     locale === 'zh' ? '组件导航' : 'Component navigation'
                   }
                 >
-                  <Button
+                  <InternalButtonLink
                     aria-current={
                       normalizePath(location.pathname) ===
                       `/${locale}/components`
@@ -216,7 +312,7 @@ export const Layout = () => {
                     variant="ghost"
                   >
                     {locale === 'zh' ? '组件总览' : 'Overview'}
-                  </Button>
+                  </InternalButtonLink>
                   {componentGroups.map((group) => (
                     <section className="docs-sidebar-group" key={group.key}>
                       <Typography.Title level={2}>
@@ -227,7 +323,7 @@ export const Layout = () => {
                           const href = `/${locale}/components/${componentSlug(name)}`;
                           return (
                             <li key={name}>
-                              <Button
+                              <InternalButtonLink
                                 aria-current={
                                   normalizePath(location.pathname) === href
                                     ? 'page'
@@ -240,7 +336,7 @@ export const Layout = () => {
                                 variant="ghost"
                               >
                                 {localizedComponentName(name, locale)}
-                              </Button>
+                              </InternalButtonLink>
                             </li>
                           );
                         })}
@@ -270,9 +366,16 @@ export const Layout = () => {
             />
           ) : null}
 
-          <UiLayout.Content className="docs-main">
+          <UiLayout.Content
+            className="docs-main"
+            id="main-content"
+            tabIndex={-1}
+          >
             <DocsMdxProvider>
-              <article className="docs-article rspress-doc">
+              <article
+                className="docs-article rspress-doc"
+                data-page-type={pageType}
+              >
                 <Content />
               </article>
             </DocsMdxProvider>
@@ -285,25 +388,35 @@ export const Layout = () => {
               side="end"
               width="14rem"
             >
-              <Typography.Text as="p" size="sm" weight="semibold">
-                {locale === 'zh' ? '本页内容' : 'On this page'}
-              </Typography.Text>
-              <nav
-                aria-label={locale === 'zh' ? '本页目录' : 'Table of contents'}
+              <ScrollArea
+                className="docs-toc-scroll"
+                orientation="vertical"
+                scrollbar={{ size: 'sm', visibility: 'auto' }}
               >
-                {page.toc.map((item) => (
-                  <Button
-                    block
-                    data-depth={item.depth}
-                    href={`#${item.id}`}
-                    key={item.id}
-                    size="xs"
-                    variant="link"
+                <div className="docs-toc-content">
+                  <Typography.Text as="p" size="sm" weight="semibold">
+                    {locale === 'zh' ? '本页内容' : 'On this page'}
+                  </Typography.Text>
+                  <nav
+                    aria-label={
+                      locale === 'zh' ? '本页目录' : 'Table of contents'
+                    }
                   >
-                    {item.text}
-                  </Button>
-                ))}
-              </nav>
+                    {page.toc.map((item) => (
+                      <Button
+                        block
+                        data-depth={item.depth}
+                        href={`#${item.id}`}
+                        key={item.id}
+                        size="xs"
+                        variant="link"
+                      >
+                        {item.text}
+                      </Button>
+                    ))}
+                  </nav>
+                </div>
+              </ScrollArea>
             </UiLayout.Sidebar>
           ) : null}
         </UiLayout>

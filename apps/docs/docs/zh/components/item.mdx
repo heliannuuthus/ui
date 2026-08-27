@@ -221,56 +221,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## 类型定义
-
-### ItemGroupEntry
-
-```ts
-type ItemGroupEntry = ItemProps & {
-  key?: React.Key;
-  variant?: 'default' | 'outline' | 'muted';
-  size?: 'xs' | 'sm' | 'default';
-  href?: string;
-  media?: ReactNode;
-  mediaType?: 'default' | 'icon' | 'image';
-  title?: ReactNode;
-  description?: ReactNode;
-  content?: ReactNode;
-  actions?: ReactNode;
-  header?: ReactNode;
-  footer?: ReactNode;
-  classNames?: ItemClassNames;
-};
-```
-
-### ItemClassNames
-
-```ts
-type ItemClassNames = {
-  actions?: string;
-  content?: string;
-  description?: string;
-  footer?: string;
-  header?: string;
-  media?: string;
-  title?: string;
-};
-```
-
-### ItemStyles
-
-```ts
-type ItemStyles = {
-  actions?: React.CSSProperties;
-  content?: React.CSSProperties;
-  description?: React.CSSProperties;
-  footer?: React.CSSProperties;
-  header?: React.CSSProperties;
-  media?: React.CSSProperties;
-  title?: React.CSSProperties;
-};
-```
-
 ## 无障碍
 
 - Item.Group 默认提供列表与列表项语义；使用 renderItem 时需要保留等价语义。

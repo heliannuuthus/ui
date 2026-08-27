@@ -215,38 +215,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## 类型定义
-
-### AccordionItem
-
-```ts
-type AccordionItem = {
-  value: string;
-  title: ReactNode;
-  content: ReactNode;
-  disabled?: boolean;
-};
-```
-
-### AccordionIndicatorProps
-
-```ts
-type AccordionIndicatorProps = Omit<ComponentProps<'span'>, 'children'> & {
-  children?: ReactNode | ((state: AccordionIndicatorState) => ReactNode);
-  position?: 'start' | 'end';
-};
-```
-
-### AccordionIndicatorState
-
-```ts
-type AccordionIndicatorState = {
-  open?: boolean;
-  disabled?: boolean;
-  value?: string;
-};
-```
-
 ## 无障碍
 
 - 保留底层语义、焦点管理与键盘交互。

@@ -191,49 +191,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## 类型定义
-
-### AvatarFallbackProps
-
-```ts
-type AvatarFallbackProps = Omit<ComponentProps<'span'>, 'children'> & {
-  delay?: number;
-};
-```
-
-### AvatarImageProps
-
-```ts
-type AvatarImageProps = Omit<
-  ComponentProps<'img'>,
-  'alt' | 'children' | 'src'
-> & {
-  onLoadingStatusChange?: (status: AvatarImageLoadingStatus) => void;
-};
-```
-
-### AvatarImageLoadingStatus
-
-```ts
-type AvatarImageLoadingStatus = 'error' | 'idle' | 'loaded' | 'loading';
-```
-
-### AvatarGroupItem
-
-```ts
-type AvatarGroupItem = AvatarProps & {
-  key?: React.Key;
-  alt: string;
-  src?: string;
-  fallback?: ReactNode;
-  fallbackProps?: AvatarFallbackProps;
-  imageProps?: AvatarImageProps;
-  badge?: ReactNode;
-  shape?: 'circle' | 'square';
-  size?: 'sm' | 'default' | 'lg';
-};
-```
-
 ## 无障碍
 
 - 保留底层语义、焦点管理与键盘交互。

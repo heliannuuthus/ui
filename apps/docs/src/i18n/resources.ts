@@ -80,6 +80,11 @@ const zh = {
     demo: {
       copied: '已复制',
       copyCode: '复制代码',
+      preview: '预览',
+      source: '源码',
+      wrapCode: '代码自动换行',
+      unwrapCode: '关闭代码自动换行',
+      editOnGitHub: '在 GitHub 编辑此案例',
       openCodeSandbox: '在 CodeSandbox 打开',
       openStackBlitz: '在 StackBlitz 打开',
       collapseCode: '收起代码',
@@ -252,6 +257,11 @@ const en = {
     demo: {
       copied: 'Copied',
       copyCode: 'Copy code',
+      preview: 'Preview',
+      source: 'Source',
+      wrapCode: 'Wrap code',
+      unwrapCode: 'Disable code wrapping',
+      editOnGitHub: 'Edit this case on GitHub',
       openCodeSandbox: 'Open in CodeSandbox',
       openStackBlitz: 'Open in StackBlitz',
       collapseCode: 'Collapse code',

@@ -171,41 +171,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## 类型定义
-
-### AttachmentProps
-
-```ts
-type AttachmentProps = Omit<ComponentProps<'div'>, 'children' | 'title'> & {
-  title: ReactNode;
-  description?: ReactNode;
-  media?: ReactNode;
-  mediaType?: 'icon' | 'image';
-  actions?: ReactNode;
-  trigger?: ReactElement;
-  orientation?: 'horizontal' | 'vertical';
-  size?: 'xs' | 'sm' | 'default';
-  state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
-};
-```
-
-### AttachmentGroupItem
-
-```ts
-type AttachmentGroupItem = AttachmentProps & {
-  key?: React.Key;
-  title: ReactNode;
-  description?: ReactNode;
-  media?: ReactNode;
-  mediaType?: 'icon' | 'image';
-  actions?: ReactNode;
-  trigger?: ReactElement;
-  orientation?: 'horizontal' | 'vertical';
-  size?: 'xs' | 'sm' | 'default';
-  state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
-};
-```
-
 ## 无障碍
 
 - 保留底层语义、焦点管理与键盘交互。

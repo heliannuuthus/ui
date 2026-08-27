@@ -157,43 +157,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## 类型定义
-
-### CollapsibleTriggerProps
-
-```ts
-type CollapsibleTriggerProps = Omit<
-  ButtonNativeProps,
-  'children' | 'className' | 'href'
-> & {
-  variant?:
-    'default' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link';
-  size?:
-    'xs' | 'sm' | 'default' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
-  disabled?: boolean;
-  'aria-label'?: string;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-};
-```
-
-### CollapsibleClassNames
-
-```ts
-type CollapsibleClassNames = {
-  content?: string;
-  header?: string;
-};
-```
-
-### CollapsibleStyles
-
-```ts
-type CollapsibleStyles = {
-  content?: React.CSSProperties;
-  header?: React.CSSProperties;
-};
-```
-
 ## 无障碍
 
 - Header 触发和独立按钮触发都使用原生按钮语义，并通过 aria-expanded 传达展开状态。

@@ -6,9 +6,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-heading: 'LXGW WenKai', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --font-sans:
-    'LXGW WenKai Screen', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-heading: 'LXGW ZhenKai GB', 'STKaiti', 'KaiTi', 'Kaiti SC', serif;
+  --font-mono:
+    'LXGW WenKai Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+  --font-sans: 'LXGW ZhenKai GB', 'STKaiti', 'KaiTi', 'Kaiti SC', serif;
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);

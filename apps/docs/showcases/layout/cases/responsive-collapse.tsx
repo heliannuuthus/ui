@@ -23,7 +23,7 @@ const ZhExample = (() => {
             setStatus((collapsed ? '已收起' : '已展开') + '：' + reason)
           }
         >
-          Navigation
+          导航
         </Layout.Sidebar>
         <Layout.Content>{status}</Layout.Content>
       </Layout>
@@ -54,7 +54,7 @@ const EnExample = (() => {
             setStatus((collapsed ? 'Collapsed' : 'Expanded') + ': ' + reason)
           }
         >
-          Navigation
+          Nav
         </Layout.Sidebar>
         <Layout.Content>{status}</Layout.Content>
       </Layout>

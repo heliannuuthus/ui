@@ -2,16 +2,9 @@
 title: 设计理念
 description: Heliannuuthus UI 的组件设计原则。
 lang: zh-Hans
+pageType: design
 ---
 
-# 设计理念
+import { DesignPage } from '@docs/pages/design';
 
-Heliannuuthus UI 将产品语义留在业务层。基础组件使用语义化 Token，保留原生元素与 Radix 的无障碍能力，并在交互需要时同时提供受控和非受控模式。
-
-## 原则
-
-- 优先组合能力，避免布尔属性不断膨胀。
-- 稳定维护公共命名、类型、事件、ref、状态与扩展点。
-- 使用语义 CSS 变量，不写入产品领域颜色。
-- 覆盖禁用、加载、空、错误、长内容和窄布局状态。
-- 所有公共组件统一从 `@heliannuuthus/ui` 根入口导入。
+<DesignPage />

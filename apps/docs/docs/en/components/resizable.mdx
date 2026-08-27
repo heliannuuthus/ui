@@ -197,42 +197,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## Type definitions
-
-### ResizableClassNames
-
-```ts
-type ResizableClassNames = {
-  panel?: string;
-  separator?: string;
-};
-```
-
-### ResizableStyles
-
-```ts
-type ResizableStyles = {
-  panel?: React.CSSProperties;
-  separator?: React.CSSProperties;
-};
-```
-
-### PanelSize
-
-```ts
-type PanelSize = {
-  asPercentage: number;
-  inPixels: number;
-};
-```
-
-### ResizableSeparator
-
-```ts
-type ResizableSeparator =
-  ReactNode | ((props: ResizableSeparatorRenderProps) => ReactNode);
-```
-
 ## Accessibility
 
 - Dividers remain focusable and support directional pad resizing of adjacent areas.

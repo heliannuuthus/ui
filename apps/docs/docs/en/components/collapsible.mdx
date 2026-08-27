@@ -160,43 +160,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## Type definitions
-
-### CollapsibleTriggerProps
-
-```ts
-type CollapsibleTriggerProps = Omit<
-  ButtonNativeProps,
-  'children' | 'className' | 'href'
-> & {
-  variant?:
-    'default' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link';
-  size?:
-    'xs' | 'sm' | 'default' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
-  disabled?: boolean;
-  'aria-label'?: string;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-};
-```
-
-### CollapsibleClassNames
-
-```ts
-type CollapsibleClassNames = {
-  content?: string;
-  header?: string;
-};
-```
-
-### CollapsibleStyles
-
-```ts
-type CollapsibleStyles = {
-  content?: React.CSSProperties;
-  header?: React.CSSProperties;
-};
-```
-
 ## Accessibility
 
 - Both header triggering and independent button triggering use native button semantics and communicate the expanded state through aria-expanded.

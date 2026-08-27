@@ -220,38 +220,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## Type definitions
-
-### AccordionItem
-
-```ts
-type AccordionItem = {
-  value: string;
-  title: ReactNode;
-  content: ReactNode;
-  disabled?: boolean;
-};
-```
-
-### AccordionIndicatorProps
-
-```ts
-type AccordionIndicatorProps = Omit<ComponentProps<'span'>, 'children'> & {
-  children?: ReactNode | ((state: AccordionIndicatorState) => ReactNode);
-  position?: 'start' | 'end';
-};
-```
-
-### AccordionIndicatorState
-
-```ts
-type AccordionIndicatorState = {
-  open?: boolean;
-  disabled?: boolean;
-  value?: string;
-};
-```
-
 ## Accessibility
 
 - Preserves underlying semantics, focus management, and keyboard interaction.

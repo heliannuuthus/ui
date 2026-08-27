@@ -107,51 +107,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## Type definitions
-
-### BreadcrumbCollapseOptions
-
-```ts
-type BreadcrumbCollapseOptions = {
-  maxItems: number;
-  before?: number; // default: 1
-  after?: number; // default: 2
-  label?: string;
-};
-```
-
-### BreadcrumbItem
-
-```ts
-type BreadcrumbItem = {
-  label: ReactNode;
-  href?: string;
-  icon?: ReactNode;
-  disabled?: boolean;
-  menu?: BreadcrumbMenuItem[];
-  separator?: BreadcrumbSeparator;
-  onClick?: MouseEventHandler<HTMLAnchorElement>;
-};
-```
-
-### BreadcrumbMenuItem
-
-```ts
-type BreadcrumbMenuItem = {
-  label: ReactNode;
-  href?: string;
-  icon?: ReactNode;
-  disabled?: boolean;
-  onSelect?: () => void;
-};
-```
-
-### BreadcrumbSeparator
-
-```ts
-type BreadcrumbSeparator = 'chevron' | 'slash' | 'dot' | ReactNode;
-```
-
 ## Accessibility
 
 - Use a nav with a breadcrumb name for the root node and an ordered list for the path.

@@ -275,58 +275,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## Type definitions
-
-### SelectClassNames
-
-```ts
-type SelectClassNames = {
-  trigger?: string;
-};
-```
-
-### SelectStyles
-
-```ts
-type SelectStyles = {
-  trigger?: React.CSSProperties;
-};
-```
-
-### SelectOption
-
-```ts
-type SelectOption<Value> = {
-  disabled?: boolean;
-  label: ReactNode;
-  value: Value;
-};
-```
-
-### SelectOptionGroup
-
-```ts
-type SelectOptionGroup<Value> = {
-  label: ReactNode;
-  options: readonly SelectOption<Value>[];
-};
-```
-
-### SelectTriggerProps
-
-```ts
-type SelectTriggerProps = Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  'children' | 'className'
-> & {
-  children?: ReactNode;
-  className?: string;
-  inputRef?: Ref<HTMLInputElement>;
-  showClear?: boolean;
-  showTrigger?: boolean;
-};
-```
-
 ## Accessibility
 
 - Preserves underlying semantics, focus management, and keyboard interaction.

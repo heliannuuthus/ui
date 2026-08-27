@@ -236,30 +236,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## 类型定义
-
-### CommandInputProps
-
-```ts
-type CommandInputProps = Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  'children' | 'defaultValue' | 'onChange' | 'value'
-> & {
-  value?: string;
-  onChange?: (value: string) => void;
-};
-```
-
-### CommandFilter
-
-```ts
-type CommandFilter = (
-  value: string,
-  search: string,
-  keywords?: string[]
-) => number;
-```
-
 ## 无障碍
 
 - 使用 label 为命令列表提供明确的可访问名称。

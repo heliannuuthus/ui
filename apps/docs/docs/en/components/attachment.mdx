@@ -175,41 +175,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## Type definitions
-
-### AttachmentProps
-
-```ts
-type AttachmentProps = Omit<ComponentProps<'div'>, 'children' | 'title'> & {
-  title: ReactNode;
-  description?: ReactNode;
-  media?: ReactNode;
-  mediaType?: 'icon' | 'image';
-  actions?: ReactNode;
-  trigger?: ReactElement;
-  orientation?: 'horizontal' | 'vertical';
-  size?: 'xs' | 'sm' | 'default';
-  state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
-};
-```
-
-### AttachmentGroupItem
-
-```ts
-type AttachmentGroupItem = AttachmentProps & {
-  key?: React.Key;
-  title: ReactNode;
-  description?: ReactNode;
-  media?: ReactNode;
-  mediaType?: 'icon' | 'image';
-  actions?: ReactNode;
-  trigger?: ReactElement;
-  orientation?: 'horizontal' | 'vertical';
-  size?: 'xs' | 'sm' | 'default';
-  state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
-};
-```
-
 ## Accessibility
 
 - Preserves underlying semantics, focus management, and keyboard interaction.

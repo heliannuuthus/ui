@@ -728,6 +728,7 @@ const ManagedTable = <TData,>({
       >
         {rowSelection ? (
           <TableCell
+            key="selection"
             fixed="start"
             fixedOffset={0}
             className={cn('w-11', rowSelection.className)}
@@ -746,6 +747,7 @@ const ManagedTable = <TData,>({
         ) : null}
         {expandable ? (
           <TableCell
+            key="expansion"
             fixed="start"
             fixedOffset={rowSelection ? SELECTION_COLUMN_WIDTH : 0}
             className={cn('w-12', expandable.className)}
@@ -884,6 +886,7 @@ const ManagedTable = <TData,>({
               <TableRow key={group.id}>
                 {rowSelection && groupIndex === 0 ? (
                   <TableHead
+                    key="selection"
                     fixed="start"
                     fixedOffset={0}
                     className={cn('w-11', rowSelection.className)}
@@ -912,6 +915,7 @@ const ManagedTable = <TData,>({
                 ) : null}
                 {expandable && groupIndex === 0 ? (
                   <TableHead
+                    key="expansion"
                     fixed="start"
                     fixedOffset={rowSelection ? SELECTION_COLUMN_WIDTH : 0}
                     className={cn('w-12', expandable.className)}

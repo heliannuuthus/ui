@@ -1,5 +1,4 @@
 import {
-  Button,
   cn,
   Separator,
   Table,
@@ -9,6 +8,7 @@ import {
 import { MDXProvider } from '@mdx-js/react';
 import type { ComponentProps, ReactNode } from 'react';
 import { CodeBlock } from './code-block';
+import { InternalButtonLink } from './internal-link';
 
 const heading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
   const Heading = ({ children, ...props }: ComponentProps<'h1'>) => (
@@ -20,13 +20,14 @@ const heading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
   return Heading;
 };
 
-const link = ({ className, href, ...props }: ComponentProps<'a'>) => {
+const link = ({ className, href, ref, ...props }: ComponentProps<'a'>) => {
+  void ref;
   if (href == null || className?.split(' ').includes('rp-header-anchor')) {
     return <a className={className} href={href} {...props} />;
   }
 
   return (
-    <Button
+    <InternalButtonLink
       {...(props as Omit<ButtonLinkProps, 'className' | 'href'>)}
       className={cn('docs-mdx-link', className)}
       href={href}

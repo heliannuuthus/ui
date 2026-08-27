@@ -132,9 +132,6 @@ importers:
       lucide-react:
         specifier: ^0.468.0
         version: 0.468.0(react@19.2.8)
-      lxgw-wenkai-screen-webfont:
-        specifier: 1.7.0
-        version: 1.7.0
       lxgw-wenkai-webfont:
         specifier: 1.7.0
         version: 1.7.0
@@ -2673,9 +2670,6 @@ packages:
     resolution: {integrity: sha512-6koYRhnM2N0GGZIdXzSeiNwguv1gt/FAjZOiPl76roBi3xKEXa4WmfpxgQwTTL4KipXjefrnf3oV4IsYhi4JFA==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
-
-  lxgw-wenkai-screen-webfont@1.7.0:
-    resolution: {integrity: sha512-xvfF4V26Mb335xKg3uxljz+V2nq4F5ek0ku9pmyKgT0Dzo/d2rHi7WpnqgvM9mlXAcAKOrxrcDmUZiIs/ZQ9bQ==}
 
   lxgw-wenkai-webfont@1.7.0:
     resolution: {integrity: sha512-kVJmT4xMAyOLhG6q0w63wJkVU7RP8UMQRGoAWj9tnpzL7sWFFYiEHBdUQyW9myqBQFa5SQfWfa2VLYF4IJBL5g==}
@@ -6416,8 +6410,6 @@ snapshots:
   lucide-react@0.468.0(react@19.2.8):
     dependencies:
       react: 19.2.8
-
-  lxgw-wenkai-screen-webfont@1.7.0: {}
 
   lxgw-wenkai-webfont@1.7.0: {}
 

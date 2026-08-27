@@ -63,7 +63,12 @@ const componentSidebar = (locale: 'zh' | 'en') => [
 ];
 
 const rewriteHtmlLanguage = async (directory: string, language: string) => {
-  const entries = await readdir(directory, { withFileTypes: true });
+  const entries = await readdir(directory, { withFileTypes: true }).catch(
+    (error: NodeJS.ErrnoException) => {
+      if (error.code === 'ENOENT') return [];
+      throw error;
+    }
+  );
 
   await Promise.all(
     entries.map(async (entry) => {

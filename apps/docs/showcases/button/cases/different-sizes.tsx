@@ -4,7 +4,7 @@ import { Button } from '@heliannuuthus/ui';
 const ZhExample = (() => {
   const ButtonSizes = () => {
     return (
-      <div className="flex items-end gap-3">
+      <div className="flex flex-wrap items-end justify-center gap-3">
         <Button size="xs">超小按钮</Button>
         <Button size="sm">小按钮</Button>
         <Button>默认按钮</Button>
@@ -19,7 +19,7 @@ const ZhExample = (() => {
 const EnExample = (() => {
   const ButtonSizes = () => {
     return (
-      <div className="flex items-end gap-3">
+      <div className="flex flex-wrap items-end justify-center gap-3">
         <Button size="xs">Extra small button</Button>
         <Button size="sm">Small button</Button>
         <Button>Default Button</Button>

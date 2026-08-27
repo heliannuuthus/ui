@@ -201,49 +201,6 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-## Type definitions
-
-### AvatarFallbackProps
-
-```ts
-type AvatarFallbackProps = Omit<ComponentProps<'span'>, 'children'> & {
-  delay?: number;
-};
-```
-
-### AvatarImageProps
-
-```ts
-type AvatarImageProps = Omit<
-  ComponentProps<'img'>,
-  'alt' | 'children' | 'src'
-> & {
-  onLoadingStatusChange?: (status: AvatarImageLoadingStatus) => void;
-};
-```
-
-### AvatarImageLoadingStatus
-
-```ts
-type AvatarImageLoadingStatus = 'error' | 'idle' | 'loaded' | 'loading';
-```
-
-### AvatarGroupItem
-
-```ts
-type AvatarGroupItem = AvatarProps & {
-  key?: React.Key;
-  alt: string;
-  src?: string;
-  fallback?: ReactNode;
-  fallbackProps?: AvatarFallbackProps;
-  imageProps?: AvatarImageProps;
-  badge?: ReactNode;
-  shape?: 'circle' | 'square';
-  size?: 'sm' | 'default' | 'lg';
-};
-```
-
 ## Accessibility
 
 - Preserves underlying semantics, focus management, and keyboard interaction.
