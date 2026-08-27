@@ -18,55 +18,33 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## 示例
 
-<AvatarShowcase />
-
-### 基础用法
-
-{"shape 在圆形和圆角方形之间切换，每种形状作为独立 case 展示。"}
+<AvatarShowcase>
 
 ```tsx title="showcases/avatar/cases/basic-usage.tsx" file="<root>/showcases/avatar/cases/basic-usage.tsx"
 
 ```
 
-### 头像尺寸
-
-{"size 提供小、中、大三档尺寸，并同步调整文字与状态标记。"}
-
 ```tsx title="showcases/avatar/cases/avatar-sizes.tsx" file="<root>/showcases/avatar/cases/avatar-sizes.tsx"
 
 ```
-
-### 图片与回退内容
-
-{"src 提供头像图片；加载失败时显示 fallback，并通过 imageProps 与 fallbackProps 配置加载回调和延迟。"}
 
 ```tsx title="showcases/avatar/cases/image-and-fallback-content.tsx" file="<root>/showcases/avatar/cases/image-and-fallback-content.tsx"
 
 ```
 
-### 展示上限与重叠程度
-
-{"max 限制可见头像数量并自动生成 +N；overlap 使用像素值控制分组的紧凑程度。"}
-
 ```tsx title="showcases/avatar/cases/impression-caps-and-overlap.tsx" file="<root>/showcases/avatar/cases/impression-caps-and-overlap.tsx"
 
 ```
-
-### 自定义剩余数量
-
-{"renderCount 接收未展示数量并替换默认 +N，同时继承分组的 shape 与 size。"}
 
 ```tsx title="showcases/avatar/cases/custom-overflow-count.tsx" file="<root>/showcases/avatar/cases/custom-overflow-count.tsx"
 
 ```
 
-### 与 Tag 和 Badge 组合
-
-{"badge 插槽可放置 Tag 状态标签或 Badge 通知标记，并始终锚定在头像右下角。"}
-
 ```tsx title="showcases/avatar/cases/composed-with-tag-and-badge.tsx" file="<root>/showcases/avatar/cases/composed-with-tag-and-badge.tsx"
 
 ```
+
+</AvatarShowcase>
 
 ## 组成部分
 

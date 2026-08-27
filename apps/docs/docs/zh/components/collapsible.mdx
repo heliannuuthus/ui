@@ -18,39 +18,25 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## 示例
 
-<CollapsibleShowcase />
-
-### 基础用法
-
-{"传入 header 和 content 即可创建一个可展开区域；省略 trigger 时，整个 Header 负责切换状态。"}
+<CollapsibleShowcase>
 
 ```tsx title="showcases/collapsible/cases/basic.tsx" file="<root>/showcases/collapsible/cases/basic.tsx"
 
 ```
 
-### 不同触发方式
-
-{"默认由整个 Header 触发；传入 trigger 后，Header 保持静态，只由独立按钮控制展开。"}
-
 ```tsx title="showcases/collapsible/cases/trigger.tsx" file="<root>/showcases/collapsible/cases/trigger.tsx"
 
 ```
-
-### Header 与图标
-
-{"header 可以组合任意摘要内容；indicator 在两种触发模式下统一控制状态图标，传 false 时隐藏。"}
 
 ```tsx title="showcases/collapsible/cases/indicator.tsx" file="<root>/showcases/collapsible/cases/indicator.tsx"
 
 ```
 
-### 受控与禁用状态
-
-{"open 与 onOpenChange 管理受控展开状态；disabled 阻止触发器改变状态。"}
-
 ```tsx title="showcases/collapsible/cases/controlled.tsx" file="<root>/showcases/collapsible/cases/controlled.tsx"
 
 ```
+
+</CollapsibleShowcase>
 
 ## 组成部分
 

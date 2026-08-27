@@ -36,13 +36,19 @@ import { Example } from '@heliannuuthus/ui';
 components. It must use the package's semantic tokens and must not restyle the
 component internals or replace package components with docs-only facades.
 
-Show the owning case source beside the live showcase with Rspress's file code
-block syntax. Do not copy the implementation into MDX:
+Pass the owning case sources into the showcase with Rspress's file code block
+syntax. `ComponentShowcase` pairs the blocks with cases in order and exposes
+each source behind the case card's expand control. Do not copy implementations
+into MDX:
 
 ````mdx
+<ExampleShowcase>
+
 ```tsx title="showcases/example/cases/basic.tsx" file="<root>/showcases/example/cases/basic.tsx"
 
 ```
+
+</ExampleShowcase>
 ````
 
 All public components follow this structure. Add or change examples directly

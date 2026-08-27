@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ComponentShowcase } from '../_shared/component-showcase';
 import Case01 from './cases/single-item-expansion';
 import Case02 from './cases/multiple-expansion';
@@ -84,6 +85,10 @@ const cases = [
   },
 ];
 
-export default function AccordionShowcase() {
-  return <ComponentShowcase cases={cases} />;
+export default function AccordionShowcase({
+  children,
+}: {
+  children?: ReactNode;
+}) {
+  return <ComponentShowcase cases={cases}>{children}</ComponentShowcase>;
 }

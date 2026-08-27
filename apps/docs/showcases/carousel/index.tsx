@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ComponentShowcase } from '../_shared/component-showcase';
 import Case01 from './cases/basic-usage';
 import Case02 from './cases/navigation-buttons';
@@ -66,6 +67,10 @@ const cases = [
   },
 ];
 
-export default function CarouselShowcase() {
-  return <ComponentShowcase cases={cases} />;
+export default function CarouselShowcase({
+  children,
+}: {
+  children?: ReactNode;
+}) {
+  return <ComponentShowcase cases={cases}>{children}</ComponentShowcase>;
 }

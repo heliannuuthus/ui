@@ -98,10 +98,21 @@ for (const locale of ['zh', 'en']) {
       new RegExp(`lang: ${locale === 'zh' ? 'zh-Hans' : 'en'}`),
       `${pagePath} must declare the exact document language.`
     );
-    assert.match(
-      source,
-      new RegExp(`from '@showcases/${slug}'`),
-      `${pagePath} must render its component showcase index.`
+    const showcaseImport = source.match(
+      new RegExp(`import ([A-Za-z0-9]+Showcase) from '@showcases/${slug}';`)
+    );
+    assert.ok(
+      showcaseImport,
+      `${pagePath} must import its component showcase index.`
+    );
+    const showcaseName = showcaseImport[1];
+    assert.ok(showcaseName, `${pagePath} must name its component showcase.`);
+    const showcaseSection = source.match(
+      new RegExp(`<${showcaseName}>\\n([\\s\\S]*?)\\n</${showcaseName}>`)
+    );
+    assert.ok(
+      showcaseSection,
+      `${pagePath} must nest case sources inside its component showcase.`
     );
     if (locale === 'en') {
       assert.doesNotMatch(
@@ -123,7 +134,7 @@ for (const locale of ['zh', 'en']) {
     }
 
     const caseFiles = Array.from(
-      source.matchAll(
+      showcaseSection[1].matchAll(
         new RegExp(
           `title="showcases/${slug}/cases/([^"]+\\.tsx)" file="<root>/showcases/${slug}/cases/\\1"\\n\\n\\x60\\x60\\x60`,
           'g'
@@ -165,6 +176,11 @@ for (const slug of slugs) {
     indexSource,
     /ComponentShowcase/,
     `${slug}/index.tsx must compose cases through ComponentShowcase.`
+  );
+  assert.match(
+    indexSource,
+    /<ComponentShowcase cases=\{cases\}>\{children\}<\/ComponentShowcase>/u,
+    `${slug}/index.tsx must pass its MDX case sources into ComponentShowcase.`
   );
 
   const expectedCases = casesBySlug.get(slug);

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ComponentShowcase } from '../_shared/component-showcase';
 import Case01 from './cases/basic-usage';
 import Case02 from './cases/elastic-feedback';
@@ -39,6 +40,6 @@ const cases = [
   },
 ];
 
-export default function SliderShowcase() {
-  return <ComponentShowcase cases={cases} />;
+export default function SliderShowcase({ children }: { children?: ReactNode }) {
+  return <ComponentShowcase cases={cases}>{children}</ComponentShowcase>;
 }

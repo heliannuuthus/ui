@@ -1,4 +1,5 @@
 import { Button } from '@heliannuuthus/ui';
+import { useLocation } from '@rspress/core/runtime';
 import { Check, Copy, WrapText } from 'lucide-react';
 import { type ReactNode, useEffect, useRef, useState } from 'react';
 
@@ -21,6 +22,8 @@ export const CodeBlock = ({
   title,
   wrapCode = false,
 }: CodeBlockProps) => {
+  const { pathname } = useLocation();
+  const chinese = pathname.startsWith('/zh/');
   const contentRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
   const [wrapped, setWrapped] = useState(wrapCode);
@@ -53,7 +56,15 @@ export const CodeBlock = ({
       </div>
       <div className="docs-code-actions">
         <Button
-          aria-label={wrapped ? 'Disable code wrapping' : 'Wrap code'}
+          aria-label={
+            wrapped
+              ? chinese
+                ? '关闭代码自动换行'
+                : 'Disable code wrapping'
+              : chinese
+                ? '代码自动换行'
+                : 'Wrap code'
+          }
           onClick={() => setWrapped((value) => !value)}
           size="icon-xs"
           variant="ghost"
@@ -61,7 +72,15 @@ export const CodeBlock = ({
           <WrapText aria-hidden="true" />
         </Button>
         <Button
-          aria-label={copied ? 'Copied' : 'Copy code'}
+          aria-label={
+            copied
+              ? chinese
+                ? '已复制'
+                : 'Copied'
+              : chinese
+                ? '复制代码'
+                : 'Copy code'
+          }
           onClick={() => void copy()}
           size="icon-xs"
           variant="ghost"

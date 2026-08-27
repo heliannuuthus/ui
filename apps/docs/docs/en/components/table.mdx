@@ -19,111 +19,61 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## Examples
 
-<TableShowcase />
-
-### Basic usage
-
-{"The default composition includes search, sorting, fixed columns, actions, Footer, and Pagination; applications only provide data and Table.Column."}
+<TableShowcase>
 
 ```tsx title="showcases/table/cases/basic-usage.tsx" file="<root>/showcases/table/cases/basic-usage.tsx"
 
 ```
 
-### Row expansion
-
-{"expandable will automatically complete expandable columns, keyboard buttons, and cross-column detail rows; business columns fixed to the starting side will automatically avoid expandable buttons."}
-
 ```tsx title="showcases/table/cases/row-expansion.tsx" file="<root>/showcases/table/cases/row-expansion.tsx"
 
 ```
-
-### Group header
-
-{"Nest columns in Table.Column to create grouped headers; Table calculates spans, levels, and empty-state width."}
 
 ```tsx title="showcases/table/cases/group-header.tsx" file="<root>/showcases/table/cases/group-header.tsx"
 
 ```
 
-### virtual scrolling
-
-{"virtual scrolls and virtualizes only the table body. Header stays pinned to the top of the container, while fixed columns, horizontal scrolling, and custom render continue to work."}
-
 ```tsx title="showcases/table/cases/virtual-scrolling.tsx" file="<root>/showcases/table/cases/virtual-scrolling.tsx"
 
 ```
-
-### Controlled sorting, pagination, and row selection
-
-{"Applications can control sorting, pagination, and rowSelection; every interaction returns public state without exposing the underlying table instance."}
 
 ```tsx title="showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx" file="<root>/showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx"
 
 ```
 
-### Pagination summary
-
-{"Shows the total item count or renders a custom summary from the total and current range."}
-
 ```tsx title="showcases/table/cases/pagination-summary.tsx" file="<root>/showcases/table/cases/pagination-summary.tsx"
 
 ```
-
-### Loading and external state composition
-
-{"Table only provides boolean loading; compose Empty and Alert for custom empty results and request errors."}
 
 ```tsx title="showcases/table/cases/loading-and-external-state-composition.tsx" file="<root>/showcases/table/cases/loading-and-external-state-composition.tsx"
 
 ```
 
-### Server data mode
-
-{"The manual modes for search, sorting, and pagination manage only public state and do not process server-returned data again on the client."}
-
 ```tsx title="showcases/table/cases/server-data-mode.tsx" file="<root>/showcases/table/cases/server-data-mode.tsx"
 
 ```
-
-### Custom table
-
-{"When data is already prepared or the structure needs full control, compose Header, Body, and Footer directly. Footer contains column summaries."}
 
 ```tsx title="showcases/table/cases/custom-table.tsx" file="<root>/showcases/table/cases/custom-table.tsx"
 
 ```
 
-### Fixed columns and horizontal scrolling
-
-{"CorrespondingHeadandCellSet simultaneously fixed=\"start\"Fixed starting column, or set fixed=\"end\"Fixed end column; give againTable.Primitive set upclassName=\"min-w-[960px]\" If it is larger than the minimum width of the container, the middle column can be scrolled horizontally."}
-
 ```tsx title="showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx" file="<root>/showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx"
 
 ```
-
-### Combined with Pagination
-
-{"Table is only responsible for the semantic structure of the current page, and Pagination manages the page number; local arrays or server-side data use the same controlled combination."}
 
 ```tsx title="showcases/table/cases/combined-with-pagination.tsx" file="<root>/showcases/table/cases/combined-with-pagination.tsx"
 
 ```
 
-### Primitive row expansion
-
-{"Use a regular Button to control aria-expanded and render details with Row and a spanning Cell; no table-specific component is needed."}
-
 ```tsx title="showcases/table/cases/primitive-row-expansion.tsx" file="<root>/showcases/table/cases/primitive-row-expansion.tsx"
 
 ```
 
-### Column alignment, super long omission and custom Cell
-
-{"align uniformly controls the start, center and end alignment; the ellipsis of Head and Cell provides full-text Tooltip when overflowing, and the custom component directly acts as a Cell child node."}
-
 ```tsx title="showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx" file="<root>/showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx"
 
 ```
+
+</TableShowcase>
 
 ## Component parts
 

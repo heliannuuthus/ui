@@ -18,63 +18,37 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## 示例
 
-<CarouselShowcase />
-
-### 基础用法
-
-{"Carousel 始终使用景深过渡；paginationPosition 控制默认点位位于内容前方或后方。"}
+<CarouselShowcase>
 
 ```tsx title="showcases/carousel/cases/basic-usage.tsx" file="<root>/showcases/carousel/cases/basic-usage.tsx"
 
 ```
 
-### 导航按钮
-
-{"controls 决定是否渲染上一项和下一项按钮；按钮属性通过 previousButtonProps 与 nextButtonProps 独立扩展。"}
-
 ```tsx title="showcases/carousel/cases/navigation-buttons.tsx" file="<root>/showcases/carousel/cases/navigation-buttons.tsx"
 
 ```
-
-### 分页点
-
-{"pagination 控制默认点位或隐藏分页，renderDot 只改写单个点位的内容。"}
 
 ```tsx title="showcases/carousel/cases/pagination-dots.tsx" file="<root>/showcases/carousel/cases/pagination-dots.tsx"
 
 ```
 
-### 轨道与项目样式
-
-{"classNames 按 content 与 item 语义槽位扩展轮播轨道和项目样式。"}
-
 ```tsx title="showcases/carousel/cases/track-and-item-styles.tsx" file="<root>/showcases/carousel/cases/track-and-item-styles.tsx"
 
 ```
-
-### 自定义翻页器
-
-{"pagination 接收函数时提供页码状态与控制方法，可直接组合符合当前页面的完整翻页器。"}
 
 ```tsx title="showcases/carousel/cases/custom-page-turner.tsx" file="<root>/showcases/carousel/cases/custom-page-turner.tsx"
 
 ```
 
-### 自动播放
-
-{"autoplay 传 true 使用默认间隔，传数字直接设置秒数；loop 循环始终沿下一页方向越过首尾。"}
-
 ```tsx title="showcases/carousel/cases/autoplay.tsx" file="<root>/showcases/carousel/cases/autoplay.tsx"
 
 ```
 
-### 外部控制
-
-{"通过 ref 调用 scrollPrev、scrollNext、scrollTo、play 与 pause，不暴露底层轮播实例。"}
-
 ```tsx title="showcases/carousel/cases/external-control.tsx" file="<root>/showcases/carousel/cases/external-control.tsx"
 
 ```
+
+</CarouselShowcase>
 
 ## 组成部分
 

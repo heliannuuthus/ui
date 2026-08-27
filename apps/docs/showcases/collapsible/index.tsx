@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ComponentShowcase } from '../_shared/component-showcase';
 import Case01 from './cases/basic';
 import Case02 from './cases/trigger';
@@ -39,6 +40,10 @@ const cases = [
   },
 ];
 
-export default function CollapsibleShowcase() {
-  return <ComponentShowcase cases={cases} />;
+export default function CollapsibleShowcase({
+  children,
+}: {
+  children?: ReactNode;
+}) {
+  return <ComponentShowcase cases={cases}>{children}</ComponentShowcase>;
 }

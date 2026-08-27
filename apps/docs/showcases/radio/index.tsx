@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ComponentShowcase } from '../_shared/component-showcase';
 import Case01 from './cases/basic-usage';
 import Case02 from './cases/plan-radio-button';
@@ -21,6 +22,6 @@ const cases = [
   },
 ];
 
-export default function RadioShowcase() {
-  return <ComponentShowcase cases={cases} />;
+export default function RadioShowcase({ children }: { children?: ReactNode }) {
+  return <ComponentShowcase cases={cases}>{children}</ComponentShowcase>;
 }

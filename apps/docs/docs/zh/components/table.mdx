@@ -19,111 +19,61 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## 示例
 
-<TableShowcase />
-
-### 基础用法
-
-{"默认组合搜索、排序、固定列、操作列、Footer 和 Pagination；业务只需要提供 data 与 Table.Column。"}
+<TableShowcase>
 
 ```tsx title="showcases/table/cases/basic-usage.tsx" file="<root>/showcases/table/cases/basic-usage.tsx"
 
 ```
 
-### 行展开
-
-{"expandable 会自动补齐展开列、键盘按钮和跨列详情行；固定在起始侧的业务列会自动避开展开按钮。"}
-
 ```tsx title="showcases/table/cases/row-expansion.tsx" file="<root>/showcases/table/cases/row-expansion.tsx"
 
 ```
-
-### 分组表头
-
-{"在 Table.Column 中嵌套 columns 即可形成多级表头；Table 会计算跨列、层级和空状态宽度。"}
 
 ```tsx title="showcases/table/cases/group-header.tsx" file="<root>/showcases/table/cases/group-header.tsx"
 
 ```
 
-### 虚拟滚动
-
-{"virtual 只滚动并虚拟化表体；Header 固定在容器顶部，固定列、横向滚动和自定义 render 会继续生效。"}
-
 ```tsx title="showcases/table/cases/virtual-scrolling.tsx" file="<root>/showcases/table/cases/virtual-scrolling.tsx"
 
 ```
-
-### 受控排序、分页与行选择
-
-{"sorting、pagination 和 rowSelection 都可以由业务受控；每次交互都会返回公开状态，不暴露底层表格实例。"}
 
 ```tsx title="showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx" file="<root>/showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx"
 
 ```
 
-### 分页摘要
-
-{"显示数据总数，或根据总数与当前范围自定义摘要。"}
-
 ```tsx title="showcases/table/cases/pagination-summary.tsx" file="<root>/showcases/table/cases/pagination-summary.tsx"
 
 ```
-
-### 加载与外部状态组合
-
-{"Table 只内置布尔 loading；定制空结果和请求错误分别组合 Empty 与 Alert。"}
 
 ```tsx title="showcases/table/cases/loading-and-external-state-composition.tsx" file="<root>/showcases/table/cases/loading-and-external-state-composition.tsx"
 
 ```
 
-### 服务端数据模式
-
-{"search、sorting 与 pagination 的 manual 模式只管理公开状态，不在客户端二次处理服务端返回的数据。"}
-
 ```tsx title="showcases/table/cases/server-data-mode.tsx" file="<root>/showcases/table/cases/server-data-mode.tsx"
 
 ```
-
-### 自定义表格
-
-{"数据已经完成加工，或需要完全控制结构时，直接组合 Header、Body 和 Footer；Footer 承载列汇总。"}
 
 ```tsx title="showcases/table/cases/custom-table.tsx" file="<root>/showcases/table/cases/custom-table.tsx"
 
 ```
 
-### 固定列与横向滚动
-
-{"对应的Head与Cell同时设置 fixed=\"start\"固定起始列，或设置 fixed=\"end\"固定末尾列；再给Table.Primitive 设置className=\"min-w-[960px]\" 等大于容器的最小宽度，中间列即可横向滚动。"}
-
 ```tsx title="showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx" file="<root>/showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx"
 
 ```
-
-### 与 Pagination 组合
-
-{"Table 只负责当前页的语义结构，Pagination 管理页码；本地数组或服务端数据都使用同一受控组合。"}
 
 ```tsx title="showcases/table/cases/combined-with-pagination.tsx" file="<root>/showcases/table/cases/combined-with-pagination.tsx"
 
 ```
 
-### Primitive 行展开
-
-{"使用普通 Button 控制 aria-expanded，并通过 Row 与跨列 Cell 承载详情，不需要额外的表格专用组件。"}
-
 ```tsx title="showcases/table/cases/primitive-row-expansion.tsx" file="<root>/showcases/table/cases/primitive-row-expansion.tsx"
 
 ```
 
-### 列对齐、超长省略与自定义 Cell
-
-{"align 统一控制起始、居中和末端对齐；Head 与 Cell 的 ellipsis 在溢出时提供全文 Tooltip，自定义组件直接作为 Cell 子节点。"}
-
 ```tsx title="showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx" file="<root>/showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx"
 
 ```
+
+</TableShowcase>
 
 ## 组成部分
 

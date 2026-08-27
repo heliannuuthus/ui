@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ComponentShowcase } from '../_shared/component-showcase';
 import Case01 from './cases/basic-usage';
 import Case02 from './cases/localized-formatting';
@@ -30,6 +31,10 @@ const cases = [
   },
 ];
 
-export default function InputNumberShowcase() {
-  return <ComponentShowcase cases={cases} />;
+export default function InputNumberShowcase({
+  children,
+}: {
+  children?: ReactNode;
+}) {
+  return <ComponentShowcase cases={cases}>{children}</ComponentShowcase>;
 }

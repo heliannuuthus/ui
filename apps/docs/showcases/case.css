@@ -51,11 +51,41 @@
   gap: 0.5rem;
 }
 
-.component-case > h3 {
+.component-case-copy > h3 {
   margin: 0 0 0.875rem;
   color: var(--foreground);
   font-size: 0.875rem;
   font-weight: 650;
+}
+
+.component-case-source {
+  margin: 1rem -1.25rem -1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.component-case-source-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem 0.75rem;
+}
+
+.component-case-source-content .docs-code-block {
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.component-case-source-label-open {
+  display: none;
+}
+
+.component-case-source[data-open] .component-case-source-label-closed {
+  display: none;
+}
+
+.component-case-source[data-open] .component-case-source-label-open {
+  display: inline;
 }
 
 .collapsible-case {

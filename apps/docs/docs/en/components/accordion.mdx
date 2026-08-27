@@ -18,79 +18,45 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## Examples
 
-<AccordionShowcase />
-
-### Single item expansion
-
-{"By default, only one item is open at a time; opening another item closes the previous one."}
+<AccordionShowcase>
 
 ```tsx title="showcases/accordion/cases/single-item-expansion.tsx" file="<root>/showcases/accordion/cases/single-item-expansion.tsx"
 
 ```
 
-### Multiple expansion
-
-{"Set multiple to allow several items to remain open at the same time."}
-
 ```tsx title="showcases/accordion/cases/multiple-expansion.tsx" file="<root>/showcases/accordion/cases/multiple-expansion.tsx"
 
 ```
-
-### controlled state
-
-{"value represents the currently expanded items, and onChange receives the complete value array after user interaction."}
 
 ```tsx title="showcases/accordion/cases/controlled-state.tsx" file="<root>/showcases/accordion/cases/controlled-state.tsx"
 
 ```
 
-### Default indicator
-
-{"Omit indicator to show the default arrow at the end of the title and rotate it with the open state."}
-
 ```tsx title="showcases/accordion/cases/default-indicator.tsx" file="<root>/showcases/accordion/cases/default-indicator.tsx"
 
 ```
-
-### Start position
-
-{"Use Accordion.Indicator position to place the default arrow at the start of the title."}
 
 ```tsx title="showcases/accordion/cases/start-position.tsx" file="<root>/showcases/accordion/cases/start-position.tsx"
 
 ```
 
-### State function indicator
-
-{"Use Accordion.Indicator to set the position in one place. Its children state function receives the current item’s open, disabled, and value state so the caller controls what is rendered."}
-
 ```tsx title="showcases/accordion/cases/state-function-indicator.tsx" file="<root>/showcases/accordion/cases/state-function-indicator.tsx"
 
 ```
-
-### Disable one item
-
-{"Set disabled on an AccordionItem to prevent trigger interaction for that item only."}
 
 ```tsx title="showcases/accordion/cases/disable-one-item.tsx" file="<root>/showcases/accordion/cases/disable-one-item.tsx"
 
 ```
 
-### Disable the entire component
-
-{"Set disabled on Accordion to prevent every item from opening or closing."}
-
 ```tsx title="showcases/accordion/cases/disable-the-entire-component.tsx" file="<root>/showcases/accordion/cases/disable-the-entire-component.tsx"
 
 ```
 
-### Closed panel retention
-
-{"Closed panels unmount by default; keepMounted preserves internal state, while hiddenUntilFound retains searchable content for the browser find feature."}
-
 ```tsx title="showcases/accordion/cases/closed-panel-retention.tsx" file="<root>/showcases/accordion/cases/closed-panel-retention.tsx"
 
 ```
+
+</AccordionShowcase>
 
 ## Component parts
 

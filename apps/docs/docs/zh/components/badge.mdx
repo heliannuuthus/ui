@@ -18,39 +18,25 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## 示例
 
-<BadgeShowcase />
-
-### 基础用法
-
-{"没有 children 时独立显示通知；数字 0 会保留，超过 max 时显示封顶文案。"}
+<BadgeShowcase>
 
 ```tsx title="showcases/badge/cases/basic-usage.tsx" file="<root>/showcases/badge/cases/basic-usage.tsx"
 
 ```
 
-### 锚点通知
-
-{"传入 children 后，通知会定位到对象的 inline-end 顶角；offset 可微调逻辑方向位置。"}
-
 ```tsx title="showcases/badge/cases/anchored-notifications.tsx" file="<root>/showcases/badge/cases/anchored-notifications.tsx"
 
 ```
-
-### 状态红点
-
-{"indicator 为 true 时只显示红点；因为没有可见内容，必须提供 indicatorLabel。"}
 
 ```tsx title="showcases/badge/cases/status-dot.tsx" file="<root>/showcases/badge/cases/status-dot.tsx"
 
 ```
 
-### 样式扩展
-
-{"根节点使用 className 与 style，通知标记使用对应的 classNames 和 styles 插槽。"}
-
 ```tsx title="showcases/badge/cases/style-extensions.tsx" file="<root>/showcases/badge/cases/style-extensions.tsx"
 
 ```
+
+</BadgeShowcase>
 
 ## API
 

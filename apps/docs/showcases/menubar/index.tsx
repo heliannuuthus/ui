@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ComponentShowcase } from '../_shared/component-showcase';
 import Case01 from './cases/basic-usage';
 import Case02 from './cases/optional-view-state';
@@ -33,6 +34,10 @@ const cases = [
   },
 ];
 
-export default function MenubarShowcase() {
-  return <ComponentShowcase cases={cases} />;
+export default function MenubarShowcase({
+  children,
+}: {
+  children?: ReactNode;
+}) {
+  return <ComponentShowcase cases={cases}>{children}</ComponentShowcase>;
 }

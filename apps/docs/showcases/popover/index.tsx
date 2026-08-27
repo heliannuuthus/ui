@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ComponentShowcase } from '../_shared/component-showcase';
 import Case01 from './cases/basic-usage';
 import Case02 from './cases/hover-preview-manager';
@@ -21,6 +22,10 @@ const cases = [
   },
 ];
 
-export default function PopoverShowcase() {
-  return <ComponentShowcase cases={cases} />;
+export default function PopoverShowcase({
+  children,
+}: {
+  children?: ReactNode;
+}) {
+  return <ComponentShowcase cases={cases}>{children}</ComponentShowcase>;
 }
