@@ -336,8 +336,24 @@ const themeCodeBlock = await readFile(
   resolve(docsAppRoot, 'theme/code-block.tsx'),
   'utf8'
 );
+const themeCss = await readFile(
+  resolve(docsAppRoot, 'theme/theme.css'),
+  'utf8'
+);
 const themeMdxContent = await readFile(
   resolve(docsAppRoot, 'theme/mdx-content.tsx'),
+  'utf8'
+);
+const themeMdxDirectives = await readFile(
+  resolve(docsAppRoot, 'theme/mdx-directives.tsx'),
+  'utf8'
+);
+const remarkUiDirectives = await readFile(
+  resolve(docsAppRoot, 'src/rspress/remark-ui-directives.ts'),
+  'utf8'
+);
+const rspressConfig = await readFile(
+  resolve(docsAppRoot, 'rspress.config.ts'),
   'utf8'
 );
 const themeInternalLink = await readFile(
@@ -354,6 +370,10 @@ const componentsOverview = await readFile(
 );
 const componentShowcase = await readFile(
   resolve(docsAppRoot, 'showcases/_shared/component-showcase.tsx'),
+  'utf8'
+);
+const componentShowcaseCss = await readFile(
+  resolve(docsAppRoot, 'showcases/case.css'),
   'utf8'
 );
 const apiTable = await readFile(
@@ -376,6 +396,40 @@ const localizedEnglishSource = sourceLocalizer.localizeShowcaseSource(
   localizedSourceFixture,
   'en'
 );
+const cardSemanticDom = await readFile(
+  resolve(docsAppRoot, 'showcases/card/semantic-dom.tsx'),
+  'utf8'
+);
+const resizableShowcase = await readFile(
+  resolve(docsAppRoot, 'showcases/resizable/index.tsx'),
+  'utf8'
+);
+const resizableBasicCase = await readFile(
+  resolve(docsAppRoot, 'showcases/resizable/cases/basic-usage.tsx'),
+  'utf8'
+);
+const resizableVerticalCase = await readFile(
+  resolve(docsAppRoot, 'showcases/resizable/cases/vertical-area.tsx'),
+  'utf8'
+);
+const scrollAreaShowcase = await readFile(
+  resolve(docsAppRoot, 'showcases/scroll-area/index.tsx'),
+  'utf8'
+);
+const scrollAreaAnimatedCase = await readFile(
+  resolve(
+    docsAppRoot,
+    'showcases/scroll-area/cases/animated-release-stream.tsx'
+  ),
+  'utf8'
+);
+const scrollAreaAnimatedCss = await readFile(
+  resolve(
+    docsAppRoot,
+    'showcases/scroll-area/cases/animated-release-stream.css'
+  ),
+  'utf8'
+);
 
 for (const source of [localizedChineseSource, localizedEnglishSource]) {
   assert.doesNotMatch(
@@ -394,11 +448,116 @@ assert.doesNotMatch(localizedChineseSource, /Pagination actions/u);
 assert.match(localizedEnglishSource, /Pagination actions/u);
 assert.doesNotMatch(localizedEnglishSource, /分页操作/u);
 
+assert.match(
+  cardSemanticDom,
+  /import \{ Button, Card, Typography \} from ['"]@heliannuuthus\/ui['"]/u,
+  'The Card semantic DOM explorer must use public UI components.'
+);
+for (const locale of ['zh', 'en']) {
+  const cardPage = await readFile(
+    resolve(docsRoot, locale, 'components/card.mdx'),
+    'utf8'
+  );
+  assert.match(
+    cardPage,
+    new RegExp(`<CardSemanticDom locale="${locale}" \\/>`),
+    `${locale}/components/card.mdx must render the interactive semantic DOM explorer.`
+  );
+}
+
+assert.equal(
+  [...resizableShowcase.matchAll(/span: ['"]full['"]/gu)].length,
+  3,
+  'Resizable interaction cases must retain the full-width workspace contract.'
+);
+for (const [source, pattern, message] of [
+  [
+    resizableBasicCase,
+    /resizable-workspace-shell/u,
+    'The basic Resizable case must render a recognizable workspace.',
+  ],
+  [
+    resizableVerticalCase,
+    /resizable-terminal-panel/u,
+    'The vertical Resizable case must render an editor and terminal scenario.',
+  ],
+]) {
+  assert.match(source, pattern, message);
+}
+assert.doesNotMatch(
+  resizableBasicCase,
+  /panel: ['"](?:文件列表|内容预览|file list|content preview)['"]/u,
+  'Resizable cases must not regress to abstract text-only placeholder panels.'
+);
+assert.match(
+  scrollAreaShowcase,
+  /animated-release-stream/u,
+  'Scroll Area documentation must retain the navigable animated release stream.'
+);
+assert.match(
+  scrollAreaAnimatedCase,
+  /useInView[\s\S]*useReducedMotion/u,
+  'The animated Scroll Area case must preserve viewport-driven motion and reduced-motion behavior.'
+);
+assert.match(
+  scrollAreaAnimatedCss,
+  /@media \(prefers-reduced-motion: reduce\)/u,
+  'The animated Scroll Area case must ship a reduced-motion CSS fallback.'
+);
+
 assert.doesNotMatch(
   themeIndex,
   /export \* from ['"]@rspress\/core\/theme-original['"]/,
   'The docs theme must not restore the Rspress default visual theme.'
 );
+assert.match(
+  themeIndex,
+  /export \{ DocsCallout as Callout \} from ['"]\.\/mdx-directives['"]/u,
+  'Rspress callouts must render through the UI-backed docs directive layer.'
+);
+assert.match(
+  rspressConfig,
+  /remarkPlugins: \[remarkDirective, remarkUiDirectives\]/u,
+  'Rspress must register the shared directive parser before the UI transformer.'
+);
+assert.match(
+  themeMdxDirectives,
+  /import \{[\s\S]*Alert[\s\S]*Collapsible[\s\S]*Tabs[\s\S]*Tooltip[\s\S]*Typography[\s\S]*\} from ['"]@heliannuuthus\/ui['"]/u,
+  'MDX directives must render entirely through public UI components.'
+);
+for (const component of [
+  'DocsAdmonition',
+  'DocsCollapse',
+  'DocsHint',
+  'DocsTab',
+  'DocsTabs',
+]) {
+  assert.ok(
+    themeMdxContent.includes(component),
+    `The MDX provider must expose ${component}.`
+  );
+  assert.ok(
+    remarkUiDirectives.includes(`'${component}'`),
+    `The remark transformer must emit ${component}.`
+  );
+}
+assert.doesNotMatch(
+  `${themeMdxDirectives}\n${remarkUiDirectives}`,
+  /dangerouslySetInnerHTML|data-island|@heroui/u,
+  'The docs directive layer must not copy the blog HTML or island runtime.'
+);
+for (const locale of ['zh', 'en']) {
+  const layoutPage = await readFile(
+    resolve(docsRoot, locale, 'components/layout.mdx'),
+    'utf8'
+  );
+  for (const syntax of [':::note', '::::tabs', ':hint[', ':::collapse']) {
+    assert.ok(
+      layoutPage.includes(syntax),
+      `${locale}/components/layout.mdx must exercise ${syntax}.`
+    );
+  }
+}
 assert.doesNotMatch(
   themeLayout,
   /OriginalLayout|@rspress\/core\/theme-original/,
@@ -426,18 +585,33 @@ assert.match(
 );
 assert.match(
   themeCodeBlock,
-  /import \{[^}]*Button[^}]*Typography[^}]*\} from ['"]@heliannuuthus\/ui['"]/s,
-  'The code block must use the public Button and Typography components.'
+  /import \{[^}]*Button[^}]*Tooltip[^}]*Typography[^}]*\} from ['"]@heliannuuthus\/ui['"]/s,
+  'The code block must use the public Button, Tooltip, and Typography components.'
+);
+assert.doesNotMatch(
+  themeCodeBlock,
+  /\btitle=/u,
+  'Code toolbar actions must not fall back to native title tooltips.'
+);
+assert.match(
+  themeCodeBlock,
+  /CodeDisclosureIcon expanded=\{sourceDisclosure\.expanded\}/u,
+  'Code disclosure must communicate state through the custom code icon.'
 );
 assert.match(
   themeCodeBlock,
   /localizeShowcaseSource/u,
   'Case source blocks must render only the active locale example.'
 );
-assert.match(
+assert.doesNotMatch(
   themeCodeBlock,
-  /wrapCode = true/u,
-  'Code blocks must wrap long lines by default.'
+  /wrapCode|WrapText|<Toggle(?:\.|\s)/u,
+  'Code wrapping must not require an interactive toolbar control.'
+);
+assert.match(
+  themeCss,
+  /\.docs-code-content code \{[^}]*white-space: pre-wrap;/su,
+  'Code blocks must always wrap long lines.'
 );
 assert.match(
   themeCodeBlock,
@@ -479,19 +653,49 @@ assert.match(
   'MDX links must use the Rspress client router.'
 );
 assert.match(
+  themeMdxContent,
+  /includes\(['"]rp-header-anchor['"]\)\) return null/u,
+  'Heading ids may remain addressable, but visible title anchor controls must not render.'
+);
+assert.doesNotMatch(
+  themeCss,
+  /\.rp-header-anchor/u,
+  'The docs theme must not retain a second visible heading-anchor interaction.'
+);
+assert.match(
   componentsOverview,
   /import \{ Link \} from ['"]@rspress\/core\/theme-original['"]/u,
   'Component catalog cards must use the Rspress client router.'
 );
 assert.match(
   componentShowcase,
-  /import \{ Button, Typography \} from ['"]@heliannuuthus\/ui['"]/,
-  'Case cards must use the public Button and Typography components.'
+  /import \{ Card, Masonry, Typography \} from ['"]@heliannuuthus\/ui['"]/,
+  'Case cards and their responsive flow must use public UI components.'
 );
 assert.match(
   componentShowcase,
-  /aria-expanded=\{sourceExpanded\}/u,
-  'Case source must use an explicit disclosure button.'
+  /CodeBlockDisclosureContext\.Provider/u,
+  'Case source state must be shared with the code block toolbar.'
+);
+assert.match(
+  componentShowcase,
+  /<Masonry[\s\S]*className="component-showcase-flow"[\s\S]*minColumnWidth="26rem"/u,
+  'Component cases must use the shared container-responsive Masonry flow.'
+);
+assert.match(
+  componentShowcase,
+  /<Card[\s\S]*className="component-case"[\s\S]*variant="outline"/u,
+  'Every case shell must preserve the public Card radius and slot contract.'
+);
+assert.match(
+  componentShowcaseCss,
+  /\.component-case-preview \{[^}]*justify-content: center;/su,
+  'Every case preview must provide a horizontally centered rendering area.'
+);
+assert.match(
+  themeCodeBlock,
+  /aria-expanded=\{sourceDisclosure\.expanded\}/u,
+  'Case source must use an explicit toolbar disclosure button.'
 );
 assert.doesNotMatch(
   componentShowcase,
@@ -510,8 +714,23 @@ assert.doesNotMatch(
 );
 assert.match(
   apiTable,
-  /import \{ Table, Tooltip, Typography \} from ['"]@heliannuuthus\/ui['"]/,
-  'API tables must use the public Table, Tooltip, and Typography components.'
+  /import \{ Popover, Table, Tag, Typography \} from ['"]@heliannuuthus\/ui['"]/,
+  'API tables must use the public Popover, Table, Tag, and Typography components.'
+);
+assert.match(
+  apiTable,
+  /const declarationMembers =/u,
+  'API type cards must derive and expose the fields in structured declarations.'
+);
+assert.match(
+  themeCss,
+  /\.docs-api-type-popover \{[^}]*width: min\(23rem,/su,
+  'API type cards must remain compact instead of spanning the API table.'
+);
+assert.doesNotMatch(
+  apiTable,
+  /\bTooltip\b/u,
+  'Structured API type definitions must not use a transient Tooltip.'
 );
 assert.doesNotMatch(
   apiTable,

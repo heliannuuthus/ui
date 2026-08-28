@@ -8,6 +8,7 @@ import '../src/pages/pages.css';
 import './theme.css';
 
 export { CodeBlock } from './code-block';
+export { DocsCallout as Callout } from './mdx-directives';
 export { Layout } from './layout';
 export { Root } from './root';
 export { Search } from './search';

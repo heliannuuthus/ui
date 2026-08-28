@@ -33,6 +33,7 @@ const cases = [
   },
   {
     component: Case04,
+    span: 'full' as const,
     title: { en: 'Cross axis aligned with main axis', zh: '交叉轴与主轴对齐' },
     description: {
       en: 'align controls cross-axis alignment, and justify controls main-axis distribution; the example code shows the corresponding properties and values in full.',

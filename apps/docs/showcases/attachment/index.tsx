@@ -36,10 +36,11 @@ const cases = [
   },
   {
     component: Case04,
+    span: 'full' as const,
     title: { en: 'Attachment sizes', zh: '附件尺寸' },
     description: {
-      en: 'size controls the density of one attachment; preview each size individually with the segmented control.',
-      zh: 'size 只控制单个附件的整体密度；不同尺寸通过分段控件逐项预览。',
+      en: 'size controls the density of one attachment; compare the three independent widths side by side.',
+      zh: 'size 只控制单个附件的整体密度；三种尺寸使用独立宽度并排比较。',
     },
   },
   {

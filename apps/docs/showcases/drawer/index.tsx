@@ -23,6 +23,7 @@ const cases = [
   },
   {
     component: Case03,
+    span: 'full' as const,
     title: { en: 'Bind parent container', zh: '绑定父容器' },
     description: {
       en: 'After passing in container, the portal, viewport and panel are all limited to the specified parent container, and the four directions remain consistent.',

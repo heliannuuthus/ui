@@ -17,6 +17,10 @@ import { ApiTable } from '@docs/rspress/api-table';
 - Apps need to include navigation, table of contents, or details areas to the left or right of the content.
 - Complex pages require combining vertical and horizontal areas through nested layouts.
 
+:::note{title="Layout responsibility"}
+Layout describes structural relationships between regions; navigation state, routing, and product content remain application concerns.
+:::
+
 ## Examples
 
 <LayoutShowcase>
@@ -50,6 +54,15 @@ import { ApiTable } from '@docs/rspress/api-table';
 - **Layout.Content** — Hosts the main content and takes up the remaining space in the layout.
 - **Layout.Footer** — A fixed area at the bottom of a page or partial layout.
 - **Layout.Sidebar** — A side area for navigation, table of contents, or details.
+
+::::tabs
+:::tab{label="Vertical composition" value="vertical"}
+Header, Content, and Footer are arranged vertically by default, with Content filling the remaining space.
+:::
+:::tab{label="Horizontal composition" value="horizontal"}
+Layout switches to a horizontal arrangement when it directly contains Sidebar; a nested Layout can continue organizing the main region.
+:::
+::::
 
 ## API
 
@@ -222,4 +235,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 ## Avoid
 
 - Do not tile all areas in the same Layout; the Header and Footer that span the entire page should wrap the nested Layout in the middle.
-- Text navigation usually should not be compressed into an icon rail on narrow screens; set collapsedWidth to 0 and compose Drawer for complete navigation.
+- Text navigation should not be compressed into an icon rail below the :hint[layout breakpoint]{title="The responsive threshold selected by the breakpoint property"}.
+
+:::collapse{title="Narrow navigation guidance"}
+Set collapsedWidth to 0 and compose Drawer for complete navigation instead of merely narrowing text navigation.
+:::

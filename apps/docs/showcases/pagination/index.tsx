@@ -15,6 +15,7 @@ const cases = [
   },
   {
     component: Case02,
+    span: 'full' as const,
     title: { en: 'Complete data pagination', zh: '完整数据分页' },
     description: {
       en: 'Derive the page count from the total and page size, then keep the visible range, page controls, page-size selection, and quick jump on one line.',
@@ -23,6 +24,7 @@ const cases = [
   },
   {
     component: Case03,
+    span: 'full' as const,
     title: { en: 'Simple and disabled states', zh: '简洁与禁用状态' },
     description: {
       en: 'Simple mode uses a page input for long-range jumps; the disabled state preserves pagination context while preventing every action.',

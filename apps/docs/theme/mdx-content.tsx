@@ -9,6 +9,13 @@ import { MDXProvider } from '@mdx-js/react';
 import type { ComponentProps, ReactNode } from 'react';
 import { CodeBlock } from './code-block';
 import { InternalButtonLink } from './internal-link';
+import {
+  DocsAdmonition,
+  DocsCollapse,
+  DocsHint,
+  DocsTab,
+  DocsTabs,
+} from './mdx-directives';
 
 const heading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
   const Heading = ({ children, ...props }: ComponentProps<'h1'>) => (
@@ -22,7 +29,8 @@ const heading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
 
 const link = ({ className, href, ref, ...props }: ComponentProps<'a'>) => {
   void ref;
-  if (href == null || className?.split(' ').includes('rp-header-anchor')) {
+  if (className?.split(' ').includes('rp-header-anchor')) return null;
+  if (href == null) {
     return <a className={className} href={href} {...props} />;
   }
 
@@ -44,6 +52,11 @@ const tableAlign = (align: ComponentProps<'td'>['align']) => {
 };
 
 const components = {
+  DocsAdmonition,
+  DocsCollapse,
+  DocsHint,
+  DocsTab,
+  DocsTabs,
   a: link,
   blockquote: ({ className, ...props }: ComponentProps<'blockquote'>) => (
     <Typography.Blockquote

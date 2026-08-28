@@ -1,6 +1,6 @@
-import { Button, Typography } from '@heliannuuthus/ui';
+import { Card, Masonry, Typography } from '@heliannuuthus/ui';
 import { useLocation } from '@rspress/core/runtime';
-import { ChevronUp, Code2 } from 'lucide-react';
+import { CodeBlockDisclosureContext } from '../../theme/code-block-disclosure';
 import {
   Children,
   isValidElement,
@@ -20,6 +20,7 @@ type LocalizedCopy = Record<Locale, string>;
 export type ShowcaseCase = {
   component: ComponentType<{ locale?: Locale }>;
   description: LocalizedCopy;
+  span?: 'auto' | 'full';
   title: LocalizedCopy;
 };
 
@@ -40,19 +41,49 @@ const ShowcaseCaseCard = ({
 }) => {
   const labels = resources[locale].common.demo;
   const panelId = useId();
+  const titleId = `${panelId}-title`;
   const [sourceExpanded, setSourceExpanded] = useState(false);
+  const sourceContent = source ? (
+    <CodeBlockDisclosureContext.Provider
+      value={{
+        expanded: sourceExpanded,
+        onExpandedChange: setSourceExpanded,
+        panelId: `${panelId}-source`,
+      }}
+    >
+      <div aria-label={labels.source} className="component-case-source">
+        {source}
+      </div>
+    </CodeBlockDisclosureContext.Provider>
+  ) : undefined;
 
   return (
-    <section className="component-case">
-      <div className="component-case-copy">
-        <Typography.Title level={3}>{title}</Typography.Title>
-        {description ? (
+    <Card
+      aria-labelledby={titleId}
+      className="component-case"
+      classNames={{
+        content: 'component-case-content',
+        description: 'component-case-description',
+        footer: 'component-case-footer',
+        header: 'component-case-header',
+        title: 'component-case-title',
+      }}
+      footer={sourceContent}
+      header={{
+        title: (
+          <Typography.Title id={titleId} level={3}>
+            {title}
+          </Typography.Title>
+        ),
+        description: description ? (
           <Typography.Text as="p" size="sm" tone="muted">
             {description}
           </Typography.Text>
-        ) : null}
-      </div>
-
+        ) : undefined,
+      }}
+      role="region"
+      variant="outline"
+    >
       <div
         aria-label={labels.preview}
         className="component-case-preview"
@@ -60,37 +91,7 @@ const ShowcaseCaseCard = ({
       >
         <Case locale={locale} />
       </div>
-
-      {source ? (
-        <div
-          aria-label={labels.source}
-          className="component-case-source"
-          hidden={!sourceExpanded}
-          id={`${panelId}-source`}
-        >
-          {source}
-        </div>
-      ) : null}
-
-      {source ? (
-        <div className="component-case-disclosure">
-          <Button
-            aria-controls={`${panelId}-source`}
-            aria-expanded={sourceExpanded}
-            onClick={() => setSourceExpanded((value) => !value)}
-            size="xs"
-            variant="ghost"
-          >
-            {sourceExpanded ? (
-              <ChevronUp aria-hidden="true" data-icon="inline-start" />
-            ) : (
-              <Code2 aria-hidden="true" data-icon="inline-start" />
-            )}
-            {sourceExpanded ? labels.collapseCode : labels.expandCode}
-          </Button>
-        </div>
-      ) : null}
-    </section>
+    </Card>
   );
 };
 
@@ -108,17 +109,26 @@ export const ComponentShowcase = ({
   ) as ShowcaseSource[];
 
   return (
-    <div className="component-case-grid">
-      {cases.map(({ component: Case, description, title }, index) => (
-        <ShowcaseCaseCard
-          Case={Case}
-          description={description[locale]}
-          key={title.en}
-          locale={locale}
-          source={sources[index]}
-          title={title[locale]}
-        />
-      ))}
-    </div>
+    <Masonry
+      className="component-showcase-flow"
+      columns={3}
+      gap={16}
+      items={cases.map(
+        ({ component: Case, description, span = 'auto', title }, index) => ({
+          content: (
+            <ShowcaseCaseCard
+              Case={Case}
+              description={description[locale]}
+              locale={locale}
+              source={sources[index]}
+              title={title[locale]}
+            />
+          ),
+          key: title.en,
+          span,
+        })
+      )}
+      minColumnWidth="26rem"
+    />
   );
 };

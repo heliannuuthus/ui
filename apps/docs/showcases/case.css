@@ -8,28 +8,73 @@
  * theme: existing documentation tokens · macrostructure: preview-first disclosure
  * pre-emit critique: P5 H5 E5 S5 R5 V5
  */
+.docs-article:has(.component-showcase-flow) {
+  width: min(100%, 92rem);
+}
+
+.component-showcase-flow {
+  width: 100%;
+}
+
 .component-case-grid {
   display: grid;
   gap: 1rem;
 }
 
 .component-case {
+  width: 100%;
   min-width: 0;
-  padding: 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--card);
+  gap: 0;
+  padding-block: 0;
+  break-inside: avoid-column;
 }
 
-.component-case-copy {
-  display: grid;
+.component-case-header {
   gap: 0.375rem;
+  padding: 1.25rem;
+  border-bottom-color: var(--border);
 }
 
-.component-case-copy > p {
+.component-case-title > h3,
+.component-case-description > p {
   margin: 0;
+}
+
+.component-case-title > h3 {
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.component-case-description > p {
   color: var(--muted-foreground);
   font-size: 0.875rem;
+}
+
+.component-case-content,
+.component-case-footer {
+  padding: 0;
+}
+
+.component-case-footer {
+  display: block;
+}
+
+.component-case-preview {
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  container-type: inline-size;
+}
+
+.component-case-preview > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.component-case-preview > .demo-preview {
+  width: 100%;
+  justify-content: center;
 }
 
 .component-case-loading {
@@ -55,16 +100,8 @@
   gap: 0.5rem;
 }
 
-.component-case-copy > h3 {
-  margin: 0 0 0.875rem;
-  color: var(--foreground);
-  font-size: 0.875rem;
-  font-weight: 650;
-}
-
 .component-case-source {
-  margin: 1rem -1.25rem 0;
-  border-top: 1px solid var(--border);
+  width: 100%;
 }
 
 .component-case-source .docs-code-block {
@@ -74,27 +111,7 @@
 }
 
 .component-case-source .docs-code-content {
-  height: clamp(13rem, 36svh, 22rem);
-}
-
-.component-case-disclosure {
-  min-height: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.75rem;
-  margin: 1rem -1.25rem -1.25rem;
-  padding: 0.5rem 0.75rem;
-  border-top: 1px solid var(--border);
-  background: color-mix(in oklab, var(--muted) 38%, var(--card));
-}
-
-.component-case-source:not([hidden]) + .component-case-disclosure {
-  margin-top: 0;
-}
-
-.component-case-disclosure [data-slot='button'] {
-  color: var(--muted-foreground);
+  max-height: min(32rem, 60svh);
 }
 
 .collapsible-case {

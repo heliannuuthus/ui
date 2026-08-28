@@ -16,6 +16,7 @@
     "i18next": "^26.3.6",
     "lucide-react": "^0.468.0",
     "lxgw-wenkai-webfont": "1.7.0",
+    "motion": "^12.42.2",
     "prism-react-renderer": "2.4.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -26,6 +27,8 @@
     "@rsbuild/plugin-tailwindcss": "^2.0.3",
     "@rspress/core": "^2.0.20",
     "@types/node": "^24.13.3",
-    "typescript": "^5.9.3"
+    "remark-directive": "^4.0.0",
+    "typescript": "^5.9.3",
+    "unist-util-visit": "^5.1.0"
   }
 }

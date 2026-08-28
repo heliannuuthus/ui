@@ -17,6 +17,10 @@ import { ApiTable } from '@docs/rspress/api-table';
 - 应用需要在内容左侧或右侧加入导航、目录或详情区域。
 - 复杂页面需要通过嵌套 Layout 组合纵向与横向区域。
 
+:::note{title="布局职责"}
+Layout 只描述区域之间的结构关系；导航状态、路由和业务内容仍由应用负责。
+:::
+
 ## 示例
 
 <LayoutShowcase>
@@ -50,6 +54,15 @@ import { ApiTable } from '@docs/rspress/api-table';
 - **Layout.Content** — 承载主要内容并占据布局中的剩余空间。
 - **Layout.Footer** — 页面或局部布局底部的固定区域。
 - **Layout.Sidebar** — 放置导航、目录或详情的侧边区域。
+
+::::tabs
+:::tab{label="纵向组合" value="vertical"}
+Header、Content 和 Footer 默认纵向排列，Content 自动占据剩余空间。
+:::
+:::tab{label="横向组合" value="horizontal"}
+Layout 直接包含 Sidebar 时切换为横向排列，嵌套 Layout 可继续组织主体区域。
+:::
+::::
 
 ## API
 
@@ -218,4 +231,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 ## 避免事项
 
 - 不要把所有区域平铺在同一个 Layout；跨整页的 Header 和 Footer 应包住中间的嵌套 Layout。
-- 文字导航在窄屏下通常不适合压成图标栏；将 collapsedWidth 设置为 0，并组合 Drawer 提供完整导航。
+- 文字导航在低于 :hint[布局断点]{title="由 breakpoint 属性指定的响应式阈值"} 时通常不适合压成图标栏。
+
+:::collapse{title="窄屏导航建议"}
+将 collapsedWidth 设置为 0，并组合 Drawer 提供完整导航；不要只缩窄文字导航。
+:::

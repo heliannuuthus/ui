@@ -2,11 +2,13 @@ import { fileURLToPath } from 'node:url';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { defineConfig } from '@rspress/core';
 import { pluginTailwindcss } from '@rsbuild/plugin-tailwindcss';
+import remarkDirective from 'remark-directive';
 import {
   componentGroups,
   componentSlug,
   localizedComponentName,
 } from './src/component-catalog';
+import { remarkUiDirectives } from './src/rspress/remark-ui-directives';
 
 const uiEntry = fileURLToPath(new URL('../../src/index.ts', import.meta.url));
 const uiStyles = fileURLToPath(
@@ -109,6 +111,9 @@ export default defineConfig({
   lang: 'zh',
   logo: '/heliannuuthus.png',
   logoText: 'Heliannuuthus UI',
+  markdown: {
+    remarkPlugins: [remarkDirective, remarkUiDirectives],
+  },
   outDir: 'dist',
   plugins: [exactDocumentLanguagePlugin],
   root: 'docs',

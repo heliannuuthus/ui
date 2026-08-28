@@ -36,6 +36,7 @@ const cases = [
   },
   {
     component: Case04,
+    span: 'full' as const,
     title: { en: 'Verification code form', zh: '验证码形态' },
     description: {
       en: 'Use the Input variant to switch between connected and separated blocks, previewing one option at a time with the segmented control.',

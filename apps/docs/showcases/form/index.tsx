@@ -24,6 +24,7 @@ const cases = [
   },
   {
     component: Case03,
+    span: 'full' as const,
     title: { en: 'Complete component form', zh: '完整组件表单' },
     description: {
       en: 'Validate value binding, validation state, and accessible relationships for every supported control in one form.',
