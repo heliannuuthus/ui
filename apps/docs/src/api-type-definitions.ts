@@ -156,7 +156,19 @@ export const isCustomApiTypeReference = (reference: string) => {
   if (/^(?:Intl|React|NavigationMenuPrimitive)\./.test(reference)) {
     return false;
   }
-  if (['Item', 'Key', 'TData', 'Value'].includes(reference)) return false;
+  if (
+    [
+      'Item',
+      'Key',
+      'TData',
+      'TFieldValues',
+      'TName',
+      'TSelectedValue',
+      'Value',
+    ].includes(reference)
+  ) {
+    return false;
+  }
 
   const segments = reference.split('.');
   const name = segments[segments.length - 1] ?? reference;

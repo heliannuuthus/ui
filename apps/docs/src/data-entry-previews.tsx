@@ -535,6 +535,84 @@ export const FormIntegrationDemo = () => {
   );
 };
 
+type FormDependencyValues = {
+  plan: 'personal' | 'team';
+  seats: number | null;
+};
+
+export const FormFieldDependencyDemo = () => {
+  const form = Form.useForm<FormDependencyValues>({
+    defaultValues: {
+      plan: 'personal',
+      seats: 1,
+    },
+  });
+  const plan = Form.useWatch('plan', form);
+  const seats = Form.useWatch('seats', form);
+  const isTeamPlan = plan === 'team';
+
+  return (
+    <div className="data-form-shell">
+      <div className="data-card-heading">
+        <div>
+          <strong>{docsCopy('字段监听与联动')}</strong>
+          <p>
+            {docsCopy('只订阅影响当前视图的字段，并通过表单实例更新关联字段。')}
+          </p>
+        </div>
+        <span>
+          {isTeamPlan
+            ? `${seats ?? 0} ${docsCopy('个席位')}`
+            : docsCopy('个人方案')}
+        </span>
+      </div>
+      <Form className="data-form-stack" form={form} onSubmit={() => undefined}>
+        <Form.Field name="plan" label={docsCopy('订阅方案')}>
+          <Radio.Group
+            options={[
+              { label: docsCopy('个人版'), value: 'personal' },
+              { label: docsCopy('团队版'), value: 'team' },
+            ]}
+          />
+        </Form.Field>
+        <Form.Field
+          name="seats"
+          label={docsCopy('团队席位')}
+          description={
+            isTeamPlan
+              ? docsCopy('团队方案可按实际成员数调整席位。')
+              : docsCopy('切换到团队方案后即可调整席位。')
+          }
+          disabled={!isTeamPlan}
+          rules={{
+            min: {
+              value: 2,
+              message: docsCopy('团队方案至少需要 2 个席位。'),
+            },
+          }}
+        >
+          <Input.Number min={2} max={100} />
+        </Form.Field>
+        <div className="data-form-actions">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              form.setValue('plan', 'team', { shouldDirty: true });
+              form.setValue('seats', 5, {
+                shouldDirty: true,
+                shouldValidate: true,
+              });
+            }}
+          >
+            {docsCopy('设为 5 人团队')}
+          </Button>
+        </div>
+      </Form>
+    </div>
+  );
+};
+
 type Priority = '' | 'routine' | 'important' | 'urgent';
 
 type PriorityControlProps = FormFieldInjectedControlProps<Priority>;

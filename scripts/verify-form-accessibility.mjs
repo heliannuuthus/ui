@@ -2,7 +2,20 @@ import assert from 'node:assert/strict';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-import { Form, Input, Radio, Slider } from '../dist/index.js';
+import {
+  Form,
+  Input,
+  Radio,
+  Slider,
+  useForm,
+  useFormInstance,
+  useWatch,
+} from '../dist/index.js';
+
+assert.equal(Form.useForm, useForm);
+assert.equal(Form.useFormInstance, useFormInstance);
+assert.equal(Form.useWatch, useWatch);
+assert.equal('Item' in Form, false);
 
 const elementWithSlot = (markup, tagName, slot) => {
   const match = markup.match(
@@ -63,6 +76,13 @@ const CustomValueGroup = React.forwardRef(
     )
 );
 
+const FormSummary = () => {
+  const form = useFormInstance();
+  const role = useWatch('role', form);
+
+  return React.createElement('output', { 'data-slot': 'form-summary' }, role);
+};
+
 const AccessibilityFixture = () => {
   const form = Form.useForm({
     defaultValues: {
@@ -74,6 +94,8 @@ const AccessibilityFixture = () => {
       threshold: 50,
     },
   });
+
+  assert.equal('watch' in form, false);
 
   return React.createElement(
     Form,
@@ -138,13 +160,18 @@ const AccessibilityFixture = () => {
         rules: { required: 'Choose a priority.' },
       },
       React.createElement(CustomValueGroup)
-    )
+    ),
+    React.createElement(FormSummary)
   );
 };
 
 const markup = renderToStaticMarkup(React.createElement(AccessibilityFixture));
 const form = elementWithSlot(markup, 'form', 'form');
 assert.equal(attribute(form, 'noValidate'), '');
+assert.match(
+  markup,
+  /<output[^>]*data-slot="form-summary"[^>]*>reader<\/output>/
+);
 
 const labels = [
   ...markup.matchAll(/<label[^>]*data-slot="field-label"[^>]*>/g),
@@ -242,5 +269,5 @@ assert.throws(
 );
 
 globalThis.console.log(
-  'Verified Form.Field labels, descriptions, automatic custom control injection, single-child enforcement, custom groups, and group ARIA relationships, including Input.Number and Slider.'
+  'Verified Form hooks, field subscriptions, labels, descriptions, automatic custom control injection, single-child enforcement, custom groups, and group ARIA relationships, including Input.Number and Slider.'
 );

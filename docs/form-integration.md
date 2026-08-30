@@ -21,6 +21,8 @@ form, import `Controller`, or manually adapt controls such as `Switch`.
 - Support nested field paths, array values and controlled or uncontrolled form
   initialization without turning the component API into a schema-driven UI
   generator.
+- Provide typed hooks for form creation, descendant access and isolated field
+  subscriptions without exposing the underlying form engine.
 
 ## Non-goals
 
@@ -141,6 +143,71 @@ const form = Form.useForm<Values>({
 The caller does not manually pass `control`, render a `Controller`, read the
 field error object, map `checked`, or reproduce ARIA attributes for supported
 controls.
+
+## Hooks and field changes
+
+The package exports the hooks directly and also exposes them on `Form` for a
+discoverable compound API. `useForm` creates the instance, `useWatch`
+subscribes the calling component to only the requested field or derived value,
+and `useFormInstance` reads the current instance from a descendant of `Form`.
+
+```tsx
+import { Form, useForm, useWatch } from '@heliannuuthus/ui';
+
+type Values = {
+  plan: 'personal' | 'team';
+  seats: number | null;
+};
+
+const PlanForm = () => {
+  const form = useForm<Values>({
+    defaultValues: { plan: 'personal', seats: 1 },
+  });
+  const plan = useWatch('plan', form);
+  const summary = useWatch(
+    (values) => `${values.plan}:${values.seats ?? 0}`,
+    form
+  );
+
+  return (
+    <Form
+      form={form}
+      onValuesChange={(values, info) => {
+        analytics.track('form_changed', { field: info.name, values });
+      }}
+      onSubmit={save}
+    >
+      <Form.Field name="plan" label="Plan">
+        <Radio.Group options={planOptions} />
+      </Form.Field>
+      <Form.Field name="seats" label="Seats" disabled={plan !== 'team'}>
+        <Input.Number min={2} />
+      </Form.Field>
+      <output>{summary}</output>
+    </Form>
+  );
+};
+```
+
+Use `useWatch` when a field affects rendered UI, validation configuration or a
+derived value. It isolates rerendering to the component that calls the hook.
+Use `onValuesChange` for event-style side effects that should not drive render.
+Use typed instance methods such as `setValue`, `reset`, `setError`, `trigger`
+and `getValues` for programmatic changes. `setValue` accepts `shouldDirty`,
+`shouldTouch` and `shouldValidate` so callers must choose the state transitions
+that accompany a programmatic update.
+
+Inside a component rendered below `Form`, access the same instance without
+prop drilling:
+
+```tsx
+const FormSummary = () => {
+  const form = Form.useFormInstance<Values>();
+  const seats = Form.useWatch('seats', form);
+
+  return <output>{seats ?? 0}</output>;
+};
+```
 
 Use an explicit form value generic on `Form.Field` when compile-time field-path
 checking is required:
@@ -283,12 +350,9 @@ const MapControl = React.forwardRef<
 
 Product code does not configure event names, value-property names or
 transformers on `Form.Field`. A composite control follows the same contract and
-owns the semantics of its internal elements. The legacy render-function child
-remains temporarily available for source compatibility, but it is not the
-recommended integration model and receives no new capabilities.
-
-`Form.Item` remains a deprecated alias of `Form.Field` for compatibility. New
-code and documentation use `Form.Field`.
+owns the semantics of its internal elements. `Form.Field` accepts exactly one
+direct control element; render-function children and alternate aliases are not
+part of the API.
 
 ## Validation and errors
 

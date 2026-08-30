@@ -4,6 +4,9 @@ import {
   Form,
   type FormFieldInjectedControlProps,
   type FormFieldProps,
+  useForm,
+  useFormInstance,
+  useWatch,
 } from '../components/form';
 import { Input } from '../components/input';
 import { Select } from '../components/select';
@@ -70,6 +73,15 @@ const roleOptions = [
   { label: 'Member', value: 'member' },
 ] as const;
 
+const FormInstanceConsumer = () => {
+  const form = useFormInstance<Values>();
+  const enabled = useWatch('enabled', form);
+
+  enabled.valueOf();
+
+  return null;
+};
+
 // @ts-expect-error Form.Field accepts one direct control element.
 export const invalidMultipleFormFieldChildren: FormFieldProps<
   Values,
@@ -85,6 +97,12 @@ export const invalidTextFormFieldChild: FormFieldProps<
   'name'
 >['children'] = 'name';
 
+// @ts-expect-error Form.Field does not accept render-function children.
+export const invalidRenderFormFieldChild: FormFieldProps<
+  Values,
+  'name'
+>['children'] = () => null;
+
 export const FormTypeTest = () => {
   const form = Form.useForm<Values>({
     defaultValues: {
@@ -95,15 +113,33 @@ export const FormTypeTest = () => {
       volume: 50,
     },
   });
+  const name = Form.useWatch('name', form);
+  const [enabled, retries] = useWatch(['enabled', 'retries'] as const, form);
+  const enabledFields = Form.useWatch(
+    (values) => (values.enabled ? values.name : values.role),
+    form
+  );
+  const values = Form.useWatch(form);
+
+  name.toUpperCase();
+  enabled.valueOf();
+  retries?.toFixed();
+  enabledFields?.toUpperCase();
+  values.name?.toUpperCase();
 
   return (
     <Form
       form={form}
+      onValuesChange={(nextValues, info) => {
+        nextValues.name.toUpperCase();
+        info.name?.toUpperCase();
+      }}
       onSubmit={(values) => {
         values.name.toUpperCase();
         values.enabled.valueOf();
       }}
     >
+      <FormInstanceConsumer />
       <Form.Field<Values> name="name" label="Name">
         <Input />
       </Form.Field>
@@ -135,4 +171,13 @@ export const FormTypeTest = () => {
       </Form.Field>
     </Form>
   );
+};
+
+export const NamedUseFormTypeTest = () => {
+  const form = useForm<Values>();
+
+  // @ts-expect-error Unknown field names must be rejected by useWatch.
+  useWatch('missing', form);
+
+  return null;
 };
