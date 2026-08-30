@@ -1,0 +1,299 @@
+---
+title: 'Pagination'
+description: 'Navigate between segmented data collections and identify the current page, adjacent pages, and data ranges.'
+lang: en
+---
+
+import PaginationShowcase from '@showcases/pagination';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Pagination
+
+{"Navigate between segmented data collections and identify the current page, adjacent pages, and data ranges."}
+
+## When to use
+
+- The complete data cannot be efficiently loaded or understood in a single view.
+- Users need to jump near their current location or return to previously viewed results pages.
+
+## Examples
+
+<PaginationShowcase>
+
+```tsx title="showcases/pagination/cases/basic-usage.tsx" file="<root>/showcases/pagination/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/pagination/cases/complete-data-pagination.tsx" file="<root>/showcases/pagination/cases/complete-data-pagination.tsx"
+
+```
+
+```tsx title="showcases/pagination/cases/simple-and-disabled-states.tsx" file="<root>/showcases/pagination/cases/simple-and-disabled-states.tsx"
+
+```
+
+</PaginationShowcase>
+
+## API
+
+Choose exactly one collection-size source: pass `total` to derive the page count from `pageSize`, or pass `pageCount` to declare it directly. Only `total` mode supports `showTotal`.
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Pagination',
+      defaultValue: "'center'",
+      description: 'Aligns the pagination within its available width.',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: 'Sets the controlled current page, starting at 1.',
+      name: 'current',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: '1',
+      description: 'Sets the initial page in uncontrolled mode.',
+      name: 'defaultCurrent',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description:
+        'Declares the page count directly; choose either this or total.',
+      name: 'pageCount',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description:
+        'Sets the total item count and derives the page count from pageSize; choose either this or pageCount.',
+      name: 'total',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: 'Sets the controlled number of items per page.',
+      name: 'pageSize',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: '10',
+      description:
+        'Sets the initial number of items per page in uncontrolled mode.',
+      name: 'defaultPageSize',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description:
+        'Returns the next page and page size when either value changes.',
+      name: 'onChange',
+      type: '(page: number, pageSize: number) => void',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description:
+        'Returns the adjusted page and new page size when the page size changes.',
+      name: 'onPageSizeChange',
+      type: '(page: number, pageSize: number) => void',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description:
+        'Shows the page-size selector; pass an object to configure its options and option labels together.',
+      name: 'showSizeChanger',
+      type: 'boolean | PaginationSizeChangerOptions',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description:
+        'Shows a quick-jump input with configurable label, suffix, and confirmation button.',
+      name: 'showQuickJumper',
+      type: 'boolean | PaginationQuickJumperOptions',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description:
+        'In total mode, shows the item count or renders a custom summary from the total and current range.',
+      name: 'showTotal',
+      type: 'boolean | ((total: number, range: readonly [number, number]) => ReactNode)',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description: 'Uses a compact page-input mode that can be made read-only.',
+      name: 'simple',
+      type: 'boolean | PaginationSimpleOptions',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description:
+        'Disables page navigation, quick jumping, and page-size changes.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description:
+        'Hides the entire pagination when only one page is available.',
+      name: 'hideOnSinglePage',
+      type: 'boolean',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'true',
+      description:
+        'Controls the previous-page item: false hides it, true uses the default content, and a ReactNode replaces its complete content.',
+      name: 'previous',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'true',
+      description:
+        'Controls the next-page item: false hides it, true uses the default content, and a ReactNode replaces its complete content.',
+      name: 'next',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description:
+        'Controls the first-page item: false hides it, true uses the default icon, and a ReactNode replaces its complete content.',
+      name: 'first',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description:
+        'Controls the last-page item: false hides it, true uses the default icon, and a ReactNode replaces its complete content.',
+      name: 'last',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'true',
+      description: 'Adds native title text to page and navigation controls.',
+      name: 'showTitle',
+      type: 'boolean',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description:
+        'Localizes the accessible names for pagination navigation, previous and next controls, and ellipses.',
+      name: 'ariaLabels',
+      type: 'PaginationAriaLabels',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description:
+        'Generates an accessible name from the item type, page, and selected state.',
+      name: 'getItemAriaLabel',
+      type: '(context: PaginationAriaLabelContext) => string',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description:
+        'Generates real, copyable URLs for page and navigation controls.',
+      name: 'getItemHref',
+      type: '(page: number, type: PaginationItemType) => string',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: '1',
+      description:
+        'Controls how many boundary pages remain visible at the beginning and end.',
+      name: 'boundaries',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: '1',
+      description:
+        'Controls how many adjacent page numbers are retained on both sides of the current page.',
+      name: 'siblings',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description:
+        'Customizes the final rendering of pages, navigation controls, and ellipses.',
+      name: 'renderItem',
+      type: '(item: PaginationRenderItemProps) => ReactNode',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: "'md'",
+      description: 'Sets the pagination control size.',
+      name: 'size',
+      type: 'PaginationSize',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'PaginationClassNames',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'PaginationStyles',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- The current page uses aria-current, and the previous and next pages retain explicit accessible names.
+- Disabled boundary operations also set aria-disabled and prevent navigation.
+
+## Avoid
+
+- Don't display all page numbers at once; long ranges should be condensed around the current page.
+- If the data naturally lends itself to continuous viewing, loading more or virtual scrolling should be evaluated.

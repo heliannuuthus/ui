@@ -1,0 +1,87 @@
+---
+title: 'Tag'
+description: 'Express an object status, category, or attribute with short text.'
+lang: en
+---
+
+import TagShowcase from '@showcases/tag';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Tag
+
+{"Express an object status, category, or attribute with short text."}
+
+## When to use
+
+- Mark an object status, category, or stable attribute.
+- Provide scannable short text in lists, cards, and detail views.
+
+## Examples
+
+<TagShowcase>
+
+```tsx title="showcases/tag/cases/basic-usage.tsx" file="<root>/showcases/tag/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/tag/cases/semantic-types.tsx" file="<root>/showcases/tag/cases/semantic-types.tsx"
+
+```
+
+```tsx title="showcases/tag/cases/icon-placement.tsx" file="<root>/showcases/tag/cases/icon-placement.tsx"
+
+```
+
+</TagShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Tag',
+      defaultValue: "'default'",
+      description: 'Sets the semantic type expressed by the tag.',
+      name: 'type',
+      type: "'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'",
+    },
+    {
+      component: 'Tag',
+      defaultValue: null,
+      description: 'Short text or a supporting icon inside the tag.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Tag',
+      defaultValue: null,
+      description: 'Extends the tag styles.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Tag',
+      defaultValue: null,
+      description: 'Extends the tag inline styles.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Do not communicate status through color alone; tag text must preserve the full meaning.
+- Tag supports standard span, ARIA, and data attributes and events, and forwards a span ref.
+
+## Avoid
+
+- Do not use Tag as a button or link; compose Button or a native link for interaction.
+- Avoid long sentences or complex actions inside Tag.

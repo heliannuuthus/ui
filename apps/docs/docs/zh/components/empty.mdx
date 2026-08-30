@@ -1,0 +1,106 @@
+---
+title: 'Empty 空状态'
+description: '为空集合或缺失结果提供稳定占位，并通过 props 配置图标、标题、说明和操作。'
+lang: zh-Hans
+---
+
+import EmptyShowcase from '@showcases/empty';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Empty 空状态
+
+{"为空集合或缺失结果提供稳定占位，并通过 props 配置图标、标题、说明和操作。"}
+
+## 何时使用
+
+- 列表、表格、搜索或首次使用场景当前没有可展示内容。
+- 需要解释空状态原因，并提供一个清晰、可执行的下一步。
+
+## 示例
+
+<EmptyShowcase>
+
+```tsx title="showcases/empty/cases/basic-usage.tsx" file="<root>/showcases/empty/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/empty/cases/title-and-description.tsx" file="<root>/showcases/empty/cases/title-and-description.tsx"
+
+```
+
+```tsx title="showcases/empty/cases/icon.tsx" file="<root>/showcases/empty/cases/icon.tsx"
+
+```
+
+```tsx title="showcases/empty/cases/action-area.tsx" file="<root>/showcases/empty/cases/action-area.tsx"
+
+```
+
+</EmptyShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Empty',
+      defaultValue: '<InboxIcon />',
+      description: '替换默认 Inbox 图标；传入 null 可明确隐藏图标。',
+      name: 'icon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Empty',
+      defaultValue: null,
+      description: '明确说明当前为空的对象或结果。',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Empty',
+      defaultValue: null,
+      description: '补充原因、筛选建议或下一步说明。',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Empty',
+      defaultValue: null,
+      description: '渲染主要按钮、链接或一组相关操作。',
+      name: 'actions',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Empty',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Empty',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 默认装饰图标会从无障碍树中隐藏，标题和说明承担状态表达。
+- 操作文案应说明下一步，例如“清除筛选”或“创建项目”，不要只写“确定”。
+
+## 避免事项
+
+- 不要为普通空状态重复拼装内部结构，优先使用语义 props。
+- 操作较复杂时先封装为一个业务节点，再传给 actions。
+- 加载中、请求失败和权限不足不是空数据，应分别使用 Skeleton、Alert 或专门的权限反馈。

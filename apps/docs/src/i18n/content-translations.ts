@@ -626,10 +626,11 @@ const ActionCell = () => {
     setPage(page)
     setPageSize(size)
   }}
-  pageSizeOptions={[10, 20, 50, 100]}
-  pageSizeLabel={(size) => \`\${size} 条 / 页\`}
   showTotal={(total, range) => \`\${range[0]}–\${range[1]} / \${total} 项\`}
-  showSizeChanger
+  showSizeChanger={{
+    options: [10, 20, 50, 100],
+    getOptionLabel: (size) => \`\${size} 条 / 页\`,
+  }}
   showQuickJumper={{ goButton: '跳转', label: '跳至', suffix: '页' }}
   first
   last
@@ -655,10 +656,11 @@ const ActionCell = () => {
     setPage(page)
     setPageSize(size)
   }}
-  pageSizeOptions={[10, 20, 50, 100]}
-  pageSizeLabel={(size) => \`\${size} items / page\`}
   showTotal={(total, range) => \`\${range[0]}–\${range[1]} / \${total} items\`}
-  showSizeChanger
+  showSizeChanger={{
+    options: [10, 20, 50, 100],
+    getOptionLabel: (size) => \`\${size} items / page\`,
+  }}
   showQuickJumper={{ goButton: 'Go', label: 'Jump to', suffix: 'page' }}
   first
   last
@@ -1071,8 +1073,8 @@ const ActionCell = () => {
   尺寸: 'size',
   '尺寸低于 size 中的最小值时是否允许面板折叠。':
     'Whether to allow panel collapse when the size is below the minimum value in size.',
-  '尺寸应跟随容器密度，而不是用来表达重要程度。默认尺寸适合大多数表单与页面。':
-    'Size should follow container density and not be used to express importance. The default size fits most forms and pages.',
+  '尺寸应跟随容器密度，而不是用来表达重要程度。中等尺寸适合大多数表单与页面。':
+    'Size should follow container density and not be used to express importance. The medium size fits most forms and pages.',
   '尺寸跟随容器密度，不用于表达操作的重要程度。':
     'Size follows container density; it does not express the importance of an action.',
   尺寸约束与分隔线覆盖: 'Size constraints and divider overrides',
@@ -1896,7 +1898,7 @@ const ActionCell = () => {
   模拟异步发布: 'Simulate asynchronous publishing',
   末端箭头: 'end arrow',
   默认: 'default',
-  默认按钮: 'Default button',
+  中等按钮: 'Medium button',
   默认景深动效: 'Default depth of field animation',
   默认空状态: 'Default empty state',
   默认图标: 'Default icon',
@@ -3715,8 +3717,8 @@ const ActionCell = () => {
     'ExpandButton synchronizes aria-expanded by default and provides expanded or collapsed labels; the business should add the current row name to the label.',
   'ExpandButton 提供键盘可用的展开状态与图标，ExpandedRow 使用真实表格行承载跨列详情。':
     'ExpandButton provides keyboard-available expanded states and icons, and ExpandedRow uses real table rows to carry cross-column details.',
-  'export const ButtonSizes = () => {\n  return (\n    <div className="flex items-end gap-3">\n      <Button size="xs">超小按钮</Button>\n      <Button size="sm">小按钮</Button>\n      <Button>默认按钮</Button>\n      <Button size="lg">大按钮</Button>\n    </div>\n  )\n}':
-    'export const ButtonSizes = () => {\n  return (\n    <div className="flex items-end gap-3">\n      <Button size="xs">Extra small button</Button>\n      <Button size="sm">Small button</Button>\n      <Button>Default Button</Button>\n      <Button size="lg">Big button</Button>\n    </div>\n  )\n}',
+  'export const ButtonSizes = () => {\n  return (\n    <div className="flex items-end gap-3">\n      <Button size="xs">超小按钮</Button>\n      <Button size="sm">小按钮</Button>\n      <Button size="md">中等按钮</Button>\n      <Button size="lg">大按钮</Button>\n    </div>\n  )\n}':
+    'export const ButtonSizes = () => {\n  return (\n    <div className="flex items-end gap-3">\n      <Button size="xs">Extra small button</Button>\n      <Button size="sm">Small button</Button>\n      <Button size="md">Medium button</Button>\n      <Button size="lg">Big button</Button>\n    </div>\n  )\n}',
   'export const ButtonStates = () => {\n  return (\n    <>\n      <Button disabled>不可用</Button>\n      <Button aria-busy="true" disabled>处理中</Button>\n      <Button aria-invalid="true" variant="outline">校验失败</Button>\n    </>\n  )\n}':
     'export const ButtonStates = () => {\n  return (\n    <>\n      <Button disabled>Not available</Button>\n      <Button aria-busy="true" disabled>Processing</Button>\n      <Button aria-invalid="true" variant="outline">Verification failed</Button>\n    </>\n  )\n}',
   'export const ButtonVariants = () => {\n  return (\n    <div className="flex flex-wrap gap-3">\n      <Button>主要操作</Button>\n      <Button variant="secondary">次要操作</Button>\n      <Button variant="outline">描边按钮</Button>\n      <Button variant="ghost">幽灵按钮</Button>\n      <Button variant="link">文字链接</Button>\n      <Button variant="destructive">危险操作</Button>\n    </div>\n  )\n}':

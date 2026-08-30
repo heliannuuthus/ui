@@ -1,0 +1,243 @@
+---
+title: 'Command 命令面板'
+description: '提供可搜索的键盘命令列表。'
+lang: zh-Hans
+---
+
+import CommandShowcase from '@showcases/command';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Command 命令面板
+
+{"提供可搜索的键盘命令列表。"}
+
+## 何时使用
+
+- 需要从较多页面、文件、设置或操作中快速搜索并执行命令。
+- 需要同时支持键盘导航、快捷键提示和模糊检索。
+- 需要在页面内嵌列表与模态命令面板之间复用同一组命令数据。
+
+## 示例
+
+<CommandShowcase>
+
+```tsx title="showcases/command/cases/basic-usage.tsx" file="<root>/showcases/command/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/command/cases/groups-and-options.tsx" file="<root>/showcases/command/cases/groups-and-options.tsx"
+
+```
+
+```tsx title="showcases/command/cases/search-input-placeholder.tsx" file="<root>/showcases/command/cases/search-input-placeholder.tsx"
+
+```
+
+```tsx title="showcases/command/cases/empty-result-content.tsx" file="<root>/showcases/command/cases/empty-result-content.tsx"
+
+```
+
+```tsx title="showcases/command/cases/command-dialog.tsx" file="<root>/showcases/command/cases/command-dialog.tsx"
+
+```
+
+</CommandShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Command',
+      defaultValue: null,
+      description: '配置一组或多组命令；每组通过 heading 和 options 描述内容。',
+      name: 'groups',
+      type: 'readonly CommandGroup[]',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description:
+        '传入 Dialog 配置后把命令列表放入模态层，并配置触发器、标题、说明及打开状态；省略时渲染内联列表。',
+      name: 'dialog',
+      type: 'Omit<DialogProps, "children">',
+    },
+    {
+      component: 'Command',
+      defaultValue: '搜索命令…',
+      description: '设置搜索输入框没有内容时显示的提示。',
+      name: 'placeholder',
+      type: 'string',
+    },
+    {
+      component: 'Command',
+      defaultValue: '没有找到命令',
+      description: '设置过滤后没有匹配命令时显示的内容。',
+      name: 'emptyText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description:
+        '配置搜索输入框的原生属性，并通过 value 与 onChange 管理搜索关键词。',
+      name: 'inputProps',
+      type: 'CommandInputProps',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description: '管理当前选中的命令值，不表示搜索关键词。',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description: '管理当前选中的命令值，不表示搜索关键词。',
+      name: 'defaultValue',
+      type: 'string',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description: '管理当前选中的命令值，不表示搜索关键词。',
+      name: 'onChange',
+      type: '(value: string) => void',
+    },
+    {
+      component: 'Command',
+      defaultValue: '内置过滤',
+      description:
+        '省略时使用内置过滤；传 false 关闭过滤，或传入返回匹配分数的自定义过滤函数。',
+      name: 'filter',
+      type: 'false | CommandFilter',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description: '设置命令列表供辅助技术读取的可访问名称。',
+      name: 'label',
+      type: 'string',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description: '控制首尾循环、Vim 导航键以及指针悬停是否改变当前命令。',
+      name: 'loop',
+      type: 'boolean',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description: '控制首尾循环、Vim 导航键以及指针悬停是否改变当前命令。',
+      name: 'vimBindings',
+      type: 'boolean',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description: '控制首尾循环、Vim 导航键以及指针悬停是否改变当前命令。',
+      name: 'disablePointerSelection',
+      type: 'boolean',
+    },
+    {
+      component: 'CommandGroup',
+      defaultValue: null,
+      description: '设置当前命令分组的可选标题。',
+      name: 'heading',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CommandGroup',
+      defaultValue: null,
+      description: '设置当前分组内按顺序展示的命令。',
+      name: 'options',
+      type: 'readonly CommandOption[]',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: null,
+      description: '设置命令的唯一值，并参与默认文本匹配。',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: null,
+      description:
+        '设置命令列表中显示的主要内容；纯文本标签会自动参与过滤匹配。',
+      name: 'label',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: null,
+      description:
+        '补充不显示但可参与过滤匹配的别名；标签为复杂 ReactNode 时也可在这里提供可搜索文本。',
+      name: 'keywords',
+      type: 'string[]',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: null,
+      description: '设置显示在命令标签前的图标。',
+      name: 'icon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: null,
+      description: '设置显示在命令右侧的快捷键提示。',
+      name: 'shortcut',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: 'false',
+      description: '禁用命令并阻止选择。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: null,
+      description: '选择该命令时执行回调并接收命令值。',
+      name: 'onSelect',
+      type: '(value: string) => void',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 使用 label 为命令列表提供明确的可访问名称。
+- 键盘用户可以输入关键词，并通过方向键移动、Enter 执行命令。
+- 禁用命令需要使用 disabled，不要仅通过颜色表达不可用状态。
+
+## 避免事项
+
+- placeholder 描述可搜索内容，emptyText 说明搜索无结果，两者不要混用。
+- value 管理当前命令选择；搜索关键词应通过 inputProps 管理。
+- shortcut 只负责展示提示，应用仍需自行注册对应的全局快捷键。

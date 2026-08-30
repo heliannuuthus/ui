@@ -1,0 +1,137 @@
+---
+title: 'Dropdown Menu 下拉菜单'
+description: '从一个明确的触发器展开临时操作列表，可承载普通命令、选择状态和分层操作。'
+lang: zh-Hans
+---
+
+import DropdownMenuShowcase from '@showcases/dropdown-menu';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Dropdown Menu 下拉菜单
+
+{"从一个明确的触发器展开临时操作列表，可承载普通命令、选择状态和分层操作。"}
+
+## 何时使用
+
+- 当前界面没有足够空间直接展示一组次要操作。
+- 操作与某个按钮、对象或局部上下文紧密相关。
+
+## 示例
+
+<DropdownMenuShowcase>
+
+```tsx title="showcases/dropdown-menu/cases/basic-usage.tsx" file="<root>/showcases/dropdown-menu/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/dropdown-menu/cases/choices-and-status.tsx" file="<root>/showcases/dropdown-menu/cases/choices-and-status.tsx"
+
+```
+
+```tsx title="showcases/dropdown-menu/cases/submenus-and-dimensions.tsx" file="<root>/showcases/dropdown-menu/cases/submenus-and-dimensions.tsx"
+
+```
+
+</DropdownMenuShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Dropdown Menu',
+      defaultValue: null,
+      description: '打开菜单的按钮或其他可交互元素。',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: null,
+      description: '描述操作、分组标题、分隔线、勾选项、单选组和子菜单。',
+      name: 'items',
+      type: 'DropdownMenuEntry[]',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: "'default'",
+      description: '控制菜单项密度和菜单最小宽度。',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: "'start'",
+      description: '菜单相对触发器的对齐方式。',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: "'bottom'",
+      description: '菜单优先出现的方向；空间不足时会自动避让。',
+      name: 'side',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: null,
+      description: '以受控方式管理菜单开关状态。',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: 'false',
+      description: '设置菜单非受控模式下的初始开关状态。',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: null,
+      description: '菜单开关状态变化时调用。',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'DropdownMenuClassNames',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'DropdownMenuStyles',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: 'false',
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 触发器需要提供可理解的文字或 aria-label，并支持 Enter、Space 和方向键打开菜单。
+- 菜单项保持明确的动作名称；仅图标不足以表达操作含义。
+- 危险操作使用 destructive 进行视觉提示，但最终删除仍应提供确认或撤销能力。
+
+## 避免事项
+
+- 不要把主要操作藏进菜单；高频主要动作应直接显示在界面上。
+- 避免超过两层子菜单，过深的结构会增加指针和键盘操作成本。

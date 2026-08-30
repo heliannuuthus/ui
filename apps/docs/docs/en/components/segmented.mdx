@@ -1,0 +1,188 @@
+---
+title: 'Segmented'
+description: 'Select one compact view, mode, or filter from a small visible set.'
+lang: en
+---
+
+import SegmentedShowcase from '@showcases/segmented';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Segmented
+
+{"Select one compact view, mode, or filter from a small visible set."}
+
+## When to use
+
+- A short set of choices should remain visible, such as list or board views, data density, or a simple filter.
+- Switching changes one value without establishing a semantic relationship between labels and content panels.
+
+Segmented does not render content panels. Use Tabs when every choice owns a corresponding content region and requires `tab` / `tabpanel` keyboard and screen-reader semantics.
+
+## Examples
+
+<SegmentedShowcase>
+
+```tsx title="showcases/segmented/cases/basic-usage.tsx" file="<root>/showcases/segmented/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/segmented/cases/icons-and-layouts.tsx" file="<root>/showcases/segmented/cases/icons-and-layouts.tsx"
+
+```
+
+```tsx title="showcases/segmented/cases/vertical-alignment.tsx" file="<root>/showcases/segmented/cases/vertical-alignment.tsx"
+
+```
+
+</SegmentedShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description:
+        'Defines option values, labels, icons, and disabled states; strings and numbers are supported as shorthand.',
+      name: 'options',
+      type: 'readonly (SegmentedValue | SegmentedOption)[]',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description:
+        'Sets the controlled selected value; pass null to leave every option unselected.',
+      name: 'value',
+      type: 'SegmentedValue | null',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: 'first enabled option',
+      description: 'Sets the initial selected value in uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'SegmentedValue',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: 'Called when the selected value changes.',
+      name: 'onChange',
+      type: '(value: SegmentedValue) => void',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: 'false',
+      description:
+        'Fills the available width and distributes it equally among the options.',
+      name: 'block',
+      type: 'boolean',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: "'horizontal'",
+      description: 'Arranges options horizontally or vertically.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Segmented',
+      defaultValue: "'md'",
+      description: 'Sets the segment size.',
+      name: 'size',
+      type: 'SegmentedSize',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: 'false',
+      description: 'Disables the complete segmented control.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: 'false',
+      description:
+        'Keeps the current value focusable without allowing the selection to change.',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: 'false',
+      description:
+        'Requires a selected value when its owning form is submitted.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: 'Sets the form field name.',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: 'Associates the hidden input with a form by id.',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: 'Provides a ref to the underlying form input.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description:
+        'Extends the indicator, item, and label semantic slot class names.',
+      name: 'classNames',
+      type: 'SegmentedClassNames',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description:
+        'Sets inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'SegmentedStyles',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: 'Extends the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: 'Extends the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- The component uses radio-group semantics with Tab focus, arrow-key selection, and form submission support.
+- Give icon-only labels an accessible name through the option's `aria-label`.
+- The selected indicator switches immediately when the user prefers reduced motion.
+
+## Avoid
+
+- Don't place a large number of choices inside Segmented; use Select for long lists.
+- Don't use Segmented to imitate Tabs when the choices own semantic content panels.

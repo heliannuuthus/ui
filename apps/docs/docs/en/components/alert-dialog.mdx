@@ -1,0 +1,158 @@
+---
+title: 'Alert Dialog'
+description: 'Interrupt the current flow and identify actions with important consequences.'
+lang: en
+---
+
+import AlertDialogShowcase from '@showcases/alert-dialog';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Alert Dialog
+
+{"Interrupt the current flow and identify actions with important consequences."}
+
+## When to use
+
+- Primary use: Interrupt the current flow and identify actions with important consequences.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<AlertDialogShowcase>
+
+```tsx title="showcases/alert-dialog/cases/basic-usage.tsx" file="<root>/showcases/alert-dialog/cases/basic-usage.tsx"
+
+```
+
+</AlertDialogShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description:
+        'A button or other interactive element that opens a confirmation dialog.',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description:
+        'Set confirmation items, consequence instructions, and auxiliary icons.',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description:
+        'Set confirmation items, consequence instructions, and auxiliary icons.',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description:
+        'Set confirmation items, consequence instructions, and auxiliary icons.',
+      name: 'media',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description:
+        'Set the text and confirmation button style for confirmation and cancellation operations.',
+      name: 'confirmText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description:
+        'Set the text and confirmation button style for confirmation and cancellation operations.',
+      name: 'cancelText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description:
+        'Set the text and confirmation button style for confirmation and cancellation operations.',
+      name: 'confirmVariant',
+      type: 'ButtonProps["variant"]',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: 'Called when the user confirms the operation.',
+      name: 'onConfirm',
+      type: '() => void',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: 'Manage open states in a controlled or uncontrolled manner.',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: 'false',
+      description: 'Manage open states in a controlled or uncontrolled manner.',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: 'Manage open states in a controlled or uncontrolled manner.',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'AlertDialogClassNames',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'AlertDialogStyles',
+    },
+    {
+      component: 'Alert Dialog',
+      defaultValue: "'default'",
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'size',
+      type: "'default' | 'sm'",
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

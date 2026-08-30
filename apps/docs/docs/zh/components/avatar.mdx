@@ -1,0 +1,197 @@
+---
+title: 'Avatar 头像'
+description: '表示人物、团队或其他实体。'
+lang: zh-Hans
+---
+
+import AvatarShowcase from '@showcases/avatar';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Avatar 头像
+
+{"表示人物、团队或其他实体。"}
+
+## 何时使用
+
+- 需要表示人物、团队或其他实体时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<AvatarShowcase>
+
+```tsx title="showcases/avatar/cases/basic-usage.tsx" file="<root>/showcases/avatar/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/avatar/cases/avatar-sizes.tsx" file="<root>/showcases/avatar/cases/avatar-sizes.tsx"
+
+```
+
+```tsx title="showcases/avatar/cases/image-and-fallback-content.tsx" file="<root>/showcases/avatar/cases/image-and-fallback-content.tsx"
+
+```
+
+```tsx title="showcases/avatar/cases/impression-caps-and-overlap.tsx" file="<root>/showcases/avatar/cases/impression-caps-and-overlap.tsx"
+
+```
+
+```tsx title="showcases/avatar/cases/custom-overflow-count.tsx" file="<root>/showcases/avatar/cases/custom-overflow-count.tsx"
+
+```
+
+```tsx title="showcases/avatar/cases/composed-with-tag-and-badge.tsx" file="<root>/showcases/avatar/cases/composed-with-tag-and-badge.tsx"
+
+```
+
+</AvatarShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '为头像图片和默认回退文字提供可访问名称。',
+      name: 'alt',
+      type: 'string',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '设置头像图片资源地址。',
+      name: 'src',
+      type: 'string',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '设置图片不可用时显示的姓名缩写或图标。',
+      name: 'fallback',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '配置回退内容的延迟显示和原生 span 属性。',
+      name: 'fallbackProps',
+      type: 'AvatarFallbackProps',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '配置头像图片的加载状态回调和原生 img 属性。',
+      name: 'imageProps',
+      type: 'AvatarImageProps',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '在头像右下角展示在线、认证等状态节点。',
+      name: 'badge',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: "'circle'",
+      description: '设置圆形头像或圆角方形头像。',
+      name: 'shape',
+      type: "'circle' | 'square'",
+    },
+    {
+      component: 'Avatar',
+      defaultValue: "'default'",
+      description: '设置头像尺寸，并同步 AvatarBadge 与分组计数。',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '配置头像集合及每个项目的稳定 key。',
+      name: 'items',
+      type: 'readonly AvatarGroupItem[]',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '限制可见头像数量，并自动将剩余数量显示为 +N。',
+      name: 'max',
+      type: 'number',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: '8',
+      description: '使用像素值控制相邻头像的重叠程度。',
+      name: 'overlap',
+      type: 'number',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '自定义剩余数量的呈现方式。',
+      name: 'renderCount',
+      type: '(count: number) => ReactNode',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '为组内头像和自动计数项设置统一形状。',
+      name: 'shape',
+      type: "'circle' | 'square'",
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '为组内头像和自动计数项设置统一尺寸。',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

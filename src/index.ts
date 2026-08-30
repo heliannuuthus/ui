@@ -130,9 +130,25 @@ export {
 } from './components/counter';
 export {
   DatePicker,
+  DateRangePicker,
+  DateTimePicker,
+  DateTimeRangePicker,
+  TimePicker,
+  TimeRangePicker,
   type DatePickerClassNames,
   type DatePickerProps,
   type DatePickerStyles,
+  type DateRangePickerProps,
+  type DateTimePickerClassNames,
+  type DateTimePickerProps,
+  type DateTimePickerStyles,
+  type DateTimeRangePickerProps,
+  type PickerLocale,
+  type PickerRangeValue,
+  type TimePickerProps,
+  type TimeRangePickerClassNames,
+  type TimeRangePickerProps,
+  type TimeRangePickerStyles,
 } from './components/date-picker';
 export {
   Dialog,
@@ -264,6 +280,7 @@ export {
   type PaginationRenderItemProps,
   type PaginationSimpleOptions,
   type PaginationSize,
+  type PaginationSizeChangerOptions,
   type PaginationStyles,
 } from './components/pagination';
 export {
@@ -321,15 +338,23 @@ export {
   type ScrollAreaScrollbarVisibility,
 } from './components/scroll-area';
 export {
+  Segmented,
+  type SegmentedClassNames,
+  type SegmentedOption,
+  type SegmentedProps,
+  type SegmentedProviderDefaults,
+  type SegmentedSize,
+  type SegmentedStyles,
+  type SegmentedValue,
+} from './components/segmented';
+export {
   Select,
   type SelectClassNames,
   type SelectOption,
   type SelectOptionGroup,
   type SelectProps,
   type SelectStyles,
-  type SelectTriggerProps,
   type SelectValue,
-  useSelectAnchor,
 } from './components/select';
 export { Separator, type SeparatorProps } from './components/separator';
 export { Skeleton, type SkeletonEffect } from './components/skeleton';

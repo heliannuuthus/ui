@@ -1,0 +1,177 @@
+---
+title: 'Attachment 附件'
+description: '展示附件信息、状态与操作。'
+lang: zh-Hans
+---
+
+import AttachmentShowcase from '@showcases/attachment';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Attachment 附件
+
+{"展示附件信息、状态与操作。"}
+
+## 何时使用
+
+- 需要展示附件信息、状态与操作时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<AttachmentShowcase>
+
+```tsx title="showcases/attachment/cases/basic-usage.tsx" file="<root>/showcases/attachment/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/media-content-type.tsx" file="<root>/showcases/attachment/cases/media-content-type.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/processing-states.tsx" file="<root>/showcases/attachment/cases/processing-states.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/attachment-sizes.tsx" file="<root>/showcases/attachment/cases/attachment-sizes.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/attachment-orientation.tsx" file="<root>/showcases/attachment/cases/attachment-orientation.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/attachment-actions.tsx" file="<root>/showcases/attachment/cases/attachment-actions.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/full-card-trigger.tsx" file="<root>/showcases/attachment/cases/full-card-trigger.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/attachment-collection.tsx" file="<root>/showcases/attachment/cases/attachment-collection.tsx"
+
+```
+
+</AttachmentShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '设置附件名称。',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '设置文件大小、处理状态或错误原因等辅助说明。',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '设置文件类型图标或缩略图。',
+      name: 'media',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'icon'",
+      description: '声明媒体内容是图标还是图片。',
+      name: 'mediaType',
+      type: "'icon' | 'image'",
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '设置与附件直接相关的下载、重试或移除操作。',
+      name: 'actions',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '传入链接或按钮元素，使整个附件成为对应触发区域。',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'horizontal'",
+      description: '切换行式附件或纵向缩略附件。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'default'",
+      description: '设置附件的整体密度。',
+      name: 'size',
+      type: "'xs' | 'sm' | 'default'",
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'done'",
+      description: '表达附件当前处理阶段并驱动状态样式。',
+      name: 'state',
+      type: "'idle' | 'uploading' | 'processing' | 'error' | 'done'",
+    },
+    {
+      component: 'Attachment.Group',
+      defaultValue: null,
+      description: '通过配置数组渲染一组 Attachment。',
+      name: 'items',
+      type: 'readonly AttachmentGroupItem[]',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Attachment.Group',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Attachment.Group',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

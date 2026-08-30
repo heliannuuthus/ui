@@ -1,0 +1,198 @@
+---
+title: 'Select 选择器'
+description: '从固定候选项中选择一个值，并可直接输入关键词过滤较长列表。'
+lang: zh-Hans
+---
+
+import SelectShowcase from '@showcases/select';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Select 选择器
+
+{"从固定候选项中选择一个值，并可直接输入关键词过滤较长列表。"}
+
+## 何时使用
+
+- 候选项固定时使用 Select；列表较长时直接输入关键词过滤。
+- 通过 options 提供平铺或分组候选项，通过受控或非受控 props 管理单选值。
+
+Select 的值限定为字符串或数字。需要多选、标签折叠或异步搜索时，应使用单独的 Multi Select / Combobox，而不是继续扩张 Select 的属性面。
+
+## 示例
+
+<SelectShowcase>
+
+```tsx title="showcases/select/cases/basic-usage.tsx" file="<root>/showcases/select/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/select/cases/group-selection.tsx" file="<root>/showcases/select/cases/group-selection.tsx"
+
+```
+
+</SelectShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Select',
+      defaultValue: null,
+      description:
+        '提供平铺或分组候选项；复杂标签可通过 textValue 提供用于显示和过滤的纯文本。',
+      name: 'options',
+      type: '(SelectOption<Value> | SelectOptionGroup<Value>)[]',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '设置受控选中值；清除选择时为 null。',
+      name: 'value',
+      type: 'Value | null',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '设置非受控模式下的初始选中值。',
+      name: 'defaultValue',
+      type: 'Value | null',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '选中值变化或被清除时调用。',
+      name: 'onChange',
+      type: '(value: Value | null) => void',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '未选中且未输入搜索词时显示的提示文本。',
+      name: 'placeholder',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '过滤后没有可用选项时显示的内容。',
+      name: 'emptyText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '是否在存在选中值时显示清除按钮。',
+      name: 'showClear',
+      type: 'boolean',
+    },
+    {
+      component: 'Select',
+      defaultValue: 'false',
+      description: '禁用输入、展开和选择操作。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Select',
+      defaultValue: 'false',
+      description: '保留当前值和聚焦能力，但不允许修改。',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Select',
+      defaultValue: 'false',
+      description: '参与表单提交时要求存在选中值。',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '设置输入节点 id，并用于关联标签。',
+      name: 'id',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '设置表单字段名。',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '将字段关联到指定表单。',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '获取底层输入节点的 ref。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '输入失去焦点时调用。',
+      name: 'onBlur',
+      type: 'FocusEventHandler<HTMLInputElement>',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '为没有可见标签的 Select 提供可访问名称。',
+      name: 'aria-label',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '关联描述文本节点。',
+      name: 'aria-describedby',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '标记当前值是否无效。',
+      name: 'aria-invalid',
+      type: 'boolean | string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '按 trigger 语义槽位扩展类名。',
+      name: 'classNames',
+      type: 'SelectClassNames',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '按与 classNames 相同的 trigger 槽位设置行内样式。',
+      name: 'styles',
+      type: 'SelectStyles',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

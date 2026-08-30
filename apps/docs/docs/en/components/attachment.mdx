@@ -1,0 +1,181 @@
+---
+title: 'Attachment'
+description: 'Display attachment information, status and operations.'
+lang: en
+---
+
+import AttachmentShowcase from '@showcases/attachment';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Attachment
+
+{"Display attachment information, status and operations."}
+
+## When to use
+
+- Primary use: Display attachment information, status and operations.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<AttachmentShowcase>
+
+```tsx title="showcases/attachment/cases/basic-usage.tsx" file="<root>/showcases/attachment/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/media-content-type.tsx" file="<root>/showcases/attachment/cases/media-content-type.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/processing-states.tsx" file="<root>/showcases/attachment/cases/processing-states.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/attachment-sizes.tsx" file="<root>/showcases/attachment/cases/attachment-sizes.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/attachment-orientation.tsx" file="<root>/showcases/attachment/cases/attachment-orientation.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/attachment-actions.tsx" file="<root>/showcases/attachment/cases/attachment-actions.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/full-card-trigger.tsx" file="<root>/showcases/attachment/cases/full-card-trigger.tsx"
+
+```
+
+```tsx title="showcases/attachment/cases/attachment-collection.tsx" file="<root>/showcases/attachment/cases/attachment-collection.tsx"
+
+```
+
+</AttachmentShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: 'Set the attachment name.',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description:
+        'Set supporting details such as file size, processing state, or error reason.',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: 'Set a file-type icon or thumbnail.',
+      name: 'media',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'icon'",
+      description: 'Declare whether the media content is an icon or an image.',
+      name: 'mediaType',
+      type: "'icon' | 'image'",
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: 'Set attachment actions such as download, retry, or remove.',
+      name: 'actions',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description:
+        'Pass in a link or button element to make the entire attachment the corresponding trigger area.',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'horizontal'",
+      description:
+        'Switch between line attachments or vertical thumbnail attachments.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'default'",
+      description: 'Sets the overall density of attachments.',
+      name: 'size',
+      type: "'xs' | 'sm' | 'default'",
+    },
+    {
+      component: 'Attachment',
+      defaultValue: "'done'",
+      description:
+        "Expresses the attachment's current processing stage and drives status styles.",
+      name: 'state',
+      type: "'idle' | 'uploading' | 'processing' | 'error' | 'done'",
+    },
+    {
+      component: 'Attachment.Group',
+      defaultValue: null,
+      description: 'Renders a set of Attachments via a configuration array.',
+      name: 'items',
+      type: 'readonly AttachmentGroupItem[]',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Attachment.Group',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Attachment.Group',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

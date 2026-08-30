@@ -1,0 +1,133 @@
+---
+title: 'Badge'
+description: 'Displays notification counts and status dots over an object or independently.'
+lang: en
+---
+
+import BadgeShowcase from '@showcases/badge';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Badge
+
+{"Displays notification counts and status dots over an object or independently."}
+
+## When to use
+
+- Overlay an unread count on a button, avatar, or other object.
+- Use when only the presence of new content or a short standalone count is needed.
+
+## Examples
+
+<BadgeShowcase>
+
+```tsx title="showcases/badge/cases/basic-usage.tsx" file="<root>/showcases/badge/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/badge/cases/anchored-notifications.tsx" file="<root>/showcases/badge/cases/anchored-notifications.tsx"
+
+```
+
+```tsx title="showcases/badge/cases/status-dot.tsx" file="<root>/showcases/badge/cases/status-dot.tsx"
+
+```
+
+```tsx title="showcases/badge/cases/style-extensions.tsx" file="<root>/showcases/badge/cases/style-extensions.tsx"
+
+```
+
+</BadgeShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description:
+        'Sets notification content: true displays a dot, a node displays content, and false, null, or undefined hides it.',
+      name: 'indicator',
+      type: 'true | ReactNode | false | null',
+    },
+    {
+      component: 'Badge',
+      defaultValue: '99',
+      description:
+        'Sets the numeric notification maximum and appends a plus sign above it.',
+      name: 'max',
+      type: 'number',
+    },
+    {
+      component: 'Badge',
+      defaultValue: '[0, 0]',
+      description:
+        'Fine-tunes the horizontal and vertical position relative to the anchor.',
+      name: 'offset',
+      type: 'readonly [horizontal: number, vertical: number]',
+    },
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description:
+        'Sets the accessible notification name and is required for dot mode.',
+      name: 'indicatorLabel',
+      type: 'string',
+    },
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description:
+        'Sets the notification anchor; omit it for standalone display.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'BadgeClassNames',
+    },
+    {
+      component: 'Badge',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'BadgeStyles',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- A dot has no visible text, so indicatorLabel must describe the notification.
+- Counts have visible text; add indicatorLabel when their meaning is still unclear.
+- Badge supports standard span, ARIA, and data attributes and events, and forwards a span ref.
+
+## Avoid
+
+- Badge only represents notifications; use Tag for status, categories, and short attributes.
+- Do not use Badge itself as an interactive control; pass a Button or link as children.

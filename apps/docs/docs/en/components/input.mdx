@@ -1,0 +1,278 @@
+---
+title: 'Input'
+description: 'Undertake input tasks of different complexity through single-line, multi-line, combined input and verification codes.'
+lang: en
+---
+
+import InputShowcase from '@showcases/input';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Input
+
+{"Undertake input tasks of different complexity through single-line, multi-line, combined input and verification codes."}
+
+## When to use
+
+- Enter a single or multiple lines of text, structured content with prefixes and suffixes, or a fixed-length verification code.
+- There is a need to combine instructions, additional actions, and status feedback in the same input task.
+
+## Examples
+
+<InputShowcase>
+
+```tsx title="showcases/input/cases/basic-usage.tsx" file="<root>/showcases/input/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/input/cases/field-status.tsx" file="<root>/showcases/input/cases/field-status.tsx"
+
+```
+
+```tsx title="showcases/input/cases/prefixes-suffixes-and-block-level-appends.tsx" file="<root>/showcases/input/cases/prefixes-suffixes-and-block-level-appends.tsx"
+
+```
+
+```tsx title="showcases/input/cases/verification-code-form.tsx" file="<root>/showcases/input/cases/verification-code-form.tsx"
+
+```
+
+```tsx title="showcases/input/cases/instructions-with-word-count-feedback.tsx" file="<root>/showcases/input/cases/instructions-with-word-count-feedback.tsx"
+
+```
+
+</InputShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Input',
+      defaultValue: "'text'",
+      description:
+        'Choose from native input types such as text, email, password, etc.',
+      name: 'type',
+      type: 'HTMLInputTypeAttribute',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description:
+        'Set the controlled input value; the caller is responsible for updating it when the content changes.',
+      name: 'value',
+      type: 'string | number',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description:
+        'Set the initial value of uncontrolled input, which only takes effect during initialization.',
+      name: 'defaultValue',
+      type: 'string | number',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description:
+        'Display an inline icon or text before typing, keeping it within the same input border.',
+      name: 'prefix',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description:
+        'Display inline text or associated actions after input, keeping within the same input border.',
+      name: 'suffix',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description:
+        'Display block-level additional content above the input control, suitable for instructions or secondary settings.',
+      name: 'addonBefore',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description:
+        'Display block-level additional content below the input control, suitable for counting or status feedback.',
+      name: 'addonAfter',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Input',
+      defaultValue: 'false',
+      description: 'Tag validation failed and error styles enabled.',
+      name: 'aria-invalid',
+      type: 'boolean',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description:
+        'Blocks modifications but retains focus, selection, and copy capabilities.',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Input',
+      defaultValue: 'false',
+      description: 'Disables input and prevents focus and editing.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: '6',
+      description: 'Set the total number of verification code digits.',
+      name: 'maxLength',
+      type: 'number',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: "'connected'",
+      description:
+        'Switch between grouped connected tiles or bit-by-bit independent tile layout.',
+      name: 'variant',
+      type: "'connected' | 'separated'",
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: null,
+      description:
+        'Set a controlled verification code string; the caller is responsible for updating it after the content changes.',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: null,
+      description:
+        'Set the initial string for uncontrolled verification codes.',
+      name: 'defaultValue',
+      type: 'string',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: null,
+      description:
+        'Called when the content of the verification code changes, and the complete string is returned.',
+      name: 'onChange',
+      type: '(value: string) => void',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: null,
+      description: 'Limit the types of characters allowed to be entered.',
+      name: 'pattern',
+      type: 'string',
+    },
+    {
+      component: 'Input.TextArea',
+      defaultValue: null,
+      description:
+        'Sets a controlled multi-line text value; the caller is responsible for updating it when the content changes.',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'Input.TextArea',
+      defaultValue: null,
+      description: 'Sets the initial value for uncontrolled multiline text.',
+      name: 'defaultValue',
+      type: 'string',
+    },
+    {
+      component: 'Input.TextArea',
+      defaultValue: null,
+      description: 'Sets the initial number of visible text lines.',
+      name: 'rows',
+      type: 'number',
+    },
+    {
+      component: 'Input.TextArea',
+      defaultValue: null,
+      description:
+        'Limit the number of characters that can be entered for multi-line text.',
+      name: 'maxLength',
+      type: 'number',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'InputClassNames',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'InputStyles',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Input.TextArea',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Input.TextArea',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

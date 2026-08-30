@@ -1,0 +1,232 @@
+---
+title: 'Slider 滑块'
+description: '在连续或离散范围内选择数值。'
+lang: zh-Hans
+---
+
+import SliderShowcase from '@showcases/slider';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Slider 滑块
+
+{"在连续或离散范围内选择数值。"}
+
+## 何时使用
+
+- 需要在连续或离散范围内选择数值时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<SliderShowcase>
+
+```tsx title="showcases/slider/cases/basic-usage.tsx" file="<root>/showcases/slider/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/slider/cases/elastic-feedback.tsx" file="<root>/showcases/slider/cases/elastic-feedback.tsx"
+
+```
+
+```tsx title="showcases/slider/cases/range-selection.tsx" file="<root>/showcases/slider/cases/range-selection.tsx"
+
+```
+
+```tsx title="showcases/slider/cases/vertical-direction.tsx" file="<root>/showcases/slider/cases/vertical-direction.tsx"
+
+```
+
+</SliderShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Slider',
+      defaultValue: "'elastic'",
+      description:
+        '控制内置反馈：悬停、触摸或聚焦时轻微缩放整体，拖拽越界时仅边缘内容在透明安全区内偏移并回弹，不改变轨道长度；减少动态效果偏好下自动停用。',
+      name: 'effect',
+      type: "'none' | 'elastic'",
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '在轨道起点显示图标，并参与 elastic 边缘反馈。',
+      name: 'startIcon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '在轨道终点显示图标，并参与 elastic 边缘反馈。',
+      name: 'endIcon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '在轨道起点显示文字标签。',
+      name: 'startLabel',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '在轨道终点显示文字标签。',
+      name: 'endLabel',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '设置受控模式下当前的一个或多个滑块值。',
+      name: 'value',
+      type: 'number | number[]',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '设置非受控模式下初始的一个或多个滑块值。',
+      name: 'defaultValue',
+      type: 'number | number[]',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '滑块值变化时调用。',
+      name: 'onChange',
+      type: '(value: number | number[]) => void',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '一次指针或键盘调整完成后调用。',
+      name: 'onChangeComplete',
+      type: '(value: number | number[]) => void',
+    },
+    {
+      component: 'Slider',
+      defaultValue: '0',
+      description: '设置允许选择的最小值。',
+      name: 'min',
+      type: 'number',
+    },
+    {
+      component: 'Slider',
+      defaultValue: '100',
+      description: '设置允许选择的最大值。',
+      name: 'max',
+      type: 'number',
+    },
+    {
+      component: 'Slider',
+      defaultValue: '1',
+      description: '设置每次键盘或指针移动的步长。',
+      name: 'step',
+      type: 'number',
+    },
+    {
+      component: 'Slider',
+      defaultValue: "'horizontal'",
+      description: '切换水平或垂直方向。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'format',
+      type: 'Intl.NumberFormatOptions',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'largeStep',
+      type: 'number',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'locale',
+      type: 'Intl.LocalesArgument',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'minStepsBetweenValues',
+      type: 'number',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'thumbCollisionBehavior',
+      type: "'none' | 'push' | 'swap'",
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

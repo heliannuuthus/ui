@@ -1,0 +1,94 @@
+---
+title: 'Scroll Area 滚动区域'
+description: '在受限区域内承载长内容，并通过封装后的原生滚动视口提供一致的滚动体验。'
+lang: zh-Hans
+---
+
+import ScrollAreaShowcase from '@showcases/scroll-area';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Scroll Area 滚动区域
+
+{"在受限区域内承载长内容，并通过封装后的原生滚动视口提供一致的滚动体验。"}
+
+## 何时使用
+
+- 列表、日志或长文本必须保持在固定高度内，但仍需完整访问全部内容。
+- 需要保持原生滚动、键盘操作和触控惯性，同时统一滚动条样式。
+- 内容可能横向溢出，或需要配置滚动条的尺寸与显隐策略。
+
+## 示例
+
+<ScrollAreaShowcase>
+
+```tsx title="showcases/scroll-area/cases/animated-release-stream.tsx" file="<root>/showcases/scroll-area/cases/animated-release-stream.tsx"
+
+```
+
+```tsx title="showcases/scroll-area/cases/basic-usage.tsx" file="<root>/showcases/scroll-area/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/scroll-area/cases/horizontal-content.tsx" file="<root>/showcases/scroll-area/cases/horizontal-content.tsx"
+
+```
+
+```tsx title="showcases/scroll-area/cases/two-axis-content.tsx" file="<root>/showcases/scroll-area/cases/two-axis-content.tsx"
+
+```
+
+</ScrollAreaShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Scroll Area',
+      defaultValue: "'vertical'",
+      description: '决定渲染纵向、横向或两个方向的滚动条。',
+      name: 'orientation',
+      type: "'vertical' | 'horizontal' | 'both'",
+    },
+    {
+      component: 'Scroll Area',
+      defaultValue: "{ size: 'md', visibility: 'auto' }",
+      description: '集中配置滚动条尺寸与显隐策略。',
+      name: 'scrollbar',
+      type: 'ScrollAreaScrollbarConfig',
+    },
+    {
+      component: 'Scroll Area',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Scroll Area',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 内部视口只在内容溢出时进入 Tab 顺序，并保留浏览器原生键盘滚动行为。
+- 隐藏滚动条不会禁用滚动；仍需确保触控、滚轮与键盘均可到达全部内容。
+- 列表、日志等内容语义应声明在子内容容器上，不需要操作内部 viewport。
+
+## 避免事项
+
+- 不要在内容可以自然撑开页面时强行嵌套滚动区域。
+- 隐藏滚动条前应确认界面仍有足够线索表明内容可以滚动。
+- 不要依赖或覆盖内部 viewport、thumb 与 corner；它们不是公共组合 API。

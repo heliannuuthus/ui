@@ -1,6 +1,4 @@
-import type { ComponentDocumentation } from './component-docs';
 import type { ComponentSlug } from './component-catalog';
-import type { DocsLocale } from './i18n/resources';
 
 export const componentSearchMetadata = {
   button: [
@@ -101,6 +99,11 @@ export const componentSearchMetadata = {
     ['分页', '页码'],
     ['pages', 'pager', 'data range'],
   ],
+  segmented: [
+    'Selects one compact view, mode, or filter with a sliding state indicator.',
+    ['分段控制器', '分段选择', '视图切换', '模式切换'],
+    ['segmented control', 'single choice', 'view switcher', 'mode switcher'],
+  ],
   tabs: [
     'Switches between mutually exclusive content while preserving context and task continuity.',
     ['标签页', '选项卡', '页签'],
@@ -112,9 +115,16 @@ export const componentSearchMetadata = {
     ['boolean', 'check', 'multi-select'],
   ],
   'date-picker': [
-    'Selects a date from an inline calendar or popup trigger.',
-    ['日期选择', '日历'],
-    ['calendar', 'date input'],
+    'Selects dates, date-times, or times, including matching range values.',
+    ['日期选择', '日期范围', '日期时间', '时间选择', '时间范围', '日历'],
+    [
+      'calendar',
+      'date input',
+      'date range',
+      'datetime picker',
+      'range picker',
+      'time picker',
+    ],
   ],
   form: [
     'Structures fields and connects state, validation, and submission behavior.',
@@ -284,54 +294,3 @@ export const componentSearchMetadata = {
     enAliases: readonly string[],
   ]
 >;
-
-const collectDocumentationText = (documentation: ComponentDocumentation) => {
-  return [
-    documentation.summary,
-    ...documentation.whenToUse,
-    ...documentation.examples.flatMap((example) => [
-      example.title,
-      typeof example.description === 'string' ? example.description : '',
-    ]),
-    ...(documentation.parts ?? []).flatMap((part) => [
-      part.name,
-      part.description,
-    ]),
-    ...(documentation.relatedComponents ?? []).flatMap((related) => [
-      related.name,
-      related.description,
-    ]),
-    documentation.semanticDom?.description ?? '',
-    ...documentation.api.flatMap((property) => [
-      property.name,
-      property.description,
-      property.type,
-    ]),
-    ...documentation.accessibility,
-    ...documentation.pitfalls,
-  ].filter(Boolean);
-};
-
-export const localizedComponentMetadata = (
-  slug: string,
-  locale: DocsLocale,
-  documentation: ComponentDocumentation | undefined
-) => {
-  const entry =
-    componentSearchMetadata[slug as keyof typeof componentSearchMetadata];
-  const summary =
-    locale === 'en'
-      ? (entry?.[0] ?? documentation?.summary ?? '')
-      : (documentation?.summary ?? '');
-  const aliases = locale === 'en' ? (entry?.[2] ?? []) : (entry?.[1] ?? []);
-  const searchText =
-    locale === 'zh' && documentation
-      ? collectDocumentationText(documentation)
-      : [summary, ...aliases];
-
-  return {
-    aliases,
-    searchText,
-    summary,
-  };
-};

@@ -1,0 +1,256 @@
+---
+title: 'Radio'
+description: 'Use Radio to express individual options, and Radio.Group to organize mutually exclusive choices.'
+lang: en
+---
+
+import RadioShowcase from '@showcases/radio';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Radio
+
+{"Use Radio to express individual options, and Radio.Group to organize mutually exclusive choices."}
+
+## When to use
+
+- There are fewer candidates, and you want users to see and compare all options directly.
+- A set of options allows only one value to be selected.
+
+## Examples
+
+<RadioShowcase>
+
+```tsx title="showcases/radio/cases/basic-usage.tsx" file="<root>/showcases/radio/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/radio/cases/plan-radio-button.tsx" file="<root>/showcases/radio/cases/plan-radio-button.tsx"
+
+```
+
+</RadioShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description:
+        'The value that identifies Radio in the group it belongs to.',
+      name: 'value',
+      type: 'string | number',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description:
+        'Sets the currently selected radio value in controlled mode.',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description:
+        'Sets the initially selected radio value in uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'string',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: 'Called when the current radio value changes.',
+      name: 'onChange',
+      type: '(value: string) => void',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description:
+        'Generate a set of Radios from a configuration of labels and values.',
+      name: 'options',
+      type: 'RadioOption[]',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description:
+        'Declare the keyboard navigation direction; use Stack adaptive word wrapping in landscape orientation.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: '3',
+      description:
+        'The maximum number of columns allowed to be displayed in landscape layout.',
+      name: 'columns',
+      type: 'number',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: '180',
+      description:
+        'The desired minimum width of a single option in a landscape layout.',
+      name: 'minColumnWidth',
+      type: 'number | string',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: '12',
+      description:
+        'Sets the horizontal and vertical spacing between Radio.Group options.',
+      name: 'gap',
+      type: 'number | string | [number | string, number | string]',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: 'false',
+      description: 'Disable the entire Radio.Group or a single Radio.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'RadioClassNames',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'RadioStyles',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Radio',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Radio.Group',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

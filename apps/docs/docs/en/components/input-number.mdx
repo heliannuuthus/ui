@@ -1,0 +1,310 @@
+---
+title: 'Input Number'
+description: 'Enter, format, and precisely adjust numeric values with the keyboard or step controls.'
+lang: en
+---
+
+import InputNumberShowcase from '@showcases/input-number';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Input Number
+
+{"Enter, format, and precisely adjust numeric values with the keyboard or step controls."}
+
+## When to use
+
+- Enter quantities, currency, percentages, or values with explicit steps and boundaries.
+- Preserve the raw number value while formatting the displayed content for a locale.
+
+## Examples
+
+<InputNumberShowcase>
+
+```tsx title="showcases/input-number/cases/basic-usage.tsx" file="<root>/showcases/input-number/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/input-number/cases/localized-formatting.tsx" file="<root>/showcases/input-number/cases/localized-formatting.tsx"
+
+```
+
+```tsx title="showcases/input-number/cases/sizes-and-states.tsx" file="<root>/showcases/input-number/cases/sizes-and-states.tsx"
+
+```
+
+</InputNumberShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Set the controlled raw value; an empty input uses null.',
+      name: 'value',
+      type: 'number | null',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description:
+        'Set the initial uncontrolled value; an empty input uses null.',
+      name: 'defaultValue',
+      type: 'number | null',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description:
+        'Return the unformatted number or null when the value changes.',
+      name: 'onChange',
+      type: '(value: number | null) => void',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description:
+        'Return the committed value on blur, after stepping ends, or when the keyboard commits a value.',
+      name: 'onChangeComplete',
+      type: '(value: number | null) => void',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Limit the minimum value accepted by input and stepping.',
+      name: 'min',
+      type: 'number',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Limit the maximum value accepted by input and stepping.',
+      name: 'max',
+      type: 'number',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: '1',
+      description: 'Set the regular step amount.',
+      name: 'step',
+      type: "number | 'any'",
+    },
+    {
+      component: 'Input Number',
+      defaultValue: '0.1',
+      description: 'Set the step amount used with the Alt key.',
+      name: 'smallStep',
+      type: 'number',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: '10',
+      description: 'Set the step amount used with the Shift key.',
+      name: 'largeStep',
+      type: 'number',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Format the displayed value with Intl.NumberFormatOptions.',
+      name: 'format',
+      type: 'Intl.NumberFormatOptions',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Set the locale used to format the displayed value.',
+      name: 'locale',
+      type: 'Intl.LocalesArgument',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: 'true',
+      description:
+        'Show, hide, or customize the icons in the increment and decrement buttons.',
+      name: 'controls',
+      type: 'boolean | InputNumberControls',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Display a fixed prefix inside the same input border.',
+      name: 'prefix',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Display a fixed unit suffix inside the same input border.',
+      name: 'suffix',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Configure the native input placeholder.',
+      name: 'placeholder',
+      type: 'string',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Configure the native autocomplete hint.',
+      name: 'autoComplete',
+      type: 'string',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Configure the soft-keyboard input mode.',
+      name: 'inputMode',
+      type: 'HTMLAttributes<HTMLInputElement>["inputMode"]',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Localize the accessible name of the increment button.',
+      name: 'incrementLabel',
+      type: 'string',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Localize the accessible name of the decrement button.',
+      name: 'decrementLabel',
+      type: 'string',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: "'default'",
+      description: 'Set a compact, default, or spacious control height.',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Input Number',
+      defaultValue: 'false',
+      description: 'Set the corresponding native form semantics.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: 'false',
+      description: 'Set the corresponding native form semantics.',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: 'false',
+      description: 'Set the corresponding native form semantics.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: 'false',
+      description:
+        'Choose whether hovering and using the mouse wheel adjusts the value.',
+      name: 'allowWheelScrub',
+      type: 'boolean',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: 'false',
+      description: 'Choose whether stepping snaps to the nearest multiple.',
+      name: 'snapOnStep',
+      type: 'boolean',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'InputNumberClassNames',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'InputNumberStyles',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'autoFocus',
+      type: 'boolean',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'inputProps',
+      type: 'ComponentProps<"input">',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'onBlur',
+      type: 'FocusEventHandler<HTMLInputElement>',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'onFocus',
+      type: 'FocusEventHandler<HTMLInputElement>',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Provide a label or aria-label for a standalone numeric input; Form.Field automatically associates its label and description.
+- Arrow keys adjust by step, while Alt and Shift use smallStep and largeStep respectively.
+- Keep accessible names on the increment and decrement buttons and disable them automatically at boundaries.
+
+## Avoid
+
+- Do not store the formatted string in application state; onChange already returns the raw number or null.
+- For currency and high-precision values, specify format and step and handle decimal fixed-point rules in the application layer.
+- Prefer Slider when only an approximate choice within a range is needed.

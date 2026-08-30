@@ -1,0 +1,168 @@
+---
+title: 'Stack 堆叠'
+description: '为一组相关元素提供一致的方向、间距、对齐和换行规则。'
+lang: zh-Hans
+---
+
+import StackShowcase from '@showcases/stack';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Stack 堆叠
+
+{"为一组相关元素提供一致的方向、间距、对齐和换行规则。"}
+
+## 何时使用
+
+- 一组控件或标签需要保持稳定间距，但不需要共享选择状态。
+- 相同内容需要在水平、垂直或窄屏换行布局之间切换。
+- 相邻控件需要折叠边框与圆角时，使用 Stack.Compact 形成连续轮廓。
+
+## 示例
+
+<StackShowcase>
+
+```tsx title="showcases/stack/cases/basic-usage.tsx" file="<root>/showcases/stack/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/stack/cases/value-spacing.tsx" file="<root>/showcases/stack/cases/value-spacing.tsx"
+
+```
+
+```tsx title="showcases/stack/cases/compact-combination-across-controls.tsx" file="<root>/showcases/stack/cases/compact-combination-across-controls.tsx"
+
+```
+
+```tsx title="showcases/stack/cases/cross-axis-aligned-with-main-axis.tsx" file="<root>/showcases/stack/cases/cross-axis-aligned-with-main-axis.tsx"
+
+```
+
+```tsx title="showcases/stack/cases/item-separators.tsx" file="<root>/showcases/stack/cases/item-separators.tsx"
+
+```
+
+</StackShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Stack',
+      defaultValue: "'vertical'",
+      description: '设置元素水平或垂直排列。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Stack',
+      defaultValue: '12',
+      description: '设置统一间距，数组依次表示水平与垂直间距。',
+      name: 'gap',
+      type: 'number | [number, number]',
+    },
+    {
+      component: 'Stack',
+      defaultValue: "'stretch'",
+      description: '设置交叉轴对齐方式。',
+      name: 'align',
+      type: "'start' | 'center' | 'end' | 'baseline' | 'stretch'",
+    },
+    {
+      component: 'Stack',
+      defaultValue: "'start'",
+      description: '设置主轴内容分布方式。',
+      name: 'justify',
+      type: "'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'",
+    },
+    {
+      component: 'Stack',
+      defaultValue: 'false',
+      description: '让 Stack 填满父容器的可用宽度。',
+      name: 'block',
+      type: 'boolean',
+    },
+    {
+      component: 'Stack',
+      defaultValue: 'false',
+      description: '在水平方向空间不足时允许自动换行。',
+      name: 'wrap',
+      type: 'boolean',
+    },
+    {
+      component: 'Stack',
+      defaultValue: null,
+      description: '在相邻元素之间插入统一分隔内容。',
+      name: 'separator',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Stack.Compact',
+      defaultValue: "'horizontal'",
+      description: '设置紧凑组的拼接方向；紧凑组不允许换行。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Stack.Compact',
+      defaultValue: 'false',
+      description: '让紧凑组填满父容器，适合包含 Input 的组合。',
+      name: 'block',
+      type: 'boolean',
+    },
+    {
+      component: 'Stack',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Stack',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Stack',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Stack.Compact',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Stack.Compact',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- Stack 只提供视觉布局，不改变子元素原有语义和焦点顺序。
+- Compact 默认提供 group 角色；同一区域存在多个操作组时应补充 aria-label。
+- 需要表达选择关系时仍应使用 Radio.Group 或 Toggle.Group。
+
+## 避免事项
+
+- 不要用 Stack 代替表单分组、单选组或工具栏等语义结构。
+- 不要让 Compact 换行；空间不足时应切换为垂直方向。
+- 不要通过空白字符或子元素外边距模拟组件间距。

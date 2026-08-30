@@ -1,0 +1,79 @@
+---
+title: 'Aspect Ratio'
+description: 'Keep media content at fixed proportions in responsive layouts.'
+lang: en
+---
+
+import AspectRatioShowcase from '@showcases/aspect-ratio';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Aspect Ratio
+
+{"Keep media content at fixed proportions in responsive layouts."}
+
+## When to use
+
+- Article covers, videos, and product images need to maintain consistent composition across different widths.
+- A stable media area needs to be reserved to avoid page jumps after images are loaded.
+
+## Examples
+
+<AspectRatioShowcase>
+
+```tsx title="showcases/aspect-ratio/cases/basic-usage.tsx" file="<root>/showcases/aspect-ratio/cases/basic-usage.tsx"
+
+```
+
+</AspectRatioShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Aspect Ratio',
+      defaultValue: null,
+      description: 'Container aspect ratio, such as 16/9, 4/3, or 1.',
+      name: 'ratio',
+      type: 'number',
+    },
+    {
+      component: 'Aspect Ratio',
+      defaultValue: null,
+      description: 'Media or content that requires proportional constraints.',
+      name: 'children',
+      type: 'React.ReactNode',
+    },
+    {
+      component: 'Aspect Ratio',
+      defaultValue: null,
+      description: 'Extended scale container style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Aspect Ratio',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Media content must still provide accurate alternative text or subtitles.
+- The scale switching control needs to expose the current selected state.
+
+## Avoid
+
+- Don't just set a fixed height or you'll lose the target proportions with a responsive width.
+- The important subject should not be close to the edge of the picture to avoid being cropped in different aspect ratios.

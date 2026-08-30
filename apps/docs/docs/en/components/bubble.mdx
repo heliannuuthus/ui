@@ -1,0 +1,127 @@
+---
+title: 'Bubble'
+description: 'Display the conversation content and freely combine it with the avatar and scroll area.'
+lang: en
+---
+
+import BubbleShowcase from '@showcases/bubble';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Bubble
+
+{"Display the conversation content and freely combine it with the avatar and scroll area."}
+
+## When to use
+
+- Primary use: Display the conversation content and freely combine it with the avatar and scroll area.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<BubbleShowcase>
+
+```tsx title="showcases/bubble/cases/basic-usage.tsx" file="<root>/showcases/bubble/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/bubble/cases/message-alignment.tsx" file="<root>/showcases/bubble/cases/message-alignment.tsx"
+
+```
+
+```tsx title="showcases/bubble/cases/reaction-position.tsx" file="<root>/showcases/bubble/cases/reaction-position.tsx"
+
+```
+
+```tsx title="showcases/bubble/cases/content-node-properties.tsx" file="<root>/showcases/bubble/cases/content-node-properties.tsx"
+
+```
+
+```tsx title="showcases/bubble/cases/avatars-and-scrollable-conversations.tsx" file="<root>/showcases/bubble/cases/avatars-and-scrollable-conversations.tsx"
+
+```
+
+</BubbleShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: 'Set the message content inside the bubble.',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description:
+        'Pass standard HTML, ARIA, data attributes and events to the inner content div.',
+      name: 'contentProps',
+      type: 'ComponentProps<"div"> & DataAttributes',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: 'Set reactions, read status, or other edge content.',
+      name: 'reactions',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description:
+        'Control the edge position of reaction content and extend its container props.',
+      name: 'reactionsProps',
+      type: 'BubbleReactionsProps',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: "'default'",
+      description:
+        'Set the emphasis and semantic appearance of message bubbles.',
+      name: 'variant',
+      type: "'default' | 'secondary' | 'muted' | 'elevated' | 'tinted' | 'outline' | 'ghost' | 'destructive'",
+    },
+    {
+      component: 'Bubble',
+      defaultValue: "'start'",
+      description:
+        'Align the bubble to the beginning or end of the message flow.',
+      name: 'align',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Bubble',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

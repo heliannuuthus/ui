@@ -1,0 +1,264 @@
+---
+title: 'Input 输入框'
+description: '通过单行、多行、组合输入和验证码承接不同复杂度的录入任务。'
+lang: zh-Hans
+---
+
+import InputShowcase from '@showcases/input';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Input 输入框
+
+{"通过单行、多行、组合输入和验证码承接不同复杂度的录入任务。"}
+
+## 何时使用
+
+- 输入单行或多行文本、带前后缀的结构化内容或固定长度验证码。
+- 需要在同一输入任务中组合说明、附加动作和状态反馈。
+
+## 示例
+
+<InputShowcase>
+
+```tsx title="showcases/input/cases/basic-usage.tsx" file="<root>/showcases/input/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/input/cases/field-status.tsx" file="<root>/showcases/input/cases/field-status.tsx"
+
+```
+
+```tsx title="showcases/input/cases/prefixes-suffixes-and-block-level-appends.tsx" file="<root>/showcases/input/cases/prefixes-suffixes-and-block-level-appends.tsx"
+
+```
+
+```tsx title="showcases/input/cases/verification-code-form.tsx" file="<root>/showcases/input/cases/verification-code-form.tsx"
+
+```
+
+```tsx title="showcases/input/cases/instructions-with-word-count-feedback.tsx" file="<root>/showcases/input/cases/instructions-with-word-count-feedback.tsx"
+
+```
+
+</InputShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Input',
+      defaultValue: "'text'",
+      description: '选择文本、邮箱、密码等原生输入类型。',
+      name: 'type',
+      type: 'HTMLInputTypeAttribute',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: '设置受控输入值；内容变化后由调用方负责更新。',
+      name: 'value',
+      type: 'string | number',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: '设置非受控输入的初始值，仅在初始化时生效。',
+      name: 'defaultValue',
+      type: 'string | number',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: '在输入内容前显示行内图标或文本，并保持在同一输入边框内。',
+      name: 'prefix',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description:
+        '在输入内容后显示行内文本或关联操作，并保持在同一输入边框内。',
+      name: 'suffix',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: '在输入控件上方显示块级附加内容，适合说明或辅助设置。',
+      name: 'addonBefore',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: '在输入控件下方显示块级附加内容，适合计数或状态反馈。',
+      name: 'addonAfter',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Input',
+      defaultValue: 'false',
+      description: '标记校验失败并启用错误样式。',
+      name: 'aria-invalid',
+      type: 'boolean',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: '阻止修改但保留聚焦、选择和复制能力。',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Input',
+      defaultValue: 'false',
+      description: '禁用输入并阻止聚焦和编辑。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: '6',
+      description: '设置验证码总位数。',
+      name: 'maxLength',
+      type: 'number',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: "'connected'",
+      description: '切换分组连接方块或逐位独立方块布局。',
+      name: 'variant',
+      type: "'connected' | 'separated'",
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: null,
+      description: '设置受控验证码字符串；内容变化后由调用方负责更新。',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: null,
+      description: '设置非受控验证码的初始字符串。',
+      name: 'defaultValue',
+      type: 'string',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: null,
+      description: '验证码内容变化时调用，并返回完整字符串。',
+      name: 'onChange',
+      type: '(value: string) => void',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: null,
+      description: '限制允许输入的字符类型。',
+      name: 'pattern',
+      type: 'string',
+    },
+    {
+      component: 'Input.TextArea',
+      defaultValue: null,
+      description: '设置受控多行文本值；内容变化后由调用方负责更新。',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'Input.TextArea',
+      defaultValue: null,
+      description: '设置非受控多行文本的初始值。',
+      name: 'defaultValue',
+      type: 'string',
+    },
+    {
+      component: 'Input.TextArea',
+      defaultValue: null,
+      description: '设置初始可见文本行数。',
+      name: 'rows',
+      type: 'number',
+    },
+    {
+      component: 'Input.TextArea',
+      defaultValue: null,
+      description: '限制多行文本可输入的字符数量。',
+      name: 'maxLength',
+      type: 'number',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'InputClassNames',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'InputStyles',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Input',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Input.OTP',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Input.TextArea',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Input.TextArea',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

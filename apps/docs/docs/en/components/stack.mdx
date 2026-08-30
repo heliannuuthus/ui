@@ -1,0 +1,175 @@
+---
+title: 'Stack'
+description: 'Provide consistent direction, spacing, alignment, and wrapping rules for a group of related elements.'
+lang: en
+---
+
+import StackShowcase from '@showcases/stack';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Stack
+
+{"Provide consistent direction, spacing, alignment, and wrapping rules for a group of related elements."}
+
+## When to use
+
+- A group of controls or labels needs to maintain stable spacing but does not need to share selection state.
+- The same content needs to switch between horizontal, vertical, or narrow wrap layouts.
+- When adjacent controls need to collapse their borders and rounded corners, use Stack.Compact to form a continuous outline.
+
+## Examples
+
+<StackShowcase>
+
+```tsx title="showcases/stack/cases/basic-usage.tsx" file="<root>/showcases/stack/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/stack/cases/value-spacing.tsx" file="<root>/showcases/stack/cases/value-spacing.tsx"
+
+```
+
+```tsx title="showcases/stack/cases/compact-combination-across-controls.tsx" file="<root>/showcases/stack/cases/compact-combination-across-controls.tsx"
+
+```
+
+```tsx title="showcases/stack/cases/cross-axis-aligned-with-main-axis.tsx" file="<root>/showcases/stack/cases/cross-axis-aligned-with-main-axis.tsx"
+
+```
+
+```tsx title="showcases/stack/cases/item-separators.tsx" file="<root>/showcases/stack/cases/item-separators.tsx"
+
+```
+
+</StackShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Stack',
+      defaultValue: "'vertical'",
+      description: 'Set elements to be arranged horizontally or vertically.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Stack',
+      defaultValue: '12',
+      description:
+        'Set the uniform spacing, and the array represents the horizontal and vertical spacing in turn.',
+      name: 'gap',
+      type: 'number | [number, number]',
+    },
+    {
+      component: 'Stack',
+      defaultValue: "'stretch'",
+      description: 'Set cross-axis alignment.',
+      name: 'align',
+      type: "'start' | 'center' | 'end' | 'baseline' | 'stretch'",
+    },
+    {
+      component: 'Stack',
+      defaultValue: "'start'",
+      description: 'Set the spindle content distribution method.',
+      name: 'justify',
+      type: "'start' | 'center' | 'end' | 'between' | 'around' | 'evenly'",
+    },
+    {
+      component: 'Stack',
+      defaultValue: 'false',
+      description:
+        'Let the Stack fill the available width of the parent container.',
+      name: 'block',
+      type: 'boolean',
+    },
+    {
+      component: 'Stack',
+      defaultValue: 'false',
+      description:
+        'Allow automatic word wrapping when there is insufficient horizontal space.',
+      name: 'wrap',
+      type: 'boolean',
+    },
+    {
+      component: 'Stack',
+      defaultValue: null,
+      description:
+        'Insert uniformly separated content between adjacent elements.',
+      name: 'separator',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Stack.Compact',
+      defaultValue: "'horizontal'",
+      description:
+        'Set the splicing direction of compact groups; compact groups do not allow line breaks.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Stack.Compact',
+      defaultValue: 'false',
+      description:
+        'Makes the compact group fill the parent container, suitable for the containing Input group.',
+      name: 'block',
+      type: 'boolean',
+    },
+    {
+      component: 'Stack',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Stack',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Stack',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Stack.Compact',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Stack.Compact',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Stack only provides visual layout and does not change the original semantics and focus order of sub-elements.
+- Compact provides the group role by default; aria-label should be added when there are multiple operation groups in the same area.
+- Radio.Group or Toggle.Group should still be used when expressing selection relationships.
+
+## Avoid
+
+- Do not use Stack to replace semantic structures such as form groups, radio groups, or toolbars.
+- Don't let Compact wrap; switch to vertical orientation when there's not enough space.
+- Do not simulate component spacing through whitespace or child element margins.

@@ -1,0 +1,207 @@
+---
+title: 'Avatar'
+description: 'Represents a person, team, or other entity.'
+lang: en
+---
+
+import AvatarShowcase from '@showcases/avatar';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Avatar
+
+{"Represents a person, team, or other entity."}
+
+## When to use
+
+- Primary use: Represents a person, team, or other entity.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<AvatarShowcase>
+
+```tsx title="showcases/avatar/cases/basic-usage.tsx" file="<root>/showcases/avatar/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/avatar/cases/avatar-sizes.tsx" file="<root>/showcases/avatar/cases/avatar-sizes.tsx"
+
+```
+
+```tsx title="showcases/avatar/cases/image-and-fallback-content.tsx" file="<root>/showcases/avatar/cases/image-and-fallback-content.tsx"
+
+```
+
+```tsx title="showcases/avatar/cases/impression-caps-and-overlap.tsx" file="<root>/showcases/avatar/cases/impression-caps-and-overlap.tsx"
+
+```
+
+```tsx title="showcases/avatar/cases/custom-overflow-count.tsx" file="<root>/showcases/avatar/cases/custom-overflow-count.tsx"
+
+```
+
+```tsx title="showcases/avatar/cases/composed-with-tag-and-badge.tsx" file="<root>/showcases/avatar/cases/composed-with-tag-and-badge.tsx"
+
+```
+
+</AvatarShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description:
+        'Provide an accessible name for the avatar image and default fallback text.',
+      name: 'alt',
+      type: 'string',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: 'Set the avatar image source URL.',
+      name: 'src',
+      type: 'string',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description:
+        'Set initials or an icon to display when the image is unavailable.',
+      name: 'fallback',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: 'Configure the fallback delay and native span props.',
+      name: 'fallbackProps',
+      type: 'AvatarFallbackProps',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description:
+        'Configure the avatar image loading callback and native img props.',
+      name: 'imageProps',
+      type: 'AvatarImageProps',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description:
+        'Online, authentication and other status nodes are displayed in the lower right corner of the avatar.',
+      name: 'badge',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: "'circle'",
+      description:
+        'Set up a round avatar or a square avatar with rounded corners.',
+      name: 'shape',
+      type: "'circle' | 'square'",
+    },
+    {
+      component: 'Avatar',
+      defaultValue: "'default'",
+      description: 'Set avatar size and sync AvatarBadge with group count.',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description:
+        'Configure the avatar collection and a stable key for each item.',
+      name: 'items',
+      type: 'readonly AvatarGroupItem[]',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description:
+        'Limit the number of visible avatars and automatically display the remaining number as +N.',
+      name: 'max',
+      type: 'number',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: '8',
+      description:
+        'Use pixel values ​​to control how much adjacent avatars overlap.',
+      name: 'overlap',
+      type: 'number',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: 'Customize how the remaining quantity is presented.',
+      name: 'renderCount',
+      type: '(count: number) => ReactNode',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description:
+        'Set a consistent shape for avatars and the generated count item in the group.',
+      name: 'shape',
+      type: "'circle' | 'square'",
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description:
+        'Set a consistent size for avatars and the generated count item in the group.',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Avatar.Group',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

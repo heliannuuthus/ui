@@ -1,0 +1,198 @@
+---
+title: 'Tabs 标签页'
+description: '在同一上下文中切换互斥内容，同时保持页面位置和任务连续性。'
+lang: zh-Hans
+---
+
+import TabsShowcase from '@showcases/tabs';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Tabs 标签页
+
+{"在同一上下文中切换互斥内容，同时保持页面位置和任务连续性。"}
+
+## 何时使用
+
+- 多组内容处于同一层级，并且用户通常只需要查看其中一组。
+- 切换内容不应改变页面主路径或丢失当前任务上下文。
+
+## 示例
+
+<TabsShowcase>
+
+```tsx title="showcases/tabs/cases/basic-usage.tsx" file="<root>/showcases/tabs/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/tabs/cases/four-styles-and-quick-centering.tsx" file="<root>/showcases/tabs/cases/four-styles-and-quick-centering.tsx"
+
+```
+
+```tsx title="showcases/tabs/cases/narrow-vessel-pressure-testing.tsx" file="<root>/showcases/tabs/cases/narrow-vessel-pressure-testing.tsx"
+
+```
+
+```tsx title="showcases/tabs/cases/content-switching-animation.tsx" file="<root>/showcases/tabs/cases/content-switching-animation.tsx"
+
+```
+
+</TabsShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description: '标签配置列表，决定标签、对应面板及禁用状态。必填。',
+      name: 'items',
+      type: 'readonly TabsItem[]',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description: '受控模式下当前激活标签的 value；传入 null 时不激活标签。',
+      name: 'value',
+      type: 'string | null',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: '首个可用标签',
+      description: '非受控模式下的初始标签；省略时自动选择第一个可用标签。',
+      name: 'defaultValue',
+      type: 'string | null',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description: '激活标签变化时调用，回传新的 value。',
+      name: 'onChange',
+      type: '(value: string | null) => void',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: "'horizontal'",
+      description: '设置标签列表方向，同时决定键盘方向键行为。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Tabs',
+      defaultValue: "'default'",
+      description: '切换胶囊、线型、描边或柔和指示器。',
+      name: 'variant',
+      type: "'default' | 'line' | 'outline' | 'soft'",
+    },
+    {
+      component: 'Tabs',
+      defaultValue: "'fade'",
+      description: '设置面板内容的切换动效；减少动态效果偏好下自动降级。',
+      name: 'animation',
+      type: "'none' | 'fade' | 'slide'",
+    },
+    {
+      component: 'Tabs',
+      defaultValue: 'false',
+      description: '在 TabsList 上快速居中标签列表。',
+      name: 'centered',
+      type: 'boolean',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: '内置英文文案',
+      description: '本地化横向溢出时自动出现的起始与末尾滚动按钮名称。',
+      name: 'scrollLabels',
+      type: 'Partial<TabsScrollLabels>',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description: '扩展 Tabs 根容器样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'TabsItem',
+      defaultValue: null,
+      description: '标签与对应面板共享的唯一标识。',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'TabsItem',
+      defaultValue: null,
+      description: '标签触发器中展示的内容。',
+      name: 'label',
+      type: 'React.ReactNode',
+    },
+    {
+      component: 'TabsItem',
+      defaultValue: null,
+      description: '标签激活后展示的面板内容。',
+      name: 'content',
+      type: 'React.ReactNode',
+    },
+    {
+      component: 'TabsItem',
+      defaultValue: 'false',
+      description: '禁用该标签并跳过鼠标与键盘激活。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'TabsScrollLabels',
+      defaultValue: "'Scroll tabs backward'",
+      description: '向列表起始方向滚动按钮的可访问名称。',
+      name: 'start',
+      type: 'string',
+    },
+    {
+      component: 'TabsScrollLabels',
+      defaultValue: "'Scroll tabs forward'",
+      description: '向列表末尾方向滚动按钮的可访问名称。',
+      name: 'end',
+      type: 'string',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'TabsClassNames',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'TabsStyles',
+    },
+    {
+      component: 'Tabs',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 标签列表、标签和面板之间保留正确的 ARIA 关联。
+- 水平标签使用左右方向键，纵向标签使用上下方向键移动。
+- 横向标签溢出时，前后按钮提供可本地化名称；触控滚动和焦点自动带出仍然可用。
+
+## 避免事项
+
+- 不要用 Tabs 表达有前后依赖的步骤流程。
+- 标签过多时应减少分组或改用导航，不应挤压到无法辨认。
+- 不要为 Tabs 硬编码设备断点；应让它服从实际父容器，并在嵌套窄空间中验证溢出行为。

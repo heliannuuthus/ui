@@ -1,0 +1,80 @@
+---
+title: 'Separator 分隔线'
+description: '用水平或垂直分隔线组织相邻但不同层级的内容。'
+lang: zh-Hans
+---
+
+import SeparatorShowcase from '@showcases/separator';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Separator 分隔线
+
+{"用水平或垂直分隔线组织相邻但不同层级的内容。"}
+
+## 何时使用
+
+- 需要在纵向内容之间建立章节边界。
+- 需要在横向工具栏或元信息之间建立分组边界。
+
+## 示例
+
+<SeparatorShowcase>
+
+```tsx title="showcases/separator/cases/basic-usage.tsx" file="<root>/showcases/separator/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/separator/cases/vertical-separation.tsx" file="<root>/showcases/separator/cases/vertical-separation.tsx"
+
+```
+
+```tsx title="showcases/separator/cases/custom-divider.tsx" file="<root>/showcases/separator/cases/custom-divider.tsx"
+
+```
+
+</SeparatorShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Separator',
+      defaultValue: "'horizontal'",
+      description: '设置分隔线的布局方向。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Separator',
+      defaultValue: null,
+      description: '扩展分隔线的尺寸、颜色和间距。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Separator',
+      defaultValue: null,
+      description: '使用行内样式扩展分隔线。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 组件会根据 orientation 提供对应的分隔方向语义。
+- 仅用于装饰时，不要让分隔线进入键盘焦点顺序。
+
+## 避免事项
+
+- 垂直分隔线需要父容器具有明确高度或可拉伸的高度。
+- 不要用分隔线代替真正的标题层级与内容分组。

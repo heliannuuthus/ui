@@ -1,0 +1,210 @@
+---
+title: 'Button 按钮'
+description: '触发操作或事件的基础控件；设置 href 时切换为使用相同视觉样式的原生链接。'
+lang: zh-Hans
+---
+
+import ButtonShowcase from '@showcases/button';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Button 按钮
+
+{"触发操作或事件的基础控件；设置 href 时切换为使用相同视觉样式的原生链接。"}
+
+## 何时使用
+
+- 用户需要执行一个明确动作，例如提交表单、创建内容或确认选择。
+- 页面需要区分主要、次要、危险和低强调操作。
+- 需要仅图标按钮时，必须同时提供可访问名称。
+
+## 示例
+
+<ButtonShowcase>
+
+```tsx title="showcases/button/cases/basic-usage.tsx" file="<root>/showcases/button/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/button/cases/different-sizes.tsx" file="<root>/showcases/button/cases/different-sizes.tsx"
+
+```
+
+```tsx title="showcases/button/cases/combination-button.tsx" file="<root>/showcases/button/cases/combination-button.tsx"
+
+```
+
+```tsx title="showcases/button/cases/fill-container.tsx" file="<root>/showcases/button/cases/fill-container.tsx"
+
+```
+
+```tsx title="showcases/button/cases/form-and-click-events.tsx" file="<root>/showcases/button/cases/form-and-click-events.tsx"
+
+```
+
+```tsx title="showcases/button/cases/button-with-icon.tsx" file="<root>/showcases/button/cases/button-with-icon.tsx"
+
+```
+
+```tsx title="showcases/button/cases/state.tsx" file="<root>/showcases/button/cases/state.tsx"
+
+```
+
+```tsx title="showcases/button/cases/link-mode.tsx" file="<root>/showcases/button/cases/link-mode.tsx"
+
+```
+
+</ButtonShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Button',
+      defaultValue: "'default'",
+      description: '按钮或链接的视觉样式；不参与决定根元素的语义。',
+      name: 'variant',
+      type: "'default' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link'",
+    },
+    {
+      component: 'Button',
+      defaultValue: "'md'",
+      description: '按钮尺寸，也包含仅图标尺寸。',
+      name: 'size',
+      type: "'xs' | 'sm' | 'md' | 'lg' | 'icon-xs' | 'icon-sm' | 'icon' | 'icon-lg'",
+    },
+    {
+      component: 'Button',
+      defaultValue: 'false',
+      description: '让按钮填满父容器的可用宽度。',
+      name: 'block',
+      type: 'boolean',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description:
+        '导航地址与根元素判别字段；设置后渲染为 a，未设置时渲染为原生 button。',
+      name: 'href',
+      type: 'string',
+    },
+    {
+      component: 'Button',
+      defaultValue: 'false',
+      description:
+        '禁用当前操作；链接模式下同步设置 aria-disabled 并阻止导航。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Button',
+      defaultValue: "'button'",
+      description: '原生按钮类型，仅在未设置 href 时使用。',
+      name: 'type',
+      type: "'button' | 'submit' | 'reset'",
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: '链接打开位置，仅在设置 href 时使用。',
+      name: 'target',
+      type: 'HTMLAttributeAnchorTarget',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: '链接与当前页面的关系，仅在设置 href 时使用。',
+      name: 'rel',
+      type: 'string',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: '下载链接资源，仅在设置 href 时使用。',
+      name: 'download',
+      type: 'boolean | string',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: '点击后的回调；禁用状态下不会触发。',
+      name: 'onClick',
+      type: 'MouseEventHandler<HTMLButtonElement> | MouseEventHandler<HTMLAnchorElement>',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: '按钮或链接中展示的内容。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: '扩展按钮根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: '扩展按钮根节点的行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: '访问实际渲染的 button 或 a 元素。',
+      name: 'ref',
+      type: 'Ref<HTMLButtonElement | HTMLAnchorElement>',
+    },
+    {
+      component: 'Button.Group',
+      defaultValue: "'horizontal'",
+      description: '设置按钮组水平或垂直拼接。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Button.Group',
+      defaultValue: 'false',
+      description: '让按钮组填满父容器的可用宽度。',
+      name: 'block',
+      type: 'boolean',
+    },
+    {
+      component: 'Button.Group',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Button.Group',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 仅图标按钮必须提供 aria-label 或可见文本。
+- 不要用颜色作为区分危险操作的唯一信息。
+- 异步操作使用 aria-busy，并避免在处理中改变按钮宽度。
+
+## 避免事项
+
+- 不要在同一操作组中放置多个同等强调的主要按钮。
+- 不要用禁用按钮隐藏失败原因；在附近说明需要满足的条件。
+- 执行操作时不要设置 href；页面导航也不要通过 onClick 手动修改地址。

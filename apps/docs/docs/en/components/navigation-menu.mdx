@@ -1,0 +1,131 @@
+---
+title: 'Navigation Menu'
+description: 'Organize the main entrance to your site or product and expand rich navigation panels with descriptions and groupings when needed.'
+lang: en
+---
+
+import NavigationMenuShowcase from '@showcases/navigation-menu';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Navigation Menu
+
+{"Organize the main entrance to your site or product and expand rich navigation panels with descriptions and groupings when needed."}
+
+## When to use
+
+- The first-level entrance needs to display classification, description or recommended content at the same time.
+- Site navigation requires a balance between direct links and expandable content groupings.
+
+## Examples
+
+<NavigationMenuShowcase>
+
+```tsx title="showcases/navigation-menu/cases/basic-usage.tsx" file="<root>/showcases/navigation-menu/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/navigation-menu/cases/local-navigation-and-alignment.tsx" file="<root>/showcases/navigation-menu/cases/local-navigation-and-alignment.tsx"
+
+```
+
+</NavigationMenuShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description:
+        'Configure direct links or top-level navigation entries with pop-up content.',
+      name: 'items',
+      type: 'NavigationMenuItemConfig[]',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: 'Set the popup alignment and navigation direction.',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: 'Set the popup alignment and navigation direction.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description:
+        'Manage the current expansion entry in a controlled or uncontrolled manner.',
+      name: 'value',
+      type: 'string | null',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description:
+        'Manage the current expansion entry in a controlled or uncontrolled manner.',
+      name: 'defaultValue',
+      type: 'string | null',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description:
+        'Manage the current expansion entry in a controlled or uncontrolled manner.',
+      name: 'onChange',
+      type: '(value: string | null) => void',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description:
+        'Set the delay for opening and closing the rich navigation panel.',
+      name: 'delay',
+      type: 'number',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description:
+        'Set the delay for opening and closing the rich navigation panel.',
+      name: 'closeDelay',
+      type: 'number',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Top-level entrances and pop-up links support keyboard focus and arrow key navigation.
+- The current page uses the active state and keeps the link text to express the target independently.
+
+## Avoid
+
+- Don’t hide the only main action with a large menu; high-frequency entries should remain directly visible.
+- Avoid nesting third-level navigation in the pop-up layer.

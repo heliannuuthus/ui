@@ -20,13 +20,20 @@ type LayoutSidebarLabels = {
   expand: string;
 };
 type LayoutSidebarProps = Omit<React.ComponentProps<'aside'>, 'onChange'> & {
+  /** Automatically request a collapsed state while the viewport is below this breakpoint. */
   breakpoint?: LayoutBreakpoint;
+  /** Controlled collapsed state. Apply state requests received through onChange. */
   collapsed?: boolean;
+  /** Width used while collapsed. Numeric values are interpreted as pixels. */
   collapsedWidth?: number | string;
+  /** Show the built-in trigger, or replace its icon with a React node. */
   collapsible?: boolean | React.ReactNode;
+  /** Initial collapsed state when collapsed is not controlled. An initially matched breakpoint takes precedence. */
   defaultCollapsed?: boolean;
   labels?: LayoutSidebarLabels;
+  /** Reports the initial breakpoint match and each later boundary crossing. */
   onBreakpointChange?: (below: boolean) => void;
+  /** Reports a requested collapsed-state change and its source. */
   onChange?: (collapsed: boolean, reason: LayoutSidebarCollapseReason) => void;
   side?: LayoutSidebarSide;
   width?: number | string;

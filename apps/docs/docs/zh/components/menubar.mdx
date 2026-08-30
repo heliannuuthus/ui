@@ -1,0 +1,116 @@
+---
+title: 'Menubar 菜单栏'
+description: '组织桌面应用式的顶层命令，让多组全局操作在稳定位置中被发现和执行。'
+lang: zh-Hans
+---
+
+import MenubarShowcase from '@showcases/menubar';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Menubar 菜单栏
+
+{"组织桌面应用式的顶层命令，让多组全局操作在稳定位置中被发现和执行。"}
+
+## 何时使用
+
+- 产品具有文件、编辑、视图等跨页面或跨内容的全局命令。
+- 用户需要通过键盘连续切换多个顶层菜单并执行高密度操作。
+
+## 示例
+
+<MenubarShowcase>
+
+```tsx title="showcases/menubar/cases/basic-usage.tsx" file="<root>/showcases/menubar/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/menubar/cases/optional-view-state.tsx" file="<root>/showcases/menubar/cases/optional-view-state.tsx"
+
+```
+
+```tsx title="showcases/menubar/cases/secondary-menu-and-top-level-status.tsx" file="<root>/showcases/menubar/cases/secondary-menu-and-top-level-status.tsx"
+
+```
+
+</MenubarShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Menubar',
+      defaultValue: null,
+      description: '定义顶层菜单名称、禁用状态和每组内部命令。',
+      name: 'menus',
+      type: 'MenubarMenuConfig[]',
+    },
+    {
+      component: 'MenubarMenuConfig',
+      defaultValue: null,
+      description: '设置顶层菜单触发项的可见名称。',
+      name: 'label',
+      type: 'ReactNode',
+    },
+    {
+      component: 'MenubarMenuConfig',
+      defaultValue: null,
+      description: '承载普通命令、标题、分隔线、勾选项、单选组及二级菜单。',
+      name: 'items',
+      type: 'DropdownMenuEntry[]',
+    },
+    {
+      component: 'MenubarMenuConfig',
+      defaultValue: null,
+      description: '禁用当前顶层菜单及其触发项。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Menubar',
+      defaultValue: "'default'",
+      description: '控制顶层菜单栏与触发项的整体密度。',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Menubar',
+      defaultValue: 'false',
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Menubar',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Menubar',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 顶层菜单支持左右方向键切换，菜单内部使用上下方向键移动焦点。
+- 快捷键文本只提供提示；应用仍需自行注册对应的全局键盘命令。
+- 菜单名称和命令名称应直接表达动作，不要仅依赖图标。
+
+## 避免事项
+
+- Menubar 面向全局命令，不适合替代站点主导航或页面标签页。
+- 不要把所有页面操作塞进顶层菜单，应保留稳定且跨上下文的命令。

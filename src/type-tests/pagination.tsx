@@ -8,6 +8,7 @@ import {
   type PaginationQuickJumperOptions,
   type PaginationRenderItemProps,
   type PaginationSimpleOptions,
+  type PaginationSizeChangerOptions,
   type PaginationStyles,
 } from '../index';
 
@@ -37,6 +38,10 @@ const quickJumper: PaginationQuickJumperOptions = {
   suffix: 'page',
 };
 const simple: PaginationSimpleOptions = { readOnly: true };
+const sizeChanger: PaginationSizeChangerOptions = {
+  getOptionLabel: (pageSize) => `${pageSize} / page`,
+  options: [10, 20, 50],
+};
 const renderItem = ({
   originalElement,
 }: PaginationRenderItemProps): React.ReactNode => originalElement;
@@ -65,12 +70,18 @@ export const paginationTypeTests = (
       defaultPageSize={20}
       onChange={(page, pageSize) => [page, pageSize]}
       onPageSizeChange={(page, pageSize) => [page, pageSize]}
-      pageSizeLabel={(pageSize) => `${pageSize} / page`}
-      pageSizeOptions={[10, 20, 50]}
       showQuickJumper={quickJumper}
-      showSizeChanger
+      showSizeChanger={sizeChanger}
       showTotal={(total, range) => `${range[0]}-${range[1]} / ${total}`}
       total={500}
     />
+    {/* @ts-expect-error Pagination requires exactly one count source. */}
+    <Pagination />
+    {/* @ts-expect-error total and pageCount are mutually exclusive. */}
+    <Pagination pageCount={20} total={500} />
+    {/* @ts-expect-error showTotal requires item-count mode. */}
+    <Pagination pageCount={20} showTotal />
+    {/* @ts-expect-error Pagination uses the explicit md size name. */}
+    <Pagination pageCount={20} size="default" />
   </>
 );

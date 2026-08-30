@@ -1,0 +1,277 @@
+[
+  {
+    "type": "file",
+    "name": "index",
+    "label": "Overview"
+  },
+  {
+    "type": "file",
+    "name": "button",
+    "label": "Button"
+  },
+  {
+    "type": "file",
+    "name": "typography",
+    "label": "Typography"
+  },
+  {
+    "type": "file",
+    "name": "tag",
+    "label": "Tag"
+  },
+  {
+    "type": "file",
+    "name": "kbd",
+    "label": "Kbd"
+  },
+  {
+    "type": "file",
+    "name": "aspect-ratio",
+    "label": "Aspect Ratio"
+  },
+  {
+    "type": "file",
+    "name": "card",
+    "label": "Card"
+  },
+  {
+    "type": "file",
+    "name": "layout",
+    "label": "Layout"
+  },
+  {
+    "type": "file",
+    "name": "masonry",
+    "label": "Masonry"
+  },
+  {
+    "type": "file",
+    "name": "resizable",
+    "label": "Resizable"
+  },
+  {
+    "type": "file",
+    "name": "scroll-area",
+    "label": "Scroll Area"
+  },
+  {
+    "type": "file",
+    "name": "separator",
+    "label": "Separator"
+  },
+  {
+    "type": "file",
+    "name": "stack",
+    "label": "Stack"
+  },
+  {
+    "type": "file",
+    "name": "breadcrumb",
+    "label": "Breadcrumb"
+  },
+  {
+    "type": "file",
+    "name": "navigation-menu",
+    "label": "Navigation Menu"
+  },
+  {
+    "type": "file",
+    "name": "pagination",
+    "label": "Pagination"
+  },
+  {
+    "type": "file",
+    "name": "segmented",
+    "label": "Segmented"
+  },
+  {
+    "type": "file",
+    "name": "tabs",
+    "label": "Tabs"
+  },
+  {
+    "type": "file",
+    "name": "form",
+    "label": "Form"
+  },
+  {
+    "type": "file",
+    "name": "input",
+    "label": "Input"
+  },
+  {
+    "type": "file",
+    "name": "input-number",
+    "label": "Input Number"
+  },
+  {
+    "type": "file",
+    "name": "date-picker",
+    "label": "Date Picker"
+  },
+  {
+    "type": "file",
+    "name": "select",
+    "label": "Select"
+  },
+  {
+    "type": "file",
+    "name": "checkbox",
+    "label": "Checkbox"
+  },
+  {
+    "type": "file",
+    "name": "radio",
+    "label": "Radio"
+  },
+  {
+    "type": "file",
+    "name": "slider",
+    "label": "Slider"
+  },
+  {
+    "type": "file",
+    "name": "switch",
+    "label": "Switch"
+  },
+  {
+    "type": "file",
+    "name": "dropdown-menu",
+    "label": "Dropdown Menu"
+  },
+  {
+    "type": "file",
+    "name": "menubar",
+    "label": "Menubar"
+  },
+  {
+    "type": "file",
+    "name": "command",
+    "label": "Command"
+  },
+  {
+    "type": "file",
+    "name": "context-menu",
+    "label": "Context Menu"
+  },
+  {
+    "type": "file",
+    "name": "toggle",
+    "label": "Toggle"
+  },
+  {
+    "type": "file",
+    "name": "accordion",
+    "label": "Accordion"
+  },
+  {
+    "type": "file",
+    "name": "attachment",
+    "label": "Attachment"
+  },
+  {
+    "type": "file",
+    "name": "avatar",
+    "label": "Avatar"
+  },
+  {
+    "type": "file",
+    "name": "bubble",
+    "label": "Bubble"
+  },
+  {
+    "type": "file",
+    "name": "carousel",
+    "label": "Carousel"
+  },
+  {
+    "type": "file",
+    "name": "collapsible",
+    "label": "Collapsible"
+  },
+  {
+    "type": "file",
+    "name": "empty",
+    "label": "Empty"
+  },
+  {
+    "type": "file",
+    "name": "item",
+    "label": "Item"
+  },
+  {
+    "type": "file",
+    "name": "marker",
+    "label": "Marker"
+  },
+  {
+    "type": "file",
+    "name": "badge",
+    "label": "Badge"
+  },
+  {
+    "type": "file",
+    "name": "counter",
+    "label": "Counter"
+  },
+  {
+    "type": "file",
+    "name": "table",
+    "label": "Table"
+  },
+  {
+    "type": "file",
+    "name": "dialog",
+    "label": "Dialog"
+  },
+  {
+    "type": "file",
+    "name": "drawer",
+    "label": "Drawer"
+  },
+  {
+    "type": "file",
+    "name": "popover",
+    "label": "Popover"
+  },
+  {
+    "type": "file",
+    "name": "tooltip",
+    "label": "Tooltip"
+  },
+  {
+    "type": "file",
+    "name": "alert",
+    "label": "Alert"
+  },
+  {
+    "type": "file",
+    "name": "alert-dialog",
+    "label": "Alert Dialog"
+  },
+  {
+    "type": "file",
+    "name": "progress",
+    "label": "Progress"
+  },
+  {
+    "type": "file",
+    "name": "skeleton",
+    "label": "Skeleton"
+  },
+  {
+    "type": "file",
+    "name": "sonner",
+    "label": "Sonner"
+  },
+  {
+    "type": "file",
+    "name": "spinner",
+    "label": "Spinner"
+  },
+  {
+    "type": "file",
+    "name": "toast",
+    "label": "Toast"
+  }
+]

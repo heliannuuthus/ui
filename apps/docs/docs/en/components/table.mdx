@@ -1,0 +1,683 @@
+---
+title: 'Table'
+description: 'Table handles complete data-driven interactions; for full native structure control, start with Table.Primitive and compose Table.Header, Table.Row, and Table.Cell.'
+lang: en
+---
+
+import TableShowcase from '@showcases/table';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Table
+
+{"Table handles complete data-driven interactions; for full native structure control, start with Table.Primitive and compose Table.Header, Table.Row, and Table.Cell."}
+
+## When to use
+
+- Use data and Table.Column for typical data lists with search, sorting, pagination, selection, expansion, and virtualization.
+- When data is already processed or the structure cannot be expressed by columns, use Table.Primitive as the root and compose Table.Header, Table.Body, Table.Row, and Table.Cell.
+- Use Table when you want consistent table visuals and accessible semantics while tailoring fixed columns, summaries, actions, and details to the business.
+
+## Examples
+
+<TableShowcase>
+
+```tsx title="showcases/table/cases/basic-usage.tsx" file="<root>/showcases/table/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/table/cases/row-expansion.tsx" file="<root>/showcases/table/cases/row-expansion.tsx"
+
+```
+
+```tsx title="showcases/table/cases/group-header.tsx" file="<root>/showcases/table/cases/group-header.tsx"
+
+```
+
+```tsx title="showcases/table/cases/virtual-scrolling.tsx" file="<root>/showcases/table/cases/virtual-scrolling.tsx"
+
+```
+
+```tsx title="showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx" file="<root>/showcases/table/cases/controlled-sorting-pagination-and-row-selection.tsx"
+
+```
+
+```tsx title="showcases/table/cases/pagination-summary.tsx" file="<root>/showcases/table/cases/pagination-summary.tsx"
+
+```
+
+```tsx title="showcases/table/cases/loading-and-external-state-composition.tsx" file="<root>/showcases/table/cases/loading-and-external-state-composition.tsx"
+
+```
+
+```tsx title="showcases/table/cases/server-data-mode.tsx" file="<root>/showcases/table/cases/server-data-mode.tsx"
+
+```
+
+```tsx title="showcases/table/cases/custom-table.tsx" file="<root>/showcases/table/cases/custom-table.tsx"
+
+```
+
+```tsx title="showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx" file="<root>/showcases/table/cases/fixed-columns-and-horizontal-scrolling.tsx"
+
+```
+
+```tsx title="showcases/table/cases/combined-with-pagination.tsx" file="<root>/showcases/table/cases/combined-with-pagination.tsx"
+
+```
+
+```tsx title="showcases/table/cases/primitive-row-expansion.tsx" file="<root>/showcases/table/cases/primitive-row-expansion.tsx"
+
+```
+
+```tsx title="showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx" file="<root>/showcases/table/cases/column-alignment-super-long-omission-and-custom-cell.tsx"
+
+```
+
+</TableShowcase>
+
+## Semantic DOM
+
+{"Hover, focus, or click a property row to inspect the table root targeted by className/style and the internal regions targeted by classNames/styles."}
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Table',
+      defaultValue: null,
+      description:
+        'Use the library-owned column model to define accessors, headers, cells, and nested column groups.',
+      name: 'columns',
+      type: 'Table.Column<TData>[]',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description:
+        'Set a stable column identifier; it may be omitted when accessor is a field name.',
+      name: 'key',
+      type: 'string',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description:
+        'Read a field or calculate the current column value with a function.',
+      name: 'accessor',
+      type: 'keyof TData | (row: TData) => unknown',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: 'Set the column heading.',
+      name: 'header',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: 'Render a cell from its current value, record, and index.',
+      name: 'render',
+      type: 'Table.Render<TData>',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: 'Nest child columns to generate grouped headings.',
+      name: 'columns',
+      type: 'Table.Column<TData>[]',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description:
+        'Enable default sorting or provide an application comparison function.',
+      name: 'sortable',
+      type: 'boolean | ((a: TData, b: TData) => number)',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: "'start'",
+      description: 'Set the alignment of the heading and cell content.',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description: 'Pin the column to the start or end of the table.',
+      name: 'fixed',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description:
+        'Set the column width and include it in fixed-column offset calculation.',
+      name: 'width',
+      type: 'number',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: 'false',
+      description:
+        'Controls text truncation and Tooltip for the entire column; true uses the current header or cell content, while a ReactNode provides the Tooltip content.',
+      name: 'ellipsis',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description:
+        'Extend the current column class names by header and cell slots.',
+      name: 'classNames',
+      type: 'Table.ColumnClassNames<TData>',
+    },
+    {
+      component: 'Table.Column',
+      defaultValue: null,
+      description:
+        'Set inline styles on the current column by header and cell slots.',
+      name: 'styles',
+      type: 'Table.ColumnStyles<TData>',
+    },
+    {
+      component: 'Table.ColumnClassNames',
+      defaultValue: null,
+      description:
+        'Extend the class name of every heading cell in the current column.',
+      name: 'header',
+      type: 'string',
+    },
+    {
+      component: 'Table.ColumnClassNames',
+      defaultValue: null,
+      description: 'Extend data cell class names by column or current record.',
+      name: 'cell',
+      type: 'string | ((row: TData, index: number) => string)',
+    },
+    {
+      component: 'Table.ColumnStyles',
+      defaultValue: null,
+      description:
+        'Set inline styles on every heading cell in the current column.',
+      name: 'header',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.ColumnStyles',
+      defaultValue: null,
+      description: 'Set data cell inline styles by column or current record.',
+      name: 'cell',
+      type: 'CSSProperties | ((row: TData, index: number) => CSSProperties)',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: 'Extend the class name of the table-level toolbar.',
+      name: 'toolbar',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description:
+        'Extend the class name of the scrolling, bordered container.',
+      name: 'container',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: 'Extend the class name of the native table element.',
+      name: 'table',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: 'Extend the class name of the table header.',
+      name: 'header',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: 'Extend the class name of the table body.',
+      name: 'body',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description: 'Extend the class name of the table footer summary.',
+      name: 'footer',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description:
+        'Extend the class name of the built-in loading and empty-data state cell.',
+      name: 'state',
+      type: 'string',
+    },
+    {
+      component: 'Table.ClassNames',
+      defaultValue: null,
+      description:
+        'Extend the class name of the pagination summary and controls container.',
+      name: 'pagination',
+      type: 'string',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: 'Set inline styles on the table-level toolbar.',
+      name: 'toolbar',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: 'Set inline styles on the scrolling, bordered container.',
+      name: 'container',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: 'Set inline styles on the native table element.',
+      name: 'table',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: 'Set inline styles on the table header.',
+      name: 'header',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: 'Set inline styles on the table body.',
+      name: 'body',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description: 'Set inline styles on the table footer summary.',
+      name: 'footer',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description:
+        'Set inline styles on the built-in loading and empty-data state cell.',
+      name: 'state',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Styles',
+      defaultValue: null,
+      description:
+        'Set inline styles on the pagination summary and controls container.',
+      name: 'pagination',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description: 'Provide tabular data records.',
+      name: 'data',
+      type: 'readonly TData[]',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description:
+        'Render a table footer summary; a function receives the visible rows on the current page.',
+      name: 'footer',
+      type: 'ReactNode | ((visibleRows: readonly TData[]) => ReactNode)',
+    },
+    {
+      component: 'Table',
+      defaultValue: 'true',
+      description: 'Control whether the table header is rendered.',
+      name: 'showHeader',
+      type: 'boolean',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description:
+        'Provide a stable business row key; when omitted, fall back to the record key and then the current index.',
+      name: 'rowKey',
+      type: 'keyof TData | ((row: TData, index: number) => Key)',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description:
+        'Extend Row classes, events, and native attributes from the current record and index.',
+      name: 'rowProps',
+      type: "(row: TData, index: number) => Omit<ComponentProps<'tr'>, 'children'>",
+    },
+    {
+      component: 'Table',
+      defaultValue: 'false',
+      description:
+        'Configure search state, field scope, and client or manual server mode.',
+      name: 'search',
+      type: 'false | Table.SearchProps<TData>',
+    },
+    {
+      component: 'Table',
+      defaultValue: '{}',
+      description:
+        'Configure controlled sorting state and client or manual server mode.',
+      name: 'sorting',
+      type: 'false | Table.SortingProps',
+    },
+    {
+      component: 'Table',
+      defaultValue: '{ pageSize: 10 }',
+      description:
+        'Configure pagination state and summary; set false to disable pagination.',
+      name: 'pagination',
+      type: 'false | Table.PaginationProps',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description:
+        'Configure controlled row selection, disabled rules, and accessible names.',
+      name: 'rowSelection',
+      type: 'Table.RowSelectionProps<TData>',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description:
+        'Configure controlled row expansion, expandable rules, and detail content.',
+      name: 'expandable',
+      type: 'Table.ExpandableProps<TData>',
+    },
+    {
+      component: 'Table',
+      defaultValue: 'false',
+      description:
+        'Enable a fixed-row-height virtual body; it cannot be used with expandable.',
+      name: 'virtual',
+      type: 'boolean | Table.VirtualProps',
+    },
+    {
+      component: 'Table',
+      defaultValue: 'false',
+      description:
+        'Show the built-in loading state; Table automatically displays the default message for empty data.',
+      name: 'loading',
+      type: 'boolean',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description:
+        'Customize internal semantic regions by toolbar, container, table, header, body, footer, state, and pagination.',
+      name: 'classNames',
+      type: 'Table.ClassNames',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'Table.Styles',
+    },
+    {
+      component: 'Table.Primitive',
+      defaultValue: null,
+      description: 'Extend the class name of the native table element.',
+      name: 'classNames',
+      type: 'Table.PrimitiveClassNames',
+    },
+    {
+      component: 'Table.Primitive',
+      defaultValue: null,
+      description: 'Set inline styles on the native table element.',
+      name: 'styles',
+      type: 'Table.PrimitiveStyles',
+    },
+    {
+      component: 'Table.Primitive',
+      defaultValue: null,
+      description:
+        'Reference the built-in scrolling container for external scroll control or size observation.',
+      name: 'containerRef',
+      type: 'Ref<HTMLDivElement>',
+    },
+    {
+      component: 'Table.PrimitiveClassNames',
+      defaultValue: null,
+      description:
+        'Extend the class name of the native Table.Primitive table element.',
+      name: 'table',
+      type: 'string',
+    },
+    {
+      component: 'Table.PrimitiveStyles',
+      defaultValue: null,
+      description:
+        'Set inline styles on the native Table.Primitive table element.',
+      name: 'table',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Head',
+      defaultValue: "'start'",
+      description:
+        'Align content to the start, center, or end according to the writing direction.',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Table.Head',
+      defaultValue: null,
+      description: 'Fix the current cell to the start or end of the table.',
+      name: 'fixed',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Table.Head',
+      defaultValue: '0',
+      description:
+        'Set the cumulative offset of preceding fixed columns on the same side.',
+      name: 'fixedOffset',
+      type: 'number | string',
+    },
+    {
+      component: 'Table.Head',
+      defaultValue: 'false',
+      description:
+        'Pass true to show the full content in a Tooltip after actual overflow, or pass a ReactNode as the Tooltip content.',
+      name: 'ellipsis',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Table.Cell',
+      defaultValue: "'start'",
+      description:
+        'Align content to the start, center, or end according to the writing direction.',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Table.Cell',
+      defaultValue: null,
+      description: 'Fix the current cell to the start or end of the table.',
+      name: 'fixed',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Table.Cell',
+      defaultValue: '0',
+      description:
+        'Set the cumulative offset of preceding fixed columns on the same side.',
+      name: 'fixedOffset',
+      type: 'number | string',
+    },
+    {
+      component: 'Table.Cell',
+      defaultValue: 'false',
+      description:
+        'Pass true to show the full content in a Tooltip after actual overflow, or pass a ReactNode as the Tooltip content.',
+      name: 'ellipsis',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Primitive',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Primitive',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Header',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Header',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Body',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Body',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Footer',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Footer',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Row',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Row',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Head',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Head',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Table.Cell',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Table.Cell',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- The group header uses colgroup/col scope and retains the correct colSpan and rowSpan relationship.
+- Row actions with only icons must contain the current record, such as "v0.12.0 More Actions", not each row with only "More".
+- Expand buttons synchronize aria-expanded; rowKey should return a stable, recognizable business identifier.
+- Virtual scrolling will provide aria-rowcount and real aria-rowindex, and the business still needs to ensure that the height of each row is fixed.
+- Use Header and Head to clarify the data meaning of each column; when the column title is too long, use ellipsis to retain the full-text Tooltip that can be viewed in focus.
+- Row expansion buttons expose state through aria-expanded and include the current record in their accessible name.
+- Head and Cell enable Tooltip only when ellipsis content actually overflows, allow keyboard focus to read the full text, and accept a ReactNode to replace the Tooltip content.
+
+## Avoid
+
+- Do not hardcode application actions in Table; compose them after reading the row in Table.Column.render.
+- Don’t hand-write two side-by-side tables for visual partitioning; use nested columns to generate truly connected data headers.
+- Do not wrap Table in another scroll and rounded container; customize its existing semantic regions through classNames.
+- Virtual scrolling is only applicable to single-row data of fixed height and cannot be used together with expandable; turn off virtual when dynamic detail height is required.
+- When there are many operations, keep one high-frequency action and put the rest into the menu to prevent the operation column from becoming infinitely wide.
+- Fixed columns require clear column width; when multiple columns are fixed at the same time, use fixedOffset to declare the cumulative width of the previous fixed columns.
+- For manual pagination, pass only the current page to Table.Primitive and let Pagination or the server request manage page state.
+- Use data-driven Table for search, sorting, selection, or automatic pagination; do not put that state into Table.Primitive.

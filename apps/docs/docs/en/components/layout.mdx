@@ -1,0 +1,253 @@
+---
+title: 'Layout'
+description: 'Use Header, Content, Footer, and Sidebar to combine page skeletons to keep common layout relationships clear and nestable.'
+lang: en
+---
+
+import LayoutShowcase from '@showcases/layout';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Layout
+
+{"Use Header, Content, Footer, and Sidebar to combine page skeletons to keep common layout relationships clear and nestable."}
+
+## When to use
+
+- Pages need a stable header, body, and footer structure.
+- Apps need to include navigation, table of contents, or details areas to the left or right of the content.
+- Complex pages require combining vertical and horizontal areas through nested layouts.
+
+:::note{title="Layout responsibility"}
+Layout describes structural relationships between regions; navigation state, routing, and product content remain application concerns.
+:::
+
+## Examples
+
+<LayoutShowcase>
+
+```tsx title="showcases/layout/cases/basic-usage.tsx" file="<root>/showcases/layout/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/layout/cases/left-navigation.tsx" file="<root>/showcases/layout/cases/left-navigation.tsx"
+
+```
+
+```tsx title="showcases/layout/cases/details-on-the-right.tsx" file="<root>/showcases/layout/cases/details-on-the-right.tsx"
+
+```
+
+```tsx title="showcases/layout/cases/complete-application-framework.tsx" file="<root>/showcases/layout/cases/complete-application-framework.tsx"
+
+```
+
+```tsx title="showcases/layout/cases/responsive-collapse.tsx" file="<root>/showcases/layout/cases/responsive-collapse.tsx"
+
+```
+
+```tsx title="showcases/layout/cases/collapse-state.tsx" file="<root>/showcases/layout/cases/collapse-state.tsx"
+
+```
+
+</LayoutShowcase>
+
+## Layout patterns
+
+::::tabs
+:::tab{label="Vertical composition" value="vertical"}
+Header, Content, and Footer are arranged vertically by default, with Content filling the remaining space.
+:::
+:::tab{label="Horizontal composition" value="horizontal"}
+Layout switches to a horizontal arrangement when it directly contains Sidebar; a nested Layout can continue organizing the main region.
+:::
+::::
+
+## Collapse state model
+
+| Property             | Responsibility                                                                                                                                                                       |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `collapsible`        | Only controls whether the built-in trigger renders; it is not the collapsed state. Pass a node to replace the default icon.                                                          |
+| `defaultCollapsed`   | Only initializes uncontrolled state. It is ignored when `collapsed` is provided; in uncontrolled mode, an initially matched `breakpoint` takes precedence and collapses the sidebar. |
+| `collapsed`          | The controlled state. The component does not mutate it; the parent must apply the next value from `onChange`.                                                                        |
+| `onBreakpointChange` | Fires after the first breakpoint check and whenever the viewport enters or leaves the range; `below` reports whether it is currently below the breakpoint.                           |
+| `onChange`           | Fires when a collapse request actually differs from the current state and identifies `breakpoint` or `trigger` as its `reason`.                                                      |
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description:
+        'Request a collapsed state below the selected viewport breakpoint; uncontrolled mode applies it automatically, while controlled mode notifies the parent through onChange. Uses tokens aligned with the default Tailwind breakpoints.',
+      name: 'breakpoint',
+      type: "'sm' | 'md' | 'lg' | 'xl' | '2xl'",
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description:
+        'The controlled collapsed state; the parent must apply requested values received through onChange.',
+      name: 'collapsed',
+      type: 'boolean',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: '80',
+      description:
+        'The collapsed sidebar width; numbers are treated as pixels and 0 hides its content.',
+      name: 'collapsedWidth',
+      type: 'number | string',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: 'false',
+      description:
+        'Only enables the built-in collapse trigger and does not represent the current state; pass a ReactNode to replace the default icon.',
+      name: 'collapsible',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: 'false',
+      description:
+        'The initial collapsed state in uncontrolled mode; ignored when collapsed is provided, while an initially matched breakpoint takes precedence in uncontrolled mode.',
+      name: 'defaultCollapsed',
+      type: 'boolean',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description:
+        'Called after the first check and when entering or leaving the breakpoint range; below reports whether the viewport is currently below it.',
+      name: 'onBreakpointChange',
+      type: '(below: boolean) => void',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description:
+        'Called when a collapse request changes the current state, including whether it came from the breakpoint or trigger; controlled consumers must apply the next value.',
+      name: 'onChange',
+      type: "(collapsed: boolean, reason: 'breakpoint' | 'trigger') => void",
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: "'start'",
+      description:
+        'Declare whether the sidebar sits on the logical start or end side so the built-in trigger uses the matching position and icon.',
+      name: 'side',
+      type: "'start' | 'end'",
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue:
+        "{ collapse: 'Collapse sidebar', expand: 'Expand sidebar' }",
+      description:
+        'Set the accessible names of the built-in collapse trigger in its expanded and collapsed states.',
+      name: 'labels',
+      type: 'LayoutSidebarLabels',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: '240',
+      description:
+        'Sets the width of the side area; numbers are handled in pixels, or any CSS length can be passed in.',
+      name: 'width',
+      type: 'number | string',
+    },
+    {
+      component: 'Layout',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Layout.Header',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout.Header',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Layout.Content',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout.Content',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Layout.Footer',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout.Footer',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Layout.Sidebar',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Header, Content, Footer and Sidebar use header, main, footer and aside semantic elements by default.
+- Only one Content main landmark should be retained on the same page; please use ordinary content containers for local layout to avoid multiple mains.
+- Navigation or detail areas in sidebars need to provide a recognizable aria-label.
+
+## Avoid
+
+- Do not tile all areas in the same Layout; the Header and Footer that span the entire page should wrap the nested Layout in the middle.
+- Text navigation should not be compressed into an icon rail below the :hint[layout breakpoint]{title="The responsive threshold selected by the breakpoint property"}.
+
+:::collapse{title="Narrow navigation guidance"}
+Set collapsedWidth to 0 and compose Drawer for complete navigation instead of merely narrowing text navigation.
+:::

@@ -61,7 +61,6 @@ const zh = {
       openNavigation: '打开组件导航',
       related: '相关组件',
       examples: '示例',
-      parts: '组成组件',
       purpose: '用途',
       properties: '属性',
       inheritedPropsNotice:
@@ -76,10 +75,23 @@ const zh = {
     docs: {
       onThisPage: '本页目录',
       previewType: '预览 {{type}} 类型',
+      typeCard: {
+        alias: '类型别名',
+        declaration: '完整声明',
+        fields: '字段',
+        function: '函数类型',
+        members: '{{count}} 个字段',
+        object: '对象类型',
+        optional: '可选',
+        required: '必填',
+        union: '联合类型',
+      },
     },
     demo: {
       copied: '已复制',
       copyCode: '复制代码',
+      preview: '预览',
+      source: '源码',
       openCodeSandbox: '在 CodeSandbox 打开',
       openStackBlitz: '在 StackBlitz 打开',
       collapseCode: '收起代码',
@@ -232,7 +244,6 @@ const en = {
       openNavigation: 'Open component navigation',
       related: 'Related components',
       examples: 'Examples',
-      parts: 'Component parts',
       purpose: 'Purpose',
       properties: 'Properties',
       inheritedPropsNotice:
@@ -248,10 +259,23 @@ const en = {
     docs: {
       onThisPage: 'On this page',
       previewType: 'Preview the {{type}} type',
+      typeCard: {
+        alias: 'Type alias',
+        declaration: 'Full declaration',
+        fields: 'Fields',
+        function: 'Function type',
+        members: '{{count}} fields',
+        object: 'Object type',
+        optional: 'Optional',
+        required: 'Required',
+        union: 'Union type',
+      },
     },
     demo: {
       copied: 'Copied',
       copyCode: 'Copy code',
+      preview: 'Preview',
+      source: 'Source',
       openCodeSandbox: 'Open in CodeSandbox',
       openStackBlitz: 'Open in StackBlitz',
       collapseCode: 'Collapse code',

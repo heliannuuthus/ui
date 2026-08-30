@@ -1,0 +1,120 @@
+---
+title: 'Menubar'
+description: 'Organize desktop application-style top-level commands so that multiple sets of global operations are discovered and executed in stable locations.'
+lang: en
+---
+
+import MenubarShowcase from '@showcases/menubar';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Menubar
+
+{"Organize desktop application-style top-level commands so that multiple sets of global operations are discovered and executed in stable locations."}
+
+## When to use
+
+- The product has global commands for file, edit, view, etc. that span pages or content.
+- Users need to continuously switch multiple top-level menus and perform high-density operations through the keyboard.
+
+## Examples
+
+<MenubarShowcase>
+
+```tsx title="showcases/menubar/cases/basic-usage.tsx" file="<root>/showcases/menubar/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/menubar/cases/optional-view-state.tsx" file="<root>/showcases/menubar/cases/optional-view-state.tsx"
+
+```
+
+```tsx title="showcases/menubar/cases/secondary-menu-and-top-level-status.tsx" file="<root>/showcases/menubar/cases/secondary-menu-and-top-level-status.tsx"
+
+```
+
+</MenubarShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Menubar',
+      defaultValue: null,
+      description:
+        'Define the top-level menu name, disabled state, and each set of internal commands.',
+      name: 'menus',
+      type: 'MenubarMenuConfig[]',
+    },
+    {
+      component: 'MenubarMenuConfig',
+      defaultValue: null,
+      description: 'Sets the visible name of the top-level menu trigger item.',
+      name: 'label',
+      type: 'ReactNode',
+    },
+    {
+      component: 'MenubarMenuConfig',
+      defaultValue: null,
+      description:
+        'Carrying common commands, titles, separators, check options, radio groups and secondary menus.',
+      name: 'items',
+      type: 'DropdownMenuEntry[]',
+    },
+    {
+      component: 'MenubarMenuConfig',
+      defaultValue: null,
+      description: 'Disable the current top-level menu and its trigger items.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Menubar',
+      defaultValue: "'default'",
+      description:
+        'Controls the overall density of top-level menu bars and trigger items.',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Menubar',
+      defaultValue: 'false',
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Menubar',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Menubar',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- The top-level menu supports left and right arrow keys to switch, and the up and down arrow keys can be used to move the focus inside the menu.
+- Shortcut text only provides hints; apps still need to register the corresponding global keyboard commands themselves.
+- Menu and command names should express actions directly and don't rely solely on icons.
+
+## Avoid
+
+- Menubar is for global commands and is not suitable to replace the main site navigation or page tabs.
+- Don’t cram all page actions into top-level menus; keep commands that are stable and cross-context.

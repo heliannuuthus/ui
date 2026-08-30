@@ -1,0 +1,199 @@
+---
+title: 'Select'
+description: 'Select one value from fixed candidates and filter longer lists by typing.'
+lang: en
+---
+
+import SelectShowcase from '@showcases/select';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Select
+
+{"Select one value from fixed candidates and filter longer lists by typing."}
+
+## When to use
+
+- Use Select when the candidates are fixed; directly enter keywords to filter when the list is long.
+- Provide flat or grouped candidates through options and manage a single value with controlled or uncontrolled props.
+
+Select values are limited to strings and numbers. Use a dedicated Multi Select or Combobox for multiple values, tag collapsing, or asynchronous search instead of expanding the Select prop surface.
+
+## Examples
+
+<SelectShowcase>
+
+```tsx title="showcases/select/cases/basic-usage.tsx" file="<root>/showcases/select/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/select/cases/group-selection.tsx" file="<root>/showcases/select/cases/group-selection.tsx"
+
+```
+
+</SelectShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Select',
+      defaultValue: null,
+      description:
+        'Provides flat or grouped candidates; use textValue to give rich labels plain text for display and filtering.',
+      name: 'options',
+      type: '(SelectOption<Value> | SelectOptionGroup<Value>)[]',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Sets the controlled selected value; clearing returns null.',
+      name: 'value',
+      type: 'Value | null',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Sets the initial value in uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'Value | null',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Called when the selection changes or is cleared.',
+      name: 'onChange',
+      type: '(value: Value | null) => void',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Text shown before a value or search query is present.',
+      name: 'placeholder',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Content shown when filtering returns no options.',
+      name: 'emptyText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Shows a clear button while a value is selected.',
+      name: 'showClear',
+      type: 'boolean',
+    },
+    {
+      component: 'Select',
+      defaultValue: 'false',
+      description: 'Disables input, opening, and selection.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Select',
+      defaultValue: 'false',
+      description: 'Keeps the value focusable without allowing changes.',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Select',
+      defaultValue: 'false',
+      description: 'Requires a selected value when its form is submitted.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Sets the input id and associates it with a label.',
+      name: 'id',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Sets the form field name.',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Associates the field with a form by id.',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Provides a ref to the underlying input.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Called when the input loses focus.',
+      name: 'onBlur',
+      type: 'FocusEventHandler<HTMLInputElement>',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Provides an accessible name when no visible label exists.',
+      name: 'aria-label',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Associates descriptive text with the input.',
+      name: 'aria-describedby',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Marks whether the current value is invalid.',
+      name: 'aria-invalid',
+      type: 'boolean | string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Extends the trigger semantic slot class name.',
+      name: 'classNames',
+      type: 'SelectClassNames',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description:
+        'Sets inline styles using the same trigger slot as classNames.',
+      name: 'styles',
+      type: 'SelectStyles',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

@@ -1,0 +1,141 @@
+---
+title: 'Dropdown Menu'
+description: 'Expand a list of temporary actions from an explicit trigger that can host normal commands, selection states, and hierarchical actions.'
+lang: en
+---
+
+import DropdownMenuShowcase from '@showcases/dropdown-menu';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Dropdown Menu
+
+{"Expand a list of temporary actions from an explicit trigger that can host normal commands, selection states, and hierarchical actions."}
+
+## When to use
+
+- The current interface does not have enough space to directly display a set of secondary operations.
+- Actions are tied to a button, object, or local context.
+
+## Examples
+
+<DropdownMenuShowcase>
+
+```tsx title="showcases/dropdown-menu/cases/basic-usage.tsx" file="<root>/showcases/dropdown-menu/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/dropdown-menu/cases/choices-and-status.tsx" file="<root>/showcases/dropdown-menu/cases/choices-and-status.tsx"
+
+```
+
+```tsx title="showcases/dropdown-menu/cases/submenus-and-dimensions.tsx" file="<root>/showcases/dropdown-menu/cases/submenus-and-dimensions.tsx"
+
+```
+
+</DropdownMenuShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Dropdown Menu',
+      defaultValue: null,
+      description: 'A button or other interactive element that opens a menu.',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: null,
+      description:
+        'Describe actions, group titles, dividers, checkboxes, radio groups, and submenus.',
+      name: 'items',
+      type: 'DropdownMenuEntry[]',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: "'default'",
+      description: 'Control menu item density and menu minimum width.',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: "'start'",
+      description: 'The alignment of the menu relative to the trigger.',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: "'bottom'",
+      description:
+        'The direction in which the menu appears first; it will be automatically avoided when there is insufficient space.',
+      name: 'side',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: null,
+      description: 'Manage the menu open state in controlled mode.',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: 'false',
+      description: 'Set the initial menu open state in uncontrolled mode.',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: null,
+      description: 'Called when the menu open state changes.',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'DropdownMenuClassNames',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'DropdownMenuStyles',
+    },
+    {
+      component: 'Dropdown Menu',
+      defaultValue: 'false',
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- The trigger needs to provide understandable text or aria-label, and support Enter, Space, and arrow keys to open the menu.
+- Menu items keep clear action names; icons alone are not enough to convey the meaning of the action.
+- Dangerous operations use destructives for visual cues, but final deletion should still provide the ability to confirm or undo.
+
+## Avoid
+
+- Don’t hide main operations in menus; high-frequency main actions should be displayed directly on the interface.
+- Avoid more than two levels of submenus, as an overly deep structure will increase the cost of pointer and keyboard operations.

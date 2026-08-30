@@ -1,0 +1,190 @@
+---
+title: 'Carousel 轮播'
+description: '横向浏览同级内容，始终提供景深动效，并支持点位插槽、自动播放、首尾循环和自定义翻页器。'
+lang: zh-Hans
+---
+
+import CarouselShowcase from '@showcases/carousel';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Carousel 轮播
+
+{"横向浏览同级内容，始终提供景深动效，并支持点位插槽、自动播放、首尾循环和自定义翻页器。"}
+
+## 何时使用
+
+- 同一层级有多张重点内容卡片，但当前区域只适合突出展示一项。
+- 需要轮播营销亮点、版本更新或媒体内容，并允许用户主动前后浏览。
+
+## 示例
+
+<CarouselShowcase>
+
+```tsx title="showcases/carousel/cases/basic-usage.tsx" file="<root>/showcases/carousel/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/carousel/cases/navigation-buttons.tsx" file="<root>/showcases/carousel/cases/navigation-buttons.tsx"
+
+```
+
+```tsx title="showcases/carousel/cases/pagination-dots.tsx" file="<root>/showcases/carousel/cases/pagination-dots.tsx"
+
+```
+
+```tsx title="showcases/carousel/cases/track-and-item-styles.tsx" file="<root>/showcases/carousel/cases/track-and-item-styles.tsx"
+
+```
+
+```tsx title="showcases/carousel/cases/custom-page-turner.tsx" file="<root>/showcases/carousel/cases/custom-page-turner.tsx"
+
+```
+
+```tsx title="showcases/carousel/cases/autoplay.tsx" file="<root>/showcases/carousel/cases/autoplay.tsx"
+
+```
+
+```tsx title="showcases/carousel/cases/external-control.tsx" file="<root>/showcases/carousel/cases/external-control.tsx"
+
+```
+
+</CarouselShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: '提供轮播数据或直接渲染的节点列表。',
+      name: 'items',
+      type: 'readonly Item[]',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: '根据当前数据项和索引渲染轮播内容。',
+      name: 'renderItem',
+      type: '(item: Item, index: number) => ReactNode',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: 'true',
+      description: '是否显示上一页与下一页按钮。',
+      name: 'controls',
+      type: 'boolean',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: '配置上一页按钮的外观、可访问名称和原生属性。',
+      name: 'previousButtonProps',
+      type: 'ButtonNativeProps',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: '配置下一页按钮的外观、可访问名称和原生属性。',
+      name: 'nextButtonProps',
+      type: 'ButtonNativeProps',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: "'dots'",
+      description: '使用默认点位、关闭分页，或通过函数自定义完整翻页器。',
+      name: 'pagination',
+      type: "false | 'dots' | ((controls: CarouselControls) => ReactNode)",
+    },
+    {
+      component: 'Carousel',
+      defaultValue: "'after'",
+      description: '将分页内容放在轮播轨道之前或之后。',
+      name: 'paginationPosition',
+      type: "'before' | 'after'",
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: '根据点位索引和选中状态自定义分页点。',
+      name: 'renderDot',
+      type: '(props: CarouselDotRenderProps) => ReactNode',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: 'false',
+      description:
+        '传 true 以默认 3 秒间隔自动播放，或直接传入正数设置切换秒数。',
+      name: 'autoplay',
+      type: 'boolean | number',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: 'false',
+      description:
+        '让最后一项与第一项首尾相接；自动播放跨越首尾时始终沿下一页方向继续。',
+      name: 'loop',
+      type: 'boolean',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: 'true',
+      description: '自动播放时，指针进入轮播区域即暂停，离开后继续。',
+      name: 'pauseOnHover',
+      type: 'boolean',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: '从 Carousel 外部滚动、播放或暂停；底层轮播实例不会暴露。',
+      name: 'ref',
+      type: 'React.Ref<CarouselRef>',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'CarouselClassNames',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'CarouselStyles',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Carousel',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 轮播区域、幻灯片、前后按钮和页码点均保留可识别的语义与键盘操作。
+- 开启自动播放后，动态内容不会持续触发读屏播报；系统要求减少动态效果时会停止自动播放和景深过渡。
+
+## 避免事项
+
+- 不要用自动播放承载必须阅读或必须操作的内容，用户仍应能通过箭头和页码点主动导航。
+- 自动播放默认悬停暂停；若关闭 pauseOnHover，需要提供其他清晰的暂停方式。
+- 单屏塞入过多文字会让轮播难以扫读，内容较长时改用列表或分页。

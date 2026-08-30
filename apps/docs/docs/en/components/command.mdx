@@ -1,0 +1,256 @@
+---
+title: 'Command'
+description: 'Provides a searchable list of keyboard commands.'
+lang: en
+---
+
+import CommandShowcase from '@showcases/command';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Command
+
+{"Provides a searchable list of keyboard commands."}
+
+## When to use
+
+- Use when people need to quickly search and run commands across many pages, files, settings, or actions.
+- Use when keyboard navigation, shortcut hints, and fuzzy search are all required.
+- Use when the same command data must be shared between an inline list and a modal command palette.
+
+## Examples
+
+<CommandShowcase>
+
+```tsx title="showcases/command/cases/basic-usage.tsx" file="<root>/showcases/command/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/command/cases/groups-and-options.tsx" file="<root>/showcases/command/cases/groups-and-options.tsx"
+
+```
+
+```tsx title="showcases/command/cases/search-input-placeholder.tsx" file="<root>/showcases/command/cases/search-input-placeholder.tsx"
+
+```
+
+```tsx title="showcases/command/cases/empty-result-content.tsx" file="<root>/showcases/command/cases/empty-result-content.tsx"
+
+```
+
+```tsx title="showcases/command/cases/command-dialog.tsx" file="<root>/showcases/command/cases/command-dialog.tsx"
+
+```
+
+</CommandShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Command',
+      defaultValue: null,
+      description:
+        'Configure one or more command groups; each group describes its content with heading and options.',
+      name: 'groups',
+      type: 'readonly CommandGroup[]',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description:
+        'Pass Dialog configuration to place the command list in a modal and configure its trigger, title, description, and open state; omit it to render an inline list.',
+      name: 'dialog',
+      type: 'Omit<DialogProps, "children">',
+    },
+    {
+      component: 'Command',
+      defaultValue: 'Search command…',
+      description: 'Set the hint shown when the search input has no content.',
+      name: 'placeholder',
+      type: 'string',
+    },
+    {
+      component: 'Command',
+      defaultValue: 'No command found',
+      description:
+        'Set the content shown when filtering finds no matching command.',
+      name: 'emptyText',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description:
+        'Configure native search input attributes and manage the search term through value and onChange.',
+      name: 'inputProps',
+      type: 'CommandInputProps',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description:
+        'Manage the currently selected command value, not the search term.',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description:
+        'Manage the currently selected command value, not the search term.',
+      name: 'defaultValue',
+      type: 'string',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description:
+        'Manage the currently selected command value, not the search term.',
+      name: 'onChange',
+      type: '(value: string) => void',
+    },
+    {
+      component: 'Command',
+      defaultValue: 'Built-in filtering',
+      description:
+        'Omit it to use built-in filtering, pass false to disable filtering, or provide a custom filter function that returns a match score.',
+      name: 'filter',
+      type: 'false | CommandFilter',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description:
+        'Set an accessible name for assistive technologies to identify the command list.',
+      name: 'label',
+      type: 'string',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description:
+        'Control wraparound navigation, Vim navigation keys, and whether pointer hover changes the current command.',
+      name: 'loop',
+      type: 'boolean',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description:
+        'Control wraparound navigation, Vim navigation keys, and whether pointer hover changes the current command.',
+      name: 'vimBindings',
+      type: 'boolean',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description:
+        'Control wraparound navigation, Vim navigation keys, and whether pointer hover changes the current command.',
+      name: 'disablePointerSelection',
+      type: 'boolean',
+    },
+    {
+      component: 'CommandGroup',
+      defaultValue: null,
+      description: 'Set the optional title of the current command group.',
+      name: 'heading',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CommandGroup',
+      defaultValue: null,
+      description:
+        'Set the commands displayed in order within the current group.',
+      name: 'options',
+      type: 'readonly CommandOption[]',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: null,
+      description:
+        'Set the unique command value, which also participates in default text matching.',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: null,
+      description:
+        'Set the primary content displayed in the command list; plain-text labels automatically participate in filtering.',
+      name: 'label',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: null,
+      description:
+        'Add hidden aliases for filtering; when the label is a complex ReactNode, searchable text can also be provided here.',
+      name: 'keywords',
+      type: 'string[]',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: null,
+      description: 'Set the icon displayed before the command label.',
+      name: 'icon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: null,
+      description:
+        'Set the shortcut hint displayed on the right side of the command.',
+      name: 'shortcut',
+      type: 'ReactNode',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: 'false',
+      description: 'Disable a command and prevent selection.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'CommandOption',
+      defaultValue: null,
+      description:
+        'Run a callback with the command value when the command is selected.',
+      name: 'onSelect',
+      type: '(value: string) => void',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Command',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Use label to provide a clear accessible name for the command list.
+- Keyboard users can enter a search term, move with the arrow keys, and run a command with Enter.
+- Use disabled for unavailable commands instead of communicating the state with color alone.
+
+## Avoid
+
+- placeholder describes what can be searched, while emptyText explains that no results were found; do not mix their roles.
+- value manages the current command selection; manage the search term through inputProps.
+- shortcut only displays a hint; the application must still register the corresponding global keyboard shortcut.

@@ -1,0 +1,116 @@
+---
+title: 'Breadcrumb 面包屑'
+description: '展示当前位置与上级路径，并在层级较深时提供快速返回入口。'
+lang: zh-Hans
+---
+
+import BreadcrumbShowcase from '@showcases/breadcrumb';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Breadcrumb 面包屑
+
+{"展示当前位置与上级路径，并在层级较深时提供快速返回入口。"}
+
+## 何时使用
+
+- 页面存在三层以上的稳定信息层级。
+- 用户需要理解当前位置并返回任一上级页面。
+
+## 示例
+
+<BreadcrumbShowcase>
+
+```tsx title="showcases/breadcrumb/cases/basic-usage.tsx" file="<root>/showcases/breadcrumb/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/breadcrumb/cases/deep-path-collapse.tsx" file="<root>/showcases/breadcrumb/cases/deep-path-collapse.tsx"
+
+```
+
+```tsx title="showcases/breadcrumb/cases/node-menus-and-visual-styles.tsx" file="<root>/showcases/breadcrumb/cases/node-menus-and-visual-styles.tsx"
+
+```
+
+</BreadcrumbShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Breadcrumb',
+      defaultValue: null,
+      description: '设置每一级的名称、链接、图标、禁用状态和下拉菜单。',
+      name: 'items',
+      type: 'BreadcrumbItem[]',
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: "'default'",
+      description: '路径项的视觉样式。',
+      name: 'variant',
+      type: "'default' | 'underline' | 'pill'",
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: "'chevron'",
+      description: '设置统一的路径分隔符，也可以传入自己的图标。',
+      name: 'separator',
+      type: 'BreadcrumbSeparator',
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: "'default'",
+      description: '控制文字与路径项的整体密度。',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: null,
+      description: '设置路径折叠阈值，或进一步配置前后保留数量和触发器名称。',
+      name: 'collapse',
+      type: 'number | BreadcrumbCollapseOptions',
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: 'false',
+      description: '为首项显示内置首页图标，或传入自定义图标。',
+      name: 'icon',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 根节点使用带有 breadcrumb 名称的 nav，路径使用有序列表。
+- 当前页面使用 aria-current，视觉分隔符不进入读屏顺序。
+- 折叠项和层级菜单支持键盘打开与导航。
+
+## 避免事项
+
+- 不要在只有一到两层页面时增加没有导航价值的 Breadcrumb。
+- 避免展示超过五个可见层级；深层路径应使用 collapse 收起。

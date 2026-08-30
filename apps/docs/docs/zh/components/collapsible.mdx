@@ -1,0 +1,164 @@
+---
+title: 'Collapsible 折叠'
+description: '按需展开一块辅助内容；支持独立按钮或整个自定义 Header 触发，并允许替换状态图标。'
+lang: zh-Hans
+---
+
+import CollapsibleShowcase from '@showcases/collapsible';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Collapsible 折叠
+
+{"按需展开一块辅助内容；支持独立按钮或整个自定义 Header 触发，并允许替换状态图标。"}
+
+## 何时使用
+
+- 默认只展示摘要，用户需要时再查看日志、详情、说明或高级配置。
+- 页面只需要控制一个内容区域；多个并列区域需要互相协调时使用 Accordion。
+
+## 示例
+
+<CollapsibleShowcase>
+
+```tsx title="showcases/collapsible/cases/basic.tsx" file="<root>/showcases/collapsible/cases/basic.tsx"
+
+```
+
+```tsx title="showcases/collapsible/cases/trigger.tsx" file="<root>/showcases/collapsible/cases/trigger.tsx"
+
+```
+
+```tsx title="showcases/collapsible/cases/indicator.tsx" file="<root>/showcases/collapsible/cases/indicator.tsx"
+
+```
+
+```tsx title="showcases/collapsible/cases/controlled.tsx" file="<root>/showcases/collapsible/cases/controlled.tsx"
+
+```
+
+</CollapsibleShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description:
+        '设置始终可见的摘要内容；未传 trigger 时，整个 Header 同时作为触发器。',
+      name: 'header',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: '设置展开后显示的内容。',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: '设置内容区域后的可选底部信息或操作。',
+      name: 'footer',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description:
+        '设置独立触发按钮的内容；传入后 Header 保持静态，不再响应展开操作。',
+      name: 'trigger',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: '设置独立触发按钮的外观、尺寸和原生触发器属性。',
+      name: 'triggerProps',
+      type: 'CollapsibleTriggerProps',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: 'true',
+      description:
+        '统一设置 Header 或独立触发按钮的状态图标；true 使用默认图标，false 隐藏，也可传入自定义节点。',
+      name: 'indicator',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: '以受控方式设置当前展开状态。',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: 'false',
+      description: '设置非受控模式的初始展开状态。',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: '用户展开或收起内容时调用。',
+      name: 'onOpenChange',
+      type: '(open: boolean, eventDetails) => void',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: 'false',
+      description: '阻止触发器改变展开状态。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'CollapsibleClassNames',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'CollapsibleStyles',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- Header 触发和独立按钮触发都使用原生按钮语义，并通过 aria-expanded 传达展开状态。
+- 动效会响应 prefers-reduced-motion；不要移除键盘焦点样式。
+
+## 避免事项
+
+- 不要在可点击的 Header 内嵌套链接或按钮；有额外操作时传入 trigger，改用独立按钮触发。
+- 不要用 Collapsible 组织多个需要单选或多选联动的面板，这类结构应使用 Accordion。

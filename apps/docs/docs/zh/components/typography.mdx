@@ -1,0 +1,192 @@
+---
+title: 'Typography 排版'
+description: '提供语义明确的标题、正文、引用和行内代码，并让文本语义与视觉层级独立组合。'
+lang: zh-Hans
+---
+
+import TypographyShowcase from '@showcases/typography';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Typography 排版
+
+{"提供语义明确的标题、正文、引用和行内代码，并让文本语义与视觉层级独立组合。"}
+
+## 何时使用
+
+- 页面需要使用连续的 h1–h6 标题层级。
+- 正文需要独立组合语义元素、字号、颜色层级与字重。
+- 引用与行内代码需要保留原生 HTML 语义。
+
+## 示例
+
+<TypographyShowcase>
+
+```tsx title="showcases/typography/cases/basic-usage.tsx" file="<root>/showcases/typography/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/typography/cases/heading-levels.tsx" file="<root>/showcases/typography/cases/heading-levels.tsx"
+
+```
+
+```tsx title="showcases/typography/cases/text-customization.tsx" file="<root>/showcases/typography/cases/text-customization.tsx"
+
+```
+
+```tsx title="showcases/typography/cases/quotations-and-inline-code.tsx" file="<root>/showcases/typography/cases/quotations-and-inline-code.tsx"
+
+```
+
+</TypographyShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Typography.Title',
+      defaultValue: '1',
+      description: '设置标题语义元素和对应视觉层级。',
+      name: 'level',
+      type: '1 | 2 | 3 | 4 | 5 | 6',
+    },
+    {
+      component: 'Typography.Title',
+      defaultValue: null,
+      description: '标题内容。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Typography.Title',
+      defaultValue: null,
+      description: '扩展标题元素样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Typography.Title',
+      defaultValue: null,
+      description: '扩展标题元素行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: "'span'",
+      description: '设置真实文本元素，不改变视觉属性。',
+      name: 'as',
+      type: "'span' | 'p' | 'div' | 'small'",
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: "'md'",
+      description: '设置字号与匹配的行高。',
+      name: 'size',
+      type: "'sm' | 'md' | 'lg' | 'xl'",
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: "'default'",
+      description: '设置默认或次要正文颜色。',
+      name: 'tone',
+      type: "'default' | 'muted'",
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: "'normal'",
+      description: '设置正文的字重。',
+      name: 'weight',
+      type: "'normal' | 'medium' | 'semibold'",
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: null,
+      description: '文本内容。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: null,
+      description: '扩展文本元素样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Typography.Text',
+      defaultValue: null,
+      description: '扩展文本元素行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Typography.Blockquote',
+      defaultValue: null,
+      description: '设置引用内容的来源 URL。',
+      name: 'cite',
+      type: 'string',
+    },
+    {
+      component: 'Typography.Blockquote',
+      defaultValue: null,
+      description: '引用内容。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Typography.Blockquote',
+      defaultValue: null,
+      description: '扩展引用元素样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Typography.Blockquote',
+      defaultValue: null,
+      description: '扩展引用元素行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Typography.Code',
+      defaultValue: null,
+      description: '行内代码内容。',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Typography.Code',
+      defaultValue: null,
+      description: '扩展代码元素样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Typography.Code',
+      defaultValue: null,
+      description: '扩展代码元素行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 页面从 h1 开始保持标题层级连续，不要因为视觉大小跳过级别。
+- 根据内容语义选择 Text 的 as，而不是根据默认外观选择元素。
+- 次要文字仍需满足对比度要求，不要仅依靠颜色表达信息。
+
+## 避免事项
+
+- 不要使用 Title.level 只追求字号；标题级别首先表达文档结构。
+- 不要用 Text.as 调整视觉，字号、颜色和字重分别使用对应属性。
+- Code 用于行内短代码；多行代码块应组合原生 pre 与 code。

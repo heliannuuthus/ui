@@ -1,0 +1,119 @@
+---
+title: 'Breadcrumb'
+description: 'Display the current location and upper-level path, and provide a quick return entrance when the level is deep.'
+lang: en
+---
+
+import BreadcrumbShowcase from '@showcases/breadcrumb';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Breadcrumb
+
+{"Display the current location and upper-level path, and provide a quick return entrance when the level is deep."}
+
+## When to use
+
+- There are more than three levels of stable information levels on the page.
+- Users need to understand their current location and return to any previous page.
+
+## Examples
+
+<BreadcrumbShowcase>
+
+```tsx title="showcases/breadcrumb/cases/basic-usage.tsx" file="<root>/showcases/breadcrumb/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/breadcrumb/cases/deep-path-collapse.tsx" file="<root>/showcases/breadcrumb/cases/deep-path-collapse.tsx"
+
+```
+
+```tsx title="showcases/breadcrumb/cases/node-menus-and-visual-styles.tsx" file="<root>/showcases/breadcrumb/cases/node-menus-and-visual-styles.tsx"
+
+```
+
+</BreadcrumbShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Breadcrumb',
+      defaultValue: null,
+      description:
+        'Set the name, link, icon, disabled state, and drop-down menu for each level.',
+      name: 'items',
+      type: 'BreadcrumbItem[]',
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: "'default'",
+      description: 'The visual style of the path item.',
+      name: 'variant',
+      type: "'default' | 'underline' | 'pill'",
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: "'chevron'",
+      description: 'Set a unified path separator, or pass in your own icon.',
+      name: 'separator',
+      type: 'BreadcrumbSeparator',
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: "'default'",
+      description: 'Controls the overall density of text and path items.',
+      name: 'size',
+      type: "'sm' | 'default' | 'lg'",
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: null,
+      description:
+        'Set the path collapse threshold, or further configure the number of items retained before and after it and the trigger label.',
+      name: 'collapse',
+      type: 'number | BreadcrumbCollapseOptions',
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: 'false',
+      description:
+        'Display the built-in home page icon for the first item, or pass in a custom icon.',
+      name: 'icon',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Breadcrumb',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Use a nav with a breadcrumb name for the root node and an ordered list for the path.
+- The current page uses aria-current, and the visual separators do not enter the screen reading order.
+- Folding items and hierarchical menus support keyboard opening and navigation.
+
+## Avoid
+
+- Don’t add breadcrumbs that have no navigational value when you only have one or two levels of pages.
+- Avoid showing more than five visible levels; deep paths should be collapsed using collapse.

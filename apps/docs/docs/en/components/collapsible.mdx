@@ -1,0 +1,167 @@
+---
+title: 'Collapsible'
+description: 'Expand a piece of auxiliary content on demand; support independent button or entire custom Header triggering, and allow status icons to be replaced.'
+lang: en
+---
+
+import CollapsibleShowcase from '@showcases/collapsible';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Collapsible
+
+{"Expand a piece of auxiliary content on demand; support independent button or entire custom Header triggering, and allow status icons to be replaced."}
+
+## When to use
+
+- By default, only the summary is displayed, and users can view logs, details, instructions or advanced configuration when needed.
+- The page only needs to control one content area; use Accordion when multiple parallel areas need to coordinate with each other.
+
+## Examples
+
+<CollapsibleShowcase>
+
+```tsx title="showcases/collapsible/cases/basic.tsx" file="<root>/showcases/collapsible/cases/basic.tsx"
+
+```
+
+```tsx title="showcases/collapsible/cases/trigger.tsx" file="<root>/showcases/collapsible/cases/trigger.tsx"
+
+```
+
+```tsx title="showcases/collapsible/cases/indicator.tsx" file="<root>/showcases/collapsible/cases/indicator.tsx"
+
+```
+
+```tsx title="showcases/collapsible/cases/controlled.tsx" file="<root>/showcases/collapsible/cases/controlled.tsx"
+
+```
+
+</CollapsibleShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description:
+        'Set summary content that is always visible; when trigger is not passed, the entire Header will act as a trigger at the same time.',
+      name: 'header',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: 'Set the content displayed after expansion.',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description:
+        'Optional bottom information or action after setting the content area.',
+      name: 'footer',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description:
+        'Set the content of the independent trigger button; after passing it in, the Header remains static and no longer responds to the expansion operation.',
+      name: 'trigger',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description:
+        'Set the appearance, size and native trigger properties of independent trigger buttons.',
+      name: 'triggerProps',
+      type: 'CollapsibleTriggerProps',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: 'true',
+      description:
+        'Sets the status icon for either the Header or a separate trigger; true uses the default icon, false hides it, and a custom node replaces it.',
+      name: 'indicator',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: 'Set the current open state in controlled mode.',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: 'false',
+      description: 'Set the initial open state in uncontrolled mode.',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: 'Called when the user expands or collapses content.',
+      name: 'onOpenChange',
+      type: '(open: boolean, eventDetails) => void',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: 'false',
+      description: 'Prevents the trigger from changing the expanded state.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'CollapsibleClassNames',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'CollapsibleStyles',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Collapsible',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Both header triggering and independent button triggering use native button semantics and communicate the expanded state through aria-expanded.
+- Animations respond to prefers-reduced-motion; do not remove keyboard focus styles.
+
+## Avoid
+
+- Do not nest links or buttons within clickable headers; pass in triggers when there are additional operations, and use independent button triggers instead.
+- Do not use Collapsible to organize multiple panels that require single-select or multi-select linkage. Accordion should be used for such structures.

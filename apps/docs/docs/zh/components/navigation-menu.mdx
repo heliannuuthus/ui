@@ -1,0 +1,125 @@
+---
+title: 'Navigation Menu 导航菜单'
+description: '组织站点或产品的主要入口，并在需要时展开带有说明和分组的丰富导航面板。'
+lang: zh-Hans
+---
+
+import NavigationMenuShowcase from '@showcases/navigation-menu';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Navigation Menu 导航菜单
+
+{"组织站点或产品的主要入口，并在需要时展开带有说明和分组的丰富导航面板。"}
+
+## 何时使用
+
+- 一级入口需要同时展示分类、说明或推荐内容。
+- 站点导航需要兼顾直接链接和可展开的内容分组。
+
+## 示例
+
+<NavigationMenuShowcase>
+
+```tsx title="showcases/navigation-menu/cases/basic-usage.tsx" file="<root>/showcases/navigation-menu/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/navigation-menu/cases/local-navigation-and-alignment.tsx" file="<root>/showcases/navigation-menu/cases/local-navigation-and-alignment.tsx"
+
+```
+
+</NavigationMenuShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '配置直接链接或带弹层内容的顶级导航入口。',
+      name: 'items',
+      type: 'NavigationMenuItemConfig[]',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '设置弹层对齐方式与导航方向。',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '设置弹层对齐方式与导航方向。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '以受控或非受控方式管理当前展开入口。',
+      name: 'value',
+      type: 'string | null',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '以受控或非受控方式管理当前展开入口。',
+      name: 'defaultValue',
+      type: 'string | null',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '以受控或非受控方式管理当前展开入口。',
+      name: 'onChange',
+      type: '(value: string | null) => void',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '设置打开与关闭富导航面板的延迟。',
+      name: 'delay',
+      type: 'number',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '设置打开与关闭富导航面板的延迟。',
+      name: 'closeDelay',
+      type: 'number',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Navigation Menu',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 顶层入口和弹层链接支持键盘聚焦与方向键导航。
+- 当前页面使用 active 状态，并保持链接文字能独立表达目标。
+
+## 避免事项
+
+- 不要用大菜单隐藏唯一的主要行动；高频入口应保持直接可见。
+- 避免在弹层中继续嵌套第三层导航。

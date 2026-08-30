@@ -1,0 +1,245 @@
+---
+title: 'Slider'
+description: 'Select a numeric value in a continuous or discrete range.'
+lang: en
+---
+
+import SliderShowcase from '@showcases/slider';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Slider
+
+{"Select a numeric value in a continuous or discrete range."}
+
+## When to use
+
+- Primary use: Select a numeric value in a continuous or discrete range.
+- When you need to override the default, controlled, disabled and narrow screen states.
+
+## Examples
+
+<SliderShowcase>
+
+```tsx title="showcases/slider/cases/basic-usage.tsx" file="<root>/showcases/slider/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/slider/cases/elastic-feedback.tsx" file="<root>/showcases/slider/cases/elastic-feedback.tsx"
+
+```
+
+```tsx title="showcases/slider/cases/range-selection.tsx" file="<root>/showcases/slider/cases/range-selection.tsx"
+
+```
+
+```tsx title="showcases/slider/cases/vertical-direction.tsx" file="<root>/showcases/slider/cases/vertical-direction.tsx"
+
+```
+
+</SliderShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Slider',
+      defaultValue: "'elastic'",
+      description:
+        'Control built-in feedback: slightly scale the whole when hovering, touching or focusing. When dragging out of bounds, only the edge content is offset and rebounds within the transparent safe zone without changing the track length; automatically deactivated under the Reduce Dynamic Effect preference.',
+      name: 'effect',
+      type: "'none' | 'elastic'",
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Displays an icon at the start of a track and engages elastic edge feedback.',
+      name: 'startIcon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Display icons at track endpoints and engage elastic edge feedback.',
+      name: 'endIcon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: 'Display a text label at the start of the track.',
+      name: 'startLabel',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: 'Display a text label at the end of the track.',
+      name: 'endLabel',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Sets the current slider value or values ​​in controlled mode.',
+      name: 'value',
+      type: 'number | number[]',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Sets the initial slider value or values ​​in uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'number | number[]',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: 'Called whenever the slider value changes.',
+      name: 'onChange',
+      type: '(value: number | number[]) => void',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: 'Called after a pointer or keyboard adjustment completes.',
+      name: 'onChangeComplete',
+      type: '(value: number | number[]) => void',
+    },
+    {
+      component: 'Slider',
+      defaultValue: '0',
+      description: 'Sets the minimum value allowed for selection.',
+      name: 'min',
+      type: 'number',
+    },
+    {
+      component: 'Slider',
+      defaultValue: '100',
+      description: 'Sets the maximum value allowed for selection.',
+      name: 'max',
+      type: 'number',
+    },
+    {
+      component: 'Slider',
+      defaultValue: '1',
+      description: 'Set the step size for each keyboard or pointer movement.',
+      name: 'step',
+      type: 'number',
+    },
+    {
+      component: 'Slider',
+      defaultValue: "'horizontal'",
+      description: 'Switch horizontal or vertical orientation.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'format',
+      type: 'Intl.NumberFormatOptions',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'largeStep',
+      type: 'number',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'locale',
+      type: 'Intl.LocalesArgument',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'minStepsBetweenValues',
+      type: 'number',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'thumbCollisionBehavior',
+      type: "'none' | 'push' | 'swap'",
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Slider',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

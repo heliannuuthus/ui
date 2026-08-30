@@ -1,0 +1,284 @@
+---
+title: 'Pagination 分页'
+description: '在分段数据集合之间导航，并明确当前页、相邻页和数据范围。'
+lang: zh-Hans
+---
+
+import PaginationShowcase from '@showcases/pagination';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Pagination 分页
+
+{"在分段数据集合之间导航，并明确当前页、相邻页和数据范围。"}
+
+## 何时使用
+
+- 完整数据无法在一个视图中高效加载或理解。
+- 用户需要在当前位置附近跳转，或返回之前浏览的结果页。
+
+## 示例
+
+<PaginationShowcase>
+
+```tsx title="showcases/pagination/cases/basic-usage.tsx" file="<root>/showcases/pagination/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/pagination/cases/complete-data-pagination.tsx" file="<root>/showcases/pagination/cases/complete-data-pagination.tsx"
+
+```
+
+```tsx title="showcases/pagination/cases/simple-and-disabled-states.tsx" file="<root>/showcases/pagination/cases/simple-and-disabled-states.tsx"
+
+```
+
+</PaginationShowcase>
+
+## API
+
+必须且只能选择一种数据规模来源：传入 `total` 让组件根据 `pageSize` 计算页数，或传入 `pageCount` 直接声明总页数。只有 `total` 模式支持 `showTotal`。
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Pagination',
+      defaultValue: "'center'",
+      description: '设置分页器在可用宽度内的对齐方式。',
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '受控模式下的当前页，从 1 开始。',
+      name: 'current',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: '1',
+      description: '非受控模式下的初始页码。',
+      name: 'defaultCurrent',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '直接声明总页数；与 total 必须且只能选择一个。',
+      name: 'pageCount',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description:
+        '设置数据总数并结合 pageSize 推导总页数；与 pageCount 必须且只能选择一个。',
+      name: 'total',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '受控模式下的每页数据条数。',
+      name: 'pageSize',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: '10',
+      description: '非受控模式下的初始每页数据条数。',
+      name: 'defaultPageSize',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '页码或每页数量变化时回传下一页和每页数量。',
+      name: 'onChange',
+      type: '(page: number, pageSize: number) => void',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '每页数量变化时回传校正后的页码和每页数量。',
+      name: 'onPageSizeChange',
+      type: '(page: number, pageSize: number) => void',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description: '显示每页数量选择器；传入对象可集中配置候选值与选项标签。',
+      name: 'showSizeChanger',
+      type: 'boolean | PaginationSizeChangerOptions',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description: '显示快速跳页输入框，并可配置标签、后缀和确认按钮。',
+      name: 'showQuickJumper',
+      type: 'boolean | PaginationQuickJumperOptions',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description:
+        '在 total 模式下显示数据总数，或根据总数与当前范围自定义摘要。',
+      name: 'showTotal',
+      type: 'boolean | ((total: number, range: readonly [number, number]) => ReactNode)',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description: '使用紧凑的页码输入模式，并可设为只读。',
+      name: 'simple',
+      type: 'boolean | PaginationSimpleOptions',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description: '禁用所有分页、跳页和每页数量操作。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description: '只有一页时隐藏整个分页器。',
+      name: 'hideOnSinglePage',
+      type: 'boolean',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'true',
+      description:
+        '控制上一页条目；false 隐藏，true 使用默认内容，ReactNode 自定义完整内容。',
+      name: 'previous',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'true',
+      description:
+        '控制下一页条目；false 隐藏，true 使用默认内容，ReactNode 自定义完整内容。',
+      name: 'next',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description:
+        '控制第一页条目；false 隐藏，true 使用默认图标，ReactNode 自定义完整内容。',
+      name: 'first',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'false',
+      description:
+        '控制最后一页条目；false 隐藏，true 使用默认图标，ReactNode 自定义完整内容。',
+      name: 'last',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: 'true',
+      description: '为页码和导航按钮提供原生 title 提示。',
+      name: 'showTitle',
+      type: 'boolean',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '本地化分页导航、前后翻页按钮和省略页码的无障碍名称。',
+      name: 'ariaLabels',
+      type: 'PaginationAriaLabels',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '根据条目类型、页码和选中状态生成无障碍名称。',
+      name: 'getItemAriaLabel',
+      type: '(context: PaginationAriaLabelContext) => string',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '为页码和导航按钮生成可复制、可打开新窗口的真实地址。',
+      name: 'getItemHref',
+      type: '(page: number, type: PaginationItemType) => string',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: '1',
+      description: '控制首尾两侧始终保留多少个边界页码。',
+      name: 'boundaries',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: '1',
+      description: '控制当前页两侧保留多少个相邻页码。',
+      name: 'siblings',
+      type: 'number',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '自定义页码、导航按钮和省略标记的最终渲染。',
+      name: 'renderItem',
+      type: '(item: PaginationRenderItemProps) => ReactNode',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: "'md'",
+      description: '设置分页控件尺寸。',
+      name: 'size',
+      type: 'PaginationSize',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'PaginationClassNames',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'PaginationStyles',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Pagination',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 当前页使用 aria-current，上一页和下一页保留明确的可访问名称。
+- 不可用的边界操作同时设置 aria-disabled 并阻止导航。
+
+## 避免事项
+
+- 不要一次展示所有页码；长范围应围绕当前页进行压缩。
+- 如果数据天然适合连续浏览，应评估加载更多或虚拟滚动。

@@ -1,0 +1,127 @@
+---
+title: 'Marker'
+description: 'Mark a boundary, position, or state within continuous content.'
+lang: en
+---
+
+import MarkerShowcase from '@showcases/marker';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Marker
+
+{"Mark a boundary, position, or state within continuous content."}
+
+## When to use
+
+- Mark dates, unread boundaries, state transitions, or navigable positions within continuous content.
+- Use when you need a lightweight dividing rule with text or an icon.
+
+## Examples
+
+<MarkerShowcase>
+
+```tsx title="showcases/marker/cases/basic-usage.tsx" file="<root>/showcases/marker/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/marker/cases/unread-boundary.tsx" file="<root>/showcases/marker/cases/unread-boundary.tsx"
+
+```
+
+```tsx title="showcases/marker/cases/status-note.tsx" file="<root>/showcases/marker/cases/status-note.tsx"
+
+```
+
+```tsx title="showcases/marker/cases/linked-marker.tsx" file="<root>/showcases/marker/cases/linked-marker.tsx"
+
+```
+
+```tsx title="showcases/marker/cases/link-and-slot-styles.tsx" file="<root>/showcases/marker/cases/link-and-slot-styles.tsx"
+
+```
+
+</MarkerShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: 'Set wrappable markup text or links.',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description:
+        'Set decorative status icons and automatically hide accessibility semantics.',
+      name: 'icon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Marker',
+      defaultValue: "'default'",
+      description:
+        'Choose from plain text, side dividers, or bottom border markers.',
+      name: 'variant',
+      type: "'default' | 'separator' | 'border'",
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description:
+        'Use the native a element after passing in the link address, otherwise it will be rendered as an ordinary div.',
+      name: 'href',
+      type: 'string',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'MarkerClassNames',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'MarkerStyles',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Marker',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Decorative icons are hidden from assistive technology automatically; include the state meaning in content as well.
+- Pass href when navigation is needed so the component preserves native link semantics and keyboard behavior.
+
+## Avoid
+
+- Do not use Marker to represent a complete timeline with nodes, connectors, and sequential relationships.
+- Do not communicate status through color or icons alone, and do not put long explanations in marker text.

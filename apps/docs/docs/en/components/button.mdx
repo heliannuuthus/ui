@@ -1,0 +1,215 @@
+---
+title: 'Button'
+description: 'A foundational control for triggering actions or events; setting href switches it to a native link with the same visual styles.'
+lang: en
+---
+
+import ButtonShowcase from '@showcases/button';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Button
+
+{"A foundational control for triggering actions or events; setting href switches it to a native link with the same visual styles."}
+
+## When to use
+
+- The user needs to perform an explicit action, such as submitting a form, creating content, or confirming a selection.
+- Pages need to differentiate between primary, secondary, dangerous, and low-emphasis actions.
+- When an icon-only button is required, an accessible name must also be provided.
+
+## Examples
+
+<ButtonShowcase>
+
+```tsx title="showcases/button/cases/basic-usage.tsx" file="<root>/showcases/button/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/button/cases/different-sizes.tsx" file="<root>/showcases/button/cases/different-sizes.tsx"
+
+```
+
+```tsx title="showcases/button/cases/combination-button.tsx" file="<root>/showcases/button/cases/combination-button.tsx"
+
+```
+
+```tsx title="showcases/button/cases/fill-container.tsx" file="<root>/showcases/button/cases/fill-container.tsx"
+
+```
+
+```tsx title="showcases/button/cases/form-and-click-events.tsx" file="<root>/showcases/button/cases/form-and-click-events.tsx"
+
+```
+
+```tsx title="showcases/button/cases/button-with-icon.tsx" file="<root>/showcases/button/cases/button-with-icon.tsx"
+
+```
+
+```tsx title="showcases/button/cases/state.tsx" file="<root>/showcases/button/cases/state.tsx"
+
+```
+
+```tsx title="showcases/button/cases/link-mode.tsx" file="<root>/showcases/button/cases/link-mode.tsx"
+
+```
+
+</ButtonShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Button',
+      defaultValue: "'default'",
+      description:
+        'The visual style of a button or link; it does not determine the semantics of the root element.',
+      name: 'variant',
+      type: "'default' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link'",
+    },
+    {
+      component: 'Button',
+      defaultValue: "'md'",
+      description: 'Button size, also includes icon only size.',
+      name: 'size',
+      type: "'xs' | 'sm' | 'md' | 'lg' | 'icon-xs' | 'icon-sm' | 'icon' | 'icon-lg'",
+    },
+    {
+      component: 'Button',
+      defaultValue: 'false',
+      description:
+        'Make the button fill the available width of the parent container.',
+      name: 'block',
+      type: 'boolean',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description:
+        'The navigation destination and root-element discriminator; renders an a element when set and a native button when omitted.',
+      name: 'href',
+      type: 'string',
+    },
+    {
+      component: 'Button',
+      defaultValue: 'false',
+      description:
+        'Disables the current operation; synchronizes aria-disabled in linked mode and prevents navigation.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Button',
+      defaultValue: "'button'",
+      description: 'Native button type, only used when href is not set.',
+      name: 'type',
+      type: "'button' | 'submit' | 'reset'",
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: 'Link opening position, only used when setting href.',
+      name: 'target',
+      type: 'HTMLAttributeAnchorTarget',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description:
+        'The relationship between the link and the current page, only used when setting href.',
+      name: 'rel',
+      type: 'string',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: 'Download link resource, only used when setting href.',
+      name: 'download',
+      type: 'boolean | string',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: 'Callback after click; will not be triggered when disabled.',
+      name: 'onClick',
+      type: 'MouseEventHandler<HTMLButtonElement> | MouseEventHandler<HTMLAnchorElement>',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: 'The content displayed in the button or link.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: 'Extend button root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: "Expand the inline style of the button's root node.",
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Button',
+      defaultValue: null,
+      description: 'Access the actual rendered button or a element.',
+      name: 'ref',
+      type: 'Ref<HTMLButtonElement | HTMLAnchorElement>',
+    },
+    {
+      component: 'Button.Group',
+      defaultValue: "'horizontal'",
+      description:
+        'Set the button group to be spliced ​​horizontally or vertically.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Button.Group',
+      defaultValue: 'false',
+      description:
+        'Let the button group fill the available width of the parent container.',
+      name: 'block',
+      type: 'boolean',
+    },
+    {
+      component: 'Button.Group',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Button.Group',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Only icon buttons must provide an aria-label or visible text.
+- Do not use color as the only information to distinguish hazardous operations.
+- Use aria-busy for asynchronous operations and avoid changing button width in the middle of processing.
+
+## Avoid
+
+- Don't place multiple primary buttons with equal emphasis in the same action group.
+- Don't hide the reason for failure with a disable button; state the conditions that need to be met nearby.
+- Do not set href for actions, and do not implement page navigation by manually changing the address in onClick.

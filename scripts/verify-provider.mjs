@@ -18,6 +18,7 @@ const {
   Progress,
   Provider,
   ScrollArea,
+  Segmented,
   Slider,
   Spinner,
   Tabs,
@@ -49,6 +50,7 @@ const markup = renderToStaticMarkup(
         Pagination: { size: 'sm' },
         Progress: { effect: 'sparkle' },
         ScrollArea: { scrollbar: { size: 'sm', visibility: 'always' } },
+        Segmented: { block: true, size: 'sm' },
         Slider: { effect: 'none' },
         Spinner: { size: 'sm' },
         Tabs: { animation: 'slide', centered: true, variant: 'line' },
@@ -83,6 +85,7 @@ const markup = renderToStaticMarkup(
     createElement(Pagination, { pageCount: 2 }),
     createElement(Progress, { value: 40 }),
     createElement(ScrollArea, null, 'Scrollable content'),
+    createElement(Segmented, { options: ['list', 'board'] }),
     createElement(Slider, { defaultValue: 40 }),
     createElement(Spinner),
     createElement(Spinner, { size: 'lg' }),
@@ -134,6 +137,10 @@ assert.match(
 assert.match(markup, /data-slot="progress" data-effect="sparkle"/);
 assert.match(markup, /data-scrollbar-visibility="always"/);
 assert.match(markup, /--scroll-area-scrollbar-size:6px/);
+assert.match(
+  markup,
+  /<div(?=[^>]*data-slot="segmented")(?=[^>]*data-block="true")(?=[^>]*data-size="sm")[^>]*>/
+);
 assert.match(
   markup,
   /<div(?=[^>]*data-slot="slider")(?=[^>]*data-effect="none")[^>]*>/

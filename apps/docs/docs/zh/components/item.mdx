@@ -1,0 +1,227 @@
+---
+title: 'Item 列表项'
+description: '构建包含内容和操作的通用列表项。'
+lang: zh-Hans
+---
+
+import ItemShowcase from '@showcases/item';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Item 列表项
+
+{"构建包含内容和操作的通用列表项。"}
+
+## 何时使用
+
+- 展示成员、动态、文件、设置等具有一致骨架的行级内容。
+- 需要组合媒体、主次文字、尾部操作或跨行元数据时使用。
+
+## 示例
+
+<ItemShowcase>
+
+```tsx title="showcases/item/cases/basic-usage.tsx" file="<root>/showcases/item/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/item/cases/member-directory.tsx" file="<root>/showcases/item/cases/member-directory.tsx"
+
+```
+
+```tsx title="showcases/item/cases/settings-list.tsx" file="<root>/showcases/item/cases/settings-list.tsx"
+
+```
+
+```tsx title="showcases/item/cases/resource-entry.tsx" file="<root>/showcases/item/cases/resource-entry.tsx"
+
+```
+
+```tsx title="showcases/item/cases/item-sizes.tsx" file="<root>/showcases/item/cases/item-sizes.tsx"
+
+```
+
+```tsx title="showcases/item/cases/media-content-type.tsx" file="<root>/showcases/item/cases/media-content-type.tsx"
+
+```
+
+```tsx title="showcases/item/cases/content-slots.tsx" file="<root>/showcases/item/cases/content-slots.tsx"
+
+```
+
+```tsx title="showcases/item/cases/linked-item.tsx" file="<root>/showcases/item/cases/linked-item.tsx"
+
+```
+
+```tsx title="showcases/item/cases/item-group.tsx" file="<root>/showcases/item/cases/item-group.tsx"
+
+```
+
+```tsx title="showcases/item/cases/custom-item-rendering.tsx" file="<root>/showcases/item/cases/custom-item-rendering.tsx"
+
+```
+
+</ItemShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Item',
+      defaultValue: "'default'",
+      description: '设置列表项的默认、描边或柔和外观。',
+      name: 'variant',
+      type: "'default' | 'outline' | 'muted'",
+    },
+    {
+      component: 'Item',
+      defaultValue: "'default'",
+      description: '设置列表项内容密度。',
+      name: 'size',
+      type: "'xs' | 'sm' | 'default'",
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '传入链接地址后使用原生 a 元素，否则渲染为普通 div。',
+      name: 'href',
+      type: 'string',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '设置列表项起始侧的媒体内容。',
+      name: 'media',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: "'default'",
+      description: '声明媒体内容是普通内容、图标还是图片。',
+      name: 'mediaType',
+      type: "'default' | 'icon' | 'image'",
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '设置列表项的主要标题。',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '设置列表项的辅助说明。',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '在标题和说明之外添加自定义内容。',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '设置列表项末尾的相关操作。',
+      name: 'actions',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '添加横跨整行的前置内容。',
+      name: 'header',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '添加横跨整行的后置内容。',
+      name: 'footer',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item.Group',
+      defaultValue: null,
+      description: '配置一组列表项及每个项目的稳定 key。',
+      name: 'items',
+      type: 'readonly ItemGroupEntry[]',
+    },
+    {
+      component: 'Item.Group',
+      defaultValue: null,
+      description: '根据当前项目和索引完全自定义列表项渲染。',
+      name: 'renderItem',
+      type: '(item: ItemGroupEntry, index: number) => ReactNode',
+    },
+    {
+      component: 'Item.Group',
+      defaultValue: 'false',
+      description: '在相邻列表项之间显示默认分隔线或自定义内容。',
+      name: 'separator',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'ItemClassNames',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'ItemStyles',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Item.Group',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Item.Group',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- Item.Group 默认提供列表与列表项语义；使用 renderItem 时需要保留等价语义。
+- 整行需要跳转时传入 href；行内已有按钮或开关时不要再把整行设为链接。
+
+## 避免事项
+
+- 不要只为比较 variant 创建脱离业务上下文的重复列表。
+- 不要在一个列表项中堆叠过多操作；保留一个主要操作，其余收进菜单。

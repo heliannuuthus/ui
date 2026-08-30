@@ -1,0 +1,234 @@
+---
+title: 'Item'
+description: 'Build generic list items with content and actions.'
+lang: en
+---
+
+import ItemShowcase from '@showcases/item';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Item
+
+{"Build generic list items with content and actions."}
+
+## When to use
+
+- Display row-level content with a consistent structure, such as members, activity, files, and settings.
+- Use when composing media, primary and secondary text, trailing actions, or full-row metadata.
+
+## Examples
+
+<ItemShowcase>
+
+```tsx title="showcases/item/cases/basic-usage.tsx" file="<root>/showcases/item/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/item/cases/member-directory.tsx" file="<root>/showcases/item/cases/member-directory.tsx"
+
+```
+
+```tsx title="showcases/item/cases/settings-list.tsx" file="<root>/showcases/item/cases/settings-list.tsx"
+
+```
+
+```tsx title="showcases/item/cases/resource-entry.tsx" file="<root>/showcases/item/cases/resource-entry.tsx"
+
+```
+
+```tsx title="showcases/item/cases/item-sizes.tsx" file="<root>/showcases/item/cases/item-sizes.tsx"
+
+```
+
+```tsx title="showcases/item/cases/media-content-type.tsx" file="<root>/showcases/item/cases/media-content-type.tsx"
+
+```
+
+```tsx title="showcases/item/cases/content-slots.tsx" file="<root>/showcases/item/cases/content-slots.tsx"
+
+```
+
+```tsx title="showcases/item/cases/linked-item.tsx" file="<root>/showcases/item/cases/linked-item.tsx"
+
+```
+
+```tsx title="showcases/item/cases/item-group.tsx" file="<root>/showcases/item/cases/item-group.tsx"
+
+```
+
+```tsx title="showcases/item/cases/custom-item-rendering.tsx" file="<root>/showcases/item/cases/custom-item-rendering.tsx"
+
+```
+
+</ItemShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Item',
+      defaultValue: "'default'",
+      description:
+        'Set the default, stroked, or soft appearance of list items.',
+      name: 'variant',
+      type: "'default' | 'outline' | 'muted'",
+    },
+    {
+      component: 'Item',
+      defaultValue: "'default'",
+      description: 'Set the list item content density.',
+      name: 'size',
+      type: "'xs' | 'sm' | 'default'",
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description:
+        'Use the native a element after passing in the link address, otherwise it will be rendered as an ordinary div.',
+      name: 'href',
+      type: 'string',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: 'Set media content at the start of the item.',
+      name: 'media',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: "'default'",
+      description:
+        'Declare whether the media content is default content, an icon, or an image.',
+      name: 'mediaType',
+      type: "'default' | 'icon' | 'image'",
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: 'Set the primary item title.',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: 'Set the supporting item description.',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: 'Add custom content beyond the title and description.',
+      name: 'content',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: 'Set related actions at the end of the item.',
+      name: 'actions',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: 'Add leading content that spans the full row.',
+      name: 'header',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: 'Add trailing content that spans the full row.',
+      name: 'footer',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Item.Group',
+      defaultValue: null,
+      description:
+        'Configure a collection of items and a stable key for each entry.',
+      name: 'items',
+      type: 'readonly ItemGroupEntry[]',
+    },
+    {
+      component: 'Item.Group',
+      defaultValue: null,
+      description:
+        'Fully customize item rendering from the current entry and index.',
+      name: 'renderItem',
+      type: '(item: ItemGroupEntry, index: number) => ReactNode',
+    },
+    {
+      component: 'Item.Group',
+      defaultValue: 'false',
+      description:
+        'Show the default separator or custom content between adjacent items.',
+      name: 'separator',
+      type: 'boolean | ReactNode',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'ItemClassNames',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'ItemStyles',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Item.Group',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Item.Group',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Item.Group provides list and list-item semantics by default; preserve equivalent semantics when using renderItem.
+- Pass href when the whole row navigates; do not also make the row a link when it already contains a button or switch.
+
+## Avoid
+
+- Do not create repetitive, context-free lists solely to compare variants.
+- Do not stack too many actions in one list item; keep one primary action and move the rest into a menu.

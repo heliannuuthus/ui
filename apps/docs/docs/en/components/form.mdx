@@ -1,0 +1,186 @@
+---
+title: 'Form'
+description: 'Uses Form.Field to connect data-entry controls, validation state, and submission behavior consistently.'
+lang: en
+---
+
+import FormShowcase from '@showcases/form';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Form
+
+{"Uses Form.Field to connect data-entry controls, validation state, and submission behavior consistently."}
+
+## When to use
+
+- Organizes labels, controls, descriptions, and errors consistently.
+- Lets built-in data-entry controls connect field values, validation state, and submission automatically.
+
+## Examples
+
+<FormShowcase>
+
+```tsx title="showcases/form/cases/basic-usage.tsx" file="<root>/showcases/form/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/form/cases/label-association-and-necessity.tsx" file="<root>/showcases/form/cases/label-association-and-necessity.tsx"
+
+```
+
+```tsx title="showcases/form/cases/complete-component-form.tsx" file="<root>/showcases/form/cases/complete-component-form.tsx"
+
+```
+
+```tsx title="showcases/form/cases/custom-control-integration.tsx" file="<root>/showcases/form/cases/custom-control-integration.tsx"
+
+```
+
+</FormShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: 'Connects the form instance created by Form.useForm.',
+      name: 'form',
+      type: 'FormInstance',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description:
+        'Receives the complete form values after validation succeeds.',
+      name: 'onSubmit',
+      type: '(values) => void | Promise<void>',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Specifies the unique path of the current field in the form data.',
+      name: 'name',
+      type: 'FieldPath',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Sets the field label and automatically associates it with the control.',
+      name: 'label',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Adds field guidance and its accessible description relationship.',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Declare the required fields, formats and custom validation rules for the current field.',
+      name: 'rules',
+      type: 'RegisterOptions',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Accepts one control element; built-in controls bind automatically, while custom controls receive the standard controlled props.',
+      name: 'children',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: "'vertical'",
+      description:
+        'Set the arrangement direction of labels, content and controls.',
+      name: 'orientation',
+      type: "'vertical' | 'horizontal' | 'responsive'",
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'onInvalid',
+      type: 'SubmitErrorHandler',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'defaultValue',
+      type: 'FieldPathValue',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

@@ -1,0 +1,145 @@
+---
+title: 'Masonry 瀑布流'
+description: '将不同高度的内容持续放入当前最短列，并允许指定内容独占整行。'
+lang: zh-Hans
+---
+
+import MasonryShowcase from '@showcases/masonry';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Masonry 瀑布流
+
+{"将不同高度的内容持续放入当前最短列，并允许指定内容独占整行。"}
+
+## 何时使用
+
+- 卡片需要根据容器宽度自动显示一至多列，并紧接当前最短列继续排列。
+- 某些总结、横幅或末尾内容需要跨越当前所有列。
+
+## 示例
+
+<MasonryShowcase>
+
+```tsx title="showcases/masonry/cases/basic-usage.tsx" file="<root>/showcases/masonry/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/masonry/cases/adaptive-number-of-columns.tsx" file="<root>/showcases/masonry/cases/adaptive-number-of-columns.tsx"
+
+```
+
+```tsx title="showcases/masonry/cases/cross-column-content.tsx" file="<root>/showcases/masonry/cases/cross-column-content.tsx"
+
+```
+
+</MasonryShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Masonry',
+      defaultValue: null,
+      description: '提供需要布局的 MasonryItem 配置列表。',
+      name: 'items',
+      type: 'readonly MasonryItem[]',
+    },
+    {
+      component: 'Masonry',
+      defaultValue: '3',
+      description:
+        '设置容器允许显示的最大列数；它是上限，实际列数会随可用宽度自动减少。',
+      name: 'columns',
+      type: 'number',
+    },
+    {
+      component: 'Masonry',
+      defaultValue: '240',
+      description: '设置单列期望的最小宽度，用于决定响应式折列时机。',
+      name: 'minColumnWidth',
+      type: 'number | string',
+    },
+    {
+      component: 'Masonry',
+      defaultValue: '16',
+      description: '设置统一间距，数组依次表示水平与垂直间距。',
+      name: 'gap',
+      type: 'number | string | [number | string, number | string]',
+    },
+    {
+      component: 'MasonryItem',
+      defaultValue: null,
+      description: '提供稳定且唯一的 React key，用于识别当前布局项。',
+      name: 'key',
+      type: 'React.Key',
+    },
+    {
+      component: 'MasonryItem',
+      defaultValue: null,
+      description: '设置布局项内部展示的卡片、媒体或其他 React 内容。',
+      name: 'content',
+      type: 'React.ReactNode',
+    },
+    {
+      component: 'MasonryItem',
+      defaultValue: "'auto'",
+      description: '控制单项按普通列宽排列，或等待当前各列结束后独占整行。',
+      name: 'span',
+      type: "'auto' | 'full'",
+    },
+    {
+      component: 'MasonryItem',
+      defaultValue: null,
+      description: '为当前布局项扩展样式类。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'MasonryItem',
+      defaultValue: null,
+      description:
+        '通过标准 div 的行内样式、ARIA、data 属性、角色与事件扩展当前布局项。',
+      name: 'style',
+      type: 'React.CSSProperties',
+    },
+    {
+      component: 'Masonry',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'ref',
+      type: 'React.Ref<HTMLDivElement>',
+    },
+    {
+      component: 'Masonry',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Masonry',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 组件只改变视觉位置，内容语义、键盘焦点和读屏顺序仍按 DOM 顺序保留。
+- 需要表达列表、文章或分组语义时，应在内容节点上提供对应元素或角色。
+
+## 避免事项
+
+- 不要依靠视觉列位置表达严格顺序；不同高度可能让后续内容出现在更高的位置。
+- 不要仅靠卡片位置表达顺序；窄屏折为单列后仍应能按源码顺序阅读。

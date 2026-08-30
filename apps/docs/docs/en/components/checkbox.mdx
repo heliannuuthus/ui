@@ -1,0 +1,319 @@
+---
+title: 'Checkbox'
+description: 'Use Checkbox to mark individual submittable selections and manage multi-select values ​​via Checkbox.Group.'
+lang: en
+---
+
+import CheckboxShowcase from '@showcases/checkbox';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Checkbox
+
+{"Use Checkbox to mark individual submittable selections and manage multi-select values ​​via Checkbox.Group."}
+
+## When to use
+
+- The independent state requires user confirmation before submitting with the form.
+- A set of visible options allows multiple values ​​to be selected at the same time.
+
+## Examples
+
+<CheckboxShowcase>
+
+```tsx title="showcases/checkbox/cases/basic-usage.tsx" file="<root>/showcases/checkbox/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/checkbox/cases/task-completed-status.tsx" file="<root>/showcases/checkbox/cases/task-completed-status.tsx"
+
+```
+
+```tsx title="showcases/checkbox/cases/permission-combination.tsx" file="<root>/showcases/checkbox/cases/permission-combination.tsx"
+
+```
+
+```tsx title="showcases/checkbox/cases/select-status.tsx" file="<root>/showcases/checkbox/cases/select-status.tsx"
+
+```
+
+</CheckboxShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description:
+        'Sets the controlled selection state; the new value is returned by the caller after the state changes.',
+      name: 'checked',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description:
+        'Set the initial selection state of uncontrolled mode, which only takes effect during initialization.',
+      name: 'defaultChecked',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: 'false',
+      description: 'The expression child is only partially selected.',
+      name: 'indeterminate',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: 'Called when the selected state changes.',
+      name: 'onChange',
+      type: '(checked: boolean) => void',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: "'default'",
+      description:
+        'Sets the visual expression of the label; task weakens the text and adds a strikethrough when selected.',
+      name: 'variant',
+      type: "'default' | 'task'",
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: 'false',
+      description: 'Blocks interaction and reduces visual emphasis.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: "'default'",
+      description:
+        'Set a unified variant for all options in the group, and individual options can be overridden individually.',
+      name: 'variant',
+      type: "'default' | 'task'",
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description:
+        'Sets the currently selected set of values ​​in controlled mode.',
+      name: 'value',
+      type: 'string[]',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description:
+        'Sets the set of values ​​initially selected in uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'string[]',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description:
+        'Generate a set of checkboxes from a configuration of labels and values.',
+      name: 'options',
+      type: 'CheckboxOption[]',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: 'Extend the className of the corresponding semantic slot.',
+      name: 'classNames',
+      type: 'CheckboxClassNames',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description:
+        'Set inline styles using the same semantic slots as classNames.',
+      name: 'styles',
+      type: 'CheckboxStyles',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'children',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'uncheckedValue',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'value',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'parent',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'allValues',
+      type: 'string[]',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'columns',
+      type: 'number',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'gap',
+      type: 'MasonryLength | MasonryGap',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'minColumnWidth',
+      type: 'MasonryLength | MasonryGap',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'onChange',
+      type: '(value: string[]) => void',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description:
+        'Configure the component public state, behavior, or extension point.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: 'Extend the root node style.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Checkbox.Group',
+      defaultValue: null,
+      description: 'Extend the root node inline style.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Preserves underlying semantics, focus management, and keyboard interaction.
+- Provide sensible names for triggers, icons, and states.
+
+## Avoid
+
+- Don't remove focus styles or bypass state properties.
+- Don’t write down business copy, dimensions, and product status.

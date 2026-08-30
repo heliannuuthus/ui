@@ -1,0 +1,203 @@
+---
+title: 'Resizable 可调整大小'
+description: '通过可拖动分隔线调整相邻内容区域的尺寸。'
+lang: zh-Hans
+---
+
+import ResizableShowcase from '@showcases/resizable';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Resizable 可调整大小
+
+{"通过可拖动分隔线调整相邻内容区域的尺寸。"}
+
+## 何时使用
+
+- 文件树、列表或导航需要与详情内容共享同一工作区。
+- 用户需要根据当前任务主动分配相邻区域的可用空间。
+
+## 示例
+
+<ResizableShowcase>
+
+```tsx title="showcases/resizable/cases/basic-usage.tsx" file="<root>/showcases/resizable/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/resizable/cases/vertical-area.tsx" file="<root>/showcases/resizable/cases/vertical-area.tsx"
+
+```
+
+```tsx title="showcases/resizable/cases/size-constraints-and-divider-overrides.tsx" file="<root>/showcases/resizable/cases/size-constraints-and-divider-overrides.tsx"
+
+```
+
+</ResizableShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Resizable',
+      defaultValue: null,
+      description: '定义各面板的内容、稳定标识、尺寸约束和分隔线覆盖。',
+      name: 'items',
+      type: 'ResizableItem[]',
+    },
+    {
+      component: 'Resizable',
+      defaultValue: "'horizontal'",
+      description: '内容区域的排列方向。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Resizable',
+      defaultValue: null,
+      description:
+        '所有分隔线的默认内容；可传入 ReactNode，或根据索引和方向动态渲染。',
+      name: 'separator',
+      type: 'ReactNode | ((props: ResizableSeparatorRenderProps) => ReactNode)',
+    },
+    {
+      component: 'ResizableClassNames',
+      defaultValue: null,
+      description: '扩展所有面板内容区域的样式。',
+      name: 'panel',
+      type: 'string',
+    },
+    {
+      component: 'ResizableClassNames',
+      defaultValue: null,
+      description: '扩展所有可拖动分隔线的样式。',
+      name: 'separator',
+      type: 'string',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: null,
+      description: '面板的稳定标识，同时用于 React 渲染和底层布局关联。',
+      name: 'key',
+      type: 'string | number',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: null,
+      description: '面板中渲染的 React 节点。',
+      name: 'panel',
+      type: 'ReactNode',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: null,
+      description:
+        '依次设置初始、最小和最大尺寸；数字按像素解释，无单位字符串按百分比解释。',
+      name: 'size',
+      type: 'readonly [defaultSize, minSize?, maxSize?]',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: 'false',
+      description: '尺寸低于 size 中的最小值时是否允许面板折叠。',
+      name: 'collapsible',
+      type: 'boolean',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: "'0%'",
+      description: '面板折叠后的尺寸。',
+      name: 'collapsedSize',
+      type: 'number | string',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: null,
+      description: '覆盖当前 item 之后的分隔线内容；传入 null 可隐藏视觉内容。',
+      name: 'separator',
+      type: 'ResizableSeparator',
+    },
+    {
+      component: 'ResizableItem',
+      defaultValue: null,
+      description: '面板尺寸变化时调用，并提供当前尺寸、item key 和上次尺寸。',
+      name: 'onResize',
+      type: '(size: PanelSize, key: string | number, previousSize?: PanelSize) => void',
+    },
+    {
+      component: 'ResizableSeparatorRenderProps',
+      defaultValue: null,
+      description: '当前分隔线在 items 间的顺序索引。',
+      name: 'index',
+      type: 'number',
+    },
+    {
+      component: 'ResizableSeparatorRenderProps',
+      defaultValue: null,
+      description: '分隔线前一个面板的稳定标识。',
+      name: 'itemKey',
+      type: 'string | number',
+    },
+    {
+      component: 'ResizableSeparatorRenderProps',
+      defaultValue: null,
+      description: '分隔线后一个面板的稳定标识。',
+      name: 'nextItemKey',
+      type: 'string | number',
+    },
+    {
+      component: 'ResizableSeparatorRenderProps',
+      defaultValue: null,
+      description: '当前面板组的排列方向。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Resizable',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'ResizableClassNames',
+    },
+    {
+      component: 'Resizable',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'ResizableStyles',
+    },
+    {
+      component: 'Resizable',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Resizable',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 分隔线保持可聚焦，并支持方向键调整相邻区域尺寸。
+- separator 提供的纯装饰内容应使用 aria-hidden。
+- items 中的导航和内容仍需使用各自正确的语义结构。
+
+## 避免事项
+
+- 不要让任一区域缩小到内容无法理解或操作的程度。
+- 不要在 separator 中嵌套按钮等可聚焦控件，以免与分隔线的键盘交互冲突。
+- 移动端空间不足时，应评估是否改用纵向排列或折叠导航。

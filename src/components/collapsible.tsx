@@ -63,7 +63,7 @@ const Collapsible = ({
     variant: variantProp,
     ...restTriggerProps
   } = triggerProps ?? {};
-  const size = sizeProp ?? defaults.size ?? 'default';
+  const size = sizeProp ?? defaults.size ?? 'md';
   const variant = variantProp ?? defaults.variant ?? 'outline';
   const resolvedIndicator =
     indicator === true ? (

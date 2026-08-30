@@ -1,0 +1,277 @@
+[
+  {
+    "type": "file",
+    "name": "index",
+    "label": "组件总览"
+  },
+  {
+    "type": "file",
+    "name": "button",
+    "label": "按钮"
+  },
+  {
+    "type": "file",
+    "name": "typography",
+    "label": "排版"
+  },
+  {
+    "type": "file",
+    "name": "tag",
+    "label": "标签"
+  },
+  {
+    "type": "file",
+    "name": "kbd",
+    "label": "键盘按键"
+  },
+  {
+    "type": "file",
+    "name": "aspect-ratio",
+    "label": "宽高比"
+  },
+  {
+    "type": "file",
+    "name": "card",
+    "label": "卡片"
+  },
+  {
+    "type": "file",
+    "name": "layout",
+    "label": "布局"
+  },
+  {
+    "type": "file",
+    "name": "masonry",
+    "label": "瀑布流"
+  },
+  {
+    "type": "file",
+    "name": "resizable",
+    "label": "可调整大小"
+  },
+  {
+    "type": "file",
+    "name": "scroll-area",
+    "label": "滚动区域"
+  },
+  {
+    "type": "file",
+    "name": "separator",
+    "label": "分隔线"
+  },
+  {
+    "type": "file",
+    "name": "stack",
+    "label": "堆叠"
+  },
+  {
+    "type": "file",
+    "name": "breadcrumb",
+    "label": "面包屑"
+  },
+  {
+    "type": "file",
+    "name": "navigation-menu",
+    "label": "导航菜单"
+  },
+  {
+    "type": "file",
+    "name": "pagination",
+    "label": "分页"
+  },
+  {
+    "type": "file",
+    "name": "segmented",
+    "label": "分段控制器"
+  },
+  {
+    "type": "file",
+    "name": "tabs",
+    "label": "标签页"
+  },
+  {
+    "type": "file",
+    "name": "form",
+    "label": "表单"
+  },
+  {
+    "type": "file",
+    "name": "input",
+    "label": "输入框"
+  },
+  {
+    "type": "file",
+    "name": "input-number",
+    "label": "数字输入框"
+  },
+  {
+    "type": "file",
+    "name": "date-picker",
+    "label": "日期与时间选择器"
+  },
+  {
+    "type": "file",
+    "name": "select",
+    "label": "选择器"
+  },
+  {
+    "type": "file",
+    "name": "checkbox",
+    "label": "复选框"
+  },
+  {
+    "type": "file",
+    "name": "radio",
+    "label": "单选框"
+  },
+  {
+    "type": "file",
+    "name": "slider",
+    "label": "滑块"
+  },
+  {
+    "type": "file",
+    "name": "switch",
+    "label": "开关"
+  },
+  {
+    "type": "file",
+    "name": "dropdown-menu",
+    "label": "下拉菜单"
+  },
+  {
+    "type": "file",
+    "name": "menubar",
+    "label": "菜单栏"
+  },
+  {
+    "type": "file",
+    "name": "command",
+    "label": "命令面板"
+  },
+  {
+    "type": "file",
+    "name": "context-menu",
+    "label": "右键菜单"
+  },
+  {
+    "type": "file",
+    "name": "toggle",
+    "label": "切换按钮"
+  },
+  {
+    "type": "file",
+    "name": "accordion",
+    "label": "手风琴"
+  },
+  {
+    "type": "file",
+    "name": "attachment",
+    "label": "附件"
+  },
+  {
+    "type": "file",
+    "name": "avatar",
+    "label": "头像"
+  },
+  {
+    "type": "file",
+    "name": "bubble",
+    "label": "气泡"
+  },
+  {
+    "type": "file",
+    "name": "carousel",
+    "label": "轮播"
+  },
+  {
+    "type": "file",
+    "name": "collapsible",
+    "label": "折叠"
+  },
+  {
+    "type": "file",
+    "name": "empty",
+    "label": "空状态"
+  },
+  {
+    "type": "file",
+    "name": "item",
+    "label": "列表项"
+  },
+  {
+    "type": "file",
+    "name": "marker",
+    "label": "标记"
+  },
+  {
+    "type": "file",
+    "name": "badge",
+    "label": "徽标"
+  },
+  {
+    "type": "file",
+    "name": "counter",
+    "label": "计数器"
+  },
+  {
+    "type": "file",
+    "name": "table",
+    "label": "表格"
+  },
+  {
+    "type": "file",
+    "name": "dialog",
+    "label": "对话框"
+  },
+  {
+    "type": "file",
+    "name": "drawer",
+    "label": "抽屉"
+  },
+  {
+    "type": "file",
+    "name": "popover",
+    "label": "气泡卡片"
+  },
+  {
+    "type": "file",
+    "name": "tooltip",
+    "label": "文字提示"
+  },
+  {
+    "type": "file",
+    "name": "alert",
+    "label": "警告提示"
+  },
+  {
+    "type": "file",
+    "name": "alert-dialog",
+    "label": "确认对话框"
+  },
+  {
+    "type": "file",
+    "name": "progress",
+    "label": "进度条"
+  },
+  {
+    "type": "file",
+    "name": "skeleton",
+    "label": "骨架屏"
+  },
+  {
+    "type": "file",
+    "name": "sonner",
+    "label": "消息通知"
+  },
+  {
+    "type": "file",
+    "name": "spinner",
+    "label": "加载图标"
+  },
+  {
+    "type": "file",
+    "name": "toast",
+    "label": "轻提示"
+  }
+]

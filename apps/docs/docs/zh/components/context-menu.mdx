@@ -1,0 +1,119 @@
+---
+title: 'Context Menu 右键菜单'
+description: '提供对象相关的上下文操作。'
+lang: zh-Hans
+---
+
+import ContextMenuShowcase from '@showcases/context-menu';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Context Menu 右键菜单
+
+{"提供对象相关的上下文操作。"}
+
+## 何时使用
+
+- 需要提供对象相关的上下文操作时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<ContextMenuShowcase>
+
+```tsx title="showcases/context-menu/cases/basic-usage.tsx" file="<root>/showcases/context-menu/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/context-menu/cases/checkbox-and-radio-states.tsx" file="<root>/showcases/context-menu/cases/checkbox-and-radio-states.tsx"
+
+```
+
+```tsx title="showcases/context-menu/cases/nested-submenu.tsx" file="<root>/showcases/context-menu/cases/nested-submenu.tsx"
+
+```
+
+```tsx title="showcases/context-menu/cases/open-state-and-disabled.tsx" file="<root>/showcases/context-menu/cases/open-state-and-disabled.tsx"
+
+```
+
+</ContextMenuShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: '响应右键或菜单键的目标元素。',
+      name: 'trigger',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: '配置普通操作、分隔线、选择项和子菜单。',
+      name: 'items',
+      type: 'readonly DropdownMenuEntry[]',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: '以受控或非受控方式管理菜单状态。',
+      name: 'open',
+      type: 'boolean',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: 'false',
+      description: '以受控或非受控方式管理菜单状态。',
+      name: 'defaultOpen',
+      type: 'boolean',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: '以受控或非受控方式管理菜单状态。',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: 'false',
+      description: '禁用上下文菜单触发。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: '扩展对应语义槽位的 className。',
+      name: 'classNames',
+      type: 'ContextMenuClassNames',
+    },
+    {
+      component: 'Context Menu',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义区域设置行内样式。',
+      name: 'styles',
+      type: 'ContextMenuStyles',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

@@ -24,6 +24,7 @@ import type { MenubarProviderDefaults } from './menubar';
 import type { PaginationProviderDefaults } from './pagination';
 import type { ProgressProviderDefaults } from './progress';
 import type { ScrollAreaProviderDefaults } from './scroll-area';
+import type { SegmentedProviderDefaults } from './segmented';
 import type { SliderProviderDefaults } from './slider';
 import type { SpinnerProviderDefaults } from './spinner';
 import type { TabsProviderDefaults } from './tabs';
@@ -88,6 +89,7 @@ type ProviderComponents = {
   Pagination?: PaginationProviderDefaults;
   Progress?: ProgressProviderDefaults;
   ScrollArea?: ScrollAreaProviderDefaults;
+  Segmented?: SegmentedProviderDefaults;
   Slider?: SliderProviderDefaults;
   Spinner?: SpinnerProviderDefaults;
   Tabs?: TabsProviderDefaults;

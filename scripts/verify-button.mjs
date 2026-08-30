@@ -10,6 +10,13 @@ const actionMarkup = renderToStaticMarkup(
 
 assert.match(actionMarkup, /^<button\b/);
 assert.match(actionMarkup, /data-variant="link"/);
+assert.match(actionMarkup, /data-size="md"/);
+
+const mediumMarkup = renderToStaticMarkup(
+  createElement(Button, { size: 'md' }, 'Medium')
+);
+
+assert.match(mediumMarkup, /data-size="md"/);
 
 const linkMarkup = renderToStaticMarkup(
   createElement(
@@ -55,5 +62,5 @@ assert.match(blockGroupMarkup, /w-full/);
 assert.match(blockGroupMarkup, /data-slot=button\]\]:flex-1/);
 
 globalThis.console.log(
-  'Verified href-driven anchor rendering, visual variants, native link attributes, disabled links, and block groups.'
+  'Verified the md default size, href-driven anchor rendering, visual variants, native link attributes, disabled links, and block groups.'
 );

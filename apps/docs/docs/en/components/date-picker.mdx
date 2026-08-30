@@ -1,0 +1,522 @@
+---
+title: 'Date Picker'
+description: 'Select dates, date-times, or times, with a matching range picker for every precision.'
+lang: en
+---
+
+import DatePickerShowcase from '@showcases/date-picker';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Date Picker
+
+{"Select dates, date-times, or times, with a matching range picker for every precision."}
+
+## When to use
+
+- Use `DatePicker` for a calendar day and `DateRangePicker` for start and end dates.
+- Use `DateTimePicker` or `DateTimeRangePicker` when an event must be precise to the minute.
+- Use `TimePicker` or `TimeRangePicker` when the time is independent of a date. Their values remain timezone-free `HH:mm` strings.
+
+Date and date-time pickers use native `Date` values. Every range picker uses the same `[start, end]` tuple. Component names state both precision and single/range semantics, so consumers do not need to coordinate conditional `mode` or `showTime` props.
+
+## Examples
+
+<DatePickerShowcase>
+
+```tsx title="showcases/date-picker/cases/basic-usage.tsx" file="<root>/showcases/date-picker/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/date-picker/cases/date-range.tsx" file="<root>/showcases/date-picker/cases/date-range.tsx"
+
+```
+
+```tsx title="showcases/date-picker/cases/date-time.tsx" file="<root>/showcases/date-picker/cases/date-time.tsx"
+
+```
+
+```tsx title="showcases/date-picker/cases/date-time-range.tsx" file="<root>/showcases/date-picker/cases/date-time-range.tsx"
+
+```
+
+```tsx title="showcases/date-picker/cases/time.tsx" file="<root>/showcases/date-picker/cases/time.tsx"
+
+```
+
+```tsx title="showcases/date-picker/cases/time-range.tsx" file="<root>/showcases/date-picker/cases/time-range.tsx"
+
+```
+
+</DatePickerShowcase>
+
+## API
+
+### Value contracts
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'DatePicker',
+      defaultValue: null,
+      description: 'The current date; undefined when cleared.',
+      name: 'value',
+      type: 'Date | undefined',
+    },
+    {
+      component: 'DatePicker',
+      defaultValue: null,
+      description: 'The initial date in uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'Date',
+    },
+    {
+      component: 'DatePicker',
+      defaultValue: null,
+      description: 'Called when the date is selected or cleared.',
+      name: 'onChange',
+      type: '(date?: Date) => void',
+    },
+    {
+      component: 'DateRangePicker',
+      defaultValue: null,
+      description: 'The current start and end dates.',
+      name: 'value',
+      type: 'PickerRangeValue<Date>',
+    },
+    {
+      component: 'DateRangePicker',
+      defaultValue: null,
+      description: 'The initial date range in uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'PickerRangeValue<Date>',
+    },
+    {
+      component: 'DateRangePicker',
+      defaultValue: null,
+      description:
+        'Called when either boundary changes or the range is cleared.',
+      name: 'onChange',
+      type: '(range?: PickerRangeValue<Date>) => void',
+    },
+    {
+      component: 'DateTimePicker',
+      defaultValue: null,
+      description: 'The current date and time stored in one Date.',
+      name: 'value',
+      type: 'Date | undefined',
+    },
+    {
+      component: 'DateTimePicker',
+      defaultValue: null,
+      description: 'The initial date and time in uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'Date',
+    },
+    {
+      component: 'DateTimePicker',
+      defaultValue: null,
+      description: 'Called when either the date or time changes.',
+      name: 'onChange',
+      type: '(date?: Date) => void',
+    },
+    {
+      component: 'DateTimeRangePicker',
+      defaultValue: null,
+      description: 'The current start and end date-times.',
+      name: 'value',
+      type: 'PickerRangeValue<Date>',
+    },
+    {
+      component: 'DateTimeRangePicker',
+      defaultValue: null,
+      description: 'The initial date-time range in uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'PickerRangeValue<Date>',
+    },
+    {
+      component: 'DateTimeRangePicker',
+      defaultValue: null,
+      description: 'Called when any date or time boundary changes.',
+      name: 'onChange',
+      type: '(range?: PickerRangeValue<Date>) => void',
+    },
+    {
+      component: 'TimePicker',
+      defaultValue: null,
+      description: 'The current timezone-free HH:mm time.',
+      name: 'value',
+      type: 'string | undefined',
+    },
+    {
+      component: 'TimePicker',
+      defaultValue: null,
+      description: 'The initial time in uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'string',
+    },
+    {
+      component: 'TimePicker',
+      defaultValue: null,
+      description: 'Called when the time changes or is cleared.',
+      name: 'onChange',
+      type: '(time?: string) => void',
+    },
+    {
+      component: 'TimeRangePicker',
+      defaultValue: null,
+      description: 'The current start and end times.',
+      name: 'value',
+      type: 'PickerRangeValue<string>',
+    },
+    {
+      component: 'TimeRangePicker',
+      defaultValue: null,
+      description: 'The initial time range in uncontrolled mode.',
+      name: 'defaultValue',
+      type: 'PickerRangeValue<string>',
+    },
+    {
+      component: 'TimeRangePicker',
+      defaultValue: null,
+      description: 'Called when either time boundary changes.',
+      name: 'onChange',
+      type: '(range?: PickerRangeValue<string>) => void',
+    },
+  ]}
+/>
+
+### Shared date-based picker props
+
+These props are shared by `DatePicker`, `DateRangePicker`, `DateTimePicker`, and `DateTimeRangePicker`.
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Date-based pickers',
+      defaultValue: "'popover'",
+      description: 'Use a popover trigger or an inline calendar.',
+      name: 'display',
+      type: "'inline' | 'popover'",
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: 'Localized copy',
+      description: 'Text shown when no value is selected.',
+      name: 'placeholder',
+      type: 'string',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: 'false',
+      description: 'Disable the trigger and calendar interaction.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: 'false',
+      description:
+        'Mark the field as required for forms and assistive technology.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: "'zh'",
+      description: 'Localize the calendar and formatted trigger text.',
+      name: 'locale',
+      type: 'PickerLocale',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: null,
+      description:
+        'Configure month navigation, disabled dates, and visible month count.',
+      name: 'calendarProps',
+      type: 'CalendarProps',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: null,
+      description: 'Extend the component root class name.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: null,
+      description: 'Set inline styles on the component root.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: null,
+      description: 'Extend calendar, trigger, and date-time time slots.',
+      name: 'classNames',
+      type: 'DatePickerClassNames | DateTimePickerClassNames',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: null,
+      description: 'Set inline styles using the same slots as classNames.',
+      name: 'styles',
+      type: 'DatePickerStyles | DateTimePickerStyles',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: null,
+      description: 'Access the trigger button in popover mode.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLButtonElement>',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: null,
+      description: 'Set the trigger button id.',
+      name: 'id',
+      type: 'string',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: null,
+      description: 'Set the form field name.',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: null,
+      description: 'Called when the trigger button loses focus.',
+      name: 'onBlur',
+      type: 'FocusEventHandler<HTMLButtonElement>',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: null,
+      description: 'Name a trigger without a visible label.',
+      name: 'aria-label',
+      type: 'string',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: null,
+      description: 'Reference descriptive text nodes.',
+      name: 'aria-describedby',
+      type: 'string',
+    },
+    {
+      component: 'Date-based pickers',
+      defaultValue: null,
+      description: 'Mark the current value as invalid.',
+      name: 'aria-invalid',
+      type: 'boolean | string',
+    },
+  ]}
+/>
+
+### Date-time additions
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'DateTimePicker',
+      defaultValue: '1',
+      description: 'Minute step for the time input.',
+      name: 'minuteStep',
+      type: 'number',
+    },
+    {
+      component: 'DateTimeRangePicker',
+      defaultValue: '1',
+      description: 'Minute step for the start and end time inputs.',
+      name: 'minuteStep',
+      type: 'number',
+    },
+  ]}
+/>
+
+### Shared time-based picker props
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'Time-based pickers',
+      defaultValue: '1',
+      description: 'Minute step.',
+      name: 'minuteStep',
+      type: 'number',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: 'false',
+      description: 'Disable time input.',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: 'false',
+      description: 'Mark time input as required.',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: null,
+      description: 'Earliest allowed time.',
+      name: 'min',
+      type: 'string',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: null,
+      description: 'Latest allowed time.',
+      name: 'max',
+      type: 'string',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: null,
+      description: 'Set the autocomplete hint.',
+      name: 'autoComplete',
+      type: 'string',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: null,
+      description: 'Access the first time input.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: null,
+      description: 'Set the first time input id.',
+      name: 'id',
+      type: 'string',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: null,
+      description: 'Set the form field name.',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: null,
+      description: 'Called when either time input loses focus.',
+      name: 'onBlur',
+      type: 'FocusEventHandler<HTMLInputElement>',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: null,
+      description: 'Provide an accessible name.',
+      name: 'aria-label',
+      type: 'string',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: null,
+      description: 'Reference descriptive text nodes.',
+      name: 'aria-describedby',
+      type: 'string',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: null,
+      description: 'Mark the current value as invalid.',
+      name: 'aria-invalid',
+      type: 'boolean | string',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: null,
+      description: 'Extend the component root class name.',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Time-based pickers',
+      defaultValue: null,
+      description: 'Set inline styles on the component root.',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+### TimeRangePicker additions
+
+<ApiTable
+  labels={{
+    component: 'Component',
+    defaultValue: 'Default',
+    description: 'Description',
+    name: 'Property',
+    type: 'Type',
+  }}
+  rows={[
+    {
+      component: 'TimeRangePicker',
+      defaultValue: "['Start time', 'End time']",
+      description: 'Accessible names for the start and end inputs.',
+      name: 'labels',
+      type: 'readonly [string, string]',
+    },
+    {
+      component: 'TimeRangePicker',
+      defaultValue: null,
+      description: 'Extend the start, separator, and end slot class names.',
+      name: 'classNames',
+      type: 'TimeRangePickerClassNames',
+    },
+    {
+      component: 'TimeRangePicker',
+      defaultValue: null,
+      description: 'Set inline styles using the same slots as classNames.',
+      name: 'styles',
+      type: 'TimeRangePickerStyles',
+    },
+  ]}
+/>
+
+## Accessibility
+
+- Date selection preserves calendar-grid semantics, keyboard navigation, and focus management. The calendar communicates range boundaries.
+- Set `aria-label` when a trigger has no visible `<label>`. `TimeRangePicker.labels` names its start and end inputs separately.
+
+## Avoid
+
+- Do not use `TimePicker` for an absolute instant. Use a DateTime picker and define time-zone semantics in the product layer.
+- Do not reverse the range tuple: the first item is always the start and the second is always the end.

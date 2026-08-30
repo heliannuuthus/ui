@@ -1,0 +1,176 @@
+---
+title: 'Form 表单'
+description: '通过 Form.Field 统一连接数据录入组件、校验状态和提交行为。'
+lang: zh-Hans
+---
+
+import FormShowcase from '@showcases/form';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Form 表单
+
+{"通过 Form.Field 统一连接数据录入组件、校验状态和提交行为。"}
+
+## 何时使用
+
+- 使用统一方式组织标签、控件、说明和错误信息。
+- 让内置数据录入组件自动连接字段值、校验状态和提交行为。
+
+## 示例
+
+<FormShowcase>
+
+```tsx title="showcases/form/cases/basic-usage.tsx" file="<root>/showcases/form/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/form/cases/label-association-and-necessity.tsx" file="<root>/showcases/form/cases/label-association-and-necessity.tsx"
+
+```
+
+```tsx title="showcases/form/cases/complete-component-form.tsx" file="<root>/showcases/form/cases/complete-component-form.tsx"
+
+```
+
+```tsx title="showcases/form/cases/custom-control-integration.tsx" file="<root>/showcases/form/cases/custom-control-integration.tsx"
+
+```
+
+</FormShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: '连接 Form.useForm 创建的表单实例。',
+      name: 'form',
+      type: 'FormInstance',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: '校验通过后接收完整表单数据。',
+      name: 'onSubmit',
+      type: '(values) => void | Promise<void>',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '指定当前字段在表单数据中的唯一路径。',
+      name: 'name',
+      type: 'FieldPath',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '设置字段标签并自动关联实际控件。',
+      name: 'label',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '补充字段说明并建立无障碍描述关联。',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '声明当前字段的必填、格式和自定义校验规则。',
+      name: 'rules',
+      type: 'RegisterOptions',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description:
+        '接收一个控件元素；内置控件自动绑定，自定义控件自动获得标准受控属性。',
+      name: 'children',
+      type: 'ReactElement',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: "'vertical'",
+      description: '设置标签、内容与控件的排列方向。',
+      name: 'orientation',
+      type: "'vertical' | 'horizontal' | 'responsive'",
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'onInvalid',
+      type: 'SubmitErrorHandler',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'defaultValue',
+      type: 'FieldPathValue',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '配置组件的公开状态、行为或扩展点。',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Form.Field',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

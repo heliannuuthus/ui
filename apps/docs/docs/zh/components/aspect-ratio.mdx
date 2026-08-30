@@ -1,0 +1,79 @@
+---
+title: 'Aspect Ratio 宽高比'
+description: '让媒体内容在响应式布局中保持固定比例。'
+lang: zh-Hans
+---
+
+import AspectRatioShowcase from '@showcases/aspect-ratio';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Aspect Ratio 宽高比
+
+{"让媒体内容在响应式布局中保持固定比例。"}
+
+## 何时使用
+
+- 文章封面、视频和商品图需要在不同宽度下保持一致构图。
+- 需要预留稳定的媒体区域，避免图片加载后引起页面跳动。
+
+## 示例
+
+<AspectRatioShowcase>
+
+```tsx title="showcases/aspect-ratio/cases/basic-usage.tsx" file="<root>/showcases/aspect-ratio/cases/basic-usage.tsx"
+
+```
+
+</AspectRatioShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Aspect Ratio',
+      defaultValue: null,
+      description: '容器宽高比，例如 16 / 9、4 / 3 或 1。',
+      name: 'ratio',
+      type: 'number',
+    },
+    {
+      component: 'Aspect Ratio',
+      defaultValue: null,
+      description: '需要约束比例的媒体或内容。',
+      name: 'children',
+      type: 'React.ReactNode',
+    },
+    {
+      component: 'Aspect Ratio',
+      defaultValue: null,
+      description: '扩展比例容器样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Aspect Ratio',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 媒体内容仍需提供准确的替代文本或字幕。
+- 比例切换控件需要暴露当前选中状态。
+
+## 避免事项
+
+- 不要只设置固定高度，否则响应式宽度下会失去目标比例。
+- 重要主体不要贴近图片边缘，以免在不同宽高比下被裁切。

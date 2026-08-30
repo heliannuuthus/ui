@@ -1,0 +1,100 @@
+---
+title: 'Alert 警告提示'
+description: '持续展示重要的页面内提示。'
+lang: zh-Hans
+---
+
+import AlertShowcase from '@showcases/alert';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Alert 警告提示
+
+{"持续展示重要的页面内提示。"}
+
+## 何时使用
+
+- 需要持续展示重要的页面内提示时。
+- 需要覆盖默认、受控、禁用和窄屏状态时。
+
+## 示例
+
+<AlertShowcase>
+
+```tsx title="showcases/alert/cases/basic-usage.tsx" file="<root>/showcases/alert/cases/basic-usage.tsx"
+
+```
+
+</AlertShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Alert',
+      defaultValue: null,
+      description: '设置提示标题、补充说明和语义图标。',
+      name: 'title',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert',
+      defaultValue: null,
+      description: '设置提示标题、补充说明和语义图标。',
+      name: 'description',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert',
+      defaultValue: null,
+      description: '设置提示标题、补充说明和语义图标。',
+      name: 'icon',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert',
+      defaultValue: null,
+      description: '放置与当前提示直接相关的查看、重试或关闭操作。',
+      name: 'action',
+      type: 'ReactNode',
+    },
+    {
+      component: 'Alert',
+      defaultValue: "'default'",
+      description: '设置提示的语义状态。',
+      name: 'variant',
+      type: "'default' | 'info' | 'success' | 'warning' | 'error' | 'destructive'",
+    },
+    {
+      component: 'Alert',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Alert',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 保留底层语义、焦点管理与键盘交互。
+- 为触发器、图标和状态提供可感知名称。
+
+## 避免事项
+
+- 不要移除焦点样式或绕过状态属性。
+- 不要写死业务文案、尺寸和产品状态。

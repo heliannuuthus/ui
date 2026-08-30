@@ -27,6 +27,7 @@ const components = {
   Pagination: { size: 'sm' },
   Progress: { effect: 'sparkle' },
   ScrollArea: { scrollbar: { size: 'sm', visibility: 'always' } },
+  Segmented: { block: true, size: 'sm' },
   Slider: { effect: 'none' },
   Spinner: { size: 'sm' },
   Tabs: { animation: 'slide', centered: true, variant: 'line' },
