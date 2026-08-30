@@ -34,11 +34,9 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 </PaginationShowcase>
 
-## Component parts
-
-- **Pagination** — Configure content, state, behavior, and extension points through main component props.
-
 ## API
+
+Choose exactly one collection-size source: pass `total` to derive the page count from `pageSize`, or pass `pageCount` to declare it directly. Only `total` mode supports `showTotal`.
 
 <ApiTable
   labels={{
@@ -74,15 +72,15 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Pagination',
       defaultValue: null,
       description:
-        'Sets the page count directly; when omitted, it is derived from total and pageSize.',
+        'Declares the page count directly; choose either this or total.',
       name: 'pageCount',
       type: 'number',
     },
     {
       component: 'Pagination',
-      defaultValue: '0',
+      defaultValue: null,
       description:
-        'Sets the total item count and derives the page count from pageSize; pageCount can override the derived result.',
+        'Sets the total item count and derives the page count from pageSize; choose either this or pageCount.',
       name: 'total',
       type: 'number',
     },
@@ -119,24 +117,11 @@ import { ApiTable } from '@docs/rspress/api-table';
     },
     {
       component: 'Pagination',
-      defaultValue: '[10, 20, 50, 100]',
-      description: 'Sets the options available in the page-size selector.',
-      name: 'pageSizeOptions',
-      type: 'readonly number[]',
-    },
-    {
-      component: 'Pagination',
-      defaultValue: null,
-      description: 'Formats the visible label for each page-size option.',
-      name: 'pageSizeLabel',
-      type: '(pageSize: number) => ReactNode',
-    },
-    {
-      component: 'Pagination',
       defaultValue: 'false',
-      description: 'Shows the page-size selector.',
+      description:
+        'Shows the page-size selector; pass an object to configure its options and option labels together.',
       name: 'showSizeChanger',
-      type: 'boolean',
+      type: 'boolean | PaginationSizeChangerOptions',
     },
     {
       component: 'Pagination',
@@ -150,7 +135,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Pagination',
       defaultValue: 'false',
       description:
-        'Shows the total item count or renders a custom summary from the total and current range.',
+        'In total mode, shows the item count or renders a custom summary from the total and current range.',
       name: 'showTotal',
       type: 'boolean | ((total: number, range: readonly [number, number]) => ReactNode)',
     },
@@ -266,7 +251,7 @@ import { ApiTable } from '@docs/rspress/api-table';
     },
     {
       component: 'Pagination',
-      defaultValue: "'default'",
+      defaultValue: "'md'",
       description: 'Sets the pagination control size.',
       name: 'size',
       type: 'PaginationSize',

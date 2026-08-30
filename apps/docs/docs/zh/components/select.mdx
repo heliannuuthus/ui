@@ -1,6 +1,6 @@
 ---
 title: 'Select 选择器'
-description: '从固定候选项中选择一个或多个值，并使用同一套交互直接过滤较长列表。'
+description: '从固定候选项中选择一个值，并可直接输入关键词过滤较长列表。'
 lang: zh-Hans
 ---
 
@@ -9,12 +9,14 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 # Select 选择器
 
-{"从固定候选项中选择一个或多个值，并使用同一套交互直接过滤较长列表。"}
+{"从固定候选项中选择一个值，并可直接输入关键词过滤较长列表。"}
 
 ## 何时使用
 
 - 候选项固定时使用 Select；列表较长时直接输入关键词过滤。
-- 通过 options 提供平铺或分组候选项，通过受控或非受控 props 管理选择。
+- 通过 options 提供平铺或分组候选项，通过受控或非受控 props 管理单选值。
+
+Select 的值限定为字符串或数字。需要多选、标签折叠或异步搜索时，应使用单独的 Multi Select / Combobox，而不是继续扩张 Select 的属性面。
 
 ## 示例
 
@@ -30,10 +32,6 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 </SelectShowcase>
 
-## 组成部分
-
-- **Select** — 通过主组件 props 配置内容、状态、行为和扩展点。
-
 ## API
 
 <ApiTable
@@ -48,205 +46,143 @@ import { ApiTable } from '@docs/rspress/api-table';
     {
       component: 'Select',
       defaultValue: null,
-      description: '提供平铺或分组候选项。',
+      description:
+        '提供平铺或分组候选项；复杂标签可通过 textValue 提供用于显示和过滤的纯文本。',
       name: 'options',
       type: '(SelectOption<Value> | SelectOptionGroup<Value>)[]',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: '以受控或非受控方式管理当前选择。',
+      description: '设置受控选中值；清除选择时为 null。',
       name: 'value',
-      type: 'Value | Value[] | null',
+      type: 'Value | null',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: '以受控或非受控方式管理当前选择。',
+      description: '设置非受控模式下的初始选中值。',
       name: 'defaultValue',
-      type: 'Value | Value[] | null',
+      type: 'Value | null',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: '以受控或非受控方式管理当前选择。',
+      description: '选中值变化或被清除时调用。',
       name: 'onChange',
-      type: '(value: Value | Value[] | null) => void',
+      type: '(value: Value | null) => void',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: '以受控或非受控方式管理搜索关键词。',
-      name: 'searchValue',
-      type: 'string',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '以受控或非受控方式管理搜索关键词。',
-      name: 'defaultSearchValue',
-      type: 'string',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '以受控或非受控方式管理搜索关键词。',
-      name: 'onSearch',
-      type: '(query: string) => void',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '设置输入提示、空结果文案和清除操作。',
+      description: '未选中且未输入搜索词时显示的提示文本。',
       name: 'placeholder',
-      type: 'ReactNode',
+      type: 'string',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: '设置输入提示、空结果文案和清除操作。',
+      description: '过滤后没有可用选项时显示的内容。',
       name: 'emptyText',
       type: 'ReactNode',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: '设置输入提示、空结果文案和清除操作。',
+      description: '是否在存在选中值时显示清除按钮。',
       name: 'showClear',
       type: 'boolean',
     },
     {
       component: 'Select',
-      defaultValue: null,
-      description: '设置多选、禁用、只读和表单必填状态。',
-      name: 'multiple',
-      type: 'boolean',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '设置多选、禁用、只读和表单必填状态。',
+      defaultValue: 'false',
+      description: '禁用输入、展开和选择操作。',
       name: 'disabled',
       type: 'boolean',
     },
     {
       component: 'Select',
-      defaultValue: null,
-      description: '设置多选、禁用、只读和表单必填状态。',
+      defaultValue: 'false',
+      description: '保留当前值和聚焦能力，但不允许修改。',
       name: 'readOnly',
       type: 'boolean',
     },
     {
       component: 'Select',
-      defaultValue: null,
-      description: '设置多选、禁用、只读和表单必填状态。',
+      defaultValue: 'false',
+      description: '参与表单提交时要求存在选中值。',
       name: 'required',
       type: 'boolean',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: '配置输入框的标准属性，以及是否显示尾部展开按钮。',
-      name: 'triggerProps',
-      type: 'SelectTriggerProps',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '扩展对应语义槽位的 className。',
-      name: 'classNames',
-      type: 'SelectClassNames',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '按与 classNames 相同的语义区域设置行内样式。',
-      name: 'styles',
-      type: 'SelectStyles',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
-      name: 'autoComplete',
-      type: "'list' | 'both' | 'inline' | 'none'",
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
-      name: 'defaultOpen',
-      type: 'boolean',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
-      name: 'open',
-      type: 'boolean',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
-      name: 'filter',
-      type: 'null | ((item: Value, query: string) => boolean)',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
-      name: 'form',
-      type: 'string',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
+      description: '设置输入节点 id，并用于关联标签。',
       name: 'id',
       type: 'string',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
-      name: 'isItemEqualToValue',
-      type: '(item: Value, value: Value) => boolean',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
-      name: 'itemToStringLabel',
-      type: '(item: Value) => string',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
-      name: 'itemToStringValue',
-      type: '(item: Value) => string',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
-      name: 'locale',
-      type: 'Intl.LocalesArgument',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
+      description: '设置表单字段名。',
       name: 'name',
       type: 'string',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
-      name: 'onOpenChange',
-      type: '(open: boolean) => void',
+      description: '将字段关联到指定表单。',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '获取底层输入节点的 ref。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '输入失去焦点时调用。',
+      name: 'onBlur',
+      type: 'FocusEventHandler<HTMLInputElement>',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '为没有可见标签的 Select 提供可访问名称。',
+      name: 'aria-label',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '关联描述文本节点。',
+      name: 'aria-describedby',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '标记当前值是否无效。',
+      name: 'aria-invalid',
+      type: 'boolean | string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '按 trigger 语义槽位扩展类名。',
+      name: 'classNames',
+      type: 'SelectClassNames',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: '按与 classNames 相同的 trigger 槽位设置行内样式。',
+      name: 'styles',
+      type: 'SelectStyles',
     },
   ]}
 />

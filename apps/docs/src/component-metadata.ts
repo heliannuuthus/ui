@@ -99,6 +99,11 @@ export const componentSearchMetadata = {
     ['分页', '页码'],
     ['pages', 'pager', 'data range'],
   ],
+  segmented: [
+    'Selects one compact view, mode, or filter with a sliding state indicator.',
+    ['分段控制器', '分段选择', '视图切换', '模式切换'],
+    ['segmented control', 'single choice', 'view switcher', 'mode switcher'],
+  ],
   tabs: [
     'Switches between mutually exclusive content while preserving context and task continuity.',
     ['标签页', '选项卡', '页签'],
@@ -110,9 +115,16 @@ export const componentSearchMetadata = {
     ['boolean', 'check', 'multi-select'],
   ],
   'date-picker': [
-    'Selects a date from an inline calendar or popup trigger.',
-    ['日期选择', '日历'],
-    ['calendar', 'date input'],
+    'Selects dates, date-times, or times, including matching range values.',
+    ['日期选择', '日期范围', '日期时间', '时间选择', '时间范围', '日历'],
+    [
+      'calendar',
+      'date input',
+      'date range',
+      'datetime picker',
+      'range picker',
+      'time picker',
+    ],
   ],
   form: [
     'Structures fields and connects state, validation, and submission behavior.',

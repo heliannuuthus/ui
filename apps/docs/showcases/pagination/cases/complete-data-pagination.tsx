@@ -43,13 +43,14 @@ const createExample = (locale: 'en' | 'zh') => {
             setPageSize(nextPageSize);
           }}
           pageSize={pageSize}
-          pageSizeLabel={(value) => `${value} ${copy('条 / 页')}`}
-          pageSizeOptions={[10, 20, 50, 100]}
           showQuickJumper={{
             label: copy('跳至'),
             suffix: copy('页'),
           }}
-          showSizeChanger
+          showSizeChanger={{
+            getOptionLabel: (value) => `${value} ${copy('条 / 页')}`,
+            options: [10, 20, 50, 100],
+          }}
           showTotal={(total, range) =>
             `${range[0]}–${range[1]} / ${total.toLocaleString()} ${copy('项')}`
           }

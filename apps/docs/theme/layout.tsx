@@ -4,7 +4,7 @@ import {
   Layout as UiLayout,
   Provider,
   ScrollArea,
-  Toggle,
+  Segmented,
   Typography,
 } from '@heliannuuthus/ui';
 import {
@@ -27,8 +27,8 @@ import {
 import { useEffect, useState } from 'react';
 import {
   componentGroups,
+  componentNavigationName,
   componentSlug,
-  localizedComponentName,
 } from '../src/component-catalog';
 import { DocsMdxProvider } from './mdx-content';
 import { InternalButtonLink } from './internal-link';
@@ -166,23 +166,21 @@ export const Layout = () => {
             </Typography.Text>
           </InternalButtonLink>
 
-          <Toggle.Group
-            aria-label={locale === 'zh' ? '主要导航' : 'Main navigation'}
-            className="docs-primary-nav"
-            items={navigationLinks.map((link) => ({
-              'aria-label': link.label,
-              label: link.label,
-              value: link.href,
-            }))}
-            onChange={(paths) => {
-              const nextPath = paths[paths.length - 1];
-              if (nextPath && nextPath !== activeNavigationPath) {
+          <nav aria-label={locale === 'zh' ? '主要导航' : 'Main navigation'}>
+            <Segmented
+              className="docs-primary-nav"
+              onChange={(href) => {
                 setNavigationOpen(false);
-                void navigate(nextPath);
-              }
-            }}
-            value={activeNavigationPath ? [activeNavigationPath] : []}
-          />
+                void navigate(href);
+              }}
+              options={navigationLinks.map((link) => ({
+                label: link.label,
+                value: link.href,
+              }))}
+              size="md"
+              value={activeNavigationPath ?? null}
+            />
+          </nav>
 
           <div className="docs-header-actions">
             <Search />
@@ -335,7 +333,7 @@ export const Layout = () => {
                                 size="sm"
                                 variant="ghost"
                               >
-                                {localizedComponentName(name, locale)}
+                                {componentNavigationName(name, locale)}
                               </InternalButtonLink>
                             </li>
                           );

@@ -38,6 +38,7 @@ export const ButtonTypeTest = () => (
     <Button onClick={() => {}} variant="link">
       Link-styled action
     </Button>
+    <Button size="md">Medium button</Button>
 
     {/* @ts-expect-error Anchor-only attributes require href. */}
     <Button target="_blank">Invalid native button</Button>
@@ -45,6 +46,8 @@ export const ButtonTypeTest = () => (
     <Button formAction="/submit" href="/docs">
       Invalid link
     </Button>
+    {/* @ts-expect-error The medium size is named md; default is a visual variant. */}
+    <Button size="default">Invalid legacy size</Button>
   </>
 );
 

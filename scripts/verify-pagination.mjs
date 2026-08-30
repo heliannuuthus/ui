@@ -16,7 +16,10 @@ const dataMarkup = renderToStaticMarkup(
     previous: 'Previous',
     siblings: 2,
     showQuickJumper: { goButton: 'Go' },
-    showSizeChanger: true,
+    showSizeChanger: {
+      getOptionLabel: (pageSize) => `${pageSize} rows`,
+      options: [10, 20, 50],
+    },
     showTotal: (total, range) => `${range[0]}-${range[1]} / ${total}`,
     styles: { summary: { minWidth: 120 } },
     total: 95,
@@ -28,6 +31,7 @@ assert.ok(dataMarkup.includes('41-60 / 95'));
 assert.match(dataMarkup, /class="[^"]*summary-slot[^"]*"/);
 assert.match(dataMarkup, /min-width:120px/);
 assert.match(dataMarkup, /data-slot="pagination-page-size"/);
+assert.ok(dataMarkup.includes('20 rows'));
 assert.match(dataMarkup, /data-slot="pagination-quick-jumper"/);
 assert.match(dataMarkup, /flex-nowrap/);
 assert.doesNotMatch(dataMarkup, /overflow-x-auto/);

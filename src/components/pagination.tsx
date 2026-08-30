@@ -12,7 +12,7 @@ import { buttonVariants } from './button';
 import { useComponentDefaults } from './provider';
 import { Select } from './select';
 
-type PaginationSize = 'sm' | 'default' | 'lg';
+type PaginationSize = 'sm' | 'md' | 'lg';
 
 type PaginationItemType =
   | 'page'
@@ -61,6 +61,11 @@ type PaginationQuickJumperOptions = {
   suffix?: React.ReactNode;
 };
 
+type PaginationSizeChangerOptions = {
+  getOptionLabel?: (pageSize: number) => React.ReactNode;
+  options?: readonly number[];
+};
+
 type PaginationSimpleOptions = {
   readOnly?: boolean;
 };
@@ -93,26 +98,34 @@ type PaginationBaseProps = Omit<
   next?: boolean | React.ReactNode;
   onChange?: (page: number, pageSize: number) => void;
   onPageSizeChange?: (page: number, pageSize: number) => void;
-  pageCount?: number;
   pageSize?: number;
-  pageSizeLabel?: (pageSize: number) => React.ReactNode;
-  pageSizeOptions?: readonly number[];
   previous?: boolean | React.ReactNode;
   renderItem?: (item: PaginationRenderItemProps) => React.ReactNode;
   showQuickJumper?: boolean | PaginationQuickJumperOptions;
-  showSizeChanger?: boolean;
+  showSizeChanger?: boolean | PaginationSizeChangerOptions;
   showTitle?: boolean;
-  showTotal?:
-    | boolean
-    | ((total: number, range: readonly [number, number]) => React.ReactNode);
   siblings?: number;
   simple?: boolean | PaginationSimpleOptions;
   size?: PaginationSize;
   styles?: PaginationStyles;
-  total?: number;
 };
 
-type PaginationProps = PaginationBaseProps;
+type PaginationTotalModeProps = {
+  pageCount?: never;
+  showTotal?:
+    | boolean
+    | ((total: number, range: readonly [number, number]) => React.ReactNode);
+  total: number;
+};
+
+type PaginationPageCountModeProps = {
+  pageCount: number;
+  showTotal?: never;
+  total?: never;
+};
+
+type PaginationProps = PaginationBaseProps &
+  (PaginationTotalModeProps | PaginationPageCountModeProps);
 
 type PaginationProviderDefaults = Pick<PaginationProps, 'size'>;
 
@@ -186,8 +199,6 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       onPageSizeChange,
       pageCount: pageCountProp,
       pageSize,
-      pageSizeLabel = (value) => `${value} / 页`,
-      pageSizeOptions = [10, 20, 50, 100],
       previous = true,
       renderItem,
       showQuickJumper = false,
@@ -205,7 +216,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
     ref
   ) => {
     const defaults = useComponentDefaults('Pagination');
-    const size = sizeProp ?? defaults.size ?? 'default';
+    const size = sizeProp ?? defaults.size ?? 'md';
     const [uncontrolledCurrent, setUncontrolledCurrent] = React.useState(
       Math.max(1, Math.trunc(defaultCurrent))
     );
@@ -241,7 +252,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       quickJumper: '跳转页码',
       ...ariaLabels,
     };
-    const controlSize = size === 'sm' ? 'sm' : size === 'lg' ? 'lg' : 'default';
+    const controlSize = size === 'sm' ? 'sm' : size === 'lg' ? 'lg' : 'md';
     const iconSize =
       size === 'sm' ? 'icon-sm' : size === 'lg' ? 'icon-lg' : 'icon';
     const pages = getVisiblePages(
@@ -250,9 +261,19 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       siblings,
       boundaries
     );
+    const sizeChangerOptions =
+      showSizeChanger && typeof showSizeChanger === 'object'
+        ? showSizeChanger
+        : undefined;
+    const getPageSizeLabel =
+      sizeChangerOptions?.getOptionLabel ??
+      ((value: number) => `${value} / 页`);
     const normalizedPageSizeOptions = Array.from(
       new Set(
-        [...pageSizeOptions, resolvedPageSize]
+        [
+          ...(sizeChangerOptions?.options ?? [10, 20, 50, 100]),
+          resolvedPageSize,
+        ]
           .map((option) => Math.trunc(option))
           .filter((option) => option > 0)
       )
@@ -615,6 +636,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
             style={styles?.pageSize}
           >
             <Select<number>
+              aria-label={resolvedAriaLabels.pageSize}
               classNames={{
                 trigger: cn(
                   'w-28 text-xs tabular-nums',
@@ -623,20 +645,18 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
                 ),
               }}
               disabled={disabled}
-              itemToStringLabel={(value) => {
-                const label = pageSizeLabel(value);
-                return typeof label === 'string' || typeof label === 'number'
-                  ? String(label)
-                  : String(value);
-              }}
               onChange={requestPageSize}
-              options={normalizedPageSizeOptions.map((option) => ({
-                label: pageSizeLabel(option),
-                value: option,
-              }))}
-              triggerProps={{
-                'aria-label': resolvedAriaLabels.pageSize,
-              }}
+              options={normalizedPageSizeOptions.map((option) => {
+                const label = getPageSizeLabel(option);
+                return {
+                  label,
+                  textValue:
+                    typeof label === 'string' || typeof label === 'number'
+                      ? String(label)
+                      : String(option),
+                  value: option,
+                };
+              })}
               value={resolvedPageSize}
             />
           </span>
@@ -706,5 +726,6 @@ export {
   type PaginationRenderItemProps,
   type PaginationSimpleOptions,
   type PaginationSize,
+  type PaginationSizeChangerOptions,
   type PaginationStyles,
 };

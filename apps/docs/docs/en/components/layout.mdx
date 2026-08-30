@@ -45,15 +45,13 @@ Layout describes structural relationships between regions; navigation state, rou
 
 ```
 
+```tsx title="showcases/layout/cases/collapse-state.tsx" file="<root>/showcases/layout/cases/collapse-state.tsx"
+
+```
+
 </LayoutShowcase>
 
-## Component parts
-
-- **Layout** — Combine vertical areas; automatically switch to horizontal arrangement when directly containing Sidebar.
-- **Layout.Header** — A fixed area at the top of a page or partial layout.
-- **Layout.Content** — Hosts the main content and takes up the remaining space in the layout.
-- **Layout.Footer** — A fixed area at the bottom of a page or partial layout.
-- **Layout.Sidebar** — A side area for navigation, table of contents, or details.
+## Layout patterns
 
 ::::tabs
 :::tab{label="Vertical composition" value="vertical"}
@@ -63,6 +61,16 @@ Header, Content, and Footer are arranged vertically by default, with Content fil
 Layout switches to a horizontal arrangement when it directly contains Sidebar; a nested Layout can continue organizing the main region.
 :::
 ::::
+
+## Collapse state model
+
+| Property             | Responsibility                                                                                                                                                                       |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `collapsible`        | Only controls whether the built-in trigger renders; it is not the collapsed state. Pass a node to replace the default icon.                                                          |
+| `defaultCollapsed`   | Only initializes uncontrolled state. It is ignored when `collapsed` is provided; in uncontrolled mode, an initially matched `breakpoint` takes precedence and collapses the sidebar. |
+| `collapsed`          | The controlled state. The component does not mutate it; the parent must apply the next value from `onChange`.                                                                        |
+| `onBreakpointChange` | Fires after the first breakpoint check and whenever the viewport enters or leaves the range; `below` reports whether it is currently below the breakpoint.                           |
+| `onChange`           | Fires when a collapse request actually differs from the current state and identifies `breakpoint` or `trigger` as its `reason`.                                                      |
 
 ## API
 
@@ -79,14 +87,15 @@ Layout switches to a horizontal arrangement when it directly contains Sidebar; a
       component: 'Layout.Sidebar',
       defaultValue: null,
       description:
-        'Collapse automatically below the selected viewport breakpoint using tokens aligned with the default Tailwind breakpoints.',
+        'Request a collapsed state below the selected viewport breakpoint; uncontrolled mode applies it automatically, while controlled mode notifies the parent through onChange. Uses tokens aligned with the default Tailwind breakpoints.',
       name: 'breakpoint',
       type: "'sm' | 'md' | 'lg' | 'xl' | '2xl'",
     },
     {
       component: 'Layout.Sidebar',
       defaultValue: null,
-      description: 'The controlled collapsed state.',
+      description:
+        'The controlled collapsed state; the parent must apply requested values received through onChange.',
       name: 'collapsed',
       type: 'boolean',
     },
@@ -102,21 +111,23 @@ Layout switches to a horizontal arrangement when it directly contains Sidebar; a
       component: 'Layout.Sidebar',
       defaultValue: 'false',
       description:
-        'Enable the built-in collapse trigger; pass a ReactNode to replace the default icon.',
+        'Only enables the built-in collapse trigger and does not represent the current state; pass a ReactNode to replace the default icon.',
       name: 'collapsible',
       type: 'boolean | ReactNode',
     },
     {
       component: 'Layout.Sidebar',
       defaultValue: 'false',
-      description: 'The initial collapsed state in uncontrolled mode.',
+      description:
+        'The initial collapsed state in uncontrolled mode; ignored when collapsed is provided, while an initially matched breakpoint takes precedence in uncontrolled mode.',
       name: 'defaultCollapsed',
       type: 'boolean',
     },
     {
       component: 'Layout.Sidebar',
       defaultValue: null,
-      description: 'Called when entering or leaving the breakpoint range.',
+      description:
+        'Called after the first check and when entering or leaving the breakpoint range; below reports whether the viewport is currently below it.',
       name: 'onBreakpointChange',
       type: '(below: boolean) => void',
     },
@@ -124,7 +135,7 @@ Layout switches to a horizontal arrangement when it directly contains Sidebar; a
       component: 'Layout.Sidebar',
       defaultValue: null,
       description:
-        'Called when the collapsed state is requested to change, including whether the request came from the breakpoint or trigger.',
+        'Called when a collapse request changes the current state, including whether it came from the breakpoint or trigger; controlled consumers must apply the next value.',
       name: 'onChange',
       type: "(collapsed: boolean, reason: 'breakpoint' | 'trigger') => void",
     },

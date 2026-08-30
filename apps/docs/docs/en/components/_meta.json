@@ -81,6 +81,11 @@
   },
   {
     "type": "file",
+    "name": "segmented",
+    "label": "Segmented"
+  },
+  {
+    "type": "file",
     "name": "tabs",
     "label": "Tabs"
   },

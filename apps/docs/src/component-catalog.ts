@@ -21,7 +21,7 @@ export const componentGroups = [
   {
     key: 'navigation',
     title: '导航',
-    items: ['Breadcrumb', 'Navigation Menu', 'Pagination', 'Tabs'],
+    items: ['Breadcrumb', 'Navigation Menu', 'Pagination', 'Segmented', 'Tabs'],
   },
   {
     key: 'forms',
@@ -112,9 +112,10 @@ export const zhComponentNames = {
   Menubar: '菜单栏',
   'Navigation Menu': '导航菜单',
   Pagination: '分页',
+  Segmented: '分段控制器',
   Tabs: '标签页',
   Checkbox: '复选框',
-  'Date Picker': '日期选择器',
+  'Date Picker': '日期与时间选择器',
   Form: '表单',
   Input: '输入框',
   'Input Number': '数字输入框',
@@ -152,6 +153,13 @@ export const zhComponentNames = {
 export const localizedComponentName = (name: string, locale: 'zh' | 'en') => {
   if (locale === 'en') return name;
   return zhComponentNames[name as ComponentName] ?? name;
+};
+
+export const componentNavigationName = (name: string, locale: 'zh' | 'en') => {
+  if (locale === 'en') return name;
+
+  const localizedName = localizedComponentName(name, locale);
+  return localizedName === name ? name : `${name} ${localizedName}`;
 };
 
 export const componentSlug = (name: string) => {

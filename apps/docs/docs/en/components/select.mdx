@@ -1,6 +1,6 @@
 ---
 title: 'Select'
-description: 'Select one or more values ​​from fixed candidates and filter longer lists directly using the same set of interactions.'
+description: 'Select one value from fixed candidates and filter longer lists by typing.'
 lang: en
 ---
 
@@ -9,12 +9,14 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 # Select
 
-{"Select one or more values ​​from fixed candidates and filter longer lists directly using the same set of interactions."}
+{"Select one value from fixed candidates and filter longer lists by typing."}
 
 ## When to use
 
 - Use Select when the candidates are fixed; directly enter keywords to filter when the list is long.
-- Provide tiling or grouping candidates via options and manage selection via controlled or uncontrolled props.
+- Provide flat or grouped candidates through options and manage a single value with controlled or uncontrolled props.
+
+Select values are limited to strings and numbers. Use a dedicated Multi Select or Combobox for multiple values, tag collapsing, or asynchronous search instead of expanding the Select prop surface.
 
 ## Examples
 
@@ -30,10 +32,6 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 </SelectShowcase>
 
-## Component parts
-
-- **Select** — Configure content, state, behavior, and extension points through main component props.
-
 ## API
 
 <ApiTable
@@ -48,123 +46,134 @@ import { ApiTable } from '@docs/rspress/api-table';
     {
       component: 'Select',
       defaultValue: null,
-      description: 'Provides tiling or grouping candidates.',
+      description:
+        'Provides flat or grouped candidates; use textValue to give rich labels plain text for display and filtering.',
       name: 'options',
       type: '(SelectOption<Value> | SelectOptionGroup<Value>)[]',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description:
-        'Manage the current selection in a controlled or uncontrolled manner.',
+      description: 'Sets the controlled selected value; clearing returns null.',
       name: 'value',
-      type: 'Value | Value[] | null',
+      type: 'Value | null',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description:
-        'Manage the current selection in a controlled or uncontrolled manner.',
+      description: 'Sets the initial value in uncontrolled mode.',
       name: 'defaultValue',
-      type: 'Value | Value[] | null',
+      type: 'Value | null',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description:
-        'Manage the current selection in a controlled or uncontrolled manner.',
+      description: 'Called when the selection changes or is cleared.',
       name: 'onChange',
-      type: '(value: Value | Value[] | null) => void',
+      type: '(value: Value | null) => void',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description:
-        'Manage search keywords in a controlled or uncontrolled manner.',
-      name: 'searchValue',
-      type: 'string',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Manage search keywords in a controlled or uncontrolled manner.',
-      name: 'defaultSearchValue',
-      type: 'string',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Manage search keywords in a controlled or uncontrolled manner.',
-      name: 'onSearch',
-      type: '(query: string) => void',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description: 'Set input prompts, empty result text, and clear actions.',
+      description: 'Text shown before a value or search query is present.',
       name: 'placeholder',
-      type: 'ReactNode',
+      type: 'string',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: 'Set input prompts, empty result text, and clear actions.',
+      description: 'Content shown when filtering returns no options.',
       name: 'emptyText',
       type: 'ReactNode',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: 'Set input prompts, empty result text, and clear actions.',
+      description: 'Shows a clear button while a value is selected.',
       name: 'showClear',
       type: 'boolean',
     },
     {
       component: 'Select',
-      defaultValue: null,
-      description:
-        'Set multi-select, disabled, read-only and required form status.',
-      name: 'multiple',
-      type: 'boolean',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Set multi-select, disabled, read-only and required form status.',
+      defaultValue: 'false',
+      description: 'Disables input, opening, and selection.',
       name: 'disabled',
       type: 'boolean',
     },
     {
       component: 'Select',
-      defaultValue: null,
-      description:
-        'Set multi-select, disabled, read-only and required form status.',
+      defaultValue: 'false',
+      description: 'Keeps the value focusable without allowing changes.',
       name: 'readOnly',
       type: 'boolean',
     },
     {
       component: 'Select',
-      defaultValue: null,
-      description:
-        'Set multi-select, disabled, read-only and required form status.',
+      defaultValue: 'false',
+      description: 'Requires a selected value when its form is submitted.',
       name: 'required',
       type: 'boolean',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description:
-        'Configure the standard properties of the input box and whether to display the tail expand button.',
-      name: 'triggerProps',
-      type: 'SelectTriggerProps',
+      description: 'Sets the input id and associates it with a label.',
+      name: 'id',
+      type: 'string',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: 'Extend the className of the corresponding semantic slot.',
+      description: 'Sets the form field name.',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Associates the field with a form by id.',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Provides a ref to the underlying input.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Called when the input loses focus.',
+      name: 'onBlur',
+      type: 'FocusEventHandler<HTMLInputElement>',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Provides an accessible name when no visible label exists.',
+      name: 'aria-label',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Associates descriptive text with the input.',
+      name: 'aria-describedby',
+      type: 'string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Marks whether the current value is invalid.',
+      name: 'aria-invalid',
+      type: 'boolean | string',
+    },
+    {
+      component: 'Select',
+      defaultValue: null,
+      description: 'Extends the trigger semantic slot class name.',
       name: 'classNames',
       type: 'SelectClassNames',
     },
@@ -172,105 +181,9 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Select',
       defaultValue: null,
       description:
-        'Set inline styles using the same semantic slots as classNames.',
+        'Sets inline styles using the same trigger slot as classNames.',
       name: 'styles',
       type: 'SelectStyles',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'autoComplete',
-      type: "'list' | 'both' | 'inline' | 'none'",
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'defaultOpen',
-      type: 'boolean',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'open',
-      type: 'boolean',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'filter',
-      type: 'null | ((item: Value, query: string) => boolean)',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'form',
-      type: 'string',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'id',
-      type: 'string',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'isItemEqualToValue',
-      type: '(item: Value, value: Value) => boolean',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'itemToStringLabel',
-      type: '(item: Value) => string',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'itemToStringValue',
-      type: '(item: Value) => string',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'locale',
-      type: 'Intl.LocalesArgument',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'name',
-      type: 'string',
-    },
-    {
-      component: 'Select',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'onOpenChange',
-      type: '(open: boolean) => void',
     },
   ]}
 />

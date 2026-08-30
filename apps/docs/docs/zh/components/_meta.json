@@ -81,6 +81,11 @@
   },
   {
     "type": "file",
+    "name": "segmented",
+    "label": "分段控制器"
+  },
+  {
+    "type": "file",
     "name": "tabs",
     "label": "标签页"
   },
@@ -102,7 +107,7 @@
   {
     "type": "file",
     "name": "date-picker",
-    "label": "日期选择器"
+    "label": "日期与时间选择器"
   },
   {
     "type": "file",

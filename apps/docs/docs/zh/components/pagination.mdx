@@ -34,11 +34,9 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 </PaginationShowcase>
 
-## 组成部分
-
-- **Pagination** — 通过主组件 props 配置内容、状态、行为和扩展点。
-
 ## API
+
+必须且只能选择一种数据规模来源：传入 `total` 让组件根据 `pageSize` 计算页数，或传入 `pageCount` 直接声明总页数。只有 `total` 模式支持 `showTotal`。
 
 <ApiTable
   labels={{
@@ -73,15 +71,15 @@ import { ApiTable } from '@docs/rspress/api-table';
     {
       component: 'Pagination',
       defaultValue: null,
-      description: '直接设置总页数；省略时由 total 与 pageSize 推导。',
+      description: '直接声明总页数；与 total 必须且只能选择一个。',
       name: 'pageCount',
       type: 'number',
     },
     {
       component: 'Pagination',
-      defaultValue: '0',
+      defaultValue: null,
       description:
-        '设置数据总数，并结合 pageSize 推导总页数；pageCount 可直接覆盖推导结果。',
+        '设置数据总数并结合 pageSize 推导总页数；与 pageCount 必须且只能选择一个。',
       name: 'total',
       type: 'number',
     },
@@ -115,24 +113,10 @@ import { ApiTable } from '@docs/rspress/api-table';
     },
     {
       component: 'Pagination',
-      defaultValue: '[10, 20, 50, 100]',
-      description: '设置每页数量选择器的候选值。',
-      name: 'pageSizeOptions',
-      type: 'readonly number[]',
-    },
-    {
-      component: 'Pagination',
-      defaultValue: null,
-      description: '格式化每页数量选项的可见文字。',
-      name: 'pageSizeLabel',
-      type: '(pageSize: number) => ReactNode',
-    },
-    {
-      component: 'Pagination',
       defaultValue: 'false',
-      description: '显示每页数量选择器。',
+      description: '显示每页数量选择器；传入对象可集中配置候选值与选项标签。',
       name: 'showSizeChanger',
-      type: 'boolean',
+      type: 'boolean | PaginationSizeChangerOptions',
     },
     {
       component: 'Pagination',
@@ -144,7 +128,8 @@ import { ApiTable } from '@docs/rspress/api-table';
     {
       component: 'Pagination',
       defaultValue: 'false',
-      description: '显示数据总数，或根据总数与当前范围自定义摘要。',
+      description:
+        '在 total 模式下显示数据总数，或根据总数与当前范围自定义摘要。',
       name: 'showTotal',
       type: 'boolean | ((total: number, range: readonly [number, number]) => ReactNode)',
     },
@@ -252,7 +237,7 @@ import { ApiTable } from '@docs/rspress/api-table';
     },
     {
       component: 'Pagination',
-      defaultValue: "'default'",
+      defaultValue: "'md'",
       description: '设置分页控件尺寸。',
       name: 'size',
       type: 'PaginationSize',

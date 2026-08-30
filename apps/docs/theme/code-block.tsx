@@ -1,6 +1,6 @@
 import { Button, Tooltip, Typography, useProvider } from '@heliannuuthus/ui';
 import { useLocation } from '@rspress/core/runtime';
-import { Box, Check, Copy, PencilLine, Zap } from 'lucide-react';
+import { Box, Check, CodeXml, Copy, Zap } from 'lucide-react';
 import { Highlight, themes } from 'prism-react-renderer';
 import {
   Fragment,
@@ -32,31 +32,6 @@ const nodeText = (node: ReactNode): string => {
   return nodeText(node.props.children);
 };
 
-const CodeDisclosureIcon = ({ expanded }: { expanded: boolean }) => (
-  <svg
-    aria-hidden="true"
-    className="docs-code-disclosure-icon"
-    data-expanded={expanded}
-    fill="none"
-    focusable="false"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.6"
-    viewBox="0 0 20 20"
-  >
-    <path
-      className="docs-code-disclosure-bracket docs-code-disclosure-bracket-left"
-      d="m6.25 3.75-3.5 3.5 3.5 3.5"
-    />
-    <path
-      className="docs-code-disclosure-bracket docs-code-disclosure-bracket-right"
-      d="m13.75 3.75 3.5 3.5-3.5 3.5"
-    />
-    <path d="m11.5 2.75-3 9" />
-  </svg>
-);
-
 export const CodeBlock = ({
   children,
   containerElementClassName,
@@ -85,9 +60,6 @@ export const CodeBlock = ({
   const sourcePath = title?.startsWith('showcases/') ? title : null;
   const displayedTitle = sourcePath?.split('/').pop() ?? title;
   const repositorySourcePath = sourcePath ? `apps/docs/${sourcePath}` : null;
-  const editHref = repositorySourcePath
-    ? `https://github.com/heliannuuthus/ui/edit/main/${repositorySourcePath}`
-    : null;
   const stackBlitzHref = repositorySourcePath
     ? `https://stackblitz.com/fork/github/heliannuuthus/ui?file=${encodeURIComponent(repositorySourcePath)}&startScript=dev`
     : null;
@@ -180,6 +152,51 @@ export const CodeBlock = ({
         className="docs-code-toolbar"
         role="toolbar"
       >
+        <Tooltip
+          content={copied ? labels.copied : labels.copyCode}
+          openDelay={copied ? 0 : undefined}
+        >
+          <Button
+            aria-label={copied ? labels.copied : labels.copyCode}
+            onClick={() => void copy()}
+            size="icon-sm"
+            variant="ghost"
+          >
+            {copied ? (
+              <Check aria-hidden="true" />
+            ) : (
+              <Copy aria-hidden="true" />
+            )}
+          </Button>
+        </Tooltip>
+        {repositorySourcePath ? (
+          <>
+            <Tooltip content={labels.openCodeSandbox}>
+              <Button
+                aria-label={labels.openCodeSandbox}
+                href={codeSandboxHref!}
+                rel="noreferrer"
+                size="icon-sm"
+                target="_blank"
+                variant="ghost"
+              >
+                <Box aria-hidden="true" />
+              </Button>
+            </Tooltip>
+            <Tooltip content={labels.openStackBlitz}>
+              <Button
+                aria-label={labels.openStackBlitz}
+                href={stackBlitzHref!}
+                rel="noreferrer"
+                size="icon-sm"
+                target="_blank"
+                variant="ghost"
+              >
+                <Zap aria-hidden="true" />
+              </Button>
+            </Tooltip>
+          </>
+        ) : null}
         {sourceDisclosureEnabled ? (
           <Tooltip
             content={
@@ -199,69 +216,12 @@ export const CodeBlock = ({
               onClick={() =>
                 sourceDisclosure.onExpandedChange(!sourceDisclosure.expanded)
               }
-              size="icon-xs"
+              size="icon-sm"
               variant="ghost"
             >
-              <CodeDisclosureIcon expanded={sourceDisclosure.expanded} />
+              <CodeXml aria-hidden="true" />
             </Button>
           </Tooltip>
-        ) : null}
-        <Tooltip
-          content={copied ? labels.copied : labels.copyCode}
-          openDelay={copied ? 0 : undefined}
-        >
-          <Button
-            aria-label={copied ? labels.copied : labels.copyCode}
-            onClick={() => void copy()}
-            size="icon-xs"
-            variant="ghost"
-          >
-            {copied ? (
-              <Check aria-hidden="true" />
-            ) : (
-              <Copy aria-hidden="true" />
-            )}
-          </Button>
-        </Tooltip>
-        {editHref ? (
-          <>
-            <Tooltip content={labels.openCodeSandbox}>
-              <Button
-                aria-label={labels.openCodeSandbox}
-                href={codeSandboxHref!}
-                rel="noreferrer"
-                size="icon-xs"
-                target="_blank"
-                variant="ghost"
-              >
-                <Box aria-hidden="true" />
-              </Button>
-            </Tooltip>
-            <Tooltip content={labels.openStackBlitz}>
-              <Button
-                aria-label={labels.openStackBlitz}
-                href={stackBlitzHref!}
-                rel="noreferrer"
-                size="icon-xs"
-                target="_blank"
-                variant="ghost"
-              >
-                <Zap aria-hidden="true" />
-              </Button>
-            </Tooltip>
-            <Tooltip content={labels.editOnGitHub}>
-              <Button
-                aria-label={labels.editOnGitHub}
-                href={editHref}
-                rel="noreferrer"
-                size="icon-xs"
-                target="_blank"
-                variant="ghost"
-              >
-                <PencilLine aria-hidden="true" />
-              </Button>
-            </Tooltip>
-          </>
         ) : null}
         <span aria-live="polite" className="sr-only">
           {copied ? labels.copied : ''}

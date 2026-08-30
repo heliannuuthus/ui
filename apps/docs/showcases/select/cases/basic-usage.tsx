@@ -13,13 +13,8 @@ const createExample = (locale: 'en' | 'zh') => {
     copy('宋雨 · 运营'),
   ];
 
-  const SelectMemberSearchDemo = ({
-    mode = 'default',
-  }: {
-    mode?: 'controlled-open' | 'custom-filter' | 'default';
-  }) => {
+  const SelectMemberSearchDemo = () => {
     const [value, setValue] = useState<string | null>(members[0]);
-    const [open, setOpen] = useState(false);
 
     return (
       <div className="data-compact-form">
@@ -31,21 +26,11 @@ const createExample = (locale: 'en' | 'zh') => {
         </div>
         <Select
           emptyText={copy('没有找到成员')}
-          filter={
-            mode === 'custom-filter'
-              ? (member, query) =>
-                  member
-                    .toLocaleLowerCase()
-                    .startsWith(query.toLocaleLowerCase())
-              : undefined
-          }
+          id="member-select"
           onChange={setValue}
-          onOpenChange={mode === 'controlled-open' ? setOpen : undefined}
-          open={mode === 'controlled-open' ? open : undefined}
           options={members.map((member) => ({ label: member, value: member }))}
           placeholder={copy('搜索成员…')}
           showClear
-          triggerProps={{ id: 'member-select' }}
           value={value}
         />
         <p className="data-result">

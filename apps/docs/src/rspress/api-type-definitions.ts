@@ -104,7 +104,7 @@ export const apiTypeDefinitions = {
   variant?:
     'default' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link';
   size?:
-    'xs' | 'sm' | 'default' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
+    'xs' | 'sm' | 'md' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
   block?: boolean;
   disabled?: boolean;
 };`,
@@ -187,7 +187,7 @@ export const apiTypeDefinitions = {
   variant?:
     'default' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link';
   size?:
-    'xs' | 'sm' | 'default' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
+    'xs' | 'sm' | 'md' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
   disabled?: boolean;
   'aria-label'?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -228,6 +228,29 @@ export const apiTypeDefinitions = {
   DatePickerStyles: `type DatePickerStyles = {
   calendar?: React.CSSProperties;
   trigger?: React.CSSProperties;
+};`,
+  DateTimePickerClassNames: `type DateTimePickerClassNames = DatePickerClassNames & {
+  time?: string;
+};`,
+  DateTimePickerStyles: `type DateTimePickerStyles = {
+  calendar?: React.CSSProperties;
+  time?: React.CSSProperties;
+  trigger?: React.CSSProperties;
+};`,
+  PickerLocale: `type PickerLocale = 'en' | 'zh';`,
+  PickerRangeValue: `type PickerRangeValue<Value> = readonly [
+  Value | undefined,
+  Value | undefined,
+];`,
+  TimeRangePickerClassNames: `type TimeRangePickerClassNames = {
+  end?: string;
+  separator?: string;
+  start?: string;
+};`,
+  TimeRangePickerStyles: `type TimeRangePickerStyles = {
+  end?: React.CSSProperties;
+  separator?: React.CSSProperties;
+  start?: React.CSSProperties;
 };`,
   DialogClassNames: `type DialogClassNames = {
   content?: string;
@@ -454,7 +477,11 @@ export const apiTypeDefinitions = {
   PaginationSimpleOptions: `type PaginationSimpleOptions = {
   readOnly?: boolean;
 };`,
-  PaginationSize: `type PaginationSize = 'sm' | 'default' | 'lg';`,
+  PaginationSize: `type PaginationSize = 'sm' | 'md' | 'lg';`,
+  PaginationSizeChangerOptions: `type PaginationSizeChangerOptions = {
+  getOptionLabel?: (pageSize: number) => ReactNode;
+  options?: readonly number[];
+};`,
   PaginationStyles: `type PaginationStyles = {
   content?: React.CSSProperties;
   control?: React.CSSProperties;
@@ -502,30 +529,44 @@ export const apiTypeDefinitions = {
   size?: 'sm' | 'md' | 'lg' | number;
   visibility?: 'auto' | 'always' | 'hidden';
 };`,
+  SegmentedClassNames: `type SegmentedClassNames = {
+  indicator?: string;
+  item?: string;
+  label?: string;
+};`,
+  SegmentedOption: `type SegmentedOption<Value extends SegmentedValue = string> = {
+  'aria-label'?: string;
+  className?: string;
+  disabled?: boolean;
+  icon?: ReactNode;
+  label: ReactNode;
+  style?: CSSProperties;
+  title?: string;
+  value: Value;
+};`,
+  SegmentedSize: `type SegmentedSize = 'sm' | 'md' | 'lg';`,
+  SegmentedStyles: `type SegmentedStyles = {
+  indicator?: CSSProperties;
+  item?: CSSProperties;
+  label?: CSSProperties;
+};`,
+  SegmentedValue: `type SegmentedValue = string | number;`,
   SelectClassNames: `type SelectClassNames = {
   trigger?: string;
 };`,
-  SelectOption: `type SelectOption<Value> = {
+  SelectOption: `type SelectOption<Value extends SelectValue> = {
   disabled?: boolean;
   label: ReactNode;
+  textValue?: string;
   value: Value;
 };`,
-  SelectOptionGroup: `type SelectOptionGroup<Value> = {
+  SelectOptionGroup: `type SelectOptionGroup<Value extends SelectValue> = {
   label: ReactNode;
   options: readonly SelectOption<Value>[];
 };`,
+  SelectValue: `type SelectValue = string | number;`,
   SelectStyles: `type SelectStyles = {
   trigger?: React.CSSProperties;
-};`,
-  SelectTriggerProps: `type SelectTriggerProps = Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  'children' | 'className'
-> & {
-  children?: ReactNode;
-  className?: string;
-  inputRef?: Ref<HTMLInputElement>;
-  showClear?: boolean;
-  showTrigger?: boolean;
 };`,
   'Table.ExpandableProps': `type Table.ExpandableProps<TData> = {
   canExpand?: (row: TData, index: number) => boolean

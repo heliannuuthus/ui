@@ -193,6 +193,11 @@ for (const locale of ['zh', 'en']) {
       /^## (?:类型定义|Type definitions)$/mu,
       `${pagePath} must reference shared API type tooltips instead of rendering a type-definition section.`
     );
+    assert.doesNotMatch(
+      source,
+      /^## (?:组成部分|Component parts)$/mu,
+      `${pagePath} must let examples and the API reference describe component composition without a repetitive parts section.`
+    );
 
     const caseFiles = Array.from(
       showcaseSection[1].matchAll(
@@ -595,8 +600,8 @@ assert.doesNotMatch(
 );
 assert.match(
   themeCodeBlock,
-  /CodeDisclosureIcon expanded=\{sourceDisclosure\.expanded\}/u,
-  'Code disclosure must communicate state through the custom code icon.'
+  /<CodeXml aria-hidden="true" \/>/u,
+  'Code disclosure must use the same centered Lucide icon system as the other toolbar actions.'
 );
 assert.match(
   themeCodeBlock,
@@ -622,6 +627,27 @@ assert.match(
   themeCodeBlock,
   /https:\/\/codesandbox\.io\/p\/github\/heliannuuthus\/ui\/main/u,
   'Case source blocks must link to the public CodeSandbox project.'
+);
+assert.doesNotMatch(
+  themeCodeBlock,
+  /PencilLine|editOnGitHub|github\.com\/heliannuuthus\/ui\/edit/u,
+  'Case source blocks must not render a GitHub edit action.'
+);
+const copyActionIndex = themeCodeBlock.indexOf('<Copy aria-hidden="true" />');
+const codeSandboxActionIndex = themeCodeBlock.indexOf(
+  '<Tooltip content={labels.openCodeSandbox}>'
+);
+const stackBlitzActionIndex = themeCodeBlock.indexOf(
+  '<Tooltip content={labels.openStackBlitz}>'
+);
+const disclosureActionIndex = themeCodeBlock.indexOf(
+  '<CodeXml aria-hidden="true" />'
+);
+assert.ok(
+  copyActionIndex < codeSandboxActionIndex &&
+    codeSandboxActionIndex < stackBlitzActionIndex &&
+    stackBlitzActionIndex < disclosureActionIndex,
+  'Case source toolbar must place copy and playground actions before the code disclosure action.'
 );
 assert.doesNotMatch(
   themeCodeBlock,

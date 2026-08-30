@@ -45,15 +45,13 @@ Layout 只描述区域之间的结构关系；导航状态、路由和业务内�
 
 ```
 
+```tsx title="showcases/layout/cases/collapse-state.tsx" file="<root>/showcases/layout/cases/collapse-state.tsx"
+
+```
+
 </LayoutShowcase>
 
-## 组成部分
-
-- **Layout** — 组合纵向区域；直接包含 Sidebar 时自动切换为横向排列。
-- **Layout.Header** — 页面或局部布局顶部的固定区域。
-- **Layout.Content** — 承载主要内容并占据布局中的剩余空间。
-- **Layout.Footer** — 页面或局部布局底部的固定区域。
-- **Layout.Sidebar** — 放置导航、目录或详情的侧边区域。
+## 布局模式
 
 ::::tabs
 :::tab{label="纵向组合" value="vertical"}
@@ -63,6 +61,16 @@ Header、Content 和 Footer 默认纵向排列，Content 自动占据剩余空�
 Layout 直接包含 Sidebar 时切换为横向排列，嵌套 Layout 可继续组织主体区域。
 :::
 ::::
+
+## 折叠状态模型
+
+| 属性                 | 职责                                                                                                               |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `collapsible`        | 只决定是否渲染内置折叠触发器；它不是折叠状态。传入节点可替换默认图标。                                             |
+| `defaultCollapsed`   | 仅初始化非受控状态。提供 `collapsed` 后会被忽略；在非受控模式下，若初次渲染已低于 `breakpoint`，侧边栏会优先折叠。 |
+| `collapsed`          | 受控状态。组件不会自行改写它，父组件需要在 `onChange` 中应用新值。                                                 |
+| `onBreakpointChange` | 首次检测以及每次进入或离开断点范围时触发；`below` 表示当前是否低于断点。                                           |
+| `onChange`           | 折叠请求真正改变当前状态时触发，并通过 `reason` 区分 `breakpoint` 与 `trigger`。                                   |
 
 ## API
 
@@ -79,14 +87,14 @@ Layout 直接包含 Sidebar 时切换为横向排列，嵌套 Layout 可继续�
       component: 'Layout.Sidebar',
       defaultValue: null,
       description:
-        '低于指定视口断点时自动折叠；使用与 Tailwind 默认断点一致的 token。',
+        '低于指定视口断点时请求折叠；非受控模式会自动应用，受控模式通过 onChange 通知父组件。使用与 Tailwind 默认断点一致的 token。',
       name: 'breakpoint',
       type: "'sm' | 'md' | 'lg' | 'xl' | '2xl'",
     },
     {
       component: 'Layout.Sidebar',
       defaultValue: null,
-      description: '受控的折叠状态。',
+      description: '受控的折叠状态；父组件需要在 onChange 中应用请求的新值。',
       name: 'collapsed',
       type: 'boolean',
     },
@@ -100,28 +108,32 @@ Layout 直接包含 Sidebar 时切换为横向排列，嵌套 Layout 可继续�
     {
       component: 'Layout.Sidebar',
       defaultValue: 'false',
-      description: '启用内置折叠触发器；传入 ReactNode 可以替换默认图标。',
+      description:
+        '只启用内置折叠触发器，不代表当前折叠状态；传入 ReactNode 可以替换默认图标。',
       name: 'collapsible',
       type: 'boolean | ReactNode',
     },
     {
       component: 'Layout.Sidebar',
       defaultValue: 'false',
-      description: '非受控模式下的初始折叠状态。',
+      description:
+        '非受控模式下的初始折叠状态；提供 collapsed 时忽略，非受控模式初始命中 breakpoint 时会优先折叠。',
       name: 'defaultCollapsed',
       type: 'boolean',
     },
     {
       component: 'Layout.Sidebar',
       defaultValue: null,
-      description: '进入或离开 breakpoint 范围时调用。',
+      description:
+        '首次检测以及进入或离开 breakpoint 范围时调用；below 表示当前是否低于断点。',
       name: 'onBreakpointChange',
       type: '(below: boolean) => void',
     },
     {
       component: 'Layout.Sidebar',
       defaultValue: null,
-      description: '折叠状态请求变化时调用，并说明变化来自断点还是触发器。',
+      description:
+        '折叠请求改变当前状态时调用，并说明变化来自断点还是触发器；受控模式需由父组件应用新值。',
       name: 'onChange',
       type: "(collapsed: boolean, reason: 'breakpoint' | 'trigger') => void",
     },

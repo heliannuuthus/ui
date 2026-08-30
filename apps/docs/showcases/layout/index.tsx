@@ -5,6 +5,7 @@ import Case02 from './cases/left-navigation';
 import Case03 from './cases/details-on-the-right';
 import Case04 from './cases/complete-application-framework';
 import Case05 from './cases/responsive-collapse';
+import Case06 from './cases/collapse-state';
 
 const cases = [
   {
@@ -41,10 +42,18 @@ const cases = [
   },
   {
     component: Case05,
-    title: { en: 'Responsive collapse', zh: '响应式折叠' },
+    title: { en: 'Breakpoint events', zh: '断点事件' },
     description: {
-      en: 'The Sidebar collapses automatically below lg and can also be toggled manually with its built-in trigger; collapsedWidth controls the remaining width.',
-      zh: 'Sidebar 在 lg 以下自动折叠，也可以通过内置触发器手动切换；collapsedWidth 决定折叠后保留的宽度。',
+      en: 'onBreakpointChange reports whether the viewport is below lg, while onChange separately reports collapse requests from the breakpoint or trigger.',
+      zh: 'onBreakpointChange 报告视口是否低于 lg；onChange 则单独报告来自断点或触发器的折叠请求。',
+    },
+  },
+  {
+    component: Case06,
+    title: { en: 'Collapse state', zh: '折叠状态' },
+    description: {
+      en: 'collapsible only enables the built-in trigger. Use defaultCollapsed for an uncontrolled initial state, or collapsed with onChange when the parent owns the state.',
+      zh: 'collapsible 只启用内置触发器。非受控模式用 defaultCollapsed 设置初始值；由父组件管理时则组合 collapsed 与 onChange。',
     },
   },
 ];

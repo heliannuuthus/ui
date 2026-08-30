@@ -174,6 +174,35 @@ const referencesTypeGroup = (value: string, name: string) =>
     `(^|[^A-Za-z0-9_$])${escapeRegularExpression(name)}(?=$|[^A-Za-z0-9_$.])`
   ).test(value);
 
+// Keep component API tables focused on the decisions consumers need to make.
+// These React/HTML plumbing props remain supported by the components and types;
+// examples and accessibility guidance document them where they are relevant.
+const hiddenApiTablePropertyNames = new Set([
+  'autoComplete',
+  'autoFocus',
+  'children',
+  'className',
+  'form',
+  'id',
+  'inputRef',
+  'name',
+  'onBlur',
+  'onFocus',
+  'parent',
+  'pattern',
+  'readOnly',
+  'ref',
+  'required',
+  'role',
+  'style',
+  'tabIndex',
+]);
+
+const isApiTablePropertyVisible = (name: string) =>
+  !hiddenApiTablePropertyNames.has(name) &&
+  !name.startsWith('aria-') &&
+  !name.startsWith('data-');
+
 const ApiTypePopoverContent = ({
   labels,
   name,
@@ -331,8 +360,9 @@ export const ApiTable = ({
   rows: ApiTableRow[];
 }) => {
   const groups = new Map<string, ApiTableRow[]>();
+  const visibleRows = rows.filter((row) => isApiTablePropertyVisible(row.name));
 
-  rows.forEach((row) => {
+  visibleRows.forEach((row) => {
     const componentRows = groups.get(row.component);
     if (componentRows) {
       componentRows.push(row);
@@ -343,7 +373,7 @@ export const ApiTable = ({
 
   const referencedGroups = new Set(
     [...groups.keys()].filter((name) =>
-      rows.some(
+      visibleRows.some(
         (row) => row.component !== name && referencesTypeGroup(row.type, name)
       )
     )

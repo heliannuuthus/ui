@@ -1,0 +1,182 @@
+---
+title: 'Segmented 分段控制器'
+description: '在一组紧凑的视图、模式或筛选条件中选择一项。'
+lang: zh-Hans
+---
+
+import SegmentedShowcase from '@showcases/segmented';
+import { ApiTable } from '@docs/rspress/api-table';
+
+# Segmented 分段控制器
+
+{"在一组紧凑的视图、模式或筛选条件中选择一项。"}
+
+## 何时使用
+
+- 可选项数量少且需要始终可见，例如列表或看板视图、数据密度和简单筛选。
+- 切换只改变一个值，不需要建立标签与内容面板的语义关系。
+
+Segmented 不渲染内容面板。当每个选项都拥有对应的内容区域，并需要 `tab` / `tabpanel` 键盘与读屏语义时，使用 Tabs。
+
+## 示例
+
+<SegmentedShowcase>
+
+```tsx title="showcases/segmented/cases/basic-usage.tsx" file="<root>/showcases/segmented/cases/basic-usage.tsx"
+
+```
+
+```tsx title="showcases/segmented/cases/icons-and-layouts.tsx" file="<root>/showcases/segmented/cases/icons-and-layouts.tsx"
+
+```
+
+```tsx title="showcases/segmented/cases/vertical-alignment.tsx" file="<root>/showcases/segmented/cases/vertical-alignment.tsx"
+
+```
+
+</SegmentedShowcase>
+
+## API
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description:
+        '设置选项的值、标签、图标与禁用状态；字符串或数字可作为简写。',
+      name: 'options',
+      type: 'readonly (SegmentedValue | SegmentedOption)[]',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: '设置受控选中值；传入 null 时不选中任何项。',
+      name: 'value',
+      type: 'SegmentedValue | null',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: '首个可用选项',
+      description: '设置非受控模式的初始选中值。',
+      name: 'defaultValue',
+      type: 'SegmentedValue',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: '选中值变化时调用。',
+      name: 'onChange',
+      type: '(value: SegmentedValue) => void',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: 'false',
+      description: '填满可用宽度，并让各选项平分空间。',
+      name: 'block',
+      type: 'boolean',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: "'horizontal'",
+      description: '设置水平或垂直排列方向。',
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+    },
+    {
+      component: 'Segmented',
+      defaultValue: "'md'",
+      description: '设置分段选项尺寸。',
+      name: 'size',
+      type: 'SegmentedSize',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: 'false',
+      description: '禁用整个分段控制器。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: 'false',
+      description: '保留当前值和聚焦能力，但不允许更改选择。',
+      name: 'readOnly',
+      type: 'boolean',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: 'false',
+      description: '要求表单提交时存在选中值。',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: '设置表单字段名。',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: '将隐藏输入关联到指定表单。',
+      name: 'form',
+      type: 'string',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: '获取底层表单输入的 ref。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: '按 indicator、item 和 label 语义槽位扩展类名。',
+      name: 'classNames',
+      type: 'SegmentedClassNames',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: '按与 classNames 相同的语义槽位设置行内样式。',
+      name: 'styles',
+      type: 'SegmentedStyles',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: '扩展根节点样式。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: 'Segmented',
+      defaultValue: null,
+      description: '扩展根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+  ]}
+/>
+
+## 无障碍
+
+- 组件使用单选组语义，支持 Tab 聚焦、方向键切换和表单提交。
+- 纯图标标签应通过选项的 `aria-label` 提供可感知名称。
+- 用户开启减少动态效果时，选中指示器会立即切换。
+
+## 避免事项
+
+- 不要放入大量选项；长列表应使用 Select。
+- 不要用 Segmented 模拟拥有内容面板语义的 Tabs。

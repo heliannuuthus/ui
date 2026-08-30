@@ -1,20 +1,23 @@
 ---
-title: 'Date Picker 日期选择器'
-description: '通过内联日历或弹出触发器选择单个日期。'
+title: 'Date Picker 日期与时间选择器'
+description: '选择日期、日期时间或时间，并为每种精度提供对应的范围选择器。'
 lang: zh-Hans
 ---
 
 import DatePickerShowcase from '@showcases/date-picker';
 import { ApiTable } from '@docs/rspress/api-table';
 
-# Date Picker 日期选择器
+# Date Picker 日期与时间选择器
 
-{"通过内联日历或弹出触发器选择单个日期。"}
+{"选择日期、日期时间或时间，并为每种精度提供对应的范围选择器。"}
 
 ## 何时使用
 
-- 需要通过内联日历或弹出触发器选择单个日期时。
-- 需要覆盖默认、受控、禁用和窄屏状态时。
+- 只关心自然日时使用 `DatePicker`，需要起止日期时使用 `DateRangePicker`。
+- 事件精确到分钟时使用 `DateTimePicker` 或 `DateTimeRangePicker`。
+- 时间与具体日期无关时使用 `TimePicker` 或 `TimeRangePicker`，值保持为不带时区的 `HH:mm` 字符串。
+
+日期与日期时间使用原生 `Date`；所有范围选择器统一使用 `[start, end]` 二元组。组件名称直接表达值的精度和单值/范围语义，不需要组合 `mode`、`showTime` 等条件属性。
 
 ## 示例
 
@@ -24,13 +27,31 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ```
 
-```tsx title="showcases/date-picker/cases/release-regularly.tsx" file="<root>/showcases/date-picker/cases/release-regularly.tsx"
+```tsx title="showcases/date-picker/cases/date-range.tsx" file="<root>/showcases/date-picker/cases/date-range.tsx"
+
+```
+
+```tsx title="showcases/date-picker/cases/date-time.tsx" file="<root>/showcases/date-picker/cases/date-time.tsx"
+
+```
+
+```tsx title="showcases/date-picker/cases/date-time-range.tsx" file="<root>/showcases/date-picker/cases/date-time-range.tsx"
+
+```
+
+```tsx title="showcases/date-picker/cases/time.tsx" file="<root>/showcases/date-picker/cases/time.tsx"
+
+```
+
+```tsx title="showcases/date-picker/cases/time-range.tsx" file="<root>/showcases/date-picker/cases/time-range.tsx"
 
 ```
 
 </DatePickerShowcase>
 
 ## API
+
+### 值契约
 
 <ApiTable
   labels={{
@@ -42,112 +63,457 @@ import { ApiTable } from '@docs/rspress/api-table';
   }}
   rows={[
     {
-      component: 'Date Picker',
-      defaultValue: "'popover'",
-      description: '选择内联日历或由按钮触发的弹出日历。',
-      name: 'display',
-      type: "'inline' | 'popover'",
-    },
-    {
-      component: 'Date Picker',
+      component: 'DatePicker',
       defaultValue: null,
-      description: '当前选择的日期。',
+      description: '当前日期；清除时为 undefined。',
       name: 'value',
       type: 'Date | undefined',
     },
     {
-      component: 'Date Picker',
+      component: 'DatePicker',
+      defaultValue: null,
+      description: '非受控模式下的初始日期。',
+      name: 'defaultValue',
+      type: 'Date',
+    },
+    {
+      component: 'DatePicker',
       defaultValue: null,
       description: '选择或清除日期时调用。',
       name: 'onChange',
       type: '(date?: Date) => void',
     },
     {
-      component: 'Date Picker',
-      defaultValue: "'选择日期'",
-      description: '未选择日期时的提示。',
-      name: 'placeholder',
-      type: 'string',
-    },
-    {
-      component: 'Date Picker',
-      defaultValue: 'false',
-      description: '禁用触发器与日历日期选择。',
-      name: 'disabled',
-      type: 'boolean',
-    },
-    {
-      component: 'Date Picker',
+      component: 'DateRangePicker',
       defaultValue: null,
-      description: '透传月份导航、禁用日期和本地化等日历配置。',
-      name: 'calendarProps',
-      type: 'CalendarProps',
+      description: '当前开始与结束日期。',
+      name: 'value',
+      type: 'PickerRangeValue<Date>',
     },
     {
-      component: 'Date Picker',
-      defaultValue: "'zh'",
-      description: '同时本地化日历名称、星期、月份和弹出触发器中的日期格式。',
-      name: 'locale',
-      type: "'zh' | 'en'",
-    },
-    {
-      component: 'Date Picker',
+      component: 'DateRangePicker',
       defaultValue: null,
-      description: '扩展对应语义槽位的 className。',
-      name: 'classNames',
-      type: 'DatePickerClassNames',
+      description: '非受控模式下的初始日期范围。',
+      name: 'defaultValue',
+      type: 'PickerRangeValue<Date>',
     },
     {
-      component: 'Date Picker',
+      component: 'DateRangePicker',
       defaultValue: null,
-      description: '按与 classNames 相同的语义区域设置行内样式。',
-      name: 'styles',
-      type: 'DatePickerStyles',
+      description: '范围任一端变化或清除时调用。',
+      name: 'onChange',
+      type: '(range?: PickerRangeValue<Date>) => void',
     },
     {
-      component: 'Date Picker',
+      component: 'DateTimePicker',
       defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
+      description: '当前日期时间，时间保存在同一个 Date 中。',
+      name: 'value',
+      type: 'Date | undefined',
+    },
+    {
+      component: 'DateTimePicker',
+      defaultValue: null,
+      description: '非受控模式下的初始日期时间。',
       name: 'defaultValue',
       type: 'Date',
     },
     {
-      component: 'Date Picker',
+      component: 'DateTimePicker',
       defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
-      name: 'inputRef',
-      type: 'React.Ref<HTMLButtonElement>',
+      description: '日期或时间变化时调用。',
+      name: 'onChange',
+      type: '(date?: Date) => void',
     },
     {
-      component: 'Date Picker',
+      component: 'DateTimeRangePicker',
+      defaultValue: null,
+      description: '当前开始与结束日期时间。',
+      name: 'value',
+      type: 'PickerRangeValue<Date>',
+    },
+    {
+      component: 'DateTimeRangePicker',
+      defaultValue: null,
+      description: '非受控模式下的初始日期时间范围。',
+      name: 'defaultValue',
+      type: 'PickerRangeValue<Date>',
+    },
+    {
+      component: 'DateTimeRangePicker',
+      defaultValue: null,
+      description: '范围内任一日期或时间变化时调用。',
+      name: 'onChange',
+      type: '(range?: PickerRangeValue<Date>) => void',
+    },
+    {
+      component: 'TimePicker',
+      defaultValue: null,
+      description: '当前时间，格式为不带时区的 HH:mm。',
+      name: 'value',
+      type: 'string | undefined',
+    },
+    {
+      component: 'TimePicker',
+      defaultValue: null,
+      description: '非受控模式下的初始时间。',
+      name: 'defaultValue',
+      type: 'string',
+    },
+    {
+      component: 'TimePicker',
+      defaultValue: null,
+      description: '时间变化或清除时调用。',
+      name: 'onChange',
+      type: '(time?: string) => void',
+    },
+    {
+      component: 'TimeRangePicker',
+      defaultValue: null,
+      description: '当前开始与结束时间。',
+      name: 'value',
+      type: 'PickerRangeValue<string>',
+    },
+    {
+      component: 'TimeRangePicker',
+      defaultValue: null,
+      description: '非受控模式下的初始时间范围。',
+      name: 'defaultValue',
+      type: 'PickerRangeValue<string>',
+    },
+    {
+      component: 'TimeRangePicker',
+      defaultValue: null,
+      description: '开始或结束时间变化时调用。',
+      name: 'onChange',
+      type: '(range?: PickerRangeValue<string>) => void',
+    },
+  ]}
+/>
+
+### 日期类选择器共享属性
+
+以下属性由 `DatePicker`、`DateRangePicker`、`DateTimePicker` 和 `DateTimeRangePicker` 共用。
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: '日期类选择器',
+      defaultValue: "'popover'",
+      description: '使用弹出触发器或内联日历。',
+      name: 'display',
+      type: "'inline' | 'popover'",
+    },
+    {
+      component: '日期类选择器',
+      defaultValue: '本地化文案',
+      description: '未选择值时显示的提示。',
+      name: 'placeholder',
+      type: 'string',
+    },
+    {
+      component: '日期类选择器',
       defaultValue: 'false',
-      description: '配置组件的公开状态、行为或扩展点。',
+      description: '禁用触发器和日历交互。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: '日期类选择器',
+      defaultValue: 'false',
+      description: '向表单和无障碍树声明必填。',
       name: 'required',
       type: 'boolean',
     },
     {
-      component: 'Date Picker',
+      component: '日期类选择器',
+      defaultValue: "'zh'",
+      description: '本地化日历和格式化后的触发器文案。',
+      name: 'locale',
+      type: 'PickerLocale',
+    },
+    {
+      component: '日期类选择器',
       defaultValue: null,
-      description: '扩展根节点样式。',
+      description: '配置月份导航、禁用日期和可见月份数量。',
+      name: 'calendarProps',
+      type: 'CalendarProps',
+    },
+    {
+      component: '日期类选择器',
+      defaultValue: null,
+      description: '扩展组件根节点类名。',
       name: 'className',
       type: 'string',
     },
     {
-      component: 'Date Picker',
+      component: '日期类选择器',
       defaultValue: null,
-      description: '扩展根节点行内样式。',
+      description: '设置组件根节点行内样式。',
+      name: 'style',
+      type: 'CSSProperties',
+    },
+    {
+      component: '日期类选择器',
+      defaultValue: null,
+      description: '扩展 calendar、trigger 及日期时间的 time 槽位。',
+      name: 'classNames',
+      type: 'DatePickerClassNames | DateTimePickerClassNames',
+    },
+    {
+      component: '日期类选择器',
+      defaultValue: null,
+      description: '按与 classNames 相同的槽位设置行内样式。',
+      name: 'styles',
+      type: 'DatePickerStyles | DateTimePickerStyles',
+    },
+    {
+      component: '日期类选择器',
+      defaultValue: null,
+      description: '获取弹出模式下的触发按钮。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLButtonElement>',
+    },
+    {
+      component: '日期类选择器',
+      defaultValue: null,
+      description: '设置触发按钮 id。',
+      name: 'id',
+      type: 'string',
+    },
+    {
+      component: '日期类选择器',
+      defaultValue: null,
+      description: '设置表单字段名。',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: '日期类选择器',
+      defaultValue: null,
+      description: '触发按钮失焦时调用。',
+      name: 'onBlur',
+      type: 'FocusEventHandler<HTMLButtonElement>',
+    },
+    {
+      component: '日期类选择器',
+      defaultValue: null,
+      description: '为没有可见标签的触发器提供名称。',
+      name: 'aria-label',
+      type: 'string',
+    },
+    {
+      component: '日期类选择器',
+      defaultValue: null,
+      description: '关联描述文本节点。',
+      name: 'aria-describedby',
+      type: 'string',
+    },
+    {
+      component: '日期类选择器',
+      defaultValue: null,
+      description: '标记当前值是否无效。',
+      name: 'aria-invalid',
+      type: 'boolean | string',
+    },
+  ]}
+/>
+
+### 日期时间附加属性
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'DateTimePicker',
+      defaultValue: '1',
+      description: '时间输入的分钟步长。',
+      name: 'minuteStep',
+      type: 'number',
+    },
+    {
+      component: 'DateTimeRangePicker',
+      defaultValue: '1',
+      description: '开始与结束时间输入的分钟步长。',
+      name: 'minuteStep',
+      type: 'number',
+    },
+  ]}
+/>
+
+### 时间类选择器共享属性
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: '时间类选择器',
+      defaultValue: '1',
+      description: '分钟步长。',
+      name: 'minuteStep',
+      type: 'number',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: 'false',
+      description: '禁用时间输入。',
+      name: 'disabled',
+      type: 'boolean',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: 'false',
+      description: '标记时间输入为必填。',
+      name: 'required',
+      type: 'boolean',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: null,
+      description: '允许选择的最早时间。',
+      name: 'min',
+      type: 'string',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: null,
+      description: '允许选择的最晚时间。',
+      name: 'max',
+      type: 'string',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: null,
+      description: '设置自动填充提示。',
+      name: 'autoComplete',
+      type: 'string',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: null,
+      description: '获取第一个时间输入节点。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLInputElement>',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: null,
+      description: '设置第一个时间输入 id。',
+      name: 'id',
+      type: 'string',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: null,
+      description: '设置表单字段名。',
+      name: 'name',
+      type: 'string',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: null,
+      description: '任一时间输入失焦时调用。',
+      name: 'onBlur',
+      type: 'FocusEventHandler<HTMLInputElement>',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: null,
+      description: '提供可访问名称。',
+      name: 'aria-label',
+      type: 'string',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: null,
+      description: '关联描述文本节点。',
+      name: 'aria-describedby',
+      type: 'string',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: null,
+      description: '标记当前值是否无效。',
+      name: 'aria-invalid',
+      type: 'boolean | string',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: null,
+      description: '扩展组件根节点类名。',
+      name: 'className',
+      type: 'string',
+    },
+    {
+      component: '时间类选择器',
+      defaultValue: null,
+      description: '设置组件根节点行内样式。',
       name: 'style',
       type: 'CSSProperties',
     },
   ]}
 />
 
+### TimeRangePicker 附加属性
+
+<ApiTable
+  labels={{
+    component: '组件',
+    defaultValue: '默认值',
+    description: '说明',
+    name: '属性',
+    type: '类型',
+  }}
+  rows={[
+    {
+      component: 'TimeRangePicker',
+      defaultValue: "['Start time', 'End time']",
+      description: '开始与结束输入的可访问名称。',
+      name: 'labels',
+      type: 'readonly [string, string]',
+    },
+    {
+      component: 'TimeRangePicker',
+      defaultValue: null,
+      description: '扩展 start、separator 和 end 槽位类名。',
+      name: 'classNames',
+      type: 'TimeRangePickerClassNames',
+    },
+    {
+      component: 'TimeRangePicker',
+      defaultValue: null,
+      description: '按与 classNames 相同的槽位设置行内样式。',
+      name: 'styles',
+      type: 'TimeRangePickerStyles',
+    },
+  ]}
+/>
+
 ## 无障碍
 
-- 保留底层语义、焦点管理与键盘交互。
-- 为触发器、图标和状态提供可感知名称。
+- 日期选择保留日历网格、键盘导航和焦点管理；范围起止状态由日历语义表达。
+- 为没有可见 `<label>` 的触发器设置 `aria-label`；`TimeRangePicker.labels` 分别命名开始与结束输入。
 
 ## 避免事项
 
-- 不要移除焦点样式或绕过状态属性。
-- 不要写死业务文案、尺寸和产品状态。
+- 不要用 `TimePicker` 表达绝对时间点；需要日期或时区语义时使用 DateTime 组件并在业务层明确时区。
+- 不要交换范围二元组的顺序；第一项始终是开始值，第二项始终是结束值。

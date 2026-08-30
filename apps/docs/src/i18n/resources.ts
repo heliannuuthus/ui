@@ -61,7 +61,6 @@ const zh = {
       openNavigation: '打开组件导航',
       related: '相关组件',
       examples: '示例',
-      parts: '组成组件',
       purpose: '用途',
       properties: '属性',
       inheritedPropsNotice:
@@ -93,7 +92,6 @@ const zh = {
       copyCode: '复制代码',
       preview: '预览',
       source: '源码',
-      editOnGitHub: '在 GitHub 编辑此案例',
       openCodeSandbox: '在 CodeSandbox 打开',
       openStackBlitz: '在 StackBlitz 打开',
       collapseCode: '收起代码',
@@ -246,7 +244,6 @@ const en = {
       openNavigation: 'Open component navigation',
       related: 'Related components',
       examples: 'Examples',
-      parts: 'Component parts',
       purpose: 'Purpose',
       properties: 'Properties',
       inheritedPropsNotice:
@@ -279,7 +276,6 @@ const en = {
       copyCode: 'Copy code',
       preview: 'Preview',
       source: 'Source',
-      editOnGitHub: 'Edit this case on GitHub',
       openCodeSandbox: 'Open in CodeSandbox',
       openStackBlitz: 'Open in StackBlitz',
       collapseCode: 'Collapse code',

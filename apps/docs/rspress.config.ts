@@ -5,8 +5,8 @@ import { pluginTailwindcss } from '@rsbuild/plugin-tailwindcss';
 import remarkDirective from 'remark-directive';
 import {
   componentGroups,
+  componentNavigationName,
   componentSlug,
-  localizedComponentName,
 } from './src/component-catalog';
 import { remarkUiDirectives } from './src/rspress/remark-ui-directives';
 
@@ -58,7 +58,7 @@ const componentSidebar = (locale: 'zh' | 'en') => [
   ...componentGroups.map((group) => ({
     text: locale === 'zh' ? group.title : englishGroupTitles[group.key],
     items: group.items.map((name) => ({
-      text: localizedComponentName(name, locale),
+      text: componentNavigationName(name, locale),
       link: `/${locale}/components/${componentSlug(name)}`,
     })),
   })),

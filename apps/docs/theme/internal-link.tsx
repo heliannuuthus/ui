@@ -10,7 +10,7 @@ export const InternalButtonLink = ({
   disabled = false,
   href,
   onClick,
-  size = 'default',
+  size = 'md',
   tabIndex,
   variant = 'default',
   ...props

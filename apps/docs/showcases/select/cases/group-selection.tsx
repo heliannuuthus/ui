@@ -30,9 +30,12 @@ const createExample = (locale: 'en' | 'zh') => {
   ];
 
   const SelectWorkspaceDemo = () => {
-    const [value, setValue] = useState<WorkspaceItem | null>(
-      workspaceGroups[0]?.items[0] ?? null
+    const [value, setValue] = useState<string | null>(
+      workspaceGroups[0]?.items[0]?.value ?? null
     );
+    const selectedWorkspace = workspaceGroups
+      .flatMap((group) => group.items)
+      .find((item) => item.value === value);
 
     return (
       <div className="data-compact-form">
@@ -49,21 +52,18 @@ const createExample = (locale: 'en' | 'zh') => {
             options: group.items.map((item) => ({
               disabled: 'disabled' in item && item.disabled,
               label: item.label,
-              value: item,
+              value: item.value,
             })),
           }))}
-          itemToStringLabel={(item) => item.label}
-          itemToStringValue={(item) => item.value}
-          isItemEqualToValue={(item, selected) => item.value === selected.value}
           placeholder={copy('选择工作区')}
         />
         <p className="data-result">
           {copy('目标：')}
-          {value?.value === 'design'
+          {value === 'design'
             ? copy('设计系统')
-            : value?.value === 'website'
+            : value === 'website'
               ? copy('品牌官网')
-              : (value?.label ?? copy('未选择'))}
+              : (selectedWorkspace?.label ?? copy('未选择'))}
         </p>
       </div>
     );

@@ -5,10 +5,10 @@ import Case01 from './cases/basic-usage';
 const cases = [
   {
     component: Case01,
-    title: { en: 'Basic usage', zh: '基础用法' },
+    title: { en: 'Responsive media cover', zh: '响应式媒体封面' },
     description: {
-      en: 'Switch common cover ratios and observe how the same image maintains a stable layout as the width and height of the container change.',
-      zh: '切换常用封面比例，观察同一张图片如何随容器宽高变化保持稳定布局。',
+      en: 'Reserve a predictable area for article covers, video previews, and product images before the media finishes loading.',
+      zh: '为文章封面、视频预览和商品图预留可预测的区域，并在媒体加载前稳定页面布局。',
     },
   },
 ];

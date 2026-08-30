@@ -18,79 +18,29 @@ import {
   useFormControl,
 } from './internal/form-control';
 
-type SelectValue<
-  Value,
-  Multiple extends boolean | undefined,
-> = Multiple extends true ? Value[] : Value;
+type SelectValue = string | number;
 
-type SelectRootProps<Value, Multiple extends boolean | undefined = false> = {
-  autoComplete?: 'list' | 'both' | 'inline' | 'none';
-  autoHighlight?: boolean;
+type SelectRootProps<Value> = {
   children?: React.ReactNode;
-  defaultOpen?: boolean;
-  defaultValue?: SelectValue<Value, Multiple> | null;
-  /** The uncontrolled search query when the select is initially rendered. */
-  defaultSearchValue?: string;
+  defaultValue?: Value | null;
   disabled?: boolean;
-  filter?: null | ((item: Value, query: string) => boolean);
   form?: string;
-  highlightItemOnHover?: boolean;
   id?: string;
   isItemEqualToValue?: (item: Value, value: Value) => boolean;
   items?: readonly Value[];
   itemToStringLabel?: (item: Value) => string;
   itemToStringValue?: (item: Value) => string;
-  limit?: number;
-  locale?: Intl.LocalesArgument;
-  loopFocus?: boolean;
-  modal?: boolean;
-  multiple?: Multiple;
   name?: string;
-  onOpenChange?: (open: boolean) => void;
-  onOpenChangeComplete?: (open: boolean) => void;
-  open?: boolean;
-  openOnInputClick?: boolean;
   readOnly?: boolean;
   required?: boolean;
-  /** The controlled search query used to filter items. */
-  searchValue?: string;
-  value?: SelectValue<Value, Multiple> | null;
+  value?: Value | null;
   /** Called when the selected value changes. */
-  onChange?: (
-    value: SelectValue<Value, Multiple> | (Multiple extends true ? never : null)
-  ) => void;
-  /** Called when the search query changes. */
-  onSearch?: (searchValue: string) => void;
+  onChange?: (value: Value | null) => void;
 };
 
-const SelectRoot = <Value, Multiple extends boolean | undefined = false>({
-  defaultSearchValue,
-  searchValue,
-  onChange,
-  onOpenChange,
-  onSearch,
-  ...props
-}: SelectRootProps<Value, Multiple>) => {
-  const handleSearchChange: SelectPrimitive.Root.Props<
-    Value,
-    Multiple
-  >['onInputValueChange'] = onSearch
-    ? (nextSearchValue, eventDetails) => {
-        if (
-          eventDetails.reason === 'input-change' ||
-          eventDetails.reason === 'input-clear'
-        ) {
-          onSearch(nextSearchValue);
-        }
-      }
-    : undefined;
-
+const SelectRoot = <Value,>({ onChange, ...props }: SelectRootProps<Value>) => {
   return (
     <SelectPrimitive.Root
-      defaultInputValue={defaultSearchValue}
-      inputValue={searchValue}
-      onInputValueChange={handleSearchChange}
-      onOpenChange={onOpenChange ? (open) => onOpenChange(open) : undefined}
       onValueChange={onChange ? (value) => onChange(value) : undefined}
       {...props}
     />
@@ -276,12 +226,6 @@ const SelectLabel = ({
   );
 };
 
-const SelectCollection = ({ ...props }: SelectPrimitive.Collection.Props) => {
-  return (
-    <SelectPrimitive.Collection data-slot="select-collection" {...props} />
-  );
-};
-
 const SelectEmpty = ({ className, ...props }: SelectPrimitive.Empty.Props) => {
   return (
     <SelectPrimitive.Empty
@@ -308,19 +252,21 @@ const SelectSeparator = ({
   );
 };
 
-const useSelectAnchor = () => {
-  return React.useRef<HTMLDivElement | null>(null);
-};
-
-type SelectOption<Value> = {
+type SelectOption<Value extends SelectValue> = {
   disabled?: boolean;
   label: React.ReactNode;
+  /** Plain text used to filter and display non-text labels. */
+  textValue?: string;
   value: Value;
 };
 
-type SelectOptionGroup<Value> = {
+type SelectOptionGroup<Value extends SelectValue> = {
   label: React.ReactNode;
   options: readonly SelectOption<Value>[];
+};
+
+type InternalSelectOption<Value extends SelectValue> = SelectOption<Value> & {
+  textValue: string;
 };
 
 type SelectClassNames = {
@@ -331,137 +277,152 @@ type SelectStyles = {
   trigger?: React.CSSProperties;
 };
 
-type SelectProps<Value, Multiple extends boolean | undefined = false> = Omit<
-  SelectRootProps<Value, Multiple>,
-  | 'autoHighlight'
-  | 'children'
-  | 'highlightItemOnHover'
-  | 'items'
-  | 'limit'
-  | 'loopFocus'
-  | 'modal'
-  | 'onOpenChangeComplete'
-  | 'openOnInputClick'
+type SelectProps<Value extends SelectValue = string> = Pick<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'aria-describedby' | 'aria-invalid' | 'aria-label' | 'id' | 'onBlur'
 > & {
   classNames?: SelectClassNames;
+  defaultValue?: Value | null;
+  disabled?: boolean;
   emptyText?: React.ReactNode;
+  form?: string;
+  inputRef?: React.Ref<HTMLInputElement>;
+  name?: string;
+  onChange?: (value: Value | null) => void;
   options: readonly (SelectOption<Value> | SelectOptionGroup<Value>)[];
   placeholder?: string;
+  readOnly?: boolean;
+  required?: boolean;
   showClear?: boolean;
   styles?: SelectStyles;
-  triggerProps?: Omit<
-    React.ComponentProps<typeof SelectTrigger>,
-    'children' | 'className' | 'placeholder' | 'showClear' | 'style'
-  >;
+  value?: Value | null;
 };
 
-const Select = <Value, Multiple extends boolean | undefined = false>({
+const Select = <Value extends SelectValue = string>({
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
+  'aria-label': ariaLabel,
   defaultValue,
   classNames,
   disabled,
   emptyText = '没有找到选项',
+  form,
   id,
+  inputRef,
   name,
+  onBlur,
   onChange,
   options,
   placeholder,
+  readOnly,
   required,
   showClear,
   styles,
-  triggerProps,
   value,
-  ...props
-}: SelectProps<Value, Multiple>) => {
-  const formControl = useFormControl<
-    SelectValue<Value, Multiple> | null | undefined
-  >();
-  const flatOptions = options.flatMap((option) =>
+}: SelectProps<Value>) => {
+  const formControl = useFormControl<Value | null | undefined>();
+  const internalOptions = React.useMemo(
+    () =>
+      options.map((option) => {
+        const normalize = (
+          item: SelectOption<Value>
+        ): InternalSelectOption<Value> => ({
+          ...item,
+          textValue:
+            item.textValue ??
+            (typeof item.label === 'string' || typeof item.label === 'number'
+              ? String(item.label)
+              : String(item.value)),
+        });
+
+        return 'options' in option
+          ? { ...option, options: option.options.map(normalize) }
+          : normalize(option);
+      }),
+    [options]
+  );
+  const flatOptions = internalOptions.flatMap((option) =>
     'options' in option ? option.options : [option]
   );
-  const {
-    'aria-describedby': triggerAriaDescribedBy,
-    'aria-invalid': triggerAriaInvalid,
-    id: triggerId,
-    onBlur: triggerOnBlur,
-    inputRef: triggerRef,
-    ...otherTriggerProps
-  } = triggerProps ?? {};
   const controlRef = useMergedRefs(
-    triggerRef,
+    inputRef,
     formControl?.ref as React.Ref<HTMLInputElement> | undefined
   );
+  const resolvedDisabled = disabled || formControl?.disabled;
+  const findOption = (optionValue: Value | null | undefined) =>
+    optionValue == null
+      ? optionValue
+      : flatOptions.find((option) => Object.is(option.value, optionValue));
+  const controlledValue = findOption(formControl ? formControl.value : value);
+  const initialValue = findOption(defaultValue);
 
   return (
-    <SelectRoot
-      {...props}
-      defaultValue={formControl ? undefined : defaultValue}
-      disabled={disabled || formControl?.disabled}
+    <SelectRoot<InternalSelectOption<Value>>
+      defaultValue={formControl ? undefined : initialValue}
+      disabled={resolvedDisabled}
+      form={form}
       id={id}
-      items={flatOptions.map((option) => option.value)}
+      isItemEqualToValue={(item, selected) =>
+        Object.is(item.value, selected.value)
+      }
+      itemToStringLabel={(item) => item.textValue}
+      itemToStringValue={(item) => String(item.value)}
+      items={flatOptions}
       name={formControl?.name ?? name}
       onChange={(nextValue) => {
-        onChange?.(nextValue);
-        formControl?.onChange(nextValue);
+        const nextExternalValue = nextValue?.value ?? null;
+        onChange?.(nextExternalValue);
+        formControl?.onChange(nextExternalValue);
       }}
+      readOnly={readOnly}
       required={required || formControl?.required}
-      value={
-        formControl
-          ? (formControl.value as SelectValue<Value, Multiple> | null)
-          : value
-      }
+      value={controlledValue}
     >
       <SelectTrigger
-        {...otherTriggerProps}
         aria-describedby={mergeIds(
-          triggerAriaDescribedBy,
+          ariaDescribedBy,
           formControl?.descriptionId,
           formControl?.messageId
         )}
-        aria-invalid={triggerAriaInvalid ?? formControl?.invalid}
+        aria-invalid={ariaInvalid ?? formControl?.invalid}
+        aria-label={ariaLabel}
+        aria-required={required || formControl?.required}
         className={classNames?.trigger}
-        id={triggerId ?? formControl?.controlId ?? id}
+        disabled={resolvedDisabled}
+        id={formControl?.controlId ?? id}
         onBlur={(event) => {
-          triggerOnBlur?.(event);
+          onBlur?.(event);
           formControl?.onBlur();
         }}
         placeholder={placeholder}
         inputRef={controlRef}
+        readOnly={readOnly}
         showClear={showClear}
         style={styles?.trigger}
       />
       <SelectContent>
         <SelectEmpty>{emptyText}</SelectEmpty>
         <SelectList>
-          {options.map((option, index) =>
+          {internalOptions.map((option, index) =>
             'options' in option ? (
-              <SelectGroup
-                items={option.options.map((item) => item.value)}
-                key={index}
-              >
+              <SelectGroup items={option.options} key={index}>
                 {index > 0 ? <SelectSeparator /> : null}
                 <SelectLabel>{option.label}</SelectLabel>
-                <SelectCollection>
-                  {(value: Value) => {
-                    const item = option.options.find(
-                      (candidate) => candidate.value === value
-                    );
-                    return item ? (
-                      <SelectItem
-                        disabled={item.disabled}
-                        key={String(item.value)}
-                        value={item.value}
-                      >
-                        {item.label}
-                      </SelectItem>
-                    ) : null;
-                  }}
-                </SelectCollection>
+                {option.options.map((item) => (
+                  <SelectItem
+                    disabled={item.disabled}
+                    key={`${typeof item.value}:${String(item.value)}`}
+                    value={item}
+                  >
+                    {item.label}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             ) : (
               <SelectItem
                 disabled={option.disabled}
-                key={String(option.value)}
-                value={option.value}
+                key={`${typeof option.value}:${String(option.value)}`}
+                value={option}
               >
                 {option.label}
               </SelectItem>
@@ -475,13 +436,12 @@ const Select = <Value, Multiple extends boolean | undefined = false>({
 
 registerFormControl(Select);
 
-export { Select, useSelectAnchor };
+export { Select };
 export type {
   SelectOption,
   SelectOptionGroup,
   SelectProps,
   SelectClassNames,
   SelectStyles,
-  SelectTriggerProps,
   SelectValue,
 };

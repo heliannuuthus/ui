@@ -2,19 +2,35 @@ import '@heliannuuthus/ui/styles.css';
 import { DatePicker } from '@heliannuuthus/ui';
 import { useState } from 'react';
 
-const DatePickerExample = () => {
-  const [date, setDate] = useState<Date>();
-  return <DatePicker display="inline" onChange={setDate} value={date} />;
-};
-
 export default function ExampleCase({
-  locale: _locale = 'zh',
+  locale = 'zh',
 }: {
   locale?: 'en' | 'zh';
 }) {
+  const [date, setDate] = useState<Date | undefined>(new Date(2026, 8, 8));
+  const formatter = new Intl.DateTimeFormat(
+    locale === 'en' ? 'en-US' : 'zh-CN',
+    { dateStyle: 'long' }
+  );
+
   return (
-    <div className="demo-preview demo-preview-date-picker">
-      <DatePickerExample />
+    <div className="picker-demo-stack">
+      <label htmlFor="date-picker-demo">
+        {locale === 'en' ? 'Delivery date' : '交付日期'}
+      </label>
+      <DatePicker
+        id="date-picker-demo"
+        locale={locale}
+        onChange={setDate}
+        value={date}
+      />
+      <p>
+        {date
+          ? formatter.format(date)
+          : locale === 'en'
+            ? 'No date selected'
+            : '尚未选择日期'}
+      </p>
     </div>
   );
 }

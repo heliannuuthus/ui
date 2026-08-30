@@ -35,7 +35,7 @@
     "type-check": "tsc --noEmit && pnpm --filter @heliannuuthus/ui-docs exec tsc --noEmit",
     "prepare": "pnpm build:package",
     "prepack": "pnpm build:package",
-    "verify:package": "node scripts/verify-package.mjs && node scripts/verify-button.mjs && node scripts/verify-pagination.mjs && node scripts/verify-scroll-area.mjs && node scripts/verify-semantic-styles.mjs && node scripts/verify-form-accessibility.mjs && node scripts/verify-typography.mjs && node scripts/verify-badge-tag.mjs && node scripts/verify-provider.mjs"
+    "verify:package": "node scripts/verify-package.mjs && node scripts/verify-button.mjs && node scripts/verify-pagination.mjs && node scripts/verify-segmented.mjs && node scripts/verify-scroll-area.mjs && node scripts/verify-semantic-styles.mjs && node scripts/verify-form-accessibility.mjs && node scripts/verify-typography.mjs && node scripts/verify-badge-tag.mjs && node scripts/verify-provider.mjs"
   },
   "peerDependencies": {
     "react": "^19.0.0",
