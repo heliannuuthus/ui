@@ -47,6 +47,12 @@ The package implements the domain-neutral shadcn/ui primitives that belong in
 the shared Radix foundation, including Heliannuuthus-owned recipe exports for
 Table, Date Picker, Form, Input.Number, and Typography.
 
+Form state is available through typed, engine-independent hooks. Create an
+instance with `useForm` or `Form.useForm`, subscribe to a field or selector with
+`useWatch` or `Form.useWatch`, and read the current instance below a `Form` with
+`useFormInstance`. Programmatic changes use the typed methods on the form
+instance, including `setValue`, `reset`, `setError`, `trigger` and `getValues`.
+
 ## Workspace policy
 
 `@heliannuuthus/ui` is the single source of truth for domain-neutral frontend primitives across Heliannuuthus projects. If a product needs a missing base component or a reusable capability, implement and document it here first instead of creating a product-local primitive.

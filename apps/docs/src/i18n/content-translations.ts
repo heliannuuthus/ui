@@ -401,6 +401,43 @@ const ActionCell = () => {
   '请选择优先级。': 'Choose a priority.',
   已保存优先级: 'Saved priority',
   保存优先级: 'Save priority',
+  字段监听与联动: 'Field subscriptions and dependencies',
+  '使用 Form.useWatch 精确订阅参与渲染的字段，并通过 setValue 更新关联字段。':
+    'Use Form.useWatch to subscribe precisely to fields used for rendering, then update related fields with setValue.',
+  '只订阅影响当前视图的字段，并通过表单实例更新关联字段。':
+    'Subscribe only to fields that affect the current view, and update related fields through the form instance.',
+  '监听字段或派生值，并根据变化更新关联字段和界面。':
+    'Observe fields or derived values and update related fields and UI in response.',
+  '精确订阅字段或派生值，并隔离当前组件的重渲染。':
+    'Subscribe precisely to fields or derived values and isolate rerendering to the current component.',
+  '在 Form 后代组件中读取当前表单实例。':
+    'Read the current form instance from a descendant of Form.',
+  '任意字段值变化后接收完整值和发生变化的字段路径。':
+    'Receives the complete values and changed field path after any field value changes.',
+  '设置默认值、校验时机、受控值和解析器等初始化选项。':
+    'Sets initialization options such as default values, validation timing, controlled values, and resolvers.',
+  '指定要订阅的字段路径、路径集合或派生值选择器。':
+    'Specifies a field path, set of paths, or derived-value selector to subscribe to.',
+  '指定订阅所连接的类型化表单实例。':
+    'Specifies the typed form instance connected to the subscription.',
+  '返回字段值、字段值集合或选择器结果。':
+    'Returns a field value, field-value tuple, or selector result.',
+  '返回最近一层 Form 提供的表单实例。':
+    'Returns the form instance provided by the nearest Form ancestor.',
+  '读取或更新表单值与校验状态的类型化实例方法。':
+    'A typed instance method for reading or updating form values and validation state.',
+  '读取提交、校验、脏值、触碰和错误等响应式状态。':
+    'Reads reactive submission, validation, dirty, touched, and error state.',
+  返回值: 'Return value',
+  个席位: 'seats',
+  个人方案: 'Personal plan',
+  订阅方案: 'Subscription plan',
+  团队席位: 'Team seats',
+  '团队方案可按实际成员数调整席位。':
+    'Adjust seats in the team plan to match the actual member count.',
+  '切换到团队方案后即可调整席位。': 'Switch to the team plan to adjust seats.',
+  '团队方案至少需要 2 个席位。': 'The team plan requires at least two seats.',
+  '设为 5 人团队': 'Set a five-person team',
   '接收一个控件元素；内置控件自动绑定，自定义控件自动获得标准受控属性。':
     'Accepts one control element; built-in controls bind automatically, while custom controls receive the standard controlled props.',
   '自动提供值、事件、字段状态和 ARIA 属性；控件支持 ref 时启用错误聚焦。':
@@ -3802,8 +3839,6 @@ const ActionCell = () => {
     'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<Cloud />}\n  title="No production release yet"\n  description="After completing preflight, you can schedule your first production release from here."\n  actions={<Button>Schedule publishing</Button>}\n/>',
   'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<ShieldCheck />}\n  title="等待安全审计"\n  description="审计通过前暂无可发布版本。"\n  actions={<AuditSummary />}\n/>':
     'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<ShieldCheck />}\n  title="Waiting for security audit"\n  description="There is no release version until the audit is passed."\n  actions={<AuditSummary />}\n/>',
-  "import { Form } from '@heliannuuthus/ui'\n\nconst form = useForm({ defaultValues: { email: '', note: '' } })\n\n<Form {...form}>\n  <form onSubmit={form.handleSubmit(onSubmit)}>\n    <Form.Field\n      control={form.control}\n      name=\"email\"\n      rules={{ required: '请输入邮箱地址。' }}\n      render={({ field }) => (\n        <Form.Item>\n          <Form.Label>邮箱地址</Form.Label>\n          <Form.Control><Input {...field} /></Form.Control>\n          <Form.Message />\n        </Form.Item>\n      )}\n    />\n  </form>\n</Form>":
-    "import { Form } from '@heliannuuthus/ui'\n\nconst form = useForm({ defaultValues: { email: '', note: '' } })\n\n<Form {...form}>\n  <form onSubmit={form.handleSubmit(onSubmit)}>\n    <Form.Field\n      control={form.control}\n      name=\"email\"\n      rules={{ required: 'Please enter your email address. ' }}\n      render={({ field }) => (\n        <Form.Item>\n          <Form.Label>Email address</Form.Label>\n          <Form.Control><Input {...field} /></Form.Control>\n          <Form.Message />\n        </Form.Item>\n      )}\n    />\n  </form>\n</Form>",
   "import { Fragment, useState } from 'react'\nimport { Button, Table } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Button\n                aria-expanded={expanded}\n                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}\n                size=\"icon-xs\"\n                variant=\"ghost\"\n                onClick={() => setExpandedId(expanded ? null : row.id)}\n              >\n                <ChevronRight className={expanded ? 'rotate-90' : ''} />\n              </Button>\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.Row>\n              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>\n            </Table.Row>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>":
     "import { Fragment, useState } from 'react'\nimport { Button, Table } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Button\n                aria-expanded={expanded}\n                aria-label={`${expanded ? 'Collapse' : 'Expand'} ${row.id}`}\n                size=\"icon-xs\"\n                variant=\"ghost\"\n                onClick={() => setExpandedId(expanded ? null : row.id)}\n              >\n                <ChevronRight className={expanded ? 'rotate-90' : ''} />\n              </Button>\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.Row>\n              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>\n            </Table.Row>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>",
   'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaType="icon"\n  title="许澄提交了发布说明"\n  description="补充数据库迁移影响与回滚入口。"\n  actions={<Button>查看</Button>}\n/>':

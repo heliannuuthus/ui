@@ -3,8 +3,11 @@ import {
   FormProvider,
   useController,
   useForm as useReactHookForm,
+  useWatch as useReactHookFormWatch,
+  type DeepPartialSkipArrayKey,
   type FieldPath,
   type FieldPathValue,
+  type FieldPathValues,
   type FieldValues,
   type RegisterOptions,
   type SubmitErrorHandler,
@@ -23,9 +26,7 @@ import {
   useMergedRefs,
 } from './internal/form-control';
 
-const INTERNAL_FORM_METHODS: unique symbol = Symbol.for(
-  '@heliannuuthus/ui/form-methods'
-);
+const INTERNAL_FORM_METHODS = Symbol('@heliannuuthus/ui/form-methods');
 
 type FormInstance<
   TFieldValues extends FieldValues = FieldValues,
@@ -44,14 +45,61 @@ type FormInstance<
   | 'setValue'
   | 'trigger'
   | 'unregister'
-  | 'watch'
-> & {
-  readonly [INTERNAL_FORM_METHODS]: UseFormReturn<
+>;
+
+type InternalFormInstance<
+  TFieldValues extends FieldValues,
+  TContext,
+  TTransformedValues,
+> = FormInstance<TFieldValues, TContext, TTransformedValues> & {
+  [INTERNAL_FORM_METHODS]: UseFormReturn<
     TFieldValues,
     TContext,
     TTransformedValues
   >;
 };
+
+const getInternalFormMethods = <
+  TFieldValues extends FieldValues,
+  TContext,
+  TTransformedValues,
+>(
+  form: FormInstance<TFieldValues, TContext, TTransformedValues>
+) => {
+  const methods = (
+    form as InternalFormInstance<TFieldValues, TContext, TTransformedValues>
+  )[INTERNAL_FORM_METHODS];
+
+  if (!methods) {
+    throw new Error('Expected a form instance created by Form.useForm.');
+  }
+
+  return methods as UseFormReturn<TFieldValues, TContext, TTransformedValues>;
+};
+
+type FormValuesChangeInfo<TFieldValues extends FieldValues = FieldValues> = {
+  name?: FieldPath<TFieldValues>;
+};
+
+type FormValuesChangeHandler<TFieldValues extends FieldValues = FieldValues> = (
+  values: TFieldValues,
+  info: FormValuesChangeInfo<TFieldValues>
+) => void;
+
+type FormUseOptions<
+  TFieldValues extends FieldValues = FieldValues,
+  TContext = unknown,
+  TTransformedValues = TFieldValues,
+> = Omit<
+  UseFormProps<TFieldValues, TContext, TTransformedValues>,
+  'formControl'
+>;
+
+type FormWatchSelector<TFieldValues extends FieldValues, TSelectedValue> = (
+  values: TFieldValues
+) => TSelectedValue;
+
+const FormInstanceContext = React.createContext<unknown>(null);
 
 type FormProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -61,40 +109,11 @@ type FormProps<
   form: FormInstance<TFieldValues, TContext, TTransformedValues>;
   onInvalid?: SubmitErrorHandler<TFieldValues>;
   onSubmit: SubmitHandler<TTransformedValues>;
+  onValuesChange?: FormValuesChangeHandler<TFieldValues>;
 };
 
 type FormFieldFocusTarget = {
   focus: () => unknown;
-};
-
-type FormFieldRenderField<Value> = {
-  name: string;
-  onBlur: () => void;
-  onChange: (value: Value) => void;
-  ref: React.RefCallback<FormFieldFocusTarget>;
-  value: Value;
-};
-
-type FormFieldRenderState = {
-  disabled: boolean;
-  error?: string;
-  invalid: boolean;
-  required: boolean;
-};
-
-type FormFieldControlProps = {
-  'aria-describedby'?: string;
-  'aria-errormessage'?: string;
-  'aria-invalid'?: true;
-  'aria-required'?: true;
-  disabled: boolean;
-  id: string;
-  name: string;
-  required: boolean;
-};
-
-type FormFieldGroupProps = Omit<FormFieldControlProps, 'name' | 'required'> & {
-  'aria-labelledby'?: string;
 };
 
 type FormFieldInjectedControlProps<Value> = {
@@ -116,22 +135,11 @@ type FormFieldInjectableElementProps<Value> =
   FormFieldInjectedControlProps<Value> &
     React.RefAttributes<FormFieldFocusTarget>;
 
-type FormFieldRenderProps<Value> = {
-  controlProps: FormFieldControlProps;
-  field: FormFieldRenderField<Value>;
-  fieldState: FormFieldRenderState;
-  groupProps: FormFieldGroupProps;
-};
-
 type FormFieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = Omit<React.ComponentProps<typeof Field>, 'children'> & {
-  children:
-    | React.ReactElement
-    | ((
-        props: FormFieldRenderProps<FieldPathValue<TFieldValues, TName>>
-      ) => React.ReactNode);
+  children: React.ReactElement;
   defaultValue?: FieldPathValue<TFieldValues, TName>;
   description?: React.ReactNode;
   disabled?: boolean;
@@ -149,27 +157,96 @@ const useForm = <
   TContext = unknown,
   TTransformedValues = TFieldValues,
 >(
-  options?: UseFormProps<TFieldValues, TContext, TTransformedValues>
+  options?: FormUseOptions<TFieldValues, TContext, TTransformedValues>
 ): FormInstance<TFieldValues, TContext, TTransformedValues> => {
   const methods = useReactHookForm<TFieldValues, TContext, TTransformedValues>(
     options
   );
 
-  return {
-    clearErrors: methods.clearErrors,
-    formState: methods.formState,
-    getFieldState: methods.getFieldState,
-    getValues: methods.getValues,
-    reset: methods.reset,
-    resetField: methods.resetField,
-    setError: methods.setError,
-    setFocus: methods.setFocus,
-    setValue: methods.setValue,
-    trigger: methods.trigger,
-    unregister: methods.unregister,
-    watch: methods.watch,
-    [INTERNAL_FORM_METHODS]: methods,
-  };
+  return React.useMemo<
+    FormInstance<TFieldValues, TContext, TTransformedValues>
+  >(() => {
+    const form = {
+      clearErrors: methods.clearErrors,
+      get formState() {
+        return methods.formState;
+      },
+      getFieldState: methods.getFieldState,
+      getValues: methods.getValues,
+      reset: methods.reset,
+      resetField: methods.resetField,
+      setError: methods.setError,
+      setFocus: methods.setFocus,
+      setValue: methods.setValue,
+      trigger: methods.trigger,
+      unregister: methods.unregister,
+    };
+
+    Object.defineProperty(form, INTERNAL_FORM_METHODS, { value: methods });
+
+    return form;
+  }, [methods]);
+};
+
+function useWatch<TFieldValues extends FieldValues = FieldValues>(
+  form: FormInstance<TFieldValues>
+): DeepPartialSkipArrayKey<TFieldValues>;
+function useWatch<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(
+  name: TName,
+  form: FormInstance<TFieldValues>
+): FieldPathValue<TFieldValues, TName>;
+function useWatch<
+  TFieldValues extends FieldValues = FieldValues,
+  TNames extends readonly FieldPath<TFieldValues>[] =
+    readonly FieldPath<TFieldValues>[],
+>(
+  names: readonly [...TNames],
+  form: FormInstance<TFieldValues>
+): FieldPathValues<TFieldValues, TNames>;
+function useWatch<
+  TFieldValues extends FieldValues = FieldValues,
+  TSelectedValue = unknown,
+>(
+  selector: FormWatchSelector<TFieldValues, TSelectedValue>,
+  form: FormInstance<TFieldValues>
+): TSelectedValue;
+function useWatch<TFieldValues extends FieldValues = FieldValues>(
+  target:
+    | FormInstance<TFieldValues>
+    | FieldPath<TFieldValues>
+    | readonly FieldPath<TFieldValues>[]
+    | FormWatchSelector<TFieldValues, unknown>,
+  explicitForm?: FormInstance<TFieldValues>
+) {
+  const form = explicitForm ?? (target as FormInstance<TFieldValues>);
+  const selector = typeof target === 'function' ? target : undefined;
+  const name = explicitForm && selector == null ? target : undefined;
+
+  const methods = getInternalFormMethods(form);
+
+  return useReactHookFormWatch({
+    control: methods.control,
+    exact: name == null ? undefined : true,
+    ...(name == null ? {} : { name }),
+    ...(selector == null ? {} : { compute: selector }),
+  } as never) as unknown;
+}
+
+const useFormInstance = <
+  TFieldValues extends FieldValues = FieldValues,
+  TContext = unknown,
+  TTransformedValues = TFieldValues,
+>() => {
+  const form = React.useContext(FormInstanceContext);
+
+  if (!form) {
+    throw new Error('Form.useFormInstance must be used inside Form.');
+  }
+
+  return form as FormInstance<TFieldValues, TContext, TTransformedValues>;
 };
 
 const FormRoot = <
@@ -183,23 +260,39 @@ const FormRoot = <
   noValidate = true,
   onInvalid,
   onSubmit,
+  onValuesChange,
   ...props
 }: FormProps<TFieldValues, TContext, TTransformedValues>) => {
-  const methods = form[INTERNAL_FORM_METHODS];
+  const methods = getInternalFormMethods(form);
+
+  React.useEffect(() => {
+    if (!onValuesChange) return;
+
+    return methods.subscribe({
+      callback: ({ name, values }) => {
+        onValuesChange(values, {
+          name: name as FieldPath<TFieldValues> | undefined,
+        });
+      },
+      formState: { values: true },
+    });
+  }, [methods, onValuesChange]);
 
   return (
-    <FormProvider {...methods}>
-      <form
-        data-slot="form"
-        data-submitting={methods.formState.isSubmitting || undefined}
-        className={className}
-        noValidate={noValidate}
-        onSubmit={methods.handleSubmit(onSubmit, onInvalid)}
-        {...props}
-      >
-        {children}
-      </form>
-    </FormProvider>
+    <FormInstanceContext.Provider value={form}>
+      <FormProvider {...methods}>
+        <form
+          data-slot="form"
+          data-submitting={methods.formState.isSubmitting || undefined}
+          className={className}
+          noValidate={noValidate}
+          onSubmit={methods.handleSubmit(onSubmit, onInvalid)}
+          {...props}
+        >
+          {children}
+        </form>
+      </FormProvider>
+    </FormInstanceContext.Provider>
   );
 };
 
@@ -236,7 +329,6 @@ const FormField = <
     name,
     rules,
   });
-  const error = fieldState.error?.message;
   const fieldRef = field.ref;
   const focusRef = React.useCallback<React.RefCallback<FormFieldFocusTarget>>(
     (instance) => fieldRef(instance),
@@ -249,43 +341,10 @@ const FormField = <
     : null;
   const mergedChildRef = useMergedRefs(childElement?.props.ref, focusRef);
   const resolvedControlId = childElement?.props.id ?? controlId;
-  const fieldValue: FormFieldRenderField<FieldPathValue<TFieldValues, TName>> =
-    {
-      name: field.name,
-      onBlur: field.onBlur,
-      onChange: field.onChange,
-      ref: focusRef,
-      value: field.value,
-    };
-  const renderState: FormFieldRenderState = {
-    disabled: Boolean(field.disabled),
-    error,
-    invalid: fieldState.invalid,
-    required: isRequired,
-  };
   const describedBy = mergeIds(
     descriptionId,
     fieldState.invalid ? messageId : undefined
   );
-  const controlProps: FormFieldControlProps = {
-    'aria-describedby': describedBy,
-    'aria-errormessage': fieldState.invalid ? messageId : undefined,
-    'aria-invalid': fieldState.invalid || undefined,
-    'aria-required': isRequired || undefined,
-    disabled: Boolean(field.disabled),
-    id: resolvedControlId,
-    name: field.name,
-    required: isRequired,
-  };
-  const groupProps: FormFieldGroupProps = {
-    'aria-describedby': describedBy,
-    'aria-errormessage': fieldState.invalid ? messageId : undefined,
-    'aria-invalid': fieldState.invalid || undefined,
-    'aria-labelledby': labelId,
-    'aria-required': isRequired || undefined,
-    disabled: Boolean(field.disabled),
-    id: resolvedControlId,
-  };
   const controlContext: FormControlContextValue<
     FieldPathValue<TFieldValues, TName>
   > = {
@@ -302,60 +361,47 @@ const FormField = <
     required: isRequired,
     value: field.value,
   };
-  if (
-    typeof children !== 'function' &&
-    (!childElement || childElement.type === React.Fragment)
-  ) {
+  if (!childElement || childElement.type === React.Fragment) {
     throw new Error(
       'Form.Field expects one direct, non-Fragment control element.'
     );
   }
 
-  const controlNode =
-    typeof children === 'function' ? (
-      children({
-        controlProps,
-        field: fieldValue,
-        fieldState: renderState,
-        groupProps,
-      })
-    ) : childElement && !isRegisteredFormControl(childElement.type) ? (
-      React.cloneElement(childElement, {
-        'aria-describedby': mergeIds(
-          childElement.props['aria-describedby'],
-          describedBy
-        ),
-        'aria-errormessage':
-          (fieldState.invalid ? messageId : undefined) ??
-          childElement.props['aria-errormessage'],
-        'aria-invalid':
-          fieldState.invalid || childElement.props['aria-invalid'] || undefined,
-        'aria-labelledby': mergeIds(
-          childElement.props['aria-labelledby'],
-          labelId
-        ),
-        'aria-required':
-          isRequired || childElement.props['aria-required'] || undefined,
-        disabled: Boolean(field.disabled || childElement.props.disabled),
-        id: resolvedControlId,
-        name: field.name,
-        onBlur: () => {
-          childElement.props.onBlur?.();
-          field.onBlur();
-        },
-        onChange: (value: FieldPathValue<TFieldValues, TName>) => {
-          childElement.props.onChange?.(value);
-          field.onChange(value);
-        },
-        ref: mergedChildRef,
-        required: Boolean(isRequired || childElement.props.required),
-        value: field.value,
-      })
-    ) : (
-      <FormControlProvider value={controlContext}>
-        {children}
-      </FormControlProvider>
-    );
+  const controlNode = !isRegisteredFormControl(childElement.type) ? (
+    React.cloneElement(childElement, {
+      'aria-describedby': mergeIds(
+        childElement.props['aria-describedby'],
+        describedBy
+      ),
+      'aria-errormessage':
+        (fieldState.invalid ? messageId : undefined) ??
+        childElement.props['aria-errormessage'],
+      'aria-invalid':
+        fieldState.invalid || childElement.props['aria-invalid'] || undefined,
+      'aria-labelledby': mergeIds(
+        childElement.props['aria-labelledby'],
+        labelId
+      ),
+      'aria-required':
+        isRequired || childElement.props['aria-required'] || undefined,
+      disabled: Boolean(field.disabled || childElement.props.disabled),
+      id: resolvedControlId,
+      name: field.name,
+      onBlur: () => {
+        childElement.props.onBlur?.();
+        field.onBlur();
+      },
+      onChange: (value: FieldPathValue<TFieldValues, TName>) => {
+        childElement.props.onChange?.(value);
+        field.onChange(value);
+      },
+      ref: mergedChildRef,
+      required: Boolean(isRequired || childElement.props.required),
+      value: field.value,
+    })
+  ) : (
+    <FormControlProvider value={controlContext}>{children}</FormControlProvider>
+  );
 
   return (
     <Field
@@ -387,37 +433,20 @@ const FormField = <
 
 const Form = Object.assign(FormRoot, {
   Field: FormField,
-  /** @deprecated Use Form.Field. */
-  Item: FormField,
   useForm,
+  useFormInstance,
+  useWatch,
 });
 
-/** @deprecated Use FormFieldProps. */
-type FormItemProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = FormFieldProps<TFieldValues, TName>;
-/** @deprecated Use FormFieldRenderField. */
-type FormItemRenderField<Value> = FormFieldRenderField<Value>;
-/** @deprecated Use FormFieldRenderProps. */
-type FormItemRenderProps<Value> = FormFieldRenderProps<Value>;
-/** @deprecated Use FormFieldRenderState. */
-type FormItemRenderState = FormFieldRenderState;
-
-export { Form };
+export { Form, useForm, useFormInstance, useWatch };
 export type {
-  FormFieldControlProps,
   FormFieldFocusTarget,
-  FormFieldGroupProps,
   FormFieldInjectedControlProps,
   FormFieldProps,
-  FormFieldRenderField,
-  FormFieldRenderProps,
-  FormFieldRenderState,
   FormInstance,
-  FormItemProps,
-  FormItemRenderField,
-  FormItemRenderProps,
-  FormItemRenderState,
   FormProps,
+  FormUseOptions,
+  FormValuesChangeHandler,
+  FormValuesChangeInfo,
+  FormWatchSelector,
 };

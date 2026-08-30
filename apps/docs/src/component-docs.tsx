@@ -68,6 +68,7 @@ import {
   FieldProfileDemo,
   FieldLabelPairingDemo,
   FormCustomControlDemo,
+  FormFieldDependencyDemo,
   FormIntegrationDemo,
   InputAffixDemo,
   InputNumberCapacityDemo,
@@ -4574,6 +4575,81 @@ const dataEntryExamples: Record<string, ComponentExample[]> = {
   ],
   form: [
     {
+      title: docsCopy('字段监听与联动'),
+      description: docsCopy(
+        '使用 Form.useWatch 精确订阅参与渲染的字段，并通过 setValue 更新关联字段。'
+      ),
+      preview: <FormFieldDependencyDemo />,
+      code: `import { Form, Input, Radio } from '@heliannuuthus/ui'
+
+type Values = {
+  plan: 'personal' | 'team'
+  seats: number | null
+}
+
+const PlanActions = () => {
+  const currentForm = Form.useFormInstance<Values>()
+
+  return (
+    <Button onClick={async () => {
+      const values = currentForm.getValues()
+      if (values.plan === 'team' && !values.seats) {
+        currentForm.setError('seats', { message: t('seatsRequired') })
+      }
+      await currentForm.trigger('seats')
+    }}>
+      {t('validate')}
+    </Button>
+  )
+}
+
+export const PlanForm = () => {
+  const form = Form.useForm<Values>({
+    defaultValues: { plan: 'personal', seats: 1 },
+  })
+  const plan = Form.useWatch('plan', form)
+  const seats = Form.useWatch('seats', form)
+
+  return (
+    <Form
+      form={form}
+      onValuesChange={(values, info) => {
+        console.log(info.name, values)
+      }}
+      onSubmit={save}
+    >
+      <Form.Field name="plan" label={t('plan')}>
+        <Radio.Group options={planOptions} />
+      </Form.Field>
+      <Form.Field name="seats" label={t('seats')} disabled={plan !== 'team'}>
+        <Input.Number min={2} />
+      </Form.Field>
+      <output>{seats ?? 0}</output>
+      <Button
+        type="button"
+        onClick={() => form.setValue('seats', 5, {
+          shouldDirty: true,
+          shouldValidate: true,
+        })}
+      >
+        {t('setFiveSeats')}
+      </Button>
+      <PlanActions />
+    </Form>
+  )
+}`,
+      coveredProperties: [
+        'Form.useForm.options',
+        'Form.useWatch.return',
+        'Form.useFormInstance.return',
+        'FormInstance.getValues',
+        'FormInstance.setError',
+        'FormInstance.setValue',
+        'FormInstance.trigger',
+      ],
+      previewHeight: 460,
+    },
+    {
       title: docsCopy('字段结构与状态'),
       description: docsCopy(
         '同时展示标签、说明、错误信息，以及适合设置项的水平字段。'
@@ -4712,6 +4788,7 @@ const form = Form.useForm({
 
   <Button type="submit">{t('actions.save')}</Button>
 </Form>`,
+      coveredProperties: ['FormInstance.reset', 'FormInstance.formState'],
       previewHeight: 'auto',
       wide: true,
     },
@@ -9734,6 +9811,7 @@ componentDocumentation.form.summary = docsCopy(
 componentDocumentation.form.whenToUse = [
   docsCopy('使用统一方式组织标签、控件、说明和错误信息。'),
   docsCopy('让内置数据录入组件自动连接字段值、校验状态和提交行为。'),
+  docsCopy('监听字段或派生值，并根据变化更新关联字段和界面。'),
 ];
 componentDocumentation.form.parts = [
   {
@@ -9743,6 +9821,14 @@ componentDocumentation.form.parts = [
   {
     name: 'Form.useForm',
     description: docsCopy('创建类型化表单实例并管理完整表单状态。'),
+  },
+  {
+    name: 'Form.useWatch',
+    description: docsCopy('精确订阅字段或派生值，并隔离当前组件的重渲染。'),
+  },
+  {
+    name: 'Form.useFormInstance',
+    description: docsCopy('在 Form 后代组件中读取当前表单实例。'),
   },
   {
     name: 'Form.Field',
@@ -12093,13 +12179,19 @@ const appendMissingApi = (slug: string, properties: ApiProperty[]) => {
 const publicProperty = (
   name: string,
   type: string,
-  options: Pick<ApiProperty, 'component' | 'defaultValue' | 'required'> = {}
-): ApiProperty => ({
-  ...options,
-  name,
-  description: publicPropDescription,
-  type,
-});
+  options: Partial<
+    Pick<ApiProperty, 'component' | 'defaultValue' | 'description' | 'required'>
+  > = {}
+): ApiProperty => {
+  const { description = publicPropDescription, ...propertyOptions } = options;
+
+  return {
+    ...propertyOptions,
+    name,
+    description,
+    type,
+  };
+};
 
 appendMissingApi('alert-dialog', [
   publicProperty('onOpenChangeComplete', '(open: boolean) => void'),
@@ -12173,8 +12265,64 @@ componentDocumentation.form.api = componentDocumentation.form.api.filter(
 );
 appendMissingApi('form', [
   publicProperty('onInvalid', 'SubmitErrorHandler', { component: 'Form' }),
+  publicProperty('onValuesChange', 'FormValuesChangeHandler', {
+    component: 'Form',
+    description: docsCopy('任意字段值变化后接收完整值和发生变化的字段路径。'),
+  }),
   publicProperty(docsCopy('原生属性'), 'ComponentProps<"form">', {
     component: 'Form',
+  }),
+  publicProperty('options', 'Parameters<typeof Form.useForm>[0]', {
+    component: 'Form.useForm',
+    description: docsCopy('设置默认值、校验时机、受控值和解析器等初始化选项。'),
+  }),
+  publicProperty(
+    'name',
+    'FieldPath | FieldPath[] | ((values: TFieldValues) => TSelectedValue)',
+    {
+      component: 'Form.useWatch',
+      description: docsCopy('指定要订阅的字段路径、路径集合或派生值选择器。'),
+    }
+  ),
+  publicProperty('form', 'FormInstance', {
+    component: 'Form.useWatch',
+    description: docsCopy('指定订阅所连接的类型化表单实例。'),
+  }),
+  publicProperty(
+    'return',
+    'FieldPathValue<TFieldValues, TName> | TSelectedValue',
+    {
+      component: 'Form.useWatch',
+      description: docsCopy('返回字段值、字段值集合或选择器结果。'),
+    }
+  ),
+  publicProperty('return', 'FormInstance', {
+    component: 'Form.useFormInstance',
+    description: docsCopy('返回最近一层 Form 提供的表单实例。'),
+  }),
+  ...(
+    [
+      [
+        'getValues',
+        '(name?: FieldPath | FieldPath[]) => ReturnType<FormInstance["getValues"]>',
+      ],
+      ['reset', '(values?: Parameters<FormInstance["reset"]>[0]) => void'],
+      [
+        'setError',
+        '(name: FieldPath, error: Parameters<FormInstance["setError"]>[1]) => void',
+      ],
+      ['setValue', '(name: FieldPath, value, options?) => void'],
+      ['trigger', '(name?: FieldPath | FieldPath[]) => Promise<boolean>'],
+    ] as const
+  ).map(([name, type]) =>
+    publicProperty(name, type, {
+      component: 'FormInstance',
+      description: docsCopy('读取或更新表单值与校验状态的类型化实例方法。'),
+    })
+  ),
+  publicProperty('formState', 'FormInstance["formState"]', {
+    component: 'FormInstance',
+    description: docsCopy('读取提交、校验、脏值、触碰和错误等响应式状态。'),
   }),
   publicProperty('defaultValue', 'FieldPathValue', {
     component: 'Form.Field',
@@ -12188,6 +12336,19 @@ appendMissingApi('form', [
 ]);
 componentDocumentation.form.typePreviews = [
   ...(componentDocumentation.form.typePreviews ?? []),
+  {
+    name: 'FormValuesChangeHandler',
+    definition: `type FormValuesChangeHandler<TFieldValues> = (
+  values: TFieldValues,
+  info: FormValuesChangeInfo<TFieldValues>,
+) => void`,
+  },
+  {
+    name: 'FormValuesChangeInfo',
+    definition: `type FormValuesChangeInfo<TFieldValues> = {
+  name?: FieldPath<TFieldValues>
+}`,
+  },
   {
     name: 'FormFieldInjectedControlProps<Value>',
     declaration: '{',
