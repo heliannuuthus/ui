@@ -1,0 +1,45 @@
+---
+title: Interaction tips
+description: Establish consistent product rules for focus, feedback, loading, overlays, motion, and keyboard use.
+lang: en
+---
+
+# Interaction tips
+
+Good interaction explains what happened, what is possible next, and whether the task is complete. Components provide mechanics; products still choose the feedback and flow that fit the real task.
+
+## Keep feedback near the action
+
+Field errors belong beside their fields. A page-level save result may use a toast. Blocking issues that require immediate action belong in an alert or dialog. Do not replace all form errors with global toasts.
+
+## Loading states
+
+- Operations below roughly 300ms usually should not flash a spinner.
+- Keep a submit button's width stable while it is loading.
+- Skeletons should resemble the eventual content instead of filling the page with equal gray bars.
+- Background refresh should preserve existing content and show status locally.
+
+## Choosing an overlay
+
+| Scenario                                   | Prefer                   |
+| ------------------------------------------ | ------------------------ |
+| Supplemental information or a light action | Popover                  |
+| Choosing from commands                     | Dropdown Menu or Command |
+| A task that must be completed or cancelled | Dialog                   |
+| Explicit high-risk confirmation            | Alert Dialog             |
+| A multi-step task on a narrow screen       | Drawer                   |
+
+## Motion
+
+Use motion to explain position, hierarchy, and state. Keep transitions short and interruptible, and avoid bounce on ordinary navigation. Preserve spatial relationships between entry and exit, and honor `prefers-reduced-motion`. Reserve glass for functional floating surfaces and provide a `prefers-reduced-transparency` fallback.
+
+## Keyboard and focus
+
+- Every action must be keyboard reachable with a visible `:focus-visible` state.
+- Move focus into an opened dialog and return it to the trigger on close.
+- Arrow keys navigate menus; Tab exits a composite control instead of visiting every menu item.
+- Icon buttons need an accessible name; a tooltip is not the only naming mechanism.
+
+## Dangerous actions
+
+Use confirmation only for hard-to-recover actions with a clear impact. Name the object and consequence instead of asking only whether the user wants to continue. Prefer undo for recoverable operations.

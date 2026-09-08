@@ -95,96 +95,98 @@ export const HomePage = () => {
   return (
     <div className="docs-marketing-page docs-home-page">
       <section className="home-hero" aria-labelledby="home-title">
-        <div className="home-hero-copy">
-          <PageEyebrow>{copy.eyebrow}</PageEyebrow>
-          <Typography.Title id="home-title">{home.title}</Typography.Title>
-          <Typography.Text
-            as="p"
-            className="home-hero-description"
-            size="xl"
-            tone="muted"
-          >
-            {home.description}
-          </Typography.Text>
-          <Stack align="center" gap={12} orientation="horizontal" wrap>
-            <InternalButtonLink
-              href={localPath(locale, '/docs/getting-started')}
-              size="lg"
+        <div className="home-hero-inner">
+          <div className="home-hero-copy">
+            <PageEyebrow>{copy.eyebrow}</PageEyebrow>
+            <Typography.Title id="home-title">{home.title}</Typography.Title>
+            <Typography.Text
+              as="p"
+              className="home-hero-description"
+              size="xl"
+              tone="muted"
             >
-              {copy.getStarted}
-              <ArrowRight aria-hidden="true" data-icon="inline-end" />
-            </InternalButtonLink>
-            <InternalButtonLink
-              href={localPath(locale, '/components')}
-              size="lg"
+              {home.description}
+            </Typography.Text>
+            <Stack align="center" gap={12} orientation="horizontal" wrap>
+              <InternalButtonLink
+                href={localPath(locale, '/docs/getting-started')}
+                size="lg"
+              >
+                {copy.getStarted}
+                <ArrowRight aria-hidden="true" data-icon="inline-end" />
+              </InternalButtonLink>
+              <InternalButtonLink
+                href={localPath(locale, '/components')}
+                size="lg"
+                variant="outline"
+              >
+                {copy.browse}
+              </InternalButtonLink>
+            </Stack>
+            <div className="home-install">
+              <Typography.Text as="p" size="sm" tone="muted">
+                {copy.install}
+              </Typography.Text>
+              <InstallTabs
+                copiedLabel={common.actions.copied}
+                copyLabel={common.actions.copy}
+              />
+            </div>
+          </div>
+
+          <div className="home-preview-frame">
+            <div className="home-preview-caption">
+              <span className="home-preview-status" aria-hidden="true" />
+              <Typography.Text as="span" size="sm" weight="medium">
+                {copy.live}
+              </Typography.Text>
+            </div>
+            <Card
+              className="home-preview-card"
+              header={{
+                title: copy.previewTitle,
+                description: copy.previewDescription,
+                action: <Tag type="success">Live</Tag>,
+              }}
+              footer={
+                <Stack
+                  align="center"
+                  block
+                  gap={8}
+                  justify="end"
+                  orientation="horizontal"
+                >
+                  <Button variant="ghost">{copy.cancel}</Button>
+                  <Button>{copy.create}</Button>
+                </Stack>
+              }
               variant="outline"
             >
-              {copy.browse}
-            </InternalButtonLink>
-          </Stack>
-          <div className="home-install">
-            <Typography.Text as="p" size="sm" tone="muted">
-              {copy.install}
-            </Typography.Text>
-            <InstallTabs
-              copiedLabel={common.actions.copied}
-              copyLabel={common.actions.copy}
+              <Stack block gap={20}>
+                <label
+                  className="home-preview-field"
+                  htmlFor="home-workspace-name"
+                >
+                  <Typography.Text as="span" size="sm" weight="medium">
+                    {copy.workspace}
+                  </Typography.Text>
+                  <Input
+                    defaultValue="Heliannuuthus UI"
+                    id="home-workspace-name"
+                  />
+                </label>
+                <Checkbox defaultChecked>{copy.option}</Checkbox>
+              </Stack>
+            </Card>
+            <div
+              className="home-preview-orbit home-preview-orbit--one"
+              aria-hidden="true"
+            />
+            <div
+              className="home-preview-orbit home-preview-orbit--two"
+              aria-hidden="true"
             />
           </div>
-        </div>
-
-        <div className="home-preview-frame">
-          <div className="home-preview-caption">
-            <span className="home-preview-status" aria-hidden="true" />
-            <Typography.Text as="span" size="sm" weight="medium">
-              {copy.live}
-            </Typography.Text>
-          </div>
-          <Card
-            className="home-preview-card"
-            header={{
-              title: copy.previewTitle,
-              description: copy.previewDescription,
-              action: <Tag type="success">Live</Tag>,
-            }}
-            footer={
-              <Stack
-                align="center"
-                block
-                gap={8}
-                justify="end"
-                orientation="horizontal"
-              >
-                <Button variant="ghost">{copy.cancel}</Button>
-                <Button>{copy.create}</Button>
-              </Stack>
-            }
-            variant="outline"
-          >
-            <Stack block gap={20}>
-              <label
-                className="home-preview-field"
-                htmlFor="home-workspace-name"
-              >
-                <Typography.Text as="span" size="sm" weight="medium">
-                  {copy.workspace}
-                </Typography.Text>
-                <Input
-                  defaultValue="Heliannuuthus UI"
-                  id="home-workspace-name"
-                />
-              </label>
-              <Checkbox defaultChecked>{copy.option}</Checkbox>
-            </Stack>
-          </Card>
-          <div
-            className="home-preview-orbit home-preview-orbit--one"
-            aria-hidden="true"
-          />
-          <div
-            className="home-preview-orbit home-preview-orbit--two"
-            aria-hidden="true"
-          />
         </div>
       </section>
 

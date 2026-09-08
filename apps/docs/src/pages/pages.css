@@ -1,3 +1,4 @@
+/* Hallmark · genre: modern-minimal · macrostructure: Workbench · design-system: docs/docs-site-redesign.md · designed-as-app */
 .docs-marketing-page {
   --page-rule: color-mix(in oklab, var(--border) 72%, transparent);
   --page-grid: color-mix(in oklab, var(--foreground) 5%, transparent);
@@ -10,6 +11,7 @@
 .docs-marketing-page h2,
 .docs-marketing-page h3 {
   text-wrap: balance;
+  font-family: var(--docs-font-sans);
 }
 
 .docs-page-eyebrow {
@@ -289,18 +291,22 @@
 .home-hero {
   position: relative;
   isolation: isolate;
-  min-height: calc(100vh - 4rem);
-  min-height: calc(100dvh - 4rem);
+  min-height: min(46rem, calc(100vh - 4rem));
+  min-height: min(46rem, calc(100dvh - 4rem));
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: clamp(4rem, 7vw, 6.5rem) clamp(1.25rem, 5vw, 4.5rem);
+  background: color-mix(in oklab, var(--muted) 22%, var(--background));
+}
+
+.home-hero-inner {
+  width: min(100%, 90rem);
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(24rem, 0.95fr);
   align-items: center;
-  gap: clamp(3rem, 8vw, 8rem);
-  overflow: hidden;
-  padding: clamp(4rem, 8vw, 7rem) clamp(1.25rem, 5vw, 4.5rem);
-  background-image:
-    linear-gradient(var(--page-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--page-grid) 1px, transparent 1px);
-  background-size: 3rem 3rem;
+  gap: clamp(3rem, 6vw, 6rem);
+  margin: 0 auto;
 }
 
 .home-hero::before {
@@ -309,9 +315,9 @@
   inset: 0;
   content: '';
   background: radial-gradient(
-    circle at 72% 45%,
-    color-mix(in oklab, var(--primary) 12%, transparent),
-    transparent 34rem
+    circle at 70% 48%,
+    color-mix(in oklab, var(--primary) 9%, transparent),
+    transparent 30rem
   );
 }
 
@@ -322,10 +328,10 @@
 .home-hero-copy h1 {
   max-width: 10ch;
   margin: 0;
-  font-size: clamp(3.6rem, 8vw, 7.75rem);
-  font-weight: 560;
-  line-height: 0.9;
-  letter-spacing: -0.075em;
+  font-size: clamp(3.6rem, 6vw, 6.5rem);
+  font-weight: 680;
+  line-height: 0.96;
+  letter-spacing: -0.06em;
 }
 
 .home-hero-description {
@@ -384,7 +390,7 @@
 .home-preview-frame {
   position: relative;
   width: min(100%, 36rem);
-  justify-self: end;
+  justify-self: center;
   padding: clamp(1rem, 3vw, 2rem);
 }
 
@@ -423,6 +429,7 @@
   border: 1px solid color-mix(in oklab, var(--primary) 28%, transparent);
   border-radius: 50%;
   pointer-events: none;
+  opacity: 0.66;
 }
 
 .home-preview-orbit--one {
@@ -610,7 +617,24 @@
   letter-spacing: -0.055em;
 }
 
-.guide-hero,
+.docs-guide-page {
+  width: min(100%, 64rem);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 1.5rem 2.5rem 5rem;
+}
+
+.guide-visually-hidden-title {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px !important;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
 .design-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.48fr);
@@ -626,7 +650,6 @@
   );
 }
 
-.guide-hero h1,
 .design-hero h1 {
   max-width: 10ch;
   margin: 0;
@@ -635,25 +658,6 @@
   letter-spacing: -0.07em;
 }
 
-.guide-hero-description {
-  max-width: 38rem;
-  margin: 2rem 0 0 !important;
-  line-height: 1.65 !important;
-}
-
-.guide-requirements {
-  --card-spacing: 1.5rem;
-  border-radius: 1.25rem;
-  background: color-mix(in oklab, var(--muted) 46%, transparent);
-  box-shadow: none;
-}
-
-.guide-requirements h2 {
-  margin: 0 0 1.25rem;
-  font-size: 1.2rem;
-}
-
-.guide-requirements ul,
 .design-boundary-card ul {
   display: grid;
   gap: 0.8rem;
@@ -662,18 +666,16 @@
   list-style: none;
 }
 
-.guide-requirements li,
 .design-boundary-card li {
   display: flex;
   align-items: flex-start;
   gap: 0.65rem;
 }
 
-.guide-requirements li svg,
 .design-boundary-card li svg {
   width: 1rem;
   height: 1rem;
-  margin-top: 0.25rem;
+  margin-top: 0.15rem;
   flex: none;
   color: var(--success);
 }
@@ -682,44 +684,55 @@
   position: sticky;
   z-index: 12;
   top: 4rem;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border-bottom: 1px solid var(--page-rule);
-  background: color-mix(in oklab, var(--background) 92%, transparent);
-  backdrop-filter: blur(16px);
+  padding: 0.625rem 0;
+  border-bottom: 1px solid color-mix(in oklab, var(--border) 58%, transparent);
+  background: color-mix(in oklab, var(--background) 80%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
 }
 
-.guide-index a {
-  height: 3.25rem;
+.guide-index-control {
+  width: 100%;
+  margin: 0 auto;
+  border-color: color-mix(in oklab, var(--border) 68%, transparent);
+  background: color-mix(in oklab, var(--muted) 58%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--background) 72%, transparent),
+    0 0.6rem 1.5rem -1.2rem
+      color-mix(in oklab, var(--foreground) 28%, transparent);
+}
+
+.guide-index-label {
+  width: 100%;
   justify-content: flex-start;
-  border-radius: 0;
-  border-right: 1px solid var(--page-rule);
+  gap: 0.55rem;
 }
 
-.guide-index a span {
+.guide-index-label > span {
   color: var(--primary);
   font-family: var(--font-mono);
   font-size: 0.7rem;
 }
 
 .guide-steps {
-  padding: 0 clamp(1.25rem, 5vw, 4.5rem);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
 }
 
 .guide-step {
   display: grid;
-  grid-template-columns: 7rem minmax(0, 1fr);
-  gap: clamp(2rem, 7vw, 7rem);
-  padding: clamp(4rem, 8vw, 7rem) 0;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  gap: 1.5rem;
+  padding: 3rem 0;
   border-bottom: 1px solid var(--page-rule);
-  scroll-margin-top: 8rem;
+  scroll-margin-top: 9rem;
 }
 
 .guide-step-marker {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 0.75rem;
   color: var(--primary);
 }
 
@@ -730,32 +743,68 @@
 }
 
 .guide-step-marker svg {
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .guide-step-content {
-  max-width: 56rem;
+  min-width: 0;
+  max-width: 60rem;
 }
 
 .guide-step-content > h2 {
   margin: 0;
-  font-size: clamp(2rem, 4vw, 3.75rem);
-  letter-spacing: -0.045em;
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+  letter-spacing: -0.025em;
 }
 
 .guide-step-content > p:first-of-type {
   max-width: 42rem;
-  margin: 1rem 0 2rem !important;
+  margin: 1rem 0 1.5rem !important;
+}
+
+.guide-step-explanation {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 60rem;
+  margin: 0 0 2rem;
+  border-block: 1px solid var(--page-rule);
+}
+
+.guide-step-explanation > div {
+  min-width: 0;
+  padding: 1.15rem 1.25rem 1.2rem 0;
+}
+
+.guide-step-explanation > div + div {
+  padding-left: 1.25rem;
+  border-left: 1px solid var(--page-rule);
+}
+
+.guide-step-explanation dt {
+  margin-bottom: 0.45rem;
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.guide-step-explanation dd {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 0.9rem;
+  line-height: 1.65;
 }
 
 .guide-step-content .install-tabs,
 .guide-step-content .guide-code-panel {
-  max-width: 48rem;
+  max-width: 60rem;
 }
 
 .guide-note {
-  max-width: 48rem;
+  max-width: 56rem;
   margin-top: 1rem !important;
   padding-left: 1rem;
   border-left: 2px solid var(--primary);
@@ -763,11 +812,23 @@
 }
 
 .guide-contract-grid {
-  max-width: 48rem;
+  max-width: 56rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 1rem;
+}
+
+.docs-guide-page .guide-next {
+  margin-top: 0;
+  padding: 3.5rem 0 0;
+  border-top: 0;
+  background: transparent;
+}
+
+.docs-guide-page .guide-next h2 {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  letter-spacing: -0.035em;
 }
 
 .design-hero {
@@ -919,8 +980,7 @@
 }
 
 @media (max-width: 980px) {
-  .home-hero,
-  .guide-hero,
+  .home-hero-inner,
   .design-hero,
   .components-hero,
   .home-catalog,
@@ -948,7 +1008,6 @@
 
 @media (max-width: 720px) {
   .home-hero-copy h1,
-  .guide-hero h1,
   .design-hero h1,
   .components-hero-copy h1 {
     font-size: clamp(3.25rem, 16vw, 5rem);
@@ -958,6 +1017,10 @@
   .home-principle-grid,
   .design-principles {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .docs-guide-page {
+    padding: 1rem 1rem 4rem;
   }
 
   .home-proof > div + div {
@@ -974,13 +1037,39 @@
     aspect-ratio: 1;
   }
 
+  .home-hero {
+    min-height: 0;
+  }
+
   .guide-index {
-    grid-template-columns: repeat(2, 1fr);
+    padding-inline: 0.75rem;
+  }
+
+  .guide-index-control {
+    width: 100%;
+  }
+
+  .guide-index-control [data-slot='segmented-item'] {
+    min-width: max-content;
   }
 
   .guide-step {
     grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
+  }
+
+  .guide-step-explanation {
+    grid-template-columns: 1fr;
+  }
+
+  .guide-step-explanation > div {
+    padding: 1rem 0;
+  }
+
+  .guide-step-explanation > div + div {
+    padding-left: 0;
+    border-top: 1px solid var(--page-rule);
+    border-left: 0;
   }
 
   .guide-step-marker {
@@ -1030,6 +1119,18 @@
 
   .components-card-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .guide-index {
+    background: var(--background);
+    backdrop-filter: none;
+  }
+
+  .guide-index-control {
+    background: var(--muted);
+    box-shadow: none;
   }
 }
 

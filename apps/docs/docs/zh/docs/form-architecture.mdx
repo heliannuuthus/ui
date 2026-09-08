@@ -1,0 +1,76 @@
+---
+title: 表单设计与实现
+description: 理解 Form、Form.Field、控件绑定、校验与业务提交之间的分层关系。
+lang: zh-Hans
+---
+
+# 表单设计与实现
+
+表单不是输入框的集合，而是字段语义、状态管理、校验、提交和错误恢复共同组成的任务流程。Heliannuuthus UI 将这些职责拆成三层，使业务代码不依赖具体表单引擎。
+
+## 三层职责
+
+| 层级         | 负责                                             | 不负责                           |
+| ------------ | ------------------------------------------------ | -------------------------------- |
+| `Form`       | 原生 `<form>` 边界、表单实例、提交与整体状态     | 页面路由、API 协议和业务提示文案 |
+| `Form.Field` | 字段名称、标签、说明、错误、必填状态和 ARIA 关联 | 决定业务字段是否存在             |
+| 数据录入组件 | 自然的 `value` 或 `checked` 语义、交互和焦点     | 读取表单引擎对象                 |
+
+## 基本结构
+
+```tsx
+type Values = {
+  enabled: boolean;
+  name: string;
+};
+
+const form = Form.useForm<Values>({
+  defaultValues: { enabled: true, name: '' },
+});
+
+<Form form={form} onSubmit={save}>
+  <Form.Field
+    name="name"
+    label="名称"
+    description="团队成员会看到这个名称"
+    required
+  >
+    <Input />
+  </Form.Field>
+
+  <Form.Field name="enabled" label="立即启用">
+    <Switch />
+  </Form.Field>
+
+  <Button type="submit">保存</Button>
+</Form>;
+```
+
+`Form.Field` 会把值、变更、失焦、ID、名称和无障碍关系注入直接子控件。内置组件在自身实现旁完成适配，因此业务代码不需要渲染 `Controller`，也不需要手动把 `checked` 映射为字段值。
+
+## 观察字段与副作用
+
+界面需要根据字段值重新渲染时使用 `Form.useWatch`。埋点、日志等不驱动视图的事件使用 `onValuesChange`。命令式流程使用实例上的 `setValue`、`reset`、`setError`、`trigger` 和 `getValues`。
+
+```tsx
+const plan = Form.useWatch('plan', form);
+
+<Form.Field name="seats" label="席位数" disabled={plan !== 'team'}>
+  <Input.Number min={2} />
+</Form.Field>;
+```
+
+## 校验与错误
+
+- 字段级规则负责必填、格式和局部约束。
+- 跨字段规则应读取完整表单值，并把错误放回能够解决问题的字段。
+- 服务端返回的字段错误使用 `setError` 映射；未知系统错误保留在表单级反馈区域。
+- 首次进入页面不要立即展示所有错误；提交失败后应聚焦或滚动到第一个可修复字段。
+
+## 自定义控件
+
+自定义控件应提供标准受控接口：`value`、`onChange`、`onBlur`，并接收 `id`、`name`、`disabled`、`required` 和 ARIA 属性。第三方控件如果使用特殊事件结构，应在一个可复用适配组件中转换，不要扩展 `Form.Field` 增加库专属参数。
+
+## 继续阅读
+
+查看 [Form 组件](/zh/components/form) 获取完整 API、状态示例和自定义控件接入方式。

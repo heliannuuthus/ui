@@ -1,0 +1,44 @@
+---
+title: Typography and fonts
+description: Define product font stacks, heading hierarchy, reading width, and the roles of text and code fonts.
+lang: en
+---
+
+# Typography and fonts
+
+Typography serves reading and hierarchy before brand expression. Product interfaces should define stable roles for body, heading, and monospace fonts instead of mixing display faces into controls and long-form copy.
+
+## Three font variables
+
+```css
+:root {
+  --font-sans: Inter, 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+}
+```
+
+- `--font-sans` is for body copy, forms, and controls.
+- `--font-heading` is for headings and may share the body family while using size and weight for hierarchy.
+- `--font-mono` is for code, keyboard input, and technical values that benefit from character-level comparison.
+
+The current public theme retains a brand-font default. Production applications should explicitly override font tokens after checking licensing, glyph coverage, and loading cost.
+
+## Separate semantics from appearance
+
+Use the [Typography component](/en/components/typography) to preserve a valid HTML outline. A visually small section title should not skip from `h2` to `h4`.
+
+```tsx
+<Typography.Title level={2}>Account security</Typography.Title>
+<Typography.Text as="p" tone="muted">
+  Manage sign-in methods and recently used devices.
+</Typography.Text>
+```
+
+## Reading width
+
+Keep continuous prose near 60–80 characters per line. Form help and secondary copy should be shorter. Data and code may use more width, but should rely on scrolling, wrapping, or column rules instead of expanding every paragraph.
+
+## Font loading and accessibility
+
+Web fonts need a useful fallback and appropriate `font-display`. Avoid blocking control labels for branding, and test layout shift, button widths, and table columns after fonts load. Do not depend on ultra-light weights; muted text still needs sufficient contrast and must reflow at 200% zoom.

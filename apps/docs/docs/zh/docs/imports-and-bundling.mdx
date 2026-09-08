@@ -1,0 +1,54 @@
+---
+title: 按需导入
+description: 说明组件根入口、静态样式入口、Tree Shaking 和构建工具的职责边界。
+lang: zh-Hans
+---
+
+# 按需导入
+
+组件统一从包根入口按名称导入。构建工具会根据实际引用执行 Tree Shaking，因此不需要把公开 API 改写为组件子路径。
+
+```tsx
+import { Button, Form, Input } from '@heliannuuthus/ui';
+```
+
+## JavaScript 按需，CSS 一次导入
+
+这里有两个容易混淆的概念：
+
+- JavaScript 是按需打包的。未被引用的组件不会因为根入口而自动进入业务包。
+- CSS 是完整静态文件。应用入口只导入一次，异步路由中的组件也能立即获得样式。
+
+```tsx title="main.tsx"
+import '@heliannuuthus/ui/styles.css';
+import './app.css';
+```
+
+完整 CSS 避免了异步页面切换时的样式闪烁，也让 Portal、焦点规则和跨组件 Token 保持一致。它不是运行时 CSS，也不要求业务项目扫描组件库源码。
+
+## 为什么不使用组件子路径
+
+`@heliannuuthus/ui/button` 等路径属于构建产物的内部组织，不是公共协议。绕过根入口会让版本升级、类型声明和打包验证失去统一边界。
+
+```tsx
+// 推荐
+import { Button } from '@heliannuuthus/ui';
+
+// 不要依赖私有路径
+// import { Button } from '@heliannuuthus/ui/button';
+```
+
+## 构建工具要求
+
+项目需要支持 ESM 与现代 Tree Shaking。Vite、Rspack、Webpack、Rollup、Parcel 和现代 Next.js 均可按常规方式使用。不要为组件库额外增加 Babel 按需导入插件。
+
+## 检查包体积
+
+如果产物异常增大，先检查：
+
+1. 是否把整个命名空间作为运行时对象传递。
+2. 是否同时加载了多个版本的 React 或组件库。
+3. 是否在服务端与客户端入口重复引入业务 polyfill。
+4. 构建是否启用了生产模式和 Tree Shaking。
+
+CSS 体积与组件引用数量不是线性关系；评估时应分别观察 JavaScript chunk、共享 CSS 和缓存命中率。

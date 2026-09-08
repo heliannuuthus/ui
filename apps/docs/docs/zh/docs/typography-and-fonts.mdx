@@ -1,0 +1,50 @@
+---
+title: 字体与排版
+description: 定义产品字体栈、标题层级、正文行长、数字与代码字体的使用规则。
+lang: zh-Hans
+---
+
+# 字体与排版
+
+字体首先解决阅读和层级问题，其次才承担品牌表达。产品界面应建立稳定的正文字体、标题字体和等宽字体三套角色，不要在控件、长正文和品牌标题之间随意混用。
+
+## 三类字体变量
+
+```css
+:root {
+  --font-sans: Inter, 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+}
+```
+
+- `--font-sans` 用于正文、表单和操作控件。
+- `--font-heading` 用于标题，可与正文相同，仅通过字重和字号建立层级。
+- `--font-mono` 用于代码、键盘输入和需要逐字符比较的技术信息。
+
+当前公共主题保留了品牌字体默认值。正式产品应在应用级明确覆盖字体 Token，并在实施前确认授权、中文字符覆盖和加载性能。
+
+## 语义和视觉分开
+
+使用 [Typography 组件](/zh/components/typography) 保留正确的 HTML 层级。视觉上需要更小的标题时，也不应跳过 `h2` 直接使用 `h4`。
+
+```tsx
+<Typography.Title level={2}>账户安全</Typography.Title>
+<Typography.Text as="p" tone="muted">
+  管理登录方式和最近使用的设备。
+</Typography.Text>
+```
+
+## 阅读宽度
+
+- 连续正文建议控制在约 60–80 个中文字符对应的视觉宽度内。
+- 表单说明和次要文本应比主内容更短，不要横跨整个桌面屏幕。
+- 数据和代码可以更宽，但应使用滚动、折行或列宽策略，而不是扩大所有正文。
+
+## 字体加载
+
+Web Font 应设置合理的 fallback 和 `font-display`。不要为了首屏品牌效果阻塞控件文字；中文字体文件尤其需要评估子集、缓存和系统字体回退。字体加载完成后还要检查布局偏移、按钮宽度和表格列宽变化。
+
+## 可访问性
+
+正文不要依赖极细字重。说明文字可以降低颜色层级，但仍需保持对比度。页面缩放到 200% 时，文本应自然换行而不是被固定高度裁切。

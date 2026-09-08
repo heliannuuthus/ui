@@ -1,0 +1,55 @@
+---
+title: Dark mode
+description: Use Provider, system preferences, and semantic colors to implement stable, persistent dark mode.
+lang: en
+---
+
+# Dark mode
+
+Dark mode is not a global color inversion. It re-establishes surface hierarchy, text contrast, boundary visibility, and status-color luminance while preserving component meaning.
+
+## Choose an appearance
+
+`Provider` accepts `light`, `dark`, or `system`. System mode follows `prefers-color-scheme`.
+
+```tsx
+<Provider appearance="system">
+  <App />
+</Provider>
+```
+
+If the product offers a manual switch, persist the user's choice and restore it before React starts to avoid a light-to-dark flash. An explicit user setting takes precedence over the operating system; choosing system resumes system updates.
+
+## Configure light and dark tokens
+
+```tsx
+<Provider
+  appearance={appearance}
+  theme={{
+    colors: {
+      background: 'oklch(0.99 0 0)',
+      foreground: 'oklch(0.18 0 0)',
+    },
+    darkColors: {
+      background: 'oklch(0.14 0 0)',
+      foreground: 'oklch(0.96 0 0)',
+    },
+  }}
+>
+  <App />
+</Provider>
+```
+
+Only put values that differ from the light theme in `darkColors`. Unspecified values continue to use `colors` or the default theme.
+
+## Design checks
+
+- Page, card, and overlay surfaces need distinguishable but restrained luminance steps.
+- Borders usually need lower chroma rather than simply more transparent white.
+- Test status colors as text, icons, and tinted backgrounds.
+- Verify images, charts, shadows, code highlighting, and native controls separately.
+- Never use color as the only signal for error, success, or selection.
+
+## Portals and nested themes
+
+Dialogs, menus, and tooltips should render where they can inherit theme context. Nested providers can create a deliberate local theme, but should not become a shortcut for scattered color overrides that split portal and non-portal surfaces.

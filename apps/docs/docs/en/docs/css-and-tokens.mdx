@@ -1,0 +1,67 @@
+---
+title: CSS and tokens
+description: Understand static styles, semantic tokens, cascade order, and application overrides in Heliannuuthus UI.
+lang: en
+---
+
+# CSS and tokens
+
+Heliannuuthus UI ships behavior and styling separately. Components provide structure and interaction through JavaScript, while `styles.css` contains the complete deduplicated visual rules. Import it once at the application entry; no Tailwind plugin or runtime style injection is required.
+
+## Style layers
+
+1. The base layer owns reset, font inheritance, focus treatment, and document defaults.
+2. The theme layer defines semantic colors, radii, and fonts.
+3. The component layer consumes semantic tokens instead of product-specific colors.
+4. Application CSS owns layout and product expression and may override selected tokens.
+
+```css title="app.css"
+:root {
+  --primary: oklch(0.56 0.18 255);
+  --primary-foreground: oklch(0.99 0 0);
+  --radius: 0.75rem;
+}
+```
+
+Prefer semantic variables over selectors aimed at component internals. Token overrides continue to work across interaction states, dark mode, and component upgrades.
+
+## Core semantic tokens
+
+| Category | Common variables                                    | Purpose                           |
+| -------- | --------------------------------------------------- | --------------------------------- |
+| Page     | `--background`, `--foreground`                      | Page background and primary text  |
+| Surface  | `--card`, `--popover`, matching `-foreground`       | Cards and overlays                |
+| Action   | `--primary`, `--secondary`, `--accent`              | Actions and hover feedback        |
+| Boundary | `--border`, `--input`, `--ring`                     | Dividers, inputs, and focus rings |
+| Status   | `--success`, `--warning`, `--info`, `--destructive` | Semantic feedback                 |
+| Shape    | `--radius`                                          | Shared component radius           |
+
+## Provider versus CSS
+
+Static CSS supplies document-wide foundations. `Provider` writes theme variables for a component subtree and owns `appearance`, `direction`, and component defaults. Use Provider for product theming and application CSS for page layout.
+
+```tsx
+import { Provider } from '@heliannuuthus/ui';
+
+<Provider
+  appearance="system"
+  theme={{
+    colors: { primary: 'oklch(0.56 0.18 255)' },
+    darkColors: { primary: 'oklch(0.72 0.14 255)' },
+    radius: '0.75rem',
+  }}
+>
+  <App />
+</Provider>;
+```
+
+## Override boundaries
+
+- Use `className` and `style` for the component root.
+- Composite components expose paired `classNames` and `styles` maps for public semantic slots.
+- Do not depend on generated classes, DOM depth, or private component subpaths.
+- Keep order, permission, and workflow states out of the shared UI theme.
+
+## Troubleshooting
+
+If a component is completely unstyled, verify that `@heliannuuthus/ui/styles.css` is imported at the application entry. If a local override loses in the cascade, prefer changing a semantic token before increasing selector specificity.

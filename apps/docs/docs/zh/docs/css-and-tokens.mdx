@@ -1,0 +1,67 @@
+---
+title: CSS 设计与定义
+description: 理解 Heliannuuthus UI 的静态样式、语义 Token、层叠顺序与业务覆盖方式。
+lang: zh-Hans
+---
+
+# CSS 设计与定义
+
+Heliannuuthus UI 把行为和样式分开交付：组件通过 JavaScript 提供结构与交互，`styles.css` 提供完整且去重后的视觉规则。应用只需要在入口导入一次样式，不需要安装 Tailwind 插件，也不会在运行时注入 CSS。
+
+## 样式由哪几层组成
+
+1. 基础层负责 reset、字体继承、焦点样式和页面级默认值。
+2. 主题层定义颜色、圆角、字体等语义 Token。
+3. 组件层读取语义 Token，不直接绑定某个产品的品牌色。
+4. 应用样式负责布局与业务表达，并可覆盖需要调整的 Token。
+
+```css title="app.css"
+:root {
+  --primary: oklch(0.56 0.18 255);
+  --primary-foreground: oklch(0.99 0 0);
+  --radius: 0.75rem;
+}
+```
+
+优先覆盖语义变量，而不是定位组件内部 DOM。这样修改会同时适配交互状态、深色模式和后续组件升级。
+
+## 核心语义 Token
+
+| 类别 | 常用变量                                            | 用途                   |
+| ---- | --------------------------------------------------- | ---------------------- |
+| 页面 | `--background`、`--foreground`                      | 页面背景与主文本       |
+| 表面 | `--card`、`--popover`、对应 `-foreground`           | 卡片与浮层             |
+| 操作 | `--primary`、`--secondary`、`--accent`              | 主次操作与悬停反馈     |
+| 边界 | `--border`、`--input`、`--ring`                     | 分隔、输入边界与焦点环 |
+| 状态 | `--success`、`--warning`、`--info`、`--destructive` | 语义反馈               |
+| 形状 | `--radius`                                          | 组件共享的基础圆角     |
+
+## Provider 与 CSS 的分工
+
+静态 CSS 提供全局基础规则；`Provider` 在一棵组件子树上写入主题变量，并负责 `appearance`、`direction` 和组件默认值。产品级主题建议交给 `Provider`，纯页面布局仍写在应用 CSS 中。
+
+```tsx
+import { Provider } from '@heliannuuthus/ui';
+
+<Provider
+  appearance="system"
+  theme={{
+    colors: { primary: 'oklch(0.56 0.18 255)' },
+    darkColors: { primary: 'oklch(0.72 0.14 255)' },
+    radius: '0.75rem',
+  }}
+>
+  <App />
+</Provider>;
+```
+
+## 覆盖边界
+
+- 用 `className` 和 `style` 调整组件根节点。
+- 组合组件通过成对的 `classNames`、`styles` 调整公开语义槽位。
+- 不依赖自动生成的类名、DOM 层级或私有组件子路径。
+- 不在 UI 主题中写入订单、权限、审核等业务状态。
+
+## 常见问题
+
+如果组件完全没有样式，先确认应用入口确实导入了 `@heliannuuthus/ui/styles.css`。如果局部覆盖不生效，检查选择器是否在正确的层叠顺序中，并优先改写语义 Token，而不是不断提高选择器权重。

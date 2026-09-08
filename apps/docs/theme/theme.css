@@ -1,3 +1,4 @@
+/* Hallmark · genre: modern-minimal · macrostructure: Workbench · design-system: docs/docs-site-redesign.md · designed-as-app */
 @import url('https://fontsapi.zeoseven.com/2/main/result.css');
 
 html {
@@ -47,6 +48,12 @@ html.dark [data-slot='provider'] {
 }
 
 body {
+  --docs-font-brand: 'LXGW ZhenKai GB', 'STKaiti', 'KaiTi', 'Kaiti SC', serif;
+  --docs-font-sans:
+    Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
+  --font-heading: var(--docs-font-sans);
+  --font-sans: var(--docs-font-sans);
   min-width: 0;
   margin: 0;
   overflow-x: clip;
@@ -92,9 +99,39 @@ body {
   align-items: center;
   gap: 1rem;
   padding: 0 1.25rem;
-  border-bottom: 1px solid var(--border);
-  background: color-mix(in oklab, var(--background) 92%, transparent);
-  backdrop-filter: blur(14px);
+  border-bottom: 1px solid color-mix(in oklab, var(--border) 68%, transparent);
+  background: color-mix(in oklab, var(--background) 82%, transparent);
+  box-shadow: 0 0.5rem 1.5rem -1.25rem
+    color-mix(in oklab, var(--foreground) 28%, transparent);
+  backdrop-filter: blur(18px) saturate(145%);
+}
+
+.docs-header > :not(.docs-navigation-indicator) {
+  position: relative;
+  z-index: 1;
+}
+
+.docs-navigation-indicator {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  display: block;
+  border: 1px solid color-mix(in oklab, var(--border) 74%, transparent);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--background) 68%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--background) 88%, transparent),
+    0 0.45rem 1.25rem -0.8rem
+      color-mix(in oklab, var(--foreground) 38%, transparent);
+  pointer-events: none;
+  will-change: transform, width;
+}
+
+.docs-brand-slot {
+  width: max-content;
+  min-width: 0;
+  justify-self: start;
 }
 
 .docs-brand {
@@ -108,6 +145,8 @@ body {
   font-weight: 720;
   letter-spacing: -0.025em;
   text-decoration: none;
+  font-family: var(--docs-font-brand);
+  background: transparent;
 }
 
 .docs-brand img {
@@ -121,6 +160,24 @@ body {
 
 .docs-primary-nav {
   justify-self: center;
+}
+
+.docs-primary-nav-list {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.docs-primary-nav-link {
+  background: transparent;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+
+.docs-primary-nav-link:hover,
+.docs-primary-nav-link[aria-current='page'] {
+  background: transparent;
+  color: var(--foreground);
 }
 
 .docs-header-actions {
@@ -156,9 +213,13 @@ body {
 }
 
 .docs-body-layout {
+  --docs-sidebar-width: clamp(22rem, 25vw, 30rem);
+  --docs-toc-width: clamp(18rem, 18vw, 22rem);
   min-height: calc(100vh - 4rem);
   display: grid;
-  grid-template-columns: 17rem minmax(0, 1fr) 14rem;
+  grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr) var(
+      --docs-toc-width
+    );
   align-items: start;
 }
 
@@ -168,6 +229,10 @@ body {
 
 .docs-body-layout:not(:has(.docs-sidebar)):not(:has(.docs-toc)) {
   grid-template-columns: minmax(0, 1fr);
+}
+
+.docs-body-layout:has(.docs-sidebar):not(:has(.docs-toc)) {
+  grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr);
 }
 
 .docs-sidebar {
@@ -189,7 +254,7 @@ body {
 .docs-sidebar nav {
   display: grid;
   gap: 1.25rem;
-  padding: 1.25rem 1rem 4rem;
+  padding: 1.5rem clamp(1rem, 1.4vw, 1.5rem) 4rem;
 }
 
 .docs-sidebar-overview,
@@ -220,7 +285,7 @@ body {
 
 .docs-sidebar-group {
   display: grid;
-  gap: 0.375rem;
+  gap: 0.5rem;
 }
 
 .docs-sidebar-group h2 {
@@ -268,7 +333,9 @@ body {
 }
 
 .docs-article {
-  width: min(100%, 56rem);
+  width: 100%;
+  max-width: 56rem;
+  box-sizing: border-box;
   min-height: calc(100vh - 4rem);
   margin: 0 auto;
   padding: 3.5rem 2.5rem 6rem;
@@ -282,6 +349,7 @@ body {
 .docs-article[data-page-type='design'],
 .docs-article[data-page-type='catalog'] {
   width: 100%;
+  max-width: none;
   min-height: 0;
   padding: 0;
 }
@@ -299,6 +367,7 @@ body {
   position: relative;
   scroll-margin-top: 5.5rem;
   color: var(--foreground);
+  font-family: var(--docs-font-sans);
 }
 
 .docs-mdx-admonition,
@@ -466,7 +535,7 @@ body {
 }
 
 .docs-toc-content {
-  padding: 2.75rem 1.5rem 2rem 0.5rem;
+  padding: 2.75rem clamp(1.25rem, 1.6vw, 2rem) 2rem 0.75rem;
 }
 
 .docs-toc-content > p {
@@ -952,10 +1021,11 @@ body {
   color: var(--muted-foreground);
 }
 
-@media (max-width: 1150px) {
+@media (max-width: 1400px) {
   .docs-body-layout,
   .docs-body-layout:not(:has(.docs-sidebar)) {
-    grid-template-columns: 17rem minmax(0, 1fr);
+    --docs-sidebar-width: 19rem;
+    grid-template-columns: 19rem minmax(0, 1fr);
   }
 
   .docs-body-layout:not(:has(.docs-sidebar)) {
@@ -979,6 +1049,10 @@ body {
   }
 
   .docs-primary-nav {
+    display: none;
+  }
+
+  .docs-navigation-indicator {
     display: none;
   }
 
@@ -1024,6 +1098,18 @@ body {
 
   .docs-article {
     padding: 2.5rem 1.25rem 5rem;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .docs-header {
+    background: var(--background);
+    backdrop-filter: none;
+  }
+
+  .docs-navigation-indicator {
+    background: var(--muted);
+    box-shadow: none;
   }
 }
 

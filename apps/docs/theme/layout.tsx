@@ -4,7 +4,6 @@ import {
   Layout as UiLayout,
   Provider,
   ScrollArea,
-  Segmented,
   Typography,
 } from '@heliannuuthus/ui';
 import {
@@ -24,18 +23,27 @@ import {
   Sun,
   X,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
 import {
   componentGroups,
   componentNavigationName,
   componentSlug,
 } from '../src/component-catalog';
+import { handbookSections } from '../src/handbook-navigation';
 import { DocsMdxProvider } from './mdx-content';
 import { InternalButtonLink } from './internal-link';
 import { Search } from './search';
 import { isThemePreference, useThemeState } from './theme-state';
 
 type Locale = 'en' | 'zh';
+
+type NavigationIndicatorGeometry = {
+  height: number;
+  width: number;
+  x: number;
+  y: number;
+};
 
 const groupNames = {
   actions: { en: 'Actions and menus', zh: '操作与菜单' },
@@ -63,7 +71,7 @@ const isActivePath = (pathname: string, href: string) => {
 const mainLinks = (locale: Locale) => [
   {
     href: `/${locale}/docs/getting-started`,
-    label: locale === 'zh' ? '快速开始' : 'Getting started',
+    label: locale === 'zh' ? '研发手册' : 'Handbook',
   },
   {
     href: `/${locale}/design`,
@@ -81,9 +89,17 @@ export const Layout = () => {
   const { frontmatter } = useFrontmatter();
   const { page } = usePageData();
   const [navigationOpen, setNavigationOpen] = useState(false);
+  const [navigationIndicator, setNavigationIndicator] =
+    useState<NavigationIndicatorGeometry | null>(null);
   const [theme, setTheme, resolvedTheme] = useThemeState();
+  const headerRef = useRef<HTMLElement>(null);
+  const brandSlotRef = useRef<HTMLDivElement>(null);
+  const primaryNavigationRef = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
   const locale = routeLocale(location.pathname);
   const componentPage = location.pathname.startsWith(`/${locale}/components`);
+  const handbookPage = location.pathname.startsWith(`/${locale}/docs`);
+  const sidebarPage = componentPage || handbookPage;
   const navigationLinks = mainLinks(locale);
   const activeNavigationPath = navigationLinks.find((link) =>
     isActivePath(location.pathname, link.href)
@@ -94,6 +110,53 @@ export const Layout = () => {
   useEffect(() => {
     document.documentElement.lang = locale === 'zh' ? 'zh-Hans' : 'en';
   }, [locale]);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    const brand = brandSlotRef.current;
+    const primaryNavigation = primaryNavigationRef.current;
+
+    if (!header || !brand || !primaryNavigation) return;
+
+    const updateIndicator = () => {
+      const homePath = `/${locale}`;
+      const currentPath = normalizePath(location.pathname);
+      const target =
+        currentPath === homePath
+          ? brand
+          : primaryNavigation.querySelector<HTMLElement>(
+              '[aria-current="page"]'
+            );
+
+      if (!target) {
+        setNavigationIndicator(null);
+        return;
+      }
+
+      const headerRect = header.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+
+      setNavigationIndicator({
+        height: targetRect.height,
+        width: targetRect.width,
+        x: targetRect.left - headerRect.left,
+        y: targetRect.top - headerRect.top,
+      });
+    };
+
+    updateIndicator();
+
+    const resizeObserver = new ResizeObserver(updateIndicator);
+    resizeObserver.observe(header);
+    resizeObserver.observe(brand);
+    resizeObserver.observe(primaryNavigation);
+    window.addEventListener('resize', updateIndicator);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', updateIndicator);
+    };
+  }, [locale, location.pathname]);
 
   if (frontmatter.pageType === 'blank') {
     return (
@@ -129,8 +192,21 @@ export const Layout = () => {
         >
           {locale === 'zh' ? '跳到正文' : 'Skip to content'}
         </Button>
-        <UiLayout.Header className="docs-header">
-          {componentPage ? (
+        <UiLayout.Header className="docs-header" ref={headerRef}>
+          {navigationIndicator ? (
+            <motion.span
+              animate={navigationIndicator}
+              aria-hidden="true"
+              className="docs-navigation-indicator"
+              initial={false}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { bounce: 0, duration: 0.34, type: 'spring' }
+              }
+            />
+          ) : null}
+          {sidebarPage ? (
             <Button
               aria-label={
                 navigationOpen
@@ -154,32 +230,47 @@ export const Layout = () => {
             </Button>
           ) : null}
 
-          <InternalButtonLink
-            className="docs-brand"
-            href={`/${locale}/`}
-            size="sm"
-            variant="ghost"
-          >
-            <img alt="" height="30" src="/heliannuuthus.png" width="30" />
-            <Typography.Text as="span" weight="semibold">
-              Heliannuuthus UI
-            </Typography.Text>
-          </InternalButtonLink>
+          <div className="docs-brand-slot" ref={brandSlotRef}>
+            <InternalButtonLink
+              aria-current={
+                normalizePath(location.pathname) === `/${locale}`
+                  ? 'page'
+                  : undefined
+              }
+              className="docs-brand"
+              href={`/${locale}/`}
+              size="sm"
+              variant="ghost"
+            >
+              <img alt="" height="30" src="/heliannuuthus.png" width="30" />
+              <Typography.Text as="span" weight="semibold">
+                Heliannuuthus UI
+              </Typography.Text>
+            </InternalButtonLink>
+          </div>
 
-          <nav aria-label={locale === 'zh' ? '主要导航' : 'Main navigation'}>
-            <Segmented
-              className="docs-primary-nav"
-              onChange={(href) => {
-                setNavigationOpen(false);
-                void navigate(href);
-              }}
-              options={navigationLinks.map((link) => ({
-                label: link.label,
-                value: link.href,
-              }))}
-              size="md"
-              value={activeNavigationPath ?? null}
-            />
+          <nav
+            aria-label={locale === 'zh' ? '主要导航' : 'Main navigation'}
+            className="docs-primary-nav"
+            ref={primaryNavigationRef}
+          >
+            <div className="docs-primary-nav-list">
+              {navigationLinks.map((link) => (
+                <InternalButtonLink
+                  aria-current={
+                    activeNavigationPath === link.href ? 'page' : undefined
+                  }
+                  className="docs-primary-nav-link"
+                  href={link.href}
+                  key={link.href}
+                  onClick={() => setNavigationOpen(false)}
+                  size="sm"
+                  variant="ghost"
+                >
+                  {link.label}
+                </InternalButtonLink>
+              ))}
+            </div>
           </nav>
 
           <div className="docs-header-actions">
@@ -278,12 +369,12 @@ export const Layout = () => {
         </UiLayout.Header>
 
         <UiLayout className="docs-body-layout">
-          {componentPage ? (
+          {sidebarPage ? (
             <UiLayout.Sidebar
               className="docs-sidebar"
               collapsible={false}
               data-open={navigationOpen || undefined}
-              width="17rem"
+              width="var(--docs-sidebar-width)"
             >
               <ScrollArea
                 className="docs-sidebar-scroll"
@@ -292,55 +383,96 @@ export const Layout = () => {
               >
                 <nav
                   aria-label={
-                    locale === 'zh' ? '组件导航' : 'Component navigation'
+                    componentPage
+                      ? locale === 'zh'
+                        ? '组件导航'
+                        : 'Component navigation'
+                      : locale === 'zh'
+                        ? '研发手册导航'
+                        : 'Engineering handbook navigation'
                   }
                 >
-                  <InternalButtonLink
-                    aria-current={
-                      normalizePath(location.pathname) ===
-                      `/${locale}/components`
-                        ? 'page'
-                        : undefined
-                    }
-                    block
-                    className="docs-sidebar-overview"
-                    href={`/${locale}/components/`}
-                    onClick={() => setNavigationOpen(false)}
-                    size="sm"
-                    variant="ghost"
-                  >
-                    {locale === 'zh' ? '组件总览' : 'Overview'}
-                  </InternalButtonLink>
-                  {componentGroups.map((group) => (
-                    <section className="docs-sidebar-group" key={group.key}>
-                      <Typography.Title level={2}>
-                        {groupNames[group.key][locale]}
-                      </Typography.Title>
-                      <ul>
-                        {group.items.map((name) => {
-                          const href = `/${locale}/components/${componentSlug(name)}`;
-                          return (
-                            <li key={name}>
-                              <InternalButtonLink
-                                aria-current={
-                                  normalizePath(location.pathname) === href
-                                    ? 'page'
-                                    : undefined
-                                }
-                                block
-                                href={href}
-                                onClick={() => setNavigationOpen(false)}
-                                size="sm"
-                                variant="ghost"
-                              >
-                                {componentNavigationName(name, locale)}
-                              </InternalButtonLink>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </section>
-                  ))}
+                  {componentPage ? (
+                    <>
+                      <InternalButtonLink
+                        aria-current={
+                          normalizePath(location.pathname) ===
+                          `/${locale}/components`
+                            ? 'page'
+                            : undefined
+                        }
+                        block
+                        className="docs-sidebar-overview"
+                        href={`/${locale}/components/`}
+                        onClick={() => setNavigationOpen(false)}
+                        size="sm"
+                        variant="ghost"
+                      >
+                        {locale === 'zh' ? '组件总览' : 'Overview'}
+                      </InternalButtonLink>
+                      {componentGroups.map((group) => (
+                        <section className="docs-sidebar-group" key={group.key}>
+                          <Typography.Title level={2}>
+                            {groupNames[group.key][locale]}
+                          </Typography.Title>
+                          <ul>
+                            {group.items.map((name) => {
+                              const href = `/${locale}/components/${componentSlug(name)}`;
+                              return (
+                                <li key={name}>
+                                  <InternalButtonLink
+                                    aria-current={
+                                      normalizePath(location.pathname) === href
+                                        ? 'page'
+                                        : undefined
+                                    }
+                                    block
+                                    href={href}
+                                    onClick={() => setNavigationOpen(false)}
+                                    size="sm"
+                                    variant="ghost"
+                                  >
+                                    {componentNavigationName(name, locale)}
+                                  </InternalButtonLink>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </section>
+                      ))}
+                    </>
+                  ) : (
+                    handbookSections.map((section) => (
+                      <section className="docs-sidebar-group" key={section.key}>
+                        <Typography.Title level={2}>
+                          {section.labels[locale]}
+                        </Typography.Title>
+                        <ul>
+                          {section.items.map((item) => {
+                            const href = `/${locale}/docs/${item.slug}`;
+                            return (
+                              <li key={item.slug}>
+                                <InternalButtonLink
+                                  aria-current={
+                                    normalizePath(location.pathname) === href
+                                      ? 'page'
+                                      : undefined
+                                  }
+                                  block
+                                  href={href}
+                                  onClick={() => setNavigationOpen(false)}
+                                  size="sm"
+                                  variant="ghost"
+                                >
+                                  {item.labels[locale]}
+                                </InternalButtonLink>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </section>
+                    ))
+                  )}
                 </nav>
               </ScrollArea>
               <Button
@@ -384,7 +516,7 @@ export const Layout = () => {
               className="docs-toc"
               collapsible={false}
               side="end"
-              width="14rem"
+              width="var(--docs-toc-width)"
             >
               <ScrollArea
                 className="docs-toc-scroll"
