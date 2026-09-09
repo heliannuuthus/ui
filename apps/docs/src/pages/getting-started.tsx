@@ -84,17 +84,23 @@ export function Welcome() {
               </Typography.Text>
               {id === 'installation' ? (
                 <InstallTabs
+                  codeToolsLabel={common.demo.codeTools}
                   copiedLabel={common.actions.copied}
                   copyLabel={common.actions.copy}
+                  unwrapLabel={common.demo.unwrapCode}
+                  wrapLabel={common.demo.wrapCode}
                 />
               ) : null}
               {id === 'styles' ? (
                 <>
                   <CodePanel
                     code={styleCode}
+                    codeToolsLabel={common.demo.codeTools}
                     copiedLabel={common.actions.copied}
                     copyLabel={common.actions.copy}
                     title="main.tsx"
+                    unwrapLabel={common.demo.unwrapCode}
+                    wrapLabel={common.demo.wrapCode}
                   />
                   <Typography.Text as="p" className="guide-note" size="sm">
                     {copy.styleNote}
@@ -105,9 +111,12 @@ export function Welcome() {
                 <>
                   <CodePanel
                     code={providerCode}
+                    codeToolsLabel={common.demo.codeTools}
                     copiedLabel={common.actions.copied}
                     copyLabel={common.actions.copy}
                     title="app.tsx"
+                    unwrapLabel={common.demo.unwrapCode}
+                    wrapLabel={common.demo.wrapCode}
                   />
                   <div className="guide-contract-grid">
                     {[
@@ -130,9 +139,12 @@ export function Welcome() {
                 <>
                   <CodePanel
                     code={usageCode}
+                    codeToolsLabel={common.demo.codeTools}
                     copiedLabel={common.actions.copied}
                     copyLabel={common.actions.copy}
                     title="welcome.tsx"
+                    unwrapLabel={common.demo.unwrapCode}
+                    wrapLabel={common.demo.wrapCode}
                   />
                   <Typography.Text as="p" className="guide-note" size="sm">
                     {copy.usageNote}

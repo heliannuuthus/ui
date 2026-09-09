@@ -88,8 +88,11 @@ const zh = {
       },
     },
     demo: {
+      codeTools: '代码工具',
       copied: '已复制',
       copyCode: '复制代码',
+      wrapCode: '自动换行',
+      unwrapCode: '取消自动换行',
       preview: '预览',
       source: '源码',
       openCodeSandbox: '在 CodeSandbox 打开',
@@ -268,8 +271,11 @@ const en = {
       },
     },
     demo: {
+      codeTools: 'Code tools',
       copied: 'Copied',
       copyCode: 'Copy code',
+      wrapCode: 'Wrap lines',
+      unwrapCode: 'Do not wrap lines',
       preview: 'Preview',
       source: 'Source',
       openCodeSandbox: 'Open in CodeSandbox',

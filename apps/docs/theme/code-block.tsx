@@ -1,6 +1,6 @@
 import { Button, Tooltip, Typography, useProvider } from '@heliannuuthus/ui';
 import { useLocation } from '@rspress/core/runtime';
-import { Box, Check, CodeXml, Copy, Zap } from 'lucide-react';
+import { Box, Check, CodeXml, Copy, WrapText, Zap } from 'lucide-react';
 import { Highlight, themes } from 'prism-react-renderer';
 import {
   Fragment,
@@ -48,6 +48,7 @@ export const CodeBlock = ({
   const sourceDisclosure = useContext(CodeBlockDisclosureContext);
   const contentRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
+  const [wrapped, setWrapped] = useState(false);
   const localizedSource = useMemo(() => {
     if (!title?.startsWith('showcases/') || !title.endsWith('.tsx'))
       return null;
@@ -104,129 +105,153 @@ export const CodeBlock = ({
         </Typography.Text>
       ) : null}
       <div
-        className="docs-code-content"
+        className="docs-code-viewport"
         hidden={sourceDisclosureEnabled && !sourceDisclosure.expanded}
         id={sourceDisclosure?.panelId}
-        ref={contentRef}
-        style={height == null ? undefined : { maxHeight: height }}
       >
-        {localizedSource == null ? (
-          children
-        ) : (
-          <Highlight
-            code={localizedSource}
-            language="tsx"
-            theme={
-              resolvedAppearance === 'dark' ? themes.nightOwl : themes.github
-            }
-          >
-            {({ className, getLineProps, getTokenProps, style, tokens }) => (
-              <pre className={className} style={style}>
-                <code>
-                  {tokens.map((line, lineIndex) => (
-                    <Fragment key={lineIndex}>
-                      <span {...getLineProps({ line })}>
-                        {line.map((token, tokenIndex) => (
-                          <span
-                            {...getTokenProps({ token })}
-                            key={tokenIndex}
-                          />
-                        ))}
-                      </span>
-                      {lineIndex < tokens.length - 1 &&
-                      !line.some((token) =>
-                        String(token.content).includes('\n')
-                      )
-                        ? '\n'
-                        : null}
-                    </Fragment>
-                  ))}
-                </code>
-              </pre>
-            )}
-          </Highlight>
-        )}
-      </div>
-      <div
-        aria-label={chinese ? '代码工具' : 'Code tools'}
-        className="docs-code-toolbar"
-        role="toolbar"
-      >
-        <Tooltip
-          content={copied ? labels.copied : labels.copyCode}
-          openDelay={copied ? 0 : undefined}
+        <div
+          className="docs-code-content"
+          data-wrap={wrapped}
+          ref={contentRef}
+          style={height == null ? undefined : { maxHeight: height }}
         >
-          <Button
-            aria-label={copied ? labels.copied : labels.copyCode}
-            onClick={() => void copy()}
-            size="icon-sm"
-            variant="ghost"
-          >
-            {copied ? (
-              <Check aria-hidden="true" />
-            ) : (
-              <Copy aria-hidden="true" />
-            )}
-          </Button>
-        </Tooltip>
-        {repositorySourcePath ? (
-          <>
-            <Tooltip content={labels.openCodeSandbox}>
-              <Button
-                aria-label={labels.openCodeSandbox}
-                href={codeSandboxHref!}
-                rel="noreferrer"
-                size="icon-sm"
-                target="_blank"
-                variant="ghost"
-              >
-                <Box aria-hidden="true" />
-              </Button>
-            </Tooltip>
-            <Tooltip content={labels.openStackBlitz}>
-              <Button
-                aria-label={labels.openStackBlitz}
-                href={stackBlitzHref!}
-                rel="noreferrer"
-                size="icon-sm"
-                target="_blank"
-                variant="ghost"
-              >
-                <Zap aria-hidden="true" />
-              </Button>
-            </Tooltip>
-          </>
-        ) : null}
-        {sourceDisclosureEnabled ? (
+          {localizedSource == null ? (
+            children
+          ) : (
+            <Highlight
+              code={localizedSource}
+              language="tsx"
+              theme={
+                resolvedAppearance === 'dark' ? themes.nightOwl : themes.github
+              }
+            >
+              {({ className, getLineProps, getTokenProps, style, tokens }) => (
+                <pre className={className} style={style}>
+                  <code>
+                    {tokens.map((line, lineIndex) => (
+                      <Fragment key={lineIndex}>
+                        <span {...getLineProps({ line })}>
+                          {line.map((token, tokenIndex) => (
+                            <span
+                              {...getTokenProps({ token })}
+                              key={tokenIndex}
+                            />
+                          ))}
+                        </span>
+                        {lineIndex < tokens.length - 1 &&
+                        !line.some((token) =>
+                          String(token.content).includes('\n')
+                        )
+                          ? '\n'
+                          : null}
+                      </Fragment>
+                    ))}
+                  </code>
+                </pre>
+              )}
+            </Highlight>
+          )}
+        </div>
+        <div
+          aria-label={chinese ? '代码工具' : 'Code tools'}
+          className="docs-code-viewport-toolbar"
+          role="toolbar"
+        >
           <Tooltip
-            content={
-              sourceDisclosure.expanded
-                ? labels.collapseCode
-                : labels.expandCode
-            }
+            content={copied ? labels.copied : labels.copyCode}
+            openDelay={copied ? 0 : undefined}
           >
             <Button
-              aria-controls={sourceDisclosure.panelId}
-              aria-expanded={sourceDisclosure.expanded}
-              aria-label={
+              aria-label={copied ? labels.copied : labels.copyCode}
+              onClick={() => void copy()}
+              size="icon-sm"
+              variant="ghost"
+            >
+              {copied ? (
+                <Check aria-hidden="true" />
+              ) : (
+                <Copy aria-hidden="true" />
+              )}
+            </Button>
+          </Tooltip>
+          <Tooltip content={wrapped ? labels.unwrapCode : labels.wrapCode}>
+            <Button
+              aria-label={wrapped ? labels.unwrapCode : labels.wrapCode}
+              aria-pressed={wrapped}
+              onClick={() => setWrapped((value) => !value)}
+              size="icon-sm"
+              variant="ghost"
+            >
+              <WrapText aria-hidden="true" />
+            </Button>
+          </Tooltip>
+          <span aria-live="polite" className="sr-only">
+            {copied ? labels.copied : ''}
+          </span>
+        </div>
+      </div>
+      {repositorySourcePath ? (
+        <div
+          aria-label={chinese ? '源码操作' : 'Source actions'}
+          className="docs-code-actions"
+          role="toolbar"
+        >
+          {codeSandboxHref ? (
+            <>
+              <Tooltip content={labels.openCodeSandbox}>
+                <Button
+                  aria-label={labels.openCodeSandbox}
+                  href={codeSandboxHref!}
+                  rel="noreferrer"
+                  size="icon-sm"
+                  target="_blank"
+                  variant="ghost"
+                >
+                  <Box aria-hidden="true" />
+                </Button>
+              </Tooltip>
+              <Tooltip content={labels.openStackBlitz}>
+                <Button
+                  aria-label={labels.openStackBlitz}
+                  href={stackBlitzHref!}
+                  rel="noreferrer"
+                  size="icon-sm"
+                  target="_blank"
+                  variant="ghost"
+                >
+                  <Zap aria-hidden="true" />
+                </Button>
+              </Tooltip>
+            </>
+          ) : null}
+          {sourceDisclosureEnabled ? (
+            <Tooltip
+              content={
                 sourceDisclosure.expanded
                   ? labels.collapseCode
                   : labels.expandCode
               }
-              onClick={() =>
-                sourceDisclosure.onExpandedChange(!sourceDisclosure.expanded)
-              }
-              size="icon-sm"
-              variant="ghost"
             >
-              <CodeXml aria-hidden="true" />
-            </Button>
-          </Tooltip>
-        ) : null}
-        <span aria-live="polite" className="sr-only">
-          {copied ? labels.copied : ''}
-        </span>
-      </div>
+              <Button
+                aria-controls={sourceDisclosure.panelId}
+                aria-expanded={sourceDisclosure.expanded}
+                aria-label={
+                  sourceDisclosure.expanded
+                    ? labels.collapseCode
+                    : labels.expandCode
+                }
+                onClick={() =>
+                  sourceDisclosure.onExpandedChange(!sourceDisclosure.expanded)
+                }
+                size="icon-sm"
+                variant="ghost"
+              >
+                <CodeXml aria-hidden="true" />
+              </Button>
+            </Tooltip>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 };

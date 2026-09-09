@@ -124,8 +124,11 @@ export const HomePage = () => {
                 {copy.install}
               </Typography.Text>
               <InstallTabs
+                codeToolsLabel={common.demo.codeTools}
                 copiedLabel={common.actions.copied}
                 copyLabel={common.actions.copy}
+                unwrapLabel={common.demo.unwrapCode}
+                wrapLabel={common.demo.wrapCode}
               />
             </div>
           </div>

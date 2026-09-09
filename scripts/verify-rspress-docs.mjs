@@ -637,15 +637,20 @@ assert.match(
   /localizeShowcaseSource/u,
   'Case source blocks must render only the active locale example.'
 );
-assert.doesNotMatch(
+assert.match(
   themeCodeBlock,
-  /wrapCode|WrapText|<Toggle(?:\.|\s)/u,
-  'Code wrapping must not require an interactive toolbar control.'
+  /<WrapText aria-hidden="true" \/>/u,
+  'Code blocks must expose line wrapping from the code viewport toolbar.'
 );
 assert.match(
   themeCss,
-  /\.docs-code-content code \{[^}]*white-space: pre-wrap;/su,
-  'Code blocks must always wrap long lines.'
+  /\.docs-code-content\[data-wrap='true'\] code \{[^}]*white-space: pre-wrap;/su,
+  'Code blocks must wrap long lines only when wrapping is enabled.'
+);
+assert.match(
+  themeCss,
+  /\.docs-code-viewport-toolbar \{[^}]*position: absolute;/su,
+  'Copy and wrapping controls must be positioned inside the code viewport.'
 );
 assert.match(
   themeCodeBlock,

@@ -1,5 +1,5 @@
-import { Button, Card, Tabs, Typography } from '@heliannuuthus/ui';
-import { Check, Copy } from 'lucide-react';
+import { Button, Card, Tabs, Tooltip, Typography } from '@heliannuuthus/ui';
+import { Check, Copy, WrapText } from 'lucide-react';
 import { useState } from 'react';
 
 const installCommands = {
@@ -52,16 +52,23 @@ const PackageManagerLabel = ({ manager }: { manager: PackageManager }) => {
 
 export const CodePanel = ({
   code,
+  codeToolsLabel,
   copyLabel,
   copiedLabel,
   title,
+  unwrapLabel,
+  wrapLabel,
 }: {
   code: string;
+  codeToolsLabel: string;
   copyLabel: string;
   copiedLabel: string;
   title: string;
+  unwrapLabel: string;
+  wrapLabel: string;
 }) => {
   const [copied, setCopied] = useState(false);
+  const [wrapped, setWrapped] = useState(false);
 
   const copy = async () => {
     await navigator.clipboard.writeText(code);
@@ -71,32 +78,66 @@ export const CodePanel = ({
 
   return (
     <Card className="guide-code-panel" variant="outline">
-      <div className="guide-code-toolbar">
-        <Typography.Text as="span" size="sm" tone="muted">
-          {title}
-        </Typography.Text>
-        <Button
-          aria-label={copied ? copiedLabel : copyLabel}
-          onClick={() => void copy()}
-          size="icon-xs"
-          variant="ghost"
+      <Typography.Text
+        as="div"
+        className="guide-code-title"
+        size="sm"
+        tone="muted"
+      >
+        {title}
+      </Typography.Text>
+      <div className="guide-code-viewport">
+        <pre data-wrap={wrapped}>
+          <code>{code}</code>
+        </pre>
+        <div
+          aria-label={codeToolsLabel}
+          className="guide-code-toolbar"
+          role="toolbar"
         >
-          {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
-        </Button>
+          <Tooltip content={copied ? copiedLabel : copyLabel}>
+            <Button
+              aria-label={copied ? copiedLabel : copyLabel}
+              onClick={() => void copy()}
+              size="icon-xs"
+              variant="ghost"
+            >
+              {copied ? (
+                <Check aria-hidden="true" />
+              ) : (
+                <Copy aria-hidden="true" />
+              )}
+            </Button>
+          </Tooltip>
+          <Tooltip content={wrapped ? unwrapLabel : wrapLabel}>
+            <Button
+              aria-label={wrapped ? unwrapLabel : wrapLabel}
+              aria-pressed={wrapped}
+              onClick={() => setWrapped((value) => !value)}
+              size="icon-xs"
+              variant="ghost"
+            >
+              <WrapText aria-hidden="true" />
+            </Button>
+          </Tooltip>
+        </div>
       </div>
-      <pre>
-        <code>{code}</code>
-      </pre>
     </Card>
   );
 };
 
 export const InstallTabs = ({
+  codeToolsLabel,
   copyLabel,
   copiedLabel,
+  unwrapLabel,
+  wrapLabel,
 }: {
+  codeToolsLabel: string;
   copyLabel: string;
   copiedLabel: string;
+  unwrapLabel: string;
+  wrapLabel: string;
 }) => (
   <Tabs
     animation="none"
@@ -108,9 +149,12 @@ export const InstallTabs = ({
       content: (
         <CodePanel
           code={command}
+          codeToolsLabel={codeToolsLabel}
           copiedLabel={copiedLabel}
           copyLabel={copyLabel}
           title="terminal"
+          unwrapLabel={unwrapLabel}
+          wrapLabel={wrapLabel}
         />
       ),
     }))}
