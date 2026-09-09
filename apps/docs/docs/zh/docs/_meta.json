@@ -1,6 +1,7 @@
 [
   { "type": "file", "name": "getting-started", "label": "快速开始" },
   { "type": "file", "name": "css-and-tokens", "label": "CSS 设计与定义" },
+  { "type": "file", "name": "provider", "label": "全局 Provider" },
   { "type": "file", "name": "imports-and-bundling", "label": "按需导入" },
   { "type": "file", "name": "typography-and-fonts", "label": "字体与排版" },
   { "type": "file", "name": "dark-mode", "label": "暗黑模式" },

@@ -1,6 +1,7 @@
 [
   { "type": "file", "name": "getting-started", "label": "Getting started" },
   { "type": "file", "name": "css-and-tokens", "label": "CSS and tokens" },
+  { "type": "file", "name": "provider", "label": "Global Provider" },
   {
     "type": "file",
     "name": "imports-and-bundling",

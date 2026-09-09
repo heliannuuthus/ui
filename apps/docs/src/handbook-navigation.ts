@@ -18,6 +18,10 @@ export const handbookSections = [
         slug: 'css-and-tokens',
       },
       {
+        labels: { en: 'Global Provider', zh: '全局 Provider' },
+        slug: 'provider',
+      },
+      {
         labels: { en: 'Imports and bundling', zh: '按需导入' },
         slug: 'imports-and-bundling',
       },

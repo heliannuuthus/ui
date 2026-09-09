@@ -1,0 +1,124 @@
+---
+title: 全局 Provider
+description: 配置主题、外观、文字方向和组件默认值，并说明覆盖顺序与使用边界。
+lang: zh-Hans
+---
+
+# 全局 Provider
+
+`Provider` 把一组稳定的界面配置放在应用根部：浅色或深色外观、文字方向、主题变量，以及常用组件的默认属性。页面仍然可以传入具体属性覆盖默认值。
+
+## 放在哪里
+
+在应用根节点挂载一次。`Provider` 会渲染一个 `div`，并把主题变量、`dir` 和外观状态写在这个节点上。
+
+```tsx title="main.tsx"
+import { Provider } from '@heliannuuthus/ui';
+import '@heliannuuthus/ui/styles.css';
+
+root.render(
+  <Provider appearance="system">
+    <App />
+  </Provider>
+);
+```
+
+根节点使用 `system` 时会跟随操作系统。需要固定预览或后台主题时，也可以传入 `light` 或 `dark`。
+
+## 设置主题颜色
+
+`theme.colors` 提供基础颜色，`theme.darkColors` 在深色外观下覆盖其中的同名字段。只传需要修改的变量，未填写的部分继续使用组件库默认值。
+
+```tsx title="app-provider.tsx"
+<Provider
+  appearance="system"
+  theme={{
+    colors: {
+      primary: 'oklch(0.56 0.18 255)',
+      primaryForeground: 'oklch(0.99 0 0)',
+      ring: 'oklch(0.62 0.16 255)',
+    },
+    darkColors: {
+      primary: 'oklch(0.72 0.14 255)',
+      primaryForeground: 'oklch(0.18 0.02 255)',
+      ring: 'oklch(0.72 0.14 255)',
+    },
+    radius: '0.75rem',
+  }}
+>
+  <App />
+</Provider>
+```
+
+颜色字段对应 [CSS 设计与定义](/zh/docs/css-and-tokens) 中的语义 Token。Provider 适合由 JavaScript 配置或按租户生成的主题；固定品牌也可以直接在应用 CSS 中覆盖变量。
+
+## 设置组件默认值
+
+`components` 用于统一重复出现的组件属性。例如，后台系统可以把按钮设为小尺寸，把卡片设为描边样式，并统一 Tooltip 的打开延迟。
+
+```tsx title="app-provider.tsx"
+<Provider
+  components={{
+    Button: { size: 'sm' },
+    Card: { variant: 'outline' },
+    Tooltip: { openDelay: 300, placement: 'top' },
+    ScrollArea: {
+      scrollbar: { size: 'sm', visibility: 'auto' },
+    },
+  }}
+>
+  <App />
+</Provider>
+```
+
+组件默认值适合处理跨页面重复的展示选择，不适合保存表单数据、权限或请求状态。
+
+## 覆盖顺序
+
+同一属性按下面的顺序生效，越靠后优先级越高：
+
+1. 组件库默认值。
+2. 外层 Provider。
+3. 内层 Provider。
+4. 组件自身显式传入的属性。
+
+因此，全局设置 `Button.size` 为 `sm` 后，单个 `<Button size="lg" />` 仍会使用 `lg`。Provider 提供默认选择，不会锁死组件 API。
+
+## 局部配置
+
+内层 Provider 会继承外层配置，再覆盖自己声明的部分。它适合独立工作台、预览区域或需要不同文字方向的局部界面。
+
+```tsx title="preview.tsx"
+<Provider appearance="system" components={{ Button: { size: 'sm' } }}>
+  <AppShell>
+    <Provider theme={{ colors: { primary: 'oklch(0.62 0.2 25)' } }}>
+      <PreviewPanel />
+    </Provider>
+  </AppShell>
+</Provider>
+```
+
+Provider 通过 DOM 继承主题变量。挂载到 `document.body` 的浮层不会自动继承局部 Provider 的变量；这类浮层应使用根级主题，或使用组件公开的挂载容器能力。
+
+## 文字方向
+
+`direction` 接受 `ltr` 或 `rtl`，并写入 Provider 根节点的 `dir` 属性。默认值是 `ltr`。
+
+```tsx title="rtl-area.tsx"
+<Provider direction="rtl">
+  <ArabicWorkspace />
+</Provider>
+```
+
+方向只解决组件布局和浏览器双向文本基础规则。日期格式、数字格式和翻译仍由应用的国际化方案负责。
+
+## 为什么集中配置
+
+集中配置能减少页面重复属性，并让主题和组件约定有明确入口。调整按钮尺寸、焦点色或圆角时，不需要逐页搜索；局部例外仍由组件属性表达，代码审查时也能看出它是有意覆盖。
+
+## 使用边界
+
+- 页面网格、内容宽度和响应式布局写在应用样式中。
+- 订单、权限、审核等业务状态留在业务状态管理中。
+- 只为一处出现的视觉差异使用组件 `className`、`style` 或公开槽位。
+- `useProvider` 可读取当前外观和方向；`useComponentDefaults` 主要供组件库实现读取默认值，普通页面通常不需要直接调用。
