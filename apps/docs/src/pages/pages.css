@@ -690,7 +690,7 @@
   display: grid;
   grid-template-columns: 2.75rem minmax(0, 1fr);
   gap: 1.5rem;
-  padding: 3rem 0;
+  padding: 1.5rem 0 2.25rem;
   border-bottom: 1px solid var(--page-rule);
   scroll-margin-top: 5.5rem;
 }
