@@ -645,29 +645,19 @@ body {
 
 .docs-code-viewport-toolbar {
   position: absolute;
-  inset-block-start: 0.375rem;
-  inset-inline-end: 0.375rem;
+  z-index: 1;
+  inset-block-start: 0;
+  inset-inline-end: 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.25rem;
-  padding: 0.1875rem;
-  border: 1px solid var(--border);
-  border-radius: calc(var(--radius) - 4px);
-  background: color-mix(in oklab, var(--background) 92%, var(--muted));
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-0.125rem);
-  transition:
-    opacity 120ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 120ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.docs-code-viewport:hover .docs-code-viewport-toolbar,
-.docs-code-viewport:focus-within .docs-code-viewport-toolbar {
+  gap: 0;
+  padding: 0.375rem;
+  border: 0;
+  background: transparent;
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: none;
 }
 
 .docs-code-viewport-toolbar [data-slot='button'],
@@ -677,6 +667,15 @@ body {
   height: 2rem;
   padding: 0;
   border-radius: calc(var(--radius) - 5px);
+}
+
+.docs-code-viewport-toolbar [data-slot='button'] {
+  color: color-mix(in oklab, var(--muted-foreground) 82%, transparent);
+}
+
+.docs-code-viewport-toolbar [data-slot='button']:hover {
+  background: transparent;
+  color: var(--foreground);
 }
 
 .docs-code-actions {
@@ -706,21 +705,13 @@ body {
 }
 
 .docs-code-viewport-toolbar [aria-pressed='true'] {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: transparent;
+  color: var(--primary);
 }
 
 .docs-code-block[data-source-path]:has(.docs-code-viewport[hidden])
   .docs-code-actions {
   border-bottom: 0;
-}
-
-@media (hover: none), (pointer: coarse) {
-  .docs-code-viewport-toolbar {
-    opacity: 1;
-    pointer-events: auto;
-    transform: none;
-  }
 }
 
 /* Hallmark · component: API reference table · genre: modern-minimal
