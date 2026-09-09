@@ -6,7 +6,7 @@ lang: zh-Hans
 
 # CSS 设计与定义
 
-Heliannuuthus UI 把行为和样式分开交付：组件通过 JavaScript 提供结构与交互，`styles.css` 提供完整且去重后的视觉规则。应用只需要在入口导入一次样式，不需要安装 Tailwind 插件，也不会在运行时注入 CSS。
+组件 JavaScript 和样式分别交付。应用从包根入口导入组件，并在应用入口导入一次 `styles.css`。无需安装 Tailwind 插件，组件也不会在运行时注入 CSS。
 
 ## 样式由哪几层组成
 

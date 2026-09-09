@@ -6,7 +6,7 @@ lang: zh-Hans
 
 # 按需导入
 
-组件统一从包根入口按名称导入。构建工具会根据实际引用执行 Tree Shaking，因此不需要把公开 API 改写为组件子路径。
+组件统一从包根入口按名称导入。构建工具根据实际引用执行 Tree Shaking；不要使用组件子路径。
 
 ```tsx
 import { Button, Form, Input } from '@heliannuuthus/ui';

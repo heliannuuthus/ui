@@ -15,10 +15,10 @@ import { PageEyebrow } from './shared';
 
 const copy = {
   zh: {
-    eyebrow: 'PUBLIC CATALOG · 组件能力地图',
+    eyebrow: '公共组件',
     title: '组件总览',
     description:
-      '按界面职责浏览全部公共组件。每个入口都包含真实示例、完整 API、无障碍约束和明确的使用边界。',
+      '按用途浏览组件。每个页面包含运行示例、属性表、键盘行为和使用说明。',
     countLabel: '公共组件',
     groupLabel: '能力分组',
     runtimeLabel: '运行基线',
@@ -32,10 +32,10 @@ const copy = {
     keywordLabel: '适用场景',
   },
   en: {
-    eyebrow: 'PUBLIC CATALOG · CAPABILITY MAP',
+    eyebrow: 'Public components',
     title: 'Component overview',
     description:
-      'Browse every public component by interface responsibility. Each entry includes real examples, a complete API, accessibility constraints, and clear usage boundaries.',
+      'Browse components by purpose. Each page includes live examples, prop tables, keyboard behavior, and usage notes.',
     countLabel: 'public components',
     groupLabel: 'capability groups',
     runtimeLabel: 'runtime baseline',

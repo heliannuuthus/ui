@@ -355,6 +355,18 @@
   margin-bottom: 0.35rem;
 }
 
+.install-tab-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.install-tab-label svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+
 .guide-code-panel {
   --card-spacing: 0rem;
   overflow: hidden;
@@ -730,41 +742,6 @@
   margin: 1rem 0 1.5rem !important;
 }
 
-.guide-step-explanation {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  max-width: 60rem;
-  margin: 0 0 2rem;
-  border-block: 1px solid var(--page-rule);
-}
-
-.guide-step-explanation > div {
-  min-width: 0;
-  padding: 1.15rem 1.25rem 1.2rem 0;
-}
-
-.guide-step-explanation > div + div {
-  padding-left: 1.25rem;
-  border-left: 1px solid var(--page-rule);
-}
-
-.guide-step-explanation dt {
-  margin-bottom: 0.45rem;
-  color: var(--primary);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 650;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.guide-step-explanation dd {
-  margin: 0;
-  color: var(--muted-foreground);
-  font-size: 0.9rem;
-  line-height: 1.65;
-}
-
 .guide-step-content .install-tabs,
 .guide-step-content .guide-code-panel {
   max-width: 60rem;
@@ -1011,20 +988,6 @@
   .guide-step {
     grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
-  }
-
-  .guide-step-explanation {
-    grid-template-columns: 1fr;
-  }
-
-  .guide-step-explanation > div {
-    padding: 1rem 0;
-  }
-
-  .guide-step-explanation > div + div {
-    padding-left: 0;
-    border-top: 1px solid var(--page-rule);
-    border-left: 0;
   }
 
   .guide-step-marker {

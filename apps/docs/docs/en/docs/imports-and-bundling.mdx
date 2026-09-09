@@ -6,7 +6,7 @@ lang: en
 
 # Imports and bundling
 
-Import components as named exports from the package root. Your bundler tree-shakes the actual references, so public imports do not need to be rewritten to component subpaths.
+Import named components from the package root. The bundler tree-shakes actual references; do not use component subpaths.
 
 ```tsx
 import { Button, Form, Input } from '@heliannuuthus/ui';

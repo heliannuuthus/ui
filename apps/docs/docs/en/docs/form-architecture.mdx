@@ -6,7 +6,7 @@ lang: en
 
 # Form architecture
 
-A form is a task made from field semantics, state, validation, submission, and error recovery—not merely a collection of inputs. Heliannuuthus UI separates these responsibilities into three layers so product code does not depend on a specific form engine.
+Form responsibilities are split across three layers: `Form` handles submission and aggregate state, `Form.Field` handles field semantics, and input components handle values and interaction. Product code does not bind directly to a form engine.
 
 ## Three layers
 

@@ -13,15 +13,14 @@ import { PageEyebrow } from './shared';
 
 const pageCopy = {
   zh: {
-    kicker: 'FOUNDATION / 04 PRINCIPLES',
-    manifesto:
-      '设计系统的价值，不是让所有页面长得一样，而是让相同的问题不必反复解决。',
+    kicker: '组件设计规则',
+    manifesto: '相同的界面问题使用相同的组件和交互约定。',
     principleLabels: ['解释结构', '减少选择', '守住边界', '覆盖现实'],
-    boundaryKicker: 'OWNERSHIP MODEL',
-    boundaryTitle: '共享能力与产品语义必须有清楚边界',
-    boundaryDescription: '边界越清楚，公共组件越稳定，业务表达也越自由。',
+    boundaryKicker: '职责边界',
+    boundaryTitle: '组件库与业务项目分别负责什么',
+    boundaryDescription: '先判断能力是否领域无关，再决定它应该放在哪一层。',
     sharedTitle: '公共 UI 层',
-    sharedDescription: '负责可复用的行为、视觉语法和无障碍基础。',
+    sharedDescription: '维护领域无关的行为、样式和无障碍基础。',
     sharedItems: [
       '交互与键盘行为',
       '语义 Token',
@@ -29,10 +28,10 @@ const pageCopy = {
       '类型、事件与 ref',
     ],
     productTitle: '产品业务层',
-    productDescription: '负责特定产品真正想表达和完成的事情。',
+    productDescription: '维护具体产品的数据、权限、路由和流程。',
     productItems: ['业务文案与数据', '权限和路由', '领域状态', '流程编排'],
-    checklistKicker: 'DEFINITION OF DONE',
-    checklistTitle: '一个组件值得共享之前',
+    checklistKicker: '完成标准',
+    checklistTitle: '合并公共组件前逐项检查',
     checklistItems: [
       '键盘和屏幕阅读器可用',
       '加载、空、错误、禁用状态明确',
@@ -40,27 +39,26 @@ const pageCopy = {
       '受控与非受控边界清楚',
       'API 能向后兼容地生长',
     ],
-    closing: '这些原则最终都要在组件代码和文档里被看见。',
-    action: '查看组件如何落地',
+    closing: '规则必须同时落实在实现、测试和文档中。',
+    action: '查看组件目录',
   },
   en: {
-    kicker: 'FOUNDATION / 04 PRINCIPLES',
+    kicker: 'Component design rules',
     manifesto:
-      'A design system does not make every page look the same. It prevents teams from solving the same problem repeatedly.',
+      'Use the same components and interaction conventions for the same interface problems.',
     principleLabels: [
       'Explain structure',
       'Reduce choices',
       'Protect boundaries',
       'Cover reality',
     ],
-    boundaryKicker: 'OWNERSHIP MODEL',
-    boundaryTitle:
-      'Shared capability and product meaning need a clear boundary',
+    boundaryKicker: 'Ownership',
+    boundaryTitle: 'What belongs to the library and to product applications',
     boundaryDescription:
-      'Clear ownership makes shared components more stable and product expression more flexible.',
+      'Decide whether a capability is domain-neutral before choosing its layer.',
     sharedTitle: 'Shared UI layer',
     sharedDescription:
-      'Owns reusable behavior, visual grammar, and accessibility foundations.',
+      'Maintains domain-neutral behavior, styles, and accessibility.',
     sharedItems: [
       'Interaction and keyboard behavior',
       'Semantic tokens',
@@ -69,15 +67,15 @@ const pageCopy = {
     ],
     productTitle: 'Product layer',
     productDescription:
-      'Owns what a specific product needs to express and accomplish.',
+      'Maintains product data, permissions, routing, and flows.',
     productItems: [
       'Product copy and data',
       'Permissions and routing',
       'Domain state',
       'Workflow orchestration',
     ],
-    checklistKicker: 'DEFINITION OF DONE',
-    checklistTitle: 'Before a component deserves to be shared',
+    checklistKicker: 'Definition of done',
+    checklistTitle: 'Check each item before merging a shared component',
     checklistItems: [
       'Keyboard and screen-reader access works',
       'Loading, empty, error, and disabled states are explicit',
@@ -85,9 +83,8 @@ const pageCopy = {
       'Controlled and uncontrolled boundaries are clear',
       'The API can evolve compatibly',
     ],
-    closing:
-      'These principles must be visible in both component code and documentation.',
-    action: 'See the principles in components',
+    closing: 'Apply these rules in implementation, tests, and documentation.',
+    action: 'Open the component catalog',
   },
 } as const;
 

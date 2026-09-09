@@ -99,45 +99,46 @@ const zh = {
     },
     home: {
       componentCount: '{{count}} 个可组合组件',
-      title: '构建清晰、一致的产品界面',
+      title: 'React 产品界面的公共组件',
       description:
-        'Heliannuuthus UI 提供稳定的 React 组件、明确的 API 与可访问交互，让产品团队把注意力留给真正的业务问题。',
+        '统一维护基础组件、交互行为和 TypeScript API，业务项目直接安装使用。',
       previewTitle: '组件组合预览',
-      previewDescription: '使用公共组件完成真实界面，而不是绘制静态示意图。',
+      previewDescription: '下面的工作区表单由已发布组件组合而成。',
       workspaceName: '工作区名称',
       features: '项目特性',
       baseComponents: '个基础组件',
       accessibilityFirst: '可访问性优先',
       openSource: '源码完全可控',
-      philosophyTitle: '让每一个产品共享同一套界面语言',
+      philosophyTitle: '一套组件，供所有产品使用',
       philosophyDescription:
-        '公共组件负责稳定的行为和表达，业务项目专注自己的流程与语义。',
+        '组件库维护基础行为和样式，业务项目维护自己的数据、路由和文案。',
       philosophyAction: '了解设计理念',
       componentsTitle: '从基础控件到完整交互',
       clarity: '清晰',
-      clarityDescription: '信息层级先于装饰，让状态、操作与反馈始终可理解。',
+      clarityDescription: '先排清信息、状态和操作，再考虑装饰。',
       consistency: '一致',
-      consistencyDescription: '相同的问题提供相同的解法，跨产品也保持熟悉感。',
+      consistencyDescription: '同类操作使用同一套名称、状态和反馈。',
       composable: '可组合',
-      composableDescription: '小而稳定的能力可以自由组合，业务语义留在业务中。',
+      composableDescription: '基础能力保持独立，由业务页面按需要组合。',
       evolvable: '可生长',
-      evolvableDescription: 'API 为真实场景保留扩展点，并尊重长期兼容性。',
+      evolvableDescription: '公共 API 保持兼容，并为常见场景提供扩展点。',
     },
     gettingStarted: {
       title: '快速开始',
       kicker: '接入指南',
-      description: '用几分钟把 Heliannuuthus UI 接入你的 React 项目。',
+      description: '完成安装、样式导入、全局配置和第一个组件。',
       installation: '安装',
       installationDescription:
-        '选择项目正在使用的包管理器安装。推荐使用 pnpm。',
+        '在项目目录运行一条命令。选择与现有锁文件一致的包管理器。',
       importStyles: '导入样式',
       importStylesDescription:
-        '在应用入口导入一次共享样式，确保所有组件都能正确显示。',
+        '在应用入口导入一次 styles.css，不要在页面或组件文件中重复导入。',
       usage: '使用组件',
-      usageDescription: '从 @heliannuuthus/ui 导入所需组件并在页面中使用。',
+      usageDescription:
+        '从包根入口按名称导入组件。下面的示例可用于检查安装结果。',
       configuration: '全局配置',
       configurationDescription:
-        '在应用根部声明跨组件共享的视觉规则。只有下面列出的属性会被全局管理。',
+        '需要统一明暗模式、书写方向或组件默认值时，在应用根部添加 Provider。',
       configurationItems: '可配置项',
       appearanceDescription:
         '选择 light、dark 或跟随操作系统的 system，默认使用 system。',
@@ -159,19 +160,17 @@ const zh = {
     design: {
       title: '设计理念',
       description:
-        '组件不是终点。我们建立的是一套让产品持续保持清晰、一致和可维护的共同语言。',
+        '这里记录组件的取舍标准，以及业务项目使用组件时应遵守的边界。',
       clarity: '清晰胜过表现',
-      clarityDescription:
-        '视觉的首要职责是解释结构。颜色、间距和动效都应服务于理解，而不是争夺注意力。',
+      clarityDescription: '颜色、间距和动效用于区分结构、状态和操作优先级。',
       convention: '约定创造效率',
-      conventionDescription:
-        '一致的命名、状态和反馈让团队少做无谓选择，把注意力留给真正的产品问题。',
+      conventionDescription: '相同的状态和操作采用相同的名称、位置与反馈。',
       composition: '组合保持边界',
       compositionDescription:
-        '公共组件提供可靠能力，业务层负责语义与流程。两者清楚分工，系统才能自由生长。',
+        '公共组件负责通用能力，业务层负责数据、权限、路由和流程。',
       details: '细节建立信任',
       detailsDescription:
-        '键盘操作、窄屏布局、加载与错误状态并非补充，它们共同决定一个组件是否值得依赖。',
+        '每个组件都要覆盖键盘、窄屏、加载、空、错误和禁用状态。',
     },
   },
 } as const;
@@ -283,52 +282,52 @@ const en = {
     },
     home: {
       componentCount: '{{count}} composable components',
-      title: 'Build clear, consistent product interfaces',
+      title: 'Shared components for React products',
       description:
-        'Heliannuuthus UI provides stable React components, deliberate APIs, and accessible interactions so product teams can focus on real business problems.',
+        'One package for shared components, interaction behavior, and TypeScript APIs across product applications.',
       previewTitle: 'Component composition preview',
       previewDescription:
-        'Build a real interface from shared components instead of drawing a static mockup.',
+        'The workspace form below is composed from published components.',
       workspaceName: 'Workspace name',
       features: 'Project features',
       baseComponents: 'base components',
       accessibilityFirst: 'Accessibility first',
       openSource: 'Fully controlled source',
-      philosophyTitle: 'Give every product a shared interface language',
+      philosophyTitle: 'One component set for every product',
       philosophyDescription:
-        'Shared components own stable behavior and expression; product applications focus on their workflows and semantics.',
+        'The library owns base behavior and styles. Applications own data, routing, and product copy.',
       philosophyAction: 'Explore the design principles',
       componentsTitle: 'From primitives to complete interactions',
       clarity: 'Clear',
       clarityDescription:
-        'Information hierarchy comes before decoration, keeping state, actions, and feedback understandable.',
+        'Arrange information, state, and actions before adding decoration.',
       consistency: 'Consistent',
       consistencyDescription:
-        'Solve the same problem in the same way and preserve familiarity across products.',
+        'Use the same names, states, and feedback for the same operations.',
       composable: 'Composable',
       composableDescription:
-        'Small, stable capabilities combine freely while business semantics stay in the product.',
+        'Keep base capabilities independent and compose them in product pages.',
       evolvable: 'Evolvable',
       evolvableDescription:
-        'APIs preserve extension points for real scenarios and respect long-term compatibility.',
+        'Keep public APIs compatible and provide extension points for common cases.',
     },
     gettingStarted: {
       title: 'Getting started',
       kicker: 'INTEGRATION GUIDE',
       description:
-        'Add Heliannuuthus UI to your React project in a few minutes.',
+        'Install the package, import its styles, configure the app, and render a component.',
       installation: 'Install',
       installationDescription:
-        'Install with the package manager used by your project. pnpm is recommended.',
+        'Run one command in the project directory. Use the package manager that owns the existing lockfile.',
       importStyles: 'Import styles',
       importStylesDescription:
-        'Import the shared stylesheet once at your application entry point so every component renders correctly.',
+        'Import styles.css once at the application entry. Do not repeat it in pages or component files.',
       usage: 'Use components',
       usageDescription:
-        'Import the components you need from @heliannuuthus/ui and use them in your page.',
+        'Use named imports from the package root. The example below verifies the installation.',
       configuration: 'Global configuration',
       configurationDescription:
-        'Declare shared visual rules at the application root. Only the properties listed below are managed globally.',
+        'Add Provider at the application root when you need shared appearance, direction, or component defaults.',
       configurationItems: 'Configurable properties',
       appearanceDescription:
         'Choose light, dark, or system to follow the operating system. The default is system.',
@@ -352,19 +351,19 @@ const en = {
     design: {
       title: 'Design principles',
       description:
-        'Components are not the destination. We are building a shared language that keeps products clear, consistent, and maintainable as they grow.',
+        'These rules define component tradeoffs and the boundary between the library and product applications.',
       clarity: 'Clarity over spectacle',
       clarityDescription:
-        'The first job of visual design is to explain structure. Color, spacing, and motion should support understanding rather than compete for attention.',
+        'Use color, spacing, and motion to distinguish structure, state, and action priority.',
       convention: 'Conventions create efficiency',
       conventionDescription:
-        'Consistent naming, state, and feedback reduce unnecessary choices and preserve attention for actual product problems.',
+        'Use the same names, placement, and feedback for equivalent states and actions.',
       composition: 'Composition preserves boundaries',
       compositionDescription:
-        'Shared components provide dependable capabilities while product layers own semantics and workflows.',
+        'Shared components own generic behavior; products own data, permissions, routing, and workflows.',
       details: 'Details build trust',
       detailsDescription:
-        'Keyboard access, narrow layouts, loading, and error states are part of what makes a component dependable.',
+        'Every component must cover keyboard use, narrow layouts, loading, empty, error, and disabled states.',
     },
   },
 } as const satisfies LocaleShape<typeof zh>;
