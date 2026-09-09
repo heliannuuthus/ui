@@ -49,9 +49,7 @@ html.dark [data-slot='provider'] {
 
 body {
   --docs-font-brand: 'LXGW ZhenKai GB', serif;
-  --docs-font-sans:
-    Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
+  --docs-font-sans: 'LXGW ZhenKai GB', serif;
   --font-heading: var(--docs-font-sans);
   --font-sans: var(--docs-font-sans);
   min-width: 0;
@@ -60,6 +58,7 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-sans);
+  font-synthesis: weight style;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
