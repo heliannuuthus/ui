@@ -1,4 +1,4 @@
-import { Segmented, Stack, Tag, Typography } from '@heliannuuthus/ui';
+import { Stack, Tag, Typography } from '@heliannuuthus/ui';
 import {
   ArrowRight,
   Code2,
@@ -6,8 +6,6 @@ import {
   PackagePlus,
   SlidersHorizontal,
 } from 'lucide-react';
-import { useReducedMotion } from 'motion/react';
-import { useEffect, useState } from 'react';
 import { resources } from '../i18n/resources';
 import { InternalButtonLink } from '../../theme/internal-link';
 import { localPath, useDocsPageLocale } from './page-locale';
@@ -95,9 +93,6 @@ const pageCopy = {
 } as const;
 
 const styleCode = "import '@heliannuuthus/ui/styles.css';\nimport './app.css';";
-const guideStepIds = ['installation', 'styles', 'provider', 'usage'] as const;
-type StepId = (typeof guideStepIds)[number];
-
 const providerCode = `import { Provider } from '@heliannuuthus/ui';
 
 export function App() {
@@ -140,68 +135,12 @@ export function Welcome() {
     ],
     ['04', 'usage', guide.usage, guide.usageDescription, Layers3],
   ] as const;
-  const [activeStep, setActiveStep] = useState<StepId>('installation');
-  const reduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    const sections = guideStepIds
-      .map((id) => document.getElementById(id))
-      .filter((section): section is HTMLElement => section != null);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntry = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (first, second) =>
-              Math.abs(first.boundingClientRect.top) -
-              Math.abs(second.boundingClientRect.top)
-          )[0];
-
-        if (visibleEntry) {
-          setActiveStep(visibleEntry.target.id as StepId);
-        }
-      },
-      { rootMargin: '-128px 0px -65% 0px', threshold: [0, 1] }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <div className="docs-marketing-page docs-guide-page">
       <Typography.Title className="guide-visually-hidden-title">
         {guide.title}
       </Typography.Title>
-
-      <nav
-        className="guide-index"
-        aria-label={locale === 'zh' ? '接入步骤' : 'Integration steps'}
-      >
-        <Segmented
-          block
-          className="guide-index-control"
-          onChange={(id) => {
-            setActiveStep(id);
-            window.history.replaceState(null, '', `#${id}`);
-            document.getElementById(id)?.scrollIntoView({
-              behavior: reduceMotion ? 'auto' : 'smooth',
-              block: 'start',
-            });
-          }}
-          options={steps.map(([number, id, title]) => ({
-            label: (
-              <span className="guide-index-label">
-                <span>{number}</span>
-                {title}
-              </span>
-            ),
-            value: id,
-          }))}
-          value={activeStep}
-        />
-      </nav>
 
       <div className="guide-steps">
         {steps.map(([number, id, title, description, Icon]) => (

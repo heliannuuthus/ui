@@ -680,39 +680,6 @@
   color: var(--success);
 }
 
-.guide-index {
-  position: sticky;
-  z-index: 12;
-  top: 4rem;
-  padding: 0.625rem 0;
-  border-bottom: 1px solid color-mix(in oklab, var(--border) 58%, transparent);
-  background: color-mix(in oklab, var(--background) 80%, transparent);
-  backdrop-filter: blur(18px) saturate(140%);
-}
-
-.guide-index-control {
-  width: 100%;
-  margin: 0 auto;
-  border-color: color-mix(in oklab, var(--border) 68%, transparent);
-  background: color-mix(in oklab, var(--muted) 58%, transparent);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklab, var(--background) 72%, transparent),
-    0 0.6rem 1.5rem -1.2rem
-      color-mix(in oklab, var(--foreground) 28%, transparent);
-}
-
-.guide-index-label {
-  width: 100%;
-  justify-content: flex-start;
-  gap: 0.55rem;
-}
-
-.guide-index-label > span {
-  color: var(--primary);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-}
-
 .guide-steps {
   width: 100%;
   margin: 0 auto;
@@ -725,7 +692,7 @@
   gap: 1.5rem;
   padding: 3rem 0;
   border-bottom: 1px solid var(--page-rule);
-  scroll-margin-top: 9rem;
+  scroll-margin-top: 5.5rem;
 }
 
 .guide-step-marker {
@@ -1041,18 +1008,6 @@
     min-height: 0;
   }
 
-  .guide-index {
-    padding-inline: 0.75rem;
-  }
-
-  .guide-index-control {
-    width: 100%;
-  }
-
-  .guide-index-control [data-slot='segmented-item'] {
-    min-width: max-content;
-  }
-
   .guide-step {
     grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
@@ -1119,18 +1074,6 @@
 
   .components-card-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  .guide-index {
-    background: var(--background);
-    backdrop-filter: none;
-  }
-
-  .guide-index-control {
-    background: var(--muted);
-    box-shadow: none;
   }
 }
 
