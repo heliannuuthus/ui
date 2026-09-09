@@ -153,9 +153,6 @@ const zh = {
       configurationBoundary: '配置边界',
       configurationBoundaryDescription:
         'Provider 只管理跨组件的视觉默认值，不管理文案、事件、业务状态或数据行为。组件显式传入的属性始终优先于全局默认值。',
-      next: '下一步',
-      nextTitle: '浏览完整组件目录',
-      nextDescription: '继续查看组件示例、API 与具体使用建议。',
     },
     design: {
       title: '设计理念',
@@ -343,10 +340,6 @@ const en = {
       configurationBoundary: 'Configuration boundary',
       configurationBoundaryDescription:
         'Provider manages cross-component visual defaults only. It does not manage copy, events, business state, or data behavior. Explicit component props always override global defaults.',
-      next: 'Next step',
-      nextTitle: 'Browse the full component catalog',
-      nextDescription:
-        'Continue to component examples, APIs, and detailed usage guidance.',
     },
     design: {
       title: 'Design principles',

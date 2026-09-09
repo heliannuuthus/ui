@@ -609,8 +609,7 @@
 }
 
 .home-closing,
-.design-closing,
-.guide-next {
+.design-closing {
   display: grid;
   justify-items: start;
   gap: 1.25rem;
@@ -620,8 +619,7 @@
 }
 
 .home-closing h2,
-.design-closing h2,
-.guide-next h2 {
+.design-closing h2 {
   max-width: 18ch;
   margin: 0;
   font-size: clamp(2.5rem, 5vw, 5rem);
@@ -761,18 +759,6 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 1rem;
-}
-
-.docs-guide-page .guide-next {
-  margin-top: 0;
-  padding: 3.5rem 0 0;
-  border-top: 0;
-  background: transparent;
-}
-
-.docs-guide-page .guide-next h2 {
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  letter-spacing: -0.035em;
 }
 
 .design-hero {

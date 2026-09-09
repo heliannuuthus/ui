@@ -1,23 +1,14 @@
-import { Stack, Tag, Typography } from '@heliannuuthus/ui';
-import {
-  ArrowRight,
-  Code2,
-  Layers3,
-  PackagePlus,
-  SlidersHorizontal,
-} from 'lucide-react';
+import { Tag, Typography } from '@heliannuuthus/ui';
+import { Code2, Layers3, PackagePlus, SlidersHorizontal } from 'lucide-react';
 import { resources } from '../i18n/resources';
-import { InternalButtonLink } from '../../theme/internal-link';
-import { localPath, useDocsPageLocale } from './page-locale';
-import { CodePanel, InstallTabs, PageEyebrow } from './shared';
+import { useDocsPageLocale } from './page-locale';
+import { CodePanel, InstallTabs } from './shared';
 
 const pageCopy = {
   zh: {
     styleNote: '样式只导入一次。组件模块不会在运行时隐式注入 CSS。',
     providerNote: '组件上显式传入的属性会覆盖 Provider 中的默认值。',
     usageNote: '所有公共组件都从包根入口导入。组件子路径是私有实现细节。',
-    nextKicker: '下一步',
-    nextTitle: '接入完成',
   },
   en: {
     styleNote:
@@ -26,8 +17,6 @@ const pageCopy = {
       'Props passed directly to a component override Provider defaults.',
     usageNote:
       'Import every public component from the package root. Component subpaths are private.',
-    nextKicker: 'Next',
-    nextTitle: 'Setup complete',
   },
 } as const;
 
@@ -154,27 +143,6 @@ export function Welcome() {
           </section>
         ))}
       </div>
-
-      <section className="guide-next" id="next-step">
-        <PageEyebrow>{copy.nextKicker}</PageEyebrow>
-        <Typography.Title level={2}>{copy.nextTitle}</Typography.Title>
-        <Typography.Text as="p" size="lg" tone="muted">
-          {guide.nextDescription}
-        </Typography.Text>
-        <Stack align="center" gap={12} orientation="horizontal" wrap>
-          <InternalButtonLink href={localPath(locale, '/components')} size="lg">
-            {guide.nextTitle}
-            <ArrowRight aria-hidden="true" data-icon="inline-end" />
-          </InternalButtonLink>
-          <InternalButtonLink
-            href={localPath(locale, '/design')}
-            size="lg"
-            variant="outline"
-          >
-            {common.navigation.design}
-          </InternalButtonLink>
-        </Stack>
-      </section>
     </div>
   );
 };
