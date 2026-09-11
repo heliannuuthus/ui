@@ -1,3 +1,4 @@
+/* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V4 */
 /* Hallmark · genre: modern-minimal · macrostructure: Workbench · design-system: docs/docs-site-redesign.md · designed-as-app */
 .docs-marketing-page {
   --page-rule: color-mix(in oklab, var(--border) 72%, transparent);
@@ -655,8 +656,7 @@
   background: color-mix(in oklab, var(--primary) 38%, transparent);
 }
 
-.home-closing,
-.design-closing {
+.home-closing {
   display: grid;
   justify-items: start;
   gap: 1.25rem;
@@ -665,8 +665,7 @@
   background: color-mix(in oklab, var(--muted) 42%, transparent);
 }
 
-.home-closing h2,
-.design-closing h2 {
+.home-closing h2 {
   max-width: 18ch;
   margin: 0;
   font-size: clamp(2.5rem, 5vw, 5rem);
@@ -690,29 +689,6 @@
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
-}
-
-.design-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.48fr);
-  align-items: end;
-  gap: clamp(3rem, 8vw, 8rem);
-  padding: clamp(4.5rem, 9vw, 8rem) clamp(1.25rem, 5vw, 4.5rem);
-  border-bottom: 1px solid var(--page-rule);
-  background-image: linear-gradient(
-    90deg,
-    transparent 49.9%,
-    var(--page-grid) 50%,
-    transparent 50.1%
-  );
-}
-
-.design-hero h1 {
-  max-width: 10ch;
-  margin: 0;
-  font-size: clamp(3.5rem, 8vw, 7rem);
-  line-height: 0.92;
-  letter-spacing: -0.07em;
 }
 
 .design-boundary-card ul {
@@ -808,72 +784,73 @@
   margin-top: 1rem;
 }
 
+.docs-design-page {
+  width: min(100%, 80rem);
+  box-sizing: border-box;
+  margin-inline: auto;
+  padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1rem, 4vw, 3rem) 5rem;
+}
+
 .design-hero {
-  grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.7fr);
-  align-items: start;
+  display: grid;
+  gap: 1rem;
+  max-width: 54rem;
+  padding: clamp(2rem, 6vw, 4.5rem) 0 clamp(2.5rem, 6vw, 4rem);
+}
+
+.design-hero .docs-page-eyebrow {
+  margin-bottom: 0 !important;
+}
+
+.design-hero h1 {
+  max-width: 12ch;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: clamp(2.75rem, 5vw, 4.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.055em;
 }
 
 .design-manifesto {
-  max-width: 30ch;
-  margin: 0 !important;
-  font-family: var(--font-heading);
-  font-size: clamp(1.55rem, 3vw, 2.65rem) !important;
-  line-height: 1.35 !important;
-  letter-spacing: -0.025em;
-  text-wrap: balance;
+  max-width: 38ch;
+  margin: 0.5rem 0 0 !important;
+  font-family: var(--docs-font-sans);
+  font-size: clamp(1.25rem, 2vw, 1.6rem) !important;
+  line-height: 1.45 !important;
+  letter-spacing: -0.02em;
 }
 
-.design-hero > p:last-child {
-  grid-column: 2;
-  margin: 1.5rem 0 0 !important;
+.design-introduction {
+  max-width: 65ch;
+  margin: 0.25rem 0 0 !important;
+  line-height: 1.75 !important;
 }
 
-.design-principles {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.docs-design-page .docs-page-section {
+  padding: clamp(2.5rem, 6vw, 4.5rem) 0;
 }
 
-.design-principle {
-  min-height: 28rem;
-  display: grid;
-  grid-template-columns: 4rem minmax(0, 1fr);
-  gap: 1.5rem;
-  padding: clamp(2rem, 5vw, 4rem);
-  border-right: 1px solid var(--page-rule);
-  border-bottom: 1px solid var(--page-rule);
-  scroll-margin-top: 6rem;
+.docs-design-page .docs-section-heading {
+  margin-bottom: 2.25rem;
 }
 
-.design-principle-index {
-  color: var(--muted-foreground);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-}
-
-.design-principle h2 {
-  max-width: 12ch;
-  margin: 1.25rem 0;
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  line-height: 1;
-  letter-spacing: -0.05em;
-}
-
-.design-principle p {
-  max-width: 34rem;
-  line-height: 1.7 !important;
+.docs-design-page .docs-section-heading h2 {
+  max-width: 18ch;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
 }
 
 .design-boundary-map {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 5rem minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 3.5rem minmax(0, 1fr);
   align-items: stretch;
 }
 
 .design-boundary-card {
-  --card-spacing: clamp(1.5rem, 4vw, 2.5rem);
-  min-height: 26rem;
-  border-radius: 1.5rem;
+  --card-spacing: clamp(1.25rem, 3vw, 2rem);
+  min-height: 21rem;
+  border-radius: 1rem;
   box-shadow: none;
 }
 
@@ -891,8 +868,8 @@
 }
 
 .design-boundary-card h3 {
-  margin: 1.5rem 0 0;
-  font-size: 1.65rem;
+  margin: 0.75rem 0 0;
+  font-size: 1.5rem;
 }
 
 .design-boundary-card p {
@@ -918,23 +895,83 @@
   height: 1.5rem;
 }
 
+.design-principles {
+  border-top: 1px solid var(--page-rule);
+}
+
+.design-principle {
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(2rem, 6vw, 5rem);
+  padding: 2.25rem 0;
+  border-bottom: 1px solid var(--page-rule);
+  scroll-margin-top: 6rem;
+}
+
+.design-principle-heading {
+  min-width: 0;
+}
+
+.design-principle h3 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+}
+
+.design-principle-heading p {
+  max-width: 36rem;
+  margin: 0.75rem 0 0 !important;
+  line-height: 1.65 !important;
+}
+
+.design-principle-guidance {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  border: 1px solid var(--page-rule);
+  border-radius: 0.75rem;
+}
+
+.design-principle-guidance > div {
+  padding: 1.25rem;
+}
+
+.design-principle-guidance > div + div {
+  border-inline-start: 1px solid var(--page-rule);
+}
+
+.design-principle-guidance dt {
+  margin-bottom: 0.6rem;
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.design-principle-guidance dd {
+  margin: 0;
+  color: var(--muted-foreground);
+  line-height: 1.65;
+}
+
 .design-checklist {
   display: grid;
-  grid-template-columns: minmax(18rem, 0.75fr) minmax(0, 1.25fr);
-  gap: clamp(4rem, 10vw, 9rem);
-  padding: clamp(5rem, 9vw, 8rem) clamp(1.25rem, 5vw, 4.5rem);
+  grid-template-columns: minmax(16rem, 0.7fr) minmax(0, 1.3fr);
+  gap: clamp(2rem, 7vw, 6rem);
+  padding: clamp(2.5rem, 6vw, 4.5rem) 0;
   border-top: 1px solid var(--page-rule);
 }
 
 .design-checklist h2 {
-  max-width: 11ch;
+  max-width: 14ch;
   margin: 0;
-  font-size: clamp(2.3rem, 5vw, 4.5rem);
-  line-height: 1;
-  letter-spacing: -0.05em;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
 }
 
-.design-checklist ol {
+.design-checklist ul {
   margin: 0;
   padding: 0;
   border-top: 1px solid var(--page-rule);
@@ -944,21 +981,35 @@
 .design-checklist li {
   min-height: 4.75rem;
   display: grid;
-  grid-template-columns: 3rem minmax(0, 1fr);
+  grid-template-columns: 1.25rem minmax(0, 1fr);
   align-items: center;
   gap: 1rem;
   border-bottom: 1px solid var(--page-rule);
 }
 
-.design-checklist li > span:first-child {
+.design-checklist li > svg {
+  width: 1.05rem;
+  height: 1.05rem;
   color: var(--primary);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+}
+
+.design-closing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2rem 0 0;
+  border-top: 1px solid var(--page-rule);
+}
+
+.design-closing > p {
+  max-width: 34rem;
+  margin: 0 !important;
+  line-height: 1.5 !important;
 }
 
 @media (max-width: 980px) {
   .home-hero-inner,
-  .design-hero,
   .components-hero,
   .home-catalog,
   .design-checklist {
@@ -974,10 +1025,6 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .design-hero > p:last-child {
-    grid-column: auto;
-  }
-
   .components-card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -985,14 +1032,12 @@
 
 @media (max-width: 720px) {
   .home-hero-copy h1,
-  .design-hero h1,
   .components-hero-copy h1 {
     font-size: clamp(3.25rem, 16vw, 5rem);
   }
 
   .home-proof,
-  .home-principle-grid,
-  .design-principles {
+  .home-principle-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -1029,8 +1074,17 @@
   }
 
   .design-principle {
-    min-height: 22rem;
-    grid-template-columns: 2.5rem minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  .design-principle-guidance {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .design-principle-guidance > div + div {
+    border-top: 1px solid var(--page-rule);
+    border-inline-start: 0;
   }
 
   .design-boundary-map {
@@ -1040,6 +1094,11 @@
 
   .design-boundary-divider {
     min-height: 3rem;
+  }
+
+  .design-closing {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .components-search-row {
