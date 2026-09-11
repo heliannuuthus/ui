@@ -8,13 +8,17 @@ lang: en
 
 Define three font roles in each product: sans serif for body text and controls, a heading face for titles, and monospace for code and technical values. Keep brand faces out of long-form copy and controls unless the product explicitly assigns them there.
 
-## Three font variables
+## Built-in defaults
 
 ```css
 :root {
-  --font-sans: Inter, 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
   --font-heading: var(--font-sans);
-  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    monospace;
 }
 ```
 
@@ -22,7 +26,9 @@ Define three font roles in each product: sans serif for body text and controls, 
 - `--font-heading` is for headings and may share the body family while using size and weight for hierarchy.
 - `--font-mono` is for code, keyboard input, and technical values that benefit from character-level comparison.
 
-The current public theme retains a brand-font default. Production applications should explicitly override font tokens after checking licensing, glyph coverage, and loading cost.
+These values ship with `styles.css`. Apple platforms use the system interface face first, Windows uses Segoe UI, and Chinese glyphs fall through to PingFang, Hiragino Sans GB, or Microsoft YaHei.
+
+This documentation site loads a separate brand face as a site-level override. It is not shipped as the component default. Products can replace any of the three variables in application CSS.
 
 ## Separate semantics from appearance
 

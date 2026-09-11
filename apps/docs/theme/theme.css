@@ -49,8 +49,12 @@ html.dark [data-slot='provider'] {
 
 body {
   --docs-font-brand: 'LXGW ZhenKai GB', serif;
+  --docs-font-mono:
+    'LXGW WenKai Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
   --docs-font-sans: 'LXGW ZhenKai GB', serif;
   --font-heading: var(--docs-font-sans);
+  --font-mono: var(--docs-font-mono);
   --font-sans: var(--docs-font-sans);
   min-width: 0;
   margin: 0;
