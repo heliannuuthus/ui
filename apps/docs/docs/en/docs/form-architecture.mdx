@@ -1,0 +1,76 @@
+---
+title: Form architecture
+description: Understand the boundaries between Form, Form.Field, control binding, validation, and product submission.
+lang: en
+---
+
+# Form architecture
+
+Form responsibilities are split across three layers: `Form` handles submission and aggregate state, `Form.Field` handles field semantics, and input components handle values and interaction. Product code does not bind directly to a form engine.
+
+## Three layers
+
+| Layer         | Owns                                                                | Does not own                             |
+| ------------- | ------------------------------------------------------------------- | ---------------------------------------- |
+| `Form`        | Native `<form>` boundary, instance, submission, and aggregate state | Routing, API protocols, and product copy |
+| `Form.Field`  | Name, label, help, error, required state, and ARIA relationships    | Whether a business field exists          |
+| Input control | Natural `value` or `checked` semantics, interaction, and focus      | Form-engine objects                      |
+
+## Basic structure
+
+```tsx
+type Values = {
+  enabled: boolean;
+  name: string;
+};
+
+const form = Form.useForm<Values>({
+  defaultValues: { enabled: true, name: '' },
+});
+
+<Form form={form} onSubmit={save}>
+  <Form.Field
+    name="name"
+    label="Name"
+    description="Team members will see this name"
+    required
+  >
+    <Input />
+  </Form.Field>
+
+  <Form.Field name="enabled" label="Enable immediately">
+    <Switch />
+  </Form.Field>
+
+  <Button type="submit">Save</Button>
+</Form>;
+```
+
+`Form.Field` injects value, change, blur, ID, name, and accessibility relationships into its direct child. Built-in controls adapt beside their own implementation, so product code does not render a `Controller` or manually map `checked` into field state.
+
+## Watching values and side effects
+
+Use `Form.useWatch` when a value changes rendered UI. Use `onValuesChange` for analytics or logging that should not drive rendering. Use `setValue`, `reset`, `setError`, `trigger`, and `getValues` for imperative workflows.
+
+```tsx
+const plan = Form.useWatch('plan', form);
+
+<Form.Field name="seats" label="Seats" disabled={plan !== 'team'}>
+  <Input.Number min={2} />
+</Form.Field>;
+```
+
+## Validation and errors
+
+- Field rules own required, format, and local constraints.
+- Cross-field rules read the complete value and place errors on the field that can resolve them.
+- Map server field errors with `setError`; keep unknown system failures in a form-level feedback region.
+- Do not show every error on first render. After a failed submit, focus or scroll to the first actionable field.
+
+## Custom controls
+
+A custom control should expose `value`, `onChange`, and `onBlur`, and accept `id`, `name`, `disabled`, `required`, and ARIA props. Adapt unusual third-party event shapes in one reusable control instead of adding library-specific options to `Form.Field`.
+
+## Continue reading
+
+See the [Form component](/en/components/form) for the complete API, state examples, and custom-control integration.

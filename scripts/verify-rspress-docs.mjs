@@ -22,6 +22,9 @@ const loadCatalog = async () => {
           componentCatalog,
           componentSlug,
         } from './apps/docs/src/component-catalog.ts'
+        export {
+          handbookPageSlugs,
+        } from './apps/docs/src/handbook-navigation.ts'
       `,
       loader: 'ts',
       resolveDir: packageRoot,
@@ -128,6 +131,32 @@ for (const locale of ['zh', 'en']) {
       source,
       new RegExp(`lang: ${locale === 'zh' ? 'zh-Hans' : 'en'}`),
       `${relativePath} must declare the exact document language.`
+    );
+  }
+
+  const handbookMeta = JSON.parse(
+    await readFile(resolve(docsRoot, locale, 'docs/_meta.json'), 'utf8')
+  );
+  assert.deepEqual(
+    handbookMeta.map((item) => item.name),
+    catalog.handbookPageSlugs,
+    `${locale} handbook sidebar must exactly follow handbook navigation.`
+  );
+
+  for (const slug of catalog.handbookPageSlugs) {
+    const pagePath = resolve(docsRoot, locale, 'docs', `${slug}.mdx`);
+    const source = await readFile(pagePath, 'utf8');
+
+    assert.match(source, /^---\n[\s\S]*?title:/, `${pagePath} needs a title.`);
+    assert.match(
+      source,
+      /description:/,
+      `${pagePath} needs a searchable description.`
+    );
+    assert.match(
+      source,
+      new RegExp(`lang: ${locale === 'zh' ? 'zh-Hans' : 'en'}`),
+      `${pagePath} must declare the exact document language.`
     );
   }
 
@@ -608,15 +637,20 @@ assert.match(
   /localizeShowcaseSource/u,
   'Case source blocks must render only the active locale example.'
 );
-assert.doesNotMatch(
+assert.match(
   themeCodeBlock,
-  /wrapCode|WrapText|<Toggle(?:\.|\s)/u,
-  'Code wrapping must not require an interactive toolbar control.'
+  /<WrapText aria-hidden="true" \/>/u,
+  'Code blocks must expose line wrapping from the code viewport toolbar.'
 );
 assert.match(
   themeCss,
-  /\.docs-code-content code \{[^}]*white-space: pre-wrap;/su,
-  'Code blocks must always wrap long lines.'
+  /\.docs-code-content\[data-wrap='true'\] code \{[^}]*white-space: pre-wrap;/su,
+  'Code blocks must wrap long lines only when wrapping is enabled.'
+);
+assert.match(
+  themeCss,
+  /\.docs-code-viewport-toolbar \{[^}]*position: absolute;/su,
+  'Copy and wrapping controls must be positioned inside the code viewport.'
 );
 assert.match(
   themeCodeBlock,
@@ -797,5 +831,7 @@ assert.match(packageJson.scripts.build, /rspress build$/);
 assert.equal(packageJson.devDependencies.vite, undefined);
 
 globalThis.console.log(
-  `Verified ${slugs.length} bilingual Rspress component routes and ${caseCount} single-file cases with no legacy route shell.`
+  `Verified ${catalog.handbookPageSlugs.length} bilingual handbook routes, ` +
+    `${slugs.length} component routes, and ${caseCount} single-file cases ` +
+    'with no legacy route shell.'
 );

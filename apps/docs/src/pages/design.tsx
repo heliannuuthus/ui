@@ -1,4 +1,4 @@
-import { Card, Separator, Stack, Tag, Typography } from '@heliannuuthus/ui';
+import { Card, Separator, Stack, Typography } from '@heliannuuthus/ui';
 import {
   ArrowRight,
   Box,
@@ -13,15 +13,43 @@ import { PageEyebrow } from './shared';
 
 const pageCopy = {
   zh: {
-    kicker: 'FOUNDATION / 04 PRINCIPLES',
-    manifesto:
-      '设计系统的价值，不是让所有页面长得一样，而是让相同的问题不必反复解决。',
-    principleLabels: ['解释结构', '减少选择', '守住边界', '覆盖现实'],
-    boundaryKicker: 'OWNERSHIP MODEL',
-    boundaryTitle: '共享能力与产品语义必须有清楚边界',
-    boundaryDescription: '边界越清楚，公共组件越稳定，业务表达也越自由。',
+    kicker: '组件设计规则',
+    manifesto: '相同的界面问题使用相同的组件和交互约定。',
+    introduction:
+      '这份规则用于设计、实现和评审公共组件。遇到新需求时，先确认它是否属于共享能力，再检查 API、状态和文档是否完整。',
+    principlesTitle: '设计和评审时看这四件事',
+    principlesDescription:
+      '每条规则都对应一个常见的决策。不需要全凭审美判断，先看结构、约定、边界和真实使用状态。',
+    principleGuidance: [
+      {
+        doLabel: '应当',
+        doText: '用标题层级、间距和语义状态说明关系。',
+        avoidLabel: '避免',
+        avoidText: '不要靠颜色、阴影或动效掩盖结构不清。',
+      },
+      {
+        doLabel: '应当',
+        doText: '相同操作保持同名、同位置和同一类反馈。',
+        avoidLabel: '避免',
+        avoidText: '没有明确收益时，不增加新变体或另一套命名。',
+      },
+      {
+        doLabel: '应当',
+        doText: '组件处理通用行为、样式、类型和无障碍。',
+        avoidLabel: '避免',
+        avoidText: '不把业务数据、权限、路由或流程下沉到公共包。',
+      },
+      {
+        doLabel: '应当',
+        doText: '同时检查键盘、窄屏、长文本和各类数据状态。',
+        avoidLabel: '避免',
+        avoidText: '不只用一个正常案例证明组件已经完成。',
+      },
+    ],
+    boundaryTitle: '组件库与业务项目分别负责什么',
+    boundaryDescription: '先判断能力是否领域无关，再决定它应该放在哪一层。',
     sharedTitle: '公共 UI 层',
-    sharedDescription: '负责可复用的行为、视觉语法和无障碍基础。',
+    sharedDescription: '维护领域无关的行为、样式和无障碍基础。',
     sharedItems: [
       '交互与键盘行为',
       '语义 Token',
@@ -29,10 +57,9 @@ const pageCopy = {
       '类型、事件与 ref',
     ],
     productTitle: '产品业务层',
-    productDescription: '负责特定产品真正想表达和完成的事情。',
+    productDescription: '维护具体产品的数据、权限、路由和流程。',
     productItems: ['业务文案与数据', '权限和路由', '领域状态', '流程编排'],
-    checklistKicker: 'DEFINITION OF DONE',
-    checklistTitle: '一个组件值得共享之前',
+    checklistTitle: '合并公共组件前逐项检查',
     checklistItems: [
       '键盘和屏幕阅读器可用',
       '加载、空、错误、禁用状态明确',
@@ -40,27 +67,58 @@ const pageCopy = {
       '受控与非受控边界清楚',
       'API 能向后兼容地生长',
     ],
-    closing: '这些原则最终都要在组件代码和文档里被看见。',
-    action: '查看组件如何落地',
+    closing: '规则必须同时落实在实现、测试和文档中。',
+    action: '查看组件目录',
   },
   en: {
-    kicker: 'FOUNDATION / 04 PRINCIPLES',
+    kicker: 'Component design rules',
     manifesto:
-      'A design system does not make every page look the same. It prevents teams from solving the same problem repeatedly.',
-    principleLabels: [
-      'Explain structure',
-      'Reduce choices',
-      'Protect boundaries',
-      'Cover reality',
+      'Use the same components and interaction conventions for the same interface problems.',
+    introduction:
+      'Use these rules when designing, implementing, and reviewing shared components. For each new request, first decide whether it is a shared capability, then verify its API, states, and documentation.',
+    principlesTitle: 'Review four things before approving a component',
+    principlesDescription:
+      'Each rule answers a recurring decision. Start with structure, conventions, ownership, and real usage states instead of relying on taste alone.',
+    principleGuidance: [
+      {
+        doLabel: 'Do',
+        doText:
+          'Use heading hierarchy, spacing, and semantic states to explain relationships.',
+        avoidLabel: 'Avoid',
+        avoidText:
+          'Do not use color, shadow, or motion to hide unclear structure.',
+      },
+      {
+        doLabel: 'Do',
+        doText:
+          'Keep the same name, position, and feedback for the same action.',
+        avoidLabel: 'Avoid',
+        avoidText:
+          'Do not add another variant or term without a concrete benefit.',
+      },
+      {
+        doLabel: 'Do',
+        doText:
+          'Keep reusable behavior, styles, types, and accessibility in the library.',
+        avoidLabel: 'Avoid',
+        avoidText:
+          'Do not move product data, permissions, routing, or flows into the shared package.',
+      },
+      {
+        doLabel: 'Do',
+        doText:
+          'Check keyboard use, narrow screens, long text, and every data state.',
+        avoidLabel: 'Avoid',
+        avoidText:
+          'Do not call a component complete after testing only its happy path.',
+      },
     ],
-    boundaryKicker: 'OWNERSHIP MODEL',
-    boundaryTitle:
-      'Shared capability and product meaning need a clear boundary',
+    boundaryTitle: 'What belongs to the library and to product applications',
     boundaryDescription:
-      'Clear ownership makes shared components more stable and product expression more flexible.',
+      'Decide whether a capability is domain-neutral before choosing its layer.',
     sharedTitle: 'Shared UI layer',
     sharedDescription:
-      'Owns reusable behavior, visual grammar, and accessibility foundations.',
+      'Maintains domain-neutral behavior, styles, and accessibility.',
     sharedItems: [
       'Interaction and keyboard behavior',
       'Semantic tokens',
@@ -69,15 +127,14 @@ const pageCopy = {
     ],
     productTitle: 'Product layer',
     productDescription:
-      'Owns what a specific product needs to express and accomplish.',
+      'Maintains product data, permissions, routing, and flows.',
     productItems: [
       'Product copy and data',
       'Permissions and routing',
       'Domain state',
       'Workflow orchestration',
     ],
-    checklistKicker: 'DEFINITION OF DONE',
-    checklistTitle: 'Before a component deserves to be shared',
+    checklistTitle: 'Check each item before merging a shared component',
     checklistItems: [
       'Keyboard and screen-reader access works',
       'Loading, empty, error, and disabled states are explicit',
@@ -85,9 +142,8 @@ const pageCopy = {
       'Controlled and uncontrolled boundaries are clear',
       'The API can evolve compatibly',
     ],
-    closing:
-      'These principles must be visible in both component code and documentation.',
-    action: 'See the principles in components',
+    closing: 'Apply these rules in implementation, tests, and documentation.',
+    action: 'Open the component catalog',
   },
 } as const;
 
@@ -106,43 +162,21 @@ export const DesignPage = () => {
   return (
     <div className="docs-marketing-page docs-design-page">
       <header className="design-hero">
-        <PageEyebrow>{copy.kicker}</PageEyebrow>
-        <Typography.Title>{design.title}</Typography.Title>
+        <PageEyebrow>{design.title}</PageEyebrow>
+        <Typography.Title>{copy.kicker}</Typography.Title>
         <Typography.Text as="p" className="design-manifesto" size="xl">
           {copy.manifesto}
         </Typography.Text>
-        <Typography.Text as="p" size="lg" tone="muted">
-          {design.description}
+        <Typography.Text as="p" className="design-introduction" tone="muted">
+          {copy.introduction}
         </Typography.Text>
       </header>
-
-      <section className="design-principles" aria-label={design.title}>
-        {principles.map(([title, description], index) => (
-          <article
-            className="design-principle"
-            id={`principle-${index + 1}`}
-            key={title}
-          >
-            <div className="design-principle-index">0{index + 1}</div>
-            <div>
-              <Tag type={index === 0 ? 'primary' : 'default'}>
-                {copy.principleLabels[index]}
-              </Tag>
-              <Typography.Title level={2}>{title}</Typography.Title>
-              <Typography.Text as="p" size="lg" tone="muted">
-                {description}
-              </Typography.Text>
-            </div>
-          </article>
-        ))}
-      </section>
 
       <section
         className="docs-page-section design-boundary"
         aria-labelledby="boundary-title"
       >
         <div className="docs-section-heading">
-          <PageEyebrow>{copy.boundaryKicker}</PageEyebrow>
           <Typography.Title id="boundary-title" level={2}>
             {copy.boundaryTitle}
           </Typography.Title>
@@ -190,25 +224,70 @@ export const DesignPage = () => {
         </div>
       </section>
 
+      <section
+        className="docs-page-section design-principles-section"
+        aria-labelledby="principles-title"
+      >
+        <div className="docs-section-heading">
+          <Typography.Title id="principles-title" level={2}>
+            {copy.principlesTitle}
+          </Typography.Title>
+          <Typography.Text as="p" tone="muted">
+            {copy.principlesDescription}
+          </Typography.Text>
+        </div>
+        <div className="design-principles">
+          {principles.map(([title, description], index) => {
+            const guidance = copy.principleGuidance[index];
+
+            return (
+              <article
+                className="design-principle"
+                id={`principle-${index + 1}`}
+                key={title}
+              >
+                <div className="design-principle-heading">
+                  <Typography.Title level={3}>{title}</Typography.Title>
+                  <Typography.Text as="p" tone="muted">
+                    {description}
+                  </Typography.Text>
+                </div>
+                <dl className="design-principle-guidance">
+                  <div>
+                    <dt>{guidance.doLabel}</dt>
+                    <dd>{guidance.doText}</dd>
+                  </div>
+                  <div>
+                    <dt>{guidance.avoidLabel}</dt>
+                    <dd>{guidance.avoidText}</dd>
+                  </div>
+                </dl>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
       <section className="design-checklist" aria-labelledby="checklist-title">
         <div>
-          <PageEyebrow>{copy.checklistKicker}</PageEyebrow>
           <Typography.Title id="checklist-title" level={2}>
             {copy.checklistTitle}
           </Typography.Title>
         </div>
-        <ol>
-          {copy.checklistItems.map((item, index) => (
+        <ul>
+          {copy.checklistItems.map((item) => (
             <li key={item}>
-              <span>0{index + 1}</span>
+              <CheckCircle2 aria-hidden="true" />
               <Typography.Text as="span">{item}</Typography.Text>
             </li>
           ))}
-        </ol>
+        </ul>
       </section>
 
       <section className="design-closing">
-        <Typography.Title level={2}>{copy.closing}</Typography.Title>
+        <Typography.Text as="p" size="lg" weight="semibold">
+          {copy.closing}
+        </Typography.Text>
         <Stack align="center" gap={12} orientation="horizontal" wrap>
           <InternalButtonLink href={localPath(locale, '/components')} size="lg">
             {copy.action}

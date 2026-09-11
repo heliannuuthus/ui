@@ -1,0 +1,55 @@
+---
+title: 暗黑模式
+description: 使用 Provider、系统偏好和语义颜色实现稳定且可持久化的暗黑模式。
+lang: zh-Hans
+---
+
+# 暗黑模式
+
+暗黑模式由 `Provider` 的 `appearance` 和深色语义 Token 控制。背景、文字、边框和状态色需要分别配置，不能用滤镜统一反转。
+
+## 选择外观模式
+
+`Provider` 的 `appearance` 支持 `light`、`dark` 和 `system`。使用 `system` 时会跟随 `prefers-color-scheme`。
+
+```tsx
+<Provider appearance="system">
+  <App />
+</Provider>
+```
+
+如果产品提供手动切换，应把用户选择持久化，并在 React 启动前尽早恢复，避免首屏从浅色闪到深色。用户选择的优先级应高于系统偏好；“跟随系统”则恢复监听系统变化。
+
+## 配置浅色与深色 Token
+
+```tsx
+<Provider
+  appearance={appearance}
+  theme={{
+    colors: {
+      background: 'oklch(0.99 0 0)',
+      foreground: 'oklch(0.18 0 0)',
+    },
+    darkColors: {
+      background: 'oklch(0.14 0 0)',
+      foreground: 'oklch(0.96 0 0)',
+    },
+  }}
+>
+  <App />
+</Provider>
+```
+
+`darkColors` 只需要声明与浅色不同的值。未覆盖的值继续使用 `colors` 或默认主题。
+
+## 设计检查
+
+- 页面、卡片和浮层要形成可辨认但不过度割裂的明度层级。
+- 边框在暗色背景上通常需要更低饱和度，而不是简单提高透明白。
+- 状态色需要分别检查文字、图标和背景组合的对比度。
+- 图片、图表、阴影、代码高亮和浏览器原生控件都要单独验证。
+- 不要只用颜色区分错误、成功或选中状态。
+
+## Portal 与嵌套主题
+
+弹窗、菜单和 Tooltip 应渲染在能够继承主题上下文的位置。嵌套 `Provider` 可以创建局部主题，但不要把它当成零散覆盖颜色的快捷方式，否则 Portal 与非 Portal 内容容易出现视觉断层。

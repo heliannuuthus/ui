@@ -1,0 +1,56 @@
+---
+title: 字体与排版
+description: 定义产品字体栈、标题层级、正文行长、数字与代码字体的使用规则。
+lang: zh-Hans
+---
+
+# 字体与排版
+
+产品需要明确三类字体：正文与控件使用无衬线字体，标题使用标题字体，代码和技术值使用等宽字体。品牌字体只放在指定位置，不混入长正文和控件。
+
+## 内置默认字体
+
+```css
+:root {
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    monospace;
+}
+```
+
+- `--font-sans` 用于正文、表单和操作控件。
+- `--font-heading` 用于标题，可与正文相同，仅通过字重和字号建立层级。
+- `--font-mono` 用于代码、键盘输入和需要逐字符比较的技术信息。
+
+这是组件库随 `styles.css` 提供的默认值。Apple 平台优先使用系统界面字体，Windows 使用 Segoe UI；中文字符继续由苹方、冬青黑体或微软雅黑接管。
+
+当前文档站另外加载了品牌字体，这只是站点级覆盖，不会随组件库交付给业务项目。产品需要自己的字体时，可以在应用样式中覆盖这三个变量。
+
+## 语义和视觉分开
+
+使用 [Typography 组件](/zh/components/typography) 保留正确的 HTML 层级。视觉上需要更小的标题时，也不应跳过 `h2` 直接使用 `h4`。
+
+```tsx
+<Typography.Title level={2}>账户安全</Typography.Title>
+<Typography.Text as="p" tone="muted">
+  管理登录方式和最近使用的设备。
+</Typography.Text>
+```
+
+## 阅读宽度
+
+- 连续正文建议控制在约 60–80 个中文字符对应的视觉宽度内。
+- 表单说明和次要文本应比主内容更短，不要横跨整个桌面屏幕。
+- 数据和代码可以更宽，但应使用滚动、折行或列宽策略，而不是扩大所有正文。
+
+## 字体加载
+
+Web Font 应设置合理的 fallback 和 `font-display`。不要为了首屏品牌效果阻塞控件文字；中文字体文件尤其需要评估子集、缓存和系统字体回退。字体加载完成后还要检查布局偏移、按钮宽度和表格列宽变化。
+
+## 可访问性
+
+正文不要依赖极细字重。说明文字可以降低颜色层级，但仍需保持对比度。页面缩放到 200% 时，文本应自然换行而不是被固定高度裁切。

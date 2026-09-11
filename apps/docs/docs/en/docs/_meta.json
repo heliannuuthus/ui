@@ -1,0 +1,19 @@
+[
+  { "type": "file", "name": "getting-started", "label": "Getting started" },
+  { "type": "file", "name": "css-and-tokens", "label": "CSS and tokens" },
+  { "type": "file", "name": "provider", "label": "Global Provider" },
+  {
+    "type": "file",
+    "name": "imports-and-bundling",
+    "label": "Imports and bundling"
+  },
+  {
+    "type": "file",
+    "name": "typography-and-fonts",
+    "label": "Typography and fonts"
+  },
+  { "type": "file", "name": "dark-mode", "label": "Dark mode" },
+  { "type": "file", "name": "interaction-tips", "label": "Interaction tips" },
+  { "type": "file", "name": "form-architecture", "label": "Form architecture" },
+  { "type": "file", "name": "choosing-a-table", "label": "Choosing a table" }
+]

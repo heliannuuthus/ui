@@ -1,0 +1,124 @@
+---
+title: CSS and tokens
+description: How to load the stylesheet and change each group of semantic tokens.
+lang: en
+---
+
+# CSS and tokens
+
+Component code and styles ship separately. Load the shared stylesheet once at the application entry, then import components as needed. Theme switching, direction, and component defaults are covered in [Global Provider](/en/docs/provider).
+
+## Load the stylesheet
+
+Import the shared stylesheet before application CSS. Components do not inject styles at runtime, and the application does not need a Tailwind plugin.
+
+```tsx title="main.tsx"
+import '@heliannuuthus/ui/styles.css';
+import './app.css';
+```
+
+One import is enough. Loading it in several routes adds no capability and makes the cascade harder to inspect.
+
+## Style layers
+
+The stylesheet has four responsibilities. The base layer handles reset, font inheritance, and document defaults. The theme layer declares semantic variables. Components consume those variables. Application CSS owns page layout and product-specific differences.
+
+Applications normally change semantic variables or use documented styling props. Generated classes and internal DOM depth are not stable interfaces.
+
+## Page colors
+
+`--background` is the page canvas and `--foreground` is the default text color. Change them together when setting the overall light or dark tone of a product.
+
+```css title="app.css"
+:root {
+  --background: oklch(0.99 0.004 260);
+  --foreground: oklch(0.2 0.015 260);
+}
+```
+
+Do not use these variables for selected cards, success, or warnings. They define the document baseline, not business state.
+
+## Cards and overlays
+
+`--card` and `--card-foreground` style surfaces that sit in the page flow. `--popover` and `--popover-foreground` style menus, tooltips, and other overlays.
+
+```css title="app.css"
+:root {
+  --card: oklch(1 0 0);
+  --card-foreground: var(--foreground);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--foreground);
+}
+```
+
+A card may remain close to the page background. An overlay still needs a border or shadow to separate it from content underneath. Separate variables let the two surfaces use different lightness in dark mode.
+
+## Action colors
+
+`--primary` marks the main action, `--secondary` marks a quieter peer, and `--accent` covers hover or current-item feedback. Each background token has a matching `-foreground` text token.
+
+```css title="app.css"
+:root {
+  --primary: oklch(0.56 0.18 255);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.95 0.01 260);
+  --secondary-foreground: oklch(0.25 0.02 260);
+  --accent: oklch(0.94 0.025 255);
+  --accent-foreground: oklch(0.3 0.08 255);
+}
+```
+
+These are action roles, not three strengths of the brand color. A region usually has one primary action; other actions should carry less visual weight.
+
+## Borders, inputs, and focus
+
+`--border` styles ordinary separators, `--input` styles control boundaries, and `--ring` styles keyboard focus. Keeping them separate lets controls remain clearer than layout rules without weakening focus.
+
+```css title="app.css"
+:root {
+  --border: oklch(0.9 0.01 260);
+  --input: oklch(0.82 0.015 260);
+  --ring: oklch(0.62 0.16 255);
+}
+```
+
+`--ring` is not decorative. Check it on light and dark surfaces and with keyboard navigation whenever it changes.
+
+## Status colors
+
+`--success`, `--warning`, `--info`, and `--destructive` describe results and risk. Their meaning should remain stable even when the product palette changes.
+
+```css title="app.css"
+:root {
+  --success: oklch(0.58 0.14 152);
+  --warning: oklch(0.72 0.15 78);
+  --info: oklch(0.61 0.14 245);
+  --destructive: oklch(0.58 0.2 27);
+}
+```
+
+Color cannot carry status by itself. Error, warning, and success feedback still needs text, an icon, or another readable label.
+
+## Radius
+
+`--radius` is the base radius for the component set. Buttons, inputs, cards, and overlays derive size-specific values from it instead of sharing one fixed radius.
+
+```css title="app.css"
+:root {
+  --radius: 0.75rem;
+}
+```
+
+Changing the base affects the full component set. Use a local style for an exceptional shape instead of changing the global radius for one component.
+
+## Override component styles
+
+Use `className` and `style` for a simple component root. Composite components expose `classNames`, `styles`, or subcomponent props for documented semantic slots. Prefer tokens first and these public entry points second.
+
+Order, permission, and review status do not belong in the UI theme. Keep them in the application and map them to the appropriate status component or semantic color there.
+
+## Troubleshooting
+
+If components are unstyled, first confirm that the application entry imports `@heliannuuthus/ui/styles.css`. If an override does not apply, check that application CSS loads afterward, that the variable is set on an ancestor the component can inherit from, and that dark mode does not replace the same variable.
+
+If a rule only works after repeatedly increasing selector specificity, the override is probably placed at the wrong level or depends on component internals.
