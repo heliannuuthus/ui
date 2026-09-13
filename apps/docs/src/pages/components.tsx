@@ -3,7 +3,6 @@ import { Link } from '@rspress/core/theme-original';
 import { ArrowUpRight, Boxes, Search, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import {
-  componentCatalog,
   componentGroups,
   componentSlug,
   localizedComponentName,
@@ -12,17 +11,11 @@ import {
 import { componentSearchMetadata } from '../component-metadata';
 import { resources } from '../i18n/resources';
 import { localPath, useDocsPageLocale } from './page-locale';
-import { PageEyebrow } from './shared';
 
 const copy = {
   zh: {
-    eyebrow: '公共组件',
     title: '组件总览',
-    description:
-      '按用途浏览组件。每个页面包含运行示例、属性表、键盘行为和使用说明。',
-    countLabel: '公共组件',
-    groupLabel: '能力分组',
-    runtimeLabel: '运行基线',
+    description: '按类别浏览组件，或直接搜索名称。',
     searchLabel: '搜索全部组件',
     searchPlaceholder: '搜索名称、用途或关键词…',
     clear: '清除搜索',
@@ -32,13 +25,8 @@ const copy = {
     open: '查看组件',
   },
   en: {
-    eyebrow: 'Public components',
     title: 'Component overview',
-    description:
-      'Browse components by purpose. Each page includes live examples, prop tables, keyboard behavior, and usage notes.',
-    countLabel: 'public components',
-    groupLabel: 'capability groups',
-    runtimeLabel: 'runtime baseline',
+    description: 'Browse components by category, or search by name.',
     searchLabel: 'Search all components',
     searchPlaceholder: 'Search by name, purpose, or keyword…',
     clear: 'Clear search',
@@ -562,30 +550,13 @@ export const ComponentsPage = () => {
 
   return (
     <div className="docs-marketing-page docs-components-page">
-      <section className="components-hero" aria-labelledby="components-title">
-        <div className="components-hero-copy">
-          <PageEyebrow>{pageCopy.eyebrow}</PageEyebrow>
-          <Typography.Title id="components-title">
-            {pageCopy.title}
-          </Typography.Title>
-          <Typography.Text as="p" size="xl" tone="muted">
-            {pageCopy.description}
-          </Typography.Text>
-        </div>
-        <dl className="components-stats">
-          <div>
-            <dt>{pageCopy.countLabel}</dt>
-            <dd>{componentCatalog.length}</dd>
-          </div>
-          <div>
-            <dt>{pageCopy.groupLabel}</dt>
-            <dd>{componentGroups.length}</dd>
-          </div>
-          <div>
-            <dt>{pageCopy.runtimeLabel}</dt>
-            <dd>React 19</dd>
-          </div>
-        </dl>
+      <section className="components-intro" aria-labelledby="components-title">
+        <Typography.Title id="components-title">
+          {pageCopy.title}
+        </Typography.Title>
+        <Typography.Text as="p" tone="muted">
+          {pageCopy.description}
+        </Typography.Text>
       </section>
 
       <section className="components-browser" aria-label={pageCopy.title}>
