@@ -1,0 +1,124 @@
+---
+title: Global Provider
+description: Configure theme, appearance, text direction, and component defaults with clear override rules.
+lang: en
+---
+
+# Global Provider
+
+`Provider` keeps stable interface settings at the application root: light or dark appearance, text direction, theme variables, and defaults for commonly used components. A page can still override any default with an explicit component prop.
+
+## Where to mount it
+
+Mount one Provider at the application root. It renders a `div` and applies theme variables, `dir`, and appearance state to that element.
+
+```tsx title="main.tsx"
+import { Provider } from '@heliannuuthus/ui';
+import '@heliannuuthus/ui/styles.css';
+
+root.render(
+  <Provider appearance="system">
+    <App />
+  </Provider>
+);
+```
+
+`system` follows the operating system. Use `light` or `dark` when a preview or an application needs a fixed appearance.
+
+## Set theme colors
+
+`theme.colors` supplies the base palette. In dark appearance, matching fields from `theme.darkColors` replace those values. Supply only the values that differ; omitted values keep the library defaults.
+
+```tsx title="app-provider.tsx"
+<Provider
+  appearance="system"
+  theme={{
+    colors: {
+      primary: 'oklch(0.56 0.18 255)',
+      primaryForeground: 'oklch(0.99 0 0)',
+      ring: 'oklch(0.62 0.16 255)',
+    },
+    darkColors: {
+      primary: 'oklch(0.72 0.14 255)',
+      primaryForeground: 'oklch(0.18 0.02 255)',
+      ring: 'oklch(0.72 0.14 255)',
+    },
+    radius: '0.75rem',
+  }}
+>
+  <App />
+</Provider>
+```
+
+Color fields map to the semantic tokens described in [CSS and tokens](/en/docs/css-and-tokens). Provider suits themes supplied by JavaScript or generated per tenant. A fixed brand can also override variables directly in application CSS.
+
+## Set component defaults
+
+Use `components` for component props repeated across many pages. An admin application might choose small buttons, outlined cards, and one Tooltip delay.
+
+```tsx title="app-provider.tsx"
+<Provider
+  components={{
+    Button: { size: 'sm' },
+    Card: { variant: 'outline' },
+    Tooltip: { openDelay: 300, placement: 'top' },
+    ScrollArea: {
+      scrollbar: { size: 'sm', visibility: 'auto' },
+    },
+  }}
+>
+  <App />
+</Provider>
+```
+
+Component defaults are for repeated presentation choices. Do not use them to store form data, permissions, or request state.
+
+## Override order
+
+The same prop resolves in this order, with later entries taking precedence:
+
+1. Library default.
+2. Outer Provider.
+3. Nested Provider.
+4. An explicit prop on the component.
+
+After setting `Button.size` to `sm` globally, a single `<Button size="lg" />` still renders at `lg`. Provider supplies defaults without restricting the component API.
+
+## Local configuration
+
+A nested Provider inherits its parent configuration and replaces only the values it declares. Use this for an independent workspace, preview region, or a local area with a different text direction.
+
+```tsx title="preview.tsx"
+<Provider appearance="system" components={{ Button: { size: 'sm' } }}>
+  <AppShell>
+    <Provider theme={{ colors: { primary: 'oklch(0.62 0.2 25)' } }}>
+      <PreviewPanel />
+    </Provider>
+  </AppShell>
+</Provider>
+```
+
+Provider themes rely on DOM inheritance. An overlay mounted under `document.body` does not automatically inherit variables from a local Provider; use the root theme for that overlay or a documented mount-container option.
+
+## Text direction
+
+`direction` accepts `ltr` or `rtl` and writes the matching `dir` attribute to the Provider root. The default is `ltr`.
+
+```tsx title="rtl-area.tsx"
+<Provider direction="rtl">
+  <ArabicWorkspace />
+</Provider>
+```
+
+Direction covers component layout and the browser's bidirectional text rules. Date, number, and message formatting remains the responsibility of the application's internationalization layer.
+
+## Why centralize configuration
+
+A single configuration point removes repeated page props and gives theme and component conventions a clear owner. Changing button size, focus color, or radius does not require a page-by-page search. Local exceptions remain explicit at the component call site.
+
+## Boundaries
+
+- Keep page grids, content width, and responsive layout in application CSS.
+- Keep order, permission, and review state in application state management.
+- Use component `className`, `style`, or public slots for a one-off visual difference.
+- `useProvider` reads current appearance and direction. `useComponentDefaults` mainly supports library components consuming defaults; application pages rarely need to call it directly.

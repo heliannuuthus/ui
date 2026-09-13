@@ -291,14 +291,21 @@ const DatePicker = ({
             }}
             ref={controlRef}
             className={cn(
-              'w-60 justify-start text-left font-normal',
+              'w-60 max-w-full justify-start text-left font-normal',
               !selectedValue && 'text-muted-foreground',
               classNames?.trigger
             )}
             style={styles?.trigger}
           >
             <CalendarIcon />
-            {dateLabel(selectedValue, 'PPP', labelLocale, resolvedPlaceholder)}
+            <span className="min-w-0 truncate">
+              {dateLabel(
+                selectedValue,
+                'PPP',
+                labelLocale,
+                resolvedPlaceholder
+              )}
+            </span>
           </Button>
         }
       />
@@ -414,7 +421,14 @@ const DateRangePicker = ({
             style={styles?.trigger}
           >
             <CalendarIcon />
-            {rangeLabel(selectedValue, 'PP', labelLocale, resolvedPlaceholder)}
+            <span className="min-w-0 truncate">
+              {rangeLabel(
+                selectedValue,
+                'PP',
+                labelLocale,
+                resolvedPlaceholder
+              )}
+            </span>
           </Button>
         }
       />
@@ -547,7 +561,14 @@ const DateTimePicker = ({
             style={styles?.trigger}
           >
             <CalendarClockIcon />
-            {dateLabel(selectedValue, 'PPp', labelLocale, resolvedPlaceholder)}
+            <span className="min-w-0 truncate">
+              {dateLabel(
+                selectedValue,
+                'PPp',
+                labelLocale,
+                resolvedPlaceholder
+              )}
+            </span>
           </Button>
         }
       />
@@ -718,7 +739,14 @@ const DateTimeRangePicker = ({
             style={styles?.trigger}
           >
             <CalendarClockIcon />
-            {rangeLabel(selectedValue, 'Pp', labelLocale, resolvedPlaceholder)}
+            <span className="min-w-0 truncate">
+              {rangeLabel(
+                selectedValue,
+                'Pp',
+                labelLocale,
+                resolvedPlaceholder
+              )}
+            </span>
           </Button>
         }
       />

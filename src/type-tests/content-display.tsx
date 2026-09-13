@@ -18,7 +18,7 @@ export const ContentDisplayTypeTest = () => (
       reactions="2"
       reactionsProps={{ align: 'start', side: 'top' }}
     />
-    <Carousel items={['One', 'Two']} pagination="dots" />
+    <Carousel items={['One', 'Two']} pagination={{ position: 'before' }} />
     <Collapsible content="Details" header="Summary" />
     <Empty title="No results" />
     <Item mediaType="default" title="Release notes" />

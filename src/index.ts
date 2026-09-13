@@ -84,6 +84,8 @@ export {
   type CarouselClassNames,
   type CarouselControls,
   type CarouselDotRenderProps,
+  type CarouselNavigationOptions,
+  type CarouselPaginationOptions,
   type CarouselProps,
   type CarouselRef,
   type CarouselStyles,

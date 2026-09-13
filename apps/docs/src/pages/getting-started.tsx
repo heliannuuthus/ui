@@ -1,49 +1,22 @@
-import { Button, Card, Stack, Tag, Typography } from '@heliannuuthus/ui';
-import {
-  ArrowRight,
-  Check,
-  Code2,
-  Layers3,
-  PackagePlus,
-  SlidersHorizontal,
-} from 'lucide-react';
+import { Tag, Typography } from '@heliannuuthus/ui';
+import { Code2, Layers3, PackagePlus, SlidersHorizontal } from 'lucide-react';
 import { resources } from '../i18n/resources';
-import { InternalButtonLink } from '../../theme/internal-link';
-import { localPath, useDocsPageLocale } from './page-locale';
-import { CodePanel, InstallTabs, PageEyebrow } from './shared';
+import { useDocsPageLocale } from './page-locale';
+import { CodePanel, InstallTabs } from './shared';
 
 const pageCopy = {
   zh: {
-    intro: '从安装到第一个可运行界面，只需要完成下面 4 个明确步骤。',
-    requirements: '开始之前',
-    requirementItems: [
-      'React 19',
-      '支持 ESM 的构建工具',
-      '应用入口可导入全局 CSS',
-    ],
     styleNote: '样式只导入一次。组件模块不会在运行时隐式注入 CSS。',
-    providerNote:
-      'Provider 管理外观、书写方向、语义 Token 和组件默认值；业务状态仍留在业务层。',
+    providerNote: '组件上显式传入的属性会覆盖 Provider 中的默认值。',
     usageNote: '所有公共组件都从包根入口导入。组件子路径是私有实现细节。',
-    nextKicker: 'READY TO BUILD',
-    nextTitle: '接入完成。现在从真实组件开始。',
   },
   en: {
-    intro: 'Move from installation to a working interface in 4 explicit steps.',
-    requirements: 'Before you begin',
-    requirementItems: [
-      'React 19',
-      'An ESM-aware build tool',
-      'A global CSS import at the app entry',
-    ],
     styleNote:
       'Import styles once. Component modules never inject CSS implicitly at runtime.',
     providerNote:
-      'Provider manages appearance, direction, semantic tokens, and component defaults. Product state stays in the product layer.',
+      'Props passed directly to a component override Provider defaults.',
     usageNote:
       'Import every public component from the package root. Component subpaths are private.',
-    nextKicker: 'READY TO BUILD',
-    nextTitle: 'Integration complete. Start with a real component.',
   },
 } as const;
 
@@ -93,43 +66,9 @@ export function Welcome() {
 
   return (
     <div className="docs-marketing-page docs-guide-page">
-      <header className="guide-hero">
-        <div>
-          <PageEyebrow>{guide.kicker}</PageEyebrow>
-          <Typography.Title>{guide.title}</Typography.Title>
-          <Typography.Text
-            as="p"
-            className="guide-hero-description"
-            size="xl"
-            tone="muted"
-          >
-            {copy.intro}
-          </Typography.Text>
-        </div>
-        <Card className="guide-requirements" variant="outline">
-          <Typography.Title level={2}>{copy.requirements}</Typography.Title>
-          <ul>
-            {copy.requirementItems.map((item) => (
-              <li key={item}>
-                <Check aria-hidden="true" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      </header>
-
-      <nav
-        className="guide-index"
-        aria-label={locale === 'zh' ? '接入步骤' : 'Integration steps'}
-      >
-        {steps.map(([number, id, title]) => (
-          <Button href={`#${id}`} key={id} size="sm" variant="ghost">
-            <span>{number}</span>
-            {title}
-          </Button>
-        ))}
-      </nav>
+      <Typography.Title className="guide-visually-hidden-title">
+        {guide.title}
+      </Typography.Title>
 
       <div className="guide-steps">
         {steps.map(([number, id, title, description, Icon]) => (
@@ -145,17 +84,23 @@ export function Welcome() {
               </Typography.Text>
               {id === 'installation' ? (
                 <InstallTabs
+                  codeToolsLabel={common.demo.codeTools}
                   copiedLabel={common.actions.copied}
                   copyLabel={common.actions.copy}
+                  unwrapLabel={common.demo.unwrapCode}
+                  wrapLabel={common.demo.wrapCode}
                 />
               ) : null}
               {id === 'styles' ? (
                 <>
                   <CodePanel
                     code={styleCode}
+                    codeToolsLabel={common.demo.codeTools}
                     copiedLabel={common.actions.copied}
                     copyLabel={common.actions.copy}
                     title="main.tsx"
+                    unwrapLabel={common.demo.unwrapCode}
+                    wrapLabel={common.demo.wrapCode}
                   />
                   <Typography.Text as="p" className="guide-note" size="sm">
                     {copy.styleNote}
@@ -166,9 +111,12 @@ export function Welcome() {
                 <>
                   <CodePanel
                     code={providerCode}
+                    codeToolsLabel={common.demo.codeTools}
                     copiedLabel={common.actions.copied}
                     copyLabel={common.actions.copy}
                     title="app.tsx"
+                    unwrapLabel={common.demo.unwrapCode}
+                    wrapLabel={common.demo.wrapCode}
                   />
                   <div className="guide-contract-grid">
                     {[
@@ -191,9 +139,12 @@ export function Welcome() {
                 <>
                   <CodePanel
                     code={usageCode}
+                    codeToolsLabel={common.demo.codeTools}
                     copiedLabel={common.actions.copied}
                     copyLabel={common.actions.copy}
                     title="welcome.tsx"
+                    unwrapLabel={common.demo.unwrapCode}
+                    wrapLabel={common.demo.wrapCode}
                   />
                   <Typography.Text as="p" className="guide-note" size="sm">
                     {copy.usageNote}
@@ -204,27 +155,6 @@ export function Welcome() {
           </section>
         ))}
       </div>
-
-      <section className="guide-next" id="next-step">
-        <PageEyebrow>{copy.nextKicker}</PageEyebrow>
-        <Typography.Title level={2}>{copy.nextTitle}</Typography.Title>
-        <Typography.Text as="p" size="lg" tone="muted">
-          {guide.nextDescription}
-        </Typography.Text>
-        <Stack align="center" gap={12} orientation="horizontal" wrap>
-          <InternalButtonLink href={localPath(locale, '/components')} size="lg">
-            {guide.nextTitle}
-            <ArrowRight aria-hidden="true" data-icon="inline-end" />
-          </InternalButtonLink>
-          <InternalButtonLink
-            href={localPath(locale, '/design')}
-            size="lg"
-            variant="outline"
-          >
-            {common.navigation.design}
-          </InternalButtonLink>
-        </Stack>
-      </section>
     </div>
   );
 };
