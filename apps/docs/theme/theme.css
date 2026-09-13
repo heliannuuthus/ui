@@ -1029,11 +1029,20 @@ body {
   color: var(--muted-foreground);
 }
 
+@media (max-width: 2399px) {
+  .docs-body-layout:has(.component-showcase-flow) {
+    grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr);
+  }
+
+  .docs-body-layout:has(.component-showcase-flow) .docs-toc {
+    display: none;
+  }
+}
+
 @media (max-width: 1400px) {
-  .docs-body-layout,
-  .docs-body-layout:not(:has(.docs-sidebar)) {
-    --docs-sidebar-width: 19rem;
-    grid-template-columns: 19rem minmax(0, 1fr);
+  .docs-body-layout {
+    --docs-sidebar-width: clamp(19rem, 25vw, 22rem);
+    grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr);
   }
 
   .docs-body-layout:not(:has(.docs-sidebar)) {

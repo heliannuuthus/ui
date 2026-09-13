@@ -274,7 +274,7 @@ for (const slug of slugs) {
   );
   assert.match(
     indexSource,
-    /<ComponentShowcase cases=\{cases\}>\{children\}<\/ComponentShowcase>/u,
+    /<ComponentShowcase\s+cases=\{cases\}(?:\s+columns=\{[23]\})?\s*>\s*\{children\}\s*<\/ComponentShowcase>/u,
     `${slug}/index.tsx must pass its MDX case sources into ComponentShowcase.`
   );
 

@@ -9,7 +9,7 @@
  * pre-emit critique: P5 H5 E5 S5 R5 V5
  */
 .docs-article:has(.component-showcase-flow) {
-  width: min(100%, 92rem);
+  max-width: 92rem;
 }
 
 .component-showcase-flow {

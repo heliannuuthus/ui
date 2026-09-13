@@ -8,6 +8,7 @@ import Case04 from './cases/quotations-and-inline-code';
 const cases = [
   {
     component: Case01,
+    span: 'full' as const,
     title: { en: 'Basic usage', zh: '基础用法' },
     description: {
       en: 'Organize a coherent, readable piece of content using a title, lead, text, quotes, inline code, and supporting information.',

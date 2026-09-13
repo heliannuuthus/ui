@@ -7,6 +7,7 @@ import Case03 from './cases/secondary-menu-and-top-level-status';
 const cases = [
   {
     component: Case01,
+    span: 'full' as const,
     title: { en: 'Basic usage', zh: '基础用法' },
     description: {
       en: 'File and edit menus contain groups, icons, shortcut keys, disabled states, dangerous actions, and provide practical feedback.',
@@ -23,6 +24,7 @@ const cases = [
   },
   {
     component: Case03,
+    span: 'full' as const,
     title: {
       en: 'Secondary menu and top-level status',
       zh: '二级菜单与顶层状态',
