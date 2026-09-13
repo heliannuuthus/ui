@@ -29,22 +29,35 @@ type CarouselStyles = {
   item?: React.CSSProperties;
 };
 
+type CarouselNavigationOptions = {
+  next?: ButtonNativeProps;
+  previous?: ButtonNativeProps;
+};
+
+type CarouselPaginationOptions = {
+  position?: 'before' | 'after';
+} & (
+  | {
+      render?: never;
+      renderDot?: (props: CarouselDotRenderProps) => React.ReactNode;
+    }
+  | {
+      render: (controls: CarouselControls) => React.ReactNode;
+      renderDot?: never;
+    }
+);
+
 type CarouselProps<Item = React.ReactNode> = Omit<
   React.ComponentProps<'div'>,
   'children'
 > & {
   autoplay?: CarouselAutoplay;
   classNames?: CarouselClassNames;
-  controls?: boolean;
+  controls?: boolean | CarouselNavigationOptions;
   items: readonly Item[];
   loop?: boolean;
-  nextButtonProps?: ButtonNativeProps;
   pauseOnHover?: boolean;
-  pagination?:
-    false | 'dots' | ((controls: CarouselControls) => React.ReactNode);
-  paginationPosition?: 'before' | 'after';
-  previousButtonProps?: ButtonNativeProps;
-  renderDot?: (props: CarouselDotRenderProps) => React.ReactNode;
+  pagination?: false | CarouselPaginationOptions;
   renderItem?: (item: Item, index: number) => React.ReactNode;
   styles?: CarouselStyles;
 };
@@ -124,12 +137,8 @@ const CarouselRender = (
     controls = true,
     items,
     loop = false,
-    nextButtonProps,
     pauseOnHover = true,
-    pagination = 'dots',
-    paginationPosition = 'after',
-    previousButtonProps,
-    renderDot,
+    pagination,
     renderItem,
     styles,
     'aria-label': ariaLabel = 'Carousel',
@@ -170,12 +179,15 @@ const CarouselRender = (
     isManuallyPaused ||
     (pauseOnHover && isHovered);
   const isPlaying = autoplayEnabled && !isAutoplayPaused;
+  const navigationOptions = typeof controls === 'object' ? controls : undefined;
+  const paginationOptions = pagination === false ? null : (pagination ?? {});
+  const paginationPlacement = paginationOptions?.position ?? 'after';
   const paginationNode =
-    pagination === 'dots' ? (
-      <CarouselDots>{renderDot}</CarouselDots>
-    ) : typeof pagination === 'function' ? (
-      <CarouselPagination>{pagination}</CarouselPagination>
-    ) : null;
+    paginationOptions == null ? null : paginationOptions.render ? (
+      <CarouselPagination>{paginationOptions.render}</CarouselPagination>
+    ) : (
+      <CarouselDots>{paginationOptions.renderDot}</CarouselDots>
+    );
 
   const onSelect = React.useCallback(
     (api: EmblaCarouselApi) => {
@@ -377,7 +389,7 @@ const CarouselRender = (
         data-slot="carousel"
         {...props}
       >
-        {paginationPosition === 'before' ? paginationNode : null}
+        {paginationPlacement === 'before' ? paginationNode : null}
         <CarouselContent
           className={classNames?.content}
           style={styles?.content}
@@ -392,13 +404,13 @@ const CarouselRender = (
             </CarouselItem>
           ))}
         </CarouselContent>
-        {controls ? (
+        {controls !== false ? (
           <>
-            <CarouselPrevious {...previousButtonProps} />
-            <CarouselNext {...nextButtonProps} />
+            <CarouselPrevious {...navigationOptions?.previous} />
+            <CarouselNext {...navigationOptions?.next} />
           </>
         ) : null}
-        {paginationPosition === 'after' ? paginationNode : null}
+        {paginationPlacement === 'after' ? paginationNode : null}
       </div>
     </CarouselContext.Provider>
   );
@@ -593,6 +605,8 @@ export {
   type CarouselClassNames,
   type CarouselControls,
   type CarouselDotRenderProps,
+  type CarouselNavigationOptions,
+  type CarouselPaginationOptions,
   type CarouselProps,
   type CarouselRef,
   type CarouselStyles,
