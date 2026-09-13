@@ -603,20 +603,20 @@ export const ComponentsPage = () => {
                 key={group.key}
               >
                 <header className="components-group-heading">
-                  <div>
+                  <div className="components-group-title-row">
                     <Typography.Title level={2}>
                       {common.groups[group.key]}
                     </Typography.Title>
-                    <Typography.Text as="p" tone="muted">
-                      {groupDescriptions[group.key][locale]}
-                    </Typography.Text>
+                    <Tag>
+                      {common.components.count.replace(
+                        '{{count}}',
+                        String(group.items.length)
+                      )}
+                    </Tag>
                   </div>
-                  <Tag>
-                    {common.components.count.replace(
-                      '{{count}}',
-                      String(group.items.length)
-                    )}
-                  </Tag>
+                  <Typography.Text as="p" tone="muted">
+                    {groupDescriptions[group.key][locale]}
+                  </Typography.Text>
                 </header>
 
                 <div className="components-card-grid">
