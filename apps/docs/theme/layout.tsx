@@ -71,14 +71,17 @@ const isActivePath = (pathname: string, href: string) => {
 const mainLinks = (locale: Locale) => [
   {
     href: `/${locale}/docs/getting-started`,
+    sectionPath: `/${locale}/docs`,
     label: locale === 'zh' ? '研发手册' : 'Handbook',
   },
   {
     href: `/${locale}/design`,
+    sectionPath: `/${locale}/design`,
     label: locale === 'zh' ? '设计理念' : 'Design',
   },
   {
     href: `/${locale}/components`,
+    sectionPath: `/${locale}/components`,
     label: locale === 'zh' ? '组件' : 'Components',
   },
 ];
@@ -102,7 +105,7 @@ export const Layout = () => {
   const sidebarPage = componentPage || handbookPage;
   const navigationLinks = mainLinks(locale);
   const activeNavigationPath = navigationLinks.find((link) =>
-    isActivePath(location.pathname, link.href)
+    isActivePath(location.pathname, link.sectionPath)
   )?.href;
   const pageType =
     typeof frontmatter.pageType === 'string' ? frontmatter.pageType : 'article';

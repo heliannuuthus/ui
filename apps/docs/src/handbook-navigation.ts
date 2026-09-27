@@ -1,33 +1,39 @@
 export const handbookSections = [
   {
     key: 'start',
-    labels: { en: 'Start here', zh: '开始' },
+    labels: { en: 'Getting connected', zh: '接入使用' },
     items: [
       {
         labels: { en: 'Getting started', zh: '快速开始' },
         slug: 'getting-started',
       },
-    ],
-  },
-  {
-    key: 'foundations',
-    labels: { en: 'Foundations', zh: '基础接入' },
-    items: [
-      {
-        labels: { en: 'CSS and tokens', zh: 'CSS 设计与定义' },
-        slug: 'css-and-tokens',
-      },
-      {
-        labels: { en: 'Global Provider', zh: '全局 Provider' },
-        slug: 'provider',
-      },
       {
         labels: { en: 'Imports and bundling', zh: '按需导入' },
         slug: 'imports-and-bundling',
       },
+    ],
+  },
+  {
+    key: 'foundations',
+    labels: { en: 'Styling foundations', zh: '样式基础' },
+    items: [
+      {
+        labels: { en: 'Styles and design tokens', zh: '样式与设计变量' },
+        slug: 'css-and-tokens',
+      },
       {
         labels: { en: 'Typography and fonts', zh: '字体与排版' },
         slug: 'typography-and-fonts',
+      },
+    ],
+  },
+  {
+    key: 'theme',
+    labels: { en: 'Theme configuration', zh: '主题配置' },
+    items: [
+      {
+        labels: { en: 'Global Provider', zh: '全局 Provider' },
+        slug: 'provider',
       },
       {
         labels: { en: 'Dark mode', zh: '暗黑模式' },
@@ -37,7 +43,7 @@ export const handbookSections = [
   },
   {
     key: 'practice',
-    labels: { en: 'Engineering practice', zh: '工程实践' },
+    labels: { en: 'Interaction practice', zh: '交互实践' },
     items: [
       {
         labels: { en: 'Interaction tips', zh: '交互设计 Tips' },
