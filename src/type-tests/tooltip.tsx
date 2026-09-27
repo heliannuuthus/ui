@@ -22,12 +22,18 @@ export const TooltipTypeTest = () => {
         <Button>Controlled</Button>
       </Tooltip>
 
-      <Tooltip
-        align="start"
-        content="Legacy placement props remain compatible"
-        side="top"
-        trigger={<Button>Legacy trigger</Button>}
-      />
+      {/* @ts-expect-error The removed trigger prop cannot replace children. */}
+      <Tooltip content="Legacy trigger" trigger={<Button>Legacy</Button>} />
+
+      {/* @ts-expect-error Low-level side and align positioning is not public. */}
+      <Tooltip align="start" content="Legacy placement" side="top">
+        <Button>Legacy placement</Button>
+      </Tooltip>
+
+      {/* @ts-expect-error The removed delay prop cannot replace openDelay. */}
+      <Tooltip content="Legacy delay" delay={100}>
+        <Button>Legacy delay</Button>
+      </Tooltip>
 
       {/* @ts-expect-error Low-level cursor tracking is not public Tooltip API. */}
       <Tooltip content="Tracked" followCursor>

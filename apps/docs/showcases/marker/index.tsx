@@ -50,5 +50,9 @@ const cases = [
 ];
 
 export default function MarkerShowcase({ children }: { children?: ReactNode }) {
-  return <ComponentShowcase cases={cases}>{children}</ComponentShowcase>;
+  return (
+    <ComponentShowcase cases={cases} columns={3}>
+      {children}
+    </ComponentShowcase>
+  );
 }

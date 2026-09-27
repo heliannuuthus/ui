@@ -39,7 +39,6 @@ const createExample = (locale: 'en' | 'zh') => {
           className="display-carousel"
           controls={false}
           items={releaseHighlights.map((highlight) => highlight.title)}
-          pagination="dots"
           ref={carouselRef}
           renderItem={(title) => (
             <div className="rounded-3xl border p-8 text-center font-medium">

@@ -23,6 +23,7 @@ const cases = [
   },
   {
     component: Case03,
+    span: 'full' as const,
     title: { en: 'Node menus and visual styles', zh: '节点菜单与视觉样式' },
     description: {
       en: 'Drop-down nodes are used to switch sibling positions; separators and styles only change the visual expression, not the path semantics.',

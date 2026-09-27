@@ -17,6 +17,7 @@ import Case13 from './cases/column-alignment-super-long-omission-and-custom-cell
 const cases = [
   {
     component: Case01,
+    span: 'full' as const,
     title: { en: 'Basic usage', zh: '基础用法' },
     description: {
       en: 'The default composition includes search, sorting, fixed columns, actions, Footer, and Pagination; applications only provide data and Table.Column.',
@@ -25,6 +26,7 @@ const cases = [
   },
   {
     component: Case02,
+    span: 'full' as const,
     title: { en: 'Row expansion', zh: '行展开' },
     description: {
       en: 'expandable will automatically complete expandable columns, keyboard buttons, and cross-column detail rows; business columns fixed to the starting side will automatically avoid expandable buttons.',
@@ -33,6 +35,7 @@ const cases = [
   },
   {
     component: Case03,
+    span: 'full' as const,
     title: { en: 'Group header', zh: '分组表头' },
     description: {
       en: 'Nest columns in Table.Column to create grouped headers; Table calculates spans, levels, and empty-state width.',
@@ -41,6 +44,7 @@ const cases = [
   },
   {
     component: Case04,
+    span: 'full' as const,
     title: { en: 'virtual scrolling', zh: '虚拟滚动' },
     description: {
       en: 'virtual scrolls and virtualizes only the table body. Header stays pinned to the top of the container, while fixed columns, horizontal scrolling, and custom render continue to work.',
@@ -49,6 +53,7 @@ const cases = [
   },
   {
     component: Case05,
+    span: 'full' as const,
     title: {
       en: 'Controlled sorting, pagination, and row selection',
       zh: '受控排序、分页与行选择',
@@ -60,6 +65,7 @@ const cases = [
   },
   {
     component: Case06,
+    span: 'full' as const,
     title: { en: 'Pagination summary', zh: '分页摘要' },
     description: {
       en: 'Shows the total item count or renders a custom summary from the total and current range.',
@@ -68,6 +74,7 @@ const cases = [
   },
   {
     component: Case07,
+    span: 'full' as const,
     title: {
       en: 'Loading and external state composition',
       zh: '加载与外部状态组合',
@@ -79,6 +86,7 @@ const cases = [
   },
   {
     component: Case08,
+    span: 'full' as const,
     title: { en: 'Server data mode', zh: '服务端数据模式' },
     description: {
       en: 'The manual modes for search, sorting, and pagination manage only public state and do not process server-returned data again on the client.',
@@ -87,6 +95,7 @@ const cases = [
   },
   {
     component: Case09,
+    span: 'full' as const,
     title: { en: 'Custom table', zh: '自定义表格' },
     description: {
       en: 'When data is already prepared or the structure needs full control, compose Header, Body, and Footer directly. Footer contains column summaries.',
@@ -95,6 +104,7 @@ const cases = [
   },
   {
     component: Case10,
+    span: 'full' as const,
     title: {
       en: 'Fixed columns and horizontal scrolling',
       zh: '固定列与横向滚动',
@@ -106,6 +116,7 @@ const cases = [
   },
   {
     component: Case11,
+    span: 'full' as const,
     title: { en: 'Combined with Pagination', zh: '与 Pagination 组合' },
     description: {
       en: 'Table is only responsible for the semantic structure of the current page, and Pagination manages the page number; local arrays or server-side data use the same controlled combination.',
@@ -114,6 +125,7 @@ const cases = [
   },
   {
     component: Case12,
+    span: 'full' as const,
     title: { en: 'Primitive row expansion', zh: 'Primitive 行展开' },
     description: {
       en: 'Use a regular Button to control aria-expanded and render details with Row and a spanning Cell; no table-specific component is needed.',
@@ -122,6 +134,7 @@ const cases = [
   },
   {
     component: Case13,
+    span: 'full' as const,
     title: {
       en: 'Column alignment, super long omission and custom Cell',
       zh: '列对齐、超长省略与自定义 Cell',

@@ -8,6 +8,7 @@ import {
   componentNavigationName,
   componentSlug,
 } from './src/component-catalog';
+import { handbookSections } from './src/handbook-navigation';
 import { remarkUiDirectives } from './src/rspress/remark-ui-directives';
 
 const uiEntry = fileURLToPath(new URL('../../src/index.ts', import.meta.url));
@@ -63,6 +64,15 @@ const componentSidebar = (locale: 'zh' | 'en') => [
     })),
   })),
 ];
+
+const handbookSidebar = (locale: 'zh' | 'en') =>
+  handbookSections.map((section) => ({
+    text: section.labels[locale],
+    items: section.items.map((item) => ({
+      text: item.labels[locale],
+      link: `/${locale}/docs/${item.slug}`,
+    })),
+  }));
 
 const rewriteHtmlLanguage = async (directory: string, language: string) => {
   const entries = await readdir(directory, { withFileTypes: true }).catch(
@@ -127,7 +137,9 @@ export default defineConfig({
     lastUpdated: false,
     sidebar: {
       '/en/components/': componentSidebar('en'),
+      '/en/docs/': handbookSidebar('en'),
       '/zh/components/': componentSidebar('zh'),
+      '/zh/docs/': handbookSidebar('zh'),
     },
     socialLinks: [
       {

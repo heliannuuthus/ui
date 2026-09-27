@@ -1,0 +1,74 @@
+---
+title: 数据表格与普通表格
+description: 根据数据模型、交互复杂度和渲染控制需求选择 Table 或 Table.Primitive。
+lang: zh-Hans
+---
+
+# 数据表格与普通表格
+
+有排序、分页、选择或服务端查询时使用 `Table`；只需要展示静态行列，或必须直接控制 HTML 结构时使用 `Table.Primitive`。两者共享表格样式和原生语义。
+
+## 快速判断
+
+| 问题             | `Table` 数据表格              | `Table.Primitive` 普通表格          |
+| ---------------- | ----------------------------- | ----------------------------------- |
+| 输入             | `data` 与 `columns`           | 手写 Header、Body、Row、Cell        |
+| 排序、搜索、分页 | 内置受控与非受控能力          | 由业务自行实现                      |
+| 行选择、展开     | 内置模型                      | 手工组合                            |
+| 虚拟滚动         | 支持固定行高场景              | 可使用 `Table.VirtualBody` 低层组合 |
+| 自定义结构       | 通过列模型、render 和语义槽位 | 完全控制 DOM 结构                   |
+| 典型场景         | 后台列表、资源管理、数据检索  | 规格表、键值对、静态对比、特殊汇总  |
+
+## 使用数据表格
+
+当输入是稳定的数据数组，并需要排序、分页、选择或服务端查询时使用 `Table`。
+
+```tsx
+const columns: Table.Column<User>[] = [
+  { accessor: 'name', header: '姓名', sortable: true },
+  { accessor: 'role', header: '角色' },
+];
+
+<Table
+  columns={columns}
+  data={users}
+  pagination={{ pageSize: 20 }}
+  rowKey="id"
+  search={{ columnKeys: ['name', 'role'] }}
+/>;
+```
+
+客户端模式适合已经在浏览器中的完整数据集。数据量大、权限过滤严格或查询由后端完成时，把搜索、排序和分页设为 manual，并由业务层请求数据。不要先下载全部数据再伪装成服务端分页。
+
+## 使用普通表格
+
+当内容已经加工成行列，或结构无法自然表达为列模型时，直接组合 Primitive。
+
+```tsx
+<Table.Primitive>
+  <Table.Body>
+    <Table.Row>
+      <Table.Head scope="row">版本</Table.Head>
+      <Table.Cell>1.0.0</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Head scope="row">许可</Table.Head>
+      <Table.Cell>MIT</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table.Primitive>
+```
+
+Primitive 不会替你管理数据状态。它的价值是保留正确的 `<table>` 语义、统一样式、横向容器和公开扩展点。
+
+## 性能与可访问性
+
+- 先使用分页；只有确实需要连续浏览大量行时再启用虚拟滚动。
+- 每行使用稳定且唯一的 `rowKey`，不要在可排序数据中依赖数组索引。
+- 表头要能解释列含义，排序状态必须可被辅助技术感知。
+- 固定列和横向滚动需要在窄屏、键盘操作和 200% 缩放下验证。
+- 空、加载、错误是三种不同状态，不要全部渲染成一行“暂无数据”。
+
+## 继续阅读
+
+查看 [Table 组件](/zh/components/table) 获取客户端、服务端、虚拟滚动、固定列和 Primitive 示例。

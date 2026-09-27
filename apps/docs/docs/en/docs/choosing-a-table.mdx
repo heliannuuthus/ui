@@ -1,0 +1,74 @@
+---
+title: Choosing a table
+description: Choose Table or Table.Primitive according to data shape, interaction complexity, and rendering control.
+lang: en
+---
+
+# Choosing a table
+
+Use `Table` for sorting, pagination, selection, or server queries. Use `Table.Primitive` for static rows and columns or direct control of the HTML structure. Both share table styling and native semantics.
+
+## Quick decision
+
+| Question                 | `Table` data table                               | `Table.Primitive` plain table                                         |
+| ------------------------ | ------------------------------------------------ | --------------------------------------------------------------------- |
+| Input                    | `data` and `columns`                             | Authored Header, Body, Row, and Cell                                  |
+| Sort, search, pagination | Built-in controlled and uncontrolled models      | Product-owned                                                         |
+| Selection and expansion  | Built-in models                                  | Manually composed                                                     |
+| Virtualization           | Fixed-row-height scenarios                       | Low-level `Table.VirtualBody` composition                             |
+| Structural control       | Column renderers and semantic slots              | Full DOM control                                                      |
+| Typical use              | Admin lists, resource management, data retrieval | Specifications, key-value facts, static comparison, special summaries |
+
+## Use the data table
+
+Choose `Table` when the input is a stable data array and the experience needs sorting, pagination, selection, or server queries.
+
+```tsx
+const columns: Table.Column<User>[] = [
+  { accessor: 'name', header: 'Name', sortable: true },
+  { accessor: 'role', header: 'Role' },
+];
+
+<Table
+  columns={columns}
+  data={users}
+  pagination={{ pageSize: 20 }}
+  rowKey="id"
+  search={{ columnKeys: ['name', 'role'] }}
+/>;
+```
+
+Client mode fits a complete data set already in the browser. For large, permission-sensitive, or server-filtered data, use manual search, sorting, and pagination and fetch in the product layer. Do not download the full data set and present it as server pagination.
+
+## Use the plain table
+
+Choose Primitive when content has already been shaped into rows and cells or cannot be expressed naturally by a column model.
+
+```tsx
+<Table.Primitive>
+  <Table.Body>
+    <Table.Row>
+      <Table.Head scope="row">Version</Table.Head>
+      <Table.Cell>1.0.0</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Head scope="row">License</Table.Head>
+      <Table.Cell>MIT</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+</Table.Primitive>
+```
+
+Primitive does not manage data state. It preserves correct `<table>` semantics, shared styling, the horizontal container, and public extension points.
+
+## Performance and accessibility
+
+- Prefer pagination; add virtualization only when users truly need continuous access to many rows.
+- Use a stable unique `rowKey`, not an array index in sortable data.
+- Headers must explain their columns and sorting state must be exposed to assistive technology.
+- Test fixed columns and horizontal scrolling at narrow widths, with a keyboard, and at 200% zoom.
+- Empty, loading, and error are distinct states and should not all render as “No data.”
+
+## Continue reading
+
+See the [Table component](/en/components/table) for client, server, virtualization, fixed-column, and Primitive examples.

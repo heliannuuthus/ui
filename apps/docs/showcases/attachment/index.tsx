@@ -69,6 +69,7 @@ const cases = [
   },
   {
     component: Case08,
+    span: 'full' as const,
     title: { en: 'Attachment collection', zh: '附件集合' },
     description: {
       en: 'Attachment.Group renders a collection from items and provides scrolling and snapping for horizontal overflow.',
@@ -82,5 +83,9 @@ export default function AttachmentShowcase({
 }: {
   children?: ReactNode;
 }) {
-  return <ComponentShowcase cases={cases}>{children}</ComponentShowcase>;
+  return (
+    <ComponentShowcase cases={cases} columns={3}>
+      {children}
+    </ComponentShowcase>
+  );
 }

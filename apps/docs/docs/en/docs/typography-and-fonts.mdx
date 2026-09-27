@@ -1,0 +1,50 @@
+---
+title: Typography and fonts
+description: Define product font stacks, heading hierarchy, reading width, and the roles of text and code fonts.
+lang: en
+---
+
+# Typography and fonts
+
+Define three font roles in each product: sans serif for body text and controls, a heading face for titles, and monospace for code and technical values. Keep brand faces out of long-form copy and controls unless the product explicitly assigns them there.
+
+## Built-in defaults
+
+```css
+:root {
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    monospace;
+}
+```
+
+- `--font-sans` is for body copy, forms, and controls.
+- `--font-heading` is for headings and may share the body family while using size and weight for hierarchy.
+- `--font-mono` is for code, keyboard input, and technical values that benefit from character-level comparison.
+
+These values ship with `styles.css`. Apple platforms use the system interface face first, Windows uses Segoe UI, and Chinese glyphs fall through to PingFang, Hiragino Sans GB, or Microsoft YaHei.
+
+This documentation site loads a separate brand face as a site-level override. It is not shipped as the component default. Products can replace any of the three variables in application CSS.
+
+## Separate semantics from appearance
+
+Use the [Typography component](/en/components/typography) to preserve a valid HTML outline. A visually small section title should not skip from `h2` to `h4`.
+
+```tsx
+<Typography.Title level={2}>Account security</Typography.Title>
+<Typography.Text as="p" tone="muted">
+  Manage sign-in methods and recently used devices.
+</Typography.Text>
+```
+
+## Reading width
+
+Keep continuous prose near 60–80 characters per line. Form help and secondary copy should be shorter. Data and code may use more width, but should rely on scrolling, wrapping, or column rules instead of expanding every paragraph.
+
+## Font loading and accessibility
+
+Web fonts need a useful fallback and appropriate `font-display`. Avoid blocking control labels for branding, and test layout shift, button widths, and table columns after fonts load. Do not depend on ultra-light weights; muted text still needs sufficient contrast and must reflow at 200% zoom.

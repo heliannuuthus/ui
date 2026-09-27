@@ -81,49 +81,57 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Carousel',
       defaultValue: 'true',
       description:
-        'Whether to display the previous page and next page buttons.',
+        'Show or hide both navigation buttons, or configure them in one object.',
       name: 'controls',
-      type: 'boolean',
+      type: 'boolean | CarouselNavigationOptions',
     },
     {
-      component: 'Carousel',
+      component: 'Carousel.controls',
       defaultValue: null,
       description:
         'Configure the previous button appearance, accessible name, and native props.',
-      name: 'previousButtonProps',
+      name: 'previous',
       type: 'ButtonNativeProps',
     },
     {
-      component: 'Carousel',
+      component: 'Carousel.controls',
       defaultValue: null,
       description:
         'Configure the next button appearance, accessible name, and native props.',
-      name: 'nextButtonProps',
+      name: 'next',
       type: 'ButtonNativeProps',
     },
     {
       component: 'Carousel',
-      defaultValue: "'dots'",
+      defaultValue: 'undefined (dots)',
       description:
-        'Use default points, turn off paging, or customize the complete page turner through functions.',
+        'Show dots by default, set false to hide them, or pass options to customize pagination.',
       name: 'pagination',
-      type: "false | 'dots' | ((controls: CarouselControls) => ReactNode)",
+      type: 'false | CarouselPaginationOptions',
     },
     {
-      component: 'Carousel',
+      component: 'Carousel.pagination',
       defaultValue: "'after'",
       description:
         'Place pagination content before or after the carousel track.',
-      name: 'paginationPosition',
+      name: 'position',
       type: "'before' | 'after'",
     },
     {
-      component: 'Carousel',
+      component: 'Carousel.pagination',
       defaultValue: null,
       description:
         'Customize a pagination dot from its index and selected state.',
       name: 'renderDot',
       type: '(props: CarouselDotRenderProps) => ReactNode',
+    },
+    {
+      component: 'Carousel.pagination',
+      defaultValue: null,
+      description:
+        'Render the complete page turner from page state and controls; cannot be used with renderDot.',
+      name: 'render',
+      type: '(controls: CarouselControls) => ReactNode',
     },
     {
       component: 'Carousel',

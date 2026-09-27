@@ -13,24 +13,24 @@ const cases = [
     component: Case01,
     title: { en: 'Basic usage', zh: '基础用法' },
     description: {
-      en: 'Carousel always uses a depth of field transition; paginationPosition controls the default point in front or behind content.',
-      zh: 'Carousel 始终使用景深过渡；paginationPosition 控制默认点位位于内容前方或后方。',
+      en: 'The pagination.position option places dots before or after the carousel track.',
+      zh: 'pagination.position 可将分页点放在轮播轨道之前或之后。',
     },
   },
   {
     component: Case02,
     title: { en: 'Navigation buttons', zh: '导航按钮' },
     description: {
-      en: 'controls determines whether previous and next buttons are rendered; previousButtonProps and nextButtonProps extend each button independently.',
-      zh: 'controls 决定是否渲染上一项和下一项按钮；按钮属性通过 previousButtonProps 与 nextButtonProps 独立扩展。',
+      en: 'Set controls to false to hide both buttons, or pass previous and next button props in one object.',
+      zh: 'controls 设为 false 可隐藏两侧按钮；传入对象可分别配置上一项和下一项按钮。',
     },
   },
   {
     component: Case03,
     title: { en: 'Pagination dots', zh: '分页点' },
     description: {
-      en: 'pagination enables the default dots or hides pagination, while renderDot replaces only the content of each dot.',
-      zh: 'pagination 控制默认点位或隐藏分页，renderDot 只改写单个点位的内容。',
+      en: 'Pagination shows dots by default; set it to false to hide them, or pass renderDot to customize each dot.',
+      zh: '默认显示分页点；pagination 设为 false 可隐藏，传入 renderDot 可自定义点位内容。',
     },
   },
   {
@@ -45,8 +45,8 @@ const cases = [
     component: Case05,
     title: { en: 'Custom page turner', zh: '自定义翻页器' },
     description: {
-      en: 'Pagination provides page number status and control methods when receiving functions, and can directly combine a complete page turner that matches the current page.',
-      zh: 'pagination 接收函数时提供页码状态与控制方法，可直接组合符合当前页面的完整翻页器。',
+      en: 'pagination.render receives the page state and navigation methods for a custom page turner.',
+      zh: 'pagination.render 提供页码状态和导航方法，可据此构建完整翻页器。',
     },
   },
   {
