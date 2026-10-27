@@ -7,15 +7,29 @@ import {
   Tag,
   Typography,
 } from '@heliannuuthus/ui';
+import { Link } from '@rspress/core/theme-original';
 import {
+  AppWindow,
   ArrowRight,
-  Braces,
-  CheckCircle2,
-  Component,
+  BellRing,
+  Blocks,
+  Compass,
+  Focus,
+  GalleryHorizontalEnd,
   Layers3,
-  ShieldCheck,
+  LayoutGrid,
+  MousePointerClick,
+  Sprout,
+  SquareMenu,
+  Table2,
+  TextCursorInput,
+  type LucideIcon,
 } from 'lucide-react';
-import { componentCatalog } from '../component-catalog';
+import {
+  componentCatalog,
+  componentGroups,
+  localizedComponentName,
+} from '../component-catalog';
 import { resources } from '../i18n/resources';
 import { InternalButtonLink } from '../../theme/internal-link';
 import { localPath, useDocsPageLocale } from './page-locale';
@@ -74,7 +88,20 @@ const pageCopy = {
   },
 } as const;
 
-const principleIcons = [CheckCircle2, Layers3, Braces, ShieldCheck] as const;
+const principleIcons = [Focus, Layers3, Blocks, Sprout] as const;
+
+const groupIcons: Record<(typeof componentGroups)[number]['key'], LucideIcon> =
+  {
+    general: MousePointerClick,
+    layout: LayoutGrid,
+    navigation: Compass,
+    forms: TextCursorInput,
+    actions: SquareMenu,
+    content: GalleryHorizontalEnd,
+    dataDisplay: Table2,
+    overlays: AppWindow,
+    feedback: BellRing,
+  };
 
 export const HomePage = () => {
   const locale = useDocsPageLocale();
@@ -177,14 +204,6 @@ export const HomePage = () => {
                 <Checkbox defaultChecked>{copy.option}</Checkbox>
               </Stack>
             </Card>
-            <div
-              className="home-preview-orbit home-preview-orbit--one"
-              aria-hidden="true"
-            />
-            <div
-              className="home-preview-orbit home-preview-orbit--two"
-              aria-hidden="true"
-            />
           </div>
         </div>
       </section>
@@ -230,8 +249,10 @@ export const HomePage = () => {
                 key={title}
                 variant="outline"
               >
-                <div className="home-principle-number">0{index + 1}</div>
-                <Icon aria-hidden="true" />
+                <div className="home-principle-head">
+                  <Icon aria-hidden="true" />
+                  <span className="home-principle-number">0{index + 1}</span>
+                </div>
                 <Typography.Title level={3}>{title}</Typography.Title>
                 <Typography.Text as="p" tone="muted">
                   {description}
@@ -246,14 +267,16 @@ export const HomePage = () => {
         className="docs-page-section home-catalog"
         aria-labelledby="catalog-title"
       >
-        <div className="home-catalog-copy">
-          <PageEyebrow>{copy.catalogEyebrow}</PageEyebrow>
-          <Typography.Title id="catalog-title" level={2}>
-            {copy.catalogTitle}
-          </Typography.Title>
-          <Typography.Text as="p" size="lg" tone="muted">
-            {copy.catalogDescription}
-          </Typography.Text>
+        <div className="docs-section-heading home-catalog-heading">
+          <div>
+            <PageEyebrow>{copy.catalogEyebrow}</PageEyebrow>
+            <Typography.Title id="catalog-title" level={2}>
+              {copy.catalogTitle}
+            </Typography.Title>
+            <Typography.Text as="p" size="lg" tone="muted">
+              {copy.catalogDescription}
+            </Typography.Text>
+          </div>
           <InternalButtonLink
             href={localPath(locale, '/components')}
             variant="link"
@@ -262,35 +285,50 @@ export const HomePage = () => {
             <ArrowRight aria-hidden="true" data-icon="inline-end" />
           </InternalButtonLink>
         </div>
-        <div className="home-catalog-map" aria-hidden="true">
-          <div>
-            <Component />
-            <span>Button</span>
-          </div>
-          <div>
-            <Layers3 />
-            <span>Layout</span>
-          </div>
-          <div>
-            <Braces />
-            <span>Form</span>
-          </div>
-          <div>
-            <ShieldCheck />
-            <span>Dialog</span>
-          </div>
-          <span className="catalog-map-line catalog-map-line--one" />
-          <span className="catalog-map-line catalog-map-line--two" />
-        </div>
+        <ul className="home-catalog-grid">
+          {componentGroups.map((group) => {
+            const Icon = groupIcons[group.key];
+            return (
+              <li key={group.key}>
+                <Link
+                  className="home-catalog-link"
+                  href={localPath(locale, `/components#catalog-${group.key}`)}
+                >
+                  <Card className="home-catalog-card" variant="outline">
+                    <div className="home-catalog-card-head">
+                      <Icon aria-hidden="true" />
+                      <Tag>
+                        {common.components.count.replace(
+                          '{{count}}',
+                          String(group.items.length)
+                        )}
+                      </Tag>
+                    </div>
+                    <Typography.Title level={3}>
+                      {common.groups[group.key]}
+                    </Typography.Title>
+                    <Typography.Text as="p" size="sm" tone="muted">
+                      {group.items
+                        .map((name) => localizedComponentName(name, locale))
+                        .join(locale === 'zh' ? '、' : ', ')}
+                    </Typography.Text>
+                  </Card>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </section>
 
       <section className="home-closing" aria-labelledby="closing-title">
-        <Typography.Title id="closing-title" level={2}>
-          {copy.closingTitle}
-        </Typography.Title>
-        <Typography.Text as="p" size="lg" tone="muted">
-          {copy.closingDescription}
-        </Typography.Text>
+        <div className="home-closing-copy">
+          <Typography.Title id="closing-title" level={2}>
+            {copy.closingTitle}
+          </Typography.Title>
+          <Typography.Text as="p" size="lg" tone="muted">
+            {copy.closingDescription}
+          </Typography.Text>
+        </div>
         <InternalButtonLink
           href={localPath(locale, '/docs/getting-started')}
           size="lg"

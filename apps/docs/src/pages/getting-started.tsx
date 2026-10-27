@@ -1,5 +1,4 @@
 import { Tag, Typography } from '@heliannuuthus/ui';
-import { Code2, Layers3, PackagePlus, SlidersHorizontal } from 'lucide-react';
 import { resources } from '../i18n/resources';
 import { useDocsPageLocale } from './page-locale';
 import { CodePanel, InstallTabs } from './shared';
@@ -46,22 +45,10 @@ export function Welcome() {
   );
 }`;
   const steps = [
-    [
-      '01',
-      'installation',
-      guide.installation,
-      guide.installationDescription,
-      PackagePlus,
-    ],
-    ['02', 'styles', guide.importStyles, guide.importStylesDescription, Code2],
-    [
-      '03',
-      'provider',
-      guide.configuration,
-      guide.configurationDescription,
-      SlidersHorizontal,
-    ],
-    ['04', 'usage', guide.usage, guide.usageDescription, Layers3],
+    ['installation', guide.installation, guide.installationDescription],
+    ['styles', guide.importStyles, guide.importStylesDescription],
+    ['provider', guide.configuration, guide.configurationDescription],
+    ['usage', guide.usage, guide.usageDescription],
   ] as const;
 
   return (
@@ -71,87 +58,86 @@ export function Welcome() {
       </Typography.Title>
 
       <div className="guide-steps">
-        {steps.map(([number, id, title, description, Icon]) => (
+        {steps.map(([id, title, description], index) => (
           <section className="guide-step" id={id} key={id}>
-            <div className="guide-step-marker">
-              <span>{number}</span>
-              <Icon aria-hidden="true" />
-            </div>
-            <div className="guide-step-content">
+            <div className="guide-step-heading">
+              <span className="guide-step-index" aria-hidden="true">
+                {index + 1}
+              </span>
               <Typography.Title level={2}>{title}</Typography.Title>
-              <Typography.Text as="p" size="lg" tone="muted">
-                {description}
-              </Typography.Text>
-              {id === 'installation' ? (
-                <InstallTabs
+            </div>
+            <Typography.Text as="p" size="lg" tone="muted">
+              {description}
+            </Typography.Text>
+            {id === 'installation' ? (
+              <InstallTabs
+                codeToolsLabel={common.demo.codeTools}
+                copiedLabel={common.actions.copied}
+                copyLabel={common.actions.copy}
+                unwrapLabel={common.demo.unwrapCode}
+                wrapLabel={common.demo.wrapCode}
+              />
+            ) : null}
+            {id === 'styles' ? (
+              <>
+                <CodePanel
+                  code={styleCode}
                   codeToolsLabel={common.demo.codeTools}
                   copiedLabel={common.actions.copied}
                   copyLabel={common.actions.copy}
+                  title="main.tsx"
                   unwrapLabel={common.demo.unwrapCode}
                   wrapLabel={common.demo.wrapCode}
                 />
-              ) : null}
-              {id === 'styles' ? (
-                <>
-                  <CodePanel
-                    code={styleCode}
-                    codeToolsLabel={common.demo.codeTools}
-                    copiedLabel={common.actions.copied}
-                    copyLabel={common.actions.copy}
-                    title="main.tsx"
-                    unwrapLabel={common.demo.unwrapCode}
-                    wrapLabel={common.demo.wrapCode}
-                  />
-                  <Typography.Text as="p" className="guide-note" size="sm">
-                    {copy.styleNote}
-                  </Typography.Text>
-                </>
-              ) : null}
-              {id === 'provider' ? (
-                <>
-                  <CodePanel
-                    code={providerCode}
-                    codeToolsLabel={common.demo.codeTools}
-                    copiedLabel={common.actions.copied}
-                    copyLabel={common.actions.copy}
-                    title="app.tsx"
-                    unwrapLabel={common.demo.unwrapCode}
-                    wrapLabel={common.demo.wrapCode}
-                  />
-                  <div className="guide-contract-grid">
-                    {[
-                      'appearance',
-                      'direction',
-                      'theme.colors',
-                      'theme.darkColors',
-                      'theme.radius',
-                      'components',
-                    ].map((property) => (
-                      <Tag key={property}>{property}</Tag>
-                    ))}
-                  </div>
-                  <Typography.Text as="p" className="guide-note" size="sm">
-                    {copy.providerNote}
-                  </Typography.Text>
-                </>
-              ) : null}
-              {id === 'usage' ? (
-                <>
-                  <CodePanel
-                    code={usageCode}
-                    codeToolsLabel={common.demo.codeTools}
-                    copiedLabel={common.actions.copied}
-                    copyLabel={common.actions.copy}
-                    title="welcome.tsx"
-                    unwrapLabel={common.demo.unwrapCode}
-                    wrapLabel={common.demo.wrapCode}
-                  />
-                  <Typography.Text as="p" className="guide-note" size="sm">
-                    {copy.usageNote}
-                  </Typography.Text>
-                </>
-              ) : null}
-            </div>
+                <Typography.Text as="p" className="guide-note" size="sm">
+                  {copy.styleNote}
+                </Typography.Text>
+              </>
+            ) : null}
+            {id === 'provider' ? (
+              <>
+                <CodePanel
+                  code={providerCode}
+                  codeToolsLabel={common.demo.codeTools}
+                  copiedLabel={common.actions.copied}
+                  copyLabel={common.actions.copy}
+                  title="app.tsx"
+                  unwrapLabel={common.demo.unwrapCode}
+                  wrapLabel={common.demo.wrapCode}
+                />
+                <div className="guide-contract-grid">
+                  {[
+                    'appearance',
+                    'direction',
+                    'theme.colors',
+                    'theme.darkColors',
+                    'theme.radius',
+                    'components',
+                  ].map((property) => (
+                    <Tag key={property}>{property}</Tag>
+                  ))}
+                </div>
+                <Typography.Text as="p" className="guide-note" size="sm">
+                  {copy.providerNote}
+                </Typography.Text>
+              </>
+            ) : null}
+            {id === 'usage' ? (
+              <>
+                <CodePanel
+                  code={usageCode}
+                  codeToolsLabel={common.demo.codeTools}
+                  copiedLabel={common.actions.copied}
+                  copyLabel={common.actions.copy}
+                  title="welcome.tsx"
+                  unwrapLabel={common.demo.unwrapCode}
+                  wrapLabel={common.demo.wrapCode}
+                />
+                <Typography.Text as="p" className="guide-note" size="sm">
+                  {copy.usageNote}
+                </Typography.Text>
+              </>
+            ) : null}
           </section>
         ))}
       </div>
