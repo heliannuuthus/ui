@@ -49,7 +49,7 @@ type CarouselPaginationOptions = {
 
 type CarouselProps<Item = React.ReactNode> = Omit<
   React.ComponentProps<'div'>,
-  'children'
+  'children' | 'ref'
 > & {
   autoplay?: CarouselAutoplay;
   classNames?: CarouselClassNames;
@@ -58,9 +58,11 @@ type CarouselProps<Item = React.ReactNode> = Omit<
   loop?: boolean;
   pauseOnHover?: boolean;
   pagination?: false | CarouselPaginationOptions;
-  renderItem?: (item: Item, index: number) => React.ReactNode;
+  ref?: React.Ref<CarouselRef>;
   styles?: CarouselStyles;
-};
+} & ([Item] extends [React.ReactNode]
+    ? { renderItem?: (item: Item, index: number) => React.ReactNode }
+    : { renderItem: (item: Item, index: number) => React.ReactNode });
 
 type CarouselRef = {
   pause: () => void;
@@ -130,25 +132,24 @@ const useCarousel = () => {
   return useCarouselContext().controls;
 };
 
-const CarouselRender = (
-  {
-    autoplay = false,
-    classNames,
-    controls = true,
-    items,
-    loop = false,
-    pauseOnHover = true,
-    pagination,
-    renderItem,
-    styles,
-    'aria-label': ariaLabel = 'Carousel',
-    className,
-    onMouseEnter,
-    onMouseLeave,
-    ...props
-  }: CarouselProps,
-  ref: React.ForwardedRef<CarouselRef>
-) => {
+const Carousel = <Item = React.ReactNode,>({
+  autoplay = false,
+  classNames,
+  controls = true,
+  items,
+  loop = false,
+  pauseOnHover = true,
+  pagination,
+  renderItem,
+  ref,
+  styles,
+  'aria-label': ariaLabel = 'Carousel',
+  className,
+  onKeyDown,
+  onMouseEnter,
+  onMouseLeave,
+  ...props
+}: CarouselProps<Item>) => {
   const [carouselRef, api] = useEmblaCarousel({
     align: 'start',
     axis: 'x',
@@ -178,7 +179,11 @@ const CarouselRender = (
     reduceMotion ||
     isManuallyPaused ||
     (pauseOnHover && isHovered);
-  const isPlaying = autoplayEnabled && !isAutoplayPaused;
+  const isPlaying =
+    autoplayEnabled &&
+    !isAutoplayPaused &&
+    scrollSnaps.length > 1 &&
+    (loop || canScrollNext);
   const navigationOptions = typeof controls === 'object' ? controls : undefined;
   const paginationOptions = pagination === false ? null : (pagination ?? {});
   const paginationPlacement = paginationOptions?.position ?? 'after';
@@ -291,6 +296,21 @@ const CarouselRender = (
 
   const handleKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
+      onKeyDown?.(event);
+      const target = event.target;
+      if (
+        event.defaultPrevented ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.shiftKey ||
+        (target instanceof HTMLElement &&
+          (target.isContentEditable ||
+            target.closest('input, textarea, select')))
+      ) {
+        return;
+      }
+
       if (event.key === 'ArrowLeft') {
         event.preventDefault();
         scrollPrev();
@@ -299,7 +319,7 @@ const CarouselRender = (
         scrollNext();
       }
     },
-    [scrollPrev, scrollNext]
+    [onKeyDown, scrollPrev, scrollNext]
   );
 
   React.useEffect(() => {
@@ -352,7 +372,7 @@ const CarouselRender = (
         controls: {
           canScrollNext,
           canScrollPrev,
-          currentPage: selectedIndex + 1,
+          currentPage: scrollSnaps.length > 0 ? selectedIndex + 1 : 0,
           isPlaying,
           pageCount: scrollSnaps.length,
           pause,
@@ -367,7 +387,7 @@ const CarouselRender = (
     >
       <div
         aria-label={ariaLabel}
-        onKeyDownCapture={handleKeyDown}
+        onKeyDown={handleKeyDown}
         onMouseEnter={(event) => {
           onMouseEnter?.(event);
           if (pauseOnHover) setIsHovered(true);
@@ -400,7 +420,7 @@ const CarouselRender = (
               key={index}
               style={styles?.item}
             >
-              {renderItem ? renderItem(item, index) : item}
+              {renderItem ? renderItem(item, index) : (item as React.ReactNode)}
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -415,8 +435,6 @@ const CarouselRender = (
     </CarouselContext.Provider>
   );
 };
-
-const Carousel = React.forwardRef<CarouselRef, CarouselProps>(CarouselRender);
 
 const CarouselContent = ({
   className,

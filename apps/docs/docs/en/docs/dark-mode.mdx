@@ -52,4 +52,4 @@ Only put values that differ from the light theme in `darkColors`. Unspecified va
 
 ## Portals and nested themes
 
-Dialogs, menus, and tooltips should render where they can inherit theme context. Nested providers can create a deliberate local theme, but should not become a shortcut for scattered color overrides that split portal and non-portal surfaces.
+Provider applies appearance to its own `div`. Dialogs and menus portaled to `document.body` need document-level theme variables and a `dark` class on `document.documentElement` that follows the same resolved appearance. For a local theme, use an overlay's documented mount-container prop where available, such as `Tooltip.container`, so its DOM can inherit that Provider's variables. React context alone does not carry CSS variables across a portal.

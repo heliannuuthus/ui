@@ -10,8 +10,8 @@ Define three font roles in each product: sans serif for body text and controls, 
 
 ## Built-in defaults
 
-```css
-:root {
+```css title="Library font definitions"
+@theme inline {
   --font-sans:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
     'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
@@ -26,9 +26,9 @@ Define three font roles in each product: sans serif for body text and controls, 
 - `--font-heading` is for headings and may share the body family while using size and weight for hierarchy.
 - `--font-mono` is for code, keyboard input, and technical values that benefit from character-level comparison.
 
-These values ship with `styles.css`. Apple platforms use the system interface face first, Windows uses Segoe UI, and Chinese glyphs fall through to PingFang, Hiragino Sans GB, or Microsoft YaHei.
+The library compiles these defaults into `styles.css`. Apple platforms use the system interface face first, Windows uses Segoe UI, and Chinese glyphs fall through to PingFang, Hiragino Sans GB, or Microsoft YaHei.
 
-This documentation site loads a separate brand face as a site-level override. It is not shipped as the component default. Products can replace any of the three variables in application CSS.
+This documentation site loads a separate brand face as a site-level override. It is not shipped as the component default. For product fonts, set `font-family` in application CSS and use documented `className` or `style` props on components that declare their own font family. The library uses Tailwind's `@theme inline`, so changing the three `--font-*` variables alone does not replace every compiled font declaration. Applications do not need Tailwind to use the stylesheet.
 
 ## Separate semantics from appearance
 

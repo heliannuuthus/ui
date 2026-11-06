@@ -98,7 +98,7 @@ A nested Provider inherits its parent configuration and replaces only the values
 </Provider>
 ```
 
-Provider themes rely on DOM inheritance. An overlay mounted under `document.body` does not automatically inherit variables from a local Provider; use the root theme for that overlay or a documented mount-container option.
+Provider themes rely on DOM inheritance. This also applies to a Provider mounted at the application root: its `div` does not contain overlays portaled to `document.body`. For those overlays, define the shared theme variables on `:root` and synchronize the `dark` class on `document.documentElement` with the resolved appearance. Where available, a mount-container prop such as `Tooltip.container` can instead keep an overlay inside the themed Provider.
 
 ## Text direction
 

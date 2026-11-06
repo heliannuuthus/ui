@@ -102,7 +102,8 @@ const zh = {
     },
     home: {
       componentCount: '{{count}} 个可组合组件',
-      title: 'React 产品界面的公共组件',
+      // \u200b marks the only CJK line break the home title may use.
+      title: 'React 产品界面的\u200b公共组件',
       description:
         '统一维护基础组件、交互行为和 TypeScript API，业务项目直接安装使用。',
       previewTitle: '组件组合预览',

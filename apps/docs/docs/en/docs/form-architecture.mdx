@@ -33,7 +33,7 @@ const form = Form.useForm<Values>({
     name="name"
     label="Name"
     description="Team members will see this name"
-    required
+    rules={{ required: 'Enter a name' }}
   >
     <Input />
   </Form.Field>
@@ -48,16 +48,18 @@ const form = Form.useForm<Values>({
 
 `Form.Field` injects value, change, blur, ID, name, and accessibility relationships into its direct child. Built-in controls adapt beside their own implementation, so product code does not render a `Controller` or manually map `checked` into field state.
 
+`rules.required` validates the value and supplies the required marker automatically. The `required` prop only controls the marker and accessibility state; it does not add a validation rule. Form disables native browser validation by default.
+
 ## Watching values and side effects
 
 Use `Form.useWatch` when a value changes rendered UI. Use `onValuesChange` for analytics or logging that should not drive rendering. Use `setValue`, `reset`, `setError`, `trigger`, and `getValues` for imperative workflows.
 
 ```tsx
-const plan = Form.useWatch('plan', form);
+const enabled = Form.useWatch('enabled', form);
 
-<Form.Field name="seats" label="Seats" disabled={plan !== 'team'}>
-  <Input.Number min={2} />
-</Form.Field>;
+<Button type="submit" disabled={!enabled}>
+  Save
+</Button>;
 ```
 
 ## Validation and errors

@@ -98,7 +98,7 @@ root.render(
 </Provider>
 ```
 
-Provider 通过 DOM 继承主题变量。挂载到 `document.body` 的浮层不会自动继承局部 Provider 的变量；这类浮层应使用根级主题，或使用组件公开的挂载容器能力。
+Provider 通过 DOM 继承主题变量。即使 Provider 挂载在应用根部，它的 `div` 也不包含 Portal 到 `document.body` 的浮层。对于这类浮层，应把共享主题变量定义在 `:root`，并根据实际外观同步 `document.documentElement` 上的 `dark` 类。组件提供挂载容器属性时，也可以通过 `Tooltip.container` 等能力，把浮层挂载到有主题的 Provider 内。
 
 ## 文字方向
 

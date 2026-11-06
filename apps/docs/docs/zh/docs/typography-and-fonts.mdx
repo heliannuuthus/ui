@@ -10,8 +10,8 @@ lang: zh-Hans
 
 ## 内置默认字体
 
-```css
-:root {
+```css title="组件库字体定义"
+@theme inline {
   --font-sans:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
     'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
@@ -26,9 +26,9 @@ lang: zh-Hans
 - `--font-heading` 用于标题，可与正文相同，仅通过字重和字号建立层级。
 - `--font-mono` 用于代码、键盘输入和需要逐字符比较的技术信息。
 
-这是组件库随 `styles.css` 提供的默认值。Apple 平台优先使用系统界面字体，Windows 使用 Segoe UI；中文字符继续由苹方、冬青黑体或微软雅黑接管。
+组件库把这些默认值编译进 `styles.css`。Apple 平台优先使用系统界面字体，Windows 使用 Segoe UI；中文字符继续由苹方、冬青黑体或微软雅黑接管。
 
-当前文档站另外加载了品牌字体，这只是站点级覆盖，不会随组件库交付给业务项目。产品需要自己的字体时，可以在应用样式中覆盖这三个变量。
+当前文档站另外加载了品牌字体，这只是站点级覆盖，不会随组件库交付给业务项目。产品需要自己的字体时，应在应用 CSS 中设置 `font-family`；组件显式声明字体时，使用公开的 `className` 或 `style` 覆盖。组件库使用 Tailwind 的 `@theme inline`，因此只修改三个 `--font-*` 变量不能替换全部编译后的字体声明。业务项目使用样式文件不需要安装 Tailwind。
 
 ## 语义和视觉分开
 
