@@ -33,7 +33,7 @@ const form = Form.useForm<Values>({
     name="name"
     label="名称"
     description="团队成员会看到这个名称"
-    required
+    rules={{ required: '请输入名称' }}
   >
     <Input />
   </Form.Field>
@@ -48,16 +48,18 @@ const form = Form.useForm<Values>({
 
 `Form.Field` 会把值、变更、失焦、ID、名称和无障碍关系注入直接子控件。内置组件在自身实现旁完成适配，因此业务代码不需要渲染 `Controller`，也不需要手动把 `checked` 映射为字段值。
 
+`rules.required` 负责校验字段值，并自动显示必填标记。`required` 属性只控制标记和无障碍状态，不会添加校验规则。Form 默认关闭浏览器原生校验。
+
 ## 观察字段与副作用
 
 界面需要根据字段值重新渲染时使用 `Form.useWatch`。埋点、日志等不驱动视图的事件使用 `onValuesChange`。命令式流程使用实例上的 `setValue`、`reset`、`setError`、`trigger` 和 `getValues`。
 
 ```tsx
-const plan = Form.useWatch('plan', form);
+const enabled = Form.useWatch('enabled', form);
 
-<Form.Field name="seats" label="席位数" disabled={plan !== 'team'}>
-  <Input.Number min={2} />
-</Form.Field>;
+<Button type="submit" disabled={!enabled}>
+  保存
+</Button>;
 ```
 
 ## 校验与错误

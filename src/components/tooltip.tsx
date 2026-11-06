@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
 
 import { cn } from '../lib/utils';
+import { mergeIds } from './internal/form-control';
 import { getPopupArrowEdgeStyle } from './internal/popup-arrow';
 import { useComponentDefaults } from './provider';
 
@@ -105,25 +106,44 @@ const Tooltip = ({
   ...rootProps
 }: TooltipProps) => {
   const defaults = useComponentDefaults('Tooltip');
+  const popupId = React.useId();
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(
+    defaultOpen ?? false
+  );
+  const resolvedOpen = open ?? uncontrolledOpen;
   const arrow = arrowProp ?? defaults.arrow ?? true;
   const closeDelay = closeDelayProp ?? defaults.closeDelay ?? 100;
   const openDelay = openDelayProp ?? defaults.openDelay ?? 100;
   const placement = placementProp ?? defaults.placement ?? 'top';
   const resolvedPlacement = placementConfig[placement];
   const isContentEmpty = content == null || content === false || content === '';
+  const isDisabled = disabled || isContentEmpty;
+  const trigger = children as React.ReactElement<
+    Pick<React.HTMLAttributes<HTMLElement>, 'aria-describedby' | 'id'>
+  >;
+  const describedBy = mergeIds(
+    trigger.props['aria-describedby'],
+    resolvedOpen && !isDisabled ? popupId : undefined
+  );
+  const triggerNode = React.cloneElement(trigger, {
+    'aria-describedby': describedBy,
+  });
 
   return (
     <TooltipPrimitive.Root
-      defaultOpen={defaultOpen}
-      disabled={disabled || isContentEmpty}
-      onOpenChange={onOpenChange}
-      open={open}
+      disabled={isDisabled}
+      onOpenChange={(nextOpen) => {
+        if (open === undefined) setUncontrolledOpen(nextOpen);
+        onOpenChange?.(nextOpen);
+      }}
+      open={resolvedOpen}
     >
       <TooltipPrimitive.Trigger
         closeDelay={closeDelay}
         data-slot="tooltip-trigger"
         delay={openDelay}
-        render={children}
+        id={trigger.props.id}
+        render={triggerNode}
       />
       <TooltipPrimitive.Portal container={container}>
         <TooltipPrimitive.Positioner
@@ -144,6 +164,8 @@ const Tooltip = ({
               classNames?.content
             )}
             data-slot="tooltip-content"
+            id={popupId}
+            role="tooltip"
             style={styles?.content}
           >
             {content}

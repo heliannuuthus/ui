@@ -38,11 +38,11 @@ const createExample = (locale: 'en' | 'zh') => {
           aria-label={copy('外部控制的轮播')}
           className="display-carousel"
           controls={false}
-          items={releaseHighlights.map((highlight) => highlight.title)}
+          items={releaseHighlights}
           ref={carouselRef}
-          renderItem={(title) => (
+          renderItem={(highlight) => (
             <div className="rounded-3xl border p-8 text-center font-medium">
-              {title}
+              {highlight.title}
             </div>
           )}
         />

@@ -73,7 +73,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Carousel',
       defaultValue: null,
       description:
-        'Render carousel content from the current data item and index.',
+        'Render carousel content from the inferred data item and index; required when items are not React nodes.',
       name: 'renderItem',
       type: '(item: Item, index: number) => ReactNode',
     },
@@ -197,9 +197,14 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
+`pagination.render` receives `currentPage = 0` when no pages are available.
+`isPlaying` is false while paused, with fewer than two pages, or after reaching
+the last page without looping.
+
 ## Accessibility
 
 - Carousels, slides, front and back buttons, and page points all retain recognizable semantics and keyboard operations.
+- Left and Right Arrow navigate without modifier keys. Inputs, text areas, selects, and editable content keep their native key behavior; calling preventDefault in onKeyDown cancels carousel navigation.
 - After auto-play is turned on, dynamic content will not continue to trigger screen reading announcements; when the system requires reducing dynamic effects, auto-play and depth-of-field transitions will be stopped.
 
 ## Avoid

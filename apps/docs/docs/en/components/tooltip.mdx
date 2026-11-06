@@ -172,6 +172,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 ## Accessibility
 
 - Preserves underlying semantics, focus management, and keyboard interaction.
+- The popup uses `role="tooltip"` and describes its trigger while open, preserving existing `aria-describedby` references and the trigger's ID.
+- Custom trigger components must forward DOM props and refs so focus, pointer events, and the accessible description reach the trigger element.
 - Provide sensible names for triggers, icons, and states.
 
 ## Avoid

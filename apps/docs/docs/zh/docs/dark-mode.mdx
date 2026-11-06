@@ -52,4 +52,4 @@ lang: zh-Hans
 
 ## Portal 与嵌套主题
 
-弹窗、菜单和 Tooltip 应渲染在能够继承主题上下文的位置。嵌套 `Provider` 可以创建局部主题，但不要把它当成零散覆盖颜色的快捷方式，否则 Portal 与非 Portal 内容容易出现视觉断层。
+Provider 把外观状态写在自己的 `div` 上。Portal 到 `document.body` 的弹窗和菜单需要文档级主题变量，并在 `document.documentElement` 上同步相同实际外观的 `dark` 类。局部主题应在浮层支持时使用公开挂载容器属性，例如 `Tooltip.container`，让其 DOM 能继承对应 Provider 的变量。React 上下文本身不会把 CSS 变量传过 Portal。

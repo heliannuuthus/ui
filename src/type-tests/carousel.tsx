@@ -1,6 +1,9 @@
-import { Carousel, type CarouselPaginationOptions } from '..';
+import { createRef } from 'react';
+import { Carousel, type CarouselPaginationOptions, type CarouselRef } from '..';
 
 const badPagination = { render: () => null, renderDot: () => null };
+const carouselRef = createRef<CarouselRef>();
+const elementRef = createRef<HTMLDivElement>();
 
 // @ts-expect-error Dot content and a custom pagination renderer are exclusive.
 export const rejectedPagination: CarouselPaginationOptions = badPagination;
@@ -24,6 +27,18 @@ export const CarouselTypeTest = () => (
       pagination={{ render: ({ currentPage }) => currentPage }}
     />
     <Carousel items={['One', 'Two']} pagination={false} />
+    <Carousel
+      items={[{ id: 1, title: 'One' }]}
+      ref={carouselRef}
+      renderItem={(item, index) =>
+        `${index}: ${item.id.toFixed()} ${item.title.toUpperCase()}`
+      }
+    />
+
+    {/* @ts-expect-error Object data requires a renderer, not raw object children. */}
+    <Carousel items={[{ id: 1 }]} />
+    {/* @ts-expect-error Carousel exposes navigation methods rather than a DOM ref. */}
+    <Carousel items={['One']} ref={elementRef} />
 
     {/* @ts-expect-error Previous button options now live inside controls. */}
     <Carousel items={['One', 'Two']} previousButtonProps={{}} />

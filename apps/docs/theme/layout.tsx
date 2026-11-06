@@ -103,8 +103,14 @@ export const Layout = () => {
   // This layout replaces DocContent, which owns hash scrolling in the default
   // theme. scrollIntoView honors each target's scroll-margin-top.
   useLayoutEffect(() => {
-    const id = decodeURIComponent(location.hash.slice(1));
-    if (id) document.getElementById(id)?.scrollIntoView();
+    let id = location.hash.slice(1);
+    if (!id) return;
+    try {
+      id = decodeURIComponent(id);
+    } catch {
+      // Keep malformed escapes literal so a copied URL cannot break the page.
+    }
+    document.getElementById(id)?.scrollIntoView();
   }, [location.hash, location.pathname]);
   const locale = routeLocale(location.pathname);
   const componentPage = location.pathname.startsWith(`/${locale}/components`);
