@@ -1,0 +1,47 @@
+---
+title: Imports and bundling
+description: Learn how the public root entry, static stylesheet, tree shaking, and build tools divide responsibility.
+lang: en
+---
+
+# Imports and bundling
+
+Import named components from the package root. The bundler tree-shakes actual references; do not use component subpaths.
+
+```tsx
+import { Button, Form, Input } from '@heliannuuthus/ui';
+```
+
+## On-demand JavaScript, one CSS import
+
+Two separate rules apply:
+
+- JavaScript is tree-shaken. Components that are not referenced are not automatically included in the product bundle.
+- CSS is a complete static asset. Import it once so components in asynchronous routes are styled immediately.
+
+```tsx title="main.tsx"
+import '@heliannuuthus/ui/styles.css';
+import './app.css';
+```
+
+The complete CSS avoids flashes during route transitions and keeps portal, focus, and cross-component token rules available. It is not a CSS runtime and does not require scanning package source.
+
+## Why subpaths are private
+
+Paths such as `@heliannuuthus/ui/button` describe internal build output, not the public contract. Bypassing the root entry weakens versioning, type, and package verification boundaries.
+
+```tsx
+// Recommended
+import { Button } from '@heliannuuthus/ui';
+
+// Do not depend on private paths
+// import { Button } from '@heliannuuthus/ui/button';
+```
+
+## Build-tool requirements
+
+Use an ESM-aware build tool with modern tree shaking. Vite, Rspack, Webpack, Rollup, Parcel, and modern Next.js setups work through their normal configuration. Do not add a component-specific Babel import plugin.
+
+## Investigating bundle size
+
+If output grows unexpectedly, check for namespace objects used at runtime, duplicate React or UI versions, repeated product polyfills, and production tree-shaking settings. Measure JavaScript chunks, shared CSS, and cache behavior separately because CSS size does not scale linearly with imported component count.

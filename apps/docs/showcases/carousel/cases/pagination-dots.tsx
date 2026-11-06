@@ -48,13 +48,19 @@ const createExample = (locale: 'en' | 'zh') => {
           </article>
         );
       })}
-      pagination={mode === 'hidden' ? false : 'dots'}
-      renderDot={
-        mode === 'custom'
-          ? ({ index, isSelected }) => (
-              <span aria-hidden>{isSelected ? `0${index + 1}` : '·'}</span>
-            )
-          : undefined
+      pagination={
+        mode === 'hidden'
+          ? false
+          : {
+              renderDot:
+                mode === 'custom'
+                  ? ({ index, isSelected }) => (
+                      <span aria-hidden>
+                        {isSelected ? `0${index + 1}` : '·'}
+                      </span>
+                    )
+                  : undefined,
+            }
       }
     />
   );

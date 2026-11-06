@@ -45,7 +45,14 @@ const createExample = (locale: 'en' | 'zh') => {
         aria-label={copy('版本亮点')}
         autoplay={autoplay}
         className={`display-carousel${autoplay !== false ? ' display-carousel-autoplay' : ''}`}
-        controls={controls}
+        controls={
+          controls
+            ? {
+                next: { className: 'display-carousel-next' },
+                previous: { className: 'display-carousel-previous' },
+              }
+            : false
+        }
         items={releaseHighlights.map((highlight, index) => {
           const Icon = highlight.icon;
           return (
@@ -62,10 +69,8 @@ const createExample = (locale: 'en' | 'zh') => {
           );
         })}
         loop={loop}
-        nextButtonProps={{ className: 'display-carousel-next' }}
         pauseOnHover={pauseOnHover}
-        paginationPosition={dotPosition === 'top' ? 'before' : 'after'}
-        previousButtonProps={{ className: 'display-carousel-previous' }}
+        pagination={{ position: dotPosition === 'top' ? 'before' : 'after' }}
       />
     );
   };

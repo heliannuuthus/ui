@@ -6,6 +6,7 @@ import Case02 from './cases/local-navigation-and-alignment';
 const cases = [
   {
     component: Case01,
+    span: 'full' as const,
     title: { en: 'Basic usage', zh: '基础用法' },
     description: {
       en: 'Put the product entrance, resource entrance and current page into the same site navigation, and the width of the elastic layer will change smoothly with the content.',
@@ -14,6 +15,7 @@ const cases = [
   },
   {
     component: Case02,
+    span: 'full' as const,
     title: { en: 'Local navigation and alignment', zh: '局部导航与对齐' },
     description: {
       en: 'Use a smaller content panel on the right side of the toolbar, and use align to control the alignment of the popup relative to the navigation.',

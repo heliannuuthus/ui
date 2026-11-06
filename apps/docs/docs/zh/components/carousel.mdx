@@ -71,51 +71,60 @@ import { ApiTable } from '@docs/rspress/api-table';
     {
       component: 'Carousel',
       defaultValue: null,
-      description: '根据当前数据项和索引渲染轮播内容。',
+      description:
+        '根据自动推断的数据项类型和索引渲染轮播内容；数据项不是 React 节点时必须提供。',
       name: 'renderItem',
       type: '(item: Item, index: number) => ReactNode',
     },
     {
       component: 'Carousel',
       defaultValue: 'true',
-      description: '是否显示上一页与下一页按钮。',
+      description: '显示或隐藏两侧按钮；传入对象时可分别配置按钮。',
       name: 'controls',
-      type: 'boolean',
+      type: 'boolean | CarouselNavigationOptions',
     },
     {
-      component: 'Carousel',
+      component: 'Carousel.controls',
       defaultValue: null,
       description: '配置上一页按钮的外观、可访问名称和原生属性。',
-      name: 'previousButtonProps',
+      name: 'previous',
       type: 'ButtonNativeProps',
     },
     {
-      component: 'Carousel',
+      component: 'Carousel.controls',
       defaultValue: null,
       description: '配置下一页按钮的外观、可访问名称和原生属性。',
-      name: 'nextButtonProps',
+      name: 'next',
       type: 'ButtonNativeProps',
     },
     {
       component: 'Carousel',
-      defaultValue: "'dots'",
-      description: '使用默认点位、关闭分页，或通过函数自定义完整翻页器。',
+      defaultValue: '未传入（显示点位）',
+      description: '默认显示分页点；设为 false 关闭，或传入配置自定义。',
       name: 'pagination',
-      type: "false | 'dots' | ((controls: CarouselControls) => ReactNode)",
+      type: 'false | CarouselPaginationOptions',
     },
     {
-      component: 'Carousel',
+      component: 'Carousel.pagination',
       defaultValue: "'after'",
       description: '将分页内容放在轮播轨道之前或之后。',
-      name: 'paginationPosition',
+      name: 'position',
       type: "'before' | 'after'",
     },
     {
-      component: 'Carousel',
+      component: 'Carousel.pagination',
       defaultValue: null,
       description: '根据点位索引和选中状态自定义分页点。',
       name: 'renderDot',
       type: '(props: CarouselDotRenderProps) => ReactNode',
+    },
+    {
+      component: 'Carousel.pagination',
+      defaultValue: null,
+      description:
+        '用页码状态和控制方法渲染完整翻页器；不能与 renderDot 同时使用。',
+      name: 'render',
+      type: '(controls: CarouselControls) => ReactNode',
     },
     {
       component: 'Carousel',
@@ -178,9 +187,13 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
+没有可用页面时，`pagination.render` 收到的 `currentPage` 为 `0`。
+暂停、少于两页或在未循环时到达末页，`isPlaying` 均为 `false`。
+
 ## 无障碍
 
 - 轮播区域、幻灯片、前后按钮和页码点均保留可识别的语义与键盘操作。
+- 未按修饰键时可用左右方向键切换；输入框、文本域、选择框和可编辑内容保留原生按键行为。在 onKeyDown 中调用 preventDefault 可取消轮播导航。
 - 开启自动播放后，动态内容不会持续触发读屏播报；系统要求减少动态效果时会停止自动播放和景深过渡。
 
 ## 避免事项

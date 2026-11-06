@@ -55,72 +55,79 @@ const createExample = (locale: 'en' | 'zh') => {
             </article>
           );
         })}
-        pagination={({
-          canScrollNext,
-          canScrollPrev,
-          currentPage,
-          pageCount,
-          scrollNext,
-          scrollPrev,
-          scrollTo,
-        }) => (
-          <div
-            aria-label={copy('轮播分页')}
-            className="display-carousel-pagination"
-            role="group"
-          >
-            <Button
-              aria-label={copy('上一页')}
-              className="display-carousel-pagination-button"
-              disabled={!canScrollPrev}
-              onClick={scrollPrev}
-              size="icon-sm"
-              variant="ghost"
+        pagination={{
+          render: ({
+            canScrollNext,
+            canScrollPrev,
+            currentPage,
+            pageCount,
+            scrollNext,
+            scrollPrev,
+            scrollTo,
+          }) => (
+            <div
+              aria-label={copy('轮播分页')}
+              className="display-carousel-pagination"
+              role="group"
             >
-              <ArrowLeft aria-hidden />
-            </Button>
-            <div className="display-carousel-pagination-status">
-              <span aria-live="polite" className="display-carousel-page-count">
-                <strong>{String(currentPage).padStart(2, '0')}</strong>
-                <span>/</span>
-                <small>{String(Math.max(pageCount, 1)).padStart(2, '0')}</small>
-              </span>
-              <div
-                aria-label={copy('选择轮播页面')}
-                className="display-carousel-page-track"
-                role="group"
+              <Button
+                aria-label={copy('上一页')}
+                className="display-carousel-pagination-button"
+                disabled={!canScrollPrev}
+                onClick={scrollPrev}
+                size="icon-sm"
+                variant="ghost"
               >
-                {Array.from({ length: pageCount }, (_, index) => {
-                  const selected = currentPage === index + 1;
+                <ArrowLeft aria-hidden />
+              </Button>
+              <div className="display-carousel-pagination-status">
+                <span
+                  aria-live="polite"
+                  className="display-carousel-page-count"
+                >
+                  <strong>{String(currentPage).padStart(2, '0')}</strong>
+                  <span>/</span>
+                  <small>
+                    {String(Math.max(pageCount, 1)).padStart(2, '0')}
+                  </small>
+                </span>
+                <div
+                  aria-label={copy('选择轮播页面')}
+                  className="display-carousel-page-track"
+                  role="group"
+                >
+                  {Array.from({ length: pageCount }, (_, index) => {
+                    const selected = currentPage === index + 1;
 
-                  return (
-                    <Button
-                      aria-current={selected ? 'page' : undefined}
-                      aria-label={copy(`前往第 ${index + 1} 页`)}
-                      data-selected={selected || undefined}
-                      key={index}
-                      onClick={() => scrollTo(index)}
-                      size="icon-xs"
-                      variant="ghost"
-                    >
-                      <span />
-                    </Button>
-                  );
-                })}
+                    return (
+                      <Button
+                        aria-current={selected ? 'page' : undefined}
+                        aria-label={copy(`前往第 ${index + 1} 页`)}
+                        data-selected={selected || undefined}
+                        key={index}
+                        onClick={() => scrollTo(index)}
+                        size="icon-xs"
+                        variant="ghost"
+                      >
+                        <span />
+                      </Button>
+                    );
+                  })}
+                </div>
               </div>
+              <Button
+                aria-label={copy('下一页')}
+                className="display-carousel-pagination-button"
+                disabled={!canScrollNext}
+                onClick={scrollNext}
+                size="icon-sm"
+                variant="ghost"
+              >
+                <ArrowRight aria-hidden />
+              </Button>
             </div>
-            <Button
-              aria-label={copy('下一页')}
-              className="display-carousel-pagination-button"
-              disabled={!canScrollNext}
-              onClick={scrollNext}
-              size="icon-sm"
-              variant="ghost"
-            >
-              <ArrowRight aria-hidden />
-            </Button>
-          </div>
-        )}
+          ),
+        }}
       />
     );
   };

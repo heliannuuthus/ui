@@ -98,9 +98,11 @@ const ShowcaseCaseCard = ({
 export const ComponentShowcase = ({
   cases,
   children,
+  columns = 2,
 }: {
   cases: ShowcaseCase[];
   children?: ReactNode;
+  columns?: 2 | 3;
 }) => {
   const { pathname } = useLocation();
   const locale: Locale = pathname.startsWith('/en/') ? 'en' : 'zh';
@@ -111,7 +113,7 @@ export const ComponentShowcase = ({
   return (
     <Masonry
       className="component-showcase-flow"
-      columns={3}
+      columns={columns}
       gap={16}
       items={cases.map(
         ({ component: Case, description, span = 'auto', title }, index) => ({

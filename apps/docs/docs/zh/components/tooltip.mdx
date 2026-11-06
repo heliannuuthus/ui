@@ -167,6 +167,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 ## 无障碍
 
 - 保留底层语义、焦点管理与键盘交互。
+- 弹层使用 `role="tooltip"`，打开时通过 `aria-describedby` 描述触发器，并保留已有描述引用和触发器 ID。
+- 自定义触发器组件必须透传 DOM 属性和 ref，确保焦点、指针事件及无障碍描述到达实际触发元素。
 - 为触发器、图标和状态提供可感知名称。
 
 ## 避免事项

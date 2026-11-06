@@ -3689,8 +3689,6 @@ const ActionCell = () => {
   'Avatar 支持圆形和圆角方形；小、中、大三档尺寸会同步调整文字与状态标记。':
     'Avatar supports circles and rounded squares; text and status marks will be adjusted simultaneously in three sizes: small, medium and large.',
   'Card 语义区域': 'Card semantic area',
-  'Carousel 始终使用景深过渡；paginationPosition 控制默认点位位于内容前方或后方。':
-    'Carousel always uses a depth of field transition; paginationPosition controls the default point in front or behind content.',
   'checkbox 表达可独立切换的设置，radio 表达一组互斥选项。':
     'checkbox expresses settings that can be toggled independently, and radio expresses a set of mutually exclusive options.',
   'checkbox 控制可独立开关的视图项，radio 管理互斥主题，并把状态同步到内容区。':
@@ -3791,8 +3789,6 @@ const ActionCell = () => {
     "import { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\n\n<DropdownMenu\n  size=\"lg\"\n  align=\"end\"\n  trigger={<Button>Export</Button>}\n  items={[\n    {\n      label: 'Export as',\n      children: [\n        { label: 'PDF document', onSelect: exportPdf },\n        { label: 'PNG picture', onSelect: exportPng },\n        { label: 'CSV table', onSelect: exportCsv },\n      ],\n    },\n    { type: 'separator' },\n    { label: 'Download original file', onSelect: downloadOriginal },\n  ]}\n/>",
   "import { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { FilePlus2, Trash2 } from 'lucide-react'\n\n<DropdownMenu\n  trigger={<Button variant=\"outline\">文件操作</Button>}\n  items={[\n    { type: 'label', label: '文件操作' },\n    { label: '新建文件', icon: <FilePlus2 />, shortcut: '⌘N' },\n    { label: '创建副本', disabled: true },\n    { type: 'separator' },\n    { label: '移至废纸篓', icon: <Trash2 />, destructive: true },\n  ]}\n/>":
     "import { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { FilePlus2, Trash2 } from 'lucide-react'\n\n<DropdownMenu\n  trigger={<Button variant=\"outline\">File operation</Button>}\n  items={[\n    { type: 'label', label: 'File operation' },\n    { label: 'New File', icon: <FilePlus2 />, shortcut: '⌘N' },\n    { label: 'Create a copy', disabled: true },\n    { type: 'separator' },\n    { label: 'Move to Trash', icon: <Trash2 />, destructive: true },\n  ]}\n/>",
-  'import { Button, Carousel } from \'@heliannuuthus/ui\'\n\n<Carousel\n  items={highlights}\n  renderItem={(item) => <HighlightCard item={item} />}\n  pagination={({ currentPage, pageCount, scrollNext, scrollPrev }) => (\n      <div role="group" aria-label="轮播分页">\n        <Button onClick={scrollPrev}>上一页</Button>\n        <span aria-live="polite">{currentPage} / {pageCount}</span>\n        <Button onClick={scrollNext}>下一页</Button>\n      </div>\n  )}\n/>':
-    'import { Button, Carousel } from \'@heliannuuthus/ui\'\n\n<Carousel\n  items={highlights}\n  renderItem={(item) => <HighlightCard item={item} />}\n  pagination={({ currentPage, pageCount, scrollNext, scrollPrev }) => (\n      <div role="group" aria-label="Carousel paging">\n        <Button onClick={scrollPrev}>Previous page</Button>\n        <span aria-live="polite">{currentPage} / {pageCount}</span>\n        <Button onClick={scrollNext}>Next page</Button>\n      </div>\n  )}\n/>',
   'import { Button, Dialog } from \'@heliannuuthus/ui\'\n\n<Dialog\n  trigger={<Button>安排发布</Button>}\n  title="安排生产环境发布"\n  description="选择版本和发布时间。"\n  cancelText="取消"\n  confirmText="保存"\n  onConfirm={scheduleRelease}\n>\n  <ReleaseFields />\n</Dialog>':
     'import { Button, Dialog } from \'@heliannuuthus/ui\'\n\n<Dialog\n  trigger={<Button>Schedule publishing</Button>}\n  title="Scheduling production environment release"\n  description="Select version and release date."\n  cancelText="Cancel"\n  confirmText="Save"\n  onConfirm={scheduleRelease}\n>\n  <ReleaseFields />\n</Dialog>',
   'import { Button, Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>从右侧打开</Button>}\n  title="今晚的发布窗口"\n  description="22:00–23:00"\n>\n  <ReleaseWindow />\n</Drawer>':
@@ -3970,8 +3966,6 @@ const ActionCell = () => {
   'Menubar 面向全局命令，不适合替代站点主导航或页面标签页。':
     'Menubar is for global commands and is not suitable to replace the main site navigation or page tabs.',
   'Menubar 组件文档': 'Menubar component documentation',
-  'pagination 接收函数时提供页码状态与控制方法，可直接组合符合当前页面的完整翻页器。':
-    'Pagination provides page number status and control methods when receiving functions, and can directly combine a complete page turner that matches the current page.',
   'PDF 文档': 'PDF document',
   'PNG 图片': 'PNG images',
   'Props 配置': 'Props configuration',
@@ -4491,13 +4485,9 @@ const ActionCell = () => {
   默认卸载: 'Unmount by default',
   保持挂载: 'Keep mounted',
   支持页内查找: 'Support browser find',
-  'controls 决定是否渲染上一项和下一项按钮；按钮属性通过 previousButtonProps 与 nextButtonProps 独立扩展。':
-    'controls determines whether previous and next buttons are rendered; previousButtonProps and nextButtonProps extend each button independently.',
   显示: 'Show',
   隐藏: 'Hide',
   分页点: 'Pagination dots',
-  'pagination 控制默认点位或隐藏分页，renderDot 只改写单个点位的内容。':
-    'pagination enables the default dots or hides pagination, while renderDot replaces only the content of each dot.',
   外部控制: 'External control',
   '通过 ref 调用 scrollPrev、scrollNext、scrollTo、play 与 pause，不暴露底层轮播实例。':
     'Use the ref to call scrollPrev, scrollNext, scrollTo, play, and pause without exposing the underlying carousel instance.',

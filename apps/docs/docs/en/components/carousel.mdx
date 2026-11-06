@@ -73,7 +73,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Carousel',
       defaultValue: null,
       description:
-        'Render carousel content from the current data item and index.',
+        'Render carousel content from the inferred data item and index; required when items are not React nodes.',
       name: 'renderItem',
       type: '(item: Item, index: number) => ReactNode',
     },
@@ -81,49 +81,57 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Carousel',
       defaultValue: 'true',
       description:
-        'Whether to display the previous page and next page buttons.',
+        'Show or hide both navigation buttons, or configure them in one object.',
       name: 'controls',
-      type: 'boolean',
+      type: 'boolean | CarouselNavigationOptions',
     },
     {
-      component: 'Carousel',
+      component: 'Carousel.controls',
       defaultValue: null,
       description:
         'Configure the previous button appearance, accessible name, and native props.',
-      name: 'previousButtonProps',
+      name: 'previous',
       type: 'ButtonNativeProps',
     },
     {
-      component: 'Carousel',
+      component: 'Carousel.controls',
       defaultValue: null,
       description:
         'Configure the next button appearance, accessible name, and native props.',
-      name: 'nextButtonProps',
+      name: 'next',
       type: 'ButtonNativeProps',
     },
     {
       component: 'Carousel',
-      defaultValue: "'dots'",
+      defaultValue: 'undefined (dots)',
       description:
-        'Use default points, turn off paging, or customize the complete page turner through functions.',
+        'Show dots by default, set false to hide them, or pass options to customize pagination.',
       name: 'pagination',
-      type: "false | 'dots' | ((controls: CarouselControls) => ReactNode)",
+      type: 'false | CarouselPaginationOptions',
     },
     {
-      component: 'Carousel',
+      component: 'Carousel.pagination',
       defaultValue: "'after'",
       description:
         'Place pagination content before or after the carousel track.',
-      name: 'paginationPosition',
+      name: 'position',
       type: "'before' | 'after'",
     },
     {
-      component: 'Carousel',
+      component: 'Carousel.pagination',
       defaultValue: null,
       description:
         'Customize a pagination dot from its index and selected state.',
       name: 'renderDot',
       type: '(props: CarouselDotRenderProps) => ReactNode',
+    },
+    {
+      component: 'Carousel.pagination',
+      defaultValue: null,
+      description:
+        'Render the complete page turner from page state and controls; cannot be used with renderDot.',
+      name: 'render',
+      type: '(controls: CarouselControls) => ReactNode',
     },
     {
       component: 'Carousel',
@@ -189,9 +197,14 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
+`pagination.render` receives `currentPage = 0` when no pages are available.
+`isPlaying` is false while paused, with fewer than two pages, or after reaching
+the last page without looping.
+
 ## Accessibility
 
 - Carousels, slides, front and back buttons, and page points all retain recognizable semantics and keyboard operations.
+- Left and Right Arrow navigate without modifier keys. Inputs, text areas, selects, and editable content keep their native key behavior; calling preventDefault in onKeyDown cancels carousel navigation.
 - After auto-play is turned on, dynamic content will not continue to trigger screen reading announcements; when the system requires reducing dynamic effects, auto-play and depth-of-field transitions will be stopped.
 
 ## Avoid

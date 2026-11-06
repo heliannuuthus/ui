@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip';
 
 import { cn } from '../lib/utils';
+import { mergeIds } from './internal/form-control';
 import { getPopupArrowEdgeStyle } from './internal/popup-arrow';
 import { useComponentDefaults } from './provider';
 
@@ -41,53 +42,20 @@ type TooltipOpenChange = (
   open: Parameters<NonNullable<TooltipPrimitiveRootProps['onOpenChange']>>[0]
 ) => void;
 
-type TooltipTriggerProps =
-  | {
-      children: React.ReactElement;
-      trigger?: never;
-    }
-  | {
-      children?: never;
-      /** @deprecated Pass the trigger element as children instead. */
-      trigger: React.ReactElement;
-    };
-
-type TooltipPositionProps =
-  | {
-      placement?: TooltipPlacement;
-      align?: never;
-      alignOffset?: never;
-      side?: never;
-      sideOffset?: never;
-    }
-  | {
-      placement?: never;
-      /** @deprecated Use placement. */
-      align?: TooltipAlign;
-      /** @deprecated Use placement. */
-      alignOffset?: number;
-      /** @deprecated Use placement. */
-      side?: TooltipSide;
-      /** @deprecated Use placement. */
-      sideOffset?: number;
-    };
-
 type TooltipProps = Omit<
   React.ComponentPropsWithRef<'div'>,
   'children' | 'content' | 'dangerouslySetInnerHTML'
 > &
-  Pick<TooltipPrimitiveRootProps, 'defaultOpen' | 'disabled' | 'open'> &
-  TooltipTriggerProps &
-  TooltipPositionProps & {
+  Pick<TooltipPrimitiveRootProps, 'defaultOpen' | 'disabled' | 'open'> & {
     arrow?: boolean;
+    children: React.ReactElement;
     classNames?: TooltipClassNames;
     closeDelay?: TooltipPrimitiveTriggerProps['closeDelay'];
     container?: TooltipPrimitivePortalProps['container'];
     content: React.ReactNode;
-    /** @deprecated Use openDelay. */
-    delay?: TooltipPrimitiveTriggerProps['delay'];
     onOpenChange?: TooltipOpenChange;
     openDelay?: TooltipPrimitiveTriggerProps['delay'];
+    placement?: TooltipPlacement;
     styles?: TooltipStyles;
   };
 
@@ -119,8 +87,6 @@ const placementConfig: Record<TooltipPlacement, TooltipPlacementConfig> = {
 };
 
 const Tooltip = ({
-  align: legacyAlign,
-  alignOffset: legacyAlignOffset,
   arrow: arrowProp,
   children,
   className,
@@ -128,7 +94,6 @@ const Tooltip = ({
   closeDelay: closeDelayProp,
   container,
   content,
-  delay,
   defaultOpen,
   disabled = false,
   onOpenChange,
@@ -136,46 +101,61 @@ const Tooltip = ({
   openDelay: openDelayProp,
   placement: placementProp,
   ref,
-  side: legacySide,
-  sideOffset: legacySideOffset,
   style,
   styles,
-  trigger,
   ...rootProps
 }: TooltipProps) => {
   const defaults = useComponentDefaults('Tooltip');
+  const popupId = React.useId();
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(
+    defaultOpen ?? false
+  );
+  const resolvedOpen = open ?? uncontrolledOpen;
   const arrow = arrowProp ?? defaults.arrow ?? true;
   const closeDelay = closeDelayProp ?? defaults.closeDelay ?? 100;
-  const openDelay = openDelayProp ?? delay ?? defaults.openDelay ?? 100;
+  const openDelay = openDelayProp ?? defaults.openDelay ?? 100;
   const placement = placementProp ?? defaults.placement ?? 'top';
   const resolvedPlacement = placementConfig[placement];
-  const resolvedTrigger = children ?? trigger;
   const isContentEmpty = content == null || content === false || content === '';
+  const isDisabled = disabled || isContentEmpty;
+  const trigger = children as React.ReactElement<
+    Pick<React.HTMLAttributes<HTMLElement>, 'aria-describedby' | 'id'>
+  >;
+  const describedBy = mergeIds(
+    trigger.props['aria-describedby'],
+    resolvedOpen && !isDisabled ? popupId : undefined
+  );
+  const triggerNode = React.cloneElement(trigger, {
+    'aria-describedby': describedBy,
+  });
 
   return (
     <TooltipPrimitive.Root
-      defaultOpen={defaultOpen}
-      disabled={disabled || isContentEmpty}
-      onOpenChange={onOpenChange}
-      open={open}
+      disabled={isDisabled}
+      onOpenChange={(nextOpen) => {
+        if (open === undefined) setUncontrolledOpen(nextOpen);
+        onOpenChange?.(nextOpen);
+      }}
+      open={resolvedOpen}
     >
       <TooltipPrimitive.Trigger
         closeDelay={closeDelay}
         data-slot="tooltip-trigger"
         delay={openDelay}
-        render={resolvedTrigger}
+        id={trigger.props.id}
+        render={triggerNode}
       />
       <TooltipPrimitive.Portal container={container}>
         <TooltipPrimitive.Positioner
           {...rootProps}
           ref={ref}
-          align={legacyAlign ?? resolvedPlacement.align}
-          alignOffset={legacyAlignOffset ?? 0}
+          align={resolvedPlacement.align}
+          alignOffset={0}
           className={cn('isolate z-50', className)}
           data-slot="tooltip"
           positionMethod={container == null ? undefined : 'fixed'}
-          side={legacySide ?? resolvedPlacement.side}
-          sideOffset={legacySideOffset ?? 11}
+          side={resolvedPlacement.side}
+          sideOffset={11}
           style={style}
         >
           <TooltipPrimitive.Popup
@@ -184,6 +164,8 @@ const Tooltip = ({
               classNames?.content
             )}
             data-slot="tooltip-content"
+            id={popupId}
+            role="tooltip"
             style={styles?.content}
           >
             {content}
