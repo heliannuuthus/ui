@@ -13,7 +13,7 @@ const createExample = (locale: 'en' | 'zh') => {
         { key: 'preflight', title: copy('预检完成') },
         { key: 'release', title: copy('发布完成') },
       ]}
-      renderItem={({ key, ...item }, index) => (
+      render={({ key, ...item }, index) => (
         <Item
           {...item}
           actions={<Tag>0{index + 1}</Tag>}

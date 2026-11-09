@@ -22,8 +22,8 @@ const cases = [
     component: Case02,
     title: { en: 'Media content type', zh: '媒体内容类型' },
     description: {
-      en: 'mediaType declares whether media is an icon or an image so thumbnails receive the correct size, crop, and state styling.',
-      zh: 'mediaType 明确声明 media 是图标还是图片，让缩略图获得正确的尺寸、裁切与状态样式。',
+      en: 'media.type declares whether media is an icon or an image so thumbnails receive the correct size, crop, and state styling.',
+      zh: 'media.type 明确声明 media 是图标还是图片，让缩略图获得正确的尺寸、裁切与状态样式。',
     },
   },
   {

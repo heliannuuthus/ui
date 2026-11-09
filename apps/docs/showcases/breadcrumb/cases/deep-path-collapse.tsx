@@ -23,7 +23,7 @@ const createExample = (locale: 'en' | 'zh') => {
         </div>
         <Breadcrumb
           collapse={{
-            maxItems: 4,
+            limit: 4,
             before: 1,
             after: 2,
             label: copy('显示完整路径'),

@@ -14,9 +14,8 @@ const createExample = (locale: 'en' | 'zh') => {
   }) => {
     return (
       <AlertDialog
-        cancelText={copy('保留环境')}
-        confirmText={copy('确认删除')}
-        confirmVariant="destructive"
+        cancel={{ label: copy('保留环境') }}
+        confirm={{ label: copy('确认删除'), variant: 'destructive' }}
         description={copy('运行日志和临时域名会一并移除，此操作无法撤销。')}
         media={<Trash2 />}
         size={size}

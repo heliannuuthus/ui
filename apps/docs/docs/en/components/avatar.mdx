@@ -78,22 +78,36 @@ import { ApiTable } from '@docs/rspress/api-table';
       description:
         'Set initials or an icon to display when the image is unavailable.',
       name: 'fallback',
+      type: 'AvatarFallbackProps',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: 'Set fallback content; defaults to the initial.',
+      name: 'fallback.children',
       type: 'ReactNode',
     },
     {
       component: 'Avatar',
       defaultValue: null,
-      description: 'Configure the fallback delay and native span props.',
-      name: 'fallbackProps',
-      type: 'AvatarFallbackProps',
+      description: 'Set the fallback display delay.',
+      name: 'fallback.delay',
+      type: 'number',
     },
     {
       component: 'Avatar',
       defaultValue: null,
       description:
         'Configure the avatar image loading callback and native img props.',
-      name: 'imageProps',
+      name: 'image',
       type: 'AvatarImageProps',
+    },
+    {
+      component: 'Avatar',
+      defaultValue: null,
+      description: 'Observe image loading status; native onLoad remains available.',
+      name: 'image.onStatusChange',
+      type: '(status: AvatarImageLoadingStatus) => void',
     },
     {
       component: 'Avatar',
@@ -146,7 +160,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Avatar.Group',
       defaultValue: null,
       description: 'Customize how the remaining quantity is presented.',
-      name: 'renderCount',
+      name: 'overflow',
       type: '(count: number) => ReactNode',
     },
     {

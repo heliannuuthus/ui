@@ -85,13 +85,20 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description: 'Set a file-type icon or thumbnail.',
       name: 'media',
+      type: 'AttachmentMediaConfig',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: 'Set the media content.',
+      name: 'media.content',
       type: 'ReactNode',
     },
     {
       component: 'Attachment',
       defaultValue: "'icon'",
       description: 'Declare whether the media content is an icon or an image.',
-      name: 'mediaType',
+      name: 'media.type',
       type: "'icon' | 'image'",
     },
     {

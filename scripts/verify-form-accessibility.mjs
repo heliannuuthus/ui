@@ -6,15 +6,12 @@ import {
   Form,
   Input,
   Radio,
+  Select,
   Slider,
-  useForm,
   useFormInstance,
   useWatch,
 } from '../dist/index.js';
 
-assert.equal(Form.useForm, useForm);
-assert.equal(Form.useFormInstance, useFormInstance);
-assert.equal(Form.useWatch, useWatch);
 assert.equal('Item' in Form, false);
 
 const elementWithSlot = (markup, tagName, slot) => {
@@ -243,6 +240,110 @@ assert.equal(
 );
 assert.equal(attribute(customGroup, 'aria-required'), 'true');
 
+const rangeInputs = (markup) =>
+  [...markup.matchAll(/<input[^>]*type="range"[^>]*>/g)].map(
+    ([input]) => input
+  );
+
+const defaultSliderInputs = rangeInputs(
+  renderToStaticMarkup(
+    React.createElement(Slider, { 'aria-label': 'Volume', min: 5 })
+  )
+);
+assert.equal(defaultSliderInputs.length, 1);
+assert.equal(attribute(defaultSliderInputs[0], 'value'), '5');
+assert.equal(attribute(defaultSliderInputs[0], 'aria-label'), 'Volume');
+
+const rangeSliderInputs = rangeInputs(
+  renderToStaticMarkup(
+    React.createElement(Slider, {
+      'aria-describedby': 'price-hint',
+      'aria-label': 'Price range',
+      defaultValue: [20, 80],
+    })
+  )
+);
+assert.deepEqual(
+  rangeSliderInputs.map((input) => attribute(input, 'value')),
+  ['20', '80']
+);
+for (const input of rangeSliderInputs) {
+  assert.equal(attribute(input, 'aria-label'), 'Price range');
+  assert.equal(attribute(input, 'aria-describedby'), 'price-hint');
+}
+
+const UninitializedSliderFixture = () => {
+  const form = Form.useForm();
+
+  return React.createElement(
+    Form,
+    { form, onSubmit() {} },
+    React.createElement(
+      Form.Field,
+      { label: 'Threshold', name: 'threshold' },
+      React.createElement(Slider, {
+        defaultValue: [10, 90],
+        min: 5,
+        value: 42,
+      })
+    )
+  );
+};
+const uninitializedSliderInputs = rangeInputs(
+  renderToStaticMarkup(React.createElement(UninitializedSliderFixture))
+);
+assert.equal(uninitializedSliderInputs.length, 1);
+assert.equal(attribute(uninitializedSliderInputs[0], 'value'), '5');
+
+const unknownSelectMarkup = renderToStaticMarkup(
+  React.createElement(Select, {
+    defaultValue: 'reader',
+    options: [{ label: 'Reader', value: 'reader' }],
+    value: 'missing',
+  })
+);
+const unknownSelectInput = unknownSelectMarkup.match(
+  /<input[^>]*role="combobox"[^>]*>/
+)?.[0];
+assert.ok(unknownSelectInput);
+assert.equal(attribute(unknownSelectInput, 'value') ?? '', '');
+
+const MessageLessErrorFixture = () => {
+  const form = Form.useForm({
+    defaultValues: { name: '' },
+    errors: { name: { type: 'required' } },
+  });
+
+  return React.createElement(
+    Form,
+    { form, onSubmit() {} },
+    React.createElement(
+      Form.Field,
+      { description: 'Account name.', label: 'Name', name: 'name' },
+      React.createElement(Input)
+    )
+  );
+};
+const messageLessErrorMarkup = renderToStaticMarkup(
+  React.createElement(MessageLessErrorFixture)
+);
+const messageLessErrorInput = elementWithSlot(
+  messageLessErrorMarkup,
+  'input',
+  'input'
+);
+const messageLessErrorDescription = elementWithSlot(
+  messageLessErrorMarkup,
+  'p',
+  'field-description'
+);
+assert.equal(attribute(messageLessErrorInput, 'aria-invalid'), 'true');
+assert.equal(
+  attribute(messageLessErrorInput, 'aria-describedby'),
+  attribute(messageLessErrorDescription, 'id')
+);
+assert.doesNotMatch(messageLessErrorMarkup, /data-slot="field-error"/);
+
 const InvalidFieldFixture = () => {
   const invalidForm = Form.useForm({
     defaultValues: { name: '' },
@@ -269,5 +370,5 @@ assert.throws(
 );
 
 globalThis.console.log(
-  'Verified Form hooks, field subscriptions, labels, descriptions, automatic custom control injection, single-child enforcement, custom groups, and group ARIA relationships, including Input.Number and Slider.'
+  'Verified Form hooks, field subscriptions, automatic control injection, labels and descriptions, message-less errors, empty controlled Select values, and default and range Slider SSR values and accessible names.'
 );

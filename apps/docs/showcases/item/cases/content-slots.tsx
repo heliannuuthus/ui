@@ -18,7 +18,7 @@ const createExample = (locale: 'en' | 'zh') => {
       }
       content={slot === 'content' ? <Tag>production</Tag> : null}
       description={copy('每个结构字段都拥有独立的语义槽位。')}
-      classNames={
+      classes={
         slot === 'content'
           ? { content: 'rounded-xl bg-muted/50 p-2' }
           : undefined

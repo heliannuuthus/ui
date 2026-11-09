@@ -13,7 +13,6 @@ const reason: LayoutSidebarCollapseReason = 'trigger';
 const props: LayoutSidebarProps = {
   'aria-label': 'Workspace navigation',
   breakpoint,
-  collapsedWidth: 64,
   collapsible: true,
   defaultCollapsed: false,
   onBreakpointChange: (below) => below.valueOf(),
@@ -27,7 +26,7 @@ const props: LayoutSidebarProps = {
     collapse: 'Collapse workspace navigation',
     expand: 'Expand workspace navigation',
   },
-  width: '18rem',
+  width: { expanded: '18rem', collapsed: 64 },
 };
 
 void reason;

@@ -47,7 +47,7 @@ const createExample = (locale: 'en' | 'zh') => {
   const TableCellDemo = () => {
     return (
       <div className="display-table-shell display-table-wide">
-        <Table.Primitive classNames={{ table: 'min-w-[680px] table-fixed' }}>
+        <Table.Primitive classes={{ table: 'min-w-[680px] table-fixed' }}>
           <Table.Header>
             <Table.Row>
               <Table.Head className="w-52">{copy('服务（靠左）')}</Table.Head>

@@ -24,13 +24,11 @@ const createExample = (locale: 'en' | 'zh') => {
         </div>
         <Slider
           aria-label={copy('播放器音量')}
-          endIcon={<Volume2 />}
-          endLabel={copy('最大')}
+          end={{ icon: <Volume2 />, label: copy('最大') }}
           max={100}
           min={0}
           onChange={setVolume}
-          startIcon={<Volume1 />}
-          startLabel={copy('静音')}
+          start={{ icon: <Volume1 />, label: copy('静音') }}
           step={2}
           value={volume}
         />

@@ -31,7 +31,7 @@ type BreadcrumbItem = {
 type BreadcrumbSeparator = 'chevron' | 'slash' | 'dot' | React.ReactNode;
 
 type BreadcrumbCollapseOptions = {
-  maxItems: number;
+  limit: number;
   before?: number;
   after?: number;
   label?: string;
@@ -54,16 +54,16 @@ type BreadcrumbEntry =
 
 const getEntries = (
   items: BreadcrumbItem[],
-  maxItems: number | undefined,
+  limit: number | undefined,
   itemsBeforeCollapse: number,
   itemsAfterCollapse: number
 ): BreadcrumbEntry[] => {
-  if (!maxItems || items.length <= maxItems || maxItems < 2) {
+  if (!limit || items.length <= limit || limit < 2) {
     return items.map((item, index) => ({ type: 'item', item, index }));
   }
 
-  const before = Math.max(1, Math.min(itemsBeforeCollapse, maxItems - 1));
-  const after = Math.max(1, Math.min(itemsAfterCollapse, maxItems - before));
+  const before = Math.max(1, Math.min(itemsBeforeCollapse, limit - 1));
+  const after = Math.max(1, Math.min(itemsAfterCollapse, limit - before));
   const hiddenEnd = Math.max(before, items.length - after);
 
   return [
@@ -133,7 +133,7 @@ const ItemMenu = ({
         </button>
       }
       items={getMenuEntries(item.menu ?? [])}
-      classNames={{ content: 'w-auto min-w-40' }}
+      classes={{ content: 'w-auto min-w-40' }}
     />
   );
 };
@@ -159,7 +159,7 @@ const CollapsedItems = ({
         </button>
       }
       items={getMenuEntries(items)}
-      classNames={{ content: 'w-auto min-w-40' }}
+      classes={{ content: 'w-auto min-w-40' }}
     />
   );
 };
@@ -178,10 +178,10 @@ const Breadcrumb = ({
   const size = sizeProp ?? defaults.size ?? 'default';
   const variant = variantProp ?? defaults.variant ?? 'default';
   const collapseOptions =
-    typeof collapse === 'number' ? { maxItems: collapse } : collapse;
+    typeof collapse === 'number' ? { limit: collapse } : collapse;
   const entries = getEntries(
     items,
-    collapseOptions?.maxItems,
+    collapseOptions?.limit,
     collapseOptions?.before ?? 1,
     collapseOptions?.after ?? 2
   );

@@ -45,8 +45,7 @@ const createExample = (locale: 'en' | 'zh') => {
             return (
               <Drawer
                 behavior="panel"
-                closeText={copy('应用筛选')}
-                closeVariant="default"
+                close={{ label: copy('应用筛选'), variant: 'default' }}
                 container={boundaryRef}
                 description={copy(
                   `面板从父容器${placement.label}侧进入，不覆盖整个页面。`

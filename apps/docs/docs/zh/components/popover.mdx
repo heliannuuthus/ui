@@ -50,9 +50,9 @@ import { ApiTable } from '@docs/rspress/api-table';
     },
     {
       component: 'Popover',
-      defaultValue: null,
+      defaultValue: "'click'",
       description: '设置触发元素，以及点击或悬停预览模式。',
-      name: 'triggerMode',
+      name: 'mode',
       type: "'click' | 'hover'",
     },
     {
@@ -93,30 +93,44 @@ import { ApiTable } from '@docs/rspress/api-table';
     {
       component: 'Popover',
       defaultValue: null,
-      description: '设置浮层方向、对齐方式和间距。',
-      name: 'sideOffset',
-      type: 'number',
+      description: "设置浮层边距，单位为像素。",
+      name: 'offset',
+      type: "PopoverOffset",
+    },
+    {
+      component: 'Popover.offset',
+      defaultValue: "4",
+      description: "沿浮层方向的距离，单位为像素。",
+      name: 'side',
+      type: "number",
+    },
+    {
+      component: 'Popover.offset',
+      defaultValue: "0",
+      description: "沿对齐方向的偏移，单位为像素。",
+      name: 'align',
+      type: "number",
     },
     {
       component: 'Popover',
       defaultValue: null,
-      description: '设置浮层方向、对齐方式和间距。',
-      name: 'alignOffset',
-      type: 'number',
-    },
-    {
-      component: 'Popover',
-      defaultValue: null,
-      description: '设置悬停模式打开与关闭前的等待时间。',
+      description: "设置悬停预览的等待时间，单位为毫秒。",
       name: 'delay',
-      type: 'number',
+      type: "PopoverDelay",
     },
     {
-      component: 'Popover',
-      defaultValue: null,
-      description: '设置悬停模式打开与关闭前的等待时间。',
-      name: 'closeDelay',
-      type: 'number',
+      component: 'Popover.delay',
+      defaultValue: "300",
+      description: "打开前的等待时间，单位为毫秒。",
+      name: 'open',
+      type: "number",
+    },
+    {
+      component: 'Popover.delay',
+      defaultValue: "150",
+      description: "关闭前的等待时间，单位为毫秒。",
+      name: 'close',
+      type: "number",
     },
     {
       component: 'Popover',
@@ -143,13 +157,13 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Popover',
       defaultValue: null,
       description: '扩展对应语义槽位的 className。',
-      name: 'classNames',
-      type: 'PopoverClassNames',
+      name: 'classes',
+      type: 'PopoverClasses',
     },
     {
       component: 'Popover',
       defaultValue: null,
-      description: '按与 classNames 相同的语义区域设置行内样式。',
+      description: '按与 classes 相同的语义区域设置行内样式。',
       name: 'styles',
       type: 'PopoverStyles',
     },
@@ -164,4 +178,4 @@ import { ApiTable } from '@docs/rspress/api-table';
 ## 避免事项
 
 - 不要在 hover 浮层中放置必须完成的操作，触摸设备和键盘用户需要更稳定的点击入口。
-- 不要同时维护 HoverCard 与 Popover 两套相同内容；实体预览直接使用 trigger="hover"。
+- 不要同时维护 HoverCard 与 Popover 两套相同内容；实体预览直接使用 mode="hover"。

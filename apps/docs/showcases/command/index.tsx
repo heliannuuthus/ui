@@ -35,8 +35,8 @@ const cases = [
     component: Case04,
     title: { en: 'Empty result content', zh: '空结果内容' },
     description: {
-      en: 'emptyText appears only when filtering finds no matching command and can be plain text or a ReactNode with an icon, title, and suggestion.',
-      zh: 'emptyText 仅在过滤后没有匹配命令时显示，可以是纯文本，也可以是包含图标、标题和建议的 ReactNode。',
+      en: 'empty appears only when filtering finds no matching command and can be plain text or a ReactNode with an icon, title, and suggestion.',
+      zh: 'empty 仅在过滤后没有匹配命令时显示，可以是纯文本，也可以是包含图标、标题和建议的 ReactNode。',
     },
   },
   {

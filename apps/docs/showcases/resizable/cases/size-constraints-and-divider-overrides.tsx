@@ -18,7 +18,7 @@ const createExample = (locale: 'en' | 'zh') => {
         </div>
         <Resizable
           className="resizable-advanced"
-          classNames={{
+          classes={{
             panel: 'resizable-advanced-panel',
             separator: 'resizable-demo-separator',
           }}

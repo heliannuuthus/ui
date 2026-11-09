@@ -4,8 +4,8 @@ import '@heliannuuthus/ui/styles.css';
 const ZhExample = (() => {
   return () => (
     <>
-      <Bubble align="start" content="Incoming message" />
-      <Bubble align="end" content="Outgoing message" />
+      <Bubble align="start" content={{ children: 'Incoming message' }} />
+      <Bubble align="end" content={{ children: 'Outgoing message' }} />
     </>
   );
 })();
@@ -13,8 +13,8 @@ const ZhExample = (() => {
 const EnExample = (() => {
   return () => (
     <>
-      <Bubble align="start" content="Incoming message" />
-      <Bubble align="end" content="Outgoing message" />
+      <Bubble align="start" content={{ children: 'Incoming message' }} />
+      <Bubble align="end" content={{ children: 'Outgoing message' }} />
     </>
   );
 })();

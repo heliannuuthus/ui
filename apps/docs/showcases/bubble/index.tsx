@@ -27,16 +27,16 @@ const cases = [
     component: Case03,
     title: { en: 'Reaction position', zh: '回应位置' },
     description: {
-      en: 'The side and align fields in reactionsProps place reactions on the top or bottom and at either horizontal edge.',
-      zh: 'reactionsProps 的 side 与 align 分别控制回应位于气泡上下侧和左右边缘。',
+      en: 'The side and align fields in reactions place reactions on the top or bottom and at either horizontal edge.',
+      zh: 'reactions 的 side 与 align 分别控制回应位于气泡上下侧和左右边缘。',
     },
   },
   {
     component: Case04,
     title: { en: 'Content node properties', zh: '内容节点属性' },
     description: {
-      en: 'contentProps passes standard HTML, ARIA, data attributes, events, and className to the inner content node.',
-      zh: 'contentProps 向内部内容节点传递标准 HTML、ARIA、data 属性、事件和 className。',
+      en: 'content passes standard HTML, ARIA, data attributes, events, and className to the inner content node.',
+      zh: 'content 向内部内容节点传递标准 HTML、ARIA、data 属性、事件和 className。',
     },
   },
   {

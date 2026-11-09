@@ -36,7 +36,7 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## API
 
-必须且只能选择一种数据规模来源：传入 `total` 让组件根据 `pageSize` 计算页数，或传入 `pageCount` 直接声明总页数。只有 `total` 模式支持 `showTotal`。
+必须且只能选择一种数据规模来源：传入 `total` 让组件根据 `limit.value` 计算页数，或传入 `pages` 直接声明总页数。只有 `total` 模式支持 `summary`。
 
 <ApiTable
   labels={{
@@ -49,6 +49,48 @@ import { ApiTable } from '@docs/rspress/api-table';
   rows={[
     {
       component: 'Pagination',
+      defaultValue: null,
+      description: "配置每页数量、容量变化通知与可选选择器；仅提供 limit 不显示选择器。",
+      name: 'limit',
+      type: "PaginationLimitOptions",
+    },
+    {
+      component: 'PaginationLimitSelectorOptions',
+      defaultValue: "[10, 20, 50, 100]",
+      description: "设置每页数量候选值。",
+      name: 'options',
+      type: "readonly number[]",
+    },
+    {
+      component: 'PaginationLimitSelectorOptions',
+      defaultValue: null,
+      description: "渲染每页数量选项标签。",
+      name: 'render',
+      type: "(limit: number) => ReactNode",
+    },
+    {
+      component: 'PaginationJumpOptions',
+      defaultValue: null,
+      description: "设置可选跳转确认按钮内容。",
+      name: 'button',
+      type: "ReactNode",
+    },
+    {
+      component: 'PaginationJumpOptions',
+      defaultValue: null,
+      description: "设置跳转输入前的标签。",
+      name: 'label',
+      type: "ReactNode",
+    },
+    {
+      component: 'PaginationJumpOptions',
+      defaultValue: null,
+      description: "设置跳转输入后的后缀。",
+      name: 'suffix',
+      type: "ReactNode",
+    },
+    {
+      component: 'Pagination',
       defaultValue: "'center'",
       description: '设置分页器在可用宽度内的对齐方式。',
       name: 'align',
@@ -58,43 +100,43 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Pagination',
       defaultValue: null,
       description: '受控模式下的当前页，从 1 开始。',
-      name: 'current',
+      name: 'page',
       type: 'number',
     },
     {
       component: 'Pagination',
       defaultValue: '1',
       description: '非受控模式下的初始页码。',
-      name: 'defaultCurrent',
+      name: 'defaultPage',
       type: 'number',
     },
     {
       component: 'Pagination',
       defaultValue: null,
       description: '直接声明总页数；与 total 必须且只能选择一个。',
-      name: 'pageCount',
+      name: 'pages',
       type: 'number',
     },
     {
       component: 'Pagination',
       defaultValue: null,
       description:
-        '设置数据总数并结合 pageSize 推导总页数；与 pageCount 必须且只能选择一个。',
+        '设置数据总数并结合 limit.value 推导总页数；与 pages 必须且只能选择一个。',
       name: 'total',
       type: 'number',
     },
     {
-      component: 'Pagination',
+      component: 'PaginationLimitOptions',
       defaultValue: null,
       description: '受控模式下的每页数据条数。',
-      name: 'pageSize',
+      name: 'value',
       type: 'number',
     },
     {
-      component: 'Pagination',
+      component: 'PaginationLimitOptions',
       defaultValue: '10',
       description: '非受控模式下的初始每页数据条数。',
-      name: 'defaultPageSize',
+      name: 'defaultValue',
       type: 'number',
     },
     {
@@ -105,32 +147,32 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: '(page: number, pageSize: number) => void',
     },
     {
-      component: 'Pagination',
+      component: 'PaginationLimitOptions',
       defaultValue: null,
       description: '每页数量变化时回传校正后的页码和每页数量。',
-      name: 'onPageSizeChange',
+      name: 'onChange',
       type: '(page: number, pageSize: number) => void',
     },
     {
-      component: 'Pagination',
+      component: 'PaginationLimitOptions',
       defaultValue: 'false',
       description: '显示每页数量选择器；传入对象可集中配置候选值与选项标签。',
-      name: 'showSizeChanger',
-      type: 'boolean | PaginationSizeChangerOptions',
+      name: 'selector',
+      type: 'boolean | PaginationLimitSelectorOptions',
     },
     {
       component: 'Pagination',
       defaultValue: 'false',
       description: '显示快速跳页输入框，并可配置标签、后缀和确认按钮。',
-      name: 'showQuickJumper',
-      type: 'boolean | PaginationQuickJumperOptions',
+      name: 'jump',
+      type: 'boolean | PaginationJumpOptions',
     },
     {
       component: 'Pagination',
       defaultValue: 'false',
       description:
         '在 total 模式下显示数据总数，或根据总数与当前范围自定义摘要。',
-      name: 'showTotal',
+      name: 'summary',
       type: 'boolean | ((total: number, range: readonly [number, number]) => ReactNode)',
     },
     {
@@ -197,21 +239,21 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Pagination',
       defaultValue: null,
       description: '本地化分页导航、前后翻页按钮和省略页码的无障碍名称。',
-      name: 'ariaLabels',
-      type: 'PaginationAriaLabels',
+      name: 'labels',
+      type: 'PaginationLabels',
     },
     {
-      component: 'Pagination',
+      component: 'PaginationLabels',
       defaultValue: null,
       description: '根据条目类型、页码和选中状态生成无障碍名称。',
-      name: 'getItemAriaLabel',
-      type: '(context: PaginationAriaLabelContext) => string',
+      name: 'item',
+      type: '(context: PaginationLabelContext) => string',
     },
     {
       component: 'Pagination',
       defaultValue: null,
       description: '为页码和导航按钮生成可复制、可打开新窗口的真实地址。',
-      name: 'getItemHref',
+      name: 'href',
       type: '(page: number, type: PaginationItemType) => string',
     },
     {
@@ -232,8 +274,8 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Pagination',
       defaultValue: null,
       description: '自定义页码、导航按钮和省略标记的最终渲染。',
-      name: 'renderItem',
-      type: '(item: PaginationRenderItemProps) => ReactNode',
+      name: 'render',
+      type: '(item: PaginationRenderProps) => ReactNode',
     },
     {
       component: 'Pagination',
@@ -246,13 +288,13 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Pagination',
       defaultValue: null,
       description: '扩展对应语义槽位的 className。',
-      name: 'classNames',
-      type: 'PaginationClassNames',
+      name: 'classes',
+      type: 'PaginationClasses',
     },
     {
       component: 'Pagination',
       defaultValue: null,
-      description: '按与 classNames 相同的语义区域设置行内样式。',
+      description: '按与 classes 相同的语义区域设置行内样式。',
       name: 'styles',
       type: 'PaginationStyles',
     },

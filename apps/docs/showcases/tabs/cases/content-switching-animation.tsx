@@ -49,7 +49,7 @@ const createExample = (locale: 'en' | 'zh') => {
             animation={animation}
             centered
             defaultValue="design"
-            classNames={{ viewport: 'tabs-motion-viewport' }}
+            classes={{ viewport: 'tabs-motion-viewport' }}
             variant="soft"
             items={[
               {

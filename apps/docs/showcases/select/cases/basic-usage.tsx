@@ -25,12 +25,12 @@ const createExample = (locale: 'en' | 'zh') => {
           <span>{copy('输入姓名或团队进行搜索')}</span>
         </div>
         <Select
-          emptyText={copy('没有找到成员')}
+          empty={copy('没有找到成员')}
           id="member-select"
           onChange={setValue}
           options={members.map((member) => ({ label: member, value: member }))}
           placeholder={copy('搜索成员…')}
-          showClear
+          clearable
           value={value}
         />
         <p className="data-result">

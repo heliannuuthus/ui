@@ -22,7 +22,7 @@ const createExample = (locale: 'en' | 'zh') => {
         </PageSummary>
         <Pagination
           align="start"
-          ariaLabels={{
+          labels={{
             first: copy('前往第一页'),
             last: copy('前往最后一页'),
             more: copy('更多页面'),
@@ -32,26 +32,28 @@ const createExample = (locale: 'en' | 'zh') => {
               `${copy('前往第')} ${targetPage} ${copy('页')}`,
             pageSize: copy('每页条数'),
             previous: copy('前往上一页'),
-            quickJumper: copy('跳转页码'),
+            jump: copy('跳转页码'),
           }}
-          classNames={{ summary: 'mr-auto font-medium' }}
-          current={page}
-          getItemHref={(page) => `#page-${page}`}
+          classes={{ summary: 'mr-auto font-medium' }}
+          page={page}
+          href={(page) => `#page-${page}`}
           onChange={setPage}
-          onPageSizeChange={(nextPage, nextPageSize) => {
-            setPage(nextPage);
-            setPageSize(nextPageSize);
+          limit={{
+            value: pageSize,
+            onChange: (nextPage, nextPageSize) => {
+              setPage(nextPage);
+              setPageSize(nextPageSize);
+            },
+            selector: {
+              render: (value) => `${value} ${copy('条 / 页')}`,
+              options: [10, 20, 50, 100],
+            },
           }}
-          pageSize={pageSize}
-          showQuickJumper={{
+          jump={{
             label: copy('跳至'),
             suffix: copy('页'),
           }}
-          showSizeChanger={{
-            getOptionLabel: (value) => `${value} ${copy('条 / 页')}`,
-            options: [10, 20, 50, 100],
-          }}
-          showTotal={(total, range) =>
+          summary={(total, range) =>
             `${range[0]}–${range[1]} / ${total.toLocaleString()} ${copy('项')}`
           }
           size="sm"

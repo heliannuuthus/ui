@@ -54,7 +54,7 @@ const createExample = (locale: 'en' | 'zh') => {
   const releaseColumns: Table.Column<ReleaseRecord>[] = [
     {
       accessor: 'version',
-      classNames: { cell: 'font-medium' },
+      classes: { cell: 'font-medium' },
       fixed: 'start',
       header: copy('版本'),
       sortable: true,
@@ -97,7 +97,7 @@ const createExample = (locale: 'en' | 'zh') => {
           </Button>
           <DropdownMenu
             align="end"
-            classNames={{ content: 'w-44' }}
+            classes={{ content: 'w-44' }}
             trigger={
               <Button
                 aria-label={copy(`${row.version} 更多操作`)}
@@ -132,15 +132,15 @@ const createExample = (locale: 'en' | 'zh') => {
       <div className="display-table-managed">
         <p className="text-sm text-muted-foreground">
           {copy(
-            `当前排序：${sort ? `${sort.columnKey} ${sort.order}` : '无'} · 已选择 ${selectedKeys.length} 行`
+            `当前排序：${sort ? `${sort.column} ${sort.order}` : '无'} · 已选择 ${selectedKeys.length} 行`
           )}
         </p>
         <Table
           columns={releaseColumns.slice(0, 4)}
           data={releaseRecords}
-          pagination={{ current: page, onChange: setPage, pageSize: 3 }}
+          pagination={{ page: page, onChange: setPage, limit: { value: 3 } }}
           rowKey="version"
-          rowSelection={{
+          selection={{
             disabled: (row) => row.status === copy('运行中'),
             labels: {
               all: (rows) => copy(`选择当前页 ${rows.length} 条发布记录`),

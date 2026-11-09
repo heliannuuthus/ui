@@ -16,7 +16,9 @@ import { ApiTable } from '@docs/rspress/api-table';
 - Use Select when the candidates are fixed; directly enter keywords to filter when the list is long.
 - Provide flat or grouped candidates through options and manage a single value with controlled or uncontrolled props.
 
-Select values are limited to strings and numbers. Use a dedicated Multi Select or Combobox for multiple values, tag collapsing, or asynchronous search instead of expanding the Select prop surface.
+Select values are limited to strings and numbers, with one selected value and local option filtering. Multiple values, tag collapsing, and asynchronous search are outside the current Select contract.
+
+Use `value={null}` for an explicitly empty controlled selection. A controlled value with no matching option shows the placeholder. Inside `Form.Field`, a field that is uninitialized or reset to an empty value remains empty until a value is selected; it does not retain the previous option.
 
 ## Examples
 
@@ -47,7 +49,7 @@ Select values are limited to strings and numbers. Use a dedicated Multi Select o
       component: 'Select',
       defaultValue: null,
       description:
-        'Provides flat or grouped candidates; use textValue to give rich labels plain text for display and filtering.',
+        'Provides flat or grouped candidates; use text to give rich labels plain text for display and filtering.',
       name: 'options',
       type: '(SelectOption<Value> | SelectOptionGroup<Value>)[]',
     },
@@ -83,14 +85,14 @@ Select values are limited to strings and numbers. Use a dedicated Multi Select o
       component: 'Select',
       defaultValue: null,
       description: 'Content shown when filtering returns no options.',
-      name: 'emptyText',
+      name: 'empty',
       type: 'ReactNode',
     },
     {
       component: 'Select',
       defaultValue: null,
       description: 'Shows a clear button while a value is selected.',
-      name: 'showClear',
+      name: 'clearable',
       type: 'boolean',
     },
     {
@@ -139,7 +141,7 @@ Select values are limited to strings and numbers. Use a dedicated Multi Select o
       component: 'Select',
       defaultValue: null,
       description: 'Provides a ref to the underlying input.',
-      name: 'inputRef',
+      name: 'ref',
       type: 'React.Ref<HTMLInputElement>',
     },
     {
@@ -174,16 +176,23 @@ Select values are limited to strings and numbers. Use a dedicated Multi Select o
       component: 'Select',
       defaultValue: null,
       description: 'Extends the trigger semantic slot class name.',
-      name: 'classNames',
-      type: 'SelectClassNames',
+      name: 'classes',
+      type: 'SelectClasses',
     },
     {
       component: 'Select',
       defaultValue: null,
       description:
-        'Sets inline styles using the same trigger slot as classNames.',
+        'Sets inline styles using the same trigger slot as classes.',
       name: 'styles',
       type: 'SelectStyles',
+    },
+    {
+      component: 'SelectOption',
+      defaultValue: null,
+      description: 'Provides plain text for rich labels when displaying and filtering options.',
+      name: 'text',
+      type: "string",
     },
   ]}
 />

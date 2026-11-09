@@ -60,7 +60,7 @@ const createExample = (locale: 'en' | 'zh') => {
               key: file.name,
               title: file.name,
               description: file.description,
-              media: <Icon />,
+              media: { content: <Icon /> },
               orientation,
               state: file.state,
               actions: (

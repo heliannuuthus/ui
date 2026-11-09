@@ -28,14 +28,14 @@ type SegmentedOption<Value extends SegmentedValue = string> = {
   value: Value;
 };
 
-type SegmentedClassNames = {
+type SegmentedClasses = {
   indicator?: string;
   item?: string;
   label?: string;
 };
 
 type SegmentedStyles = {
-  [Slot in keyof SegmentedClassNames]?: React.CSSProperties;
+  [Slot in keyof SegmentedClasses]?: React.CSSProperties;
 };
 
 type SegmentedProps<Value extends SegmentedValue = string> = Omit<
@@ -43,7 +43,7 @@ type SegmentedProps<Value extends SegmentedValue = string> = Omit<
   'children' | 'defaultValue' | 'onChange'
 > & {
   block?: boolean;
-  classNames?: SegmentedClassNames;
+  classes?: SegmentedClasses;
   defaultValue?: Value;
   disabled?: boolean;
   form?: string;
@@ -76,7 +76,7 @@ const Segmented = <Value extends SegmentedValue = string>({
   'aria-labelledby': ariaLabelledBy,
   block: blockProp,
   className,
-  classNames,
+  classes,
   defaultValue,
   disabled,
   form,
@@ -123,7 +123,7 @@ const Segmented = <Value extends SegmentedValue = string>({
     Object.is(option.value, fallbackValue)
   );
   const resolvedValue =
-    matchingOption?.value ?? (controlled ? undefined : firstEnabledValue);
+    matchingOption?.value ?? (controlled ? null : firstEnabledValue);
   const itemSize = {
     sm: 'h-7 gap-1.5 px-2.5 text-xs',
     md: 'h-8 gap-1.5 px-3 text-sm',
@@ -163,6 +163,7 @@ const Segmented = <Value extends SegmentedValue = string>({
           formControl?.onBlur();
         }}
         onValueChange={(nextValue) => {
+          if (nextValue === null) return;
           if (!controlled) {
             setUncontrolledValue(nextValue);
           }
@@ -186,7 +187,7 @@ const Segmented = <Value extends SegmentedValue = string>({
                 orientation === 'vertical' ? 'rounded-xl' : 'rounded-full',
                 block && 'flex-1',
                 itemSize,
-                classNames?.item,
+                classes?.item,
                 option.className
               )}
               data-slot="segmented-item"
@@ -203,7 +204,7 @@ const Segmented = <Value extends SegmentedValue = string>({
                   className={cn(
                     'pointer-events-none absolute inset-0 -z-1 bg-background shadow-sm ring-1 ring-border/65',
                     orientation === 'vertical' ? 'rounded-xl' : 'rounded-full',
-                    classNames?.indicator
+                    classes?.indicator
                   )}
                   data-slot="segmented-indicator"
                   layoutId="segmented-indicator"
@@ -221,7 +222,7 @@ const Segmented = <Value extends SegmentedValue = string>({
               <span
                 className={cn(
                   'relative z-1 inline-flex min-w-0 items-center gap-[inherit]',
-                  classNames?.label
+                  classes?.label
                 )}
                 data-slot="segmented-label"
                 style={styles?.label}
@@ -241,7 +242,7 @@ registerFormControl(Segmented);
 
 export { Segmented };
 export type {
-  SegmentedClassNames,
+  SegmentedClasses,
   SegmentedOption,
   SegmentedProps,
   SegmentedProviderDefaults,

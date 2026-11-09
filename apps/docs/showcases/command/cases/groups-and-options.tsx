@@ -61,7 +61,7 @@ const createExample = (locale: 'en' | 'zh') => {
           groups={createGroups((label) =>
             setSelected(copy(`已执行：${label}`))
           )}
-          placeholder={copy('搜索文件、设置或主题…')}
+          input={{ placeholder: copy('搜索文件、设置或主题…') }}
         />
         <p aria-live="polite" className="data-result">
           {selected}

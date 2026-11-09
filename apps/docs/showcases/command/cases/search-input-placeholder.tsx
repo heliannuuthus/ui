@@ -55,7 +55,7 @@ const createExample = (locale: 'en' | 'zh') => {
       <Command
         className="minimal-command"
         groups={createGroups()}
-        placeholder={copy('搜索文件、设置或主题…')}
+        input={{ placeholder: copy('搜索文件、设置或主题…') }}
       />
     );
   };

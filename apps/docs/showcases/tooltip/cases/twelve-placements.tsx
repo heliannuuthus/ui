@@ -3,7 +3,7 @@ import { Button, Tooltip } from '@heliannuuthus/ui';
 
 const ZhExample = (() => {
   return () => (
-    <Tooltip content="上方靠左提示" openDelay={100} placement="topLeft">
+    <Tooltip content="上方靠左提示" delay={{ open: 100 }} placement="topLeft">
       <Button>上方靠左</Button>
     </Tooltip>
   );
@@ -11,7 +11,11 @@ const ZhExample = (() => {
 
 const EnExample = (() => {
   return () => (
-    <Tooltip content="Top-left tooltip" openDelay={100} placement="topLeft">
+    <Tooltip
+      content="Top-left tooltip"
+      delay={{ open: 100 }}
+      placement="topLeft"
+    >
       <Button>Top left</Button>
     </Tooltip>
   );

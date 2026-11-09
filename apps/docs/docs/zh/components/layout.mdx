@@ -100,13 +100,6 @@ Layout 直接包含 Sidebar 时切换为横向排列，嵌套 Layout 可继续�
     },
     {
       component: 'Layout.Sidebar',
-      defaultValue: '80',
-      description: '折叠后的侧边栏宽度；数字按像素处理，设置为 0 时隐藏内容。',
-      name: 'collapsedWidth',
-      type: 'number | string',
-    },
-    {
-      component: 'Layout.Sidebar',
       defaultValue: 'false',
       description:
         '只启用内置折叠触发器，不代表当前折叠状态；传入 ReactNode 可以替换默认图标。',
@@ -155,11 +148,24 @@ Layout 直接包含 Sidebar 时切换为横向排列，嵌套 Layout 可继续�
     },
     {
       component: 'Layout.Sidebar',
-      defaultValue: '240',
-      description:
-        '设置侧边区域宽度；数字按像素处理，也可以传入任意 CSS 长度。',
+      defaultValue: null,
+      description: "配置展开和折叠宽度；数字按像素处理，也支持 CSS 长度。",
       name: 'width',
-      type: 'number | string',
+      type: "LayoutSidebarWidth",
+    },
+    {
+      component: 'Layout.Sidebar.width',
+      defaultValue: "240",
+      description: "展开时的侧边栏宽度。",
+      name: 'expanded',
+      type: "number | string",
+    },
+    {
+      component: 'Layout.Sidebar.width',
+      defaultValue: "80",
+      description: "折叠时的侧边栏宽度；0 隐藏其内容。",
+      name: 'collapsed',
+      type: "number | string",
     },
     {
       component: 'Layout',
@@ -246,5 +252,5 @@ Layout 直接包含 Sidebar 时切换为横向排列，嵌套 Layout 可继续�
 - 文字导航在低于 :hint[布局断点]{title="由 breakpoint 属性指定的响应式阈值"} 时通常不适合压成图标栏。
 
 :::collapse{title="窄屏导航建议"}
-将 collapsedWidth 设置为 0，并组合 Drawer 提供完整导航；不要只缩窄文字导航。
+将 width.collapsed 设置为 0，并组合 Drawer 提供完整导航；不要只缩窄文字导航。
 :::

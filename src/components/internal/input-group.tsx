@@ -99,21 +99,6 @@ const InputGroupButton = ({
   );
 };
 
-const InputGroupText = ({
-  className,
-  ...props
-}: React.ComponentProps<'span'>) => {
-  return (
-    <span
-      className={cn(
-        "flex items-center gap-2 text-sm text-muted-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
-        className
-      )}
-      {...props}
-    />
-  );
-};
-
 const InputGroupInput = ({
   className,
   ...props
@@ -130,28 +115,9 @@ const InputGroupInput = ({
   );
 };
 
-const InputGroupTextArea = ({
-  className,
-  ...props
-}: React.ComponentProps<'textarea'>) => {
-  return (
-    <textarea
-      data-slot="input-group-control"
-      className={cn(
-        'field-sizing-content min-h-16 w-full flex-1 resize-none rounded-none border-0 bg-transparent px-3 py-2.5 text-base shadow-none outline-none ring-0 placeholder:text-muted-foreground focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-60 aria-invalid:ring-0 md:text-sm dark:bg-transparent',
-        className
-      )}
-      {...props}
-    />
-  );
-};
-
 const InputGroupCompound = Object.assign(InputGroup, {
   Addon: InputGroupAddon,
-  Button: InputGroupButton,
   Input: InputGroupInput,
-  Text: InputGroupText,
-  TextArea: InputGroupTextArea,
 });
 
 export {
@@ -159,6 +125,4 @@ export {
   InputGroupAddon as Addon,
   InputGroupButton as Button,
   InputGroupInput as Input,
-  InputGroupText as Text,
-  InputGroupTextArea as TextArea,
 };

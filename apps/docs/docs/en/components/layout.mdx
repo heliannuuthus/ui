@@ -101,14 +101,6 @@ Layout switches to a horizontal arrangement when it directly contains Sidebar; a
     },
     {
       component: 'Layout.Sidebar',
-      defaultValue: '80',
-      description:
-        'The collapsed sidebar width; numbers are treated as pixels and 0 hides its content.',
-      name: 'collapsedWidth',
-      type: 'number | string',
-    },
-    {
-      component: 'Layout.Sidebar',
       defaultValue: 'false',
       description:
         'Only enables the built-in collapse trigger and does not represent the current state; pass a ReactNode to replace the default icon.',
@@ -158,11 +150,24 @@ Layout switches to a horizontal arrangement when it directly contains Sidebar; a
     },
     {
       component: 'Layout.Sidebar',
-      defaultValue: '240',
-      description:
-        'Sets the width of the side area; numbers are handled in pixels, or any CSS length can be passed in.',
+      defaultValue: null,
+      description: "Configure expanded and collapsed widths; numbers are pixels and CSS lengths are accepted.",
       name: 'width',
-      type: 'number | string',
+      type: "LayoutSidebarWidth",
+    },
+    {
+      component: 'Layout.Sidebar.width',
+      defaultValue: "240",
+      description: "Sidebar width while expanded.",
+      name: 'expanded',
+      type: "number | string",
+    },
+    {
+      component: 'Layout.Sidebar.width',
+      defaultValue: "80",
+      description: "Sidebar width while collapsed; 0 hides its content.",
+      name: 'collapsed',
+      type: "number | string",
     },
     {
       component: 'Layout',
@@ -249,5 +254,5 @@ Layout switches to a horizontal arrangement when it directly contains Sidebar; a
 - Text navigation should not be compressed into an icon rail below the :hint[layout breakpoint]{title="The responsive threshold selected by the breakpoint property"}.
 
 :::collapse{title="Narrow navigation guidance"}
-Set collapsedWidth to 0 and compose Drawer for complete navigation instead of merely narrowing text navigation.
+Set width.collapsed to 0 and compose Drawer for complete navigation instead of merely narrowing text navigation.
 :::

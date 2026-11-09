@@ -41,7 +41,10 @@ const createExample = (locale: 'en' | 'zh') => {
 
     const notify = (status: ToastStatus) => {
       const scenario = toastScenarios[status];
-      toast[status](scenario.title, { description: scenario.description });
+      toast[status](scenario.title, {
+        description: scenario.description,
+        classes: { description: 'text-sm' },
+      });
     };
 
     return (
@@ -68,7 +71,15 @@ const createExample = (locale: 'en' | 'zh') => {
 
   const ToastSemanticDemo = () => {
     return (
-      <Toast.Provider id="toast-semantic-demo">
+      <Toast.Provider
+        id="toast-semantic-demo"
+        limit={4}
+        rich
+        closable
+        label={locale === 'zh' ? '通知' : 'Notifications'}
+        offset={{ base: { top: 24 }, mobile: { top: 12 } }}
+        defaults={{ styles: { action: { fontWeight: 600 } } }}
+      >
         <ToastSemanticActions />
       </Toast.Provider>
     );

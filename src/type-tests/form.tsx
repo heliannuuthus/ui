@@ -12,6 +12,7 @@ import { Input } from '../components/input';
 import { Select } from '../components/select';
 import { Slider } from '../components/slider';
 import { Switch } from '../components/switch';
+import { Toggle } from '../components/toggle';
 
 type Values = {
   enabled: boolean;
@@ -154,6 +155,9 @@ export const FormTypeTest = () => {
       </Form.Field>
       <Form.Field<Values> name="volume" label="Volume">
         <Slider min={0} max={100} />
+      </Form.Field>
+      <Form.Field<Values> name="enabled" label="Pinned">
+        <Toggle ref={(button) => button?.focus()}>Pin</Toggle>
       </Form.Field>
       <Form.Field<Values, 'volume'> name="volume" label="Custom volume">
         <CustomVolumeControl />

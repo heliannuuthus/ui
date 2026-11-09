@@ -252,7 +252,7 @@ const ContextMenuShortcut = ({
   );
 };
 
-type ContextMenuClassNames = {
+type ContextMenuClasses = {
   content?: string;
 };
 
@@ -261,7 +261,7 @@ type ContextMenuStyles = {
 };
 
 type ContextMenuProps = OpenStateProps & {
-  classNames?: ContextMenuClassNames;
+  classes?: ContextMenuClasses;
   disabled?: boolean;
   items: readonly DropdownMenuEntry[];
   styles?: ContextMenuStyles;
@@ -339,7 +339,7 @@ const renderContextMenuEntries = (items: readonly DropdownMenuEntry[]) => {
 };
 
 const ContextMenu = ({
-  classNames,
+  classes,
   items,
   styles,
   trigger,
@@ -348,10 +348,7 @@ const ContextMenu = ({
   return (
     <ContextMenuRoot {...props}>
       <ContextMenuTrigger render={trigger} />
-      <ContextMenuContent
-        className={classNames?.content}
-        style={styles?.content}
-      >
+      <ContextMenuContent className={classes?.content} style={styles?.content}>
         {renderContextMenuEntries(items)}
       </ContextMenuContent>
     </ContextMenuRoot>
@@ -360,7 +357,7 @@ const ContextMenu = ({
 
 export {
   ContextMenu,
-  type ContextMenuClassNames,
+  type ContextMenuClasses,
   type ContextMenuProps,
   type ContextMenuStyles,
 };

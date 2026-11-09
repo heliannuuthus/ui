@@ -8,8 +8,7 @@ const ZhExample = (() => {
       href="/release-notes/v0.12.0"
       variant="outline"
       header={<Tag>发布说明</Tag>}
-      media={<FileText />}
-      mediaType="icon"
+      media={{ content: <FileText />, type: 'icon' }}
       title="v0.12.0-release-notes.md"
       description="Markdown · 18 KB"
       footer={<span>许澄维护 · 8 分钟前更新</span>}
@@ -23,8 +22,7 @@ const EnExample = (() => {
       href="/release-notes/v0.12.0"
       variant="outline"
       header={<Tag>Release notes</Tag>}
-      media={<FileText />}
-      mediaType="icon"
+      media={{ content: <FileText />, type: 'icon' }}
       title="v0.12.0-release-notes.md"
       description="Markdown · 18 KB"
       footer={<span>Maintained by Xu Cheng · Updated 8 minutes ago</span>}

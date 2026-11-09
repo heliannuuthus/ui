@@ -2,62 +2,61 @@ import * as React from 'react';
 
 import {
   Pagination,
-  type PaginationAriaLabelContext,
-  type PaginationClassNames,
+  type PaginationLabelContext,
+  type PaginationClasses,
   type PaginationItemType,
-  type PaginationQuickJumperOptions,
-  type PaginationRenderItemProps,
+  type PaginationJumpOptions,
+  type PaginationRenderProps,
   type PaginationSimpleOptions,
-  type PaginationSizeChangerOptions,
+  type PaginationLimitSelectorOptions,
   type PaginationStyles,
 } from '../index';
 
 const itemType: PaginationItemType = 'page';
-const ariaContext: PaginationAriaLabelContext = {
+const ariaContext: PaginationLabelContext = {
   page: 2,
   selected: false,
   type: itemType,
 };
-const classNames: PaginationClassNames = {
+const classes: PaginationClasses = {
   content: 'content',
   control: 'control',
   ellipsis: 'ellipsis',
   item: 'item',
   pageSize: 'page-size',
-  quickJumper: 'quick-jumper',
+  jump: 'quick-jumper',
   summary: 'summary',
 };
 const styles: PaginationStyles = {
   ...Object.fromEntries(
-    Object.keys(classNames).map((slot) => [slot, { opacity: 1 }])
+    Object.keys(classes).map((slot) => [slot, { opacity: 1 }])
   ),
 };
-const quickJumper: PaginationQuickJumperOptions = {
-  goButton: 'Go',
+const jump: PaginationJumpOptions = {
+  button: 'Go',
   label: 'Jump to',
   suffix: 'page',
 };
 const simple: PaginationSimpleOptions = { readOnly: true };
-const sizeChanger: PaginationSizeChangerOptions = {
-  getOptionLabel: (pageSize) => `${pageSize} / page`,
+const sizeChanger: PaginationLimitSelectorOptions = {
+  render: (pageSize) => `${pageSize} / page`,
   options: [10, 20, 50],
 };
-const renderItem = ({
-  originalElement,
-}: PaginationRenderItemProps): React.ReactNode => originalElement;
+const render = ({ element }: PaginationRenderProps): React.ReactNode => element;
 
 export const paginationTypeTests = (
   <>
     <Pagination
-      ariaLabels={{ page: (page) => `Page ${page}` }}
       boundaries={2}
-      classNames={classNames}
-      defaultCurrent={3}
-      getItemAriaLabel={(context) =>
-        context === ariaContext ? 'Current page' : `Page ${context.page}`
-      }
-      pageCount={20}
-      renderItem={renderItem}
+      classes={classes}
+      defaultPage={3}
+      labels={{
+        page: (page) => `Page ${page}`,
+        item: (context) =>
+          context === ariaContext ? 'Current page' : `Page ${context.page}`,
+      }}
+      pages={20}
+      render={render}
       first
       last
       next="Next"
@@ -67,21 +66,23 @@ export const paginationTypeTests = (
       styles={styles}
     />
     <Pagination
-      defaultPageSize={20}
+      limit={{
+        defaultValue: 20,
+        onChange: (page, limit) => [page, limit],
+        selector: sizeChanger,
+      }}
       onChange={(page, pageSize) => [page, pageSize]}
-      onPageSizeChange={(page, pageSize) => [page, pageSize]}
-      showQuickJumper={quickJumper}
-      showSizeChanger={sizeChanger}
-      showTotal={(total, range) => `${range[0]}-${range[1]} / ${total}`}
+      jump={jump}
+      summary={(total, range) => `${range[0]}-${range[1]} / ${total}`}
       total={500}
     />
     {/* @ts-expect-error Pagination requires exactly one count source. */}
     <Pagination />
-    {/* @ts-expect-error total and pageCount are mutually exclusive. */}
-    <Pagination pageCount={20} total={500} />
-    {/* @ts-expect-error showTotal requires item-count mode. */}
-    <Pagination pageCount={20} showTotal />
+    {/* @ts-expect-error total and pages are mutually exclusive. */}
+    <Pagination pages={20} total={500} />
+    {/* @ts-expect-error summary requires item-count mode. */}
+    <Pagination pages={20} summary />
     {/* @ts-expect-error Pagination uses the explicit md size name. */}
-    <Pagination pageCount={20} size="default" />
+    <Pagination pages={20} size="default" />
   </>
 );

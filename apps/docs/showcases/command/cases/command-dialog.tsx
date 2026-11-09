@@ -69,8 +69,10 @@ const createExample = (locale: 'en' | 'zh') => {
             setSelected(copy(`已执行：${label}`));
             setOpen(false);
           })}
-          inputProps={{ autoFocus: true }}
-          placeholder={copy('搜索文件、设置或主题…')}
+          input={{
+            placeholder: copy('搜索文件、设置或主题…'),
+            autoFocus: true,
+          }}
         />
         <p aria-live="polite" className="data-result">
           {selected}

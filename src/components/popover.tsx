@@ -10,7 +10,17 @@ import type {
   PopupSide,
 } from './internal/public-types';
 
-type PopoverTriggerMode = 'click' | 'hover';
+type PopoverMode = 'click' | 'hover';
+
+type PopoverDelay = {
+  open?: number;
+  close?: number;
+};
+
+type PopoverOffset = {
+  side?: number;
+  align?: number;
+};
 
 type ClickPopoverRootProps = PopoverPrimitive.Root.Props & {
   trigger?: 'click';
@@ -27,7 +37,7 @@ type HoverPopoverRootProps = PreviewCardPrimitive.Root.Props & {
 type PopoverRootProps = ClickPopoverRootProps | HoverPopoverRootProps;
 
 type PopoverTriggerContextValue = {
-  trigger: PopoverTriggerMode;
+  trigger: PopoverMode;
   delay: number;
   closeDelay: number;
 };
@@ -231,7 +241,7 @@ const PopoverDescription = ({
   );
 };
 
-type PopoverClassNames = {
+type PopoverClasses = {
   content?: string;
 };
 
@@ -241,40 +251,36 @@ type PopoverStyles = {
 
 type PopoverProps = OpenStateProps & {
   align?: PopupAlign;
-  alignOffset?: number;
-  closeDelay?: number;
-  classNames?: PopoverClassNames;
+  classes?: PopoverClasses;
   content: React.ReactNode;
-  delay?: number;
+  delay?: PopoverDelay;
   description?: React.ReactNode;
+  mode?: PopoverMode;
+  offset?: PopoverOffset;
   side?: PopupSide;
-  sideOffset?: number;
   styles?: PopoverStyles;
   title?: React.ReactNode;
   trigger: React.ReactElement;
-  triggerMode?: PopoverTriggerMode;
 };
 
 const Popover = ({
   align,
-  alignOffset,
-  closeDelay,
-  classNames,
+  classes,
   content,
   delay,
   description,
+  mode = 'click',
+  offset,
   side,
-  sideOffset,
   styles,
   title,
   trigger,
-  triggerMode = 'click',
   ...props
 }: PopoverProps) => {
   const rootProps = {
-    closeDelay,
-    delay,
-    trigger: triggerMode,
+    closeDelay: delay?.close,
+    delay: delay?.open,
+    trigger: mode,
     ...props,
   } as PopoverRootProps;
 
@@ -283,10 +289,10 @@ const Popover = ({
       <PopoverTrigger render={trigger} />
       <PopoverContent
         align={align}
-        alignOffset={alignOffset}
-        className={classNames?.content}
+        alignOffset={offset?.align}
+        className={classes?.content}
         side={side}
-        sideOffset={sideOffset}
+        sideOffset={offset?.side}
         style={styles?.content}
       >
         {title != null || description != null ? (
@@ -305,8 +311,10 @@ const Popover = ({
 
 export { Popover };
 export type {
-  PopoverClassNames,
+  PopoverClasses,
+  PopoverDelay,
+  PopoverMode,
+  PopoverOffset,
   PopoverProps,
   PopoverStyles,
-  PopoverTriggerMode,
 };

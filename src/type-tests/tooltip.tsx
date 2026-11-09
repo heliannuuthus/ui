@@ -5,10 +5,9 @@ export const TooltipTypeTest = () => {
     <>
       <Tooltip
         arrow
-        closeDelay={150}
+        delay={{ open: 250, close: 150 }}
         content="Release details"
         defaultOpen
-        openDelay={250}
         placement="topLeft"
       >
         <Button>Hover or focus</Button>
@@ -30,7 +29,7 @@ export const TooltipTypeTest = () => {
         <Button>Legacy placement</Button>
       </Tooltip>
 
-      {/* @ts-expect-error The removed delay prop cannot replace openDelay. */}
+      {/* @ts-expect-error 延迟只接受 open 和 close 配置对象。 */}
       <Tooltip content="Legacy delay" delay={100}>
         <Button>Legacy delay</Button>
       </Tooltip>

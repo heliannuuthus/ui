@@ -4,9 +4,8 @@ import '@heliannuuthus/ui/styles.css';
 const ZhExample = (() => {
   return () => (
     <Bubble
-      content="Ready for review"
-      reactions="👍 2"
-      reactionsProps={{ side: 'top', align: 'start' }}
+      content={{ children: 'Ready for review' }}
+      reactions={{ children: '👍 2', ...{ side: 'top', align: 'start' } }}
     />
   );
 })();
@@ -14,9 +13,8 @@ const ZhExample = (() => {
 const EnExample = (() => {
   return () => (
     <Bubble
-      content="Ready for review"
-      reactions="👍 2"
-      reactionsProps={{ side: 'top', align: 'start' }}
+      content={{ children: 'Ready for review' }}
+      reactions={{ children: '👍 2', ...{ side: 'top', align: 'start' } }}
     />
   );
 })();

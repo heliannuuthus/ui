@@ -21,10 +21,16 @@ void (
   <Collapsible
     content="Details"
     header="Summary"
-    indicator={<span aria-hidden>+</span>}
+    trigger={{ indicator: <span aria-hidden>+</span> }}
   />
 );
-void (<Collapsible content="Details" header="Summary" indicator={false} />);
+void (
+  <Collapsible
+    content="Details"
+    header="Summary"
+    trigger={{ indicator: false }}
+  />
+);
 
 void (<Dialog closable={<span aria-hidden>×</span>} title="Settings" />);
 
@@ -32,16 +38,18 @@ void (
   <Drawer
     closable={<span aria-hidden>×</span>}
     handle={<span aria-hidden>—</span>}
-    onSnapChange={(value) => value?.valueOf()}
-    sequential
-    snapPoints={[0.25, 0.5, 1]}
+    snaps={{
+      onChange: (value) => value?.valueOf(),
+      sequential: true,
+      points: [0.25, 0.5, 1],
+    }}
   />
 );
 
 void (
   <Tabs
     items={[{ content: 'Panel', label: 'Tab', value: 'tab' }]}
-    scrollLabels={{ end: 'Next tabs', start: 'Previous tabs' }}
+    labels={{ end: 'Next tabs', start: 'Previous tabs' }}
   />
 );
 
@@ -58,7 +66,7 @@ void (
     }}
     pagination={{ summary: (total) => `${total} rows` }}
     rowKey="id"
-    rowSelection={{
+    selection={{
       defaultValue: ['one'],
       disabled: (row) => row.locked,
       labels: selectionLabels,

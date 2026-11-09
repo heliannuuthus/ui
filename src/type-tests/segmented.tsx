@@ -1,11 +1,11 @@
 import {
   Segmented,
-  type SegmentedClassNames,
+  type SegmentedClasses,
   type SegmentedOption,
   type SegmentedStyles,
 } from '../index';
 
-const classNames: SegmentedClassNames = {
+const classes: SegmentedClasses = {
   indicator: 'indicator',
   item: 'item',
   label: 'label',
@@ -24,7 +24,7 @@ export const segmentedTypeTests = (
   <>
     <Segmented
       aria-label="View"
-      classNames={classNames}
+      classes={classes}
       defaultValue="list"
       onChange={(value) => value satisfies string}
       options={['list', 'board', 'timeline']}

@@ -23,108 +23,90 @@ const parsedConfig = ts.parseJsonConfigFileContent(
 );
 const program = ts.createProgram(parsedConfig.fileNames, parsedConfig.options);
 const checker = program.getTypeChecker();
-const declarations = new Map();
-const propContracts = [];
+const entry = program.getSourceFile(resolve(packageRoot, 'src/index.ts'));
+assert.ok(entry, 'Unable to locate the public component entry.');
+const moduleSymbol = checker.getSymbolAtLocation(entry);
+assert.ok(moduleSymbol, 'Unable to resolve public component exports.');
+const visited = new Set();
+const styleContracts = [];
 
-const isComponentSource = (sourceFile) => {
-  const normalized = sourceFile.fileName.replaceAll('\\', '/');
-  return (
-    normalized.includes('/src/components/') && !sourceFile.isDeclarationFile
-  );
-};
-
-const propertyNames = (node) => {
-  return checker
-    .getTypeAtLocation(node)
+const propertyNames = (type) =>
+  checker
+    .getNonNullableType(type)
     .getProperties()
     .map((property) => property.getName())
     .sort();
+
+const inspectComponent = (symbol, name) => {
+  const target =
+    symbol.flags & ts.SymbolFlags.Alias
+      ? checker.getAliasedSymbol(symbol)
+      : symbol;
+  if (!(target.flags & ts.SymbolFlags.Value)) return;
+  const type = checker.getTypeOfSymbolAtLocation(target, entry);
+  if (visited.has(type)) return;
+  visited.add(type);
+
+  const parameter = type.getCallSignatures()[0]?.getParameters()[0];
+  if (parameter) {
+    const props = checker.getTypeOfSymbolAtLocation(parameter, entry);
+    assert.ok(
+      !props.getProperty('classNames'),
+      `${name} exposes the obsolete classNames prop.`
+    );
+    const classes = props.getProperty('classes');
+    if (classes) {
+      const styles = props.getProperty('styles');
+      assert.ok(styles, `${name} exposes classes without styles.`);
+      const classSlots = propertyNames(
+        checker.getTypeOfSymbolAtLocation(classes, entry)
+      );
+      const styleSlots = propertyNames(
+        checker.getTypeOfSymbolAtLocation(styles, entry)
+      );
+      assert.ok(
+        !classSlots.includes('root'),
+        `${name}.classes must not repeat the root target.`
+      );
+      assert.ok(
+        !styleSlots.includes('root'),
+        `${name}.styles must not repeat the root target.`
+      );
+      assert.deepEqual(
+        styleSlots,
+        classSlots,
+        `${name} must expose matching semantic slots.`
+      );
+      assert.equal(
+        Boolean(props.getProperty('className')),
+        Boolean(props.getProperty('style')),
+        `${name} must expose className and style together.`
+      );
+      styleContracts.push(name);
+    }
+  }
+
+  for (const child of type.getProperties()) {
+    if (/^[A-Z]/.test(child.getName())) {
+      inspectComponent(child, `${name}.${child.getName()}`);
+    }
+  }
 };
 
-for (const sourceFile of program.getSourceFiles().filter(isComponentSource)) {
-  const visit = (node) => {
-    if (
-      (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node)) &&
-      node.name != null
-    ) {
-      declarations.set(node.name.text, node);
-      const properties = propertyNames(node);
-      if (properties.includes('classNames')) {
-        propContracts.push({
-          fileName: sourceFile.fileName,
-          name: node.name.text,
-          properties,
-        });
-      }
-    }
-    ts.forEachChild(node, visit);
-  };
-
-  visit(sourceFile);
-}
-
-const classNamesDeclarations = [...declarations.entries()].filter(([name]) =>
-  name.endsWith('ClassNames')
-);
-
-assert.ok(
-  classNamesDeclarations.length > 0,
-  'Expected at least one semantic ClassNames contract.'
-);
-
-for (const [classNamesName, classNamesNode] of classNamesDeclarations) {
-  const stylesName = classNamesName.replace(/ClassNames$/, 'Styles');
-  const stylesNode = declarations.get(stylesName);
-  assert.ok(
-    stylesNode,
-    `${classNamesName} must have a matching ${stylesName}.`
-  );
-
-  const classNamesSlots = propertyNames(classNamesNode);
-  const stylesSlots = propertyNames(stylesNode);
-  const implementationSource = classNamesNode.getSourceFile().text;
-
-  assert.ok(
-    !classNamesSlots.includes('root'),
-    `${classNamesName} must not contain root; use className for the root node.`
-  );
-  assert.ok(
-    !stylesSlots.includes('root'),
-    `${stylesName} must not contain root; use style for the root node.`
-  );
-  assert.deepEqual(
-    stylesSlots,
-    classNamesSlots,
-    `${stylesName} must expose exactly the same semantic slots as ${classNamesName}.`
-  );
-  for (const slot of classNamesSlots) {
-    assert.ok(
-      implementationSource.includes(`classNames?.${slot}`),
-      `${classNamesName}.${slot} is declared but not applied by its component.`
-    );
-    assert.ok(
-      implementationSource.includes(`styles?.${slot}`),
-      `${stylesName}.${slot} is declared but not applied by its component.`
-    );
+for (const symbol of checker.getExportsOfModule(moduleSymbol)) {
+  if (/^[A-Z]/.test(symbol.getName())) {
+    inspectComponent(symbol, symbol.getName());
   }
 }
-
-for (const contract of propContracts) {
-  assert.ok(
-    contract.properties.includes('styles'),
-    `${contract.name} exposes classNames without styles in ${contract.fileName}.`
-  );
-  assert.equal(
-    contract.properties.includes('className'),
-    contract.properties.includes('style'),
-    `${contract.name} must expose className and style together for its root node.`
-  );
-}
+assert.ok(
+  styleContracts.length > 0,
+  'Expected public semantic slot contracts.'
+);
 
 const inputMarkup = renderToStaticMarkup(
   createElement(Input, {
     className: 'input-root',
-    classNames: { input: 'input-control' },
+    classes: { input: 'input-control' },
     prefix: '@',
     style: { width: 320 },
     styles: { input: { letterSpacing: 2 } },
@@ -163,7 +145,7 @@ const tableMarkup = renderToStaticMarkup(
     Table.Primitive,
     {
       className: 'table-root',
-      classNames: { table: 'table-element' },
+      classes: { table: 'table-element' },
       style: { overflowX: 'auto' },
       styles: { table: { tableLayout: 'fixed' } },
     },
@@ -176,5 +158,5 @@ assert.match(tableMarkup, /<table\b[^>]*class="[^"]*table-element/);
 assert.match(tableMarkup, /<table\b[^>]*style="table-layout:fixed"/);
 
 globalThis.console.log(
-  `Verified ${classNamesDeclarations.length} paired classNames/styles contracts with no root slots.`
+  `Verified ${styleContracts.length} public paired classes/styles contracts and root/slot rendering.`
 );

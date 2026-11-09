@@ -50,9 +50,9 @@ import { ApiTable } from '@docs/rspress/api-table';
     },
     {
       component: 'Popover',
-      defaultValue: null,
+      defaultValue: "'click'",
       description: 'Set trigger elements, and click or hover preview modes.',
-      name: 'triggerMode',
+      name: 'mode',
       type: "'click' | 'hover'",
     },
     {
@@ -96,30 +96,44 @@ import { ApiTable } from '@docs/rspress/api-table';
     {
       component: 'Popover',
       defaultValue: null,
-      description: 'Set the overlay direction, alignment and spacing.',
-      name: 'sideOffset',
-      type: 'number',
+      description: "Configure popup offsets in pixels.",
+      name: 'offset',
+      type: "PopoverOffset",
+    },
+    {
+      component: 'Popover.offset',
+      defaultValue: "4",
+      description: "Distance along the popup side, in pixels.",
+      name: 'side',
+      type: "number",
+    },
+    {
+      component: 'Popover.offset',
+      defaultValue: "0",
+      description: "Offset along the alignment axis, in pixels.",
+      name: 'align',
+      type: "number",
     },
     {
       component: 'Popover',
       defaultValue: null,
-      description: 'Set the overlay direction, alignment and spacing.',
-      name: 'alignOffset',
-      type: 'number',
-    },
-    {
-      component: 'Popover',
-      defaultValue: null,
-      description: 'Set the wait time before hover mode turns on and off.',
+      description: "Configure hover-preview delays in milliseconds.",
       name: 'delay',
-      type: 'number',
+      type: "PopoverDelay",
     },
     {
-      component: 'Popover',
-      defaultValue: null,
-      description: 'Set the wait time before hover mode turns on and off.',
-      name: 'closeDelay',
-      type: 'number',
+      component: 'Popover.delay',
+      defaultValue: "300",
+      description: "Delay before opening, in milliseconds.",
+      name: 'open',
+      type: "number",
+    },
+    {
+      component: 'Popover.delay',
+      defaultValue: "150",
+      description: "Delay before closing, in milliseconds.",
+      name: 'close',
+      type: "number",
     },
     {
       component: 'Popover',
@@ -146,14 +160,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Popover',
       defaultValue: null,
       description: 'Extend the className of the corresponding semantic slot.',
-      name: 'classNames',
-      type: 'PopoverClassNames',
+      name: 'classes',
+      type: 'PopoverClasses',
     },
     {
       component: 'Popover',
       defaultValue: null,
       description:
-        'Set inline styles using the same semantic slots as classNames.',
+        'Set inline styles using the same semantic slots as classes.',
       name: 'styles',
       type: 'PopoverStyles',
     },
@@ -168,4 +182,4 @@ import { ApiTable } from '@docs/rspress/api-table';
 ## Avoid
 
 - Don’t put necessary actions in a hover layer; touch device and keyboard users need a more stable tap entry.
-- Do not maintain two sets of the same content, HoverCard and Popover, at the same time; use trigger="hover" directly for entity preview.
+- Do not maintain two sets of the same content, HoverCard and Popover, at the same time; use mode="hover" directly for entity preview.

@@ -26,16 +26,16 @@ const cases = [
     component: Case03,
     title: { en: 'Status dot', zh: '状态红点' },
     description: {
-      en: 'When indicator is true, only a dot is displayed. Because it has no visible content, indicatorLabel is required.',
-      zh: 'indicator 为 true 时只显示红点；因为没有可见内容，必须提供 indicatorLabel。',
+      en: 'When indicator is true, only a dot is displayed. Because it has no visible content, label is required.',
+      zh: 'indicator 为 true 时只显示红点；因为没有可见内容，必须提供 label。',
     },
   },
   {
     component: Case04,
     title: { en: 'Style extensions', zh: '样式扩展' },
     description: {
-      en: 'Use className and style for the root, and the matching classNames and styles slot for the indicator.',
-      zh: '根节点使用 className 与 style，通知标记使用对应的 classNames 和 styles 插槽。',
+      en: 'Use className and style for the root, and the matching classes and styles slot for the indicator.',
+      zh: '根节点使用 className 与 style，通知标记使用对应的 classes 和 styles 插槽。',
     },
   },
 ];

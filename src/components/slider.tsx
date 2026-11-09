@@ -23,6 +23,11 @@ const ACTIVE_SHELL_SCALE = 1.045;
 const IDLE_SHELL_OPACITY = 0.88;
 
 type SliderEffect = 'none' | 'elastic';
+type SliderEdge = {
+  icon?: React.ReactNode;
+  label?: React.ReactNode;
+};
+
 type ElasticEdge = 'none' | 'start' | 'end';
 
 type SliderProps<Value extends number | readonly number[]> = Omit<
@@ -32,8 +37,7 @@ type SliderProps<Value extends number | readonly number[]> = Omit<
   defaultValue?: Value;
   disabled?: boolean;
   effect?: SliderEffect;
-  endIcon?: React.ReactNode;
-  endLabel?: React.ReactNode;
+  end?: SliderEdge;
   form?: string;
   format?: Intl.NumberFormatOptions;
   inputRef?: React.Ref<HTMLInputElement>;
@@ -44,12 +48,11 @@ type SliderProps<Value extends number | readonly number[]> = Omit<
   minStepsBetweenValues?: number;
   name?: string;
   onChange?: (value: Value extends number ? number : Value) => void;
-  onChangeComplete?: (value: Value extends number ? number : Value) => void;
+  onCommit?: (value: Value extends number ? number : Value) => void;
   orientation?: 'horizontal' | 'vertical';
-  startIcon?: React.ReactNode;
-  startLabel?: React.ReactNode;
+  start?: SliderEdge;
   step?: number;
-  thumbCollisionBehavior?: 'none' | 'push' | 'swap';
+  collision?: 'none' | 'push' | 'swap';
   value?: Value;
 };
 
@@ -69,13 +72,14 @@ const Slider = <Value extends number | readonly number[]>(
   const {
     'aria-describedby': ariaDescribedBy,
     'aria-invalid': ariaInvalid,
+    'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
     className,
+    collision,
     defaultValue,
     disabled,
     effect = defaults.effect ?? 'elastic',
-    endIcon,
-    endLabel,
+    end,
     id,
     inputRef,
     max = 100,
@@ -83,10 +87,9 @@ const Slider = <Value extends number | readonly number[]>(
     name,
     onBlur,
     onChange,
-    onChangeComplete,
+    onCommit,
     orientation = 'horizontal',
-    startIcon,
-    startLabel,
+    start,
     value,
     ...props
   } = sliderProps;
@@ -95,7 +98,7 @@ const Slider = <Value extends number | readonly number[]>(
     inputRef,
     formControl?.ref as React.Ref<HTMLInputElement> | undefined
   );
-  const resolvedValue = formControl?.value ?? value;
+  const resolvedValue = formControl ? (formControl.value ?? min) : value;
   const resolvedDisabled = disabled || formControl?.disabled;
   const _values = Array.isArray(resolvedValue)
     ? resolvedValue
@@ -105,7 +108,7 @@ const Slider = <Value extends number | readonly number[]>(
         ? defaultValue
         : typeof defaultValue === 'number'
           ? [defaultValue]
-          : [min, max];
+          : [min];
   const controlRef = React.useRef<HTMLDivElement>(null);
   const shellRef = React.useRef<HTMLDivElement>(null);
   const interactionActiveRef = React.useRef(false);
@@ -263,6 +266,7 @@ const Slider = <Value extends number | readonly number[]>(
         formControl?.messageId
       )}
       aria-invalid={ariaInvalid ?? formControl?.invalid}
+      aria-label={ariaLabel}
       aria-labelledby={mergeIds(ariaLabelledBy, formControl?.labelId)}
       className={cn(
         'group/slider data-horizontal:w-full data-vertical:h-full',
@@ -283,8 +287,9 @@ const Slider = <Value extends number | readonly number[]>(
         formControl?.onChange(nextValue as Value);
       }}
       onValueCommitted={(nextValue) =>
-        onChangeComplete?.(nextValue as Value extends number ? number : Value)
+        onCommit?.(nextValue as Value extends number ? number : Value)
       }
+      thumbCollisionBehavior={collision}
       orientation={orientation}
       thumbAlignment="edge"
       value={resolvedValue}
@@ -303,7 +308,7 @@ const Slider = <Value extends number | readonly number[]>(
         onPointerLeave={handlePointerLeave}
         style={{ opacity: shellOpacity, scale: shellScale }}
       >
-        {(startIcon != null || startLabel != null) && (
+        {(start?.icon != null || start?.label != null) && (
           <motion.span
             data-slot="slider-start-icon"
             aria-hidden="true"
@@ -317,8 +322,8 @@ const Slider = <Value extends number | readonly number[]>(
                 : { x: startIconOffset, scale: startIconScale }
             }
           >
-            {startIcon}
-            {startLabel != null && <span>{startLabel}</span>}
+            {start?.icon}
+            {start?.label != null && <span>{start?.label}</span>}
           </motion.span>
         )}
         <SliderPrimitive.Control
@@ -348,30 +353,22 @@ const Slider = <Value extends number | readonly number[]>(
           {Array.from({ length: _values.length }, (_, index) => (
             <SliderPrimitive.Thumb
               data-slot="slider-thumb"
-              aria-describedby={
-                index === 0
-                  ? mergeIds(
-                      ariaDescribedBy,
-                      formControl?.descriptionId,
-                      formControl?.messageId
-                    )
-                  : undefined
-              }
-              aria-invalid={
-                index === 0 ? (ariaInvalid ?? formControl?.invalid) : undefined
-              }
-              aria-labelledby={
-                index === 0
-                  ? mergeIds(ariaLabelledBy, formControl?.labelId)
-                  : undefined
-              }
+              aria-describedby={mergeIds(
+                ariaDescribedBy,
+                formControl?.descriptionId,
+                formControl?.messageId
+              )}
+              aria-invalid={ariaInvalid ?? formControl?.invalid}
+              aria-label={ariaLabel}
+              aria-labelledby={mergeIds(ariaLabelledBy, formControl?.labelId)}
+              index={index}
               inputRef={index === 0 ? formInputRef : undefined}
               key={index}
               className="block h-4 w-6 shrink-0 rounded-full bg-white shadow-md ring-1 ring-black/10 transition-[color,box-shadow,background-color,transform] select-none not-dark:bg-clip-padding hover:scale-105 hover:ring-4 hover:ring-ring/30 focus-visible:scale-105 focus-visible:ring-4 focus-visible:ring-ring/30 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 data-dragging:scale-110 data-vertical:h-6 data-vertical:w-4"
             />
           ))}
         </SliderPrimitive.Control>
-        {(endIcon != null || endLabel != null) && (
+        {(end?.icon != null || end?.label != null) && (
           <motion.span
             data-slot="slider-end-icon"
             aria-hidden="true"
@@ -385,8 +382,8 @@ const Slider = <Value extends number | readonly number[]>(
                 : { x: endIconOffset, scale: endIconScale }
             }
           >
-            {endIcon}
-            {endLabel != null && <span>{endLabel}</span>}
+            {end?.icon}
+            {end?.label != null && <span>{end?.label}</span>}
           </motion.span>
         )}
       </motion.div>
@@ -406,6 +403,7 @@ const decay = (value: number, max: number) => {
 registerFormControl(Slider);
 
 export {
+  type SliderEdge,
   Slider,
   type SliderEffect,
   type SliderProps,

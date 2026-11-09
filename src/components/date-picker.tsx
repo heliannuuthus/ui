@@ -26,31 +26,31 @@ import { Popover } from './popover';
 type PickerLocale = 'en' | 'zh';
 type PickerRangeValue<Value> = readonly [Value | undefined, Value | undefined];
 
-type DatePickerClassNames = {
+type DatePickerClasses = {
   calendar?: string;
   trigger?: string;
 };
 
 type DatePickerStyles = {
-  [Slot in keyof DatePickerClassNames]?: React.CSSProperties;
+  [Slot in keyof DatePickerClasses]?: React.CSSProperties;
 };
 
-type DateTimePickerClassNames = DatePickerClassNames & {
+type DateTimePickerClasses = DatePickerClasses & {
   time?: string;
 };
 
 type DateTimePickerStyles = {
-  [Slot in keyof DateTimePickerClassNames]?: React.CSSProperties;
+  [Slot in keyof DateTimePickerClasses]?: React.CSSProperties;
 };
 
-type TimeRangePickerClassNames = {
+type TimeRangePickerClasses = {
   end?: string;
   separator?: string;
   start?: string;
 };
 
 type TimeRangePickerStyles = {
-  [Slot in keyof TimeRangePickerClassNames]?: React.CSSProperties;
+  [Slot in keyof TimeRangePickerClasses]?: React.CSSProperties;
 };
 
 type CalendarProps = Omit<
@@ -64,13 +64,13 @@ type PickerButtonProps = Pick<
 >;
 
 type DatePickerProps = PickerButtonProps & {
-  calendarProps?: CalendarProps;
+  calendar?: CalendarProps;
   className?: string;
-  classNames?: DatePickerClassNames;
+  classes?: DatePickerClasses;
   defaultValue?: Date;
   disabled?: boolean;
   display?: 'inline' | 'popover';
-  inputRef?: React.Ref<HTMLButtonElement>;
+  triggerRef?: React.Ref<HTMLButtonElement>;
   locale?: PickerLocale;
   onChange?: (date: Date | undefined) => void;
   placeholder?: string;
@@ -89,17 +89,17 @@ type DateRangePickerProps = Omit<
   value?: PickerRangeValue<Date>;
 };
 
-type DateTimePickerProps = Omit<DatePickerProps, 'classNames' | 'styles'> & {
-  classNames?: DateTimePickerClassNames;
+type DateTimePickerProps = Omit<DatePickerProps, 'classes' | 'styles'> & {
+  classes?: DateTimePickerClasses;
   minuteStep?: number;
   styles?: DateTimePickerStyles;
 };
 
 type DateTimeRangePickerProps = Omit<
   DateRangePickerProps,
-  'classNames' | 'styles'
+  'classes' | 'styles'
 > & {
-  classNames?: DateTimePickerClassNames;
+  classes?: DateTimePickerClasses;
   minuteStep?: number;
   styles?: DateTimePickerStyles;
 };
@@ -122,7 +122,7 @@ type TimeInputProps = Pick<
 type TimePickerProps = TimeInputProps & {
   className?: string;
   defaultValue?: string;
-  inputRef?: React.Ref<HTMLInputElement>;
+  ref?: React.Ref<HTMLInputElement>;
   minuteStep?: number;
   onChange?: (time: string | undefined) => void;
   style?: React.CSSProperties;
@@ -131,11 +131,12 @@ type TimePickerProps = TimeInputProps & {
 
 type TimeRangePickerProps = Omit<
   TimePickerProps,
-  'defaultValue' | 'onChange' | 'placeholder' | 'value'
+  'defaultValue' | 'onChange' | 'placeholder' | 'ref' | 'value'
 > & {
-  classNames?: TimeRangePickerClassNames;
+  classes?: TimeRangePickerClasses;
   defaultValue?: PickerRangeValue<string>;
   labels?: readonly [string, string];
+  inputRef?: React.Ref<HTMLInputElement>;
   onChange?: (range: PickerRangeValue<string> | undefined) => void;
   styles?: TimeRangePickerStyles;
   value?: PickerRangeValue<string>;
@@ -161,14 +162,19 @@ const timeValue = (date: Date | undefined) =>
 
 const withTime = (date: Date, source: Date | undefined) => {
   const next = new Date(date);
+
   next.setHours(source?.getHours() ?? 0, source?.getMinutes() ?? 0, 0, 0);
+
   return next;
 };
 
 const withTimeValue = (date: Date | undefined, value: string) => {
   const next = date ? new Date(date) : new Date();
+
   const [hours = 0, minutes = 0] = value.split(':').map(Number);
+
   next.setHours(hours, minutes, 0, 0);
+
   return next;
 };
 
@@ -187,6 +193,7 @@ const rangeLabel = (
 ) => {
   if (!value?.[0]) return placeholder;
   const start = format(value[0], pattern, { locale });
+
   const end = value[1] ? format(value[1], pattern, { locale }) : '…';
   return `${start} – ${end}`;
 };
@@ -207,7 +214,7 @@ const DatePicker = ({
   placeholder,
   disabled,
   id,
-  inputRef,
+  triggerRef,
   name,
   onBlur,
   required,
@@ -217,17 +224,20 @@ const DatePicker = ({
   'aria-invalid': ariaInvalid,
   'aria-label': ariaLabel,
   locale: localeName = 'zh',
-  classNames,
-  calendarProps,
+  classes,
+  calendar,
   styles,
 }: DatePickerProps) => {
   const formControl = useFormControl<Date | undefined>();
+
   const controlRef = useMergedRefs(
-    inputRef,
+    triggerRef,
     formControl?.ref as React.Ref<HTMLButtonElement> | undefined
   );
+
   const [uncontrolledValue, setUncontrolledValue] =
     React.useState(defaultValue);
+
   const selectedValue = formControl
     ? formControl.value
     : value === undefined
@@ -235,24 +245,29 @@ const DatePicker = ({
       : value;
   const handleChange = (nextValue: Date | undefined) => {
     if (!formControl && value === undefined) setUncontrolledValue(nextValue);
+
     onChange?.(nextValue);
+
     formControl?.onChange(nextValue);
   };
   const fallbackLocale = localeData(localeName);
-  const locale = calendarProps?.locale ?? fallbackLocale;
+
+  const locale = calendar?.locale ?? fallbackLocale;
   const labelLocale = formattingLocale(locale, fallbackLocale);
+
   const resolvedPlaceholder =
     placeholder ?? (localeName === 'en' ? 'Select date' : '选择日期');
+
   const isDisabled = disabled || formControl?.disabled;
-  const calendar = (
+  const calendarContent = (
     <Calendar
-      {...calendarProps}
+      {...calendar}
       locale={locale}
       mode="single"
       selected={selectedValue}
       onSelect={handleChange}
-      disabled={isDisabled ? () => true : calendarProps?.disabled}
-      className={classNames?.calendar}
+      disabled={isDisabled ? () => true : calendar?.disabled}
+      className={classes?.calendar}
       style={styles?.calendar}
     />
   );
@@ -260,7 +275,7 @@ const DatePicker = ({
   if (display === 'inline') {
     return (
       <PickerRoot className={className} style={style}>
-        {calendar}
+        {calendarContent}
       </PickerRoot>
     );
   }
@@ -269,8 +284,8 @@ const DatePicker = ({
     <PickerRoot className={className} style={style}>
       <Popover
         align="start"
-        content={calendar}
-        classNames={{ content: 'w-auto p-0' }}
+        content={calendarContent}
+        classes={{ content: 'w-auto p-0' }}
         trigger={
           <Button
             aria-describedby={mergeIds(
@@ -287,13 +302,14 @@ const DatePicker = ({
             name={formControl?.name ?? name}
             onBlur={(event) => {
               onBlur?.(event);
+
               formControl?.onBlur();
             }}
             ref={controlRef}
             className={cn(
               'w-60 max-w-full justify-start text-left font-normal',
               !selectedValue && 'text-muted-foreground',
-              classNames?.trigger
+              classes?.trigger
             )}
             style={styles?.trigger}
           >
@@ -321,7 +337,7 @@ const DateRangePicker = ({
   placeholder,
   disabled,
   id,
-  inputRef,
+  triggerRef,
   name,
   onBlur,
   required,
@@ -331,18 +347,22 @@ const DateRangePicker = ({
   'aria-invalid': ariaInvalid,
   'aria-label': ariaLabel,
   locale: localeName = 'zh',
-  classNames,
-  calendarProps,
+  classes,
+  calendar,
   styles,
 }: DateRangePickerProps) => {
   const isMobile = useIsMobile();
+
   const formControl = useFormControl<PickerRangeValue<Date> | undefined>();
+
   const controlRef = useMergedRefs(
-    inputRef,
+    triggerRef,
     formControl?.ref as React.Ref<HTMLButtonElement> | undefined
   );
+
   const [uncontrolledValue, setUncontrolledValue] =
     React.useState(defaultValue);
+
   const selectedValue = formControl
     ? formControl.value
     : value === undefined
@@ -350,30 +370,36 @@ const DateRangePicker = ({
       : value;
   const handleChange = (nextValue: DayPickerRange | undefined) => {
     const nextRange = pickerRange(nextValue);
+
     if (!formControl && value === undefined) setUncontrolledValue(nextRange);
+
     onChange?.(nextRange);
+
     formControl?.onChange(nextRange);
   };
   const fallbackLocale = localeData(localeName);
-  const locale = calendarProps?.locale ?? fallbackLocale;
+
+  const locale = calendar?.locale ?? fallbackLocale;
   const labelLocale = formattingLocale(locale, fallbackLocale);
+
   const resolvedPlaceholder =
     placeholder ?? (localeName === 'en' ? 'Select date range' : '选择日期范围');
+
   const isDisabled = disabled || formControl?.disabled;
-  const calendar = (
+  const calendarContent = (
     <Calendar
-      {...calendarProps}
+      {...calendar}
       locale={locale}
       mode="range"
-      numberOfMonths={calendarProps?.numberOfMonths ?? (isMobile ? 1 : 2)}
-      classNames={{
-        ...calendarProps?.classNames,
-        months: cn('flex flex-row gap-4', calendarProps?.classNames?.months),
+      months={calendar?.months ?? (isMobile ? 1 : 2)}
+      classes={{
+        ...calendar?.classes,
+        months: cn('flex flex-row gap-4', calendar?.classes?.months),
       }}
       selected={calendarRange(selectedValue)}
       onSelect={handleChange}
-      disabled={isDisabled ? () => true : calendarProps?.disabled}
-      className={classNames?.calendar}
+      disabled={isDisabled ? () => true : calendar?.disabled}
+      className={classes?.calendar}
       style={styles?.calendar}
     />
   );
@@ -381,7 +407,7 @@ const DateRangePicker = ({
   if (display === 'inline') {
     return (
       <PickerRoot className={className} style={style}>
-        {calendar}
+        {calendarContent}
       </PickerRoot>
     );
   }
@@ -390,8 +416,8 @@ const DateRangePicker = ({
     <PickerRoot className={className} style={style}>
       <Popover
         align="start"
-        content={calendar}
-        classNames={{
+        content={calendarContent}
+        classes={{
           content: 'w-max max-w-[calc(100vw-2rem)] overflow-auto p-0',
         }}
         trigger={
@@ -410,13 +436,14 @@ const DateRangePicker = ({
             name={formControl?.name ?? name}
             onBlur={(event) => {
               onBlur?.(event);
+
               formControl?.onBlur();
             }}
             ref={controlRef}
             className={cn(
               'w-80 max-w-full justify-start text-left font-normal',
               !selectedValue?.[0] && 'text-muted-foreground',
-              classNames?.trigger
+              classes?.trigger
             )}
             style={styles?.trigger}
           >
@@ -444,7 +471,7 @@ const DateTimePicker = ({
   placeholder,
   disabled,
   id,
-  inputRef,
+  triggerRef,
   name,
   onBlur,
   required,
@@ -454,18 +481,21 @@ const DateTimePicker = ({
   'aria-invalid': ariaInvalid,
   'aria-label': ariaLabel,
   locale: localeName = 'zh',
-  classNames,
-  calendarProps,
+  classes,
+  calendar,
   minuteStep = 1,
   styles,
 }: DateTimePickerProps) => {
   const formControl = useFormControl<Date | undefined>();
+
   const controlRef = useMergedRefs(
-    inputRef,
+    triggerRef,
     formControl?.ref as React.Ref<HTMLButtonElement> | undefined
   );
+
   const [uncontrolledValue, setUncontrolledValue] =
     React.useState(defaultValue);
+
   const selectedValue = formControl
     ? formControl.value
     : value === undefined
@@ -473,36 +503,41 @@ const DateTimePicker = ({
       : value;
   const handleChange = (nextValue: Date | undefined) => {
     if (!formControl && value === undefined) setUncontrolledValue(nextValue);
+
     onChange?.(nextValue);
+
     formControl?.onChange(nextValue);
   };
   const fallbackLocale = localeData(localeName);
-  const locale = calendarProps?.locale ?? fallbackLocale;
+
+  const locale = calendar?.locale ?? fallbackLocale;
   const labelLocale = formattingLocale(locale, fallbackLocale);
+
   const resolvedPlaceholder =
     placeholder ??
     (localeName === 'en' ? 'Select date and time' : '选择日期和时间');
+
   const isDisabled = disabled || formControl?.disabled;
   const timeLabel = localeName === 'en' ? 'Time' : '时间';
   const content = (
     <div>
       <Calendar
-        {...calendarProps}
+        {...calendar}
         locale={locale}
         mode="single"
         selected={selectedValue}
         onSelect={(date) =>
           handleChange(date ? withTime(date, selectedValue) : undefined)
         }
-        disabled={isDisabled ? () => true : calendarProps?.disabled}
-        className={classNames?.calendar}
+        disabled={isDisabled ? () => true : calendar?.disabled}
+        className={classes?.calendar}
         style={styles?.calendar}
       />
       <div className="border-t border-border p-3">
         <FormControlBoundary>
           <Input
             aria-label={timeLabel}
-            className={cn('w-full', classNames?.time)}
+            className={cn('w-full', classes?.time)}
             disabled={isDisabled}
             onInput={(event) =>
               handleChange(
@@ -533,7 +568,7 @@ const DateTimePicker = ({
       <Popover
         align="start"
         content={content}
-        classNames={{ content: 'w-auto p-0' }}
+        classes={{ content: 'w-auto p-0' }}
         trigger={
           <Button
             aria-describedby={mergeIds(
@@ -550,13 +585,14 @@ const DateTimePicker = ({
             name={formControl?.name ?? name}
             onBlur={(event) => {
               onBlur?.(event);
+
               formControl?.onBlur();
             }}
             ref={controlRef}
             className={cn(
               'w-72 max-w-full justify-start text-left font-normal',
               !selectedValue && 'text-muted-foreground',
-              classNames?.trigger
+              classes?.trigger
             )}
             style={styles?.trigger}
           >
@@ -584,7 +620,7 @@ const DateTimeRangePicker = ({
   placeholder,
   disabled,
   id,
-  inputRef,
+  triggerRef,
   name,
   onBlur,
   required,
@@ -594,19 +630,23 @@ const DateTimeRangePicker = ({
   'aria-invalid': ariaInvalid,
   'aria-label': ariaLabel,
   locale: localeName = 'zh',
-  classNames,
-  calendarProps,
+  classes,
+  calendar,
   minuteStep = 1,
   styles,
 }: DateTimeRangePickerProps) => {
   const isMobile = useIsMobile();
+
   const formControl = useFormControl<PickerRangeValue<Date> | undefined>();
+
   const controlRef = useMergedRefs(
-    inputRef,
+    triggerRef,
     formControl?.ref as React.Ref<HTMLButtonElement> | undefined
   );
+
   const [uncontrolledValue, setUncontrolledValue] =
     React.useState(defaultValue);
+
   const selectedValue = formControl
     ? formControl.value
     : value === undefined
@@ -614,32 +654,38 @@ const DateTimeRangePicker = ({
       : value;
   const setValue = (nextValue: PickerRangeValue<Date> | undefined) => {
     if (!formControl && value === undefined) setUncontrolledValue(nextValue);
+
     onChange?.(nextValue);
+
     formControl?.onChange(nextValue);
   };
   const fallbackLocale = localeData(localeName);
-  const locale = calendarProps?.locale ?? fallbackLocale;
+
+  const locale = calendar?.locale ?? fallbackLocale;
   const labelLocale = formattingLocale(locale, fallbackLocale);
+
   const resolvedPlaceholder =
     placeholder ??
     (localeName === 'en' ? 'Select date and time range' : '选择日期和时间范围');
+
   const isDisabled = disabled || formControl?.disabled;
   const startTimeLabel = localeName === 'en' ? 'Start time' : '开始时间';
   const endTimeLabel = localeName === 'en' ? 'End time' : '结束时间';
   const content = (
     <div>
       <Calendar
-        {...calendarProps}
+        {...calendar}
         locale={locale}
         mode="range"
-        numberOfMonths={calendarProps?.numberOfMonths ?? (isMobile ? 1 : 2)}
-        classNames={{
-          ...calendarProps?.classNames,
-          months: cn('flex flex-row gap-4', calendarProps?.classNames?.months),
+        months={calendar?.months ?? (isMobile ? 1 : 2)}
+        classes={{
+          ...calendar?.classes,
+          months: cn('flex flex-row gap-4', calendar?.classes?.months),
         }}
         selected={calendarRange(selectedValue)}
         onSelect={(nextRange) => {
           const next = pickerRange(nextRange);
+
           setValue(
             next
               ? [
@@ -649,14 +695,14 @@ const DateTimeRangePicker = ({
               : undefined
           );
         }}
-        disabled={isDisabled ? () => true : calendarProps?.disabled}
-        className={classNames?.calendar}
+        disabled={isDisabled ? () => true : calendar?.disabled}
+        className={classes?.calendar}
         style={styles?.calendar}
       />
       <div
         className={cn(
           'grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-t border-border p-3',
-          classNames?.time
+          classes?.time
         )}
         style={styles?.time}
       >
@@ -709,7 +755,7 @@ const DateTimeRangePicker = ({
       <Popover
         align="start"
         content={content}
-        classNames={{
+        classes={{
           content: 'w-max max-w-[calc(100vw-2rem)] overflow-auto p-0',
         }}
         trigger={
@@ -728,13 +774,14 @@ const DateTimeRangePicker = ({
             name={formControl?.name ?? name}
             onBlur={(event) => {
               onBlur?.(event);
+
               formControl?.onBlur();
             }}
             ref={controlRef}
             className={cn(
               'w-96 max-w-full justify-start text-left font-normal',
               !selectedValue?.[0] && 'text-muted-foreground',
-              classNames?.trigger
+              classes?.trigger
             )}
             style={styles?.trigger}
           >
@@ -758,7 +805,7 @@ const TimePicker = ({
   value,
   defaultValue,
   onChange,
-  inputRef,
+  ref,
   minuteStep = 1,
   disabled,
   required,
@@ -771,12 +818,15 @@ const TimePicker = ({
   ...props
 }: TimePickerProps) => {
   const formControl = useFormControl<string | undefined>();
+
   const controlRef = useMergedRefs(
-    inputRef,
+    ref,
     formControl?.ref as React.Ref<HTMLInputElement> | undefined
   );
+
   const [uncontrolledValue, setUncontrolledValue] =
     React.useState(defaultValue);
+
   const selectedValue = formControl
     ? formControl.value
     : value === undefined
@@ -784,7 +834,9 @@ const TimePicker = ({
       : value;
   const handleChange = (nextValue: string | undefined) => {
     if (!formControl && value === undefined) setUncontrolledValue(nextValue);
+
     onChange?.(nextValue);
+
     formControl?.onChange(nextValue);
   };
 
@@ -804,6 +856,7 @@ const TimePicker = ({
         name={formControl?.name ?? name}
         onBlur={(event) => {
           onBlur?.(event);
+
           formControl?.onBlur();
         }}
         onInput={(event) =>
@@ -834,7 +887,7 @@ const TimeRangePicker = ({
   onBlur,
   className,
   style,
-  classNames,
+  classes,
   styles,
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
@@ -842,12 +895,15 @@ const TimeRangePicker = ({
   ...props
 }: TimeRangePickerProps) => {
   const formControl = useFormControl<PickerRangeValue<string> | undefined>();
+
   const startRef = useMergedRefs(
     inputRef,
     formControl?.ref as React.Ref<HTMLInputElement> | undefined
   );
+
   const [uncontrolledValue, setUncontrolledValue] =
     React.useState(defaultValue);
+
   const selectedValue = formControl
     ? formControl.value
     : value === undefined
@@ -856,7 +912,9 @@ const TimeRangePicker = ({
   const setValue = (nextValue: PickerRangeValue<string>) => {
     const normalized = nextValue[0] || nextValue[1] ? nextValue : undefined;
     if (!formControl && value === undefined) setUncontrolledValue(normalized);
+
     onChange?.(normalized);
+
     formControl?.onChange(normalized);
   };
   const isDisabled = disabled || formControl?.disabled;
@@ -886,13 +944,14 @@ const TimeRangePicker = ({
           aria-label={resolvedLabels[0]}
           className={cn(
             'h-9 min-w-0 flex-1 bg-transparent text-sm outline-none disabled:cursor-not-allowed',
-            classNames?.start
+            classes?.start
           )}
           disabled={isDisabled}
           id={id ?? formControl?.controlId}
           name={name ? `${name}-start` : formControl?.name}
           onBlur={(event) => {
             onBlur?.(event);
+
             formControl?.onBlur();
           }}
           onInput={(event) =>
@@ -912,7 +971,7 @@ const TimeRangePicker = ({
           aria-hidden="true"
           className={cn(
             'size-4 shrink-0 text-muted-foreground',
-            classNames?.separator
+            classes?.separator
           )}
           style={styles?.separator}
         />
@@ -923,13 +982,14 @@ const TimeRangePicker = ({
           aria-label={resolvedLabels[1]}
           className={cn(
             'h-9 min-w-0 flex-1 bg-transparent text-sm outline-none disabled:cursor-not-allowed',
-            classNames?.end
+            classes?.end
           )}
           disabled={isDisabled}
           id={id ? `${id}-end` : undefined}
           name={name ? `${name}-end` : undefined}
           onBlur={(event) => {
             onBlur?.(event);
+
             formControl?.onBlur();
           }}
           onInput={(event) =>
@@ -950,10 +1010,15 @@ const TimeRangePicker = ({
 };
 
 registerFormControl(DatePicker);
+
 registerFormControl(DateRangePicker);
+
 registerFormControl(DateTimePicker);
+
 registerFormControl(DateTimeRangePicker);
+
 registerFormControl(TimePicker);
+
 registerFormControl(TimeRangePicker);
 
 export {
@@ -963,18 +1028,18 @@ export {
   DateTimeRangePicker,
   TimePicker,
   TimeRangePicker,
-  type DatePickerClassNames,
+  type DatePickerClasses,
   type DatePickerProps,
   type DatePickerStyles,
   type DateRangePickerProps,
-  type DateTimePickerClassNames,
+  type DateTimePickerClasses,
   type DateTimePickerProps,
   type DateTimePickerStyles,
   type DateTimeRangePickerProps,
   type PickerLocale,
   type PickerRangeValue,
   type TimePickerProps,
-  type TimeRangePickerClassNames,
+  type TimeRangePickerClasses,
   type TimeRangePickerProps,
   type TimeRangePickerStyles,
 };

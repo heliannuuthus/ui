@@ -109,8 +109,8 @@ export function Welcome() {
                   {[
                     'appearance',
                     'direction',
-                    'theme.colors',
-                    'theme.darkColors',
+                    'theme.colors.base',
+                    'theme.colors.dark',
                     'theme.radius',
                     'components',
                   ].map((property) => (

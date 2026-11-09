@@ -28,7 +28,7 @@ const anchoredCount = render(
   Badge,
   {
     indicator: 123,
-    indicatorLabel: 'More than 99 unread messages',
+    label: 'More than 99 unread messages',
     max: 99,
     offset: [2, -1],
   },
@@ -36,7 +36,7 @@ const anchoredCount = render(
 );
 const dot = render(
   Badge,
-  { indicator: true, indicatorLabel: 'New notification' },
+  { indicator: true, label: 'New notification' },
   'Updates'
 );
 const zero = render(Badge, { indicator: 0 });

@@ -3,7 +3,7 @@ import { Progress } from '@heliannuuthus/ui';
 
 const ZhExample = (() => {
   return () => (
-    <Progress effect="sparkle" value={68} label="生产环境" showValue />
+    <Progress effect="sparkle" value={68} label="生产环境" display />
   );
 })();
 
@@ -13,7 +13,7 @@ const EnExample = (() => {
       effect="sparkle"
       value={68}
       label="Production environment"
-      showValue
+      display
     />
   );
 })();

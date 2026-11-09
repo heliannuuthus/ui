@@ -16,7 +16,9 @@ import { ApiTable } from '@docs/rspress/api-table';
 - 候选项固定时使用 Select；列表较长时直接输入关键词过滤。
 - 通过 options 提供平铺或分组候选项，通过受控或非受控 props 管理单选值。
 
-Select 的值限定为字符串或数字。需要多选、标签折叠或异步搜索时，应使用单独的 Multi Select / Combobox，而不是继续扩张 Select 的属性面。
+Select 的值限定为字符串或数字，支持单个选中值和本地选项过滤；多选、标签折叠和异步搜索不属于当前 Select 契约。
+
+使用 `value={null}` 表示显式为空的受控选择。受控值没有匹配选项时显示占位文本；在 `Form.Field` 中，字段未初始化或重置为空值时会保持空选择，直到选中一个值，不会残留上一次的选项。
 
 ## 示例
 
@@ -47,7 +49,7 @@ Select 的值限定为字符串或数字。需要多选、标签折叠或异步�
       component: 'Select',
       defaultValue: null,
       description:
-        '提供平铺或分组候选项；复杂标签可通过 textValue 提供用于显示和过滤的纯文本。',
+        '提供平铺或分组候选项；复杂标签可通过 text 提供用于显示和过滤的纯文本。',
       name: 'options',
       type: '(SelectOption<Value> | SelectOptionGroup<Value>)[]',
     },
@@ -83,14 +85,14 @@ Select 的值限定为字符串或数字。需要多选、标签折叠或异步�
       component: 'Select',
       defaultValue: null,
       description: '过滤后没有可用选项时显示的内容。',
-      name: 'emptyText',
+      name: 'empty',
       type: 'ReactNode',
     },
     {
       component: 'Select',
       defaultValue: null,
       description: '是否在存在选中值时显示清除按钮。',
-      name: 'showClear',
+      name: 'clearable',
       type: 'boolean',
     },
     {
@@ -139,7 +141,7 @@ Select 的值限定为字符串或数字。需要多选、标签折叠或异步�
       component: 'Select',
       defaultValue: null,
       description: '获取底层输入节点的 ref。',
-      name: 'inputRef',
+      name: 'ref',
       type: 'React.Ref<HTMLInputElement>',
     },
     {
@@ -174,15 +176,22 @@ Select 的值限定为字符串或数字。需要多选、标签折叠或异步�
       component: 'Select',
       defaultValue: null,
       description: '按 trigger 语义槽位扩展类名。',
-      name: 'classNames',
-      type: 'SelectClassNames',
+      name: 'classes',
+      type: 'SelectClasses',
     },
     {
       component: 'Select',
       defaultValue: null,
-      description: '按与 classNames 相同的 trigger 槽位设置行内样式。',
+      description: '按与 classes 相同的 trigger 槽位设置行内样式。',
       name: 'styles',
       type: 'SelectStyles',
+    },
+    {
+      component: 'SelectOption',
+      defaultValue: null,
+      description: '为复杂标签提供用于显示和过滤的纯文本。',
+      name: 'text',
+      type: "string",
     },
   ]}
 />

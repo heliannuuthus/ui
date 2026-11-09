@@ -8,7 +8,7 @@ const ZhExample = (() => {
       href="/releases/history"
       icon={<ArrowUpRight />}
       content="View release history"
-      classNames={{ icon: 'text-primary', content: 'font-medium' }}
+      classes={{ icon: 'text-primary', content: 'font-medium' }}
     />
   );
 })();
@@ -19,7 +19,7 @@ const EnExample = (() => {
       href="/releases/history"
       icon={<ArrowUpRight />}
       content="View release history"
-      classNames={{ icon: 'text-primary', content: 'font-medium' }}
+      classes={{ icon: 'text-primary', content: 'font-medium' }}
     />
   );
 })();

@@ -8,8 +8,7 @@ const ZhExample = (() => {
       separator
       items={[
         {
-          media: <MessageCircle />,
-          mediaType: 'icon',
+          media: { content: <MessageCircle />, type: 'icon' },
           title: '林默回复了检查项',
           description: '确认索引变更不会锁表。',
           actions: <Tag>2 分钟前</Tag>,
@@ -25,8 +24,7 @@ const EnExample = (() => {
       separator
       items={[
         {
-          media: <MessageCircle />,
-          mediaType: 'icon',
+          media: { content: <MessageCircle />, type: 'icon' },
           title: 'Lin Mo replied to the review item',
           description:
             'Confirmed that the index change will not lock the table.',

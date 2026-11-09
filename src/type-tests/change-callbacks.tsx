@@ -13,7 +13,7 @@ export const ChangeCallbackTypeTest = () => {
     <>
       <Input.Number
         onChange={(value) => value?.valueOf()}
-        onChangeComplete={(value) => value?.valueOf()}
+        onCommit={(value) => value?.valueOf()}
       />
       {/* @ts-expect-error Primitive callback names are not public API. */}
       <Input.Number onValueChange={() => undefined} />
@@ -28,7 +28,7 @@ export const ChangeCallbackTypeTest = () => {
 
       <Slider
         onChange={(value) => value.valueOf()}
-        onChangeComplete={(value) => value.valueOf()}
+        onCommit={(value) => value.valueOf()}
       />
       {/* @ts-expect-error Primitive callback names are not public API. */}
       <Slider onValueChange={() => undefined} />

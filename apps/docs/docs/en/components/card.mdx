@@ -33,7 +33,7 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## Semantic DOM
 
-{"Hover, focus, or click a property row to inspect the root targeted by className/style and the regions targeted by CardClassNames/CardStyles."}
+{"Hover, focus, or click a property row to inspect the root targeted by className/style and the regions targeted by CardClasses/CardStyles."}
 
 <CardSemanticDom locale="en" />
 
@@ -107,7 +107,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: 'ReactNode',
     },
     {
-      component: 'CardClassNames',
+      component: 'CardClasses',
       defaultValue: null,
       description:
         'Expands the header area containing the title, description, and actions on the right.',
@@ -115,21 +115,21 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: 'string',
     },
     {
-      component: 'CardClassNames',
+      component: 'CardClasses',
       defaultValue: null,
       description: 'Expand the card title area.',
       name: 'title',
       type: 'string',
     },
     {
-      component: 'CardClassNames',
+      component: 'CardClasses',
       defaultValue: null,
       description: 'Expand the supporting description area below the title.',
       name: 'description',
       type: 'string',
     },
     {
-      component: 'CardClassNames',
+      component: 'CardClasses',
       defaultValue: null,
       description:
         'Expand the auxiliary operating area on the right side of the head.',
@@ -137,14 +137,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: 'string',
     },
     {
-      component: 'CardClassNames',
+      component: 'CardClasses',
       defaultValue: null,
       description: 'Expand the main content area of ​​the card.',
       name: 'content',
       type: 'string',
     },
     {
-      component: 'CardClassNames',
+      component: 'CardClasses',
       defaultValue: null,
       description:
         'Expand the supplementary information and operation area at the bottom of the card.',
@@ -155,14 +155,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Card',
       defaultValue: null,
       description: 'Extend the className of the corresponding semantic slot.',
-      name: 'classNames',
-      type: 'CardClassNames',
+      name: 'classes',
+      type: 'CardClasses',
     },
     {
       component: 'Card',
       defaultValue: null,
       description:
-        'Set inline styles using the same semantic slots as classNames.',
+        'Set inline styles using the same semantic slots as classes.',
       name: 'styles',
       type: 'CardStyles',
     },

@@ -90,8 +90,8 @@ type SelectTriggerProps = Omit<
 > & {
   children?: React.ReactNode;
   className?: string;
-  inputRef?: React.Ref<HTMLInputElement>;
-  showClear?: boolean;
+  ref?: React.Ref<HTMLInputElement>;
+  clearable?: boolean;
   showTrigger?: boolean;
 };
 
@@ -99,15 +99,15 @@ const SelectTrigger = ({
   className,
   children,
   disabled = false,
-  inputRef,
+  ref,
   showTrigger = true,
-  showClear = false,
+  clearable = false,
   ...props
 }: SelectTriggerProps) => {
   return (
     <InputGroup data-slot="select-trigger" className={cn('w-auto', className)}>
       <SelectPrimitive.Input
-        ref={inputRef}
+        ref={ref}
         render={<InputGroupInput disabled={disabled} />}
         {...props}
       />
@@ -120,7 +120,7 @@ const SelectTrigger = ({
             disabled={disabled}
           />
         )}
-        {showClear && <SelectClear disabled={disabled} />}
+        {clearable && <SelectClear disabled={disabled} />}
       </InputGroupAddon>
       {children}
     </InputGroup>
@@ -256,7 +256,7 @@ type SelectOption<Value extends SelectValue> = {
   disabled?: boolean;
   label: React.ReactNode;
   /** Plain text used to filter and display non-text labels. */
-  textValue?: string;
+  text?: string;
   value: Value;
 };
 
@@ -266,10 +266,10 @@ type SelectOptionGroup<Value extends SelectValue> = {
 };
 
 type InternalSelectOption<Value extends SelectValue> = SelectOption<Value> & {
-  textValue: string;
+  text: string;
 };
 
-type SelectClassNames = {
+type SelectClasses = {
   trigger?: string;
 };
 
@@ -281,19 +281,19 @@ type SelectProps<Value extends SelectValue = string> = Pick<
   React.InputHTMLAttributes<HTMLInputElement>,
   'aria-describedby' | 'aria-invalid' | 'aria-label' | 'id' | 'onBlur'
 > & {
-  classNames?: SelectClassNames;
+  classes?: SelectClasses;
   defaultValue?: Value | null;
   disabled?: boolean;
-  emptyText?: React.ReactNode;
+  empty?: React.ReactNode;
   form?: string;
-  inputRef?: React.Ref<HTMLInputElement>;
+  ref?: React.Ref<HTMLInputElement>;
   name?: string;
   onChange?: (value: Value | null) => void;
   options: readonly (SelectOption<Value> | SelectOptionGroup<Value>)[];
   placeholder?: string;
   readOnly?: boolean;
   required?: boolean;
-  showClear?: boolean;
+  clearable?: boolean;
   styles?: SelectStyles;
   value?: Value | null;
 };
@@ -303,12 +303,12 @@ const Select = <Value extends SelectValue = string>({
   'aria-invalid': ariaInvalid,
   'aria-label': ariaLabel,
   defaultValue,
-  classNames,
+  classes,
   disabled,
-  emptyText = '没有找到选项',
+  empty = '没有找到选项',
   form,
   id,
-  inputRef,
+  ref,
   name,
   onBlur,
   onChange,
@@ -316,7 +316,7 @@ const Select = <Value extends SelectValue = string>({
   placeholder,
   readOnly,
   required,
-  showClear,
+  clearable,
   styles,
   value,
 }: SelectProps<Value>) => {
@@ -328,8 +328,8 @@ const Select = <Value extends SelectValue = string>({
           item: SelectOption<Value>
         ): InternalSelectOption<Value> => ({
           ...item,
-          textValue:
-            item.textValue ??
+          text:
+            item.text ??
             (typeof item.label === 'string' || typeof item.label === 'number'
               ? String(item.label)
               : String(item.value)),
@@ -345,7 +345,7 @@ const Select = <Value extends SelectValue = string>({
     'options' in option ? option.options : [option]
   );
   const controlRef = useMergedRefs(
-    inputRef,
+    ref,
     formControl?.ref as React.Ref<HTMLInputElement> | undefined
   );
   const resolvedDisabled = disabled || formControl?.disabled;
@@ -353,7 +353,10 @@ const Select = <Value extends SelectValue = string>({
     optionValue == null
       ? optionValue
       : flatOptions.find((option) => Object.is(option.value, optionValue));
-  const controlledValue = findOption(formControl ? formControl.value : value);
+  const controlled = formControl != null || value !== undefined;
+  const controlledValue = controlled
+    ? (findOption(formControl ? formControl.value : value) ?? null)
+    : undefined;
   const initialValue = findOption(defaultValue);
 
   return (
@@ -365,7 +368,7 @@ const Select = <Value extends SelectValue = string>({
       isItemEqualToValue={(item, selected) =>
         Object.is(item.value, selected.value)
       }
-      itemToStringLabel={(item) => item.textValue}
+      itemToStringLabel={(item) => item.text}
       itemToStringValue={(item) => String(item.value)}
       items={flatOptions}
       name={formControl?.name ?? name}
@@ -387,7 +390,7 @@ const Select = <Value extends SelectValue = string>({
         aria-invalid={ariaInvalid ?? formControl?.invalid}
         aria-label={ariaLabel}
         aria-required={required || formControl?.required}
-        className={classNames?.trigger}
+        className={classes?.trigger}
         disabled={resolvedDisabled}
         id={formControl?.controlId ?? id}
         onBlur={(event) => {
@@ -395,13 +398,13 @@ const Select = <Value extends SelectValue = string>({
           formControl?.onBlur();
         }}
         placeholder={placeholder}
-        inputRef={controlRef}
+        ref={controlRef}
         readOnly={readOnly}
-        showClear={showClear}
+        clearable={clearable}
         style={styles?.trigger}
       />
       <SelectContent>
-        <SelectEmpty>{emptyText}</SelectEmpty>
+        <SelectEmpty>{empty}</SelectEmpty>
         <SelectList>
           {internalOptions.map((option, index) =>
             'options' in option ? (
@@ -441,7 +444,7 @@ export type {
   SelectOption,
   SelectOptionGroup,
   SelectProps,
-  SelectClassNames,
+  SelectClasses,
   SelectStyles,
   SelectValue,
 };

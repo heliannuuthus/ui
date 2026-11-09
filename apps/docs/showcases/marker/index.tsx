@@ -43,8 +43,8 @@ const cases = [
     component: Case05,
     title: { en: 'Link and slot styles', zh: '链接与槽位样式' },
     description: {
-      en: 'href gives the entire Marker native link semantics, while classNames extends the icon and content slots independently.',
-      zh: 'href 让整个 Marker 使用原生链接语义，classNames 分别扩展 icon 与 content 槽位。',
+      en: 'href gives the entire Marker native link semantics, while classes extends the icon and content slots independently.',
+      zh: 'href 让整个 Marker 使用原生链接语义，classes 分别扩展 icon 与 content 槽位。',
     },
   },
 ];

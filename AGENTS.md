@@ -27,7 +27,7 @@
 - Ant Design is an API-design reference only. Do not introduce `antd`, copy its implementation, or create an Ant-compatible facade.
 - Do not design a component solely around one current screen. Cover common composition, loading, empty, error and disabled states, long content, accessibility, narrow layouts, and backward-compatible evolution.
 - Prefer composable primitives and compound components over boolean-prop proliferation. Expose `className`, semantic slots, `asChild` or equivalent escape hatches only when their contract remains type-safe and predictable.
-- `className` and `style` always target the component root. Composite components may additionally expose `classNames` and `styles`, but these maps must be provided together with exactly matching semantic slot keys and must never contain a `root` slot. Do not add flat slot-prefixed props such as `headerClassName`, `contentClassName`, or `itemStyle`.
+- `className` and `style` always target the component root. Composite components may additionally expose `classes` and `styles`, but these root-level maps must be provided together with exactly matching semantic slot keys and must never contain a `root` slot. Do not add flat slot-prefixed props such as `headerClassName`, `contentClassName`, or `itemStyle`. Upstream option objects retain their actual capabilities: Toast options support class slots but inline styles only for action/cancel buttons. Sources: `src/components/card.tsx:6`, `src/components/card.tsx:31`, `src/components/sonner.tsx:21`.
 - When a boolean prop enables a behavior and a `ReactNode` only customizes that same behavior's content, combine them into one `boolean | ReactNode` prop instead of adding a parallel content prop. Use `false` or `undefined` to disable the behavior, `true` to enable its default content, and a `ReactNode` to enable it with custom content. Split the API only when the two values represent independently controllable semantics; for example, prefer `ellipsis?: boolean | ReactNode` over `ellipsis` plus `ellipsisTooltip`.
 - List every public prop and component part on its own documentation row. Do not join names, types, or default values with `/`; each row must describe one independently usable API member.
 - Every new public component must be added to the root export manifest,
@@ -52,7 +52,7 @@
 - Public controlled-state callbacks use `onChange` consistently, regardless of
   whether the underlying primitive calls its event `onValueChange` or
   `onCheckedChange`. Reserve specific names such as `onOpenChange`,
-  `onSearch`, and `onChangeComplete` for genuinely distinct state or lifecycle
+  `onSearch`, and `onCommit` for genuinely distinct state or lifecycle
   events; primitive-specific callback names remain implementation details.
 - Form integration must use a typed, component-owned binding contract so
   `Input`, `Select`, `Switch`, `Checkbox`, `Radio.Group`, `DatePicker` and

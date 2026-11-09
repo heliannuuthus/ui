@@ -18,6 +18,8 @@ const createExample = (locale: 'en' | 'zh') => {
           loading: copy('正在发布到生产环境…'),
           success: (version) => copy(`${version} 已发布`),
           error: copy('发布失败，请检查构建日志'),
+          classes: { description: 'text-sm' },
+          styles: { action: { fontWeight: 600 } },
         }
       );
     };
@@ -28,7 +30,15 @@ const createExample = (locale: 'en' | 'zh') => {
           <Rocket />
           {copy('模拟异步发布')}
         </Button>
-        <Sonner position="bottom-right" richColors />
+        <Sonner
+          position="bottom-right"
+          rich
+          closable
+          limit={3}
+          swipe={['right']}
+          offset={{ base: 24, mobile: 12 }}
+          defaults={{ classes: { toast: 'cn-toast' } }}
+        />
       </>
     );
   };

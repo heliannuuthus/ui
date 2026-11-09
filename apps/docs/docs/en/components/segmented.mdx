@@ -18,6 +18,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 Segmented does not render content panels. Use Tabs when every choice owns a corresponding content region and requires `tab` / `tabpanel` keyboard and screen-reader semantics.
 
+In uncontrolled mode, the first enabled option is selected by default. An explicitly empty or unmatched controlled value leaves all options unselected. A `Form.Field` that is uninitialized or reset to an empty value also remains empty instead of selecting the first option.
+
 ## Examples
 
 <SegmentedShowcase>
@@ -148,14 +150,14 @@ Segmented does not render content panels. Use Tabs when every choice owns a corr
       defaultValue: null,
       description:
         'Extends the indicator, item, and label semantic slot class names.',
-      name: 'classNames',
-      type: 'SegmentedClassNames',
+      name: 'classes',
+      type: 'SegmentedClasses',
     },
     {
       component: 'Segmented',
       defaultValue: null,
       description:
-        'Sets inline styles using the same semantic slots as classNames.',
+        'Sets inline styles using the same semantic slots as classes.',
       name: 'styles',
       type: 'SegmentedStyles',
     },

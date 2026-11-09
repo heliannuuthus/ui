@@ -75,7 +75,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Badge',
       defaultValue: null,
       description: '设置通知的无障碍名称；红点模式必须提供。',
-      name: 'indicatorLabel',
+      name: 'label',
       type: 'string',
     },
     {
@@ -103,13 +103,13 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Badge',
       defaultValue: null,
       description: '扩展对应语义槽位的 className。',
-      name: 'classNames',
-      type: 'BadgeClassNames',
+      name: 'classes',
+      type: 'BadgeClasses',
     },
     {
       component: 'Badge',
       defaultValue: null,
-      description: '按与 classNames 相同的语义区域设置行内样式。',
+      description: '按与 classes 相同的语义区域设置行内样式。',
       name: 'styles',
       type: 'BadgeStyles',
     },
@@ -118,8 +118,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## 无障碍
 
-- 红点没有可见文字，必须通过 indicatorLabel 说明通知含义。
-- 数字已有可见文本；含义不明确时仍应补充 indicatorLabel。
+- 红点没有可见文字，必须通过 label 说明通知含义。
+- 数字已有可见文本；含义不明确时仍应补充 label。
 - Badge 支持标准 span、ARIA、data 属性和事件，并转发 span ref。
 
 ## 避免事项

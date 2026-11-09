@@ -52,11 +52,11 @@ const createExample = (locale: 'en' | 'zh') => {
         mode === 'hidden'
           ? false
           : {
-              renderDot:
+              dot:
                 mode === 'custom'
-                  ? ({ index, isSelected }) => (
+                  ? ({ index, selected }) => (
                       <span aria-hidden>
-                        {isSelected ? `0${index + 1}` : '·'}
+                        {selected ? `0${index + 1}` : '·'}
                       </span>
                     )
                   : undefined,

@@ -59,8 +59,8 @@ const cases = [
       zh: '受控排序、分页与行选择',
     },
     description: {
-      en: 'Applications can control sorting, pagination, and rowSelection; every interaction returns public state without exposing the underlying table instance.',
-      zh: 'sorting、pagination 和 rowSelection 都可以由业务受控；每次交互都会返回公开状态，不暴露底层表格实例。',
+      en: 'Applications can control sorting, pagination, and selection; every interaction returns public state without exposing the underlying table instance.',
+      zh: 'sorting、pagination 和 selection 都可以由业务受控；每次交互都会返回公开状态，不暴露底层表格实例。',
     },
   },
   {

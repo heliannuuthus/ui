@@ -38,12 +38,12 @@ type TabsItem = {
   value: string;
 };
 
-type TabsScrollLabels = {
+type TabsLabels = {
   end: string;
   start: string;
 };
 
-type TabsClassNames = {
+type TabsClasses = {
   indicator?: string;
   list?: string;
   panel?: string;
@@ -66,12 +66,12 @@ type TabsProps = Omit<
   VariantProps<typeof tabsListVariants> & {
     animation?: TabsAnimation;
     centered?: boolean;
-    classNames?: TabsClassNames;
+    classes?: TabsClasses;
     defaultValue?: string | null;
     items: readonly TabsItem[];
     onChange?: (value: string | null) => void;
     orientation?: 'horizontal' | 'vertical';
-    scrollLabels?: Partial<TabsScrollLabels>;
+    labels?: Partial<TabsLabels>;
     styles?: TabsStyles;
     value?: string | null;
   };
@@ -85,11 +85,11 @@ const Tabs = ({
   animation: animationProp,
   centered: centeredProp,
   className,
-  classNames,
+  classes,
   items,
   onChange,
   orientation = 'horizontal',
-  scrollLabels,
+  labels,
   styles,
   variant: variantProp,
   ...props
@@ -195,8 +195,8 @@ const Tabs = ({
   const showScrollButtons =
     orientation === 'horizontal' && overflowState.overflow;
   const resolvedScrollLabels = {
-    end: scrollLabels?.end ?? 'Scroll tabs forward',
-    start: scrollLabels?.start ?? 'Scroll tabs backward',
+    end: labels?.end ?? 'Scroll tabs forward',
+    start: labels?.start ?? 'Scroll tabs backward',
   };
 
   return (
@@ -242,7 +242,7 @@ const Tabs = ({
           className={cn(
             tabsListVariants({ variant }),
             overflowState.overflow && 'min-w-0 flex-1',
-            classNames?.list
+            classes?.list
           )}
           style={{
             scrollbarWidth: orientation === 'horizontal' ? 'none' : undefined,
@@ -259,7 +259,7 @@ const Tabs = ({
                 "relative z-1 inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-2 rounded-full border border-transparent! bg-transparent px-3 py-1 text-sm font-medium whitespace-nowrap text-foreground/60 transition-colors duration-150 group-data-horizontal/tabs-list:flex-none group-data-horizontal/tabs-list:snap-nearest group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:rounded-2xl group-data-vertical/tabs:px-3 group-data-vertical/tabs:py-1.5 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
                 'data-active:text-primary-foreground dark:data-active:text-primary-foreground',
                 'group-data-[variant=line]/tabs-list:data-active:text-primary group-data-[variant=soft]/tabs-list:data-active:text-primary group-data-[variant=outline]/tabs-list:data-active:text-foreground',
-                classNames?.tab
+                classes?.tab
               )}
               style={styles?.tab}
               onFocus={(event) => {
@@ -279,7 +279,7 @@ const Tabs = ({
             className={cn(
               'pointer-events-none absolute top-(--active-tab-top) left-(--active-tab-left) -z-1 h-(--active-tab-height) w-(--active-tab-width) transition-[top,left,width,height] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none',
               indicatorVariants[variant ?? 'default'],
-              classNames?.indicator
+              classes?.indicator
             )}
             style={styles?.indicator}
           />
@@ -301,7 +301,7 @@ const Tabs = ({
       <div
         className={cn(
           'relative grid min-w-0 flex-1 overflow-clip',
-          classNames?.viewport
+          classes?.viewport
         )}
         data-slot="tabs-content-viewport"
         style={styles?.viewport}
@@ -313,7 +313,7 @@ const Tabs = ({
             data-slot="tabs-content"
             className={cn(
               'tabs-content-motion col-start-1 row-start-1 min-w-0 text-sm outline-none',
-              classNames?.panel
+              classes?.panel
             )}
             style={styles?.panel}
           >
@@ -329,10 +329,10 @@ export {
   Tabs,
   tabsListVariants,
   type TabsAnimation,
-  type TabsClassNames,
+  type TabsClasses,
   type TabsItem,
   type TabsProps,
   type TabsProviderDefaults,
-  type TabsScrollLabels,
+  type TabsLabels,
   type TabsStyles,
 };

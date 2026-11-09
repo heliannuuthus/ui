@@ -18,6 +18,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 Segmented 不渲染内容面板。当每个选项都拥有对应的内容区域，并需要 `tab` / `tabpanel` 键盘与读屏语义时，使用 Tabs。
 
+非受控模式默认选中第一个可用选项；受控值显式为空或没有匹配选项时，所有选项均不选中。`Form.Field` 字段未初始化或重置为空值时同样保持空选择，不会自动选中第一项。
+
 ## 示例
 
 <SegmentedShowcase>
@@ -143,13 +145,13 @@ Segmented 不渲染内容面板。当每个选项都拥有对应的内容区域�
       component: 'Segmented',
       defaultValue: null,
       description: '按 indicator、item 和 label 语义槽位扩展类名。',
-      name: 'classNames',
-      type: 'SegmentedClassNames',
+      name: 'classes',
+      type: 'SegmentedClasses',
     },
     {
       component: 'Segmented',
       defaultValue: null,
-      description: '按与 classNames 相同的语义槽位设置行内样式。',
+      description: '按与 classes 相同的语义槽位设置行内样式。',
       name: 'styles',
       type: 'SegmentedStyles',
     },

@@ -50,6 +50,25 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 </CarouselShowcase>
 
+## 在轮播项内读取控制器
+
+在 Carousel 内渲染的组件（例如轮播项组件）中，从 `@heliannuuthus/ui` 导入 `useCarousel`。`useCarousel()` 返回当前 `CarouselControls`，并随轮播状态更新；在 Carousel 外调用会抛错。外部控制器使用 `ref`；分页区域的控制器可使用 `pagination.render`。
+
+| 控制器成员 | 含义 |
+| --- | --- |
+| `canScrollNext` | 当前是否可以向后翻页。 |
+| `canScrollPrev` | 当前是否可以向前翻页。 |
+| `page` | 当前页码，从一开始。 |
+| `playing` | 当前是否正在自动播放。 |
+| `pages` | 可用页数。 |
+| `index` | 当前滚动吸附点索引，从零开始。 |
+| `snaps` | 当前滚动吸附点位置。 |
+| `pause()` | 暂停自动播放。 |
+| `play()` | 恢复已配置的自动播放。 |
+| `scrollNext()` | 向后翻页。 |
+| `scrollPrev()` | 向前翻页。 |
+| `scrollTo(index)` | 跳转到从零开始的滚动吸附点索引。 |
+
 ## API
 
 <ApiTable
@@ -73,7 +92,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description:
         '根据自动推断的数据项类型和索引渲染轮播内容；数据项不是 React 节点时必须提供。',
-      name: 'renderItem',
+      name: 'render',
       type: '(item: Item, index: number) => ReactNode',
     },
     {
@@ -115,14 +134,28 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Carousel.pagination',
       defaultValue: null,
       description: '根据点位索引和选中状态自定义分页点。',
-      name: 'renderDot',
+      name: 'dot',
       type: '(props: CarouselDotRenderProps) => ReactNode',
+    },
+    {
+      component: 'CarouselDotRenderProps',
+      defaultValue: null,
+      description: "当前点位索引，从零开始。",
+      name: 'index',
+      type: "number",
+    },
+    {
+      component: 'CarouselDotRenderProps',
+      defaultValue: null,
+      description: "当前点位是否选中。",
+      name: 'selected',
+      type: "boolean",
     },
     {
       component: 'Carousel.pagination',
       defaultValue: null,
       description:
-        '用页码状态和控制方法渲染完整翻页器；不能与 renderDot 同时使用。',
+        '用页码状态和控制方法渲染完整翻页器；不能与 dot 同时使用。',
       name: 'render',
       type: '(controls: CarouselControls) => ReactNode',
     },
@@ -160,13 +193,13 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Carousel',
       defaultValue: null,
       description: '扩展对应语义槽位的 className。',
-      name: 'classNames',
-      type: 'CarouselClassNames',
+      name: 'classes',
+      type: 'CarouselClasses',
     },
     {
       component: 'Carousel',
       defaultValue: null,
-      description: '按与 classNames 相同的语义区域设置行内样式。',
+      description: '按与 classes 相同的语义区域设置行内样式。',
       name: 'styles',
       type: 'CarouselStyles',
     },
@@ -187,8 +220,8 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-没有可用页面时，`pagination.render` 收到的 `currentPage` 为 `0`。
-暂停、少于两页或在未循环时到达末页，`isPlaying` 均为 `false`。
+没有可用页面时，`pagination.render` 收到的 `page` 为 `0`。
+暂停、少于两页或在未循环时到达末页，`playing` 均为 `false`。
 
 ## 无障碍
 

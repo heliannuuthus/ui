@@ -17,7 +17,7 @@ const createExample = (locale: 'en' | 'zh') => {
         </div>
         <Resizable
           className="resizable-workspace"
-          classNames={{ separator: 'resizable-demo-separator' }}
+          classes={{ separator: 'resizable-demo-separator' }}
           id="component-workspace"
           orientation="horizontal"
           separator={

@@ -13,7 +13,7 @@ export default function CollapsibleTriggerCase({
     <div className="component-case-grid is-split">
       <Collapsible
         className="collapsible-case"
-        classNames={{ content: 'collapsible-case-content' }}
+        classes={{ content: 'collapsible-case-content' }}
         content={
           <p>
             {english
@@ -25,7 +25,7 @@ export default function CollapsibleTriggerCase({
       />
       <Collapsible
         className="collapsible-case"
-        classNames={{
+        classes={{
           content: 'collapsible-case-content',
           header: 'p-3',
         }}
@@ -37,8 +37,11 @@ export default function CollapsibleTriggerCase({
           </p>
         }
         header={<strong>{english ? 'Separate button' : '独立按钮触发'}</strong>}
-        trigger={english ? 'Configure' : '配置'}
-        triggerProps={{ size: 'sm', variant: 'outline' }}
+        trigger={{
+          children: english ? 'Configure' : '配置',
+          size: 'sm',
+          variant: 'outline',
+        }}
       />
     </div>
   );

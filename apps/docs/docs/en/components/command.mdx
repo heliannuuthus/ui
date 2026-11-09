@@ -74,7 +74,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Command',
       defaultValue: 'Search command…',
       description: 'Set the hint shown when the search input has no content.',
-      name: 'placeholder',
+      name: 'input.placeholder',
       type: 'string',
     },
     {
@@ -82,7 +82,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: 'No command found',
       description:
         'Set the content shown when filtering finds no matching command.',
-      name: 'emptyText',
+      name: 'empty',
       type: 'ReactNode',
     },
     {
@@ -90,7 +90,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description:
         'Configure native search input attributes and manage the search term through value and onChange.',
-      name: 'inputProps',
+      name: 'input',
       type: 'CommandInputProps',
     },
     {
@@ -146,7 +146,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description:
         'Control wraparound navigation, Vim navigation keys, and whether pointer hover changes the current command.',
-      name: 'vimBindings',
+      name: 'vim',
       type: 'boolean',
     },
     {
@@ -154,7 +154,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description:
         'Control wraparound navigation, Vim navigation keys, and whether pointer hover changes the current command.',
-      name: 'disablePointerSelection',
+      name: 'pointerSelection',
       type: 'boolean',
     },
     {
@@ -251,6 +251,6 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## Avoid
 
-- placeholder describes what can be searched, while emptyText explains that no results were found; do not mix their roles.
-- value manages the current command selection; manage the search term through inputProps.
+- placeholder describes what can be searched, while empty explains that no results were found; do not mix their roles.
+- value manages the current command selection; manage the search term through input.
 - shortcut only displays a hint; the application must still register the corresponding global keyboard shortcut.

@@ -16,10 +16,12 @@ const createExample = (locale: 'en' | 'zh') => {
             {copy('存储容量')}
           </label>
           <Input.Number
-            decrementLabel={copy('减少数值')}
             id="storage-capacity"
-            incrementLabel={copy('增加数值')}
-            inputProps={{
+            controls={{
+              increment: { label: copy('增加数值') },
+              decrement: { label: copy('减少数值') },
+            }}
+            input={{
               'aria-roledescription': copy('数字输入框'),
             }}
             max={256}

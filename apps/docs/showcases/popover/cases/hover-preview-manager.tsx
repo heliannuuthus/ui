@@ -12,7 +12,7 @@ const createExample = (locale: 'en' | 'zh') => {
       <div className="display-hover-stage">
         {copy('发布负责人是')}{' '}
         <Popover
-          triggerMode="hover"
+          mode="hover"
           side="bottom"
           trigger={
             <Button className="display-inline-person" size="xs" variant="link">
@@ -25,7 +25,7 @@ const createExample = (locale: 'en' | 'zh') => {
                 <Avatar
                   alt={copy('林默')}
                   badge={<span />}
-                  fallback={copy('林')}
+                  fallback={{ children: copy('林') }}
                   size="lg"
                 />
                 <div>

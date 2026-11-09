@@ -10,7 +10,7 @@ import {
   type CardStyles,
   type CardHeader,
   type CheckboxStyles,
-  type InputClassNames,
+  type InputClasses,
   type InputNumberStyles,
   type InputStyles,
   type ItemStyles,
@@ -62,22 +62,22 @@ export const validSemanticStyleUsage = (
     />
     <Table.Primitive
       className="primitive-root"
-      classNames={{ table: 'primitive-table' }}
+      classes={{ table: 'primitive-table' }}
       style={{ overflowX: 'auto' }}
       styles={{ table: { tableLayout: 'fixed' } }}
     />
   </>
 );
 
-const invalidInputClassNames: InputClassNames = {
-  // @ts-expect-error Root styles belong to className, not classNames.
+const invalidInputClasses: InputClasses = {
+  // @ts-expect-error Root styles belong to className, not classes.
   root: 'root',
 };
 const invalidTableStyles: Table.Styles = {
   // @ts-expect-error Root styles belong to style, not styles.
   root: {},
 };
-const invalidPrimitiveClassNames: Table.PrimitiveClassNames = {
+const invalidPrimitiveClasses: Table.PrimitiveClasses = {
   // @ts-expect-error Table.Primitive uses className for its scroll-container root.
   root: 'root',
 };
@@ -88,9 +88,9 @@ const legacyCardDescription = <Card description="Legacy description" />;
 // @ts-expect-error Card action moved into the unified header prop.
 const legacyCardAction = <Card action={<button type="button">Edit</button>} />;
 
-void invalidInputClassNames;
+void invalidInputClasses;
 void invalidTableStyles;
-void invalidPrimitiveClassNames;
+void invalidPrimitiveClasses;
 void invalidCardHeader;
 void legacyCardDescription;
 void legacyCardAction;

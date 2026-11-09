@@ -28,6 +28,12 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## API
 
+`Sonner` 与 Toast 使用相同的容器配置名称。
+
+`defaults` 使用 `ToastDefaults`；单条 `toast(...)`、各语义命令和 `toast.custom(...)` 使用 `ToastOptions`。两者共用 `classes` 槽位，`styles` 仅配置操作与取消按钮。单条按钮的 `action.style`、`cancel.style` 优先于对应的 `styles`。
+
+`toast.promise` 使用 `ToastPromiseOptions<Data>`，保留 loading、success、error、description 与 finally 回调，以及返回值的 `unwrap()`。success 和 error 可返回 ReactNode 或含 `message` 的 `ToastPromiseMessage`，其中的通知配置同样会被适配。`getHistory()` 与 `getToasts()` 保留上游返回模型与字段名称。`id` 和 `toasterId` 保持原路由规则；`useToast()` 返回所在 Provider 通道的命令。
+
 <ApiTable
   labels={{
     component: '组件',
@@ -37,6 +43,335 @@ import { ApiTable } from '@docs/rspress/api-table';
     type: '类型',
   }}
   rows={[
+    {
+      "component": "ToastDefaults",
+      "defaultValue": null,
+      "description": "通知语义槽位的默认类名。",
+      "name": "classes",
+      "type": "ToastClasses"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": null,
+      "description": "操作和取消按钮的默认行内样式。",
+      "name": "styles",
+      "type": "ToastStyles"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": null,
+      "description": "默认关闭按钮可见性，覆盖容器配置。",
+      "name": "closable",
+      "type": "boolean"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": null,
+      "description": "每条通知根节点的默认类名。",
+      "name": "className",
+      "type": "string"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": null,
+      "description": "每条通知根节点的默认行内样式。",
+      "name": "style",
+      "type": "CSSProperties"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": "4000",
+      "description": "默认持续时间，单位为毫秒。",
+      "name": "duration",
+      "type": "number"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": "false",
+      "description": "禁用上游默认通知样式。",
+      "name": "unstyled",
+      "type": "boolean"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": "'Close toast'",
+      "description": "关闭按钮的无障碍名称。",
+      "name": "closeButtonAriaLabel",
+      "type": "string"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": null,
+      "description": "上游通知通道标识。",
+      "name": "toasterId",
+      "type": "string"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": "3",
+      "description": "最多同时显示的通知数量。",
+      "name": "limit",
+      "type": "number"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": "false",
+      "description": "启用状态语义色。",
+      "name": "rich",
+      "type": "boolean"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": "false",
+      "description": "显示关闭按钮。",
+      "name": "closable",
+      "type": "boolean"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": null,
+      "description": "每条通知的默认配置；单条通知显式配置优先。",
+      "name": "defaults",
+      "type": "ToastDefaults"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": null,
+      "description": "允许滑动关闭的方向；默认随通知位置决定。",
+      "name": "swipe",
+      "type": "('top' | 'right' | 'bottom' | 'left')[]"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": "'Notifications'",
+      "description": "通知区域的无障碍名称。",
+      "name": "label",
+      "type": "string"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": null,
+      "description": "桌面与移动端偏移；各自支持数值、字符串或分方向配置。",
+      "name": "offset",
+      "type": "ToasterOffset"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": "32",
+      "description": "相对视口或局部容器的基础偏移。",
+      "name": "offset.base",
+      "type": "number | string | { top?: string | number; right?: string | number; bottom?: string | number; left?: string | number }"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": "16",
+      "description": "移动端偏移。",
+      "name": "offset.mobile",
+      "type": "number | string | { top?: string | number; right?: string | number; bottom?: string | number; left?: string | number }"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "通知语义槽位的类名。",
+      "name": "classes",
+      "type": "ToastClasses"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "操作和取消按钮的行内样式。",
+      "name": "styles",
+      "type": "ToastStyles"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "操作按钮行内样式。",
+      "name": "styles.action",
+      "type": "CSSProperties"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "取消按钮行内样式。",
+      "name": "styles.cancel",
+      "type": "CSSProperties"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖当前通知的状态语义色。",
+      "name": "rich",
+      "type": "boolean"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖当前通知的关闭按钮可见性。",
+      "name": "closable",
+      "type": "boolean"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "操作按钮配置或自定义内容。",
+      "name": "action",
+      "type": "ToastAction | ReactNode"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "取消按钮配置或自定义内容。",
+      "name": "cancel",
+      "type": "ToastAction | ReactNode"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "用户关闭通知时调用；保留上游通知模型。",
+      "name": "onDismiss",
+      "type": "(toast: ToastT) => void"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "通知超时自动关闭时调用。",
+      "name": "onAutoClose",
+      "type": "(toast: ToastT) => void"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "将通知路由到匹配 id 的容器。",
+      "name": "toasterId",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.toast",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.title",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.description",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.loader",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.close",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.cancel",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.action",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.success",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.error",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.info",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.warning",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.loading",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.default",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.content",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "覆盖此通知槽位的类名。",
+      "name": "classes.icon",
+      "type": "string"
+    },
+    {
+      "component": "ToastAction",
+      "defaultValue": null,
+      "description": "按钮内容。",
+      "name": "label",
+      "type": "ReactNode"
+    },
+    {
+      "component": "ToastAction",
+      "defaultValue": null,
+      "description": "按钮点击事件。",
+      "name": "onClick",
+      "type": "(event: React.MouseEvent<HTMLButtonElement>) => void"
+    },
+    {
+      "component": "ToastAction",
+      "defaultValue": null,
+      "description": "当前按钮的行内样式，覆盖 options 中对应的按钮样式。",
+      "name": "style",
+      "type": "CSSProperties"
+    },
     {
       component: 'Sonner',
       defaultValue: null,

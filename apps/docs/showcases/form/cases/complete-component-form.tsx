@@ -114,7 +114,7 @@ const createExample = (locale: 'en' | 'zh') => {
 
             <Form.Field name="region" label={copy('部署区域')}>
               <Select
-                classNames={{ trigger: 'data-wide-control' }}
+                classes={{ trigger: 'data-wide-control' }}
                 options={[
                   { label: copy('中国大陆'), value: 'china' },
                   { label: copy('亚太地区'), value: 'asia' },
@@ -129,13 +129,13 @@ const createExample = (locale: 'en' | 'zh') => {
               description={copy('支持搜索、清除和分组选项。')}
             >
               <Select
-                classNames={{ trigger: 'data-wide-control' }}
+                classes={{ trigger: 'data-wide-control' }}
                 options={workspaceGroups.map((group) => ({
                   label: group.label,
                   options: group.items,
                 }))}
                 placeholder={copy('选择工作区')}
-                showClear
+                clearable
               />
             </Form.Field>
 
@@ -155,7 +155,7 @@ const createExample = (locale: 'en' | 'zh') => {
               description={copy('选择或清除计划启用日期。')}
             >
               <DatePicker
-                classNames={{ trigger: 'data-wide-control' }}
+                classes={{ trigger: 'data-wide-control' }}
                 locale={locale}
                 placeholder={copy('选择启用日期')}
               />
@@ -175,9 +175,11 @@ const createExample = (locale: 'en' | 'zh') => {
               description={copy('设置临时失败后的最大重试次数。')}
             >
               <Input.Number
-                decrementLabel={copy('减少数值')}
-                incrementLabel={copy('增加数值')}
-                inputProps={{
+                controls={{
+                  decrement: { label: copy('减少数值') },
+                  increment: { label: copy('增加数值') },
+                }}
+                input={{
                   'aria-roledescription': copy('数字输入框'),
                 }}
                 max={10}

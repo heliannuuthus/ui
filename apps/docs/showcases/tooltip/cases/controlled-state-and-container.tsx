@@ -17,12 +17,11 @@ const createExample = (locale: 'en' | 'zh') => {
         className="flex min-h-40 flex-wrap items-center justify-center gap-3 rounded-2xl border bg-background p-6"
       >
         <Tooltip
-          closeDelay={150}
+          delay={{ open: 250, close: 150 }}
           container={container}
           content={copy('受控提示')}
           onOpenChange={setOpen}
           open={open}
-          openDelay={250}
         >
           <Button variant="outline">{copy('悬停或聚焦')}</Button>
         </Tooltip>

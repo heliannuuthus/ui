@@ -3,7 +3,7 @@ import { Badge, Button } from '@heliannuuthus/ui';
 
 const ZhExample = (() => {
   return () => (
-    <Badge indicator indicatorLabel="有新的系统通知">
+    <Badge indicator label="有新的系统通知">
       <Button variant="outline">系统通知</Button>
     </Badge>
   );
@@ -11,7 +11,7 @@ const ZhExample = (() => {
 
 const EnExample = (() => {
   return () => (
-    <Badge indicator indicatorLabel="New system notification">
+    <Badge indicator label="New system notification">
       <Button variant="outline">System notifications</Button>
     </Badge>
   );

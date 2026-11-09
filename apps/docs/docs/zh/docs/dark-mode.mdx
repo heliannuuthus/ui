@@ -27,12 +27,14 @@ lang: zh-Hans
   appearance={appearance}
   theme={{
     colors: {
-      background: 'oklch(0.99 0 0)',
-      foreground: 'oklch(0.18 0 0)',
-    },
-    darkColors: {
-      background: 'oklch(0.14 0 0)',
-      foreground: 'oklch(0.96 0 0)',
+      base: {
+        background: 'oklch(0.99 0 0)',
+        foreground: 'oklch(0.18 0 0)',
+      },
+      dark: {
+        background: 'oklch(0.14 0 0)',
+        foreground: 'oklch(0.96 0 0)',
+      },
     },
   }}
 >
@@ -40,7 +42,7 @@ lang: zh-Hans
 </Provider>
 ```
 
-`darkColors` 只需要声明与浅色不同的值。未覆盖的值继续使用 `colors` 或默认主题。
+`colors.dark` 只需要声明与基础色不同的值。未覆盖的值继续使用 `colors.base` 或默认主题。
 
 ## 设计检查
 

@@ -8,7 +8,7 @@ import { Button } from './button';
 import type { OpenStateProps } from './internal/public-types';
 import { useComponentDefaults } from './provider';
 
-type AlertDialogClassNames = {
+type AlertDialogClasses = {
   content?: string;
 };
 
@@ -16,14 +16,22 @@ type AlertDialogStyles = {
   content?: React.CSSProperties;
 };
 
+type AlertDialogConfirmConfig = {
+  label: React.ReactNode;
+  variant?: React.ComponentProps<typeof Button>['variant'];
+  onClick?: () => void;
+};
+
+type AlertDialogCancelConfig = {
+  label?: React.ReactNode;
+};
+
 type AlertDialogProps = OpenStateProps & {
-  cancelText?: React.ReactNode;
-  classNames?: AlertDialogClassNames;
-  confirmText: React.ReactNode;
-  confirmVariant?: React.ComponentProps<typeof Button>['variant'];
+  cancel?: AlertDialogCancelConfig | null | false;
+  classes?: AlertDialogClasses;
+  confirm: AlertDialogConfirmConfig;
   description?: React.ReactNode;
   media?: React.ReactNode;
-  onConfirm?: () => void;
   size?: 'default' | 'sm';
   styles?: AlertDialogStyles;
   title: React.ReactNode;
@@ -33,13 +41,11 @@ type AlertDialogProps = OpenStateProps & {
 type AlertDialogProviderDefaults = Pick<AlertDialogProps, 'size'>;
 
 const AlertDialog = ({
-  cancelText = '取消',
-  classNames,
-  confirmText,
-  confirmVariant = 'default',
+  cancel,
+  classes,
+  confirm,
   description,
   media,
-  onConfirm,
   size: sizeProp,
   styles,
   title,
@@ -48,6 +54,10 @@ const AlertDialog = ({
 }: AlertDialogProps) => {
   const defaults = useComponentDefaults('AlertDialog');
   const size = sizeProp ?? defaults.size ?? 'default';
+  const cancelLabel =
+    cancel === undefined
+      ? '取消'
+      : cancel && (cancel.label === undefined ? '取消' : cancel.label);
 
   return (
     <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props}>
@@ -65,7 +75,7 @@ const AlertDialog = ({
           data-size={size}
           className={cn(
             'group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-full -translate-x-1/2 -translate-y-1/2 gap-6 rounded-4xl bg-popover p-6 text-popover-foreground shadow-xl ring-1 ring-foreground/5 duration-100 outline-none data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-md dark:ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
-            classNames?.content
+            classes?.content
           )}
           style={styles?.content}
         >
@@ -100,19 +110,24 @@ const AlertDialog = ({
             data-slot="alert-dialog-footer"
             className="flex flex-col-reverse gap-2 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end"
           >
-            {cancelText != null ? (
+            {cancelLabel != null && cancel !== false ? (
               <AlertDialogPrimitive.Close
                 data-slot="alert-dialog-cancel"
                 render={<Button variant="outline" />}
               >
-                {cancelText}
+                {cancelLabel}
               </AlertDialogPrimitive.Close>
             ) : null}
             <AlertDialogPrimitive.Close
               data-slot="alert-dialog-action"
-              render={<Button variant={confirmVariant} onClick={onConfirm} />}
+              render={
+                <Button
+                  variant={confirm.variant ?? 'default'}
+                  onClick={confirm.onClick}
+                />
+              }
             >
-              {confirmText}
+              {confirm.label}
             </AlertDialogPrimitive.Close>
           </div>
         </AlertDialogPrimitive.Popup>
@@ -123,7 +138,9 @@ const AlertDialog = ({
 
 export {
   AlertDialog,
-  type AlertDialogClassNames,
+  type AlertDialogCancelConfig,
+  type AlertDialogClasses,
+  type AlertDialogConfirmConfig,
   type AlertDialogProps,
   type AlertDialogProviderDefaults,
   type AlertDialogStyles,

@@ -4,6 +4,7 @@ import Case01 from './cases/basic-usage';
 import Case02 from './cases/label-association-and-necessity';
 import Case03 from './cases/complete-component-form';
 import Case04 from './cases/custom-control-integration';
+import StateAndSubscriptions from './cases/state-and-subscriptions';
 
 const cases = [
   {
@@ -37,6 +38,14 @@ const cases = [
     description: {
       en: 'Compare a minimal value-bound control with one that also supports error focus and the complete field contract.',
       zh: '对比只实现值绑定的最小控件，以及额外支持错误聚焦和完整字段属性的控件。',
+    },
+  },
+  {
+    component: StateAndSubscriptions,
+    title: { en: 'State and subscriptions', zh: '状态与订阅' },
+    description: {
+      en: 'Read the instance in a child, subscribe to a field and a derived value, then fill or reset the form programmatically.',
+      zh: '子组件读取表单实例，订阅字段与派生值，并通过实例填写字段或通过原生按钮重置表单。',
     },
   },
 ];

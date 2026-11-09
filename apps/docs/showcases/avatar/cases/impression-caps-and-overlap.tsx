@@ -37,8 +37,8 @@ const createExample = (locale: 'en' | 'zh') => {
             )}
             items={avatarPeople.map((person) => ({
               alt: person.initials,
-              fallback: person.initials,
-              fallbackProps: {
+              fallback: {
+                children: person.initials,
                 className: `display-avatar-tone-${person.tone}`,
               },
             }))}

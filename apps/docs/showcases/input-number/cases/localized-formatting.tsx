@@ -16,7 +16,6 @@ const createExample = (locale: 'en' | 'zh') => {
             {copy('服务价格')}
           </label>
           <Input.Number
-            decrementLabel={copy('减少数值')}
             format={{
               currency: 'CNY',
               currencyDisplay: 'symbol',
@@ -25,8 +24,11 @@ const createExample = (locale: 'en' | 'zh') => {
               style: 'currency',
             }}
             id="service-price"
-            incrementLabel={copy('增加数值')}
-            inputProps={{
+            controls={{
+              increment: { label: copy('增加数值') },
+              decrement: { label: copy('减少数值') },
+            }}
+            input={{
               'aria-roledescription': copy('数字输入框'),
             }}
             locale={locale === 'en' ? 'en-US' : 'zh-CN'}

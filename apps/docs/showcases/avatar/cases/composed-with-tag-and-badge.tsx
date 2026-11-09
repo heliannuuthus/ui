@@ -5,8 +5,8 @@ const ZhExample = (() => {
   return () => (
     <Avatar
       alt="陈序"
-      badge={<Badge indicator={8} indicatorLabel="8 条未读消息" />}
-      fallback="陈"
+      badge={<Badge indicator={8} label="8 条未读消息" />}
+      fallback={{ children: '陈' }}
       size="lg"
     />
   );
@@ -16,8 +16,8 @@ const EnExample = (() => {
   return () => (
     <Avatar
       alt="Chen Xu"
-      badge={<Badge indicator={8} indicatorLabel="8 unread messages" />}
-      fallback="Chen"
+      badge={<Badge indicator={8} label="8 unread messages" />}
+      fallback={{ children: 'Chen' }}
       size="lg"
     />
   );

@@ -93,12 +93,14 @@ const createExample = (locale: 'en' | 'zh') => {
                 <Avatar
                   alt={message.author}
                   className="display-conversation-avatar"
-                  fallback={message.avatar}
-                  fallbackProps={{
-                    className:
-                      message.align === 'end'
-                        ? 'display-avatar-tone-blue'
-                        : 'display-avatar-tone-green',
+                  fallback={{
+                    children: message.avatar,
+                    ...{
+                      className:
+                        message.align === 'end'
+                          ? 'display-avatar-tone-blue'
+                          : 'display-avatar-tone-green',
+                    },
                   }}
                   shape={message.align === 'end' ? 'square' : 'circle'}
                 />
@@ -108,7 +110,7 @@ const createExample = (locale: 'en' | 'zh') => {
                   </span>
                   <Bubble
                     align={message.align ?? 'start'}
-                    content={message.content}
+                    content={{ children: message.content }}
                     variant={message.align === 'end' ? 'tinted' : 'elevated'}
                   />
                   {message.status && (

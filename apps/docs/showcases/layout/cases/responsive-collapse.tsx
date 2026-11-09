@@ -12,7 +12,7 @@ const ZhExample = (() => {
         <Layout.Sidebar
           breakpoint="lg"
           collapsible
-          collapsedWidth={64}
+          width={{ collapsed: 64 }}
           labels={{
             collapse: '收起侧边栏',
             expand: '展开侧边栏',
@@ -55,7 +55,7 @@ const EnExample = (() => {
         <Layout.Sidebar
           breakpoint="lg"
           collapsible
-          collapsedWidth={64}
+          width={{ collapsed: 64 }}
           labels={{
             collapse: 'Collapse sidebar',
             expand: 'Expand sidebar',

@@ -27,12 +27,14 @@ If the product offers a manual switch, persist the user's choice and restore it 
   appearance={appearance}
   theme={{
     colors: {
-      background: 'oklch(0.99 0 0)',
-      foreground: 'oklch(0.18 0 0)',
-    },
-    darkColors: {
-      background: 'oklch(0.14 0 0)',
-      foreground: 'oklch(0.96 0 0)',
+      base: {
+        background: 'oklch(0.99 0 0)',
+        foreground: 'oklch(0.18 0 0)',
+      },
+      dark: {
+        background: 'oklch(0.14 0 0)',
+        foreground: 'oklch(0.96 0 0)',
+      },
     },
   }}
 >
@@ -40,7 +42,7 @@ If the product offers a manual switch, persist the user's choice and restore it 
 </Provider>
 ```
 
-Only put values that differ from the light theme in `darkColors`. Unspecified values continue to use `colors` or the default theme.
+Only put values that differ from the base palette in `colors.dark`. Unspecified values continue to use `colors.base` or the default theme.
 
 ## Design checks
 

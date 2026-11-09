@@ -19,13 +19,17 @@ type LayoutSidebarLabels = {
   collapse: string;
   expand: string;
 };
+type LayoutSidebarWidth = {
+  /** 展开宽度，数字按像素处理。 */
+  expanded?: number | string;
+  /** 折叠宽度，数字按像素处理。 */
+  collapsed?: number | string;
+};
 type LayoutSidebarProps = Omit<React.ComponentProps<'aside'>, 'onChange'> & {
   /** Automatically request a collapsed state while the viewport is below this breakpoint. */
   breakpoint?: LayoutBreakpoint;
   /** Controlled collapsed state. Apply state requests received through onChange. */
   collapsed?: boolean;
-  /** Width used while collapsed. Numeric values are interpreted as pixels. */
-  collapsedWidth?: number | string;
   /** Show the built-in trigger, or replace its icon with a React node. */
   collapsible?: boolean | React.ReactNode;
   /** Initial collapsed state when collapsed is not controlled. An initially matched breakpoint takes precedence. */
@@ -36,7 +40,7 @@ type LayoutSidebarProps = Omit<React.ComponentProps<'aside'>, 'onChange'> & {
   /** Reports a requested collapsed-state change and its source. */
   onChange?: (collapsed: boolean, reason: LayoutSidebarCollapseReason) => void;
   side?: LayoutSidebarSide;
-  width?: number | string;
+  width?: LayoutSidebarWidth;
 };
 
 const breakpointQueries: Record<LayoutBreakpoint, string> = {
@@ -111,7 +115,6 @@ const LayoutSidebar = ({
   children,
   className,
   collapsed,
-  collapsedWidth = 80,
   collapsible = false,
   defaultCollapsed = false,
   labels = defaultLabels,
@@ -119,7 +122,7 @@ const LayoutSidebar = ({
   onChange,
   side = 'start',
   style,
-  width = 240,
+  width,
   ...props
 }: LayoutSidebarProps) => {
   const contentId = React.useId();
@@ -180,7 +183,9 @@ const LayoutSidebar = ({
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, [breakpoint, updateCollapsed]);
 
-  const resolvedWidth = resolveLength(width);
+  const expandedWidth = width?.expanded ?? 240;
+  const collapsedWidth = width?.collapsed ?? 80;
+  const resolvedWidth = resolveLength(expandedWidth);
   const resolvedCollapsedWidth = resolveLength(collapsedWidth);
   const hideCollapsedContent =
     resolvedCollapsed && isZeroLength(collapsedWidth);
@@ -268,4 +273,5 @@ export type {
   LayoutSidebarCollapseReason,
   LayoutSidebarProps,
   LayoutSidebarSide,
+  LayoutSidebarWidth,
 };

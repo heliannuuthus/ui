@@ -8,18 +8,21 @@ import { buttonVariants, type ButtonNativeProps } from './button';
 import type { OpenStateProps } from './internal/public-types';
 import { useComponentDefaults } from './provider';
 
-type CollapsibleTriggerProps = Omit<
+type CollapsibleTriggerConfig = Omit<
   ButtonNativeProps,
   'children' | 'className' | 'href'
 > &
-  VariantProps<typeof buttonVariants>;
+  VariantProps<typeof buttonVariants> & {
+    children?: React.ReactNode;
+    indicator?: boolean | React.ReactNode;
+  };
 
 type CollapsibleProviderDefaults = Pick<
-  CollapsibleTriggerProps,
+  CollapsibleTriggerConfig,
   'size' | 'variant'
 >;
 
-type CollapsibleClassNames = {
+type CollapsibleClasses = {
   content?: string;
   header?: string;
 };
@@ -34,40 +37,38 @@ type CollapsibleProps = Omit<
   'children' | 'content'
 > &
   OpenStateProps & {
-    classNames?: CollapsibleClassNames;
+    classes?: CollapsibleClasses;
     content: React.ReactNode;
     disabled?: boolean;
     footer?: React.ReactNode;
     header?: React.ReactNode;
-    indicator?: boolean | React.ReactNode;
     styles?: CollapsibleStyles;
-    trigger?: React.ReactNode;
-    triggerProps?: CollapsibleTriggerProps;
+    trigger?: CollapsibleTriggerConfig | null;
   };
 
 const Collapsible = ({
   className,
-  classNames,
+  classes,
   content,
   footer,
   header,
-  indicator = true,
   styles,
   trigger,
-  triggerProps,
   ...props
 }: CollapsibleProps) => {
   const defaults = useComponentDefaults('Collapsible');
   const {
+    children: triggerChildren,
+    indicator = true,
     size: sizeProp,
     variant: variantProp,
     ...restTriggerProps
-  } = triggerProps ?? {};
+  } = trigger ?? {};
   const size = sizeProp ?? defaults.size ?? 'md';
   const variant = variantProp ?? defaults.variant ?? 'outline';
   const resolvedIndicator =
     indicator === true ? (
-      trigger == null ? (
+      triggerChildren == null ? (
         <ChevronDownIcon className="size-4" />
       ) : (
         <ChevronRightIcon className="size-4" />
@@ -82,9 +83,9 @@ const Collapsible = ({
       data-slot="collapsible"
       {...props}
     >
-      {trigger != null ? (
+      {triggerChildren != null ? (
         <div
-          className={classNames?.header}
+          className={classes?.header}
           data-slot="collapsible-header"
           style={styles?.header}
         >
@@ -94,7 +95,7 @@ const Collapsible = ({
             data-slot="collapsible-trigger"
             {...restTriggerProps}
           >
-            {trigger}
+            {triggerChildren}
             {resolvedIndicator !== false && resolvedIndicator != null ? (
               <span
                 aria-hidden
@@ -110,7 +111,7 @@ const Collapsible = ({
         <CollapsiblePrimitive.Trigger
           className={cn(
             'group/collapsible-trigger flex w-full items-center gap-3 px-4 py-3 text-left text-sm outline-none transition-colors hover:bg-muted/60 focus-visible:ring-3 focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50',
-            classNames?.header
+            classes?.header
           )}
           data-slot="collapsible-header"
           style={styles?.header}
@@ -131,7 +132,7 @@ const Collapsible = ({
       <CollapsiblePrimitive.Panel
         className={cn(
           "h-(--collapsible-panel-height) origin-top overflow-hidden transition-[height,opacity,transform] duration-240 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[height,opacity,transform] [&[hidden]:not([hidden='until-found'])]:hidden data-ending-style:h-0 data-ending-style:-translate-y-1.5 data-ending-style:opacity-0 data-starting-style:h-0 data-starting-style:-translate-y-1.5 data-starting-style:opacity-0 motion-reduce:transform-none motion-reduce:transition-none",
-          classNames?.content
+          classes?.content
         )}
         data-slot="collapsible-content"
         style={styles?.content}
@@ -152,9 +153,9 @@ const Collapsible = ({
 
 export {
   Collapsible,
-  type CollapsibleClassNames,
+  type CollapsibleClasses,
   type CollapsibleProps,
   type CollapsibleProviderDefaults,
   type CollapsibleStyles,
-  type CollapsibleTriggerProps,
+  type CollapsibleTriggerConfig,
 };

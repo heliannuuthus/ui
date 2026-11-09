@@ -36,7 +36,44 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ```
 
+```tsx title="showcases/form/cases/state-and-subscriptions.tsx" file="<root>/showcases/form/cases/state-and-subscriptions.tsx"
+
+```
+
 </FormShowcase>
+
+## Form state and hooks
+
+Import `useForm`, `useWatch`, and `useFormInstance` from `@heliannuuthus/ui`, or use the same hooks through `Form.useForm`, `Form.useWatch`, and `Form.useFormInstance`. Pass the value type to `useForm<Values>({ defaultValues })`; it returns the instance itself, not a tuple. Give the instance to `<Form form={form}>`.
+
+| Hook | Result and usage |
+| --- | --- |
+| `useForm<Values>(options?)` | Creates a stable `FormInstance<Values>`. Options include `defaultValues`, validation `mode`, and `resolver`; the internal `formControl` option is excluded. |
+| `useFormInstance<Values>()` | Reads the nearest Form instance from a descendant. Throws when called outside Form. |
+| `useWatch(form)` | Subscribes to all current values; values may be partial before fields initialize. |
+| `useWatch('name', form)` | Subscribes to one typed field path. |
+| `useWatch(['name', 'enabled'] as const, form)` | Subscribes to a typed tuple of field values in the requested order. |
+| `useWatch((values) => values.enabled, form)` | Subscribes to a derived value returned by a selector. |
+
+Use `useWatch` for rendered values; `getValues` returns a snapshot without subscribing. `onValuesChange(values, info)` observes value changes without making the observer render, and `info.name` identifies the changed field when available.
+
+| Instance member | Purpose |
+| --- | --- |
+| `clearErrors` | Clears one or more field errors, or all errors. |
+| `formState` | Reads validation, dirty, touched, and submission state. |
+| `getFieldState` | Reads a field's current error and interaction state. |
+| `getValues` | Reads the whole value object or selected field paths. |
+| `reset` | Restores defaults or replaces values and form state. |
+| `resetField` | Resets one registered field. |
+| `setError` | Associates a server or application error with a field. |
+| `setFocus` | Focuses a registered control that exposes a focus target. |
+| `setValue` | Writes a typed field value; options choose validation, dirty, and touched updates. |
+| `trigger` | Runs validation for selected fields or the whole form and resolves to a boolean. |
+| `unregister` | Removes field registration, with options for retaining state. |
+
+The instance exposes these operations without exposing the internal engine's `control`, `register`, or `handleSubmit`. A native `<Button type="reset">` inside Form calls `form.reset()`. An `onReset` handler can call `event.preventDefault()` to cancel that reset.
+
+Inside `Form.Field`, initialize values through the form's `defaultValues` or the field's `defaultValue`; the form owns controlled values, so do not rely on the child control's `defaultValue`. Give validation rules a message when users need an explanation: an error without a message still marks the control invalid, but does not reference an absent error-text element.
 
 ## API
 
@@ -115,10 +152,25 @@ import { ApiTable } from '@docs/rspress/api-table';
     {
       component: 'Form',
       defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
+      description: 'Receives field errors when submission validation fails.',
       name: 'onInvalid',
       type: 'SubmitErrorHandler',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description:
+        'Observes value changes with the current values and optional changed field name.',
+      name: 'onValuesChange',
+      type: 'FormValuesChangeHandler',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description:
+        'Receives the native reset event; preventDefault cancels the form reset.',
+      name: 'onReset',
+      type: 'FormEventHandler<HTMLFormElement>',
     },
     {
       component: 'Form.Field',

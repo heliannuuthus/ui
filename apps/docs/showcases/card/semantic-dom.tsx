@@ -46,32 +46,32 @@ const copy = {
 const semanticRegions = [
   { api: 'className / style', description: 'root', slot: 'root' },
   {
-    api: 'classNames.header / styles.header',
+    api: 'classes.header / styles.header',
     description: 'header',
     slot: 'header',
   },
   {
-    api: 'classNames.title / styles.title',
+    api: 'classes.title / styles.title',
     description: 'title',
     slot: 'title',
   },
   {
-    api: 'classNames.description / styles.description',
+    api: 'classes.description / styles.description',
     description: 'description',
     slot: 'description',
   },
   {
-    api: 'classNames.action / styles.action',
+    api: 'classes.action / styles.action',
     description: 'trailingAction',
     slot: 'action',
   },
   {
-    api: 'classNames.content / styles.content',
+    api: 'classes.content / styles.content',
     description: 'content',
     slot: 'content',
   },
   {
-    api: 'classNames.footer / styles.footer',
+    api: 'classes.footer / styles.footer',
     description: 'footer',
     slot: 'footer',
   },

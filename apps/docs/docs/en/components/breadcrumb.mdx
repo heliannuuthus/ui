@@ -46,6 +46,13 @@ import { ApiTable } from '@docs/rspress/api-table';
   }}
   rows={[
     {
+      component: 'BreadcrumbCollapseOptions',
+      defaultValue: null,
+      description: "Sets the path count threshold for collapsing.",
+      name: 'limit',
+      type: "number",
+    },
+    {
       component: 'Breadcrumb',
       defaultValue: null,
       description:

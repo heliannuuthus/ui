@@ -5,7 +5,7 @@ type OrderableApiProperty = {
 };
 
 const stylePropertyOrder = new Map([
-  ['classNames', 0],
+  ['classes', 0],
   ['styles', 1],
   ['className', 2],
   ['style', 3],

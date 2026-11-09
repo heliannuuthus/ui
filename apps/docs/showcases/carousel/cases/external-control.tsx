@@ -40,7 +40,7 @@ const createExample = (locale: 'en' | 'zh') => {
           controls={false}
           items={releaseHighlights}
           ref={carouselRef}
-          renderItem={(highlight) => (
+          render={(highlight) => (
             <div className="rounded-3xl border p-8 text-center font-medium">
               {highlight.title}
             </div>

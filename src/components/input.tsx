@@ -16,22 +16,22 @@ import { InputNumber } from './input-number';
 
 type InputOTPVariant = 'connected' | 'separated';
 
-type InputClassNames = {
-  addonAfter?: string;
-  addonBefore?: string;
+type InputClasses = {
+  after?: string;
+  before?: string;
   input?: string;
   prefix?: string;
   suffix?: string;
 };
 
 type InputStyles = {
-  [Slot in keyof InputClassNames]?: React.CSSProperties;
+  [Slot in keyof InputClasses]?: React.CSSProperties;
 };
 
 type InputProps = Omit<React.ComponentProps<'input'>, 'prefix'> & {
-  addonAfter?: React.ReactNode;
-  addonBefore?: React.ReactNode;
-  classNames?: InputClassNames;
+  after?: React.ReactNode;
+  before?: React.ReactNode;
+  classes?: InputClasses;
   prefix?: React.ReactNode;
   styles?: InputStyles;
   suffix?: React.ReactNode;
@@ -45,7 +45,13 @@ type InputOTPProps = Omit<
   | 'maxLength'
   | 'render'
   | 'type'
+  | 'pasteTransformer'
+  | 'noScriptCSSFallback'
+  | 'textAlign'
 > & {
+  paste?: React.ComponentProps<typeof OTPInput>['pasteTransformer'];
+  noscript?: React.ComponentProps<typeof OTPInput>['noScriptCSSFallback'];
+  align?: React.ComponentProps<typeof OTPInput>['textAlign'];
   variant?: InputOTPVariant;
   maxLength?: number;
   className?: string;
@@ -136,6 +142,9 @@ const OTPField = ({
   ref,
   required,
   value,
+  paste,
+  noscript,
+  align,
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   ...props
@@ -161,6 +170,9 @@ const OTPField = ({
     <InputOTPShapeContext.Provider value={shape}>
       <OTPInput
         {...props}
+        pasteTransformer={paste}
+        noScriptCSSFallback={noscript}
+        textAlign={align}
         autoComplete={autoComplete}
         aria-describedby={mergeIds(
           ariaDescribedBy,
@@ -212,10 +224,10 @@ const InputRoot = (inputProps: InputProps) => {
     string | number | readonly string[] | undefined
   >();
   const {
-    addonAfter,
-    addonBefore,
+    after,
+    before,
     className,
-    classNames,
+    classes,
     defaultValue,
     disabled,
     id,
@@ -239,10 +251,7 @@ const InputRoot = (inputProps: InputProps) => {
     formControl?.ref as React.Ref<HTMLInputElement> | undefined
   );
   const hasDecoration =
-    addonAfter != null ||
-    addonBefore != null ||
-    prefix != null ||
-    suffix != null;
+    after != null || before != null || prefix != null || suffix != null;
   const controlProps: React.ComponentProps<'input'> = {
     ...props,
     'aria-describedby': mergeIds(
@@ -272,19 +281,19 @@ const InputRoot = (inputProps: InputProps) => {
   if (hasDecoration) {
     return (
       <InputGroup className={className} style={style}>
-        {addonBefore != null ? (
+        {before != null ? (
           <InputGroup.Addon
             align="block-start"
-            className={classNames?.addonBefore}
-            style={styles?.addonBefore}
+            className={classes?.before}
+            style={styles?.before}
           >
-            {addonBefore}
+            {before}
           </InputGroup.Addon>
         ) : null}
         {prefix != null ? (
           <InputGroup.Addon
             align="inline-start"
-            className={classNames?.prefix}
+            className={classes?.prefix}
             style={styles?.prefix}
           >
             {prefix}
@@ -292,25 +301,25 @@ const InputRoot = (inputProps: InputProps) => {
         ) : null}
         <InputGroup.Input
           {...controlProps}
-          className={classNames?.input}
+          className={classes?.input}
           style={styles?.input}
         />
         {suffix != null ? (
           <InputGroup.Addon
             align="inline-end"
-            className={classNames?.suffix}
+            className={classes?.suffix}
             style={styles?.suffix}
           >
             {suffix}
           </InputGroup.Addon>
         ) : null}
-        {addonAfter != null ? (
+        {after != null ? (
           <InputGroup.Addon
             align="block-end"
-            className={classNames?.addonAfter}
-            style={styles?.addonAfter}
+            className={classes?.after}
+            style={styles?.after}
           >
-            {addonAfter}
+            {after}
           </InputGroup.Addon>
         ) : null}
       </InputGroup>
@@ -396,7 +405,7 @@ registerFormControl(TextArea);
 
 export { Input };
 export type {
-  InputClassNames,
+  InputClasses,
   InputOTPVariant,
   InputOTPProps,
   InputOTPProviderDefaults,
@@ -405,7 +414,7 @@ export type {
   TextAreaProps,
 };
 export type {
-  InputNumberClassNames,
+  InputNumberClasses,
   InputNumberControls,
   InputNumberProps,
   InputNumberProviderDefaults,

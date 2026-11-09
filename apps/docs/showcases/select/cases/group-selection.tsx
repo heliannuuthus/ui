@@ -44,7 +44,7 @@ const createExample = (locale: 'en' | 'zh') => {
           <span>{copy('列表可以分组、分隔并禁用不可选项')}</span>
         </div>
         <Select
-          classNames={{ trigger: 'data-wide-control' }}
+          classes={{ trigger: 'data-wide-control' }}
           value={value}
           onChange={setValue}
           options={workspaceGroups.map((group) => ({

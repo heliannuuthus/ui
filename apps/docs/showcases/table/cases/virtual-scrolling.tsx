@@ -31,14 +31,14 @@ const createExample = (locale: 'en' | 'zh') => {
   const virtualTableColumns: Table.Column<VirtualTableRecord>[] = [
     {
       accessor: 'id',
-      classNames: { cell: 'font-medium' },
+      classes: { cell: 'font-medium' },
       fixed: 'start',
       header: copy('事件'),
       width: 128,
     },
     {
       accessor: 'service',
-      classNames: { header: 'font-semibold' },
+      classes: { header: 'font-semibold' },
       ellipsis: true,
       header: copy('服务'),
       width: 256,
@@ -86,9 +86,9 @@ const createExample = (locale: 'en' | 'zh') => {
           data={virtualTableRecords}
           rowKey="id"
           pagination={false}
-          classNames={{ table: 'min-w-[900px]' }}
+          classes={{ table: 'min-w-[900px]' }}
           virtual={{
-            containerHeight: 320,
+            maxHeight: 320,
             overscan: 8,
             rowHeight: 48,
           }}

@@ -28,8 +28,8 @@ const cases = [
     component: Case03,
     title: { en: 'Image and fallback content', zh: '图片与回退内容' },
     description: {
-      en: 'src provides the avatar image; fallback is shown when loading fails, while imageProps and fallbackProps configure loading callbacks and delay.',
-      zh: 'src 提供头像图片；加载失败时显示 fallback，并通过 imageProps 与 fallbackProps 配置加载回调和延迟。',
+      en: 'src provides the avatar image; fallback is shown when loading fails, while image and fallback configure loading callbacks and delay.',
+      zh: 'src 提供头像图片；加载失败时显示 fallback，并通过 image 与 fallback 配置加载回调和延迟。',
     },
   },
   {
@@ -44,8 +44,8 @@ const cases = [
     component: Case05,
     title: { en: 'Custom overflow count', zh: '自定义剩余数量' },
     description: {
-      en: 'renderCount receives the hidden count and replaces the default +N while inheriting the group shape and size.',
-      zh: 'renderCount 接收未展示数量并替换默认 +N，同时继承分组的 shape 与 size。',
+      en: 'overflow receives the hidden count and replaces the default +N while inheriting the group shape and size.',
+      zh: 'overflow 接收未展示数量并替换默认 +N，同时继承分组的 shape 与 size。',
     },
   },
   {

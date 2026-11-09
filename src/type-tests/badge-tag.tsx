@@ -20,9 +20,9 @@ const tagProps: TagProps = {
 };
 const badgeProps: BadgeProps = {
   className: 'notification-badge',
-  classNames: { indicator: 'notification-indicator' },
+  classes: { indicator: 'notification-indicator' },
   indicator: 5,
-  indicatorLabel: '5 unread messages',
+  label: '5 unread messages',
   max: 99,
   offset: [2, -1],
   style: { verticalAlign: 'middle' },
@@ -35,7 +35,7 @@ export const validBadgeTagUsage = (
     <Badge {...badgeProps} ref={badgeRef}>
       <button type="button">Messages</button>
     </Badge>
-    <Badge indicator={true} indicatorLabel="New notification" />
+    <Badge indicator={true} label="New notification" />
     <Badge indicator={<span>New</span>}>Inbox</Badge>
     <Badge indicator={0} />
     <Badge indicator={false} />

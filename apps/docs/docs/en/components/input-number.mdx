@@ -73,7 +73,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description:
         'Return the committed value on blur, after stepping ends, or when the keyboard commits a value.',
-      name: 'onChangeComplete',
+      name: 'onCommit',
       type: '(value: number | null) => void',
     },
     {
@@ -172,14 +172,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Input Number',
       defaultValue: null,
       description: 'Localize the accessible name of the increment button.',
-      name: 'incrementLabel',
+      name: 'controls.increment.label',
       type: 'string',
     },
     {
       component: 'Input Number',
       defaultValue: null,
       description: 'Localize the accessible name of the decrement button.',
-      name: 'decrementLabel',
+      name: 'controls.decrement.label',
       type: 'string',
     },
     {
@@ -215,14 +215,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: 'false',
       description:
         'Choose whether hovering and using the mouse wheel adjusts the value.',
-      name: 'allowWheelScrub',
+      name: 'wheel',
       type: 'boolean',
     },
     {
       component: 'Input Number',
       defaultValue: 'false',
       description: 'Choose whether stepping snaps to the nearest multiple.',
-      name: 'snapOnStep',
+      name: 'snap',
       type: 'boolean',
     },
     {
@@ -236,14 +236,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Input Number',
       defaultValue: null,
       description: 'Extend the className of the corresponding semantic slot.',
-      name: 'classNames',
-      type: 'InputNumberClassNames',
+      name: 'classes',
+      type: 'InputNumberClasses',
     },
     {
       component: 'Input Number',
       defaultValue: null,
       description:
-        'Set inline styles using the same semantic slots as classNames.',
+        'Set inline styles using the same semantic slots as classes.',
       name: 'styles',
       type: 'InputNumberStyles',
     },
@@ -259,15 +259,15 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Input Number',
       defaultValue: null,
       description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'inputProps',
+        'Configures the visible input, including its native events and ref.',
+      name: 'input',
       type: 'ComponentProps<"input">',
     },
     {
       component: 'Input Number',
       defaultValue: null,
       description:
-        'Configure the component public state, behavior, or extension point.',
+        'References the hidden form input independently of the root and visible input.',
       name: 'inputRef',
       type: 'React.Ref<HTMLInputElement>',
     },
@@ -293,6 +293,34 @@ import { ApiTable } from '@docs/rspress/api-table';
       description: 'Extend the root node inline style.',
       name: 'style',
       type: 'CSSProperties',
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Sets increment button content; an up icon is shown by default.',
+      name: 'controls.increment.content',
+      type: "ReactNode",
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'Sets decrement button content; a down icon is shown by default.',
+      name: 'controls.decrement.content',
+      type: "ReactNode",
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'References the root element independently of both input refs.',
+      name: 'ref',
+      type: "React.Ref<HTMLDivElement>",
+    },
+    {
+      component: 'Input Number',
+      defaultValue: null,
+      description: 'References the visible input and composes with Form focus binding.',
+      name: 'input.ref',
+      type: "React.Ref<HTMLInputElement>",
     },
   ]}
 />

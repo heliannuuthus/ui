@@ -29,14 +29,18 @@ type NavigationMenuItemConfig = {
   value?: string;
 };
 
+type NavigationMenuDelay = {
+  open?: number;
+  close?: number;
+};
+
 type NavigationMenuProps = Omit<
   React.ComponentProps<'nav'>,
   'children' | 'defaultValue' | 'onChange'
 > & {
   align?: PopupAlign;
-  closeDelay?: number;
   defaultValue?: string | null;
-  delay?: number;
+  delay?: NavigationMenuDelay;
   items: readonly NavigationMenuItemConfig[];
   onChange?: (value: string | null) => void;
   orientation?: 'horizontal' | 'vertical';
@@ -46,6 +50,7 @@ type NavigationMenuProps = Omit<
 const NavigationMenu = ({
   align = 'start',
   className,
+  delay,
   items,
   onChange,
   ...props
@@ -58,6 +63,8 @@ const NavigationMenu = ({
         className
       )}
       onValueChange={onChange}
+      delay={delay?.open}
+      closeDelay={delay?.close}
       {...props}
     >
       <NavigationMenuList>
@@ -208,6 +215,7 @@ const NavigationMenuLink = ({
 export {
   NavigationMenu,
   navigationMenuTriggerStyle,
+  type NavigationMenuDelay,
   type NavigationMenuItemConfig,
   type NavigationMenuLinkComponent,
   type NavigationMenuLinkProps,

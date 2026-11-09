@@ -14,7 +14,7 @@ import { cn } from '../lib/utils';
 
 type CounterPlace = number | '.';
 
-type CounterClassNames = {
+type CounterClasses = {
   digit?: string;
   visual?: string;
 };
@@ -25,13 +25,13 @@ type CounterStyles = {
 };
 
 type CounterProps = Omit<React.ComponentProps<'span'>, 'children'> & {
-  classNames?: CounterClassNames;
-  fontSize?: number;
-  fontWeight?: React.CSSProperties['fontWeight'];
+  classes?: CounterClasses;
+  size?: number;
+  weight?: React.CSSProperties['fontWeight'];
   gap?: number;
   places?: readonly CounterPlace[];
   prefix?: React.ReactNode;
-  springOptions?: SpringOptions;
+  spring?: SpringOptions;
   styles?: CounterStyles;
   suffix?: React.ReactNode;
   value: number;
@@ -77,18 +77,18 @@ const RollingDigit = ({
   digitStyle,
   height,
   place,
-  springOptions,
+  spring,
   value,
 }: {
   className?: string;
   digitStyle?: React.CSSProperties;
   height: number;
   place: number;
-  springOptions: SpringOptions;
+  spring: SpringOptions;
   value: number;
 }) => {
   const roundedValue = getValueRoundedToPlace(value, place);
-  const animatedValue = useSpring(roundedValue, springOptions);
+  const animatedValue = useSpring(roundedValue, spring);
   const reduceMotion = useReducedMotion();
 
   React.useEffect(() => {
@@ -120,13 +120,13 @@ const RollingDigit = ({
 const Counter = ({
   'aria-live': ariaLive = 'off',
   className,
-  classNames,
-  fontSize = 64,
-  fontWeight = 700,
+  classes,
+  size = 64,
+  weight = 700,
   gap = 4,
   places,
   prefix,
-  springOptions = defaultSpringOptions,
+  spring = defaultSpringOptions,
   style,
   styles,
   suffix,
@@ -139,7 +139,7 @@ const Counter = ({
   const resolvedPlaces = (places ?? getAutomaticPlaces(absoluteValue)).filter(
     (place) => place === '.' || (Number.isFinite(place) && place > 0)
   );
-  const height = fontSize;
+  const height = size;
   const accessibleValue = valueText ?? String(value);
   const fadeSize = Math.min(12, height / 2);
   const maskImage = `linear-gradient(to bottom, transparent 0, black ${fadeSize}px, black calc(100% - ${fadeSize}px), transparent 100%)`;
@@ -159,14 +159,14 @@ const Counter = ({
         aria-hidden="true"
         className={cn(
           'relative flex max-w-full items-center overflow-hidden font-heading leading-none tabular-nums select-none',
-          classNames?.visual
+          classes?.visual
         )}
         style={{
           borderRadius: 8,
           color: 'inherit',
           direction: 'ltr',
-          fontSize,
-          fontWeight,
+          fontSize: size,
+          fontWeight: weight,
           gap,
           paddingInline: 8,
           WebkitMaskImage: maskImage,
@@ -194,7 +194,7 @@ const Counter = ({
                 data-slot="counter-separator"
                 className={cn(
                   'flex w-[0.42em] shrink-0 items-center justify-center',
-                  classNames?.digit
+                  classes?.digit
                 )}
                 key={`separator-${index}`}
                 style={{ height, ...styles?.digit }}
@@ -203,12 +203,12 @@ const Counter = ({
               </span>
             ) : (
               <RollingDigit
-                className={classNames?.digit}
+                className={classes?.digit}
                 digitStyle={styles?.digit}
                 height={height}
                 key={`${place}-${index}`}
                 place={place}
-                springOptions={springOptions}
+                spring={spring}
                 value={absoluteValue}
               />
             )
@@ -270,7 +270,7 @@ const getAutomaticPlaces = (value: number): CounterPlace[] => {
 
 export {
   Counter,
-  type CounterClassNames,
+  type CounterClasses,
   type CounterPlace,
   type CounterProps,
   type CounterStyles,

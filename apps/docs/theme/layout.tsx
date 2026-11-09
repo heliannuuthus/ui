@@ -92,6 +92,8 @@ export const Layout = () => {
   const { frontmatter } = useFrontmatter();
   const { page } = usePageData();
   const [navigationOpen, setNavigationOpen] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
+  const [appearanceMenuOpen, setAppearanceMenuOpen] = useState(false);
   const [navigationIndicator, setNavigationIndicator] =
     useState<NavigationIndicatorGeometry | null>(null);
   const [theme, setTheme, resolvedTheme] = useThemeState();
@@ -124,8 +126,71 @@ export const Layout = () => {
     typeof frontmatter.pageType === 'string' ? frontmatter.pageType : 'article';
 
   useEffect(() => {
-    document.documentElement.lang = locale === 'zh' ? 'zh-Hans' : 'en';
-  }, [locale]);
+    document.documentElement.setAttribute(
+      'lang',
+      locale === 'zh' ? 'zh-Hans' : 'en'
+    );
+    if (location.pathname.split('/')[1] !== locale) return;
+    try {
+      window.localStorage.setItem('heliannuuthus-ui-locale', locale);
+    } catch {
+      // 存储不可用时仍允许切换语言。
+    }
+  }, [locale, location.pathname]);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    let previousY = window.scrollY;
+    let directionAnchor = previousY;
+    let direction = 0;
+    let frame = window.requestAnimationFrame(() => {
+      frame = 0;
+      setHeaderHidden(false);
+    });
+
+    const updateHeader = () => {
+      frame = 0;
+      const maximumY = Math.max(
+        0,
+        document.documentElement.scrollHeight - window.innerHeight
+      );
+      const currentY = Math.max(0, Math.min(window.scrollY, maximumY));
+      const delta = currentY - previousY;
+      previousY = currentY;
+
+      if (
+        currentY <= header.offsetHeight ||
+        header.querySelector(':focus-visible')
+      ) {
+        directionAnchor = currentY;
+        direction = 0;
+        setHeaderHidden(false);
+        return;
+      }
+      if (delta === 0) return;
+
+      const nextDirection = delta > 0 ? 1 : -1;
+      if (nextDirection !== direction) {
+        direction = nextDirection;
+        directionAnchor = currentY - delta;
+      }
+      // 累计位移，避免触控板轻微抖动导致导航反复闪现。
+      if (Math.abs(currentY - directionAnchor) < 8) return;
+      directionAnchor = currentY;
+      setHeaderHidden(nextDirection > 0);
+    };
+
+    const handleScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateHeader);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.cancelAnimationFrame(frame);
+    };
+  }, [location.pathname]);
 
   useEffect(() => {
     const header = headerRef.current;
@@ -199,7 +264,12 @@ export const Layout = () => {
 
   return (
     <Provider appearance={theme}>
-      <UiLayout className="docs-site-shell">
+      <UiLayout
+        className="docs-site-shell"
+        data-header-hidden={
+          (headerHidden && !navigationOpen && !appearanceMenuOpen) || undefined
+        }
+      >
         <Button
           className="docs-skip-link"
           href="#main-content"
@@ -208,7 +278,11 @@ export const Layout = () => {
         >
           {locale === 'zh' ? '跳到正文' : 'Skip to content'}
         </Button>
-        <UiLayout.Header className="docs-header" ref={headerRef}>
+        <UiLayout.Header
+          className="docs-header"
+          onFocusCapture={() => setHeaderHidden(false)}
+          ref={headerRef}
+        >
           {navigationIndicator ? (
             <motion.span
               animate={navigationIndicator}
@@ -293,7 +367,8 @@ export const Layout = () => {
             <Search />
             <DropdownMenu
               align="end"
-              classNames={{ content: 'docs-theme-menu' }}
+              classes={{ content: 'docs-theme-menu' }}
+              onOpenChange={setAppearanceMenuOpen}
               items={[
                 {
                   type: 'label',
@@ -390,7 +465,7 @@ export const Layout = () => {
               className="docs-sidebar"
               collapsible={false}
               data-open={navigationOpen || undefined}
-              width="var(--docs-sidebar-width)"
+              width={{ expanded: 'var(--docs-sidebar-width)' }}
             >
               <ScrollArea
                 className="docs-sidebar-scroll"
@@ -532,7 +607,7 @@ export const Layout = () => {
               className="docs-toc"
               collapsible={false}
               side="end"
-              width="var(--docs-toc-width)"
+              width={{ expanded: 'var(--docs-toc-width)' }}
             >
               <ScrollArea
                 className="docs-toc-scroll"

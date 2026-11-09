@@ -14,7 +14,7 @@ type TooltipPrimitivePositionerProps = TooltipPrimitive.Positioner.Props;
 type TooltipAlign = NonNullable<TooltipPrimitivePositionerProps['align']>;
 type TooltipSide = NonNullable<TooltipPrimitivePositionerProps['side']>;
 
-type TooltipClassNames = {
+type TooltipClasses = {
   arrow?: string;
   content?: string;
 };
@@ -42,6 +42,11 @@ type TooltipOpenChange = (
   open: Parameters<NonNullable<TooltipPrimitiveRootProps['onOpenChange']>>[0]
 ) => void;
 
+type TooltipDelay = {
+  open?: TooltipPrimitiveTriggerProps['delay'];
+  close?: TooltipPrimitiveTriggerProps['closeDelay'];
+};
+
 type TooltipProps = Omit<
   React.ComponentPropsWithRef<'div'>,
   'children' | 'content' | 'dangerouslySetInnerHTML'
@@ -49,20 +54,18 @@ type TooltipProps = Omit<
   Pick<TooltipPrimitiveRootProps, 'defaultOpen' | 'disabled' | 'open'> & {
     arrow?: boolean;
     children: React.ReactElement;
-    classNames?: TooltipClassNames;
-    closeDelay?: TooltipPrimitiveTriggerProps['closeDelay'];
+    classes?: TooltipClasses;
     container?: TooltipPrimitivePortalProps['container'];
     content: React.ReactNode;
+    delay?: TooltipDelay;
     onOpenChange?: TooltipOpenChange;
-    openDelay?: TooltipPrimitiveTriggerProps['delay'];
     placement?: TooltipPlacement;
     styles?: TooltipStyles;
   };
 
 type TooltipProviderDefaults = {
   arrow?: TooltipProps['arrow'];
-  closeDelay?: TooltipProps['closeDelay'];
-  openDelay?: TooltipProps['openDelay'];
+  delay?: TooltipProps['delay'];
   placement?: TooltipProps['placement'];
 };
 
@@ -90,15 +93,14 @@ const Tooltip = ({
   arrow: arrowProp,
   children,
   className,
-  classNames,
-  closeDelay: closeDelayProp,
+  classes,
   container,
   content,
   defaultOpen,
+  delay,
   disabled = false,
   onOpenChange,
   open,
-  openDelay: openDelayProp,
   placement: placementProp,
   ref,
   style,
@@ -112,8 +114,8 @@ const Tooltip = ({
   );
   const resolvedOpen = open ?? uncontrolledOpen;
   const arrow = arrowProp ?? defaults.arrow ?? true;
-  const closeDelay = closeDelayProp ?? defaults.closeDelay ?? 100;
-  const openDelay = openDelayProp ?? defaults.openDelay ?? 100;
+  const closeDelay = delay?.close ?? defaults.delay?.close ?? 100;
+  const openDelay = delay?.open ?? defaults.delay?.open ?? 100;
   const placement = placementProp ?? defaults.placement ?? 'top';
   const resolvedPlacement = placementConfig[placement];
   const isContentEmpty = content == null || content === false || content === '';
@@ -161,7 +163,7 @@ const Tooltip = ({
           <TooltipPrimitive.Popup
             className={cn(
               'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-sm bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pr-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
-              classNames?.content
+              classes?.content
             )}
             data-slot="tooltip-content"
             id={popupId}
@@ -171,7 +173,7 @@ const Tooltip = ({
             {content}
             {arrow ? (
               <TooltipPrimitive.Arrow
-                className={classNames?.arrow}
+                className={classes?.arrow}
                 data-popup-arrow=""
                 data-slot="tooltip-arrow"
                 style={(state) => ({
@@ -189,7 +191,8 @@ const Tooltip = ({
 
 export {
   Tooltip,
-  type TooltipClassNames,
+  type TooltipClasses,
+  type TooltipDelay,
   type TooltipPlacement,
   type TooltipProps,
   type TooltipProviderDefaults,

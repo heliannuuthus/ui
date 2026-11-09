@@ -14,7 +14,7 @@ import './app.css';
 
 <Provider
   appearance="system"
-  theme={{ colors: { primary: 'oklch(0.55 0.17 155)' } }}
+  theme={{ colors: { base: { primary: 'oklch(0.55 0.17 155)' } } }}
   components={{ Button: { size: 'sm' } }}
 >
   <Input.OTP maxLength={6} />
@@ -73,8 +73,20 @@ Public APIs target Ant Design-level maturity—consistent naming and defaults, s
 
 Styling extensions follow one contract across the package: `className` and
 `style` target the root node, while composite components expose matching
-`classNames` and `styles` maps for internal semantic slots. Slot maps never
+`classes` and `styles` maps for internal semantic slots. Slot maps never
 repeat the root target.
+
+Public names use component context: `input`, `calendar`, `render`, `empty`,
+and `clearable`. Related settings use feature configs such as
+`confirm: { label, onClick }`, `delay: { open, close }`,
+`offset: { side, align }`, and Pagination's `limit` config. This API change
+removes the previous flat names rather than retaining compatibility aliases.
+Sources: `src/components/dialog.tsx:17`, `src/components/popover.tsx:15`,
+`src/components/pagination.tsx:70`, and `src/components/input.tsx:19`.
+
+Toast option objects follow Sonner's supported capabilities: `classes` covers
+its class slots, while `styles` customizes action/cancel buttons only.
+Source: `src/components/sonner.tsx:21`.
 
 ## Design documents
 

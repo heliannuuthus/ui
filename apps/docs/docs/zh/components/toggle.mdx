@@ -116,10 +116,17 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: "'horizontal' | 'vertical'",
     },
     {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description: '指向第一个未禁用选项的按钮，支持 Form 错误聚焦与 setFocus；没有该选项时为 null。',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLButtonElement>',
+    },
+    {
       component: 'Toggle',
       defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
-      name: 'inputRef',
+      description: '访问实际渲染的切换按钮，支持 Form 聚焦。',
+      name: 'ref',
       type: 'React.Ref<HTMLButtonElement>',
     },
     {

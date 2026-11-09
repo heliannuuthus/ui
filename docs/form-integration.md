@@ -120,7 +120,7 @@ const form = Form.useForm<Values>({
 })
 
 <Form form={form} onSubmit={save}>
-  <Form.Field name="name" label="名称" required>
+  <Form.Field name="name" label="名称" rules={{ required: '请输入名称' }}>
     <Input />
   </Form.Field>
 
@@ -365,8 +365,14 @@ part of the API.
 - A description remains associated with its control when an error is present.
 - Invalid state is propagated through `aria-invalid` and error descriptions
   through `aria-describedby`.
-- Required presentation and native `required` behavior must be deliberate and
-  documented; a visual marker alone is insufficient.
+- A validation failure without a message keeps `aria-invalid`, but does not
+  add an ID reference to an error element that is not rendered.
+- `rules.required` validates values and supplies the required marker. The
+  `required` prop only controls presentation and accessible state; it does not
+  add a validation rule. `Form` disables native validation by default.
+
+Sources: `src/components/form.tsx:260`, `src/components/form.tsx:333` and
+`src/components/form.tsx:340`.
 
 ## Controlled and uncontrolled behavior
 
@@ -377,10 +383,16 @@ part of the API.
 - Supplying a child `value`, `checked`, `defaultValue` or `defaultChecked`
   inside `Form.Field` does not replace form state; initialize through
   `Form.useForm`, `form.reset` or `Form.Field.defaultValue`.
-- Reset restores the form's declared default values.
+- Reset restores the form's declared default values. Native reset buttons also
+  reset the instance, including errors and dirty state. `onReset` runs first;
+  calling `event.preventDefault()` cancels both changes.
+- An uninitialized Form-controlled Select, Radio.Group or Segmented remains
+  controlled with an empty selection. It does not inherit a child default.
 - Asynchronously loaded edit data is applied through a documented form
   initialization or reset operation, not by switching individual controls
   between controlled and uncontrolled modes.
+
+Sources: `src/components/form.tsx:290`, `src/components/select.tsx:356`.
 
 ## Arrays and nested fields
 
@@ -407,6 +419,21 @@ The common `Form.Field` path must provide:
 
 Adapters for compound controls must attach these properties to the interactive
 element rather than an arbitrary visual wrapper.
+
+`Checkbox.Group` and `Toggle.Group` expose `inputRef` for their first enabled
+option. Form uses the same target for `setFocus` and invalid-submit focus.
+`Toggle` merges its standard React button `ref` with Form's focus reference.
+`Select` and `TimePicker` also expose their input through `ref`; date pickers
+use `triggerRef` for the popup button, which is absent in inline mode.
+`Input.Number` keeps its root `ref`, hidden numeric `inputRef`, and visible
+`input.ref` distinct; Form focuses the visible input. A range Slider gives
+every focusable input its accessible label and description.
+
+Sources: `src/components/toggle.tsx:94`, `src/components/select.tsx:347`,
+`src/components/date-picker.tsx:235`, and `src/components/input-number.tsx:130`.
+
+Sources for group and range targets: `src/components/checkbox.tsx:225`,
+`src/components/toggle.tsx:149`, and `src/components/slider.tsx:362`.
 
 ## Engine boundary
 

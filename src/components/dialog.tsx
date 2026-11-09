@@ -6,7 +6,7 @@ import { cn } from '../lib/utils';
 import { Button } from './button';
 import type { OpenStateProps } from './internal/public-types';
 
-type DialogClassNames = {
+type DialogClasses = {
   content?: string;
 };
 
@@ -14,36 +14,45 @@ type DialogStyles = {
   content?: React.CSSProperties;
 };
 
+type DialogConfirmConfig = {
+  label: React.ReactNode;
+  onClick?: () => void;
+};
+
+type DialogCancelConfig = {
+  label?: React.ReactNode;
+};
+
 type DialogProps = OpenStateProps & {
-  cancelText?: React.ReactNode;
+  cancel?: DialogCancelConfig | null | false;
   children?: React.ReactNode;
   closable?: boolean | React.ReactNode;
-  confirmText?: React.ReactNode;
-  classNames?: DialogClassNames;
+  confirm?: DialogConfirmConfig | null | false;
+  classes?: DialogClasses;
   description?: React.ReactNode;
   footer?: React.ReactNode;
-  onConfirm?: () => void;
   styles?: DialogStyles;
   title?: React.ReactNode;
   trigger?: React.ReactElement;
 };
 
 const Dialog = ({
-  cancelText,
+  cancel,
   children,
   closable = true,
-  confirmText,
-  classNames,
+  confirm,
+  classes,
   description,
   footer,
-  onConfirm,
   styles,
   title,
   trigger,
   ...props
 }: DialogProps) => {
   const hasHeader = title != null || description != null;
-  const hasFooter = footer != null || cancelText != null || confirmText != null;
+  const hasCancel = cancel !== false && cancel?.label != null;
+  const hasConfirm = confirm !== false && confirm?.label != null;
+  const hasFooter = footer != null || hasCancel || hasConfirm;
 
   return (
     <DialogPrimitive.Root data-slot="dialog" {...props}>
@@ -59,7 +68,7 @@ const Dialog = ({
           data-slot="dialog-content"
           className={cn(
             'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-6 rounded-4xl bg-popover p-6 text-sm text-popover-foreground shadow-xl ring-1 ring-foreground/5 duration-100 outline-none sm:max-w-md dark:ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
-            classNames?.content
+            classes?.content
           )}
           style={styles?.content}
         >
@@ -90,14 +99,18 @@ const Dialog = ({
               className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"
             >
               {footer}
-              {cancelText != null ? (
+              {hasCancel ? (
                 <DialogPrimitive.Close render={<Button variant="outline" />}>
-                  {cancelText}
+                  {cancel && cancel.label}
                 </DialogPrimitive.Close>
               ) : null}
-              {confirmText != null ? (
-                <DialogPrimitive.Close render={<Button onClick={onConfirm} />}>
-                  {confirmText}
+              {hasConfirm ? (
+                <DialogPrimitive.Close
+                  render={
+                    <Button onClick={confirm ? confirm.onClick : undefined} />
+                  }
+                >
+                  {confirm && confirm.label}
                 </DialogPrimitive.Close>
               ) : null}
             </div>
@@ -123,4 +136,11 @@ const Dialog = ({
   );
 };
 
-export { Dialog, type DialogClassNames, type DialogProps, type DialogStyles };
+export {
+  Dialog,
+  type DialogCancelConfig,
+  type DialogClasses,
+  type DialogConfirmConfig,
+  type DialogProps,
+  type DialogStyles,
+};

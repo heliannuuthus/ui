@@ -99,13 +99,20 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description: '设置列表项起始侧的媒体内容。',
       name: 'media',
+      type: 'ItemMediaConfig',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: '设置媒体内容。',
+      name: 'media.content',
       type: 'ReactNode',
     },
     {
       component: 'Item',
       defaultValue: "'default'",
       description: '声明媒体内容是普通内容、图标还是图片。',
-      name: 'mediaType',
+      name: 'media.type',
       type: "'default' | 'icon' | 'image'",
     },
     {
@@ -161,7 +168,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Item.Group',
       defaultValue: null,
       description: '根据当前项目和索引完全自定义列表项渲染。',
-      name: 'renderItem',
+      name: 'render',
       type: '(item: ItemGroupEntry, index: number) => ReactNode',
     },
     {
@@ -175,13 +182,13 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Item',
       defaultValue: null,
       description: '扩展对应语义槽位的 className。',
-      name: 'classNames',
-      type: 'ItemClassNames',
+      name: 'classes',
+      type: 'ItemClasses',
     },
     {
       component: 'Item',
       defaultValue: null,
-      description: '按与 classNames 相同的语义区域设置行内样式。',
+      description: '按与 classes 相同的语义区域设置行内样式。',
       name: 'styles',
       type: 'ItemStyles',
     },
@@ -218,7 +225,7 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## 无障碍
 
-- Item.Group 默认提供列表与列表项语义；使用 renderItem 时需要保留等价语义。
+- Item.Group 默认提供列表与列表项语义；使用 render 时需要保留等价语义。
 - 整行需要跳转时传入 href；行内已有按钮或开关时不要再把整行设为链接。
 
 ## 避免事项

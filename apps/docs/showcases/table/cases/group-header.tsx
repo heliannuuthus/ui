@@ -120,7 +120,7 @@ const createExample = (locale: 'en' | 'zh') => {
         <Table
           columns={groupedReleaseColumns}
           data={releaseRecords}
-          classNames={{ table: 'min-w-[660px]' }}
+          classes={{ table: 'min-w-[660px]' }}
         />
       </div>
     );

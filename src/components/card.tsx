@@ -3,7 +3,7 @@ import * as React from 'react';
 import { cn } from '../lib/utils';
 import { useComponentDefaults } from './provider';
 
-type CardClassNames = {
+type CardClasses = {
   header?: string;
   title?: string;
   description?: string;
@@ -13,7 +13,7 @@ type CardClassNames = {
 };
 
 type CardStyles = {
-  [Slot in keyof CardClassNames]?: React.CSSProperties;
+  [Slot in keyof CardClasses]?: React.CSSProperties;
 };
 
 type CardVariant = 'elevated' | 'outline' | 'ghost';
@@ -28,7 +28,7 @@ type CardProps = React.ComponentProps<'div'> & {
   variant?: CardVariant;
   header?: CardHeader;
   footer?: React.ReactNode;
-  classNames?: CardClassNames;
+  classes?: CardClasses;
   styles?: CardStyles;
 };
 
@@ -41,7 +41,7 @@ const Card = (cardProps: CardProps) => {
     variant = defaults.variant ?? 'elevated',
     header,
     footer,
-    classNames,
+    classes,
     styles,
     children,
     ...props
@@ -62,7 +62,7 @@ const Card = (cardProps: CardProps) => {
           data-slot="card-header"
           className={cn(
             'group/card-header @container/card-header grid auto-rows-min items-start gap-1.5 rounded-t-4xl border-b px-(--card-spacing) pt-(--card-spacing) pb-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto]',
-            classNames?.header
+            classes?.header
           )}
           style={styles?.header}
         >
@@ -71,7 +71,7 @@ const Card = (cardProps: CardProps) => {
               data-slot="card-title"
               className={cn(
                 'font-heading text-base font-medium',
-                classNames?.title
+                classes?.title
               )}
               style={styles?.title}
             >
@@ -83,7 +83,7 @@ const Card = (cardProps: CardProps) => {
               data-slot="card-description"
               className={cn(
                 'text-sm text-muted-foreground',
-                classNames?.description
+                classes?.description
               )}
               style={styles?.description}
             >
@@ -95,7 +95,7 @@ const Card = (cardProps: CardProps) => {
               data-slot="card-action"
               className={cn(
                 'col-start-2 row-span-2 row-start-1 self-start justify-self-end',
-                classNames?.action
+                classes?.action
               )}
               style={styles?.action}
             >
@@ -106,7 +106,7 @@ const Card = (cardProps: CardProps) => {
       )}
       <div
         data-slot="card-content"
-        className={cn('px-(--card-spacing)', classNames?.content)}
+        className={cn('px-(--card-spacing)', classes?.content)}
         style={styles?.content}
       >
         {children}
@@ -116,7 +116,7 @@ const Card = (cardProps: CardProps) => {
           data-slot="card-footer"
           className={cn(
             'flex items-center rounded-b-4xl border-t px-(--card-spacing) pt-(--card-spacing) pb-(--card-spacing)',
-            classNames?.footer
+            classes?.footer
           )}
           style={styles?.footer}
         >
@@ -130,7 +130,7 @@ const Card = (cardProps: CardProps) => {
 export {
   Card,
   type CardHeader,
-  type CardClassNames,
+  type CardClasses,
   type CardProps,
   type CardProviderDefaults,
   type CardStyles,

@@ -63,7 +63,7 @@ const createExample = (locale: 'en' | 'zh') => {
     return (
       <Command
         className="minimal-command"
-        emptyText={
+        empty={
           <div className="command-demo-empty">
             <SearchX aria-hidden="true" />
             <strong>{copy('没有匹配的命令')}</strong>
@@ -71,8 +71,11 @@ const createExample = (locale: 'en' | 'zh') => {
           </div>
         }
         groups={createGroups()}
-        inputProps={{ onChange: setQuery, value: query }}
-        placeholder={copy('搜索命令…')}
+        input={{
+          placeholder: copy('搜索命令…'),
+          onChange: setQuery,
+          value: query,
+        }}
       />
     );
   };

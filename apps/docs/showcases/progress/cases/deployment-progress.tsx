@@ -32,7 +32,7 @@ const createExample = (locale: 'en' | 'zh') => {
         <Progress
           effect="sparkle"
           label={copy('生产环境')}
-          showValue
+          display
           value={value}
         />
         <div className="feedback-progress-actions">

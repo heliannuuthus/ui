@@ -16,10 +16,10 @@ type CarouselScrollDirection = 'next' | 'prev';
 
 type CarouselDotRenderProps = {
   index: number;
-  isSelected: boolean;
+  selected: boolean;
 };
 
-type CarouselClassNames = {
+type CarouselClasses = {
   content?: string;
   item?: string;
 };
@@ -39,11 +39,11 @@ type CarouselPaginationOptions = {
 } & (
   | {
       render?: never;
-      renderDot?: (props: CarouselDotRenderProps) => React.ReactNode;
+      dot?: (props: CarouselDotRenderProps) => React.ReactNode;
     }
   | {
       render: (controls: CarouselControls) => React.ReactNode;
-      renderDot?: never;
+      dot?: never;
     }
 );
 
@@ -52,7 +52,7 @@ type CarouselProps<Item = React.ReactNode> = Omit<
   'children' | 'ref'
 > & {
   autoplay?: CarouselAutoplay;
-  classNames?: CarouselClassNames;
+  classes?: CarouselClasses;
   controls?: boolean | CarouselNavigationOptions;
   items: readonly Item[];
   loop?: boolean;
@@ -61,8 +61,8 @@ type CarouselProps<Item = React.ReactNode> = Omit<
   ref?: React.Ref<CarouselRef>;
   styles?: CarouselStyles;
 } & ([Item] extends [React.ReactNode]
-    ? { renderItem?: (item: Item, index: number) => React.ReactNode }
-    : { renderItem: (item: Item, index: number) => React.ReactNode });
+    ? { render?: (item: Item, index: number) => React.ReactNode }
+    : { render: (item: Item, index: number) => React.ReactNode });
 
 type CarouselRef = {
   pause: () => void;
@@ -75,11 +75,11 @@ type CarouselRef = {
 type CarouselControls = CarouselRef & {
   canScrollNext: boolean;
   canScrollPrev: boolean;
-  currentPage: number;
-  isPlaying: boolean;
-  pageCount: number;
-  selectedIndex: number;
-  scrollSnaps: number[];
+  page: number;
+  playing: boolean;
+  pages: number;
+  index: number;
+  snaps: number[];
 };
 
 type CarouselContextValue = {
@@ -134,13 +134,13 @@ const useCarousel = () => {
 
 const Carousel = <Item = React.ReactNode,>({
   autoplay = false,
-  classNames,
+  classes,
   controls = true,
   items,
   loop = false,
   pauseOnHover = true,
   pagination,
-  renderItem,
+  render,
   ref,
   styles,
   'aria-label': ariaLabel = 'Carousel',
@@ -191,7 +191,7 @@ const Carousel = <Item = React.ReactNode,>({
     paginationOptions == null ? null : paginationOptions.render ? (
       <CarouselPagination>{paginationOptions.render}</CarouselPagination>
     ) : (
-      <CarouselDots>{paginationOptions.renderDot}</CarouselDots>
+      <CarouselDots>{paginationOptions.dot}</CarouselDots>
     );
 
   const onSelect = React.useCallback(
@@ -372,16 +372,16 @@ const Carousel = <Item = React.ReactNode,>({
         controls: {
           canScrollNext,
           canScrollPrev,
-          currentPage: scrollSnaps.length > 0 ? selectedIndex + 1 : 0,
-          isPlaying,
-          pageCount: scrollSnaps.length,
+          page: scrollSnaps.length > 0 ? selectedIndex + 1 : 0,
+          playing: isPlaying,
+          pages: scrollSnaps.length,
           pause,
           play,
           scrollNext,
           scrollPrev,
-          scrollSnaps,
+          snaps: scrollSnaps,
           scrollTo,
-          selectedIndex,
+          index: selectedIndex,
         },
       }}
     >
@@ -410,17 +410,14 @@ const Carousel = <Item = React.ReactNode,>({
         {...props}
       >
         {paginationPlacement === 'before' ? paginationNode : null}
-        <CarouselContent
-          className={classNames?.content}
-          style={styles?.content}
-        >
+        <CarouselContent className={classes?.content} style={styles?.content}>
           {items.map((item, index) => (
             <CarouselItem
-              className={classNames?.item}
+              className={classes?.item}
               key={index}
               style={styles?.item}
             >
-              {renderItem ? renderItem(item, index) : (item as React.ReactNode)}
+              {render ? render(item, index) : (item as React.ReactNode)}
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -554,7 +551,7 @@ type CarouselDotsProps = Omit<React.ComponentProps<'div'>, 'children'> & {
 };
 
 const CarouselDots = ({ className, children, ...props }: CarouselDotsProps) => {
-  const { scrollSnaps, selectedIndex, scrollTo } = useCarousel();
+  const { snaps: scrollSnaps, index: selectedIndex, scrollTo } = useCarousel();
   const customDot = typeof children === 'function';
 
   if (scrollSnaps.length <= 1) return null;
@@ -585,7 +582,7 @@ const CarouselDots = ({ className, children, ...props }: CarouselDotsProps) => {
             type="button"
           >
             {customDot ? (
-              children({ index, isSelected })
+              children({ index, selected: isSelected })
             ) : children ? (
               children
             ) : (
@@ -620,7 +617,7 @@ const CarouselPagination = ({
 
 export {
   type CarouselAutoplay,
-  type CarouselClassNames,
+  type CarouselClasses,
   type CarouselControls,
   type CarouselDotRenderProps,
   type CarouselNavigationOptions,

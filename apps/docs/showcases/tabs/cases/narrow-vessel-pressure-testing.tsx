@@ -93,7 +93,7 @@ const createExample = (locale: 'en' | 'zh') => {
               animation="none"
               defaultValue="overview"
               items={responsiveTabsItems}
-              scrollLabels={
+              labels={
                 labels === 'custom'
                   ? {
                       end: copy('向后滚动标签'),

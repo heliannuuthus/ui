@@ -5,10 +5,12 @@ import '@heliannuuthus/ui/styles.css';
 const ZhExample = (() => {
   return () => (
     <>
-      <Item media={<FileText />} mediaType="icon" title="Release notes" />
       <Item
-        media={<img alt="Cover" src="/cover.jpg" />}
-        mediaType="image"
+        media={{ content: <FileText />, type: 'icon' }}
+        title="Release notes"
+      />
+      <Item
+        media={{ content: <img alt="Cover" src="/cover.jpg" />, type: 'image' }}
         title="Cover"
       />
     </>
@@ -18,10 +20,12 @@ const ZhExample = (() => {
 const EnExample = (() => {
   return () => (
     <>
-      <Item media={<FileText />} mediaType="icon" title="Release notes" />
       <Item
-        media={<img alt="Cover" src="/cover.jpg" />}
-        mediaType="image"
+        media={{ content: <FileText />, type: 'icon' }}
+        title="Release notes"
+      />
+      <Item
+        media={{ content: <img alt="Cover" src="/cover.jpg" />, type: 'image' }}
         title="Cover"
       />
     </>

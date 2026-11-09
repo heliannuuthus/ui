@@ -99,7 +99,7 @@ const apiOrderFixture = [
   { component: 'Demo', name: 'ref' },
   { component: 'Demo', name: 'styles' },
   { component: 'Demo', name: 'disabled' },
-  { component: 'Demo', name: 'classNames' },
+  { component: 'Demo', name: 'classes' },
 ];
 const orderedApiFixtureNames = orderApiProperties(apiOrderFixture, 'Demo').map(
   qualifiedApiPropertyName
@@ -112,7 +112,7 @@ assert.deepEqual(orderedApiFixtureNames, [
   'Demo.defaultValue',
   'Demo.onChange',
   'Demo.ref',
-  'Demo.classNames',
+  'Demo.classes',
   'Demo.styles',
   'Demo.className',
   'Demo.style',

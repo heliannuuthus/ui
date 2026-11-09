@@ -84,13 +84,20 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description: '设置文件类型图标或缩略图。',
       name: 'media',
+      type: 'AttachmentMediaConfig',
+    },
+    {
+      component: 'Attachment',
+      defaultValue: null,
+      description: '设置媒体内容。',
+      name: 'media.content',
       type: 'ReactNode',
     },
     {
       component: 'Attachment',
       defaultValue: "'icon'",
       description: '声明媒体内容是图标还是图片。',
-      name: 'mediaType',
+      name: 'media.type',
       type: "'icon' | 'image'",
     },
     {
