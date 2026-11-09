@@ -66,13 +66,13 @@ type BubbleReactionsProps = React.ComponentProps<'div'> & {
   side?: 'top' | 'bottom';
 };
 
-type BubbleProps = Omit<React.ComponentProps<'div'>, 'children'> &
+type BubbleContentProps = React.ComponentProps<'div'> & DataAttributes;
+
+type BubbleProps = Omit<React.ComponentProps<'div'>, 'children' | 'content'> &
   VariantProps<typeof bubbleVariants> & {
     align?: 'start' | 'end';
-    content: React.ReactNode;
-    contentProps?: React.ComponentProps<'div'> & DataAttributes;
-    reactions?: React.ReactNode;
-    reactionsProps?: BubbleReactionsProps;
+    content: BubbleContentProps;
+    reactions?: BubbleReactionsProps;
   };
 
 type BubbleProviderDefaults = Pick<BubbleProps, 'variant'>;
@@ -81,9 +81,7 @@ const Bubble = ({
   align = 'start',
   className,
   content,
-  contentProps,
   reactions,
-  reactionsProps,
   variant: variantProp,
   ...props
 }: BubbleProps) => {
@@ -98,10 +96,8 @@ const Bubble = ({
       className={cn(bubbleVariants({ variant }), className)}
       {...props}
     >
-      <BubbleContent {...contentProps}>{content}</BubbleContent>
-      {reactions != null ? (
-        <BubbleReactions {...reactionsProps}>{reactions}</BubbleReactions>
-      ) : null}
+      <BubbleContent {...content} />
+      {reactions != null ? <BubbleReactions {...reactions} /> : null}
     </div>
   );
 };
@@ -172,6 +168,7 @@ const BubbleCompound = Object.assign(Bubble, {
 
 export {
   BubbleCompound as Bubble,
+  type BubbleContentProps,
   type BubbleProps,
   type BubbleProviderDefaults,
   type BubbleReactionsProps,

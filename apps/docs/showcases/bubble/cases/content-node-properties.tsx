@@ -4,8 +4,10 @@ import '@heliannuuthus/ui/styles.css';
 const ZhExample = (() => {
   return () => (
     <Bubble
-      content="Build completed"
-      contentProps={{ role: 'status', 'aria-live': 'polite' }}
+      content={{
+        children: 'Build completed',
+        ...{ role: 'status', 'aria-live': 'polite' },
+      }}
     />
   );
 })();
@@ -13,8 +15,10 @@ const ZhExample = (() => {
 const EnExample = (() => {
   return () => (
     <Bubble
-      content="Build completed"
-      contentProps={{ role: 'status', 'aria-live': 'polite' }}
+      content={{
+        children: 'Build completed',
+        ...{ role: 'status', 'aria-live': 'polite' },
+      }}
     />
   );
 })();

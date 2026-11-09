@@ -24,10 +24,21 @@ export const SelectTypeTest = () => (
     />
     <Select<number> {...numericProps} />
     <Select
+      options={stringOptions}
+      clearable
+      empty="No options"
+      classes={{ trigger: 'trigger' }}
+      ref={(element) => {
+        element?.focus();
+      }}
+    />
+    {/* @ts-expect-error 通过 ref 获取 Select 可见输入。 */}
+    <Select options={stringOptions} inputRef={() => {}} />
+    <Select
       options={[
         {
           label: <span aria-hidden="true">Visual label</span>,
-          textValue: 'Accessible label',
+          text: 'Accessible label',
           value: 'visual',
         },
       ]}

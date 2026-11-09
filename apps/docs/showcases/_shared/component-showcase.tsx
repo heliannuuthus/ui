@@ -61,7 +61,7 @@ const ShowcaseCaseCard = ({
     <Card
       aria-labelledby={titleId}
       className="component-case"
-      classNames={{
+      classes={{
         content: 'component-case-content',
         description: 'component-case-description',
         footer: 'component-case-footer',

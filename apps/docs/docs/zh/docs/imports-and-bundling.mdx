@@ -38,6 +38,31 @@ import { Button } from '@heliannuuthus/ui';
 // import { Button } from '@heliannuuthus/ui/button';
 ```
 
+## 其他根导出
+
+工具函数和类型同样从公共根入口导入：
+
+```tsx
+import { buttonVariants, cn, type ButtonProps } from '@heliannuuthus/ui';
+
+const actionClassName = cn(
+  buttonVariants({ variant: 'outline', size: 'sm' }),
+  'w-full'
+);
+```
+
+| 导出 | 契约 |
+| --- | --- |
+| `cn(...inputs)` | 合并条件类名字符串、数组和对象，再处理冲突的 Tailwind 工具类，返回字符串。 |
+| `buttonVariants(options?)` | 根据 `variant`、`size` 和可选的 `className` 返回 Button 类名；默认分别为 `default` 与 `md`。 |
+| `markerVariants(options?)` | 根据 `variant`（`default`、`separator` 或 `border`）和可选的 `className` 返回 Marker 类名。 |
+| `tabsListVariants(options?)` | 根据 `variant`（`default`、`line`、`outline` 或 `soft`）和可选的 `className` 返回标签列表类名；默认 `default`。 |
+| `toggleVariants(options?)` | 根据 `variant`（`default` 或 `outline`）和可选的 `className` 返回 Toggle 类名；默认 `default`。 |
+| `navigationMenuTriggerStyle()` | 返回导航菜单触发器的类名字符串，不接收参数。 |
+| `useIsMobile()` | 返回视口是否小于 `768px`，并订阅断点变化。服务端渲染与客户端首帧返回 `false`，挂载后更新；需要在 hydration 前正确布局时使用 CSS 媒体查询。 |
+
+样式工厂只返回类名，不提供交互、无障碍语义、Provider 默认值或样式表加载。需要这些行为时优先使用对应组件。表单 Hook 见 [Form](/zh/components/form)，`useProvider` 见 [全局 Provider](/zh/docs/provider)，`useCarousel` 见 [Carousel](/zh/components/carousel)。
+
 ## 构建工具要求
 
 项目需要支持 ESM 与现代 Tree Shaking。Vite、Rspack、Webpack、Rollup、Parcel 和现代 Next.js 均可按常规方式使用。不要为组件库额外增加 Babel 按需导入插件。

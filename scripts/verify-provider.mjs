@@ -25,6 +25,7 @@ const {
   Tag,
   Toggle,
   Typography,
+  useProvider,
 } = await import('../dist/index.js');
 
 const markup = renderToStaticMarkup(
@@ -62,8 +63,7 @@ const markup = renderToStaticMarkup(
       },
       direction: 'rtl',
       theme: {
-        colors: { primary: 'blue' },
-        darkColors: { primary: 'cyan' },
+        colors: { base: { primary: 'blue' }, dark: { primary: 'cyan' } },
         radius: '12px',
       },
     },
@@ -76,13 +76,13 @@ const markup = renderToStaticMarkup(
     createElement(Alert, { title: 'Alert' }),
     createElement(Checkbox, null, 'Checkbox'),
     createElement(Attachment, { title: 'Attachment' }),
-    createElement(Bubble, { content: 'Bubble' }),
+    createElement(Bubble, { content: { children: 'Bubble' } }),
     createElement(Input.Number, { 'aria-label': 'Count' }),
     createElement(Input.OTP, { maxLength: 2 }),
     createElement(Item, { title: 'Item' }),
     createElement(Marker, { content: 'Marker' }),
     createElement(Menubar, { menus: [] }),
-    createElement(Pagination, { pageCount: 2 }),
+    createElement(Pagination, { pages: 2 }),
     createElement(Progress, { value: 40 }),
     createElement(ScrollArea, null, 'Scrollable content'),
     createElement(Segmented, { options: ['list', 'board'] }),
@@ -155,6 +155,24 @@ assert.match(markup, /data-slot="tag" data-type="primary"/);
 assert.match(markup, /data-slot="toggle" data-variant="outline"/);
 assert.match(markup, /data-size="sm" data-tone="muted" data-weight="medium"/);
 assert.match(markup, /data-size="lg" data-tone="default" data-weight="medium"/);
+
+let nestedTooltipDelay;
+const CaptureTooltipDefaults = () => {
+  nestedTooltipDelay = useProvider().components.Tooltip?.delay;
+  return null;
+};
+renderToStaticMarkup(
+  createElement(
+    Provider,
+    { components: { Tooltip: { delay: { open: 300, close: 800 } } } },
+    createElement(
+      Provider,
+      { components: { Tooltip: { delay: { open: 0 } } } },
+      createElement(CaptureTooltipDefaults)
+    )
+  )
+);
+assert.deepEqual(nestedTooltipDelay, { open: 0, close: 800 });
 
 globalThis.console.log(
   'Verified Provider theme, appearance, direction, component defaults, and explicit prop precedence.'

@@ -8,7 +8,9 @@ export {
 } from './components/accordion';
 export {
   AlertDialog,
-  type AlertDialogClassNames,
+  type AlertDialogCancelConfig,
+  type AlertDialogConfirmConfig,
+  type AlertDialogClasses,
   type AlertDialogProps,
   type AlertDialogProviderDefaults,
   type AlertDialogStyles,
@@ -23,6 +25,7 @@ export {
   Attachment,
   type AttachmentGroupItem,
   type AttachmentGroupProps,
+  type AttachmentMediaConfig,
   type AttachmentProps,
   type AttachmentProviderDefaults,
 } from './components/attachment';
@@ -40,7 +43,7 @@ export {
 } from './components/avatar';
 export {
   Badge,
-  type BadgeClassNames,
+  type BadgeClasses,
   type BadgeProps,
   type BadgeStyles,
 } from './components/badge';
@@ -58,6 +61,7 @@ export {
   type BubbleProps,
   type BubbleProviderDefaults,
   type BubbleReactionsProps,
+  type BubbleContentProps,
 } from './components/bubble';
 export {
   Button,
@@ -71,7 +75,7 @@ export {
 } from './components/button';
 export {
   Card,
-  type CardClassNames,
+  type CardClasses,
   type CardHeader,
   type CardProps,
   type CardProviderDefaults,
@@ -81,7 +85,7 @@ export {
 export {
   Carousel,
   type CarouselAutoplay,
-  type CarouselClassNames,
+  type CarouselClasses,
   type CarouselControls,
   type CarouselDotRenderProps,
   type CarouselNavigationOptions,
@@ -93,7 +97,7 @@ export {
 } from './components/carousel';
 export {
   Checkbox,
-  type CheckboxClassNames,
+  type CheckboxClasses,
   type CheckboxGroupProps,
   type CheckboxOption,
   type CheckboxProps,
@@ -103,11 +107,11 @@ export {
 } from './components/checkbox';
 export {
   Collapsible,
-  type CollapsibleClassNames,
+  type CollapsibleClasses,
   type CollapsibleProps,
   type CollapsibleProviderDefaults,
   type CollapsibleStyles,
-  type CollapsibleTriggerProps,
+  type CollapsibleTriggerConfig,
 } from './components/collapsible';
 export {
   Command,
@@ -119,13 +123,13 @@ export {
 } from './components/command';
 export {
   ContextMenu,
-  type ContextMenuClassNames,
+  type ContextMenuClasses,
   type ContextMenuProps,
   type ContextMenuStyles,
 } from './components/context-menu';
 export {
   Counter,
-  type CounterClassNames,
+  type CounterClasses,
   type CounterPlace,
   type CounterProps,
   type CounterStyles,
@@ -137,40 +141,44 @@ export {
   DateTimeRangePicker,
   TimePicker,
   TimeRangePicker,
-  type DatePickerClassNames,
+  type DatePickerClasses,
   type DatePickerProps,
   type DatePickerStyles,
   type DateRangePickerProps,
-  type DateTimePickerClassNames,
+  type DateTimePickerClasses,
   type DateTimePickerProps,
   type DateTimePickerStyles,
   type DateTimeRangePickerProps,
   type PickerLocale,
   type PickerRangeValue,
   type TimePickerProps,
-  type TimeRangePickerClassNames,
+  type TimeRangePickerClasses,
   type TimeRangePickerProps,
   type TimeRangePickerStyles,
 } from './components/date-picker';
 export {
   Dialog,
-  type DialogClassNames,
+  type DialogCancelConfig,
+  type DialogConfirmConfig,
+  type DialogClasses,
   type DialogProps,
   type DialogStyles,
 } from './components/dialog';
 export {
   Drawer,
+  type DrawerCloseConfig,
   type DrawerBehavior,
-  type DrawerClassNames,
+  type DrawerClasses,
   type DrawerProps,
   type DrawerSide,
   type DrawerSnapPoint,
+  type DrawerSnapsConfig,
   type DrawerStyles,
 } from './components/drawer';
 export {
   DropdownMenu,
   type DropdownMenuCheckboxEntry,
-  type DropdownMenuClassNames,
+  type DropdownMenuClasses,
   type DropdownMenuEntry,
   type DropdownMenuItemEntry,
   type DropdownMenuLabelEntry,
@@ -199,8 +207,8 @@ export {
 } from './components/form';
 export {
   Input,
-  type InputClassNames,
-  type InputNumberClassNames,
+  type InputClasses,
+  type InputNumberClasses,
   type InputNumberControls,
   type InputNumberProps,
   type InputNumberProviderDefaults,
@@ -215,10 +223,11 @@ export {
 } from './components/input';
 export {
   Item,
-  type ItemClassNames,
+  type ItemClasses,
   type ItemDivProps,
   type ItemGroupEntry,
   type ItemGroupProps,
+  type ItemMediaConfig,
   type ItemLinkProps,
   type ItemProps,
   type ItemProviderDefaults,
@@ -234,13 +243,14 @@ export {
   type LayoutProps,
   type LayoutSidebarCollapseReason,
   type LayoutSidebarLabels,
+  type LayoutSidebarWidth,
   type LayoutSidebarProps,
   type LayoutSidebarSide,
 } from './components/layout';
 export {
   Marker,
   markerVariants,
-  type MarkerClassNames,
+  type MarkerClasses,
   type MarkerDivProps,
   type MarkerLinkProps,
   type MarkerProps,
@@ -268,29 +278,33 @@ export {
   type NavigationMenuLinkComponent,
   type NavigationMenuLinkProps,
   type NavigationMenuLinkSlots,
+  type NavigationMenuDelay,
   type NavigationMenuProps,
 } from './components/navigation-menu';
 export {
   Pagination,
-  type PaginationAriaLabelContext,
-  type PaginationAriaLabels,
-  type PaginationClassNames,
+  type PaginationLabelContext,
+  type PaginationLabels,
+  type PaginationClasses,
   type PaginationItemType,
   type PaginationProps,
   type PaginationProviderDefaults,
-  type PaginationQuickJumperOptions,
-  type PaginationRenderItemProps,
+  type PaginationJumpOptions,
+  type PaginationRenderProps,
+  type PaginationLimitOptions,
   type PaginationSimpleOptions,
   type PaginationSize,
-  type PaginationSizeChangerOptions,
+  type PaginationLimitSelectorOptions,
   type PaginationStyles,
 } from './components/pagination';
 export {
   Popover,
-  type PopoverClassNames,
+  type PopoverClasses,
+  type PopoverDelay,
+  type PopoverOffset,
   type PopoverProps,
   type PopoverStyles,
-  type PopoverTriggerMode,
+  type PopoverMode,
 } from './components/popover';
 export {
   Progress,
@@ -312,7 +326,7 @@ export {
 } from './components/provider';
 export {
   Radio,
-  type RadioClassNames,
+  type RadioClasses,
   type RadioGroupProps,
   type RadioOption,
   type RadioProps,
@@ -320,14 +334,16 @@ export {
 } from './components/radio';
 export {
   Resizable,
-  type ResizableClassNames,
+  type ResizableClasses,
   type ResizableItem,
   type ResizableItemKey,
   type ResizableItemOnResize,
   type ResizableItemSize,
+  type ResizableLayout,
   type ResizableProps,
   type ResizableSeparator,
   type ResizableSeparatorRenderProps,
+  type ResizableTarget,
   type ResizableStyles,
 } from './components/resizable';
 export {
@@ -341,7 +357,7 @@ export {
 } from './components/scroll-area';
 export {
   Segmented,
-  type SegmentedClassNames,
+  type SegmentedClasses,
   type SegmentedOption,
   type SegmentedProps,
   type SegmentedProviderDefaults,
@@ -351,7 +367,7 @@ export {
 } from './components/segmented';
 export {
   Select,
-  type SelectClassNames,
+  type SelectClasses,
   type SelectOption,
   type SelectOptionGroup,
   type SelectProps,
@@ -363,10 +379,20 @@ export { Skeleton, type SkeletonEffect } from './components/skeleton';
 export {
   Slider,
   type SliderEffect,
+  type SliderEdge,
   type SliderProps,
   type SliderProviderDefaults,
 } from './components/slider';
-export { Sonner, type SonnerProps } from './components/sonner';
+export {
+  Sonner,
+  type SonnerProps,
+  type ToastAction,
+  type ToastClasses,
+  type ToastDefaults,
+  type ToastOptions,
+  type ToastStyles,
+  type ToasterOffset,
+} from './components/sonner';
 export {
   Spinner,
   type SpinnerProps,
@@ -388,11 +414,11 @@ export {
   Tabs,
   tabsListVariants,
   type TabsAnimation,
-  type TabsClassNames,
+  type TabsClasses,
   type TabsItem,
   type TabsProps,
   type TabsProviderDefaults,
-  type TabsScrollLabels,
+  type TabsLabels,
   type TabsStyles,
 } from './components/tabs';
 export {
@@ -407,6 +433,12 @@ export {
   type ToasterProps as ToastToasterProps,
   type ToastProviderProps,
   type ToastScope,
+  type ToastApi,
+  type ToastId,
+  type ToastPromiseHandle,
+  type ToastPromiseMessage,
+  type ToastPromiseOptions,
+  type ToastPromiseResult,
   useToast,
 } from './components/toast';
 export {
@@ -419,7 +451,8 @@ export {
 } from './components/toggle';
 export {
   Tooltip,
-  type TooltipClassNames,
+  type TooltipClasses,
+  type TooltipDelay,
   type TooltipPlacement,
   type TooltipProps,
   type TooltipProviderDefaults,
@@ -440,3 +473,4 @@ export {
 } from './components/typography';
 export { useIsMobile } from './hooks/use-mobile';
 export { cn } from './lib/utils';
+export type { CalendarClasses, CalendarProps } from './components/calendar';

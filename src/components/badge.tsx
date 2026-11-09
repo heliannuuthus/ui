@@ -8,7 +8,7 @@ import {
 
 import { cn } from '../lib/utils';
 
-type BadgeClassNames = {
+type BadgeClasses = {
   indicator?: string;
 };
 
@@ -20,7 +20,7 @@ type BadgeContentIndicator = Exclude<ReactNode, boolean | null | undefined>;
 
 type BadgeSharedProps = Omit<ComponentPropsWithoutRef<'span'>, 'children'> & {
   children?: ReactNode;
-  classNames?: BadgeClassNames;
+  classes?: BadgeClasses;
   max?: number;
   offset?: readonly [horizontal: number, vertical: number];
   styles?: BadgeStyles;
@@ -28,17 +28,17 @@ type BadgeSharedProps = Omit<ComponentPropsWithoutRef<'span'>, 'children'> & {
 
 type BadgeDotProps = BadgeSharedProps & {
   indicator: true;
-  indicatorLabel: string;
+  label: string;
 };
 
 type BadgeContentProps = BadgeSharedProps & {
   indicator: BadgeContentIndicator;
-  indicatorLabel?: string;
+  label?: string;
 };
 
 type BadgeHiddenProps = BadgeSharedProps & {
   indicator?: false | null | undefined;
-  indicatorLabel?: string;
+  label?: string;
 };
 
 type BadgeProps = BadgeDotProps | BadgeContentProps | BadgeHiddenProps;
@@ -60,9 +60,9 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
     {
       children,
       className,
-      classNames,
+      classes,
       indicator,
-      indicatorLabel,
+      label,
       max = 99,
       offset = [0, 0],
       style,
@@ -93,13 +93,13 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
         {children}
         {visible ? (
           <sup
-            aria-label={indicatorLabel}
+            aria-label={label}
             className={cn(
               'inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full border border-transparent bg-destructive px-1.5 text-[11px] leading-none font-semibold text-white whitespace-nowrap tabular-nums ring-2 ring-background dark:bg-destructive',
               dot && 'size-2.5 min-w-0 p-0',
               hasAnchor &&
                 'absolute top-0 end-0 z-10 translate-x-[calc(50%+var(--badge-offset-x))] translate-y-[calc(-50%+var(--badge-offset-y))] rtl:translate-x-[calc(-50%-var(--badge-offset-x))]',
-              classNames?.indicator
+              classes?.indicator
             )}
             data-slot="badge-indicator"
             style={
@@ -122,4 +122,4 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
 
 Badge.displayName = 'Badge';
 
-export { Badge, type BadgeClassNames, type BadgeProps, type BadgeStyles };
+export { Badge, type BadgeClasses, type BadgeProps, type BadgeStyles };

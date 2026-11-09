@@ -35,7 +35,7 @@ import {
   type TableCellProps,
   type TableEllipsis,
   type TableHeadProps,
-  type TablePrimitiveClassNames,
+  type TablePrimitiveClasses,
   type TablePrimitiveProps,
   type TablePrimitiveSemanticSlot,
   type TablePrimitiveStyles,
@@ -122,7 +122,7 @@ type TableRender<TData> = (
   index: number
 ) => React.ReactNode;
 
-interface TableColumnClassNames<TData> {
+interface TableColumnClasses<TData> {
   cell?: string | ((row: TData, index: number) => string | undefined);
   header?: string;
 }
@@ -137,7 +137,7 @@ interface TableColumnStyles<TData> {
 interface TableColumn<TData> {
   accessor?: TableColumnAccessor<TData>;
   align?: TableCellAlign;
-  classNames?: TableColumnClassNames<TData>;
+  classes?: TableColumnClasses<TData>;
   columns?: TableColumn<TData>[];
   ellipsis?: TableEllipsis;
   fixed?: TableCellFixed;
@@ -152,7 +152,7 @@ interface TableColumn<TData> {
 type TableSortOrder = 'ascending' | 'descending';
 
 interface TableSortState {
-  columnKey: string;
+  column: string;
   order: TableSortOrder;
 }
 
@@ -165,7 +165,7 @@ interface TableSortingProps {
 
 interface TableSearchProps<TData> {
   'aria-label'?: string;
-  columnKeys?: string[];
+  columns?: string[];
   defaultValue?: string;
   mode?: 'client' | 'manual';
   onChange?: (value: string) => void;
@@ -196,7 +196,7 @@ interface TableSelectionLabels<TData> {
   item?: (row: TData, index: number) => string;
 }
 
-interface TableRowSelectionProps<TData> {
+interface TableSelectionProps<TData> {
   className?: string;
   defaultValue?: React.Key[];
   disabled?: (row: TData, index: number) => boolean;
@@ -209,22 +209,22 @@ interface TableRowSelectionProps<TData> {
 
 interface TablePaginationBaseProps extends Pick<
   PaginationProps,
-  'ariaLabels' | 'className' | 'next' | 'previous' | 'siblings'
+  'labels' | 'className' | 'next' | 'previous' | 'siblings'
 > {
-  current?: number;
-  defaultCurrent?: number;
+  page?: number;
+  defaultPage?: number;
   onChange?: (page: number, pageSize: number) => void;
-  pageSize?: number;
+  limit?: PaginationProps['limit'];
   summary?:
     | boolean
-    | ((total: number, current: number, pageCount: number) => React.ReactNode);
+    | ((total: number, page: number, pageCount: number) => React.ReactNode);
 }
 
 type TablePaginationProps = TablePaginationBaseProps &
   ({ mode?: 'client'; total?: never } | { mode: 'manual'; total: number });
 
 interface TableVirtualProps {
-  containerHeight?: number | string;
+  maxHeight?: number | string;
   overscan?: number;
   rowHeight?: number;
 }
@@ -239,7 +239,7 @@ type TableSemanticSlot =
   | 'state'
   | 'pagination';
 
-interface TableClassNames {
+interface TableClasses {
   body?: string;
   container?: string;
   footer?: string;
@@ -265,7 +265,7 @@ interface TableBaseProps<TData> extends Omit<
   React.ComponentProps<'div'>,
   'children'
 > {
-  classNames?: TableClassNames;
+  classes?: TableClasses;
   columns: TableColumn<TData>[];
   data: readonly TData[];
   footer?:
@@ -278,7 +278,7 @@ interface TableBaseProps<TData> extends Omit<
     row: TData,
     index: number
   ) => Omit<React.ComponentProps<'tr'>, 'children'>;
-  rowSelection?: TableRowSelectionProps<TData>;
+  selection?: TableSelectionProps<TData>;
   search?: false | TableSearchProps<TData>;
   showHeader?: boolean;
   sorting?: false | TableSortingProps;
@@ -299,7 +299,7 @@ type TableProps<TData> = TableBaseProps<TData> &
 
 type InternalColumnMeta<TData> = {
   column: TableColumn<TData>;
-  fixedOffset?: number;
+  offset?: number;
 };
 
 const SELECTION_COLUMN_WIDTH = 44;
@@ -392,7 +392,7 @@ const resolveColumns = <TData,>(
           }),
       meta: {
         column,
-        fixedOffset: fixedOffsets.get(key),
+        offset: fixedOffsets.get(key),
       } as InternalColumnMeta<TData>,
     } as TanStackColumnDef<TData>;
   });
@@ -403,7 +403,7 @@ const ManagedTable = <TData,>({
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   className,
-  classNames,
+  classes,
   columns,
   data,
   expandable,
@@ -412,7 +412,7 @@ const ManagedTable = <TData,>({
   pagination,
   rowKey,
   rowProps,
-  rowSelection,
+  selection,
   search,
   showHeader = true,
   sorting,
@@ -433,14 +433,17 @@ const ManagedTable = <TData,>({
     () => (sorting === false ? null : (sorting ?? {})),
     [sorting]
   );
-  const pageSize = Math.max(1, paginationOptions?.pageSize ?? 10);
-  const [uncontrolledPage, setUncontrolledPage] = React.useState(
-    paginationOptions?.defaultCurrent ?? 1
+  const [uncontrolledLimit, setUncontrolledLimit] = React.useState(
+    paginationOptions?.limit?.defaultValue ?? 10
   );
-  const currentPage = Math.max(
+  const pageSize = Math.max(
     1,
-    paginationOptions?.current ?? uncontrolledPage
+    paginationOptions?.limit?.value ?? uncontrolledLimit
   );
+  const [uncontrolledPage, setUncontrolledPage] = React.useState(
+    paginationOptions?.defaultPage ?? 1
+  );
+  const currentPage = Math.max(1, paginationOptions?.page ?? uncontrolledPage);
   const [uncontrolledSearch, setUncontrolledSearch] = React.useState(
     searchOptions?.defaultValue ?? ''
   );
@@ -455,8 +458,8 @@ const ManagedTable = <TData,>({
     React.useState<React.Key[]>(expandable?.defaultValue ?? []);
   const expandedKeys = expandable?.value ?? uncontrolledExpandedKeys;
   const [uncontrolledSelectedKeys, setUncontrolledSelectedKeys] =
-    React.useState<React.Key[]>(rowSelection?.defaultValue ?? []);
-  const selectedKeys = rowSelection?.value ?? uncontrolledSelectedKeys;
+    React.useState<React.Key[]>(selection?.defaultValue ?? []);
+  const selectedKeys = selection?.value ?? uncontrolledSelectedKeys;
 
   const [automaticColumnWidths, setAutomaticColumnWidths] = React.useState<
     ReadonlyMap<string, number>
@@ -499,8 +502,8 @@ const ManagedTable = <TData,>({
       return data.filter((row) => searchOptions.predicate!(row, searchValue));
     }
 
-    const searchableKeys = searchOptions.columnKeys
-      ? new Set(searchOptions.columnKeys)
+    const searchableKeys = searchOptions.columns
+      ? new Set(searchOptions.columns)
       : null;
     return data.filter((row) =>
       leafColumns.some(({ column, key }) => {
@@ -514,7 +517,7 @@ const ManagedTable = <TData,>({
   }, [data, leafColumns, searchOptions, searchValue]);
 
   const leadingWidth =
-    (rowSelection ? SELECTION_COLUMN_WIDTH : 0) +
+    (selection ? SELECTION_COLUMN_WIDTH : 0) +
     (expandable ? EXPANSION_COLUMN_WIDTH : 0);
   const fixedOffsets = React.useMemo(
     () => getFixedOffsets(columns, leadingWidth, automaticColumnWidths),
@@ -529,7 +532,7 @@ const ManagedTable = <TData,>({
       sortValue
         ? [
             {
-              id: sortValue.columnKey,
+              id: sortValue.column,
               desc: sortValue.order === 'descending',
             },
           ]
@@ -546,7 +549,7 @@ const ManagedTable = <TData,>({
       const first = nextSorting[0];
       const nextValue = first
         ? {
-            columnKey: first.id,
+            column: first.id,
             order: first.desc
               ? ('descending' as const)
               : ('ascending' as const),
@@ -561,10 +564,16 @@ const ManagedTable = <TData,>({
     (updater: Updater<PaginationState>) => {
       const nextState = functionalUpdate(updater, paginationState);
       const nextPage = nextState.pageIndex + 1;
-      if (paginationOptions?.current == null) setUncontrolledPage(nextPage);
+      if (paginationOptions?.page == null) setUncontrolledPage(nextPage);
+      if (nextState.pageSize !== pageSize) {
+        if (paginationOptions?.limit?.value === undefined) {
+          setUncontrolledLimit(nextState.pageSize);
+        }
+        paginationOptions?.limit?.onChange?.(nextPage, nextState.pageSize);
+      }
       paginationOptions?.onChange?.(nextPage, nextState.pageSize);
     },
-    [paginationOptions, paginationState]
+    [pageSize, paginationOptions, paginationState]
   );
 
   const totalRows =
@@ -602,7 +611,7 @@ const ManagedTable = <TData,>({
   const visibleRows = table.getRowModel().rows;
   const visibleColumnCount =
     table.getVisibleLeafColumns().length +
-    (rowSelection ? 1 : 0) +
+    (selection ? 1 : 0) +
     (expandable ? 1 : 0);
   const expandedKeySet = React.useMemo(
     () => new Set(expandedKeys),
@@ -619,9 +628,9 @@ const ManagedTable = <TData,>({
   const selectableRows = React.useMemo(
     () =>
       visibleRows.filter(
-        (row) => !rowSelection?.disabled?.(row.original, row.index)
+        (row) => !selection?.disabled?.(row.original, row.index)
       ),
-    [rowSelection, visibleRows]
+    [selection, visibleRows]
   );
   const visibleSelectedCount = selectableRows.filter((row) =>
     selectedKeySet.has(resolveRowKey(row))
@@ -629,16 +638,16 @@ const ManagedTable = <TData,>({
 
   const emitSelection = React.useCallback(
     (keys: React.Key[]) => {
-      if (rowSelection?.value == null) {
+      if (selection?.value == null) {
         setUncontrolledSelectedKeys(keys);
       }
       const keySet = new Set(keys);
-      rowSelection?.onChange?.(
+      selection?.onChange?.(
         keys,
         data.filter((row, index) => keySet.has(resolveRecordKey(row, index)))
       );
     },
-    [data, resolveRecordKey, rowSelection]
+    [data, resolveRecordKey, selection]
   );
   const setRowSelected = React.useCallback(
     (row: Row<TData>, selected: boolean) => {
@@ -687,9 +696,9 @@ const ManagedTable = <TData,>({
         ? column.render(value, row.original, row.index)
         : (value as React.ReactNode);
       const resolvedCellClassName =
-        typeof column.classNames?.cell === 'function'
-          ? column.classNames.cell(row.original, row.index)
-          : column.classNames?.cell;
+        typeof column.classes?.cell === 'function'
+          ? column.classes.cell(row.original, row.index)
+          : column.classes?.cell;
       const resolvedCellStyle =
         typeof column.styles?.cell === 'function'
           ? column.styles.cell(row.original, row.index)
@@ -703,7 +712,7 @@ const ManagedTable = <TData,>({
           data-column-id={cell.column.id}
           ellipsis={column.ellipsis}
           fixed={column.fixed}
-          fixedOffset={meta.fixedOffset}
+          offset={meta.offset}
           className={resolvedCellClassName}
           style={{
             ...resolvedCellStyle,
@@ -717,7 +726,7 @@ const ManagedTable = <TData,>({
 
   const renderRow = (row: Row<TData>) => {
     const key = resolveRowKey(row);
-    const disabled = rowSelection?.disabled?.(row.original, row.index);
+    const disabled = selection?.disabled?.(row.original, row.index);
     const resolvedRowProps = rowProps?.(row.original, row.index);
 
     return (
@@ -726,17 +735,17 @@ const ManagedTable = <TData,>({
         key={String(key)}
         data-state={selectedKeySet.has(key) ? 'selected' : undefined}
       >
-        {rowSelection ? (
+        {selection ? (
           <TableCell
             key="selection"
             fixed="start"
-            fixedOffset={0}
-            className={cn('w-11', rowSelection.className)}
-            style={rowSelection.style}
+            offset={0}
+            className={cn('w-11', selection.className)}
+            style={selection.style}
           >
             <Checkbox
               aria-label={
-                rowSelection.labels?.item?.(row.original, row.index) ??
+                selection.labels?.item?.(row.original, row.index) ??
                 `选择 ${String(key)}`
               }
               checked={selectedKeySet.has(key)}
@@ -749,7 +758,7 @@ const ManagedTable = <TData,>({
           <TableCell
             key="expansion"
             fixed="start"
-            fixedOffset={rowSelection ? SELECTION_COLUMN_WIDTH : 0}
+            offset={selection ? SELECTION_COLUMN_WIDTH : 0}
             className={cn('w-12', expandable.className)}
             style={expandable.style}
           >
@@ -838,7 +847,7 @@ const ManagedTable = <TData,>({
       {searchOptions ? (
         <div
           data-slot="table-toolbar"
-          className={classNames?.toolbar}
+          className={classes?.toolbar}
           style={styles?.toolbar}
         >
           <Input
@@ -854,7 +863,7 @@ const ManagedTable = <TData,>({
               if (searchOptions.value === undefined) {
                 setUncontrolledSearch(nextValue);
               }
-              if (paginationOptions?.current == null) setUncontrolledPage(1);
+              if (paginationOptions?.page == null) setUncontrolledPage(1);
               searchOptions.onChange?.(nextValue);
             }}
             className="max-w-sm"
@@ -869,34 +878,34 @@ const ManagedTable = <TData,>({
         aria-rowcount={
           virtualOptions ? totalRows + (showHeader ? 1 : 0) : undefined
         }
-        className={cn('rounded-xl border border-border', classNames?.container)}
-        classNames={{ table: classNames?.table }}
+        className={cn('rounded-xl border border-border', classes?.container)}
+        classes={{ table: classes?.table }}
         containerRef={setTableContainer}
         style={{
           ...styles?.container,
           ...(virtualOptions
-            ? { maxHeight: virtualOptions.containerHeight ?? 360 }
+            ? { maxHeight: virtualOptions.maxHeight ?? 360 }
             : undefined),
         }}
         styles={{ table: styles?.table }}
       >
         {showHeader ? (
-          <TableHeader className={classNames?.header} style={styles?.header}>
+          <TableHeader className={classes?.header} style={styles?.header}>
             {table.getHeaderGroups().map((group, groupIndex, groups) => (
               <TableRow key={group.id}>
-                {rowSelection && groupIndex === 0 ? (
+                {selection && groupIndex === 0 ? (
                   <TableHead
                     key="selection"
                     fixed="start"
-                    fixedOffset={0}
-                    className={cn('w-11', rowSelection.className)}
+                    offset={0}
+                    className={cn('w-11', selection.className)}
                     rowSpan={groups.length}
-                    style={rowSelection.style}
+                    style={selection.style}
                   >
-                    {rowSelection.header ?? (
+                    {selection.header ?? (
                       <Checkbox
                         aria-label={
-                          rowSelection.labels?.all?.(
+                          selection.labels?.all?.(
                             selectableRows.map((row) => row.original)
                           ) ?? '选择当前页全部行'
                         }
@@ -917,7 +926,7 @@ const ManagedTable = <TData,>({
                   <TableHead
                     key="expansion"
                     fixed="start"
-                    fixedOffset={rowSelection ? SELECTION_COLUMN_WIDTH : 0}
+                    offset={selection ? SELECTION_COLUMN_WIDTH : 0}
                     className={cn('w-12', expandable.className)}
                     rowSpan={groups.length}
                     style={expandable.style}
@@ -946,7 +955,7 @@ const ManagedTable = <TData,>({
                       colSpan={header.colSpan}
                       ellipsis={column.ellipsis}
                       fixed={isGroup ? undefined : column.fixed}
-                      fixedOffset={isGroup ? undefined : meta.fixedOffset}
+                      offset={isGroup ? undefined : meta.offset}
                       rowSpan={header.rowSpan > 1 ? header.rowSpan : undefined}
                       scope={isGroup ? 'colgroup' : 'col'}
                       aria-sort={
@@ -962,7 +971,7 @@ const ManagedTable = <TData,>({
                       data-header-group={isGroup ? '' : undefined}
                       className={cn(
                         isGroup && 'bg-muted/40 font-semibold',
-                        column.classNames?.header
+                        column.classes?.header
                       )}
                       style={{
                         ...column.styles?.header,
@@ -994,14 +1003,14 @@ const ManagedTable = <TData,>({
           </TableHeader>
         ) : null}
         {stateContent != null ? (
-          <TableBody className={classNames?.body} style={styles?.body}>
+          <TableBody className={classes?.body} style={styles?.body}>
             <TableRow>
               <TableCell
                 colSpan={Math.max(1, visibleColumnCount)}
                 data-slot="table-state"
                 className={cn(
                   'h-24 text-center text-muted-foreground',
-                  classNames?.state
+                  classes?.state
                 )}
                 style={styles?.state}
               >
@@ -1011,7 +1020,7 @@ const ManagedTable = <TData,>({
           </TableBody>
         ) : virtualOptions ? (
           <TableVirtualBody
-            className={classNames?.body}
+            className={classes?.body}
             colSpan={visibleColumnCount}
             items={visibleRows}
             getItemKey={resolveRowKey}
@@ -1023,7 +1032,7 @@ const ManagedTable = <TData,>({
             {(row) => renderRow(row)}
           </TableVirtualBody>
         ) : (
-          <TableBody className={classNames?.body} style={styles?.body}>
+          <TableBody className={classes?.body} style={styles?.body}>
             {visibleRows.map((row) => (
               <React.Fragment key={String(resolveRowKey(row))}>
                 {renderRow(row)}
@@ -1039,7 +1048,7 @@ const ManagedTable = <TData,>({
           </TableBody>
         )}
         {footer != null ? (
-          <TableFooter className={classNames?.footer} style={styles?.footer}>
+          <TableFooter className={classes?.footer} style={styles?.footer}>
             <TableRow>
               <TableCell colSpan={visibleColumnCount}>
                 {typeof footer === 'function'
@@ -1055,7 +1064,7 @@ const ManagedTable = <TData,>({
           data-slot="table-pagination"
           className={cn(
             'flex flex-wrap items-center justify-between gap-3',
-            classNames?.pagination
+            classes?.pagination
           )}
           style={styles?.pagination}
         >
@@ -1072,11 +1081,18 @@ const ManagedTable = <TData,>({
           ) : null}
           <Pagination
             className={cn('mx-0 w-auto', paginationOptions.className)}
-            ariaLabels={paginationOptions.ariaLabels}
-            current={Math.min(currentPage, pageCount)}
+            labels={paginationOptions.labels}
+            page={Math.min(currentPage, pageCount)}
             next={paginationOptions.next}
-            onChange={(page) => table.setPageIndex(page - 1)}
-            pageCount={pageCount}
+            onChange={(page, limit) =>
+              handlePaginationChange({ pageIndex: page - 1, pageSize: limit })
+            }
+            limit={{
+              ...paginationOptions.limit,
+              value: pageSize,
+              onChange: undefined,
+            }}
+            total={totalRows}
             previous={paginationOptions.previous}
             siblings={paginationOptions.siblings}
           />
@@ -1106,23 +1122,23 @@ namespace Table {
   export type CellAlign = TableCellAlign;
   export type CellFixed = TableCellFixed;
   export type CellProps = TableCellProps;
-  export type ClassNames = TableClassNames;
+  export type Classes = TableClasses;
   export type Column<TData> = TableColumn<TData>;
   export type ColumnAccessor<TData> = TableColumnAccessor<TData>;
-  export type ColumnClassNames<TData> = TableColumnClassNames<TData>;
+  export type ColumnClasses<TData> = TableColumnClasses<TData>;
   export type ColumnStyles<TData> = TableColumnStyles<TData>;
   export type Ellipsis = TableEllipsis;
   export type ExpandLabels<TData> = TableExpandLabels<TData>;
   export type ExpandableProps<TData> = TableExpandableProps<TData>;
   export type HeadProps = TableHeadProps;
   export type PaginationProps = TablePaginationProps;
-  export type PrimitiveClassNames = TablePrimitiveClassNames;
+  export type PrimitiveClasses = TablePrimitiveClasses;
   export type PrimitiveProps = TablePrimitiveProps;
   export type PrimitiveSemanticSlot = TablePrimitiveSemanticSlot;
   export type PrimitiveStyles = TablePrimitiveStyles;
   export type Props<TData> = TableProps<TData>;
   export type Render<TData> = TableRender<TData>;
-  export type RowSelectionProps<TData> = TableRowSelectionProps<TData>;
+  export type SelectionProps<TData> = TableSelectionProps<TData>;
   export type SelectionLabels<TData> = TableSelectionLabels<TData>;
   export type SearchProps<TData> = TableSearchProps<TData>;
   export type SemanticSlot = TableSemanticSlot;

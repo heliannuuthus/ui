@@ -70,9 +70,21 @@ body {
 }
 
 .docs-site-shell {
+  --docs-header-height: 4rem;
+  --docs-header-offset: var(--docs-header-height);
   min-height: 100vh;
   min-height: 100dvh;
   background: var(--background);
+}
+
+.docs-site-shell[data-header-hidden] {
+  --docs-header-offset: 0rem;
+}
+
+.docs-site-shell[data-header-hidden] .docs-header {
+  pointer-events: none;
+  box-shadow: none;
+  transform: translateY(-100%);
 }
 
 .docs-skip-link {
@@ -98,7 +110,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 40;
-  height: 4rem;
+  height: var(--docs-header-height);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
@@ -109,6 +121,14 @@ body {
   box-shadow: 0 0.5rem 1.5rem -1.25rem
     color-mix(in oklab, var(--foreground) 28%, transparent);
   backdrop-filter: blur(18px) saturate(145%);
+  transition: transform 180ms ease;
+}
+
+/* 聚焦时立即恢复导航，避免浏览器为屏外控件滚动页面。 */
+.docs-site-shell .docs-header:has(:focus-visible) {
+  pointer-events: auto;
+  transform: none;
+  transition: none;
 }
 
 .docs-header > :not(.docs-navigation-indicator) {
@@ -242,13 +262,16 @@ body {
 
 .docs-sidebar {
   position: sticky;
-  top: 4rem;
+  top: var(--docs-header-offset);
   z-index: 20;
-  height: calc(100vh - 4rem);
+  height: calc(100vh - var(--docs-header-offset));
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border);
   background: var(--background);
+  transition:
+    top 180ms ease,
+    height 180ms ease;
 }
 
 .docs-sidebar-scroll {
@@ -363,12 +386,7 @@ body {
   margin-top: 0;
 }
 
-.docs-article h1,
-.docs-article h2,
-.docs-article h3,
-.docs-article h4,
-.docs-article h5,
-.docs-article h6 {
+.docs-article .docs-mdx-heading {
   position: relative;
   scroll-margin-top: 5.5rem;
   color: var(--foreground);
@@ -422,41 +440,34 @@ body {
   padding-block-start: 0.75rem;
 }
 
-.docs-article h1 {
+.docs-article h1.docs-mdx-heading {
   margin: 0 0 1.25rem;
 }
 
-.docs-article h2 {
+.docs-article h2.docs-mdx-heading {
   margin: 3.25rem 0 1rem;
 }
 
-.docs-article h3 {
+.docs-article h3.docs-mdx-heading {
   margin: 2.25rem 0 0.75rem;
 }
 
-.docs-article p {
+.docs-article .docs-mdx-paragraph {
   margin: 1rem 0;
   color: color-mix(in oklab, var(--foreground) 84%, var(--muted-foreground));
 }
 
-.docs-article ul,
-.docs-article ol {
+/* 正文排版只作用于 MDX 标记，避免影响组件内部结构。 */
+.docs-article .docs-mdx-list {
   margin: 1rem 0;
   padding-left: 1.5rem;
 }
 
-.docs-article li + li {
+.docs-article .docs-mdx-list > li + li {
   margin-top: 0.375rem;
 }
 
-.docs-article a:not([data-slot]) {
-  color: var(--primary);
-  text-decoration-color: color-mix(in oklab, var(--primary) 38%, transparent);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
-}
-
-.docs-article a:not([data-slot]):hover {
+.docs-article .docs-mdx-link:hover {
   text-decoration-color: currentColor;
 }
 
@@ -472,9 +483,13 @@ body {
   white-space: normal;
   vertical-align: baseline;
   transform: none;
+  color: var(--primary);
+  text-decoration-color: color-mix(in oklab, var(--primary) 38%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 
-.docs-article :not(pre) > code {
+.docs-article :not(pre) > .docs-mdx-code {
   padding: 0.125rem 0.375rem;
   border: 1px solid var(--border);
   border-radius: calc(var(--radius) - 4px);
@@ -484,50 +499,46 @@ body {
   font-size: 0.875em;
 }
 
-.docs-article blockquote {
+.docs-article .docs-mdx-blockquote {
   margin: 1.5rem 0;
   padding: 0.25rem 0 0.25rem 1rem;
   border-left: 3px solid var(--primary);
   color: var(--muted-foreground);
 }
 
-.docs-article hr {
-  margin: 2.5rem 0;
-  border: 0;
-  border-top: 1px solid var(--border);
-}
-
 .docs-article .docs-mdx-separator {
   margin: 2.5rem 0;
 }
 
-.docs-article table {
+.docs-article .docs-mdx-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.875rem;
 }
 
-.docs-article th,
-.docs-article td {
+.docs-article .docs-mdx-table-head,
+.docs-article .docs-mdx-table-cell {
   padding: 0.75rem;
   border-bottom: 1px solid var(--border);
-  text-align: left;
   vertical-align: top;
 }
 
-.docs-article th {
+.docs-article .docs-mdx-table-head {
   color: var(--foreground);
   font-weight: 650;
 }
 
 .docs-toc {
   position: sticky;
-  top: 4rem;
-  height: calc(100vh - 4rem);
-  height: calc(100dvh - 4rem);
-  max-height: calc(100vh - 4rem);
-  max-height: calc(100dvh - 4rem);
+  top: var(--docs-header-offset);
+  height: calc(100vh - var(--docs-header-offset));
+  height: calc(100dvh - var(--docs-header-offset));
+  max-height: calc(100vh - var(--docs-header-offset));
+  max-height: calc(100dvh - var(--docs-header-offset));
   overflow: hidden;
+  transition:
+    top 180ms ease,
+    height 180ms ease;
 }
 
 .docs-toc > [data-slot='layout-sidebar-content'] {
@@ -991,7 +1002,7 @@ body {
   }
 }
 
-.docs-mdx-table [data-slot='table-cell'] {
+.docs-mdx-table-cell {
   vertical-align: top;
   white-space: normal;
 }
@@ -1086,10 +1097,10 @@ body {
 
   .docs-sidebar {
     position: fixed;
-    inset: 4rem auto 0 0;
+    inset: var(--docs-header-offset) auto 0 0;
     z-index: 35;
     width: min(19rem, calc(100vw - 3rem));
-    height: calc(100vh - 4rem);
+    height: calc(100vh - var(--docs-header-offset));
     box-shadow: 1rem 0 2.5rem color-mix(in oklab, black 18%, transparent);
     transform: translateX(-105%);
     transition: transform 200ms ease;
@@ -1105,7 +1116,7 @@ body {
 
   .docs-sidebar-backdrop {
     position: fixed;
-    inset: 4rem 0 0;
+    inset: var(--docs-header-offset) 0 0;
     z-index: 30;
     width: auto;
     height: auto;
@@ -1223,6 +1234,9 @@ body {
     scroll-behavior: auto;
   }
 
+  .docs-header,
+  .docs-toc,
+  .docs-site-shell .components-search-row,
   .docs-sidebar,
   .docs-code-toolbar,
   .docs-sidebar a {

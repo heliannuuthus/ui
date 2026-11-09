@@ -21,7 +21,7 @@ const createExample = (locale: 'en' | 'zh') => {
   const TablePaginationDemo = () => {
     const [page, setPage] = useState(1);
     const pageSize = 3;
-    const pageCount = Math.ceil(paginatedTableRows.length / pageSize);
+    const pages = Math.ceil(paginatedTableRows.length / pageSize);
     const rows = paginatedTableRows.slice(
       (page - 1) * pageSize,
       page * pageSize
@@ -75,19 +75,19 @@ const createExample = (locale: 'en' | 'zh') => {
             {copy('共')}
             {paginatedTableRows.length}
             {copy('项 · 第')}
-            {page} / {pageCount}
+            {page} / {pages}
             {copy('页')}
           </span>
           <Pagination
-            ariaLabels={{
+            labels={{
               more: copy('更多页面'),
               navigation: copy('分页'),
               next: copy('前往下一页'),
               previous: copy('前往上一页'),
             }}
-            current={page}
+            page={page}
             onChange={setPage}
-            pageCount={pageCount}
+            pages={pages}
             previous={copy('上一页')}
             next={copy('下一页')}
           />

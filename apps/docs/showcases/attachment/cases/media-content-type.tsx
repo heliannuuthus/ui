@@ -6,13 +6,14 @@ const ZhExample = (() => {
   return () => (
     <>
       <Attachment
-        media={<FileArchive />}
-        mediaType="icon"
+        media={{ content: <FileArchive />, type: 'icon' }}
         title="web-console.tgz"
       />
       <Attachment
-        media={<img alt="附件缩略图" src="/cover.jpg" />}
-        mediaType="image"
+        media={{
+          content: <img alt="附件缩略图" src="/cover.jpg" />,
+          type: 'image',
+        }}
         title="cover.jpg"
       />
     </>
@@ -23,13 +24,14 @@ const EnExample = (() => {
   return () => (
     <>
       <Attachment
-        media={<FileArchive />}
-        mediaType="icon"
+        media={{ content: <FileArchive />, type: 'icon' }}
         title="web-console.tgz"
       />
       <Attachment
-        media={<img alt="Attachment thumbnail" src="/cover.jpg" />}
-        mediaType="image"
+        media={{
+          content: <img alt="Attachment thumbnail" src="/cover.jpg" />,
+          type: 'image',
+        }}
         title="cover.jpg"
       />
     </>

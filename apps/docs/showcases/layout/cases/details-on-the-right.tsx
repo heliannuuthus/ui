@@ -5,7 +5,7 @@ const ZhExample = (() => {
   return () => (
     <Layout>
       <Layout.Content>工作区内容</Layout.Content>
-      <Layout.Sidebar width={280}>详情面板</Layout.Sidebar>
+      <Layout.Sidebar width={{ expanded: 280 }}>详情面板</Layout.Sidebar>
     </Layout>
   );
 })();
@@ -14,7 +14,7 @@ const EnExample = (() => {
   return () => (
     <Layout>
       <Layout.Content>Workspace Content</Layout.Content>
-      <Layout.Sidebar width={280}>Details panel</Layout.Sidebar>
+      <Layout.Sidebar width={{ expanded: 280 }}>Details panel</Layout.Sidebar>
     </Layout>
   );
 })();

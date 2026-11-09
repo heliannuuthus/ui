@@ -15,7 +15,7 @@ const createExample = (locale: 'en' | 'zh') => {
         </div>
         <Resizable
           className="resizable-vertical"
-          classNames={{ separator: 'resizable-demo-separator' }}
+          classes={{ separator: 'resizable-demo-separator' }}
           id="editor-terminal"
           orientation="vertical"
           separator={

@@ -6,8 +6,7 @@ const ZhExample = (() => {
   return () => (
     <Item
       variant="muted"
-      media={<Cloud />}
-      mediaType="icon"
+      media={{ content: <Cloud />, type: 'icon' }}
       title="自动部署预览环境"
       description="合并到 main 后自动更新预览环境。"
       actions={<Switch aria-label="自动部署预览环境" />}
@@ -19,8 +18,7 @@ const EnExample = (() => {
   return () => (
     <Item
       variant="muted"
-      media={<Cloud />}
-      mediaType="icon"
+      media={{ content: <Cloud />, type: 'icon' }}
       title="Automatically deploy preview environment"
       description="Update the preview environment after merging into main."
       actions={<Switch aria-label="Automatically deploy preview environment" />}

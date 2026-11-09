@@ -88,9 +88,9 @@ import { ApiTable } from '@docs/rspress/api-table';
     },
     {
       component: 'Drawer',
-      defaultValue: null,
+      defaultValue: "'bottom'",
       description:
-        'Set entry direction and adaptive, gesture, or stable panel behavior.',
+        'The only direction setting; internally determines the matching swipe direction.',
       name: 'side',
       type: "'top' | 'right' | 'bottom' | 'left'",
     },
@@ -110,28 +110,46 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: 'HTMLElement | RefObject<HTMLElement | null>',
     },
     {
-      component: 'Drawer',
+      component: "Drawer",
       defaultValue: null,
-      description:
-        'Configure and control the segmented expansion position of the gesture drawer.',
-      name: 'snapPoints',
-      type: '(number | string)[]',
+      description: "Grouped gesture drawer snap positions and controlled or uncontrolled state.",
+      name: "snaps",
+      type: "DrawerSnapsConfig",
     },
     {
-      component: 'Drawer',
+      component: "Drawer",
       defaultValue: null,
-      description:
-        'Configure and control the segmented expansion position of the gesture drawer.',
-      name: 'snapPoint',
-      type: 'number | string | null',
+      description: "Snap positions with the original number or string values and units.",
+      name: "snaps.points",
+      type: "DrawerSnapPoint[]",
     },
     {
-      component: 'Drawer',
+      component: "Drawer",
       defaultValue: null,
-      description:
-        'Configure and control the segmented expansion position of the gesture drawer.',
-      name: 'onSnapChange',
-      type: '(value: number | string | null) => void',
+      description: "Controlled snap position; null retains its original meaning.",
+      name: "snaps.value",
+      type: "DrawerSnapPoint | null",
+    },
+    {
+      component: "Drawer",
+      defaultValue: null,
+      description: "Initial snap position in uncontrolled mode.",
+      name: "snaps.defaultValue",
+      type: "DrawerSnapPoint | null",
+    },
+    {
+      component: "Drawer",
+      defaultValue: null,
+      description: "Called when the snap position changes, with the original value.",
+      name: "snaps.onChange",
+      type: "(value: DrawerSnapPoint | null) => void",
+    },
+    {
+      component: "Drawer",
+      defaultValue: null,
+      description: "Restrict gestures to sequential snap positions.",
+      name: "snaps.sequential",
+      type: "boolean",
     },
     {
       component: 'Drawer',
@@ -158,46 +176,43 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Drawer',
       defaultValue: null,
       description: 'Extend the className of the corresponding semantic slot.',
-      name: 'classNames',
-      type: 'DrawerClassNames',
+      name: 'classes',
+      type: 'DrawerClasses',
     },
     {
       component: 'Drawer',
       defaultValue: null,
       description:
-        'Set inline styles using the same semantic slots as classNames.',
+        'Set inline styles using the same semantic slots as classes.',
       name: 'styles',
       type: 'DrawerStyles',
     },
     {
-      component: 'Drawer',
+      component: "Drawer",
       defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'closeText',
-      type: 'ReactNode',
+      description: "Optional footer close button; omitted, null, or false hides it. Independent from the top-right closable control.",
+      name: "close",
+      type: "DrawerCloseConfig | null | false",
     },
     {
-      component: 'Drawer',
+      component: "Drawer",
+      defaultValue: null,
+      description: "Footer close content; undefined or null hides the button, while false keeps an empty button. Clicking automatically closes the drawer.",
+      name: "close.label",
+      type: "ReactNode",
+    },
+    {
+      component: "Drawer",
       defaultValue: "'outline'",
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'closeVariant',
-      type: 'ButtonProps["variant"]',
-    },
-    {
-      component: 'Drawer',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'defaultSnapPoint',
-      type: 'DrawerSnapPoint | null',
+      description: "Footer close button variant.",
+      name: "close.variant",
+      type: "ButtonProps[\"variant\"]",
     },
     {
       component: 'Drawer',
       defaultValue: 'true',
       description:
-        'Configure the component public state, behavior, or extension point.',
+        'Independent top-right close control; true uses the default icon, false or null hides it, and a custom node replaces the icon.',
       name: 'closable',
       type: 'boolean | ReactNode',
     },
@@ -208,22 +223,6 @@ import { ApiTable } from '@docs/rspress/api-table';
         'Configure the component public state, behavior, or extension point.',
       name: 'handle',
       type: 'boolean | ReactNode',
-    },
-    {
-      component: 'Drawer',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'sequential',
-      type: 'boolean',
-    },
-    {
-      component: 'Drawer',
-      defaultValue: null,
-      description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'swipeDirection',
-      type: "'down' | 'left' | 'right' | 'up'",
     },
   ]}
 />

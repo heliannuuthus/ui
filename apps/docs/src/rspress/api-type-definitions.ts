@@ -14,7 +14,7 @@ export const apiTypeDefinitions = {
   content: ReactNode;
   disabled?: boolean;
 };`,
-  AlertDialogClassNames: `type AlertDialogClassNames = {
+  AlertDialogClasses: `type AlertDialogClasses = {
   content?: string;
 };`,
   AlertDialogStyles: `type AlertDialogStyles = {
@@ -24,8 +24,7 @@ export const apiTypeDefinitions = {
   key?: React.Key;
   title: ReactNode;
   description?: ReactNode;
-  media?: ReactNode;
-  mediaType?: 'icon' | 'image';
+  media?: AttachmentMediaConfig;
   actions?: ReactNode;
   trigger?: ReactElement;
   orientation?: 'horizontal' | 'vertical';
@@ -35,24 +34,22 @@ export const apiTypeDefinitions = {
   AttachmentProps: `type AttachmentProps = Omit<ComponentProps<'div'>, 'children' | 'title'> & {
   title: ReactNode;
   description?: ReactNode;
-  media?: ReactNode;
-  mediaType?: 'icon' | 'image';
+  media?: AttachmentMediaConfig;
   actions?: ReactNode;
   trigger?: ReactElement;
   orientation?: 'horizontal' | 'vertical';
   size?: 'xs' | 'sm' | 'default';
   state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
 };`,
-  AvatarFallbackProps: `type AvatarFallbackProps = Omit<ComponentProps<'span'>, 'children'> & {
+  AvatarFallbackProps: `type AvatarFallbackProps = ComponentProps<'span'> & {
   delay?: number;
 };`,
   AvatarGroupItem: `type AvatarGroupItem = AvatarProps & {
   key?: React.Key;
   alt: string;
   src?: string;
-  fallback?: ReactNode;
-  fallbackProps?: AvatarFallbackProps;
-  imageProps?: AvatarImageProps;
+  fallback?: AvatarFallbackProps;
+  image?: AvatarImageProps;
   badge?: ReactNode;
   shape?: 'circle' | 'square';
   size?: 'sm' | 'default' | 'lg';
@@ -62,16 +59,16 @@ export const apiTypeDefinitions = {
   ComponentProps<'img'>,
   'alt' | 'children' | 'src'
 > & {
-  onLoadingStatusChange?: (status: AvatarImageLoadingStatus) => void;
+  onStatusChange?: (status: AvatarImageLoadingStatus) => void;
 };`,
-  BadgeClassNames: `type BadgeClassNames = {
+  BadgeClasses: `type BadgeClasses = {
   indicator?: string;
 };`,
   BadgeStyles: `type BadgeStyles = {
   indicator?: React.CSSProperties;
 };`,
   BreadcrumbCollapseOptions: `type BreadcrumbCollapseOptions = {
-  maxItems: number;
+  limit: number;
   before?: number; // default: 1
   after?: number; // default: 2
   label?: string;
@@ -108,7 +105,7 @@ export const apiTypeDefinitions = {
   block?: boolean;
   disabled?: boolean;
 };`,
-  CardClassNames: `type CardClassNames = {
+  CardClasses: `type CardClasses = {
   action?: string;
   content?: string;
   description?: string;
@@ -124,18 +121,18 @@ export const apiTypeDefinitions = {
   header?: React.CSSProperties;
   title?: React.CSSProperties;
 };`,
-  CarouselClassNames: `type CarouselClassNames = {
+  CarouselClasses: `type CarouselClasses = {
   content?: string;
   item?: string;
 };`,
   CarouselControls: `type CarouselControls = CarouselRef & {
   canScrollNext: boolean;
   canScrollPrev: boolean;
-  currentPage: number;
-  isPlaying: boolean;
-  pageCount: number;
-  selectedIndex: number;
-  scrollSnaps: number[];
+  page: number;
+  playing: boolean;
+  pages: number;
+  index: number;
+  snaps: number[];
   pause: () => void;
   play: () => void;
   scrollNext: () => void;
@@ -144,7 +141,7 @@ export const apiTypeDefinitions = {
 };`,
   CarouselDotRenderProps: `type CarouselDotRenderProps = {
   index: number;
-  isSelected: boolean;
+  selected: boolean;
 };`,
   CarouselRef: `type CarouselRef = {
   pause: () => void;
@@ -157,7 +154,7 @@ export const apiTypeDefinitions = {
   content?: React.CSSProperties;
   item?: React.CSSProperties;
 };`,
-  CheckboxClassNames: `type CheckboxClassNames = {
+  CheckboxClasses: `type CheckboxClasses = {
   control?: string;
   label?: string;
 };`,
@@ -172,7 +169,7 @@ export const apiTypeDefinitions = {
   control?: React.CSSProperties;
   label?: React.CSSProperties;
 };`,
-  CollapsibleClassNames: `type CollapsibleClassNames = {
+  CollapsibleClasses: `type CollapsibleClasses = {
   content?: string;
   header?: string;
 };`,
@@ -180,7 +177,7 @@ export const apiTypeDefinitions = {
   content?: React.CSSProperties;
   header?: React.CSSProperties;
 };`,
-  CollapsibleTriggerProps: `type CollapsibleTriggerProps = Omit<
+  CollapsibleTriggerConfig: `type CollapsibleTriggerConfig = Omit<
   ButtonNativeProps,
   'children' | 'className' | 'href'
 > & {
@@ -191,6 +188,8 @@ export const apiTypeDefinitions = {
   disabled?: boolean;
   'aria-label'?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  children?: ReactNode;
+  indicator?: boolean | ReactNode;
 };`,
   CommandFilter: `type CommandFilter = (
   value: string,
@@ -204,13 +203,13 @@ export const apiTypeDefinitions = {
   value?: string;
   onChange?: (value: string) => void;
 };`,
-  ContextMenuClassNames: `type ContextMenuClassNames = {
+  ContextMenuClasses: `type ContextMenuClasses = {
   content?: string;
 };`,
   ContextMenuStyles: `type ContextMenuStyles = {
   content?: React.CSSProperties;
 };`,
-  CounterClassNames: `type CounterClassNames = {
+  CounterClasses: `type CounterClasses = {
   digit?: string;
   visual?: string;
 };`,
@@ -221,7 +220,7 @@ export const apiTypeDefinitions = {
   DataAttributes: `type DataAttributes = {
   [key: \`data-\${string}\`]: boolean | number | string | undefined;
 };`,
-  DatePickerClassNames: `type DatePickerClassNames = {
+  DatePickerClasses: `type DatePickerClasses = {
   calendar?: string;
   trigger?: string;
 };`,
@@ -229,7 +228,7 @@ export const apiTypeDefinitions = {
   calendar?: React.CSSProperties;
   trigger?: React.CSSProperties;
 };`,
-  DateTimePickerClassNames: `type DateTimePickerClassNames = DatePickerClassNames & {
+  DateTimePickerClasses: `type DateTimePickerClasses = DatePickerClasses & {
   time?: string;
 };`,
   DateTimePickerStyles: `type DateTimePickerStyles = {
@@ -242,7 +241,7 @@ export const apiTypeDefinitions = {
   Value | undefined,
   Value | undefined,
 ];`,
-  TimeRangePickerClassNames: `type TimeRangePickerClassNames = {
+  TimeRangePickerClasses: `type TimeRangePickerClasses = {
   end?: string;
   separator?: string;
   start?: string;
@@ -252,13 +251,13 @@ export const apiTypeDefinitions = {
   separator?: React.CSSProperties;
   start?: React.CSSProperties;
 };`,
-  DialogClassNames: `type DialogClassNames = {
+  DialogClasses: `type DialogClasses = {
   content?: string;
 };`,
   DialogStyles: `type DialogStyles = {
   content?: React.CSSProperties;
 };`,
-  DrawerClassNames: `type DrawerClassNames = {
+  DrawerClasses: `type DrawerClasses = {
   content?: string;
 };`,
   DrawerSnapPoint: `type DrawerSnapPoint = number | string;`,
@@ -272,7 +271,7 @@ export const apiTypeDefinitions = {
   disabled?: boolean;
   onChange?: (checked: boolean) => void;
 };`,
-  DropdownMenuClassNames: `type DropdownMenuClassNames = {
+  DropdownMenuClasses: `type DropdownMenuClasses = {
   content?: string;
 };`,
   DropdownMenuEntry: `type DropdownMenuEntry =
@@ -327,14 +326,21 @@ export const apiTypeDefinitions = {
   required?: boolean;
   value?: Value;
 };`,
-  InputClassNames: `type InputClassNames = {
-  addonAfter?: string;
-  addonBefore?: string;
+  FormValuesChangeHandler: `type FormValuesChangeHandler<TFieldValues extends FieldValues = FieldValues> = (
+  values: TFieldValues,
+  info: FormValuesChangeInfo<TFieldValues>
+) => void;`,
+  FormValuesChangeInfo: `type FormValuesChangeInfo<TFieldValues extends FieldValues = FieldValues> = {
+  name?: FieldPath<TFieldValues>;
+};`,
+  InputClasses: `type InputClasses = {
+  after?: string;
+  before?: string;
   input?: string;
   prefix?: string;
   suffix?: string;
 };`,
-  InputNumberClassNames: `type InputNumberClassNames = {
+  InputNumberClasses: `type InputNumberClasses = {
   controls?: string;
   decrement?: string;
   group?: string;
@@ -344,8 +350,8 @@ export const apiTypeDefinitions = {
   suffix?: string;
 };`,
   InputNumberControls: `type InputNumberControls = {
-  decrement?: ReactNode;
-  increment?: ReactNode;
+  decrement?: { content?: ReactNode; label?: string };
+  increment?: { content?: ReactNode; label?: string };
 };`,
   InputNumberStyles: `type InputNumberStyles = {
   controls?: React.CSSProperties;
@@ -357,13 +363,13 @@ export const apiTypeDefinitions = {
   suffix?: React.CSSProperties;
 };`,
   InputStyles: `type InputStyles = {
-  addonAfter?: React.CSSProperties;
-  addonBefore?: React.CSSProperties;
+  after?: React.CSSProperties;
+  before?: React.CSSProperties;
   input?: React.CSSProperties;
   prefix?: React.CSSProperties;
   suffix?: React.CSSProperties;
 };`,
-  ItemClassNames: `type ItemClassNames = {
+  ItemClasses: `type ItemClasses = {
   actions?: string;
   content?: string;
   description?: string;
@@ -377,15 +383,14 @@ export const apiTypeDefinitions = {
   variant?: 'default' | 'outline' | 'muted';
   size?: 'xs' | 'sm' | 'default';
   href?: string;
-  media?: ReactNode;
-  mediaType?: 'default' | 'icon' | 'image';
+  media?: ItemMediaConfig;
   title?: ReactNode;
   description?: ReactNode;
   content?: ReactNode;
   actions?: ReactNode;
   header?: ReactNode;
   footer?: ReactNode;
-  classNames?: ItemClassNames;
+ classes?: ItemClasses;
 };`,
   ItemStyles: `type ItemStyles = {
   actions?: React.CSSProperties;
@@ -400,7 +405,7 @@ export const apiTypeDefinitions = {
   collapse: string;
   expand: string;
 };`,
-  MarkerClassNames: `type MarkerClassNames = {
+  MarkerClasses: `type MarkerClasses = {
   content?: string;
   icon?: string;
 };`,
@@ -429,12 +434,13 @@ export const apiTypeDefinitions = {
   NavigationMenuLinkSlots: `type NavigationMenuLinkSlots = {
   Link: NavigationMenuLinkComponent;
 };`,
-  PaginationAriaLabelContext: `type PaginationAriaLabelContext = {
+  PaginationLabelContext: `type PaginationLabelContext = {
   page: number | null;
   selected: boolean;
   type: PaginationItemType;
 };`,
-  PaginationAriaLabels: `type PaginationAriaLabels = {
+  PaginationLabels: `type PaginationLabels = {
+  item?: (context: PaginationLabelContext) => string;
   first?: string;
   last?: string;
   more?: string;
@@ -443,15 +449,15 @@ export const apiTypeDefinitions = {
   page?: (page: number) => string;
   pageSize?: string;
   previous?: string;
-  quickJumper?: string;
+  jump?: string;
 };`,
-  PaginationClassNames: `type PaginationClassNames = {
+  PaginationClasses: `type PaginationClasses = {
   content?: string;
   control?: string;
   ellipsis?: string;
   item?: string;
   pageSize?: string;
-  quickJumper?: string;
+  jump?: string;
   summary?: string;
 };`,
   PaginationItemType: `type PaginationItemType =
@@ -462,14 +468,14 @@ export const apiTypeDefinitions = {
   | 'previous'
   | 'ellipsis-start'
   | 'ellipsis-end';`,
-  PaginationQuickJumperOptions: `type PaginationQuickJumperOptions = {
-  goButton?: ReactNode;
+  PaginationJumpOptions: `type PaginationJumpOptions = {
+  button?: ReactNode;
   label?: ReactNode;
   suffix?: ReactNode;
 };`,
-  PaginationRenderItemProps: `type PaginationRenderItemProps = {
+  PaginationRenderProps: `type PaginationRenderProps = {
   disabled: boolean;
-  originalElement: ReactElement;
+  element: ReactElement;
   page: number | null;
   selected: boolean;
   type: PaginationItemType;
@@ -478,8 +484,8 @@ export const apiTypeDefinitions = {
   readOnly?: boolean;
 };`,
   PaginationSize: `type PaginationSize = 'sm' | 'md' | 'lg';`,
-  PaginationSizeChangerOptions: `type PaginationSizeChangerOptions = {
-  getOptionLabel?: (pageSize: number) => ReactNode;
+  PaginationLimitSelectorOptions: `type PaginationLimitSelectorOptions = {
+  render?: (pageSize: number) => ReactNode;
   options?: readonly number[];
 };`,
   PaginationStyles: `type PaginationStyles = {
@@ -488,20 +494,20 @@ export const apiTypeDefinitions = {
   ellipsis?: React.CSSProperties;
   item?: React.CSSProperties;
   pageSize?: React.CSSProperties;
-  quickJumper?: React.CSSProperties;
+  jump?: React.CSSProperties;
   summary?: React.CSSProperties;
 };`,
   PanelSize: `type PanelSize = {
   asPercentage: number;
   inPixels: number;
 };`,
-  PopoverClassNames: `type PopoverClassNames = {
+  PopoverClasses: `type PopoverClasses = {
   content?: string;
 };`,
   PopoverStyles: `type PopoverStyles = {
   content?: React.CSSProperties;
 };`,
-  RadioClassNames: `type RadioClassNames = {
+  RadioClasses: `type RadioClasses = {
   control?: string;
   label?: string;
 };`,
@@ -515,7 +521,7 @@ export const apiTypeDefinitions = {
   control?: React.CSSProperties;
   label?: React.CSSProperties;
 };`,
-  ResizableClassNames: `type ResizableClassNames = {
+  ResizableClasses: `type ResizableClasses = {
   panel?: string;
   separator?: string;
 };`,
@@ -529,7 +535,7 @@ export const apiTypeDefinitions = {
   size?: 'sm' | 'md' | 'lg' | number;
   visibility?: 'auto' | 'always' | 'hidden';
 };`,
-  SegmentedClassNames: `type SegmentedClassNames = {
+  SegmentedClasses: `type SegmentedClasses = {
   indicator?: string;
   item?: string;
   label?: string;
@@ -551,13 +557,13 @@ export const apiTypeDefinitions = {
   label?: CSSProperties;
 };`,
   SegmentedValue: `type SegmentedValue = string | number;`,
-  SelectClassNames: `type SelectClassNames = {
+  SelectClasses: `type SelectClasses = {
   trigger?: string;
 };`,
   SelectOption: `type SelectOption<Value extends SelectValue> = {
   disabled?: boolean;
   label: ReactNode;
-  textValue?: string;
+  text?: string;
   value: Value;
 };`,
   SelectOptionGroup: `type SelectOptionGroup<Value extends SelectValue> = {
@@ -582,16 +588,16 @@ export const apiTypeDefinitions = {
   expand?: (row: TData, index: number) => string
 }`,
   'Table.PaginationProps': `type Table.PaginationProps = {
-  current?: number
-  defaultCurrent?: number
+  page?: number
+  defaultPage?: number
   mode?: 'client' | 'manual'
   onChange?: (page: number, pageSize: number) => void
-  pageSize?: number
-  summary?: boolean | ((total: number, current: number, pageCount: number) => ReactNode)
+  limit?: PaginationLimitOptions
+  summary?: boolean | ((total: number, page: number, pages: number) => ReactNode)
   total?: number
 }`,
   'Table.Render': `type Table.Render<TData> = (value: unknown, row: TData, index: number) => ReactNode`,
-  'Table.RowSelectionProps': `type Table.RowSelectionProps<TData> = {
+  'Table.SelectionProps': `type Table.SelectionProps<TData> = {
   defaultValue?: Key[]
   disabled?: (row: TData, index: number) => boolean
   header?: ReactNode
@@ -601,7 +607,7 @@ export const apiTypeDefinitions = {
 }`,
   'Table.SearchProps': `type Table.SearchProps<TData> = {
   'aria-label'?: string
-  columnKeys?: string[]
+  columns?: string[]
   defaultValue?: string
   mode?: 'client' | 'manual'
   onChange?: (value: string) => void
@@ -621,15 +627,15 @@ export const apiTypeDefinitions = {
 }`,
   'Table.SortOrder': `type Table.SortOrder = 'ascending' | 'descending'`,
   'Table.SortState': `type Table.SortState = {
-  columnKey: string
+  column: string
   order: Table.SortOrder
 }`,
   'Table.VirtualProps': `type Table.VirtualProps = {
-  containerHeight?: number | string
+  maxHeight?: number | string
   overscan?: number
   rowHeight?: number
 }`,
-  TabsClassNames: `type TabsClassNames = {
+  TabsClasses: `type TabsClasses = {
   indicator?: string;
   list?: string;
   panel?: string;
@@ -647,7 +653,7 @@ export const apiTypeDefinitions = {
   label: ReactNode;
   value: Value;
 } & ButtonHTMLAttributes<HTMLButtonElement>;`,
-  TooltipClassNames: `type TooltipClassNames = {
+  TooltipClasses: `type TooltipClasses = {
   arrow?: string;
   content?: string;
 };`,
@@ -666,13 +672,200 @@ export const apiTypeDefinitions = {
   | 'bottomRight';`,
   TooltipProviderDefaults: `type TooltipProviderDefaults = {
   arrow?: boolean;
-  closeDelay?: number;
-  openDelay?: number;
+  delay?: TooltipDelay;
   placement?: TooltipPlacement;
 };`,
   TooltipStyles: `type TooltipStyles = {
   arrow?: React.CSSProperties;
   content?: React.CSSProperties;
+};`,
+  AlertDialogCancelConfig: `type AlertDialogCancelConfig = {
+  label?: React.ReactNode;
+};`,
+  AlertDialogConfirmConfig: `type AlertDialogConfirmConfig = {
+  label: React.ReactNode;
+  variant?: React.ComponentProps<typeof Button>['variant'];
+  onClick?: () => void;
+};`,
+  AttachmentMediaConfig: `type AttachmentMediaConfig = {
+  content: React.ReactNode;
+  type?: 'icon' | 'image';
+};`,
+  BubbleContentProps: `type BubbleContentProps = React.ComponentProps<'div'> & DataAttributes;`,
+  CalendarClasses: `type CalendarClasses = Omit<
+  NonNullable<React.ComponentProps<typeof DayPicker>['classNames']>,
+  'root'
+>;`,
+  CalendarOptions: `type CalendarOptions<Props> = Props extends unknown
+  ? Omit<Props, 'classNames' | 'numberOfMonths' | 'timeZone' | 'showOutsideDays'> & {
+      classes?: CalendarClasses;
+      months?: number;
+      zone?: string;
+      outside?: boolean;
+      buttonVariant?: React.ComponentProps<typeof Button>['variant'];
+    }
+  : never;`,
+  CalendarProps: `type CalendarProps = CalendarOptions<React.ComponentProps<typeof DayPicker>>;`,
+  DialogCancelConfig: `type DialogCancelConfig = {
+  label?: React.ReactNode;
+};`,
+  DialogConfirmConfig: `type DialogConfirmConfig = {
+  label: React.ReactNode;
+  onClick?: () => void;
+};`,
+  DrawerCloseConfig: `type DrawerCloseConfig = {
+  label?: React.ReactNode;
+  variant?: React.ComponentProps<typeof Button>['variant'];
+};`,
+  DrawerSnapsConfig: `type DrawerSnapsConfig = {
+  points?: DrawerSnapPoint[];
+  value?: DrawerSnapPoint | null;
+  defaultValue?: DrawerSnapPoint | null;
+  onChange?: (snapPoint: DrawerSnapPoint | null) => void;
+  sequential?: boolean;
+};`,
+  ItemMediaConfig: `type ItemMediaConfig = {
+  content: ReactNode;
+  type?: 'default' | 'icon' | 'image';
+};`,
+  LayoutSidebarWidth: `type LayoutSidebarWidth = {
+  /** 展开宽度，数字按像素处理。 */
+  expanded?: number | string;
+  /** 折叠宽度，数字按像素处理。 */
+  collapsed?: number | string;
+};`,
+  NavigationMenuDelay: `type NavigationMenuDelay = {
+  open?: number;
+  close?: number;
+};`,
+  PaginationLimitOptions: `type PaginationLimitOptions = {
+  value?: number;
+  defaultValue?: number;
+  onChange?: (page: number, limit: number) => void;
+  selector?: boolean | PaginationLimitSelectorOptions;
+};`,
+  PopoverDelay: `type PopoverDelay = {
+  open?: number;
+  close?: number;
+};`,
+  PopoverMode: `type PopoverMode = 'click' | 'hover';`,
+  PopoverOffset: `type PopoverOffset = {
+  side?: number;
+  align?: number;
+};`,
+  ResizableLayout: `type ResizableLayout = {
+  defaultValue?: ResizablePrimitive.GroupProps['defaultLayout'];
+  onChange?: ResizablePrimitive.GroupProps['onLayoutChange'];
+  onCommit?: ResizablePrimitive.GroupProps['onLayoutChanged'];
+};`,
+  ResizableTarget: `type ResizableTarget = ResizablePrimitive.GroupProps['resizeTargetMinimumSize'];`,
+  SliderEdge: `type SliderEdge = {
+  icon?: React.ReactNode;
+  label?: React.ReactNode;
+};`,
+  SonnerPromiseError: `type SonnerPromiseError = Parameters<
+  Extract<SonnerPromiseOptions<unknown>['error'], (error: never) => unknown>
+>[0];`,
+  SonnerPromiseOptions: `type SonnerPromiseOptions<Data> = NonNullable<
+  Parameters<typeof sonnerToast.promise<Data>>[1]
+>;`,
+  ToastAction: `type ToastAction = Omit<Action, 'actionButtonStyle'> & {
+  style?: React.CSSProperties;
+};`,
+  ToastApi: `type ToastApi = ((
+  message: Parameters<typeof sonnerToast>[0],
+  options?: ToastOptions
+) => ToastId) & {
+  [Method in 'success' | 'info' | 'warning' | 'error' | 'loading' | 'message']: (
+    message: Parameters<(typeof sonnerToast)[Method]>[0],
+    options?: ToastOptions
+  ) => ToastId;
+} & {
+  custom: (
+    renderer: Parameters<typeof sonnerToast.custom>[0],
+    options?: ToastOptions
+  ) => ToastId;
+  promise: <Data>(
+    promise: Parameters<typeof sonnerToast.promise<Data>>[0],
+    options?: ToastPromiseOptions<Data>
+  ) => ToastPromiseHandle<Data>;
+  dismiss: typeof sonnerToast.dismiss;
+  getHistory: typeof sonnerToast.getHistory;
+  getToasts: typeof sonnerToast.getToasts;
+};`,
+  ToastClasses: `type ToastClasses = Omit<
+  ToastClassnames,
+  'closeButton' | 'cancelButton' | 'actionButton'
+> & {
+  close?: string;
+  cancel?: string;
+  action?: string;
+};`,
+  ToastDefaults: `type ToastDefaults = Omit<
+  NonNullable<ToasterProps['toastOptions']>,
+  | 'classNames'
+  | 'descriptionClassName'
+  | 'cancelButtonStyle'
+  | 'actionButtonStyle'
+  | 'closeButton'
+> & {
+  classes?: ToastClasses;
+  styles?: ToastStyles;
+  closable?: boolean;
+};`,
+  ToastId: `type ToastId = string | number;`,
+  ToastOptions: `type ToastOptions = Omit<
+  ExternalToast,
+  | 'classNames'
+  | 'descriptionClassName'
+  | 'cancelButtonStyle'
+  | 'actionButtonStyle'
+  | 'action'
+  | 'cancel'
+  | 'richColors'
+  | 'closeButton'
+> & {
+  classes?: ToastClasses;
+  styles?: ToastStyles;
+  action?: ToastAction | React.ReactNode;
+  cancel?: ToastAction | React.ReactNode;
+  rich?: boolean;
+  closable?: boolean;
+};`,
+  ToastPromiseHandle: `type ToastPromiseHandle<Data> =
+  | (string & { unwrap: () => Promise<Data> })
+  | (number & { unwrap: () => Promise<Data> })
+  | { unwrap: () => Promise<Data> };`,
+  ToastPromiseMessage: `type ToastPromiseMessage = ToastOptions & { message: React.ReactNode };`,
+  ToastPromiseOptions: `type ToastPromiseOptions<Data = unknown> = Omit<
+  SonnerPromiseOptions<Data>,
+  keyof ExternalToast | 'success' | 'error'
+> &
+  Omit<ToastOptions, 'description'> & {
+    description?: SonnerPromiseOptions<Data>['description'];
+    success?: ToastPromiseResult<Data>;
+    error?: ToastPromiseResult<SonnerPromiseError>;
+  };`,
+  ToastPromiseResult: `type ToastPromiseResult<Data> =
+  | React.ReactNode
+  | ToastPromiseMessage
+  | ((
+      data: Data
+    ) =>
+      | React.ReactNode
+      | ToastPromiseMessage
+      | Promise<React.ReactNode | ToastPromiseMessage>);`,
+  ToastStyles: `type ToastStyles = {
+  cancel?: React.CSSProperties;
+  action?: React.CSSProperties;
+};`,
+  ToasterOffset: `type ToasterOffset = {
+  base?: ToasterProps['offset'];
+  mobile?: ToasterProps['mobileOffset'];
+};`,
+  TooltipDelay: `type TooltipDelay = {
+  open?: TooltipPrimitiveTriggerProps['delay'];
+  close?: TooltipPrimitiveTriggerProps['closeDelay'];
 };`,
 } as const;
 

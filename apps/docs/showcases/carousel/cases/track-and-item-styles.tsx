@@ -27,11 +27,11 @@ const createExample = (locale: 'en' | 'zh') => {
     },
   ];
 
-  const CarouselClassNamesDemo = () => (
+  const CarouselClassesDemo = () => (
     <Carousel
       aria-label={copy('自定义轨道与项目宽度')}
       className="display-carousel"
-      classNames={{ content: 'gap-3', item: 'basis-2/3 pl-3' }}
+      classes={{ content: 'gap-3', item: 'basis-2/3 pl-3' }}
       controls={false}
       items={releaseHighlights.map((highlight) => (
         <div className="rounded-3xl border p-6" key={highlight.title}>
@@ -44,7 +44,7 @@ const createExample = (locale: 'en' | 'zh') => {
     />
   );
 
-  return CarouselClassNamesDemo;
+  return CarouselClassesDemo;
 };
 
 const ZhExample = createExample('zh');

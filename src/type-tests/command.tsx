@@ -18,6 +18,20 @@ export const CommandFilterTypeTest = () => (
     <Command groups={groups} />
     <Command filter={false} groups={groups} />
     <Command filter={startsWithFilter} groups={groups} />
+    <Command
+      groups={groups}
+      input={{
+        placeholder: 'Search',
+        value: 'query',
+        onChange: (value) => value.toUpperCase(),
+      }}
+      pointerSelection={false}
+      vim
+    />
+    {/* @ts-expect-error 搜索占位文本统一放在 input 中。 */}
+    <Command groups={groups} placeholder="Search" />
+    {/* @ts-expect-error 指针选择使用正向布尔值。 */}
+    <Command groups={groups} disablePointerSelection />
 
     {/* @ts-expect-error Filtering is configured through filter. */}
     <Command groups={groups} shouldFilter={false} />

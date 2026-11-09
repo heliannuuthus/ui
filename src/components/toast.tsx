@@ -13,15 +13,21 @@ import {
   toast as sonnerToast,
   type ExternalToast,
   type ToastT,
-  type ToasterProps as SonnerToasterProps,
+  type ToastToDismiss,
 } from 'sonner';
 
 import { cn } from '../lib/utils';
 import { useProvider } from './provider';
+import {
+  adaptToasterProps,
+  adaptToastOptions,
+  type SonnerProps,
+  type ToastOptions,
+} from './sonner';
 
 type ToastScope = 'global' | 'local';
 
-type ToasterProps = SonnerToasterProps & {
+type ToasterProps = SonnerProps & {
   scope?: ToastScope;
 };
 
@@ -30,32 +36,123 @@ type ToastProviderProps = Omit<ToasterProps, 'id'> & {
   id?: string;
 };
 
+type ToastId = string | number;
+
+type ToastPromiseHandle<Data> =
+  | (string & { unwrap: () => Promise<Data> })
+  | (number & { unwrap: () => Promise<Data> })
+  | { unwrap: () => Promise<Data> };
+
+type SonnerPromiseOptions<Data> = NonNullable<
+  Parameters<typeof sonnerToast.promise<Data>>[1]
+>;
+
+type SonnerPromiseError = Parameters<
+  Extract<SonnerPromiseOptions<unknown>['error'], (error: never) => unknown>
+>[0];
+
+type ToastPromiseMessage = ToastOptions & { message: React.ReactNode };
+
+type ToastPromiseResult<Data> =
+  | React.ReactNode
+  | ToastPromiseMessage
+  | ((
+      data: Data
+    ) =>
+      | React.ReactNode
+      | ToastPromiseMessage
+      | Promise<React.ReactNode | ToastPromiseMessage>);
+
+type ToastPromiseOptions<Data = unknown> = Omit<
+  SonnerPromiseOptions<Data>,
+  keyof ExternalToast | 'success' | 'error'
+> &
+  Omit<ToastOptions, 'description'> & {
+    description?: SonnerPromiseOptions<Data>['description'];
+    success?: ToastPromiseResult<Data>;
+    error?: ToastPromiseResult<SonnerPromiseError>;
+  };
+
+type ToastApi = ((
+  message: Parameters<typeof sonnerToast>[0],
+  options?: ToastOptions
+) => ToastId) & {
+  [
+    Method in 'success' | 'info' | 'warning' | 'error' | 'loading' | 'message'
+  ]: (
+    message: Parameters<(typeof sonnerToast)[Method]>[0],
+    options?: ToastOptions
+  ) => ToastId;
+} & {
+  custom: (
+    renderer: Parameters<typeof sonnerToast.custom>[0],
+    options?: ToastOptions
+  ) => ToastId;
+  promise: <Data>(
+    promise: Parameters<typeof sonnerToast.promise<Data>>[0],
+    options?: ToastPromiseOptions<Data>
+  ) => ToastPromiseHandle<Data>;
+  dismiss: typeof sonnerToast.dismiss;
+  getHistory: typeof sonnerToast.getHistory;
+  getToasts: typeof sonnerToast.getToasts;
+};
+
 type ToastContextValue = {
-  toast: typeof sonnerToast;
+  toast: ToastApi;
 };
 
 const ToastContext = React.createContext<ToastContextValue | null>(null);
 
 const getToastOptions = (
-  options: ExternalToast | undefined,
+  options: ToastOptions | undefined,
   toasterId: string | undefined
 ): ExternalToast => {
-  return toasterId ? { ...options, toasterId } : (options ?? {});
+  const adapted = options ? adaptToastOptions(options) : {};
+  return toasterId ? { ...adapted, toasterId } : adapted;
+};
+
+const adaptPromiseMessage = (result: React.ReactNode | ToastPromiseMessage) => {
+  if (result !== null && typeof result === 'object' && 'message' in result) {
+    const { message, ...options } = result;
+    return { ...adaptToastOptions(options), message };
+  }
+  return result;
+};
+
+const adaptPromiseResult = <Data,>(
+  result: ToastPromiseResult<Data> | undefined
+): SonnerPromiseOptions<Data>['success'] => {
+  return (
+    typeof result === 'function'
+      ? async (data: Data) => adaptPromiseMessage(await result(data))
+      : adaptPromiseMessage(result)
+  ) as SonnerPromiseOptions<Data>['success'];
+};
+
+const getPromiseOptions = <Data,>(
+  options: ToastPromiseOptions<Data> | undefined,
+  toasterId: string | undefined
+): SonnerPromiseOptions<Data> | undefined => {
+  if (!options) return toasterId ? { toasterId } : undefined;
+  const { success, error, description, ...props } = options;
+  return {
+    ...getToastOptions(props, toasterId),
+    description,
+    success: adaptPromiseResult(success),
+    error: adaptPromiseResult(error),
+  };
 };
 
 const isToastInScope = (
-  item: ReturnType<typeof sonnerToast.getToasts>[number],
+  item: ToastT | ToastToDismiss,
   toasterId: string | undefined
 ): item is ToastT => {
   return !('dismiss' in item) && item.toasterId === toasterId;
 };
 
-const createToastApi = (toasterId?: string): typeof sonnerToast => {
+const createToastApi = (toasterId?: string): ToastApi => {
   const scopedToast = ((message, options) =>
-    sonnerToast(
-      message,
-      getToastOptions(options, toasterId)
-    )) as typeof sonnerToast;
+    sonnerToast(message, getToastOptions(options, toasterId))) as ToastApi;
 
   scopedToast.success = (message, options) =>
     sonnerToast.success(message, getToastOptions(options, toasterId));
@@ -71,11 +168,8 @@ const createToastApi = (toasterId?: string): typeof sonnerToast => {
     sonnerToast.message(message, getToastOptions(options, toasterId));
   scopedToast.custom = (renderer, options) =>
     sonnerToast.custom(renderer, getToastOptions(options, toasterId));
-  scopedToast.promise = ((promise, options) =>
-    sonnerToast.promise(
-      promise,
-      toasterId ? { ...options, toasterId } : options
-    )) as typeof sonnerToast.promise;
+  scopedToast.promise = (promise, options) =>
+    sonnerToast.promise(promise, getPromiseOptions(options, toasterId));
   scopedToast.dismiss = (toastId) => {
     if (toastId !== undefined) return sonnerToast.dismiss(toastId);
 
@@ -98,12 +192,12 @@ const createToastApi = (toasterId?: string): typeof sonnerToast => {
 
 const Toaster = ({
   className,
-  closeButton = true,
+  closable = true,
   position = 'top-center',
-  richColors = true,
+  rich = true,
   scope = 'global',
   style,
-  toastOptions,
+  defaults,
   ...props
 }: ToasterProps) => {
   const { resolvedAppearance } = useProvider();
@@ -117,8 +211,8 @@ const Toaster = ({
         scope === 'local' && 'toast-local',
         className
       )}
-      closeButton={closeButton}
-      richColors={richColors}
+      closeButton={closable}
+      richColors={rich}
       icons={{
         success: <CircleCheckIcon className="size-4" />,
         info: <InfoIcon className="size-4" />,
@@ -155,14 +249,18 @@ const Toaster = ({
           ...style,
         } as React.CSSProperties
       }
-      toastOptions={{
-        ...toastOptions,
-        classNames: {
-          toast: 'cn-toast',
-          ...toastOptions?.classNames,
+      {...adaptToasterProps({
+        ...props,
+        rich,
+        closable,
+        defaults: {
+          ...defaults,
+          classes: {
+            toast: 'cn-toast',
+            ...defaults?.classes,
+          },
         },
-      }}
-      {...props}
+      })}
     />
   );
 };
@@ -200,6 +298,12 @@ const useToast = () => {
   return context;
 };
 
+const toast: ToastApi = Object.assign(createToastApi(), {
+  dismiss: sonnerToast.dismiss,
+  getHistory: sonnerToast.getHistory,
+  getToasts: sonnerToast.getToasts,
+});
+
 const Toast = Object.assign(Toaster, {
   Provider: ToastProvider,
   Toaster,
@@ -207,9 +311,15 @@ const Toast = Object.assign(Toaster, {
 
 export {
   Toast,
-  sonnerToast as toast,
+  toast,
   useToast,
   type ToasterProps,
   type ToastProviderProps,
   type ToastScope,
+  type ToastApi,
+  type ToastPromiseOptions,
+  type ToastPromiseResult,
+  type ToastPromiseMessage,
+  type ToastId,
+  type ToastPromiseHandle,
 };

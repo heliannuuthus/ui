@@ -27,7 +27,7 @@ const createExample = (locale: 'en' | 'zh') => {
           return (
             <Drawer
               behavior="adaptive"
-              closeText={copy('关闭')}
+              close={{ label: copy('关闭') }}
               description={copy(
                 `${placement.label}打开；窄屏保留触摸拖拽，宽屏使用稳定的边缘面板布局。`
               )}

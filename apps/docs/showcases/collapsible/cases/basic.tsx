@@ -12,7 +12,7 @@ export default function CollapsibleBasicCase({
   return (
     <Collapsible
       className="collapsible-case"
-      classNames={{ content: 'collapsible-case-content' }}
+      classes={{ content: 'collapsible-case-content' }}
       content={
         <p>
           {english

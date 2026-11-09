@@ -50,6 +50,25 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 </CarouselShowcase>
 
+## Reading controls inside a slide
+
+Import `useCarousel` from `@heliannuuthus/ui` in a component rendered inside Carousel, such as an item component. `useCarousel()` returns the current `CarouselControls` and updates with the carousel state; it throws outside a Carousel. Use `ref` for controls located outside the carousel, or `pagination.render` when the controls belong to pagination.
+
+| Control member | Meaning |
+| --- | --- |
+| `canScrollNext` | Whether forward navigation is currently available. |
+| `canScrollPrev` | Whether backward navigation is currently available. |
+| `page` | Current page number, starting at one. |
+| `playing` | Whether automatic playback is currently active. |
+| `pages` | Number of available pages. |
+| `index` | Selected scroll-snap index, starting at zero. |
+| `snaps` | Current scroll-snap positions. |
+| `pause()` | Pauses automatic playback. |
+| `play()` | Resumes configured automatic playback. |
+| `scrollNext()` | Navigates forward. |
+| `scrollPrev()` | Navigates backward. |
+| `scrollTo(index)` | Navigates to the zero-based scroll-snap index. |
+
 ## API
 
 <ApiTable
@@ -74,7 +93,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description:
         'Render carousel content from the inferred data item and index; required when items are not React nodes.',
-      name: 'renderItem',
+      name: 'render',
       type: '(item: Item, index: number) => ReactNode',
     },
     {
@@ -122,14 +141,28 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description:
         'Customize a pagination dot from its index and selected state.',
-      name: 'renderDot',
+      name: 'dot',
       type: '(props: CarouselDotRenderProps) => ReactNode',
+    },
+    {
+      component: 'CarouselDotRenderProps',
+      defaultValue: null,
+      description: "Current dot index, starting at zero.",
+      name: 'index',
+      type: "number",
+    },
+    {
+      component: 'CarouselDotRenderProps',
+      defaultValue: null,
+      description: "Whether the dot is selected.",
+      name: 'selected',
+      type: "boolean",
     },
     {
       component: 'Carousel.pagination',
       defaultValue: null,
       description:
-        'Render the complete page turner from page state and controls; cannot be used with renderDot.',
+        'Render the complete page turner from page state and controls; cannot be used with dot.',
       name: 'render',
       type: '(controls: CarouselControls) => ReactNode',
     },
@@ -169,14 +202,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Carousel',
       defaultValue: null,
       description: 'Extend the className of the corresponding semantic slot.',
-      name: 'classNames',
-      type: 'CarouselClassNames',
+      name: 'classes',
+      type: 'CarouselClasses',
     },
     {
       component: 'Carousel',
       defaultValue: null,
       description:
-        'Set inline styles using the same semantic slots as classNames.',
+        'Set inline styles using the same semantic slots as classes.',
       name: 'styles',
       type: 'CarouselStyles',
     },
@@ -197,8 +230,8 @@ import { ApiTable } from '@docs/rspress/api-table';
   ]}
 />
 
-`pagination.render` receives `currentPage = 0` when no pages are available.
-`isPlaying` is false while paused, with fewer than two pages, or after reaching
+`pagination.render` receives `page = 0` when no pages are available.
+`playing` is false while paused, with fewer than two pages, or after reaching
 the last page without looping.
 
 ## Accessibility

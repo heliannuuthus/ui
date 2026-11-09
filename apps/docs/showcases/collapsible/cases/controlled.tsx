@@ -15,7 +15,7 @@ export default function CollapsibleControlledCase({
     <div className="component-case-grid is-split">
       <Collapsible
         className="collapsible-case"
-        classNames={{ content: 'collapsible-case-content' }}
+        classes={{ content: 'collapsible-case-content' }}
         content={
           <p>
             {english
@@ -42,7 +42,7 @@ export default function CollapsibleControlledCase({
       />
       <Collapsible
         className="collapsible-case"
-        classNames={{ content: 'collapsible-case-content' }}
+        classes={{ content: 'collapsible-case-content' }}
         content={
           <p>
             {english

@@ -16,13 +16,13 @@ import {
   useFormControl,
 } from './internal/form-control';
 
-type CheckboxClassNames = {
+type CheckboxClasses = {
   control?: string;
   label?: string;
 };
 
 type CheckboxStyles = {
-  [Slot in keyof CheckboxClassNames]?: React.CSSProperties;
+  [Slot in keyof CheckboxClasses]?: React.CSSProperties;
 };
 
 type CheckboxVariant = 'default' | 'task';
@@ -34,7 +34,7 @@ type CheckboxProps = Omit<
   checked?: boolean;
   children?: React.ReactNode;
   className?: string;
-  classNames?: CheckboxClassNames;
+  classes?: CheckboxClasses;
   defaultChecked?: boolean;
   disabled?: boolean;
   form?: string;
@@ -72,6 +72,7 @@ type CheckboxGroupProps = Omit<
   defaultValue?: string[];
   disabled?: boolean;
   gap?: MasonryGap;
+  inputRef?: React.Ref<HTMLInputElement>;
   minColumnWidth?: MasonryLength;
   name?: string;
   onChange?: (value: string[]) => void;
@@ -91,7 +92,7 @@ const CheckboxRoot = (checkboxProps: CheckboxProps) => {
     checked,
     children,
     className,
-    classNames,
+    classes,
     defaultChecked,
     disabled,
     id,
@@ -155,7 +156,7 @@ const CheckboxRoot = (checkboxProps: CheckboxProps) => {
         data-slot="checkbox-control"
         className={cn(
           'relative mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-[5px] border border-transparent bg-input/90 transition-[background-color,border-color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/checkbox:border-primary/40 group-hover/checkbox:bg-primary/10 group-active/checkbox:scale-90 group-data-disabled/checkbox:group-active/checkbox:scale-100 group-data-disabled/checkbox:group-hover/checkbox:border-transparent group-data-disabled/checkbox:group-hover/checkbox:bg-input/90 group-data-readonly/checkbox:group-active/checkbox:scale-100 group-aria-invalid/checkbox:border-destructive group-aria-invalid/checkbox:ring-3 group-aria-invalid/checkbox:ring-destructive/20 group-data-checked/checkbox:border-primary group-data-checked/checkbox:bg-primary group-data-checked/checkbox:text-primary-foreground group-data-checked/checkbox:group-hover/checkbox:bg-primary/90 motion-reduce:transition-none dark:group-aria-invalid/checkbox:border-destructive/50 dark:group-aria-invalid/checkbox:ring-destructive/40 dark:group-data-checked/checkbox:bg-primary',
-          classNames?.control
+          classes?.control
         )}
         style={styles?.control}
       >
@@ -186,7 +187,7 @@ const CheckboxRoot = (checkboxProps: CheckboxProps) => {
             'contents',
             variant === 'task' &&
               'block min-w-0 flex-1 transition-colors duration-150 group-data-checked/checkbox:text-muted-foreground group-data-checked/checkbox:line-through group-data-checked/checkbox:decoration-muted-foreground/70 group-data-checked/checkbox:decoration-1 motion-reduce:transition-none',
-            classNames?.label
+            classes?.label
           )}
           style={styles?.label}
         >
@@ -209,6 +210,7 @@ const CheckboxGroup = (checkboxGroupProps: CheckboxGroupProps) => {
     disabled,
     gap = 12,
     id,
+    inputRef,
     minColumnWidth = 180,
     name,
     onBlur,
@@ -220,6 +222,11 @@ const CheckboxGroup = (checkboxGroupProps: CheckboxGroupProps) => {
     ...props
   } = checkboxGroupProps;
   const formControl = useFormControl<string[]>();
+  const controlRef = useMergedRefs(
+    inputRef,
+    formControl?.ref as React.Ref<HTMLInputElement> | undefined
+  );
+  const firstEnabledValue = options.find((option) => !option.disabled)?.value;
 
   return (
     <CheckboxGroupPrimitive
@@ -258,6 +265,9 @@ const CheckboxGroup = (checkboxGroupProps: CheckboxGroupProps) => {
                 <CheckboxRoot
                   className={option.className}
                   disabled={option.disabled}
+                  inputRef={
+                    option.value === firstEnabledValue ? controlRef : undefined
+                  }
                   value={option.value}
                   variant={option.variant ?? variant}
                 >
@@ -283,7 +293,7 @@ registerFormControl(CheckboxGroup);
 
 export { Checkbox };
 export type {
-  CheckboxClassNames,
+  CheckboxClasses,
   CheckboxGroupProps,
   CheckboxOption,
   CheckboxProps,

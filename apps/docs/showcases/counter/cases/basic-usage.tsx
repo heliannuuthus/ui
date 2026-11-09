@@ -2,11 +2,11 @@ import '@heliannuuthus/ui/styles.css';
 import { Counter } from '@heliannuuthus/ui';
 
 const ZhExample = (() => {
-  return () => <Counter value={7.4} fontSize={52} fontWeight={600} />;
+  return () => <Counter value={7.4} size={52} weight={600} />;
 })();
 
 const EnExample = (() => {
-  return () => <Counter value={7.4} fontSize={52} fontWeight={600} />;
+  return () => <Counter value={7.4} size={52} weight={600} />;
 })();
 
 export default function ExampleCase({

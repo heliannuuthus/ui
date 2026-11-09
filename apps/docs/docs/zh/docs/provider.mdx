@@ -27,21 +27,23 @@ root.render(
 
 ## 设置主题颜色
 
-`theme.colors` 提供基础颜色，`theme.darkColors` 在深色外观下覆盖其中的同名字段。只传需要修改的变量，未填写的部分继续使用组件库默认值。
+`theme.colors.base` 提供基础颜色，`theme.colors.dark` 在深色外观下覆盖其中的同名字段。`dark` 未填写的变量保留基础值，两处都未填写的变量继续使用组件库默认值。
 
 ```tsx title="app-provider.tsx"
 <Provider
   appearance="system"
   theme={{
     colors: {
-      primary: 'oklch(0.56 0.18 255)',
-      primaryForeground: 'oklch(0.99 0 0)',
-      ring: 'oklch(0.62 0.16 255)',
-    },
-    darkColors: {
-      primary: 'oklch(0.72 0.14 255)',
-      primaryForeground: 'oklch(0.18 0.02 255)',
-      ring: 'oklch(0.72 0.14 255)',
+      base: {
+        primary: 'oklch(0.56 0.18 255)',
+        primaryForeground: 'oklch(0.99 0 0)',
+        ring: 'oklch(0.62 0.16 255)',
+      },
+      dark: {
+        primary: 'oklch(0.72 0.14 255)',
+        primaryForeground: 'oklch(0.18 0.02 255)',
+        ring: 'oklch(0.72 0.14 255)',
+      },
     },
     radius: '0.75rem',
   }}
@@ -61,7 +63,7 @@ root.render(
   components={{
     Button: { size: 'sm' },
     Card: { variant: 'outline' },
-    Tooltip: { openDelay: 300, placement: 'top' },
+    Tooltip: { delay: { open: 300 }, placement: 'top' },
     ScrollArea: {
       scrollbar: { size: 'sm', visibility: 'auto' },
     },
@@ -91,7 +93,7 @@ root.render(
 ```tsx title="preview.tsx"
 <Provider appearance="system" components={{ Button: { size: 'sm' } }}>
   <AppShell>
-    <Provider theme={{ colors: { primary: 'oklch(0.62 0.2 25)' } }}>
+    <Provider theme={{ colors: { base: { primary: 'oklch(0.62 0.2 25)' } } }}>
       <PreviewPanel />
     </Provider>
   </AppShell>
@@ -121,4 +123,4 @@ Provider 通过 DOM 继承主题变量。即使 Provider 挂载在应用根部�
 - 页面网格、内容宽度和响应式布局写在应用样式中。
 - 订单、权限、审核等业务状态留在业务状态管理中。
 - 只为一处出现的视觉差异使用组件 `className`、`style` 或公开槽位。
-- `useProvider` 可读取当前外观和方向；`useComponentDefaults` 主要供组件库实现读取默认值，普通页面通常不需要直接调用。
+- `useProvider` 可读取公开上下文：`appearance`、`resolvedAppearance`、`direction`、`theme` 和 `components`。同步文档级深色类时使用 `resolvedAppearance`；`appearance` 可能仍是 `system`。

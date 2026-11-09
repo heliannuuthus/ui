@@ -28,6 +28,12 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## API
 
+`Sonner` uses the same container option names as Toast.
+
+`defaults` accepts `ToastDefaults`; individual `toast(...)`, semantic commands, and `toast.custom(...)` accept `ToastOptions`. Both share the `classes` slots. `styles` configures only action and cancel buttons. A button’s `action.style` or `cancel.style` takes precedence over its corresponding `styles` entry.
+
+`toast.promise` accepts `ToastPromiseOptions<Data>` and preserves loading, success, error, description, finally, and the returned `unwrap()` method. The success and error results may be ReactNode or a `ToastPromiseMessage` containing `message`; notification options in those results are adapted too. `getHistory()` and `getToasts()` retain the upstream return model and field names. `id` and `toasterId` keep their routing behavior; `useToast()` returns commands for its Provider channel.
+
 <ApiTable
   labels={{
     component: 'Component',
@@ -37,6 +43,335 @@ import { ApiTable } from '@docs/rspress/api-table';
     type: 'Type',
   }}
   rows={[
+    {
+      "component": "ToastDefaults",
+      "defaultValue": null,
+      "description": "Default notification slot class names.",
+      "name": "classes",
+      "type": "ToastClasses"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": null,
+      "description": "Default inline styles for action and cancel buttons.",
+      "name": "styles",
+      "type": "ToastStyles"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": null,
+      "description": "Default close-button visibility, overriding the container setting.",
+      "name": "closable",
+      "type": "boolean"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": null,
+      "description": "Default class for each notification root.",
+      "name": "className",
+      "type": "string"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": null,
+      "description": "Default inline style for each notification root.",
+      "name": "style",
+      "type": "CSSProperties"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": "4000",
+      "description": "Default duration in milliseconds.",
+      "name": "duration",
+      "type": "number"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": "false",
+      "description": "Disable the upstream notification styles.",
+      "name": "unstyled",
+      "type": "boolean"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": "'Close toast'",
+      "description": "Accessible name for close buttons.",
+      "name": "closeButtonAriaLabel",
+      "type": "string"
+    },
+    {
+      "component": "ToastDefaults",
+      "defaultValue": null,
+      "description": "Upstream notification channel identifier.",
+      "name": "toasterId",
+      "type": "string"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": "3",
+      "description": "Maximum number of visible notifications.",
+      "name": "limit",
+      "type": "number"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": "false",
+      "description": "Enable semantic status colors.",
+      "name": "rich",
+      "type": "boolean"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": "false",
+      "description": "Show the close button.",
+      "name": "closable",
+      "type": "boolean"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": null,
+      "description": "Default options for each notification; explicit notification options take precedence.",
+      "name": "defaults",
+      "type": "ToastDefaults"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": null,
+      "description": "Allowed swipe dismissal directions; defaults follow the position.",
+      "name": "swipe",
+      "type": "('top' | 'right' | 'bottom' | 'left')[]"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": "'Notifications'",
+      "description": "Accessible label for the notification region.",
+      "name": "label",
+      "type": "string"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": null,
+      "description": "Desktop and mobile offsets; each supports a number, string, or directional offsets.",
+      "name": "offset",
+      "type": "ToasterOffset"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": "32",
+      "description": "Base offset from the viewport or local container.",
+      "name": "offset.base",
+      "type": "number | string | { top?: string | number; right?: string | number; bottom?: string | number; left?: string | number }"
+    },
+    {
+      "component": "Sonner",
+      "defaultValue": "16",
+      "description": "Offset applied on mobile screens.",
+      "name": "offset.mobile",
+      "type": "number | string | { top?: string | number; right?: string | number; bottom?: string | number; left?: string | number }"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Class names for notification slots.",
+      "name": "classes",
+      "type": "ToastClasses"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Inline styles for action and cancel buttons.",
+      "name": "styles",
+      "type": "ToastStyles"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Inline style for the action button.",
+      "name": "styles.action",
+      "type": "CSSProperties"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Inline style for the cancel button.",
+      "name": "styles.cancel",
+      "type": "CSSProperties"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override semantic status colors for this notification.",
+      "name": "rich",
+      "type": "boolean"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override close button visibility for this notification.",
+      "name": "closable",
+      "type": "boolean"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Action button configuration or custom content.",
+      "name": "action",
+      "type": "ToastAction | ReactNode"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Cancel button configuration or custom content.",
+      "name": "cancel",
+      "type": "ToastAction | ReactNode"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Called when a user dismisses the notification; receives the upstream notification model.",
+      "name": "onDismiss",
+      "type": "(toast: ToastT) => void"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Called when the notification duration expires.",
+      "name": "onAutoClose",
+      "type": "(toast: ToastT) => void"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Route this notification to a container with a matching id.",
+      "name": "toasterId",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.toast",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.title",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.description",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.loader",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.close",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.cancel",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.action",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.success",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.error",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.info",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.warning",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.loading",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.default",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.content",
+      "type": "string"
+    },
+    {
+      "component": "ToastOptions",
+      "defaultValue": null,
+      "description": "Override the class for this notification slot.",
+      "name": "classes.icon",
+      "type": "string"
+    },
+    {
+      "component": "ToastAction",
+      "defaultValue": null,
+      "description": "Button content.",
+      "name": "label",
+      "type": "ReactNode"
+    },
+    {
+      "component": "ToastAction",
+      "defaultValue": null,
+      "description": "Button click handler.",
+      "name": "onClick",
+      "type": "(event: React.MouseEvent<HTMLButtonElement>) => void"
+    },
+    {
+      "component": "ToastAction",
+      "defaultValue": null,
+      "description": "Inline style for this button, overriding the corresponding options style.",
+      "name": "style",
+      "type": "CSSProperties"
+    },
     {
       component: 'Sonner',
       defaultValue: null,

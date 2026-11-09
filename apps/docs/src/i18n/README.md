@@ -1,6 +1,8 @@
 # Documentation i18n
 
-The documentation site uses `i18next` and `react-i18next`.
+Rspress owns routing. MDX pages, showcase cases, and the custom theme select
+Chinese or English copy from the current route; shared strings live in
+`resources.ts` and `content-translations.ts`.
 
 - Public routes use the short locale prefixes `/zh` and `/en`.
 - The Chinese route sets the document language to `zh-Hans`; the English route

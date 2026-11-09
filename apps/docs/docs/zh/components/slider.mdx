@@ -16,6 +16,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 - 需要在连续或离散范围内选择数值时。
 - 需要覆盖默认、受控、禁用和窄屏状态时。
 
+未传入 `value` 或 `defaultValue` 时，Slider 会在 `min`（默认 `0`）位置渲染一个滑块；范围选择需传入数组。在 `Form.Field` 中，应通过表单初始化值，不使用子控件的 `defaultValue`。`aria-label`、`aria-labelledby` 和 `aria-describedby` 会作用于每个可聚焦的范围输入；使用 `Form.Field` 时会自动关联字段标签与说明。
+
 ## 示例
 
 <SliderShowcase>
@@ -60,30 +62,16 @@ import { ApiTable } from '@docs/rspress/api-table';
     {
       component: 'Slider',
       defaultValue: null,
-      description: '在轨道起点显示图标，并参与 elastic 边缘反馈。',
-      name: 'startIcon',
-      type: 'ReactNode',
+      description: '配置轨道起点的 icon 和 label，参与 elastic 边缘反馈；视觉标签不作为无障碍名称。',
+      name: 'start',
+      type: 'SliderEdge',
     },
     {
       component: 'Slider',
       defaultValue: null,
-      description: '在轨道终点显示图标，并参与 elastic 边缘反馈。',
-      name: 'endIcon',
-      type: 'ReactNode',
-    },
-    {
-      component: 'Slider',
-      defaultValue: null,
-      description: '在轨道起点显示文字标签。',
-      name: 'startLabel',
-      type: 'ReactNode',
-    },
-    {
-      component: 'Slider',
-      defaultValue: null,
-      description: '在轨道终点显示文字标签。',
-      name: 'endLabel',
-      type: 'ReactNode',
+      description: '配置轨道终点的 icon 和 label，参与 elastic 边缘反馈；视觉标签不作为无障碍名称。',
+      name: 'end',
+      type: 'SliderEdge',
     },
     {
       component: 'Slider',
@@ -94,7 +82,7 @@ import { ApiTable } from '@docs/rspress/api-table';
     },
     {
       component: 'Slider',
-      defaultValue: null,
+      defaultValue: 'min',
       description: '设置非受控模式下初始的一个或多个滑块值。',
       name: 'defaultValue',
       type: 'number | number[]',
@@ -110,7 +98,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Slider',
       defaultValue: null,
       description: '一次指针或键盘调整完成后调用。',
-      name: 'onChangeComplete',
+      name: 'onCommit',
       type: '(value: number | number[]) => void',
     },
     {
@@ -201,7 +189,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Slider',
       defaultValue: null,
       description: '配置组件的公开状态、行为或扩展点。',
-      name: 'thumbCollisionBehavior',
+      name: 'collision',
       type: "'none' | 'push' | 'swap'",
     },
     {

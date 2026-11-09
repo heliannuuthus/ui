@@ -33,7 +33,7 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## Semantic DOM
 
-{"悬停、聚焦或点击右侧属性行，查看根节点 className/style 与 CardClassNames/CardStyles 各字段对应的真实区域。"}
+{"悬停、聚焦或点击右侧属性行，查看根节点 className/style 与 CardClasses/CardStyles 各字段对应的真实区域。"}
 
 <CardSemanticDom locale="zh" />
 
@@ -106,42 +106,42 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: 'ReactNode',
     },
     {
-      component: 'CardClassNames',
+      component: 'CardClasses',
       defaultValue: null,
       description: '扩展包含标题、说明与右侧操作的头部区域。',
       name: 'header',
       type: 'string',
     },
     {
-      component: 'CardClassNames',
+      component: 'CardClasses',
       defaultValue: null,
       description: '扩展卡片标题区域。',
       name: 'title',
       type: 'string',
     },
     {
-      component: 'CardClassNames',
+      component: 'CardClasses',
       defaultValue: null,
       description: '扩展标题下方的辅助说明区域。',
       name: 'description',
       type: 'string',
     },
     {
-      component: 'CardClassNames',
+      component: 'CardClasses',
       defaultValue: null,
       description: '扩展头部右侧的辅助操作区域。',
       name: 'action',
       type: 'string',
     },
     {
-      component: 'CardClassNames',
+      component: 'CardClasses',
       defaultValue: null,
       description: '扩展卡片主要内容区域。',
       name: 'content',
       type: 'string',
     },
     {
-      component: 'CardClassNames',
+      component: 'CardClasses',
       defaultValue: null,
       description: '扩展卡片底部的补充信息与操作区域。',
       name: 'footer',
@@ -151,13 +151,13 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Card',
       defaultValue: null,
       description: '扩展对应语义槽位的 className。',
-      name: 'classNames',
-      type: 'CardClassNames',
+      name: 'classes',
+      type: 'CardClasses',
     },
     {
       component: 'Card',
       defaultValue: null,
-      description: '按与 classNames 相同的语义区域设置行内样式。',
+      description: '按与 classes 相同的语义区域设置行内样式。',
       name: 'styles',
       type: 'CardStyles',
     },

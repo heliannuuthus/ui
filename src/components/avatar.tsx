@@ -21,19 +21,18 @@ type AvatarImageProps = Omit<
   React.ComponentProps<'img'>,
   'alt' | 'children' | 'src'
 > & {
-  onLoadingStatusChange?: (status: AvatarImageLoadingStatus) => void;
+  onStatusChange?: (status: AvatarImageLoadingStatus) => void;
 };
 
-type AvatarFallbackProps = Omit<React.ComponentProps<'span'>, 'children'> & {
+type AvatarFallbackProps = React.ComponentProps<'span'> & {
   delay?: number;
 };
 
 type AvatarProps = Omit<React.ComponentProps<'span'>, 'children'> & {
   alt: string;
   badge?: React.ReactNode;
-  fallback?: React.ReactNode;
-  fallbackProps?: AvatarFallbackProps;
-  imageProps?: AvatarImageProps;
+  fallback?: AvatarFallbackProps;
+  image?: AvatarImageProps;
   shape?: AvatarShape;
   size?: AvatarSize;
   src?: string;
@@ -46,8 +45,7 @@ const Avatar = ({
   badge,
   className,
   fallback,
-  fallbackProps,
-  imageProps,
+  image,
   shape: shapeProp,
   size: sizeProp,
   src,
@@ -69,18 +67,23 @@ const Avatar = ({
       )}
       {...props}
     >
-      {src != null ? <AvatarImage {...imageProps} alt={alt} src={src} /> : null}
-      <AvatarFallback {...fallbackProps}>
-        {fallback ?? alt.slice(0, 1).toUpperCase()}
+      {src != null ? <AvatarImage {...image} alt={alt} src={src} /> : null}
+      <AvatarFallback {...fallback}>
+        {fallback?.children ?? alt.slice(0, 1).toUpperCase()}
       </AvatarFallback>
       {badge != null ? <AvatarBadge>{badge}</AvatarBadge> : null}
     </AvatarPrimitive.Root>
   );
 };
 
-const AvatarImage = ({ className, ...props }: AvatarPrimitive.Image.Props) => {
+const AvatarImage = ({
+  className,
+  onStatusChange,
+  ...props
+}: AvatarImageProps & Pick<AvatarProps, 'alt' | 'src'>) => {
   return (
     <AvatarPrimitive.Image
+      onLoadingStatusChange={onStatusChange}
       data-slot="avatar-image"
       className={cn(
         'aspect-square size-full rounded-[inherit] object-cover',
@@ -148,7 +151,7 @@ type AvatarGroupProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   items: readonly AvatarGroupItem[];
   max?: number;
   overlap?: number;
-  renderCount?: (count: number) => React.ReactNode;
+  overflow?: (count: number) => React.ReactNode;
   shape?: AvatarShape;
   size?: AvatarSize;
 };
@@ -158,7 +161,7 @@ const AvatarGroup = ({
   items,
   max,
   overlap = 8,
-  renderCount,
+  overflow,
   shape,
   size,
   style,
@@ -172,8 +175,8 @@ const AvatarGroup = ({
   const overflowCount = Math.max(0, items.length - visibleItems.length);
   const count =
     overflowCount > 0 ? (
-      renderCount ? (
-        renderCount(overflowCount)
+      overflow ? (
+        overflow(overflowCount)
       ) : (
         <AvatarGroupCount key="avatar-group-overflow">
           +{overflowCount}

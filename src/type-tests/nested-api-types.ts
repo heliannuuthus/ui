@@ -10,7 +10,7 @@ import type {
   NavigationMenuLinkComponent,
   NavigationMenuLinkProps,
   NavigationMenuLinkSlots,
-  PaginationAriaLabels,
+  PaginationLabels,
 } from '../index';
 
 export const breadcrumbMenuItem: BreadcrumbMenuItem = {
@@ -18,7 +18,7 @@ export const breadcrumbMenuItem: BreadcrumbMenuItem = {
   label: 'Docs',
 };
 
-export const paginationAriaLabels: PaginationAriaLabels = {
+export const paginationLabels: PaginationLabels = {
   navigation: 'Pagination',
   next: 'Next page',
 };

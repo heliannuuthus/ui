@@ -56,8 +56,8 @@ const cases = [
     component: Case06,
     title: { en: 'Media content type', zh: '媒体内容类型' },
     description: {
-      en: 'mediaType explicitly distinguishes plain content, icons, and images so callers do not rely on node-shape inference.',
-      zh: 'mediaType 明确区分普通内容、图标和图片，避免调用方依赖节点形态推断样式。',
+      en: 'media.type explicitly distinguishes plain content, icons, and images so callers do not rely on node-shape inference.',
+      zh: 'media.type 明确区分普通内容、图标和图片，避免调用方依赖节点形态推断样式。',
     },
   },
   {
@@ -88,8 +88,8 @@ const cases = [
     component: Case10,
     title: { en: 'Custom item rendering', zh: '自定义列表项渲染' },
     description: {
-      en: 'renderItem receives the current ItemGroupEntry and index to replace whole-item rendering without changing the base Item contract.',
-      zh: 'renderItem 接收当前 ItemGroupEntry 和索引，用于改写整项渲染，而不是修改 Item 的基础属性。',
+      en: 'render receives the current ItemGroupEntry and index to replace whole-item rendering without changing the base Item contract.',
+      zh: 'render 接收当前 ItemGroupEntry 和索引，用于改写整项渲染，而不是修改 Item 的基础属性。',
     },
   },
 ];

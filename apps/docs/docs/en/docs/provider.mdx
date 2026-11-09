@@ -27,21 +27,23 @@ root.render(
 
 ## Set theme colors
 
-`theme.colors` supplies the base palette. In dark appearance, matching fields from `theme.darkColors` replace those values. Supply only the values that differ; omitted values keep the library defaults.
+`theme.colors.base` supplies the base palette. In dark appearance, matching fields from `theme.colors.dark` replace those values. A token omitted from `dark` keeps its base value; tokens omitted from both use the library defaults.
 
 ```tsx title="app-provider.tsx"
 <Provider
   appearance="system"
   theme={{
     colors: {
-      primary: 'oklch(0.56 0.18 255)',
-      primaryForeground: 'oklch(0.99 0 0)',
-      ring: 'oklch(0.62 0.16 255)',
-    },
-    darkColors: {
-      primary: 'oklch(0.72 0.14 255)',
-      primaryForeground: 'oklch(0.18 0.02 255)',
-      ring: 'oklch(0.72 0.14 255)',
+      base: {
+        primary: 'oklch(0.56 0.18 255)',
+        primaryForeground: 'oklch(0.99 0 0)',
+        ring: 'oklch(0.62 0.16 255)',
+      },
+      dark: {
+        primary: 'oklch(0.72 0.14 255)',
+        primaryForeground: 'oklch(0.18 0.02 255)',
+        ring: 'oklch(0.72 0.14 255)',
+      },
     },
     radius: '0.75rem',
   }}
@@ -61,7 +63,7 @@ Use `components` for component props repeated across many pages. An admin applic
   components={{
     Button: { size: 'sm' },
     Card: { variant: 'outline' },
-    Tooltip: { openDelay: 300, placement: 'top' },
+    Tooltip: { delay: { open: 300 }, placement: 'top' },
     ScrollArea: {
       scrollbar: { size: 'sm', visibility: 'auto' },
     },
@@ -91,7 +93,7 @@ A nested Provider inherits its parent configuration and replaces only the values
 ```tsx title="preview.tsx"
 <Provider appearance="system" components={{ Button: { size: 'sm' } }}>
   <AppShell>
-    <Provider theme={{ colors: { primary: 'oklch(0.62 0.2 25)' } }}>
+    <Provider theme={{ colors: { base: { primary: 'oklch(0.62 0.2 25)' } } }}>
       <PreviewPanel />
     </Provider>
   </AppShell>
@@ -121,4 +123,4 @@ A single configuration point removes repeated page props and gives theme and com
 - Keep page grids, content width, and responsive layout in application CSS.
 - Keep order, permission, and review state in application state management.
 - Use component `className`, `style`, or public slots for a one-off visual difference.
-- `useProvider` reads current appearance and direction. `useComponentDefaults` mainly supports library components consuming defaults; application pages rarely need to call it directly.
+- `useProvider` reads the public context: `appearance`, `resolvedAppearance`, `direction`, `theme`, and `components`. Use `resolvedAppearance` when synchronizing a document-level dark class; `appearance` may remain `system`.

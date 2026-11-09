@@ -40,18 +40,17 @@ type CommandProps = Omit<
   'children' | 'defaultValue' | 'onChange'
 > & {
   defaultValue?: string;
-  disablePointerSelection?: boolean;
+  pointerSelection?: boolean;
   dialog?: Omit<DialogProps, 'children'>;
-  emptyText?: React.ReactNode;
+  empty?: React.ReactNode;
   filter?: false | CommandFilter;
   groups: readonly CommandGroup[];
-  inputProps?: CommandInputProps;
+  input?: CommandInputProps;
   label?: string;
   loop?: boolean;
   onChange?: (value: string) => void;
-  placeholder?: string;
   value?: string;
-  vimBindings?: boolean;
+  vim?: boolean;
 };
 
 const getOptionKeywords = (option: CommandOption) => {
@@ -69,19 +68,21 @@ const getOptionKeywords = (option: CommandOption) => {
 const Command = ({
   className,
   dialog,
-  emptyText = '没有找到命令',
+  empty = '没有找到命令',
   filter,
   groups,
-  inputProps,
+  input,
   onChange,
-  placeholder = '搜索命令…',
+  pointerSelection,
+  vim,
   ...props
 }: CommandProps) => {
   const {
     className: inputClassName,
     onChange: onInputChange,
+    placeholder = '搜索命令…',
     ...otherInputProps
-  } = inputProps ?? {};
+  } = input ?? {};
   const command = (
     <CommandPrimitive
       data-slot="command"
@@ -92,6 +93,10 @@ const Command = ({
       filter={typeof filter === 'function' ? filter : undefined}
       onValueChange={onChange}
       shouldFilter={filter === false ? false : undefined}
+      disablePointerSelection={
+        pointerSelection === undefined ? undefined : !pointerSelection
+      }
+      vimBindings={vim}
       {...props}
     >
       <div data-slot="command-input-wrapper" className="p-1 pb-0">
@@ -119,7 +124,7 @@ const Command = ({
           data-slot="command-empty"
           className="flex flex-1 items-center justify-center py-6 text-center text-sm"
         >
-          {emptyText}
+          {empty}
         </CommandPrimitive.Empty>
         {groups.map((group, groupIndex) => (
           <React.Fragment key={groupIndex}>

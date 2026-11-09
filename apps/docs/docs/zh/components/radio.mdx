@@ -16,6 +16,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 - 候选项较少，并希望用户直接看到、比较所有选项。
 - 一组选项只允许选中一个值。
 
+受控值为空或没有匹配选项时，所有选项均不选中。`Form.Field` 字段未初始化或重置为空值时会保留该空状态，不会残留上一次的选择。
+
 ## 示例
 
 <RadioShowcase>
@@ -115,13 +117,13 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Radio',
       defaultValue: null,
       description: '扩展对应语义槽位的 className。',
-      name: 'classNames',
-      type: 'RadioClassNames',
+      name: 'classes',
+      type: 'RadioClasses',
     },
     {
       component: 'Radio',
       defaultValue: null,
-      description: '按与 classNames 相同的语义区域设置行内样式。',
+      description: '按与 classes 相同的语义区域设置行内样式。',
       name: 'styles',
       type: 'RadioStyles',
     },

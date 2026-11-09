@@ -280,7 +280,7 @@ type DropdownMenuEntry =
   | DropdownMenuCheckboxEntry
   | DropdownMenuRadioEntry;
 
-type DropdownMenuClassNames = {
+type DropdownMenuClasses = {
   content?: string;
 };
 
@@ -290,7 +290,7 @@ type DropdownMenuStyles = {
 
 type DropdownMenuProps = OpenStateProps & {
   align?: PopupAlign;
-  classNames?: DropdownMenuClassNames;
+  classes?: DropdownMenuClasses;
   disabled?: boolean;
   items: DropdownMenuEntry[];
   side?: PopupSide;
@@ -390,7 +390,7 @@ const DropdownMenu = ({
   align = 'start',
   side = 'bottom',
   size: sizeProp,
-  classNames,
+  classes,
   styles,
   ...props
 }: DropdownMenuProps) => {
@@ -409,7 +409,7 @@ const DropdownMenu = ({
             'min-w-40 **:data-[slot$=-item]:px-2.5 **:data-[slot$=-item]:py-1.5 **:data-[slot$=-item]:text-xs',
           size === 'lg' &&
             'min-w-56 **:data-[slot$=-item]:px-3.5 **:data-[slot$=-item]:py-2.5',
-          classNames?.content
+          classes?.content
         )}
         style={styles?.content}
       >
@@ -422,7 +422,7 @@ const DropdownMenu = ({
 export {
   DropdownMenu,
   type DropdownMenuCheckboxEntry,
-  type DropdownMenuClassNames,
+  type DropdownMenuClasses,
   type DropdownMenuEntry,
   type DropdownMenuItemEntry,
   type DropdownMenuLabelEntry,

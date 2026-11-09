@@ -38,13 +38,12 @@ const toggleVariants: (props?: ToggleVariantOptions) => string = cva(
 type ToggleVariantProps = VariantProps<typeof toggleVariants>;
 
 type ToggleProps = Omit<
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  React.ComponentProps<'button'>,
   'defaultValue' | 'onChange' | 'value'
 > &
   ToggleVariantProps & {
     value?: boolean;
     defaultValue?: boolean;
-    inputRef?: React.Ref<HTMLButtonElement>;
     onChange?: (value: boolean) => void;
     required?: boolean;
   };
@@ -66,6 +65,7 @@ type ToggleGroupProps<Value extends string = string> = Omit<
   ToggleVariantProps & {
     defaultValue?: readonly Value[];
     disabled?: boolean;
+    inputRef?: React.Ref<HTMLButtonElement>;
     items: readonly ToggleGroupOption<Value>[];
     multiple?: boolean;
     onChange?: (value: Value[]) => void;
@@ -80,9 +80,9 @@ const ToggleRoot = ({
   defaultValue,
   disabled,
   id,
-  inputRef,
   onChange,
   onBlur,
+  ref,
   required,
   value,
   variant: variantProp,
@@ -92,7 +92,7 @@ const ToggleRoot = ({
   const variant = variantProp ?? defaults.variant ?? 'default';
   const formControl = useFormControl<boolean>();
   const controlRef = useMergedRefs(
-    inputRef,
+    ref,
     formControl?.ref as React.Ref<HTMLButtonElement> | undefined
   );
 
@@ -134,6 +134,7 @@ const ToggleGroup = <Value extends string = string>({
   defaultValue,
   disabled,
   id,
+  inputRef,
   items,
   onChange,
   onBlur,
@@ -145,6 +146,11 @@ const ToggleGroup = <Value extends string = string>({
   const defaults = useComponentDefaults('Toggle');
   const variant = variantProp ?? defaults.variant ?? 'default';
   const formControl = useFormControl<Value[]>();
+  const controlRef = useMergedRefs(
+    inputRef,
+    formControl?.ref as React.Ref<HTMLButtonElement> | undefined
+  );
+  const firstEnabledValue = items.find((item) => !item.disabled)?.value;
 
   return (
     <ToggleGroupPrimitive
@@ -190,6 +196,7 @@ const ToggleGroup = <Value extends string = string>({
           )}
           key={value}
           value={value}
+          ref={value === firstEnabledValue ? controlRef : undefined}
           {...itemProps}
         >
           {label}

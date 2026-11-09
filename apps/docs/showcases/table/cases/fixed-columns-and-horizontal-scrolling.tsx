@@ -3,7 +3,7 @@ import { Button, Table } from '@heliannuuthus/ui';
 
 const ZhExample = (() => {
   return () => (
-    <Table.Primitive classNames={{ table: 'min-w-[960px] table-fixed' }}>
+    <Table.Primitive classes={{ table: 'min-w-[960px] table-fixed' }}>
       <Table.Header>
         <Table.Row>
           <Table.Head fixed="start" className="w-40">
@@ -34,7 +34,7 @@ const ZhExample = (() => {
 
 const EnExample = (() => {
   return () => (
-    <Table.Primitive classNames={{ table: 'min-w-[960px] table-fixed' }}>
+    <Table.Primitive classes={{ table: 'min-w-[960px] table-fixed' }}>
       <Table.Header>
         <Table.Row>
           <Table.Head fixed="start" className="w-40">

@@ -19,7 +19,7 @@ type ProgressProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   locale?: Intl.LocalesArgument;
   max?: number;
   min?: number;
-  showValue?: boolean | ((value: number | null) => React.ReactNode);
+  display?: boolean | ((value: number | null) => React.ReactNode);
   value: number | null;
 };
 
@@ -32,7 +32,7 @@ const Progress = (progressProps: ProgressProps): React.JSX.Element => {
     children,
     effect = defaults.effect ?? 'none',
     label,
-    showValue = false,
+    display = false,
     value,
     ...props
   } = progressProps;
@@ -46,11 +46,11 @@ const Progress = (progressProps: ProgressProps): React.JSX.Element => {
       {...props}
     >
       {label != null ? <ProgressLabel>{label}</ProgressLabel> : null}
-      {showValue ? (
+      {display ? (
         <ProgressValue>
           {(_formattedValue, currentValue) =>
-            typeof showValue === 'function'
-              ? showValue(currentValue)
+            typeof display === 'function'
+              ? display(currentValue)
               : currentValue == null
                 ? '—'
                 : `${currentValue}%`

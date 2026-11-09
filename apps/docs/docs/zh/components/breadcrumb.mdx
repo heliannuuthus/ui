@@ -46,6 +46,13 @@ import { ApiTable } from '@docs/rspress/api-table';
   }}
   rows={[
     {
+      component: 'BreadcrumbCollapseOptions',
+      defaultValue: null,
+      description: "设置触发折叠的路径数量阈值。",
+      name: 'limit',
+      type: "number",
+    },
+    {
       component: 'Breadcrumb',
       defaultValue: null,
       description: '设置每一级的名称、链接、图标、禁用状态和下拉菜单。',

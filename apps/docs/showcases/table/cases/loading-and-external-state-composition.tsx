@@ -63,7 +63,7 @@ const createExample = (locale: 'en' | 'zh') => {
   const releaseColumns: Table.Column<ReleaseRecord>[] = [
     {
       accessor: 'version',
-      classNames: { cell: 'font-medium' },
+      classes: { cell: 'font-medium' },
       fixed: 'start',
       header: copy('版本'),
       sortable: true,
@@ -106,7 +106,7 @@ const createExample = (locale: 'en' | 'zh') => {
           </Button>
           <DropdownMenu
             align="end"
-            classNames={{ content: 'w-44' }}
+            classes={{ content: 'w-44' }}
             trigger={
               <Button
                 aria-label={copy(`${row.version} 更多操作`)}
@@ -179,7 +179,7 @@ const createExample = (locale: 'en' | 'zh') => {
     return (
       <Table
         className="display-table-status"
-        classNames={{ state: 'display-table-status-cell' }}
+        classes={{ state: 'display-table-status-cell' }}
         columns={releaseColumns.slice(0, 3)}
         data={releaseRecords.slice(0, 2)}
         loading

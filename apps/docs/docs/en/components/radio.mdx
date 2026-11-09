@@ -16,6 +16,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 - There are fewer candidates, and you want users to see and compare all options directly.
 - A set of options allows only one value to be selected.
 
+An empty or unmatched controlled value leaves every option unchecked. A `Form.Field` that is uninitialized or reset to an empty value preserves that empty state rather than retaining the previous selection.
+
 ## Examples
 
 <RadioShowcase>
@@ -123,14 +125,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Radio',
       defaultValue: null,
       description: 'Extend the className of the corresponding semantic slot.',
-      name: 'classNames',
-      type: 'RadioClassNames',
+      name: 'classes',
+      type: 'RadioClasses',
     },
     {
       component: 'Radio',
       defaultValue: null,
       description:
-        'Set inline styles using the same semantic slots as classNames.',
+        'Set inline styles using the same semantic slots as classes.',
       name: 'styles',
       type: 'RadioStyles',
     },

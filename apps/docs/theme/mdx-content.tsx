@@ -18,8 +18,12 @@ import {
 } from './mdx-directives';
 
 const heading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
-  const Heading = ({ children, ...props }: ComponentProps<'h1'>) => (
-    <Typography.Title level={level} {...props}>
+  const Heading = ({ children, className, ...props }: ComponentProps<'h1'>) => (
+    <Typography.Title
+      className={cn('docs-mdx-heading', className)}
+      level={level}
+      {...props}
+    >
       {children}
     </Typography.Title>
   );
@@ -79,7 +83,16 @@ const components = {
       <Typography.Text as="span">{children}</Typography.Text>
     </li>
   ),
-  p: (props: ComponentProps<'p'>) => <Typography.Text as="p" {...props} />,
+  ol: ({ className, ...props }: ComponentProps<'ol'>) => (
+    <ol className={cn('docs-mdx-list', className)} {...props} />
+  ),
+  p: ({ className, ...props }: ComponentProps<'p'>) => (
+    <Typography.Text
+      as="p"
+      className={cn('docs-mdx-paragraph', className)}
+      {...props}
+    />
+  ),
   pre: ({
     children,
     lang,
@@ -96,20 +109,31 @@ const components = {
   table: ({ className, ...props }: ComponentProps<'table'>) => (
     <Table.Primitive
       className="docs-mdx-table-wrap"
-      classNames={{ table: cn('docs-mdx-table', className) }}
+      classes={{ table: cn('docs-mdx-table', className) }}
       {...props}
     />
   ),
   tbody: (props: ComponentProps<'tbody'>) => <Table.Body {...props} />,
-  td: ({ align, ...props }: ComponentProps<'td'>) => (
-    <Table.Cell align={tableAlign(align)} {...props} />
+  td: ({ align, className, ...props }: ComponentProps<'td'>) => (
+    <Table.Cell
+      align={tableAlign(align)}
+      className={cn('docs-mdx-table-cell', className)}
+      {...props}
+    />
   ),
   tfoot: (props: ComponentProps<'tfoot'>) => <Table.Footer {...props} />,
-  th: ({ align, ...props }: ComponentProps<'th'>) => (
-    <Table.Head align={tableAlign(align)} {...props} />
+  th: ({ align, className, ...props }: ComponentProps<'th'>) => (
+    <Table.Head
+      align={tableAlign(align)}
+      className={cn('docs-mdx-table-head', className)}
+      {...props}
+    />
   ),
   thead: (props: ComponentProps<'thead'>) => <Table.Header {...props} />,
   tr: (props: ComponentProps<'tr'>) => <Table.Row {...props} />,
+  ul: ({ className, ...props }: ComponentProps<'ul'>) => (
+    <ul className={cn('docs-mdx-list', className)} {...props} />
+  ),
 };
 
 export const DocsMdxProvider = ({ children }: { children: ReactNode }) => (

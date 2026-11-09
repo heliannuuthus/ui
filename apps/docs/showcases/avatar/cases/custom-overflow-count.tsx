@@ -20,11 +20,13 @@ const createExample = (locale: 'en' | 'zh') => {
       <Avatar.Group
         items={avatarPeople.map((person) => ({
           alt: person.initials,
-          fallback: person.initials,
-          fallbackProps: { className: `display-avatar-tone-${person.tone}` },
+          fallback: {
+            children: person.initials,
+            className: `display-avatar-tone-${person.tone}`,
+          },
         }))}
         max={3}
-        renderCount={custom ? (count) => <Tag>+{count}</Tag> : undefined}
+        overflow={custom ? (count) => <Tag>+{count}</Tag> : undefined}
         shape="square"
         size="lg"
       />

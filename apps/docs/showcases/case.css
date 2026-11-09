@@ -77,13 +77,6 @@
   justify-content: center;
 }
 
-.component-case-loading {
-  display: grid;
-  min-height: 8rem;
-  place-items: center;
-  color: var(--muted-foreground);
-}
-
 .data-field-hint {
   color: var(--muted-foreground);
   font-size: 0.75rem;

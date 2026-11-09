@@ -11,8 +11,8 @@ const createExample = (locale: 'en' | 'zh') => {
   const DialogReleaseDemo = () => {
     return (
       <Dialog
-        cancelText={copy('取消')}
-        confirmText={copy('确认安排')}
+        cancel={{ label: copy('取消') }}
+        confirm={{ label: copy('确认安排') }}
         description={copy('选择发布时间，并为值班成员补充本次发布说明。')}
         title={copy('安排生产环境发布')}
         trigger={

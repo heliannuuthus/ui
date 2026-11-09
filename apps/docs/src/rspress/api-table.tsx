@@ -174,35 +174,6 @@ const referencesTypeGroup = (value: string, name: string) =>
     `(^|[^A-Za-z0-9_$])${escapeRegularExpression(name)}(?=$|[^A-Za-z0-9_$.])`
   ).test(value);
 
-// Keep component API tables focused on the decisions consumers need to make.
-// These React/HTML plumbing props remain supported by the components and types;
-// examples and accessibility guidance document them where they are relevant.
-const hiddenApiTablePropertyNames = new Set([
-  'autoComplete',
-  'autoFocus',
-  'children',
-  'className',
-  'form',
-  'id',
-  'inputRef',
-  'name',
-  'onBlur',
-  'onFocus',
-  'parent',
-  'pattern',
-  'readOnly',
-  'ref',
-  'required',
-  'role',
-  'style',
-  'tabIndex',
-]);
-
-const isApiTablePropertyVisible = (name: string) =>
-  !hiddenApiTablePropertyNames.has(name) &&
-  !name.startsWith('aria-') &&
-  !name.startsWith('data-');
-
 const ApiTypePopoverContent = ({
   labels,
   name,
@@ -327,7 +298,7 @@ const ApiTypeValue = ({
     return (
       <Popover
         align="start"
-        classNames={{ content: 'docs-api-type-popover' }}
+        classes={{ content: 'docs-api-type-popover' }}
         content={
           <ApiTypePopoverContent
             labels={labels}
@@ -337,7 +308,7 @@ const ApiTypeValue = ({
         }
         key={`${part}-${index}`}
         side="top"
-        sideOffset={8}
+        offset={{ side: 8 }}
         trigger={
           <button
             aria-label={`${labels.type}: ${part}`}
@@ -360,9 +331,8 @@ export const ApiTable = ({
   rows: ApiTableRow[];
 }) => {
   const groups = new Map<string, ApiTableRow[]>();
-  const visibleRows = rows.filter((row) => isApiTablePropertyVisible(row.name));
 
-  visibleRows.forEach((row) => {
+  rows.forEach((row) => {
     const componentRows = groups.get(row.component);
     if (componentRows) {
       componentRows.push(row);
@@ -373,7 +343,7 @@ export const ApiTable = ({
 
   const referencedGroups = new Set(
     [...groups.keys()].filter((name) =>
-      visibleRows.some(
+      rows.some(
         (row) => row.component !== name && referencesTypeGroup(row.type, name)
       )
     )
@@ -409,7 +379,7 @@ export const ApiTable = ({
           </Typography.Title>
           <Table.Primitive
             className="docs-api-table-wrap"
-            classNames={{ table: 'docs-api-table' }}
+            classes={{ table: 'docs-api-table' }}
           >
             <colgroup>
               <col className="docs-api-table-name" />

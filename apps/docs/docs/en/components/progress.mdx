@@ -78,7 +78,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description:
         'Set the progress name and decide whether or how to display the formatted value.',
-      name: 'showValue',
+      name: 'display',
       type: 'boolean | ((value: number | null) => ReactNode)',
     },
     {
@@ -111,7 +111,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       description:
         'Configure numeric formatting and full progress text for assistive technology reading.',
       name: 'getAriaValueText',
-      type: '(value: number, min: number, max: number) => string',
+      type: '(formattedValue: string | null, value: number | null) => string',
     },
     {
       component: 'Progress',

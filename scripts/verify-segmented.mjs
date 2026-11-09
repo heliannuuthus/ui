@@ -7,7 +7,7 @@ import { Segmented } from '../dist/segmented.js';
 const markup = renderToStaticMarkup(
   createElement(Segmented, {
     'aria-label': 'View',
-    classNames: { indicator: 'indicator-slot', item: 'item-slot' },
+    classes: { indicator: 'indicator-slot', item: 'item-slot' },
     defaultValue: 'board',
     name: 'view',
     options: [

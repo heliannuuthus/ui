@@ -24,9 +24,9 @@ export default function ExampleCase({
 
   return (
     <div className="demo-preview demo-preview-toast">
-      <Toast.Provider scope="local">
+      <Toast.Provider scope="local" limit={3} rich closable>
         <WorkspaceAction {...copy} />
-        <Toast.Toaster position="top-right" richColors scope="local" />
+        <Toast.Toaster position="top-right" rich scope="local" />
       </Toast.Provider>
     </div>
   );

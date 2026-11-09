@@ -78,7 +78,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description:
         'Sets the accessible notification name and is required for dot mode.',
-      name: 'indicatorLabel',
+      name: 'label',
       type: 'string',
     },
     {
@@ -107,14 +107,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Badge',
       defaultValue: null,
       description: 'Extend the className of the corresponding semantic slot.',
-      name: 'classNames',
-      type: 'BadgeClassNames',
+      name: 'classes',
+      type: 'BadgeClasses',
     },
     {
       component: 'Badge',
       defaultValue: null,
       description:
-        'Set inline styles using the same semantic slots as classNames.',
+        'Set inline styles using the same semantic slots as classes.',
       name: 'styles',
       type: 'BadgeStyles',
     },
@@ -123,8 +123,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## Accessibility
 
-- A dot has no visible text, so indicatorLabel must describe the notification.
-- Counts have visible text; add indicatorLabel when their meaning is still unclear.
+- A dot has no visible text, so label must describe the notification.
+- Counts have visible text; add label when their meaning is still unclear.
 - Badge supports standard span, ARIA, and data attributes and events, and forwards a span ref.
 
 ## Avoid

@@ -5,7 +5,7 @@ import { Mail } from 'lucide-react';
 const ZhExample = (() => {
   return () => (
     <>
-      <Badge indicator={5} indicatorLabel="5 条未读消息">
+      <Badge indicator={5} label="5 条未读消息">
         <Button aria-label="查看消息" size="icon" variant="outline">
           <Mail />
         </Button>
@@ -20,7 +20,7 @@ const ZhExample = (() => {
 const EnExample = (() => {
   return () => (
     <>
-      <Badge indicator={5} indicatorLabel="5 unread messages">
+      <Badge indicator={5} label="5 unread messages">
         <Button aria-label="View messages" size="icon" variant="outline">
           <Mail />
         </Button>

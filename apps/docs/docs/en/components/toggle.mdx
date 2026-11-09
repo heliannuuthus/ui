@@ -120,11 +120,19 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: "'horizontal' | 'vertical'",
     },
     {
+      component: 'Toggle.Group',
+      defaultValue: null,
+      description:
+        'References the first non-disabled option button and supports Form error focus and setFocus; null when no such option exists.',
+      name: 'inputRef',
+      type: 'React.Ref<HTMLButtonElement>',
+    },
+    {
       component: 'Toggle',
       defaultValue: null,
       description:
-        'Configure the component public state, behavior, or extension point.',
-      name: 'inputRef',
+        'Accesses the rendered toggle button and supports Form focus.',
+      name: 'ref',
       type: 'React.Ref<HTMLButtonElement>',
     },
     {

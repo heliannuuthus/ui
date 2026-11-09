@@ -53,7 +53,7 @@ const createExample = (locale: 'en' | 'zh') => {
   const releaseColumns: Table.Column<ReleaseRecord>[] = [
     {
       accessor: 'version',
-      classNames: { cell: 'font-medium' },
+      classes: { cell: 'font-medium' },
       fixed: 'start',
       header: copy('版本'),
       sortable: true,
@@ -96,7 +96,7 @@ const createExample = (locale: 'en' | 'zh') => {
           </Button>
           <DropdownMenu
             align="end"
-            classNames={{ content: 'w-44' }}
+            classes={{ content: 'w-44' }}
             trigger={
               <Button
                 aria-label={copy(`${row.version} 更多操作`)}
@@ -135,28 +135,28 @@ const createExample = (locale: 'en' | 'zh') => {
           footer={(rows) => copy(`当前页 ${rows.length} 条发布记录`)}
           rowKey="version"
           search={{
-            columnKeys: ['version'],
+            columns: ['version'],
             placeholder: copy('筛选版本…'),
           }}
           pagination={{
-            ariaLabels: {
+            labels: {
               more: copy('更多页面'),
               navigation: copy('分页'),
               next: copy('前往下一页'),
               previous: copy('前往上一页'),
             },
             next: copy('下一页'),
-            pageSize: 3,
+            limit: { value: 3 },
             previous: copy('上一页'),
             summary:
               summary === 'hidden'
                 ? false
                 : summary === 'custom'
-                  ? (total, current, pageCount) =>
-                      copy(`发布 ${current}/${pageCount} · 共 ${total} 条记录`)
+                  ? (total, page, pages) =>
+                      copy(`发布 ${page}/${pages} · 共 ${total} 条记录`)
                   : true,
           }}
-          classNames={{ table: 'min-w-[820px]' }}
+          classes={{ table: 'min-w-[820px]' }}
         />
       </div>
     );

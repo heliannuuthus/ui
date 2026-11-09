@@ -16,6 +16,8 @@ import { ApiTable } from '@docs/rspress/api-table';
 - Primary use: Select a numeric value in a continuous or discrete range.
 - When you need to override the default, controlled, disabled and narrow screen states.
 
+Without `value` or `defaultValue`, Slider renders one thumb at `min` (default `0`). Supply an array for a range. Inside `Form.Field`, initialize the value through the form rather than the child control's `defaultValue`. `aria-label`, `aria-labelledby`, and `aria-describedby` apply to every focusable range input; `Form.Field` supplies its label and description relationships automatically.
+
 ## Examples
 
 <SliderShowcase>
@@ -61,31 +63,17 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Slider',
       defaultValue: null,
       description:
-        'Displays an icon at the start of a track and engages elastic edge feedback.',
-      name: 'startIcon',
-      type: 'ReactNode',
+        'Configure the start icon and label with elastic edge feedback; visual labels remain hidden from assistive technology.',
+      name: 'start',
+      type: 'SliderEdge',
     },
     {
       component: 'Slider',
       defaultValue: null,
       description:
-        'Display icons at track endpoints and engage elastic edge feedback.',
-      name: 'endIcon',
-      type: 'ReactNode',
-    },
-    {
-      component: 'Slider',
-      defaultValue: null,
-      description: 'Display a text label at the start of the track.',
-      name: 'startLabel',
-      type: 'ReactNode',
-    },
-    {
-      component: 'Slider',
-      defaultValue: null,
-      description: 'Display a text label at the end of the track.',
-      name: 'endLabel',
-      type: 'ReactNode',
+        'Configure the end icon and label with elastic edge feedback; visual labels remain hidden from assistive technology.',
+      name: 'end',
+      type: 'SliderEdge',
     },
     {
       component: 'Slider',
@@ -97,7 +85,7 @@ import { ApiTable } from '@docs/rspress/api-table';
     },
     {
       component: 'Slider',
-      defaultValue: null,
+      defaultValue: 'min',
       description:
         'Sets the initial slider value or values ​​in uncontrolled mode.',
       name: 'defaultValue',
@@ -114,7 +102,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Slider',
       defaultValue: null,
       description: 'Called after a pointer or keyboard adjustment completes.',
-      name: 'onChangeComplete',
+      name: 'onCommit',
       type: '(value: number | number[]) => void',
     },
     {
@@ -214,7 +202,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description:
         'Configure the component public state, behavior, or extension point.',
-      name: 'thumbCollisionBehavior',
+      name: 'collision',
       type: "'none' | 'push' | 'swap'",
     },
     {

@@ -14,11 +14,11 @@ import { useComponentDefaults } from './provider';
 type InputNumberSize = 'sm' | 'default' | 'lg';
 
 type InputNumberControls = {
-  decrement?: React.ReactNode;
-  increment?: React.ReactNode;
+  decrement?: { content?: React.ReactNode; label?: string };
+  increment?: { content?: React.ReactNode; label?: string };
 };
 
-type InputNumberClassNames = {
+type InputNumberClasses = {
   controls?: string;
   decrement?: string;
   group?: string;
@@ -29,7 +29,7 @@ type InputNumberClassNames = {
 };
 
 type InputNumberStyles = {
-  [Slot in keyof InputNumberClassNames]?: React.CSSProperties;
+  [Slot in keyof InputNumberClasses]?: React.CSSProperties;
 };
 
 type InputNumberProps = Omit<
@@ -43,16 +43,16 @@ type InputNumberProps = Omit<
   | 'onFocus'
   | 'onValueChange'
   | 'onValueCommitted'
+  | 'allowWheelScrub'
+  | 'snapOnStep'
 > & {
   autoComplete?: React.InputHTMLAttributes<HTMLInputElement>['autoComplete'];
   autoFocus?: boolean;
   className?: string;
-  classNames?: InputNumberClassNames;
+  classes?: InputNumberClasses;
   controls?: boolean | InputNumberControls;
-  decrementLabel?: string;
   defaultValue?: number | null;
-  incrementLabel?: string;
-  inputProps?: Omit<
+  input?: Omit<
     NumberField.Input.Props,
     | 'aria-describedby'
     | 'aria-errormessage'
@@ -76,13 +76,15 @@ type InputNumberProps = Omit<
   inputMode?: React.InputHTMLAttributes<HTMLInputElement>['inputMode'];
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
   onChange?: (value: number | null) => void;
-  onChangeComplete?: (value: number | null) => void;
+  onCommit?: (value: number | null) => void;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
   placeholder?: string;
   prefix?: React.ReactNode;
   size?: InputNumberSize;
   suffix?: React.ReactNode;
   styles?: InputNumberStyles;
+  wheel?: NumberField.Root.Props['allowWheelScrub'];
+  snap?: NumberField.Root.Props['snapOnStep'];
 };
 
 type InputNumberProviderDefaults = Pick<InputNumberProps, 'size'>;
@@ -96,20 +98,18 @@ const InputNumber = ({
   autoComplete,
   autoFocus,
   className,
-  classNames,
+  classes,
   controls = true,
-  decrementLabel = 'Decrease value',
   defaultValue,
   disabled,
   id,
-  incrementLabel = 'Increase value',
-  inputProps,
+  input,
   inputRef,
   inputMode,
   name,
   onBlur,
   onChange,
-  onChangeComplete,
+  onCommit,
   onFocus,
   placeholder,
   prefix,
@@ -120,13 +120,15 @@ const InputNumber = ({
   suffix,
   styles,
   value,
+  wheel,
+  snap,
   ...props
 }: InputNumberProps) => {
   const defaults = useComponentDefaults('Input');
   const size = sizeProp ?? defaults.Number?.size ?? 'default';
   const formControl = useFormControl<number | null | undefined>();
   const controlRef = useMergedRefs(
-    inputRef,
+    input?.ref,
     formControl?.ref as React.Ref<HTMLInputElement> | undefined
   );
   const controlIcons = typeof controls === 'object' ? controls : undefined;
@@ -136,19 +138,21 @@ const InputNumber = ({
   return (
     <NumberField.Root
       {...props}
+      allowWheelScrub={wheel}
+      snapOnStep={snap}
       className={cn('group/input-number inline-flex w-full min-w-0', className)}
       data-size={size}
       data-slot="input-number"
       defaultValue={formControl ? undefined : (defaultValue ?? undefined)}
       disabled={isDisabled}
       id={id ?? formControl?.controlId}
-      inputRef={controlRef}
+      inputRef={inputRef}
       name={formControl?.name ?? name}
       onValueChange={(nextValue) => {
         onChange?.(nextValue);
         formControl?.onChange(nextValue);
       }}
-      onValueCommitted={onChangeComplete}
+      onValueCommitted={onCommit}
       readOnly={readOnly}
       ref={ref}
       required={isRequired}
@@ -157,7 +161,7 @@ const InputNumber = ({
       <NumberField.Group
         className={cn(
           'relative flex h-9 w-full min-w-0 items-stretch overflow-hidden rounded-3xl border border-input bg-background transition-[color,box-shadow,background-color,border-color] outline-none hover:border-primary/35 focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/20 has-[[aria-invalid=true]]:border-destructive has-[[aria-invalid=true]]:ring-3 has-[[aria-invalid=true]]:ring-destructive/20 data-disabled:cursor-not-allowed data-disabled:bg-muted/50 data-disabled:opacity-60 group-data-[size=lg]/input-number:h-10 group-data-[size=sm]/input-number:h-8 dark:has-[[aria-invalid=true]]:border-destructive/50 dark:has-[[aria-invalid=true]]:ring-destructive/40',
-          classNames?.group
+          classes?.group
         )}
         data-slot="input-number-group"
         style={styles?.group}
@@ -166,7 +170,7 @@ const InputNumber = ({
           <span
             className={cn(
               'flex shrink-0 items-center pl-3 text-sm text-muted-foreground [&_svg:not([class*=size-])]:size-4',
-              classNames?.prefix
+              classes?.prefix
             )}
             data-slot="input-number-prefix"
             style={styles?.prefix}
@@ -175,7 +179,8 @@ const InputNumber = ({
           </span>
         ) : null}
         <NumberField.Input
-          {...inputProps}
+          {...input}
+          ref={controlRef}
           aria-describedby={mergeIds(
             ariaDescribedBy,
             formControl?.descriptionId,
@@ -192,24 +197,24 @@ const InputNumber = ({
             prefix != null && 'pl-2',
             suffix != null && 'pr-2',
             controls !== false && 'pr-2',
-            classNames?.input
+            classes?.input
           )}
           data-slot="input-number-input"
           inputMode={inputMode}
           onBlur={(event) => {
-            inputProps?.onBlur?.(event);
+            input?.onBlur?.(event);
             onBlur?.(event);
             formControl?.onBlur();
           }}
           onFocus={onFocus}
           placeholder={placeholder}
-          style={{ ...inputProps?.style, ...styles?.input }}
+          style={{ ...input?.style, ...styles?.input }}
         />
         {suffix != null ? (
           <span
             className={cn(
               'flex shrink-0 items-center pr-3 text-sm text-muted-foreground [&_svg:not([class*=size-])]:size-4',
-              classNames?.suffix
+              classes?.suffix
             )}
             data-slot="input-number-suffix"
             style={styles?.suffix}
@@ -221,34 +226,34 @@ const InputNumber = ({
           <span
             className={cn(
               'flex w-7 shrink-0 flex-col border-l border-input',
-              classNames?.controls
+              classes?.controls
             )}
             data-slot="input-number-controls"
             style={styles?.controls}
           >
             <NumberField.Increment
-              aria-label={incrementLabel}
+              aria-label={controlIcons?.increment?.label ?? 'Increase value'}
               className={cn(
                 'flex min-h-0 flex-1 cursor-pointer items-center justify-center border-b border-input text-muted-foreground outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:z-10 focus-visible:bg-accent focus-visible:text-accent-foreground disabled:pointer-events-none',
-                classNames?.increment
+                classes?.increment
               )}
               data-slot="input-number-increment"
               style={styles?.increment}
             >
-              {controlIcons?.increment ?? (
+              {controlIcons?.increment?.content ?? (
                 <ChevronUpIcon aria-hidden="true" className="size-3" />
               )}
             </NumberField.Increment>
             <NumberField.Decrement
-              aria-label={decrementLabel}
+              aria-label={controlIcons?.decrement?.label ?? 'Decrease value'}
               className={cn(
                 'flex min-h-0 flex-1 cursor-pointer items-center justify-center text-muted-foreground outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:z-10 focus-visible:bg-accent focus-visible:text-accent-foreground disabled:pointer-events-none',
-                classNames?.decrement
+                classes?.decrement
               )}
               data-slot="input-number-decrement"
               style={styles?.decrement}
             >
-              {controlIcons?.decrement ?? (
+              {controlIcons?.decrement?.content ?? (
                 <ChevronDownIcon aria-hidden="true" className="size-3" />
               )}
             </NumberField.Decrement>
@@ -263,7 +268,7 @@ registerFormControl(InputNumber);
 
 export { InputNumber };
 export type {
-  InputNumberClassNames,
+  InputNumberClasses,
   InputNumberControls,
   InputNumberProps,
   InputNumberProviderDefaults,

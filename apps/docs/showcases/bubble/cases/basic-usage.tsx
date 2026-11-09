@@ -5,8 +5,8 @@ const ZhExample = (() => {
   return () => (
     <Bubble
       align="end"
-      content="已经补充完成，可以重新评审。"
-      reactions="✓ 2"
+      content={{ children: '已经补充完成，可以重新评审。' }}
+      reactions={{ children: '✓ 2' }}
       variant="elevated"
     />
   );
@@ -16,8 +16,10 @@ const EnExample = (() => {
   return () => (
     <Bubble
       align="end"
-      content="The update is complete and ready for another review."
-      reactions="✓ 2"
+      content={{
+        children: 'The update is complete and ready for another review.',
+      }}
+      reactions={{ children: '✓ 2' }}
       variant="elevated"
     />
   );

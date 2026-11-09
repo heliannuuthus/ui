@@ -259,6 +259,7 @@ const FormRoot = <
   form,
   noValidate = true,
   onInvalid,
+  onReset,
   onSubmit,
   onValuesChange,
   ...props
@@ -286,6 +287,13 @@ const FormRoot = <
           data-submitting={methods.formState.isSubmitting || undefined}
           className={className}
           noValidate={noValidate}
+          onReset={(event) => {
+            onReset?.(event);
+            if (!event.defaultPrevented) {
+              event.preventDefault();
+              methods.reset();
+            }
+          }}
           onSubmit={methods.handleSubmit(onSubmit, onInvalid)}
           {...props}
         >
@@ -329,6 +337,7 @@ const FormField = <
     name,
     rules,
   });
+  const errorMessageId = fieldState.error?.message ? messageId : undefined;
   const fieldRef = field.ref;
   const focusRef = React.useCallback<React.RefCallback<FormFieldFocusTarget>>(
     (instance) => fieldRef(instance),
@@ -341,10 +350,7 @@ const FormField = <
     : null;
   const mergedChildRef = useMergedRefs(childElement?.props.ref, focusRef);
   const resolvedControlId = childElement?.props.id ?? controlId;
-  const describedBy = mergeIds(
-    descriptionId,
-    fieldState.invalid ? messageId : undefined
-  );
+  const describedBy = mergeIds(descriptionId, errorMessageId);
   const controlContext: FormControlContextValue<
     FieldPathValue<TFieldValues, TName>
   > = {
@@ -353,7 +359,7 @@ const FormField = <
     disabled: Boolean(field.disabled),
     invalid: fieldState.invalid,
     labelId,
-    messageId: fieldState.invalid ? messageId : undefined,
+    messageId: errorMessageId,
     name: field.name,
     onBlur: field.onBlur,
     onChange: field.onChange,
@@ -374,8 +380,7 @@ const FormField = <
         describedBy
       ),
       'aria-errormessage':
-        (fieldState.invalid ? messageId : undefined) ??
-        childElement.props['aria-errormessage'],
+        errorMessageId ?? childElement.props['aria-errormessage'],
       'aria-invalid':
         fieldState.invalid || childElement.props['aria-invalid'] || undefined,
       'aria-labelledby': mergeIds(

@@ -7,7 +7,7 @@ const ZhExample = (() => {
     <Attachment
       title="web-console.tgz"
       description="8.4 MB · 正在校验"
-      media={<FileArchive />}
+      media={{ content: <FileArchive /> }}
       state="processing"
     />
   );
@@ -18,7 +18,7 @@ const EnExample = (() => {
     <Attachment
       title="web-console.tgz"
       description="8.4 MB · Verifying"
-      media={<FileArchive />}
+      media={{ content: <FileArchive /> }}
       state="processing"
     />
   );

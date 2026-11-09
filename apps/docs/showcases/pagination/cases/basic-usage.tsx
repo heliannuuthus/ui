@@ -23,15 +23,15 @@ const createExample = (locale: 'en' | 'zh') => {
           </strong>
         </PageSummary>
         <Pagination
-          ariaLabels={{
+          labels={{
             more: copy('更多页面'),
             navigation: copy('分页'),
             next: copy('前往下一页'),
             previous: copy('前往上一页'),
           }}
-          current={page}
+          page={page}
           onChange={setPage}
-          pageCount={5}
+          pages={5}
         />
       </div>
     );

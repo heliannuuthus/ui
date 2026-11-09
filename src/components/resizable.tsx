@@ -9,21 +9,21 @@ type ResizableItemKey = string | number;
 
 type ResizableSeparatorRenderProps = {
   index: number;
-  itemKey: ResizableItemKey;
-  nextItemKey: ResizableItemKey;
+  before: ResizableItemKey;
+  after: ResizableItemKey;
   orientation: NonNullable<ResizablePrimitive.GroupProps['orientation']>;
 };
 
 type ResizableSeparator =
   React.ReactNode | ((props: ResizableSeparatorRenderProps) => React.ReactNode);
 
-type ResizableClassNames = {
+type ResizableClasses = {
   panel?: string;
   separator?: string;
 };
 
 type ResizableStyles = {
-  [Slot in keyof ResizableClassNames]?: React.CSSProperties;
+  [Slot in keyof ResizableClasses]?: React.CSSProperties;
 };
 
 type ResizableItemOnResize = (
@@ -49,30 +49,52 @@ type ResizableItem = Pick<
   size?: ResizableItemSize;
 };
 
-type ResizableProps = Omit<ResizablePrimitive.GroupProps, 'children'> & {
-  classNames?: ResizableClassNames;
+type ResizableLayout = {
+  defaultValue?: ResizablePrimitive.GroupProps['defaultLayout'];
+  onChange?: ResizablePrimitive.GroupProps['onLayoutChange'];
+  onCommit?: ResizablePrimitive.GroupProps['onLayoutChanged'];
+};
+
+type ResizableTarget = ResizablePrimitive.GroupProps['resizeTargetMinimumSize'];
+
+type ResizableProps = Omit<
+  ResizablePrimitive.GroupProps,
+  | 'children'
+  | 'defaultLayout'
+  | 'onLayoutChange'
+  | 'onLayoutChanged'
+  | 'resizeTargetMinimumSize'
+  | 'disableCursor'
+> & {
+  classes?: ResizableClasses;
+  cursor?: boolean;
   items: ResizableItem[];
+  layout?: ResizableLayout;
   separator?: ResizableSeparator;
   styles?: ResizableStyles;
+  target?: ResizableTarget;
 };
 
 const Resizable = ({
   className,
-  classNames,
+  classes,
+  cursor = true,
   items,
+  layout,
   orientation = 'horizontal',
   separator: defaultSeparator,
   styles,
+  target,
   ...props
 }: ResizableProps) => {
   const renderSeparator = (
     separator: ResizableSeparator | undefined,
     index: number,
-    itemKey: ResizableItemKey,
-    nextItemKey: ResizableItemKey
+    before: ResizableItemKey,
+    after: ResizableItemKey
   ) =>
     typeof separator === 'function'
-      ? separator({ index, itemKey, nextItemKey, orientation })
+      ? separator({ index, before, after, orientation })
       : separator;
 
   return (
@@ -83,6 +105,11 @@ const Resizable = ({
         className
       )}
       orientation={orientation}
+      defaultLayout={layout?.defaultValue}
+      disableCursor={!cursor}
+      onLayoutChange={layout?.onChange}
+      onLayoutChanged={layout?.onCommit}
+      resizeTargetMinimumSize={target}
       {...props}
     >
       {items.map(
@@ -90,7 +117,7 @@ const Resizable = ({
           <React.Fragment key={key}>
             <ResizablePrimitive.Panel
               data-slot="resizable-panel"
-              className={classNames?.panel}
+              className={classes?.panel}
               defaultSize={size?.[0]}
               id={String(key)}
               maxSize={size?.[2]}
@@ -111,7 +138,7 @@ const Resizable = ({
                 data-slot="resizable-separator"
                 className={cn(
                   'relative flex w-px items-center justify-center bg-border ring-offset-background after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden aria-[orientation=horizontal]:h-px aria-[orientation=horizontal]:w-full aria-[orientation=horizontal]:after:left-0 aria-[orientation=horizontal]:after:h-1 aria-[orientation=horizontal]:after:w-full aria-[orientation=horizontal]:after:translate-x-0 aria-[orientation=horizontal]:after:-translate-y-1/2',
-                  classNames?.separator
+                  classes?.separator
                 )}
                 style={styles?.separator}
               >
@@ -132,13 +159,15 @@ const Resizable = ({
 
 export {
   Resizable,
-  type ResizableClassNames,
+  type ResizableClasses,
   type ResizableItem,
   type ResizableItemKey,
   type ResizableItemOnResize,
   type ResizableItemSize,
+  type ResizableLayout,
   type ResizableProps,
   type ResizableSeparator,
   type ResizableSeparatorRenderProps,
   type ResizableStyles,
+  type ResizableTarget,
 };

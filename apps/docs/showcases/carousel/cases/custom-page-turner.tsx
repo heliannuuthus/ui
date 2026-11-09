@@ -59,8 +59,8 @@ const createExample = (locale: 'en' | 'zh') => {
           render: ({
             canScrollNext,
             canScrollPrev,
-            currentPage,
-            pageCount,
+            page,
+            pages,
             scrollNext,
             scrollPrev,
             scrollTo,
@@ -85,19 +85,17 @@ const createExample = (locale: 'en' | 'zh') => {
                   aria-live="polite"
                   className="display-carousel-page-count"
                 >
-                  <strong>{String(currentPage).padStart(2, '0')}</strong>
+                  <strong>{String(page).padStart(2, '0')}</strong>
                   <span>/</span>
-                  <small>
-                    {String(Math.max(pageCount, 1)).padStart(2, '0')}
-                  </small>
+                  <small>{String(Math.max(pages, 1)).padStart(2, '0')}</small>
                 </span>
                 <div
                   aria-label={copy('选择轮播页面')}
                   className="display-carousel-page-track"
                   role="group"
                 >
-                  {Array.from({ length: pageCount }, (_, index) => {
-                    const selected = currentPage === index + 1;
+                  {Array.from({ length: pages }, (_, index) => {
+                    const selected = page === index + 1;
 
                     return (
                       <Button

@@ -15,13 +15,13 @@ type RadioLength = number | string;
 type RadioGap =
   RadioLength | readonly [columnGap: RadioLength, rowGap: RadioLength];
 
-type RadioClassNames = {
+type RadioClasses = {
   control?: string;
   label?: string;
 };
 
 type RadioStyles = {
-  [Slot in keyof RadioClassNames]?: React.CSSProperties;
+  [Slot in keyof RadioClasses]?: React.CSSProperties;
 };
 
 type RadioProps<Value = string> = Omit<
@@ -30,7 +30,7 @@ type RadioProps<Value = string> = Omit<
 > & {
   children?: React.ReactNode;
   className?: string;
-  classNames?: RadioClassNames;
+  classes?: RadioClasses;
   disabled?: boolean;
   inputRef?: React.Ref<HTMLInputElement>;
   readOnly?: boolean;
@@ -78,7 +78,7 @@ const resolveGap = (gap: RadioGap) => {
 const RadioRoot = <Value = string,>({
   children,
   className,
-  classNames,
+  classes,
   disabled,
   onClick,
   readOnly,
@@ -120,7 +120,7 @@ const RadioRoot = <Value = string,>({
         data-slot="radio-control"
         className={cn(
           'relative mt-0.5 flex aspect-square size-4 shrink-0 items-center justify-center rounded-full border border-transparent bg-input/90 transition-[background-color,border-color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/radio:border-primary/40 group-hover/radio:bg-primary/10 group-active/radio:scale-90 group-data-disabled/radio:group-active/radio:scale-100 group-data-disabled/radio:group-hover/radio:border-transparent group-data-disabled/radio:group-hover/radio:bg-input/90 group-data-readonly/radio:group-active/radio:scale-100 group-aria-invalid/radio:border-destructive group-aria-invalid/radio:ring-3 group-aria-invalid/radio:ring-destructive/20 group-data-checked/radio:border-primary group-data-checked/radio:bg-primary group-data-checked/radio:text-primary-foreground group-data-checked/radio:group-hover/radio:bg-primary/90 motion-reduce:transition-none dark:group-aria-invalid/radio:border-destructive/50 dark:group-aria-invalid/radio:ring-destructive/40 dark:group-data-checked/radio:bg-primary',
-          classNames?.control
+          classes?.control
         )}
         style={styles?.control}
       >
@@ -148,7 +148,7 @@ const RadioRoot = <Value = string,>({
       {children != null && (
         <span
           data-slot="radio-label"
-          className={cn('contents', classNames?.label)}
+          className={cn('contents', classes?.label)}
           style={styles?.label}
         >
           {children}
@@ -227,11 +227,12 @@ const RadioGroup = <Value = string,>({
         formControl?.onBlur();
       }}
       onValueChange={(nextValue) => {
+        if (nextValue === null) return;
         onChange?.(nextValue);
         formControl?.onChange(nextValue);
       }}
       required={required || formControl?.required}
-      value={formControl ? formControl.value : value}
+      value={formControl ? (formControl.value ?? null) : value}
     >
       {options.map((option) => (
         <RadioRoot
@@ -261,7 +262,7 @@ registerFormControl(RadioGroup);
 
 export { Radio };
 export type {
-  RadioClassNames,
+  RadioClasses,
   RadioGroupProps,
   RadioOption,
   RadioProps,

@@ -77,7 +77,7 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## Semantic DOM
 
-{"悬停、聚焦或点击右侧属性行，查看根节点 className/style 与内部 classNames/styles 各字段对应的真实数据表区域。"}
+`className` 与 `style` 作用于数据表最外层的 `div`。配套的 `classes` 与 `styles` 分别作用于 `toolbar`、`container`、`table`、`header`、`body`、`footer`、`state` 和 `pagination`，各槽位见下方 API。复用列定义时使用 `Table.Column<Row>`，复用完整配置时使用 `Table.Props<Row>`；`Table` 均从 `@heliannuuthus/ui` 导入。
 
 ## API
 
@@ -90,6 +90,48 @@ import { ApiTable } from '@docs/rspress/api-table';
     type: '类型',
   }}
   rows={[
+    {
+      component: 'Table.PaginationProps',
+      defaultValue: null,
+      description: "设置受控页码，从 1 开始。",
+      name: 'page',
+      type: "number",
+    },
+    {
+      component: 'Table.PaginationProps',
+      defaultValue: "1",
+      description: "设置非受控初始页码。",
+      name: 'defaultPage',
+      type: "number",
+    },
+    {
+      component: 'Table.PaginationProps',
+      defaultValue: null,
+      description: "配置每页数量及可选选择器，默认每页 10 条。",
+      name: 'limit',
+      type: "PaginationLimitOptions",
+    },
+    {
+      component: 'Table.SearchProps',
+      defaultValue: null,
+      description: "限制搜索的列键。",
+      name: 'columns',
+      type: "string[]",
+    },
+    {
+      component: 'Table.SortState',
+      defaultValue: null,
+      description: "指定排序列键。",
+      name: 'column',
+      type: "string",
+    },
+    {
+      component: 'Table.VirtualProps',
+      defaultValue: "360",
+      description: "设置虚拟滚动容器最大高度。",
+      name: 'maxHeight',
+      type: "number | string",
+    },
     {
       component: 'Table',
       defaultValue: null,
@@ -172,8 +214,8 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Table.Column',
       defaultValue: null,
       description: '按 header 与 cell 扩展当前列的类名。',
-      name: 'classNames',
-      type: 'Table.ColumnClassNames<TData>',
+      name: 'classes',
+      type: 'Table.ColumnClasses<TData>',
     },
     {
       component: 'Table.Column',
@@ -183,14 +225,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: 'Table.ColumnStyles<TData>',
     },
     {
-      component: 'Table.ColumnClassNames',
+      component: 'Table.ColumnClasses',
       defaultValue: null,
       description: '扩展当前列所有表头单元格的类名。',
       name: 'header',
       type: 'string',
     },
     {
-      component: 'Table.ColumnClassNames',
+      component: 'Table.ColumnClasses',
       defaultValue: null,
       description: '按列或当前记录扩展数据单元格的类名。',
       name: 'cell',
@@ -211,56 +253,56 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: 'CSSProperties | ((row: TData, index: number) => CSSProperties)',
     },
     {
-      component: 'Table.ClassNames',
+      component: 'Table.Classes',
       defaultValue: null,
       description: '扩展搜索等表格级操作区域的类名。',
       name: 'toolbar',
       type: 'string',
     },
     {
-      component: 'Table.ClassNames',
+      component: 'Table.Classes',
       defaultValue: null,
       description: '扩展滚动、边框与圆角容器的类名。',
       name: 'container',
       type: 'string',
     },
     {
-      component: 'Table.ClassNames',
+      component: 'Table.Classes',
       defaultValue: null,
       description: '扩展原生 table 节点的类名。',
       name: 'table',
       type: 'string',
     },
     {
-      component: 'Table.ClassNames',
+      component: 'Table.Classes',
       defaultValue: null,
       description: '扩展表头区域的类名。',
       name: 'header',
       type: 'string',
     },
     {
-      component: 'Table.ClassNames',
+      component: 'Table.Classes',
       defaultValue: null,
       description: '扩展表体区域的类名。',
       name: 'body',
       type: 'string',
     },
     {
-      component: 'Table.ClassNames',
+      component: 'Table.Classes',
       defaultValue: null,
       description: '扩展表尾汇总区域的类名。',
       name: 'footer',
       type: 'string',
     },
     {
-      component: 'Table.ClassNames',
+      component: 'Table.Classes',
       defaultValue: null,
       description: '扩展内置加载与空数据状态单元格的类名。',
       name: 'state',
       type: 'string',
     },
     {
-      component: 'Table.ClassNames',
+      component: 'Table.Classes',
       defaultValue: null,
       description: '扩展分页摘要与翻页控件容器的类名。',
       name: 'pagination',
@@ -374,7 +416,7 @@ import { ApiTable } from '@docs/rspress/api-table';
     },
     {
       component: 'Table',
-      defaultValue: '{ pageSize: 10 }',
+      defaultValue: '{ limit: { value: 10 } }',
       description: '配置分页状态与摘要；设置为 false 时关闭分页。',
       name: 'pagination',
       type: 'false | Table.PaginationProps',
@@ -383,8 +425,8 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Table',
       defaultValue: null,
       description: '配置行选择的受控状态、禁用规则和可访问名称。',
-      name: 'rowSelection',
-      type: 'Table.RowSelectionProps<TData>',
+      name: 'selection',
+      type: 'Table.SelectionProps<TData>',
     },
     {
       component: 'Table',
@@ -412,13 +454,13 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description:
         '按 toolbar、container、table、header、body、footer、state 与 pagination 定制内部语义区域。',
-      name: 'classNames',
-      type: 'Table.ClassNames',
+      name: 'classes',
+      type: 'Table.Classes',
     },
     {
       component: 'Table',
       defaultValue: null,
-      description: '按与 classNames 相同的语义区域设置行内样式。',
+      description: '按与 classes 相同的语义区域设置行内样式。',
       name: 'styles',
       type: 'Table.Styles',
     },
@@ -426,8 +468,8 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Table.Primitive',
       defaultValue: null,
       description: '扩展原生 table 节点的类名。',
-      name: 'classNames',
-      type: 'Table.PrimitiveClassNames',
+      name: 'classes',
+      type: 'Table.PrimitiveClasses',
     },
     {
       component: 'Table.Primitive',
@@ -444,7 +486,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: 'Ref<HTMLDivElement>',
     },
     {
-      component: 'Table.PrimitiveClassNames',
+      component: 'Table.PrimitiveClasses',
       defaultValue: null,
       description: '扩展 Table.Primitive 原生 table 节点的类名。',
       name: 'table',
@@ -475,7 +517,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Table.Head',
       defaultValue: '0',
       description: '设置当前固定单元格前方同侧固定列的累计偏移。',
-      name: 'fixedOffset',
+      name: 'offset',
       type: 'number | string',
     },
     {
@@ -504,7 +546,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Table.Cell',
       defaultValue: '0',
       description: '设置当前固定单元格前方同侧固定列的累计偏移。',
-      name: 'fixedOffset',
+      name: 'offset',
       type: 'number | string',
     },
     {
@@ -644,9 +686,9 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 - 不要在 Table 内硬编码业务操作；通过 Table.Column.render 读取当前 row 后组合业务按钮。
 - 不要为了视觉分区手写两个并列表格；使用嵌套 columns 生成真正关联的数据表头。
-- 不要在 Table 外再包一套表格滚动与圆角容器；通过 classNames 定制现有语义区域。
+- 不要在 Table 外再包一套表格滚动与圆角容器；通过 classes 定制现有语义区域。
 - 虚拟滚动只适用于固定高度的单行数据，不与 expandable 同时使用；需要动态详情高度时关闭 virtual。
 - 操作较多时保留一个高频动作，其余收进菜单，避免操作列无限变宽。
-- 固定列需要明确列宽；多列同时固定时使用 fixedOffset 声明前面固定列的累计宽度。
+- 固定列需要明确列宽；多列同时固定时使用 offset 声明前面固定列的累计宽度。
 - 手动分页时只把当前页数据传给 Table.Primitive，由 Pagination 或服务端请求管理页码。
 - 需要搜索、排序、选择或自动分页时使用数据驱动的 Table，不要把这些状态塞进 Table.Primitive。

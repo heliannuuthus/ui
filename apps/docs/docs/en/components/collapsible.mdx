@@ -53,7 +53,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Collapsible',
       defaultValue: null,
       description:
-        'Set summary content that is always visible; when trigger is not passed, the entire Header will act as a trigger at the same time.',
+        'Always-visible summary; the entire header is the trigger when trigger.children is undefined or null.',
       name: 'header',
       type: 'ReactNode',
     },
@@ -73,28 +73,39 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: 'ReactNode',
     },
     {
-      component: 'Collapsible',
+      component: "Collapsible",
       defaultValue: null,
-      description:
-        'Set the content of the independent trigger button; after passing it in, the Header remains static and no longer responds to the expansion operation.',
-      name: 'trigger',
-      type: 'ReactNode',
+      description: "Button content, indicator, appearance, and native button configuration. Omitted or null retains the whole-header trigger.",
+      name: "trigger",
+      type: "CollapsibleTriggerConfig | null",
     },
     {
-      component: 'Collapsible',
+      component: "Collapsible",
       defaultValue: null,
-      description:
-        'Set the appearance, size and native trigger properties of independent trigger buttons.',
-      name: 'triggerProps',
-      type: 'CollapsibleTriggerProps',
+      description: "Independent button content; a non-null value keeps header static. false retains an empty independent button; null or undefined uses the header trigger.",
+      name: "trigger.children",
+      type: "ReactNode",
     },
     {
-      component: 'Collapsible',
-      defaultValue: 'true',
-      description:
-        'Sets the status icon for either the Header or a separate trigger; true uses the default icon, false hides it, and a custom node replaces it.',
-      name: 'indicator',
-      type: 'boolean | ReactNode',
+      component: "Collapsible",
+      defaultValue: "true",
+      description: "true uses the default indicator; false or null hides it, and a custom node replaces it in either trigger structure.",
+      name: "trigger.indicator",
+      type: "boolean | ReactNode",
+    },
+    {
+      component: "Collapsible",
+      defaultValue: "'md'",
+      description: "Independent button size; explicit configuration overrides Provider defaults.",
+      name: "trigger.size",
+      type: "ButtonProps[\"size\"]",
+    },
+    {
+      component: "Collapsible",
+      defaultValue: "'outline'",
+      description: "Independent button variant; explicit configuration overrides Provider defaults.",
+      name: "trigger.variant",
+      type: "ButtonProps[\"variant\"]",
     },
     {
       component: 'Collapsible',
@@ -128,14 +139,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Collapsible',
       defaultValue: null,
       description: 'Extend the className of the corresponding semantic slot.',
-      name: 'classNames',
-      type: 'CollapsibleClassNames',
+      name: 'classes',
+      type: 'CollapsibleClasses',
     },
     {
       component: 'Collapsible',
       defaultValue: null,
       description:
-        'Set inline styles using the same semantic slots as classNames.',
+        'Set inline styles using the same semantic slots as classes.',
       name: 'styles',
       type: 'CollapsibleStyles',
     },
@@ -163,5 +174,5 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## Avoid
 
-- Do not nest links or buttons within clickable headers; pass in triggers when there are additional operations, and use independent button triggers instead.
+- Do not nest links or buttons within clickable headers; provide trigger.children for an independent button when the header contains extra actions.
 - Do not use Collapsible to organize multiple panels that require single-select or multi-select linkage. Accordion should be used for such structures.

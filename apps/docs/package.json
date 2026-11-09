@@ -13,15 +13,12 @@
   "dependencies": {
     "@heliannuuthus/ui": "workspace:*",
     "@mdx-js/react": "^3.1.1",
-    "i18next": "^26.3.6",
     "lucide-react": "^0.468.0",
     "lxgw-wenkai-webfont": "1.7.0",
     "motion": "^12.42.2",
     "prism-react-renderer": "2.4.1",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-i18next": "^17.0.11",
-    "react-router-dom": "^7.18.1"
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@rsbuild/plugin-tailwindcss": "^2.0.3",

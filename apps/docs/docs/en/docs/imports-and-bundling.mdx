@@ -38,6 +38,31 @@ import { Button } from '@heliannuuthus/ui';
 // import { Button } from '@heliannuuthus/ui/button';
 ```
 
+## Other root exports
+
+Helpers and types use the same public root entry:
+
+```tsx
+import { buttonVariants, cn, type ButtonProps } from '@heliannuuthus/ui';
+
+const actionClassName = cn(
+  buttonVariants({ variant: 'outline', size: 'sm' }),
+  'w-full'
+);
+```
+
+| Export | Contract |
+| --- | --- |
+| `cn(...inputs)` | Combines conditional class strings, arrays, and objects, then resolves conflicting Tailwind utilities. Returns a string. |
+| `buttonVariants(options?)` | Returns Button classes for `variant`, `size`, and optional `className`; defaults to `default` and `md`. |
+| `markerVariants(options?)` | Returns Marker classes for `variant` (`default`, `separator`, or `border`) and optional `className`. |
+| `tabsListVariants(options?)` | Returns tabs-list classes for `variant` (`default`, `line`, `outline`, or `soft`) and optional `className`; defaults to `default`. |
+| `toggleVariants(options?)` | Returns Toggle classes for `variant` (`default` or `outline`) and optional `className`; defaults to `default`. |
+| `navigationMenuTriggerStyle()` | Returns the navigation-menu trigger class string; takes no options. |
+| `useIsMobile()` | Returns whether the viewport is below `768px`, subscribing to breakpoint changes. Returns `false` during server rendering and the initial client render, then updates after mounting. Use CSS media queries for layout that must be correct before hydration. |
+
+Style factories only return classes; they do not supply interaction, accessibility semantics, Provider defaults, or stylesheet loading. Prefer the corresponding component when those behaviors are needed. See [Form](/en/components/form) for the form hooks, [Global Provider](/en/docs/provider) for `useProvider`, and [Carousel](/en/components/carousel) for `useCarousel`.
+
 ## Build-tool requirements
 
 Use an ESM-aware build tool with modern tree shaking. Vite, Rspack, Webpack, Rollup, Parcel, and modern Next.js setups work through their normal configuration. Do not add a component-specific Babel import plugin.

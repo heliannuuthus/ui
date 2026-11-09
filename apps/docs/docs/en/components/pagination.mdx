@@ -36,7 +36,7 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## API
 
-Choose exactly one collection-size source: pass `total` to derive the page count from `pageSize`, or pass `pageCount` to declare it directly. Only `total` mode supports `showTotal`.
+Choose exactly one collection-size source: pass `total` to derive the page count from `limit.value`, or pass `pages` to declare it directly. Only `total` mode supports `summary`.
 
 <ApiTable
   labels={{
@@ -49,6 +49,48 @@ Choose exactly one collection-size source: pass `total` to derive the page count
   rows={[
     {
       component: 'Pagination',
+      defaultValue: null,
+      description: "Configures page capacity, capacity notifications, and the optional selector; configuring limit alone keeps the selector hidden.",
+      name: 'limit',
+      type: "PaginationLimitOptions",
+    },
+    {
+      component: 'PaginationLimitSelectorOptions',
+      defaultValue: "[10, 20, 50, 100]",
+      description: "Sets available page capacities.",
+      name: 'options',
+      type: "readonly number[]",
+    },
+    {
+      component: 'PaginationLimitSelectorOptions',
+      defaultValue: null,
+      description: "Renders each capacity option label.",
+      name: 'render',
+      type: "(limit: number) => ReactNode",
+    },
+    {
+      component: 'PaginationJumpOptions',
+      defaultValue: null,
+      description: "Sets optional jump confirmation button content.",
+      name: 'button',
+      type: "ReactNode",
+    },
+    {
+      component: 'PaginationJumpOptions',
+      defaultValue: null,
+      description: "Sets the label before the jump input.",
+      name: 'label',
+      type: "ReactNode",
+    },
+    {
+      component: 'PaginationJumpOptions',
+      defaultValue: null,
+      description: "Sets the suffix after the jump input.",
+      name: 'suffix',
+      type: "ReactNode",
+    },
+    {
+      component: 'Pagination',
       defaultValue: "'center'",
       description: 'Aligns the pagination within its available width.',
       name: 'align',
@@ -58,14 +100,14 @@ Choose exactly one collection-size source: pass `total` to derive the page count
       component: 'Pagination',
       defaultValue: null,
       description: 'Sets the controlled current page, starting at 1.',
-      name: 'current',
+      name: 'page',
       type: 'number',
     },
     {
       component: 'Pagination',
       defaultValue: '1',
       description: 'Sets the initial page in uncontrolled mode.',
-      name: 'defaultCurrent',
+      name: 'defaultPage',
       type: 'number',
     },
     {
@@ -73,30 +115,30 @@ Choose exactly one collection-size source: pass `total` to derive the page count
       defaultValue: null,
       description:
         'Declares the page count directly; choose either this or total.',
-      name: 'pageCount',
+      name: 'pages',
       type: 'number',
     },
     {
       component: 'Pagination',
       defaultValue: null,
       description:
-        'Sets the total item count and derives the page count from pageSize; choose either this or pageCount.',
+        'Sets the total item count and derives the page count from limit.value; choose either this or pages.',
       name: 'total',
       type: 'number',
     },
     {
-      component: 'Pagination',
+      component: 'PaginationLimitOptions',
       defaultValue: null,
       description: 'Sets the controlled number of items per page.',
-      name: 'pageSize',
+      name: 'value',
       type: 'number',
     },
     {
-      component: 'Pagination',
+      component: 'PaginationLimitOptions',
       defaultValue: '10',
       description:
         'Sets the initial number of items per page in uncontrolled mode.',
-      name: 'defaultPageSize',
+      name: 'defaultValue',
       type: 'number',
     },
     {
@@ -108,35 +150,35 @@ Choose exactly one collection-size source: pass `total` to derive the page count
       type: '(page: number, pageSize: number) => void',
     },
     {
-      component: 'Pagination',
+      component: 'PaginationLimitOptions',
       defaultValue: null,
       description:
         'Returns the adjusted page and new page size when the page size changes.',
-      name: 'onPageSizeChange',
+      name: 'onChange',
       type: '(page: number, pageSize: number) => void',
     },
     {
-      component: 'Pagination',
+      component: 'PaginationLimitOptions',
       defaultValue: 'false',
       description:
         'Shows the page-size selector; pass an object to configure its options and option labels together.',
-      name: 'showSizeChanger',
-      type: 'boolean | PaginationSizeChangerOptions',
+      name: 'selector',
+      type: 'boolean | PaginationLimitSelectorOptions',
     },
     {
       component: 'Pagination',
       defaultValue: 'false',
       description:
         'Shows a quick-jump input with configurable label, suffix, and confirmation button.',
-      name: 'showQuickJumper',
-      type: 'boolean | PaginationQuickJumperOptions',
+      name: 'jump',
+      type: 'boolean | PaginationJumpOptions',
     },
     {
       component: 'Pagination',
       defaultValue: 'false',
       description:
         'In total mode, shows the item count or renders a custom summary from the total and current range.',
-      name: 'showTotal',
+      name: 'summary',
       type: 'boolean | ((total: number, range: readonly [number, number]) => ReactNode)',
     },
     {
@@ -206,23 +248,23 @@ Choose exactly one collection-size source: pass `total` to derive the page count
       defaultValue: null,
       description:
         'Localizes the accessible names for pagination navigation, previous and next controls, and ellipses.',
-      name: 'ariaLabels',
-      type: 'PaginationAriaLabels',
+      name: 'labels',
+      type: 'PaginationLabels',
     },
     {
-      component: 'Pagination',
+      component: 'PaginationLabels',
       defaultValue: null,
       description:
         'Generates an accessible name from the item type, page, and selected state.',
-      name: 'getItemAriaLabel',
-      type: '(context: PaginationAriaLabelContext) => string',
+      name: 'item',
+      type: '(context: PaginationLabelContext) => string',
     },
     {
       component: 'Pagination',
       defaultValue: null,
       description:
         'Generates real, copyable URLs for page and navigation controls.',
-      name: 'getItemHref',
+      name: 'href',
       type: '(page: number, type: PaginationItemType) => string',
     },
     {
@@ -246,8 +288,8 @@ Choose exactly one collection-size source: pass `total` to derive the page count
       defaultValue: null,
       description:
         'Customizes the final rendering of pages, navigation controls, and ellipses.',
-      name: 'renderItem',
-      type: '(item: PaginationRenderItemProps) => ReactNode',
+      name: 'render',
+      type: '(item: PaginationRenderProps) => ReactNode',
     },
     {
       component: 'Pagination',
@@ -260,14 +302,14 @@ Choose exactly one collection-size source: pass `total` to derive the page count
       component: 'Pagination',
       defaultValue: null,
       description: 'Extend the className of the corresponding semantic slot.',
-      name: 'classNames',
-      type: 'PaginationClassNames',
+      name: 'classes',
+      type: 'PaginationClasses',
     },
     {
       component: 'Pagination',
       defaultValue: null,
       description:
-        'Set inline styles using the same semantic slots as classNames.',
+        'Set inline styles using the same semantic slots as classes.',
       name: 'styles',
       type: 'PaginationStyles',
     },

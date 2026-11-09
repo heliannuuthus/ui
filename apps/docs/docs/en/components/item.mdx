@@ -101,6 +101,13 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description: 'Set media content at the start of the item.',
       name: 'media',
+      type: 'ItemMediaConfig',
+    },
+    {
+      component: 'Item',
+      defaultValue: null,
+      description: 'Set the media content.',
+      name: 'media.content',
       type: 'ReactNode',
     },
     {
@@ -108,7 +115,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: "'default'",
       description:
         'Declare whether the media content is default content, an icon, or an image.',
-      name: 'mediaType',
+      name: 'media.type',
       type: "'default' | 'icon' | 'image'",
     },
     {
@@ -166,7 +173,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: null,
       description:
         'Fully customize item rendering from the current entry and index.',
-      name: 'renderItem',
+      name: 'render',
       type: '(item: ItemGroupEntry, index: number) => ReactNode',
     },
     {
@@ -181,14 +188,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Item',
       defaultValue: null,
       description: 'Extend the className of the corresponding semantic slot.',
-      name: 'classNames',
-      type: 'ItemClassNames',
+      name: 'classes',
+      type: 'ItemClasses',
     },
     {
       component: 'Item',
       defaultValue: null,
       description:
-        'Set inline styles using the same semantic slots as classNames.',
+        'Set inline styles using the same semantic slots as classes.',
       name: 'styles',
       type: 'ItemStyles',
     },
@@ -225,7 +232,7 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## Accessibility
 
-- Item.Group provides list and list-item semantics by default; preserve equivalent semantics when using renderItem.
+- Item.Group provides list and list-item semantics by default; preserve equivalent semantics when using render.
 - Pass href when the whole row navigates; do not also make the row a link when it already contains a button or switch.
 
 ## Avoid

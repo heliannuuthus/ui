@@ -17,9 +17,8 @@ const createExample = (locale: 'en' | 'zh') => {
       <div className="flex items-center gap-4 rounded-3xl border p-5">
         <Avatar
           alt={copy('林默')}
-          fallback={copy('林')}
-          fallbackProps={{ delay: 0 }}
-          imageProps={{ onLoadingStatusChange: setStatus }}
+          fallback={{ children: copy('林'), ...{ delay: 0 } }}
+          image={{ onStatusChange: setStatus }}
           size="lg"
           src={
             source === 'image' ? '/heliannuuthus.jpg' : '/missing-avatar.jpg'

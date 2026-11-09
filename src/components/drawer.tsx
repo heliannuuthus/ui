@@ -12,17 +12,23 @@ type DrawerSide = 'top' | 'right' | 'bottom' | 'left';
 type DrawerBehavior = 'adaptive' | 'gesture' | 'panel';
 type DrawerSnapPoint = number | string;
 
+type DrawerCloseConfig = {
+  label?: React.ReactNode;
+  variant?: React.ComponentProps<typeof Button>['variant'];
+};
+
+type DrawerSnapsConfig = {
+  points?: DrawerSnapPoint[];
+  value?: DrawerSnapPoint | null;
+  defaultValue?: DrawerSnapPoint | null;
+  onChange?: (snapPoint: DrawerSnapPoint | null) => void;
+  sequential?: boolean;
+};
+
 const sideToSwipeDirection = {
   top: 'up',
   right: 'right',
   bottom: 'down',
-  left: 'left',
-} as const;
-
-const swipeDirectionToSide = {
-  up: 'top',
-  right: 'right',
-  down: 'bottom',
   left: 'left',
 } as const;
 
@@ -54,34 +60,32 @@ const DrawerRoot = ({
   container,
   handle,
   modal,
-  onSnapChange,
-  sequential,
-  side,
-  snapPoints,
-  swipeDirection,
+  side = 'bottom',
+  snaps,
   ...props
 }: Omit<
   DrawerPrimitive.Root.Props,
-  'handle' | 'onSnapPointChange' | 'snapToSequentialPoints'
+  | 'handle'
+  | 'onSnapPointChange'
+  | 'snapToSequentialPoints'
+  | 'snapPoints'
+  | 'snapPoint'
+  | 'defaultSnapPoint'
+  | 'swipeDirection'
 > & {
   behavior?: DrawerBehavior;
   container?: DrawerPrimitive.Portal.Props['container'];
   handle?: boolean | React.ReactNode;
-  onSnapChange?: (snapPoint: DrawerSnapPoint | null) => void;
-  sequential?: boolean;
+  snaps?: DrawerSnapsConfig;
   side?: DrawerSide;
 }) => {
-  const resolvedSwipeDirection =
-    sideToSwipeDirection[
-      side ?? swipeDirectionToSide[swipeDirection ?? 'down']
-    ];
-  const resolvedSide = side ?? swipeDirectionToSide[resolvedSwipeDirection];
+  const resolvedSwipeDirection = sideToSwipeDirection[side];
   const resolvedModal = modal ?? (container == null ? true : false);
   const resolvedHandle =
     handle === undefined
       ? behavior === 'adaptive' || behavior === 'gesture'
       : handle;
-  const hasSnapPoints = snapPoints != null && snapPoints.length > 0;
+  const hasSnapPoints = snaps?.points != null && snaps.points.length > 0;
   const scope: DrawerContextProps['scope'] =
     container == null ? 'viewport' : 'container';
   const contextValue = React.useMemo(
@@ -92,7 +96,7 @@ const DrawerRoot = ({
       hasSnapPoints,
       modal: resolvedModal,
       scope,
-      side: resolvedSide,
+      side,
       swipeDirection: resolvedSwipeDirection,
     }),
     [
@@ -101,7 +105,7 @@ const DrawerRoot = ({
       hasSnapPoints,
       resolvedHandle,
       resolvedModal,
-      resolvedSide,
+      side,
       resolvedSwipeDirection,
       scope,
     ]
@@ -112,9 +116,11 @@ const DrawerRoot = ({
       <DrawerPrimitive.Root
         data-slot="drawer"
         modal={resolvedModal}
-        onSnapPointChange={onSnapChange}
-        snapPoints={snapPoints}
-        snapToSequentialPoints={sequential}
+        onSnapPointChange={snaps?.onChange}
+        snapPoints={snaps?.points}
+        snapPoint={snaps?.value}
+        defaultSnapPoint={snaps?.defaultValue}
+        snapToSequentialPoints={snaps?.sequential}
         swipeDirection={resolvedSwipeDirection}
         {...props}
       />
@@ -333,7 +339,7 @@ const DrawerDescription = ({
   );
 };
 
-type DrawerClassNames = {
+type DrawerClasses = {
   content?: string;
 };
 
@@ -344,32 +350,25 @@ type DrawerStyles = {
 type DrawerProps = OpenStateProps & {
   behavior?: DrawerBehavior;
   children?: React.ReactNode;
-  classNames?: DrawerClassNames;
+  classes?: DrawerClasses;
   closable?: boolean | React.ReactNode;
-  closeText?: React.ReactNode;
-  closeVariant?: React.ComponentProps<typeof Button>['variant'];
+  close?: DrawerCloseConfig | null | false;
   container?: PortalContainer;
-  defaultSnapPoint?: DrawerSnapPoint | null;
   description?: React.ReactNode;
   footer?: React.ReactNode;
   handle?: boolean | React.ReactNode;
-  onSnapChange?: (snapPoint: DrawerSnapPoint | null) => void;
-  sequential?: boolean;
   side?: DrawerSide;
-  snapPoint?: DrawerSnapPoint | null;
-  snapPoints?: DrawerSnapPoint[];
+  snaps?: DrawerSnapsConfig;
   styles?: DrawerStyles;
-  swipeDirection?: 'down' | 'left' | 'right' | 'up';
   title?: React.ReactNode;
   trigger?: React.ReactElement;
 };
 
 const Drawer = ({
   children,
-  classNames,
+  classes,
   closable,
-  closeText,
-  closeVariant = 'outline',
+  close,
   description,
   footer,
   styles,
@@ -377,11 +376,12 @@ const Drawer = ({
   trigger,
   ...props
 }: DrawerProps) => {
+  const hasClose = close !== false && close?.label != null;
   return (
     <DrawerRoot {...props}>
       {trigger != null ? <DrawerTrigger render={trigger} /> : null}
       <DrawerContent
-        className={classNames?.content}
+        className={classes?.content}
         closable={closable}
         style={styles?.content}
       >
@@ -394,12 +394,18 @@ const Drawer = ({
           </DrawerHeader>
         ) : null}
         {children}
-        {footer != null || closeText != null ? (
+        {footer != null || hasClose ? (
           <DrawerFooter>
             {footer}
-            {closeText != null ? (
-              <DrawerClose render={<Button variant={closeVariant} />}>
-                {closeText}
+            {hasClose ? (
+              <DrawerClose
+                render={
+                  <Button
+                    variant={close ? (close.variant ?? 'outline') : 'outline'}
+                  />
+                }
+              >
+                {close && close.label}
               </DrawerClose>
             ) : null}
           </DrawerFooter>
@@ -412,9 +418,11 @@ const Drawer = ({
 export {
   Drawer,
   type DrawerBehavior,
-  type DrawerClassNames,
+  type DrawerClasses,
+  type DrawerCloseConfig,
   type DrawerProps,
   type DrawerSide,
   type DrawerSnapPoint,
+  type DrawerSnapsConfig,
   type DrawerStyles,
 };

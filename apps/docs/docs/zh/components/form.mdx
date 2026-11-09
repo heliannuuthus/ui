@@ -36,7 +36,44 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ```
 
+```tsx title="showcases/form/cases/state-and-subscriptions.tsx" file="<root>/showcases/form/cases/state-and-subscriptions.tsx"
+
+```
+
 </FormShowcase>
+
+## 表单状态与 Hook
+
+从 `@heliannuuthus/ui` 导入 `useForm`、`useWatch` 和 `useFormInstance`，或使用同一组 Hook 的 `Form.useForm`、`Form.useWatch` 与 `Form.useFormInstance` 入口。用 `useForm<Values>({ defaultValues })` 声明数据类型；返回值就是实例，不是元组，再将它传给 `<Form form={form}>`。
+
+| Hook | 返回值与用法 |
+| --- | --- |
+| `useForm<Values>(options?)` | 创建稳定的 `FormInstance<Values>`。配置包含 `defaultValues`、校验 `mode` 和 `resolver`，不包含内部的 `formControl` 选项。 |
+| `useFormInstance<Values>()` | 在后代组件读取最近的 Form 实例；在 Form 外调用会抛错。 |
+| `useWatch(form)` | 订阅当前全部值；字段初始化前，值可能不完整。 |
+| `useWatch('name', form)` | 订阅一个有类型约束的字段路径。 |
+| `useWatch(['name', 'enabled'] as const, form)` | 按给定顺序订阅字段值元组，并保留各字段类型。 |
+| `useWatch((values) => values.enabled, form)` | 订阅选择器返回的派生值。 |
+
+需要驱动界面更新时使用 `useWatch`；`getValues` 只返回快照，不建立订阅。`onValuesChange(values, info)` 可观察值变更而不使观察者重新渲染；可确定变更字段时，`info.name` 提供字段路径。
+
+| 实例成员 | 用途 |
+| --- | --- |
+| `clearErrors` | 清除一个、多个或全部字段错误。 |
+| `formState` | 读取校验、脏值、已访问和提交状态。 |
+| `getFieldState` | 读取指定字段当前的错误与交互状态。 |
+| `getValues` | 读取全部值或指定字段路径的值。 |
+| `reset` | 恢复默认值，或替换值与表单状态。 |
+| `resetField` | 重置一个已注册字段。 |
+| `setError` | 将服务端或应用错误关联到字段。 |
+| `setFocus` | 聚焦提供焦点目标的已注册控件。 |
+| `setValue` | 写入有类型约束的字段值；通过选项控制校验、脏值和已访问状态更新。 |
+| `trigger` | 校验指定字段或整个表单，并返回布尔值 Promise。 |
+| `unregister` | 移除字段注册，可按选项保留状态。 |
+
+实例提供这些操作，不暴露内部引擎的 `control`、`register` 或 `handleSubmit`。Form 内原生 `<Button type="reset">` 会调用 `form.reset()`；`onReset` 中调用 `event.preventDefault()` 可取消该次重置。
+
+在 `Form.Field` 中，通过表单的 `defaultValues` 或字段的 `defaultValue` 初始化值；受控值归表单所有，不要依赖子控件的 `defaultValue`。需要向用户解释错误时，为校验规则提供消息；没有消息的错误仍会标记控件无效，但不会引用不存在的错误文本节点。
 
 ## API
 
@@ -109,9 +146,23 @@ import { ApiTable } from '@docs/rspress/api-table';
     {
       component: 'Form',
       defaultValue: null,
-      description: '配置组件的公开状态、行为或扩展点。',
+      description: '提交校验失败后接收字段错误。',
       name: 'onInvalid',
       type: 'SubmitErrorHandler',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: '观察值变更，接收当前值和可选的变更字段名称。',
+      name: 'onValuesChange',
+      type: 'FormValuesChangeHandler',
+    },
+    {
+      component: 'Form',
+      defaultValue: null,
+      description: '接收原生重置事件；preventDefault 可取消表单重置。',
+      name: 'onReset',
+      type: 'FormEventHandler<HTMLFormElement>',
     },
     {
       component: 'Form.Field',

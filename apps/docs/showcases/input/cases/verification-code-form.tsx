@@ -35,6 +35,8 @@ const createExample = (locale: 'en' | 'zh') => {
             </span>
             <Input.OTP
               maxLength={6}
+              paste={(text) => text.replace(/[- ]/g, '')}
+              align="center"
               value={value}
               onChange={setValue}
               variant={variant}

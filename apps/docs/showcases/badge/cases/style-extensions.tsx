@@ -4,7 +4,7 @@ import { Badge } from '@heliannuuthus/ui';
 const ZhExample = (() => {
   return () => (
     <Badge
-      classNames={{ indicator: 'bg-primary' }}
+      classes={{ indicator: 'bg-primary' }}
       indicator={8}
       styles={{ indicator: { fontVariantNumeric: 'tabular-nums' } }}
     />
@@ -14,7 +14,7 @@ const ZhExample = (() => {
 const EnExample = (() => {
   return () => (
     <Badge
-      classNames={{ indicator: 'bg-primary' }}
+      classes={{ indicator: 'bg-primary' }}
       indicator={8}
       styles={{ indicator: { fontVariantNumeric: 'tabular-nums' } }}
     />

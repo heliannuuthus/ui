@@ -159,7 +159,7 @@ export const CodeBlock = ({
         >
           <Tooltip
             content={copied ? labels.copied : labels.copyCode}
-            openDelay={copied ? 0 : undefined}
+            delay={{ open: copied ? 0 : undefined }}
           >
             <Button
               aria-label={copied ? labels.copied : labels.copyCode}

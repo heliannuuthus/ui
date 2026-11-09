@@ -18,8 +18,8 @@ const createExample = (locale: 'en' | 'zh') => {
           <small>{copy('CI 完成的有效构建次数')}</small>
         </div>
         <Counter
-          fontSize={60}
-          fontWeight={600}
+          size={60}
+          weight={600}
           places={[1000, 100, 10, 1]}
           suffix={<small>{copy('次')}</small>}
           value={count}

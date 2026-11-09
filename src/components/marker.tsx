@@ -24,17 +24,17 @@ const markerVariants: (props?: MarkerVariantOptions) => string = cva(
   }
 );
 
-type MarkerClassNames = {
+type MarkerClasses = {
   content?: string;
   icon?: string;
 };
 
 type MarkerStyles = {
-  [Slot in keyof MarkerClassNames]?: React.CSSProperties;
+  [Slot in keyof MarkerClasses]?: React.CSSProperties;
 };
 
 type MarkerSharedProps = VariantProps<typeof markerVariants> & {
-  classNames?: MarkerClassNames;
+  classes?: MarkerClasses;
   content: React.ReactNode;
   icon?: React.ReactNode;
   styles?: MarkerStyles;
@@ -56,7 +56,7 @@ type MarkerProviderDefaults = Pick<MarkerProps, 'variant'>;
 
 const Marker = ({
   className,
-  classNames,
+  classes,
   content,
   icon,
   styles,
@@ -72,7 +72,7 @@ const Marker = ({
           aria-hidden="true"
           className={cn(
             "size-4 shrink-0 [&_svg:not([class*='size-'])]:size-4",
-            classNames?.icon
+            classes?.icon
           )}
           data-slot="marker-icon"
           style={styles?.icon}
@@ -83,7 +83,7 @@ const Marker = ({
       <span
         className={cn(
           'min-w-0 wrap-break-word group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
-          classNames?.content
+          classes?.content
         )}
         data-slot="marker-content"
         style={styles?.content}
@@ -116,7 +116,7 @@ const Marker = ({
 export {
   Marker,
   markerVariants,
-  type MarkerClassNames,
+  type MarkerClasses,
   type MarkerDivProps,
   type MarkerLinkProps,
   type MarkerProps,

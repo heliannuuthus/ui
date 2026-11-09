@@ -12,7 +12,7 @@ type TableEllipsis = boolean | React.ReactNode;
 
 type TablePrimitiveSemanticSlot = 'table';
 
-interface TablePrimitiveClassNames {
+interface TablePrimitiveClasses {
   table?: string;
 }
 
@@ -25,7 +25,7 @@ type TablePrimitiveProps = Omit<
   'className' | 'style'
 > & {
   className?: string;
-  classNames?: TablePrimitiveClassNames;
+  classes?: TablePrimitiveClasses;
   containerRef?: React.Ref<HTMLDivElement>;
   style?: React.CSSProperties;
   styles?: TablePrimitiveStyles;
@@ -35,14 +35,14 @@ type TableHeadProps = Omit<React.ComponentProps<'th'>, 'align'> & {
   align?: TableCellAlign;
   ellipsis?: TableEllipsis;
   fixed?: TableCellFixed;
-  fixedOffset?: number | string;
+  offset?: number | string;
 };
 
 type TableCellProps = Omit<React.ComponentProps<'td'>, 'align'> & {
   align?: TableCellAlign;
   ellipsis?: TableEllipsis;
   fixed?: TableCellFixed;
-  fixedOffset?: number | string;
+  offset?: number | string;
 };
 
 type TableRowProps = React.ComponentProps<'tr'>;
@@ -94,14 +94,14 @@ const getAlignmentClassName = (align?: TableCellAlign) => {
 
 const getFixedCellStyle = (
   fixed: TableCellFixed | undefined,
-  fixedOffset: number | string,
+  offset: number | string,
   style: React.CSSProperties | undefined
 ) => {
   if (fixed == null) return style;
 
   return {
     ...style,
-    [fixed === 'start' ? 'insetInlineStart' : 'insetInlineEnd']: fixedOffset,
+    [fixed === 'start' ? 'insetInlineStart' : 'insetInlineEnd']: offset,
   };
 };
 
@@ -133,7 +133,11 @@ const TableEllipsisContent = ({
   }, [children]);
 
   return (
-    <Tooltip content={tooltipContent} disabled={!overflowing} openDelay={300}>
+    <Tooltip
+      content={tooltipContent}
+      disabled={!overflowing}
+      delay={{ open: 300 }}
+    >
       <span
         ref={contentRef}
         data-slot="table-ellipsis-content"
@@ -149,7 +153,7 @@ const TableEllipsisContent = ({
 
 const TableRoot = ({
   className,
-  classNames,
+  classes,
   containerRef,
   style,
   styles,
@@ -179,7 +183,7 @@ const TableRoot = ({
       >
         <table
           data-slot="table"
-          className={cn('w-full text-sm', classNames?.table)}
+          className={cn('w-full text-sm', classes?.table)}
           style={styles?.table}
           {...props}
         />
@@ -333,7 +337,7 @@ const TableHead = ({
   className,
   ellipsis = false,
   fixed,
-  fixedOffset = 0,
+  offset = 0,
   style,
   title,
   ...props
@@ -353,7 +357,7 @@ const TableHead = ({
         fixed === 'end' && 'sticky z-30 shadow-[-1px_0_0_var(--border)]',
         className
       )}
-      style={getFixedCellStyle(fixed, fixedOffset, style)}
+      style={getFixedCellStyle(fixed, offset, style)}
       title={ellipsisEnabled ? undefined : title}
       {...props}
     >
@@ -376,7 +380,7 @@ const TableCell = ({
   className,
   ellipsis = false,
   fixed,
-  fixedOffset = 0,
+  offset = 0,
   style,
   title,
   ...props
@@ -396,7 +400,7 @@ const TableCell = ({
         fixed === 'end' && 'sticky z-10 shadow-[-1px_0_0_var(--border)]',
         className
       )}
-      style={getFixedCellStyle(fixed, fixedOffset, style)}
+      style={getFixedCellStyle(fixed, offset, style)}
       title={ellipsisEnabled ? undefined : title}
       {...props}
     >
@@ -429,7 +433,7 @@ export {
   type TableCellProps,
   type TableEllipsis,
   type TableHeadProps,
-  type TablePrimitiveClassNames,
+  type TablePrimitiveClasses,
   type TablePrimitiveProps,
   type TablePrimitiveSemanticSlot,
   type TablePrimitiveStyles,

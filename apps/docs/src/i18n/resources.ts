@@ -147,9 +147,10 @@ const zh = {
       appearanceDescription:
         '选择 light、dark 或跟随操作系统的 system，默认使用 system。',
       directionDescription: '设置 ltr 或 rtl，默认使用 ltr。',
-      colorsDescription: '覆盖浅色模式的语义色；只设置需要改变的令牌即可。',
+      colorsDescription:
+        '通过 colors.base 覆盖基础语义色；只设置需要改变的令牌即可。',
       darkColorsDescription:
-        '覆盖深色模式的语义色，可配置项与 colors 完全相同；未设置的值继续使用 colors 或默认主题。',
+        '通过 colors.dark 覆盖深色语义色；未设置的值继续使用 colors.base 或默认主题。',
       radiusDescription: '设置组件共享的基础圆角值。',
       componentDefaults: '组件默认属性',
       componentDefaultsDescription:
@@ -337,9 +338,9 @@ const en = {
         'Choose light, dark, or system to follow the operating system. The default is system.',
       directionDescription: 'Set ltr or rtl. The default is ltr.',
       colorsDescription:
-        'Override semantic colors for light mode. Specify only the tokens you need to change.',
+        'Override base semantic colors through colors.base. Specify only the tokens you need to change.',
       darkColorsDescription:
-        'Override semantic colors for dark mode with the same token set as colors. Unspecified values continue to use colors or the default theme.',
+        'Override dark semantic colors through colors.dark. Unspecified values continue to use colors.base or the default theme.',
       radiusDescription: 'Set the shared base radius for components.',
       componentDefaults: 'Component defaults',
       componentDefaultsDescription:

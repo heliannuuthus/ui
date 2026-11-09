@@ -23,7 +23,8 @@ type PaginationItemType =
   | 'ellipsis-start'
   | 'ellipsis-end';
 
-type PaginationAriaLabels = {
+type PaginationLabels = {
+  item?: (context: PaginationLabelContext) => string;
   first?: string;
   last?: string;
   more?: string;
@@ -32,47 +33,54 @@ type PaginationAriaLabels = {
   page?: (page: number) => string;
   pageSize?: string;
   previous?: string;
-  quickJumper?: string;
+  jump?: string;
 };
 
-type PaginationAriaLabelContext = {
+type PaginationLabelContext = {
   page: number | null;
   selected: boolean;
   type: PaginationItemType;
 };
 
-type PaginationClassNames = {
+type PaginationClasses = {
   content?: string;
   control?: string;
   ellipsis?: string;
   item?: string;
   pageSize?: string;
-  quickJumper?: string;
+  jump?: string;
   summary?: string;
 };
 
 type PaginationStyles = {
-  [Slot in keyof PaginationClassNames]?: React.CSSProperties;
+  [Slot in keyof PaginationClasses]?: React.CSSProperties;
 };
 
-type PaginationQuickJumperOptions = {
-  goButton?: React.ReactNode;
+type PaginationJumpOptions = {
+  button?: React.ReactNode;
   label?: React.ReactNode;
   suffix?: React.ReactNode;
 };
 
-type PaginationSizeChangerOptions = {
-  getOptionLabel?: (pageSize: number) => React.ReactNode;
+type PaginationLimitSelectorOptions = {
+  render?: (pageSize: number) => React.ReactNode;
   options?: readonly number[];
+};
+
+type PaginationLimitOptions = {
+  value?: number;
+  defaultValue?: number;
+  onChange?: (page: number, limit: number) => void;
+  selector?: boolean | PaginationLimitSelectorOptions;
 };
 
 type PaginationSimpleOptions = {
   readOnly?: boolean;
 };
 
-type PaginationRenderItemProps = {
+type PaginationRenderProps = {
   disabled: boolean;
-  originalElement: React.ReactElement;
+  element: React.ReactElement;
   page: number | null;
   selected: boolean;
   type: PaginationItemType;
@@ -83,26 +91,22 @@ type PaginationBaseProps = Omit<
   'children' | 'onChange'
 > & {
   align?: 'start' | 'center' | 'end';
-  ariaLabels?: PaginationAriaLabels;
+  labels?: PaginationLabels;
   boundaries?: number;
-  classNames?: PaginationClassNames;
-  current?: number;
-  defaultCurrent?: number;
-  defaultPageSize?: number;
+  classes?: PaginationClasses;
+  page?: number;
+  defaultPage?: number;
   disabled?: boolean;
   first?: boolean | React.ReactNode;
-  getItemAriaLabel?: (context: PaginationAriaLabelContext) => string;
-  getItemHref?: (page: number, type: PaginationItemType) => string;
+  href?: (page: number, type: PaginationItemType) => string;
   hideOnSinglePage?: boolean;
   last?: boolean | React.ReactNode;
   next?: boolean | React.ReactNode;
   onChange?: (page: number, pageSize: number) => void;
-  onPageSizeChange?: (page: number, pageSize: number) => void;
-  pageSize?: number;
   previous?: boolean | React.ReactNode;
-  renderItem?: (item: PaginationRenderItemProps) => React.ReactNode;
-  showQuickJumper?: boolean | PaginationQuickJumperOptions;
-  showSizeChanger?: boolean | PaginationSizeChangerOptions;
+  render?: (item: PaginationRenderProps) => React.ReactNode;
+  jump?: boolean | PaginationJumpOptions;
+  limit?: PaginationLimitOptions;
   showTitle?: boolean;
   siblings?: number;
   simple?: boolean | PaginationSimpleOptions;
@@ -111,16 +115,16 @@ type PaginationBaseProps = Omit<
 };
 
 type PaginationTotalModeProps = {
-  pageCount?: never;
-  showTotal?:
+  pages?: never;
+  summary?:
     | boolean
     | ((total: number, range: readonly [number, number]) => React.ReactNode);
   total: number;
 };
 
 type PaginationPageCountModeProps = {
-  pageCount: number;
-  showTotal?: never;
+  pages: number;
+  summary?: never;
   total?: never;
 };
 
@@ -181,30 +185,26 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
     {
       'aria-label': ariaLabel,
       align = 'center',
-      ariaLabels,
+      labels,
       boundaries = 1,
       className,
-      classNames,
-      current,
-      defaultCurrent = 1,
-      defaultPageSize = 10,
+      classes,
+      page,
+      defaultPage = 1,
       disabled = false,
       first = false,
-      getItemAriaLabel,
-      getItemHref,
+      href: getHref,
       hideOnSinglePage = false,
       last = false,
       next = true,
       onChange,
-      onPageSizeChange,
-      pageCount: pageCountProp,
-      pageSize,
+      pages: pageCountProp,
+      limit,
       previous = true,
-      renderItem,
-      showQuickJumper = false,
-      showSizeChanger = false,
+      render,
+      jump = false,
       showTitle = true,
-      showTotal = false,
+      summary = false,
       siblings = 1,
       simple = false,
       size: sizeProp,
@@ -217,8 +217,11 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
   ) => {
     const defaults = useComponentDefaults('Pagination');
     const size = sizeProp ?? defaults.size ?? 'md';
+    const pageSize = limit?.value;
+    const defaultPageSize = limit?.defaultValue ?? 10;
+    const showSizeChanger = limit?.selector ?? false;
     const [uncontrolledCurrent, setUncontrolledCurrent] = React.useState(
-      Math.max(1, Math.trunc(defaultCurrent))
+      Math.max(1, Math.trunc(defaultPage))
     );
     const [uncontrolledPageSize, setUncontrolledPageSize] = React.useState(
       Math.max(1, Math.trunc(defaultPageSize))
@@ -238,7 +241,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
     );
     const normalizedCurrent = Math.min(
       normalizedPageCount,
-      Math.max(1, Math.trunc(current ?? uncontrolledCurrent))
+      Math.max(1, Math.trunc(page ?? uncontrolledCurrent))
     );
     const resolvedAriaLabels = {
       first: '前往第一页',
@@ -249,8 +252,8 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       page: (page: number) => `前往第 ${page} 页`,
       pageSize: '每页条数',
       previous: '前往上一页',
-      quickJumper: '跳转页码',
-      ...ariaLabels,
+      jump: '跳转页码',
+      ...labels,
     };
     const controlSize = size === 'sm' ? 'sm' : size === 'lg' ? 'lg' : 'md';
     const iconSize =
@@ -266,8 +269,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
         ? showSizeChanger
         : undefined;
     const getPageSizeLabel =
-      sizeChangerOptions?.getOptionLabel ??
-      ((value: number) => `${value} / 页`);
+      sizeChangerOptions?.render ?? ((value: number) => `${value} / 页`);
     const normalizedPageSizeOptions = Array.from(
       new Set(
         [
@@ -294,7 +296,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
         Math.max(1, Math.trunc(requestedPage))
       );
       if (nextPage === normalizedCurrent) return;
-      if (current === undefined) setUncontrolledCurrent(nextPage);
+      if (page === undefined) setUncontrolledCurrent(nextPage);
       onChange?.(nextPage, resolvedPageSize);
     };
 
@@ -316,8 +318,8 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       const nextPage = Math.min(normalizedCurrent, nextPageCount);
 
       if (pageSize === undefined) setUncontrolledPageSize(nextPageSize);
-      if (current === undefined) setUncontrolledCurrent(nextPage);
-      onPageSizeChange?.(nextPage, nextPageSize);
+      if (page === undefined) setUncontrolledCurrent(nextPage);
+      limit?.onChange?.(nextPage, nextPageSize);
       onChange?.(nextPage, nextPageSize);
     };
 
@@ -326,7 +328,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       page: number | null,
       selected: boolean
     ) => {
-      const customLabel = getItemAriaLabel?.({ page, selected, type });
+      const customLabel = labels?.item?.({ page, selected, type });
       if (customLabel != null) return customLabel;
 
       if (type === 'first') return resolvedAriaLabels.first;
@@ -362,7 +364,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
             size: type === 'page' || options?.iconOnly ? iconSize : controlSize,
           }),
           type === 'page' && 'tabular-nums',
-          classNames?.control,
+          classes?.control,
           unavailable && 'pointer-events-none opacity-50'
         ),
         'data-active': selected || undefined,
@@ -371,8 +373,8 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
         style: styles?.control,
         title: showTitle ? itemAriaLabel : undefined,
       };
-      const href = unavailable ? undefined : getItemHref?.(page, type);
-      const originalElement =
+      const href = unavailable ? undefined : getHref?.(page, type);
+      const element =
         href != null ? (
           <a
             {...commonProps}
@@ -400,25 +402,25 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
         );
 
       return (
-        renderItem?.({
+        render?.({
           disabled: unavailable,
-          originalElement,
+          element,
           page,
           selected,
           type,
-        }) ?? originalElement
+        }) ?? element
       );
     };
 
     const renderEllipsis = (type: 'ellipsis-start' | 'ellipsis-end') => {
-      const originalElement = (
+      const element = (
         <span
           aria-hidden="true"
           className={cn(
             'flex size-9 items-center justify-center [&_svg:not([class*=size-])]:size-4',
             size === 'sm' && 'size-8',
             size === 'lg' && 'size-10',
-            classNames?.ellipsis
+            classes?.ellipsis
           )}
           data-slot="pagination-ellipsis"
           data-type={type}
@@ -431,13 +433,13 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       );
 
       return (
-        renderItem?.({
+        render?.({
           disabled: true,
-          originalElement,
+          element,
           page: null,
           selected: false,
           type,
-        }) ?? originalElement
+        }) ?? element
       );
     };
 
@@ -500,33 +502,30 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
         data-slot="pagination"
         style={style}
       >
-        {showTotal ? (
+        {summary ? (
           <span
             aria-live="polite"
             className={cn(
               'shrink-0 whitespace-nowrap text-xs text-muted-foreground tabular-nums',
-              classNames?.summary
+              classes?.summary
             )}
             data-slot="pagination-summary"
             style={styles?.summary}
           >
-            {typeof showTotal === 'function'
-              ? showTotal(normalizedTotal, range)
+            {typeof summary === 'function'
+              ? summary(normalizedTotal, range)
               : `共 ${normalizedTotal} 项`}
           </span>
         ) : null}
 
         <ul
-          className={cn(
-            'flex shrink-0 items-center gap-0.5',
-            classNames?.content
-          )}
+          className={cn('flex shrink-0 items-center gap-0.5', classes?.content)}
           data-slot="pagination-content"
           style={styles?.content}
         >
           {first !== false && first != null && !simple ? (
             <li
-              className={classNames?.item}
+              className={classes?.item}
               data-slot="pagination-item"
               style={styles?.item}
             >
@@ -543,7 +542,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
           ) : null}
           {previousControl ? (
             <li
-              className={classNames?.item}
+              className={classes?.item}
               data-slot="pagination-item"
               style={styles?.item}
             >
@@ -553,7 +552,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
 
           {simple ? (
             <li
-              className={classNames?.item}
+              className={classes?.item}
               data-slot="pagination-item"
               style={styles?.item}
             >
@@ -569,7 +568,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
                 ) : (
                   <input
                     ref={simpleInputRef}
-                    aria-label={resolvedAriaLabels.quickJumper}
+                    aria-label={resolvedAriaLabels.jump}
                     className="h-8 w-14 rounded-md border border-input bg-background px-2 text-center outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
                     defaultValue={normalizedCurrent}
                     disabled={disabled}
@@ -587,7 +586,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
           ) : (
             pages.map((page) => (
               <li
-                className={classNames?.item}
+                className={classes?.item}
                 data-slot="pagination-item"
                 key={page}
                 style={styles?.item}
@@ -603,7 +602,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
 
           {nextControl ? (
             <li
-              className={classNames?.item}
+              className={classes?.item}
               data-slot="pagination-item"
               style={styles?.item}
             >
@@ -612,7 +611,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
           ) : null}
           {last !== false && last != null && !simple ? (
             <li
-              className={classNames?.item}
+              className={classes?.item}
               data-slot="pagination-item"
               style={styles?.item}
             >
@@ -631,13 +630,13 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
 
         {showSizeChanger ? (
           <span
-            className={cn('shrink-0', classNames?.pageSize)}
+            className={cn('shrink-0', classes?.pageSize)}
             data-slot="pagination-page-size"
             style={styles?.pageSize}
           >
             <Select<number>
               aria-label={resolvedAriaLabels.pageSize}
-              classNames={{
+              classes={{
                 trigger: cn(
                   'w-28 text-xs tabular-nums',
                   size === 'sm' && 'h-8 w-28',
@@ -650,7 +649,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
                 const label = getPageSizeLabel(option);
                 return {
                   label,
-                  textValue:
+                  text:
                     typeof label === 'string' || typeof label === 'number'
                       ? String(label)
                       : String(option),
@@ -662,27 +661,25 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
           </span>
         ) : null}
 
-        {showQuickJumper && !simple ? (
+        {jump && !simple ? (
           <form
             className={cn(
               'flex shrink-0 items-center gap-1.5 whitespace-nowrap text-xs text-muted-foreground',
-              classNames?.quickJumper
+              classes?.jump
             )}
             data-slot="pagination-quick-jumper"
             onSubmit={(event) => {
               event.preventDefault();
               submitInputPage(quickInputRef, true);
             }}
-            style={styles?.quickJumper}
+            style={styles?.jump}
           >
             <span>
-              {typeof showQuickJumper === 'object'
-                ? (showQuickJumper.label ?? '跳至')
-                : '跳至'}
+              {typeof jump === 'object' ? (jump.label ?? '跳至') : '跳至'}
             </span>
             <input
               ref={quickInputRef}
-              aria-label={resolvedAriaLabels.quickJumper}
+              aria-label={resolvedAriaLabels.jump}
               className="h-8 w-12 appearance-none rounded-md border border-input bg-background px-2 text-center text-foreground tabular-nums outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               disabled={disabled}
               inputMode="numeric"
@@ -691,18 +688,15 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
               type="number"
             />
             <span>
-              {typeof showQuickJumper === 'object'
-                ? (showQuickJumper.suffix ?? '页')
-                : '页'}
+              {typeof jump === 'object' ? (jump.suffix ?? '页') : '页'}
             </span>
-            {typeof showQuickJumper === 'object' &&
-            showQuickJumper.goButton != null ? (
+            {typeof jump === 'object' && jump.button != null ? (
               <button
                 className={buttonVariants({ size: 'sm', variant: 'outline' })}
                 disabled={disabled}
                 type="submit"
               >
-                {showQuickJumper.goButton}
+                {jump.button}
               </button>
             ) : null}
           </form>
@@ -716,16 +710,17 @@ Pagination.displayName = 'Pagination';
 
 export {
   Pagination,
-  type PaginationAriaLabelContext,
-  type PaginationAriaLabels,
-  type PaginationClassNames,
+  type PaginationLabelContext,
+  type PaginationLabels,
+  type PaginationClasses,
   type PaginationItemType,
   type PaginationProps,
   type PaginationProviderDefaults,
-  type PaginationQuickJumperOptions,
-  type PaginationRenderItemProps,
+  type PaginationJumpOptions,
+  type PaginationRenderProps,
   type PaginationSimpleOptions,
   type PaginationSize,
-  type PaginationSizeChangerOptions,
+  type PaginationLimitSelectorOptions,
+  type PaginationLimitOptions,
   type PaginationStyles,
 };

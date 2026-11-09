@@ -72,7 +72,7 @@ const isRegisteredFormControl = (component: unknown) => {
 
 const assignRef = <T,>(ref: React.Ref<T> | undefined, value: T | null) => {
   if (typeof ref === 'function') {
-    ref(value);
+    return ref(value);
   } else if (ref) {
     ref.current = value;
   }
@@ -84,8 +84,15 @@ const useMergedRefs = <T,>(
 ) => {
   return React.useCallback(
     (value: T | null) => {
-      assignRef(firstRef, value);
-      assignRef(secondRef, value);
+      const firstCleanup = assignRef(firstRef, value);
+      const secondCleanup = assignRef(secondRef, value);
+
+      return () => {
+        if (typeof firstCleanup === 'function') firstCleanup();
+        else assignRef(firstRef, null);
+        if (typeof secondCleanup === 'function') secondCleanup();
+        else assignRef(secondRef, null);
+      };
     },
     [firstRef, secondRef]
   );

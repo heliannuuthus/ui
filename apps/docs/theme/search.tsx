@@ -76,7 +76,7 @@ export const Search = () => {
           open,
           title: locale === 'zh' ? '搜索组件' : 'Search components',
         }}
-        emptyText={
+        empty={
           <Typography.Text
             as="span"
             className="docs-search-empty"
@@ -119,9 +119,10 @@ export const Search = () => {
             };
           }),
         }))}
-        placeholder={
-          locale === 'zh' ? '搜索组件名称或用途…' : 'Search components…'
-        }
+        input={{
+          placeholder:
+            locale === 'zh' ? '搜索组件名称或用途…' : 'Search components…',
+        }}
       />
     </>
   );

@@ -1,7 +1,7 @@
 import { createRef } from 'react';
 import { Carousel, type CarouselPaginationOptions, type CarouselRef } from '..';
 
-const badPagination = { render: () => null, renderDot: () => null };
+const badPagination = { render: () => null, dot: () => null };
 const carouselRef = createRef<CarouselRef>();
 const elementRef = createRef<HTMLDivElement>();
 
@@ -18,19 +18,19 @@ export const CarouselTypeTest = () => (
       items={['One', 'Two']}
       pagination={{
         position: 'before',
-        renderDot: ({ isSelected }) => (isSelected ? '●' : '○'),
+        dot: ({ selected }) => (selected ? '●' : '○'),
       }}
     />
     <Carousel
       controls={false}
       items={['One', 'Two']}
-      pagination={{ render: ({ currentPage }) => currentPage }}
+      pagination={{ render: ({ page }) => page }}
     />
     <Carousel items={['One', 'Two']} pagination={false} />
     <Carousel
       items={[{ id: 1, title: 'One' }]}
       ref={carouselRef}
-      renderItem={(item, index) =>
+      render={(item, index) =>
         `${index}: ${item.id.toFixed()} ${item.title.toUpperCase()}`
       }
     />

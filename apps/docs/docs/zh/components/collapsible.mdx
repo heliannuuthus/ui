@@ -53,7 +53,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Collapsible',
       defaultValue: null,
       description:
-        '设置始终可见的摘要内容；未传 trigger 时，整个 Header 同时作为触发器。',
+        '始终可见的独立摘要；trigger.children 为 undefined 或 null 时，整个 Header 作为触发器。',
       name: 'header',
       type: 'ReactNode',
     },
@@ -72,27 +72,39 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: 'ReactNode',
     },
     {
-      component: 'Collapsible',
+      component: "Collapsible",
       defaultValue: null,
-      description:
-        '设置独立触发按钮的内容；传入后 Header 保持静态，不再响应展开操作。',
-      name: 'trigger',
-      type: 'ReactNode',
+      description: "合并按钮内容、指示器、外观和原生按钮配置；省略或 null 保留整个 Header 触发结构。",
+      name: "trigger",
+      type: "CollapsibleTriggerConfig | null",
     },
     {
-      component: 'Collapsible',
+      component: "Collapsible",
       defaultValue: null,
-      description: '设置独立触发按钮的外观、尺寸和原生触发器属性。',
-      name: 'triggerProps',
-      type: 'CollapsibleTriggerProps',
+      description: "独立按钮内容；非 null 值让 header 保持静态，false 保留空独立按钮，null 或 undefined 使用 Header 触发。",
+      name: "trigger.children",
+      type: "ReactNode",
     },
     {
-      component: 'Collapsible',
-      defaultValue: 'true',
-      description:
-        '统一设置 Header 或独立触发按钮的状态图标；true 使用默认图标，false 隐藏，也可传入自定义节点。',
-      name: 'indicator',
-      type: 'boolean | ReactNode',
+      component: "Collapsible",
+      defaultValue: "true",
+      description: "true 使用默认图标，false 或 null 隐藏，自定义节点替换图标；两种触发结构均适用。",
+      name: "trigger.indicator",
+      type: "boolean | ReactNode",
+    },
+    {
+      component: "Collapsible",
+      defaultValue: "'md'",
+      description: "独立按钮尺寸；显式配置覆盖 Provider 默认值。",
+      name: "trigger.size",
+      type: "ButtonProps[\"size\"]",
+    },
+    {
+      component: "Collapsible",
+      defaultValue: "'outline'",
+      description: "独立按钮样式；显式配置覆盖 Provider 默认值。",
+      name: "trigger.variant",
+      type: "ButtonProps[\"variant\"]",
     },
     {
       component: 'Collapsible',
@@ -126,13 +138,13 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Collapsible',
       defaultValue: null,
       description: '扩展对应语义槽位的 className。',
-      name: 'classNames',
-      type: 'CollapsibleClassNames',
+      name: 'classes',
+      type: 'CollapsibleClasses',
     },
     {
       component: 'Collapsible',
       defaultValue: null,
-      description: '按与 classNames 相同的语义区域设置行内样式。',
+      description: '按与 classes 相同的语义区域设置行内样式。',
       name: 'styles',
       type: 'CollapsibleStyles',
     },
@@ -160,5 +172,5 @@ import { ApiTable } from '@docs/rspress/api-table';
 
 ## 避免事项
 
-- 不要在可点击的 Header 内嵌套链接或按钮；有额外操作时传入 trigger，改用独立按钮触发。
+- 不要在可点击的 Header 内嵌套链接或按钮；Header 包含额外操作时通过 trigger.children 使用独立按钮。
 - 不要用 Collapsible 组织多个需要单选或多选联动的面板，这类结构应使用 Accordion。

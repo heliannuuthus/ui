@@ -169,8 +169,8 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Set inline styles on the built-in loading and empty-data state cell.',
   '设置分页摘要与翻页控件容器的行内样式。':
     'Set inline styles on the pagination summary and controls container.',
-  '按与 classNames 相同的语义区域设置行内样式。':
-    'Set inline styles using the same semantic slots as classNames.',
+  '按与 classes 相同的语义区域设置行内样式。':
+    'Set inline styles using the same semantic slots as classes.',
   '设置对应语义槽位的行内样式。':
     'Set inline styles on the corresponding semantic slot.',
   '分别扩展滚动容器与原生 table 节点的类名。':
@@ -187,12 +187,12 @@ export const englishContentTranslations: Readonly<Record<string, string>> = {
     'Set inline styles on the Table.Primitive scrolling container.',
   '设置 Table.Primitive 原生 table 节点的行内样式。':
     'Set inline styles on the native Table.Primitive table element.',
-  '悬停、聚焦或点击右侧属性行，查看根节点 className/style 与内部 classNames/styles 各字段对应的真实数据表区域。':
-    'Hover, focus, or click a property row to inspect the table root targeted by className/style and the internal regions targeted by classNames/styles.',
+  '悬停、聚焦或点击右侧属性行，查看根节点 className/style 与内部 classes/styles 各字段对应的真实数据表区域。':
+    'Hover, focus, or click a property row to inspect the table root targeted by className/style and the internal regions targeted by classes/styles.',
   [`import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 
-<Table.Primitive classNames={{ table: 'min-w-[960px] table-fixed' }}>
+<Table.Primitive classes={{ table: 'min-w-[960px] table-fixed' }}>
   <Table.Header>
     <Table.Row>
       <Table.Head fixed="start" className="w-40">服务</Table.Head>
@@ -220,7 +220,7 @@ import { Button } from '@heliannuuthus/ui'
 </Table.Primitive>`]: `import { Table } from '@heliannuuthus/ui'
 import { Button } from '@heliannuuthus/ui'
 
-<Table.Primitive classNames={{ table: 'min-w-[960px] table-fixed' }}>
+<Table.Primitive classes={{ table: 'min-w-[960px] table-fixed' }}>
   <Table.Header>
     <Table.Row>
       <Table.Head fixed="start" className="w-40">Service</Table.Head>
@@ -262,7 +262,7 @@ const ActionCell = () => {
   )
 }
 
-<Table.Primitive classNames={{ table: 'table-fixed' }}>
+<Table.Primitive classes={{ table: 'table-fixed' }}>
   <Table.Header>
     <Table.Row>
       <Table.Head align="start">服务</Table.Head>
@@ -295,7 +295,7 @@ const ActionCell = () => {
   )
 }
 
-<Table.Primitive classNames={{ table: 'table-fixed' }}>
+<Table.Primitive classes={{ table: 'table-fixed' }}>
   <Table.Header>
     <Table.Row>
       <Table.Head align="start">Service</Table.Head>
@@ -364,8 +364,8 @@ const ActionCell = () => {
     'Row expansion buttons expose state through aria-expanded and include the current record in their accessible name.',
   '通过 data、columns 和功能配置组装搜索、排序、分页、选择、展开与虚拟滚动。':
     'Use data, columns, and feature configs to compose search, sorting, pagination, selection, expansion, and virtualization.',
-  '不要在 Table 外再包一套表格滚动与圆角容器；通过 classNames 定制现有语义区域。':
-    'Do not wrap Table in another scroll and rounded container; customize its existing semantic regions through classNames.',
+  '不要在 Table 外再包一套表格滚动与圆角容器；通过 classes 定制现有语义区域。':
+    'Do not wrap Table in another scroll and rounded container; customize its existing semantic regions through classes.',
   '使用普通 Button 控制 aria-expanded，并通过 Row 与跨列 Cell 承载详情，不需要额外的表格专用组件。':
     'Use a regular Button to control aria-expanded and render details with Row and a spanning Cell; no table-specific component is needed.',
   自定义表格: 'Custom table',
@@ -548,10 +548,10 @@ const ActionCell = () => {
   '受控模式下的当前页，从 1 开始。':
     'Sets the controlled current page, starting at 1.',
   '非受控模式下的初始页码。': 'Sets the initial page in uncontrolled mode.',
-  '直接设置总页数；省略时由 total 与 pageSize 推导。':
-    'Sets the page count directly; when omitted, it is derived from total and pageSize.',
-  '设置数据总数，并结合 pageSize 推导总页数；pageCount 可直接覆盖推导结果。':
-    'Sets the total item count and derives the page count from pageSize; pageCount can override the derived result.',
+  '直接设置总页数；省略时由 total 与 limit.value 推导。':
+    'Sets the page count directly; when omitted, it is derived from total and limit.value.',
+  '设置数据总数，并结合 limit.value 推导总页数；pages 可直接覆盖推导结果。':
+    'Sets the total item count and derives the page count from limit.value; pages can override the derived result.',
   '受控模式下的每页数据条数。': 'Sets the controlled number of items per page.',
   '非受控模式下的初始每页数据条数。':
     'Sets the initial number of items per page in uncontrolled mode.',
@@ -618,29 +618,31 @@ const ActionCell = () => {
   align="start"
   boundaries={2}
   siblings={1}
-  current={24}
+  page={24}
   total={2480}
-  pageSize={20}
   onChange={setPage}
-  onPageSizeChange={(page, size) => {
-    setPage(page)
-    setPageSize(size)
+  limit={{
+    value: 20,
+    onChange: (page, size) => {
+      setPage(page)
+      setPageSize(size)
+    },
+    selector: {
+      options: [10, 20, 50, 100],
+      render: (size) => \`\${size} 条 / 页\`,
+    },
   }}
-  showTotal={(total, range) => \`\${range[0]}–\${range[1]} / \${total} 项\`}
-  showSizeChanger={{
-    options: [10, 20, 50, 100],
-    getOptionLabel: (size) => \`\${size} 条 / 页\`,
-  }}
-  showQuickJumper={{ goButton: '跳转', label: '跳至', suffix: '页' }}
+  summary={(total, range) => \`\${range[0]}–\${range[1]} / \${total} 项\`}
+  jump={{ button: '跳转', label: '跳至', suffix: '页' }}
   first
   last
   previous="上一页"
   next="下一页"
   showTitle
-  getItemAriaLabel={({ page }) => \`Page \${page}\`}
-  getItemHref={(page) => \`#page-\${page}\`}
-  renderItem={({ originalElement }) => originalElement}
-  classNames={{ summary: 'font-medium' }}
+  labels={{ item: ({ page }) => \`Page \${page}\` }}
+  href={(page) => \`#page-\${page}\`}
+  render={({ element }) => element}
+  classes={{ summary: 'font-medium' }}
   styles={{ summary: { minWidth: 120 } }}
 />`]: `import { Pagination } from '@heliannuuthus/ui'
 
@@ -648,29 +650,31 @@ const ActionCell = () => {
   align="start"
   boundaries={2}
   siblings={1}
-  current={24}
+  page={24}
   total={2480}
-  pageSize={20}
   onChange={setPage}
-  onPageSizeChange={(page, size) => {
-    setPage(page)
-    setPageSize(size)
+  limit={{
+    value: 20,
+    onChange: (page, size) => {
+      setPage(page)
+      setPageSize(size)
+    },
+    selector: {
+      options: [10, 20, 50, 100],
+      render: (size) => \`\${size} items / page\`,
+    },
   }}
-  showTotal={(total, range) => \`\${range[0]}–\${range[1]} / \${total} items\`}
-  showSizeChanger={{
-    options: [10, 20, 50, 100],
-    getOptionLabel: (size) => \`\${size} items / page\`,
-  }}
-  showQuickJumper={{ goButton: 'Go', label: 'Jump to', suffix: 'page' }}
+  summary={(total, range) => \`\${range[0]}–\${range[1]} / \${total} items\`}
+  jump={{ button: 'Go', label: 'Jump to', suffix: 'page' }}
   first
   last
   previous="Previous"
   next="Next"
   showTitle
-  getItemAriaLabel={({ page }) => \`Page \${page}\`}
-  getItemHref={(page) => \`#page-\${page}\`}
-  renderItem={({ originalElement }) => originalElement}
-  classNames={{ summary: 'font-medium' }}
+  labels={{ item: ({ page }) => \`Page \${page}\` }}
+  href={(page) => \`#page-\${page}\`}
+  render={({ element }) => element}
+  classes={{ summary: 'font-medium' }}
   styles={{ summary: { minWidth: 120 } }}
 />`,
   分页: 'Pagination',
@@ -692,8 +696,8 @@ const ActionCell = () => {
   '← 拖动或使用方向键调整 →': '← Drag or use the arrow keys to adjust →',
   '<DatePicker\n  value={date}\n  onChange={setDate}\n  placeholder="选择发布日期"\n/>':
     '<DatePicker\n  value={date}\n  onChange={setDate}\n  placeholder="Select publication date"\n/>',
-  "<div className=\"w-[320px] max-w-full\">\n  <Tabs\n    defaultValue=\"overview\"\n    items={[\n      { value: 'overview', label: '项目概览', content: <Overview /> },\n      { value: 'activity', label: '活动记录', content: <Activity /> },\n      { value: 'branches', label: '分支策略', content: <Branches /> },\n      { value: 'docs', label: '使用文档', content: <Docs /> },\n      { value: 'support', label: '帮助支持', content: <Support /> },\n    ]}\n    scrollLabels={{\n      start: '向前滚动标签',\n      end: '向后滚动标签',\n    }}\n  />\n</div>":
-    "<div className=\"w-[320px] max-w-full\">\n  <Tabs\n    defaultValue=\"overview\"\n    items={[\n      { value: 'overview', label: 'Project Overview', content: <Overview /> },\n      { value: 'activity', label: 'activity record', content: <Activity /> },\n      { value: 'branches', label: 'branch strategy', content: <Branches /> },\n      { value: 'docs', label: 'Use documentation', content: <Docs /> },\n      { value: 'support', label: 'Help support', content: <Support /> },\n    ]}\n    scrollLabels={{\n      start: 'Scroll tab forward',\n      end: 'Scroll label backward',\n    }}\n  />\n</div>",
+  "<div className=\"w-[320px] max-w-full\">\n  <Tabs\n    defaultValue=\"overview\"\n    items={[\n      { value: 'overview', label: '项目概览', content: <Overview /> },\n      { value: 'activity', label: '活动记录', content: <Activity /> },\n      { value: 'branches', label: '分支策略', content: <Branches /> },\n      { value: 'docs', label: '使用文档', content: <Docs /> },\n      { value: 'support', label: '帮助支持', content: <Support /> },\n    ]}\n    labels={{\n      start: '向前滚动标签',\n      end: '向后滚动标签',\n    }}\n  />\n</div>":
+    "<div className=\"w-[320px] max-w-full\">\n  <Tabs\n    defaultValue=\"overview\"\n    items={[\n      { value: 'overview', label: 'Project Overview', content: <Overview /> },\n      { value: 'activity', label: 'activity record', content: <Activity /> },\n      { value: 'branches', label: 'branch strategy', content: <Branches /> },\n      { value: 'docs', label: 'Use documentation', content: <Docs /> },\n      { value: 'support', label: 'Help support', content: <Support /> },\n    ]}\n    labels={{\n      start: 'Scroll tab forward',\n      end: 'Scroll label backward',\n    }}\n  />\n</div>",
   '<Input\n  defaultValue="docs"\n  prefix="ui.dev/"\n  suffix={<Button>复制</Button>}\n/>':
     '<Input\n  defaultValue="docs"\n  prefix="ui.dev/"\n  suffix={<Button>Copy</Button>}\n/>',
   '<Input defaultValue="设计系统迁移" />\n<Input aria-invalid defaultValue="my workspace" />\n<Input value="UI-2048" readOnly />\n<Input value="项目进行中" disabled />':
@@ -702,12 +706,12 @@ const ActionCell = () => {
     '<NavigationMenu\n  align="end"\n  items={[\n    {\n      label: \'product\',\n      content: ({ Link }) => (\n        <Link href="/components">Component Library</Link>\n      ),\n    },\n  ]}\n/>',
   "<Select\n  value={value}\n  onChange={setValue}\n  options={[\n    {\n      label: '个人工作区',\n      options: personalWorkspaces,\n    },\n    {\n      label: '团队工作区',\n      options: teamWorkspaces,\n    },\n  ]}\n  placeholder=\"选择工作区\"\n/>":
     "<Select\n  value={value}\n  onChange={setValue}\n  options={[\n    {\n      label: 'Personal workspace',\n      options: personalWorkspaces,\n    },\n    {\n      label: 'Team workspace',\n      options: teamWorkspaces,\n    },\n  ]}\n  placeholder=\"Select workspace\"\n/>",
-  '<Select\n  value={value}\n  onChange={setValue}\n  options={members.map((member) => ({\n    label: member.name,\n    value: member.id,\n  }))}\n  placeholder="搜索成员…"\n  showClear\n/>':
-    '<Select\n  value={value}\n  onChange={setValue}\n  options={members.map((member) => ({\n    label: member.name,\n    value: member.id,\n  }))}\n  placeholder="Search for members…"\n  showClear\n/>',
+  '<Select\n  value={value}\n  onChange={setValue}\n  options={members.map((member) => ({\n    label: member.name,\n    value: member.id,\n  }))}\n  placeholder="搜索成员…"\n  clearable\n/>':
+    '<Select\n  value={value}\n  onChange={setValue}\n  options={members.map((member) => ({\n    label: member.name,\n    value: member.id,\n  }))}\n  placeholder="Search for members…"\n  clearable\n/>',
   '<Slider\n  aria-label="人声电平"\n  className="h-56"\n  orientation="vertical"\n  value={level}\n  onChange={setLevel}\n  min={0}\n  max={100}\n  step={2}\n/>':
     '<Slider\n  aria-label="Vocal level"\n  className="h-56"\n  orientation="vertical"\n  value={level}\n  onChange={setLevel}\n  min={0}\n  max={100}\n  step={2}\n/>',
-  "<Tabs\n  animation=\"slide\"\n  centered\n  classNames={{\n    panel: 'p-8',\n    viewport: 'mt-4 min-h-48 rounded-xl border',\n  }}\n  defaultValue=\"design\"\n  variant=\"soft\"\n  items={[\n    { value: 'design', label: '设计', content: '整理组件视觉规范' },\n    { value: 'code', label: '开发', content: '连接组件与业务状态' },\n    { value: 'release', label: '发布', content: '完成验证并发布' },\n  ]}\n/>":
-    "<Tabs\n  animation=\"slide\"\n  centered\n  classNames={{\n    panel: 'p-8',\n    viewport: 'mt-4 min-h-48 rounded-xl border',\n  }}\n  defaultValue=\"design\"\n  variant=\"soft\"\n  items={[\n    { value: 'design', label: 'Design', content: 'Organizing component visual specifications' },\n    { value: 'code', label: 'Development', content: 'Connect components and business status' },\n    { value: 'release', label: 'release', content: 'Complete verification and release' },\n  ]}\n/>",
+  "<Tabs\n  animation=\"slide\"\n  centered\n  classes={{\n    panel: 'p-8',\n    viewport: 'mt-4 min-h-48 rounded-xl border',\n  }}\n  defaultValue=\"design\"\n  variant=\"soft\"\n  items={[\n    { value: 'design', label: '设计', content: '整理组件视觉规范' },\n    { value: 'code', label: '开发', content: '连接组件与业务状态' },\n    { value: 'release', label: '发布', content: '完成验证并发布' },\n  ]}\n/>":
+    "<Tabs\n  animation=\"slide\"\n  centered\n  classes={{\n    panel: 'p-8',\n    viewport: 'mt-4 min-h-48 rounded-xl border',\n  }}\n  defaultValue=\"design\"\n  variant=\"soft\"\n  items={[\n    { value: 'design', label: 'Design', content: 'Organizing component visual specifications' },\n    { value: 'code', label: 'Development', content: 'Connect components and business status' },\n    { value: 'release', label: 'release', content: 'Complete verification and release' },\n  ]}\n/>",
   "<Tabs\n  centered\n  defaultValue=\"preview\"\n  variant=\"line\"\n  items={[\n    { value: 'preview', label: '预览', content: '实时预览当前组件。' },\n    { value: 'code', label: '代码', content: '查看实现代码。' },\n    { value: 'tests', label: '测试', content: '查看测试结果。' },\n  ]}\n/>":
     "<Tabs\n  centered\n  defaultValue=\"preview\"\n  variant=\"line\"\n  items={[\n    { value: 'preview', label: 'Preview', content: 'Preview the current component in real time. ' },\n    { value: 'code', label: 'code', content: 'View implementation code. ' },\n    { value: 'tests', label: 'Test', content: 'View test results. ' },\n  ]}\n/>",
   "<Tabs\n  defaultValue=\"overview\"\n  items={[\n    { value: 'overview', label: '概览', content: <Overview /> },\n    { value: 'activity', label: '动态', content: <Activity /> },\n    { value: 'members', label: '成员', content: <Members /> },\n  ]}\n/>":
@@ -1095,8 +1099,8 @@ const ActionCell = () => {
     'After passing in the Dialog configuration, it will be displayed in a command pop-up window, otherwise an inline command list will be rendered.',
   '传入 header 和 content 即可创建一个可展开区域；省略 trigger 时，整个 Header 负责切换状态。':
     'Pass in header and content to create an expandable area; when trigger is omitted, the entire Header is responsible for switching states.',
-  '传入 icon=null，保留 Header 触发能力但不显示指示图标。':
-    'Pass in icon=null to retain the Header triggering ability but not display the indicator icon.',
+  '传入 trigger={{ indicator: false }}，保留 Header 触发能力但不显示指示图标。':
+    'Pass in trigger={{ indicator: false }} to retain the Header triggering ability but not display the indicator icon.',
   '传入 value 即可展示带逐位滚动反馈的数值。':
     'Pass in value to display values ​​with bit-by-bit scrolling feedback.',
   '传入链接地址后使用原生 a 元素，否则渲染为普通 div。':
@@ -1290,8 +1294,8 @@ const ActionCell = () => {
     'The independent state requires user confirmation before submitting with the form.',
   读取: 'read',
   对应的: 'Corresponding',
-  '对应的 Head 与 Cell 设置 fixed="start" 可固定在起始侧，设置 fixed="end" 可固定在末端；多固定列通过 fixedOffset 声明累计偏移。':
-    'The corresponding Head and Cell settings fixed="start" can be fixed at the starting side, and fixed="end" can be fixed at the end; multiple fixed columns declare cumulative offsets through fixedOffset.',
+  '对应的 Head 与 Cell 设置 fixed="start" 可固定在起始侧，设置 fixed="end" 可固定在末端；多固定列通过 offset 声明累计偏移。':
+    'The corresponding Head and Cell settings fixed="start" can be fixed at the starting side, and fixed="end" can be fixed at the end; multiple fixed columns declare cumulative offsets through offset.',
   多项展开: 'Multiple expansion',
   '多组内容处于同一层级，并且用户通常只需要查看其中一组。':
     'Multiple sets of content are at the same level, and users typically only need to view one set.',
@@ -1409,7 +1413,8 @@ const ActionCell = () => {
     'Use a nav with a breadcrumb name for the root node and an ordered list for the path.',
   '根据 icon、title、description 和 actions 生成完整空状态。':
     'Generate a complete empty state based on icon, title, description and actions.',
-  '根据 indicatorPosition': 'According to indicatorPosition',
+  '根据 Accordion.Indicator position':
+    'According to Accordion.Indicator position',
   '根据 value、places 和格式属性渲染可访问的滚动数值，并提供前后缀与样式扩展点。':
     'Renders accessible scrolling values ​​based on value, places, and format attributes, and provides prefixes, suffixes, and style extension points.',
   '根据当前记录扩展基础 Table Row 的类名、事件和原生属性。':
@@ -1450,8 +1455,8 @@ const ActionCell = () => {
   构建通过: 'Build passes',
   '构建一致、可访问的产品界面。':
     'Build consistent, accessible product interfaces.',
-  '固定列需要明确列宽；多列同时固定时使用 fixedOffset 声明前面固定列的累计宽度。':
-    'Fixed columns require clear column width; when multiple columns are fixed at the same time, use fixedOffset to declare the cumulative width of the previous fixed columns.',
+  '固定列需要明确列宽；多列同时固定时使用 offset 声明前面固定列的累计宽度。':
+    'Fixed columns require clear column width; when multiple columns are fixed at the same time, use offset to declare the cumulative width of the previous fixed columns.',
   固定列与横向滚动: 'Fixed columns and horizontal scrolling',
   '固定末尾列；再给': 'Fixed end column; give again',
   '固定起始列，或设置': 'Fixed starting column, or set',
@@ -1502,8 +1507,8 @@ const ActionCell = () => {
     'Browse same-level content horizontally, always provide depth-of-field animation, and support point slots, auto-play, start-to-end loops, and custom page turners.',
   横向文件行: 'Horizontal file row',
   横向文章封面: 'Horizontal article cover',
-  '红点没有可见文字，应通过 indicatorLabel 说明通知含义。':
-    'The red dot has no visible text, and the notification meaning should be explained through indicatorLabel.',
+  '红点没有可见文字，应通过 label 说明通知含义。':
+    'The red dot has no visible text, and the notification meaning should be explained through label.',
   后端值班: 'Backend duty',
   后置选择控件: 'rear selection control',
   '候选弹层打开或关闭时调用。':
@@ -2588,8 +2593,8 @@ const ActionCell = () => {
   条未读消息: 'unread messages',
   '通过 badge 放置在线点、认证图标或 Badge 节点，状态始终锚定在头像右下角。':
     'Place the online point, certification icon or Badge node through the badge, and the status is always anchored in the lower right corner of the avatar.',
-  '通过 CardClassNames 按语义区域扩展内部样式。':
-    'Extend internal styles by semantic area via CardClassNames.',
+  '通过 CardClasses 按语义区域扩展内部样式。':
+    'Extend internal styles by semantic area via CardClasses.',
   '通过 className 或 style 自定义粗细、颜色、虚线和渐变效果。':
     'Customize thickness, color, dashed lines and gradient effects via className or style.',
   '通过 content、reactions、align 与 variant 配置气泡。':
@@ -2734,8 +2739,8 @@ const ActionCell = () => {
     'After preflight is completed, the first production release can be scheduled.',
   '完成预检后，可以从这里安排第一次生产发布。':
     'Once preflight is complete, the first production release can be scheduled from here.',
-  '完全自定义底部操作；省略时可使用 cancelText 与 confirmText。':
-    'Fully customizable bottom action; cancelText and confirmText can be used when omitted.',
+  '完全自定义底部操作；省略时可使用 cancel 与 confirm。':
+    'Fully customizable bottom action; cancel and confirm can be used when omitted.',
   完整内容排版: 'Complete content layout',
   '完整数据无法在一个视图中高效加载或理解。':
     'The complete data cannot be efficiently loaded or understood in a single view.',
@@ -3028,8 +3033,8 @@ const ActionCell = () => {
   许澄提交了发布说明: 'Xu Cheng submitted release notes',
   '悬停、聚焦或触摸时轻微放大，越过边界后柔和回弹。':
     'Zoom in slightly when hovering, focusing or touching, and bounce back softly when crossing boundaries.',
-  '悬停、聚焦或点击右侧属性行，查看根节点 className/style 与 CardClassNames/CardStyles 各字段对应的真实区域。':
-    'Hover, focus, or click a property row to inspect the root targeted by className/style and the regions targeted by CardClassNames/CardStyles.',
+  '悬停、聚焦或点击右侧属性行，查看根节点 className/style 与 CardClasses/CardStyles 各字段对应的真实区域。':
+    'Hover, focus, or click a property row to inspect the root targeted by className/style and the regions targeted by CardClasses/CardStyles.',
   悬停外围按钮: 'Hover peripheral buttons',
   悬停预览负责人: 'Hover preview manager',
   选项配置: 'Options configuration',
@@ -3218,8 +3223,8 @@ const ActionCell = () => {
     'Apps need to include navigation, table of contents, or details areas to the left or right of the content.',
   应用与组件包均未发现类型错误:
     'No type errors were found in the application or component package',
-  '用 label、value 和 showValue 同时说明进度对象、完成比例和剩余范围。':
-    'Use label, value, and showValue to simultaneously describe the progress object, completion percentage, and remaining range.',
+  '用 label、value 和 display 同时说明进度对象、完成比例和剩余范围。':
+    'Use label, value, and display to simultaneously describe the progress object, completion percentage, and remaining range.',
   '用标题、导语、正文、引用、行内代码和辅助信息组织一段连贯、可阅读的内容。':
     'Organize a coherent, readable piece of content using a title, lead, text, quotes, inline code, and supporting information.',
   '用户确认操作时调用。': 'Called when the user confirms the operation.',
@@ -3733,8 +3738,8 @@ const ActionCell = () => {
   'Header 和 Footer 跨越整页，中间区域再嵌套 Sidebar 与 Content，适合后台和工作台。':
     'Header and Footer span the entire page, and Sidebar and Content are nested in the middle area, making it suitable for the backend and workbench.',
   'Header 静态，仅按钮切换状态': 'Header is static, only button switches state',
-  'header 可以组合任意摘要内容；icon 用于替换 Header 指示图标，indicator 用于独立按钮，传 null 时可隐藏图标。':
-    'The header can be combined with any summary content; icon is used to replace the Header indicator icon, indicator is used for an independent button, and the icon can be hidden when null is passed.',
+  'header 可以组合任意摘要内容；trigger.indicator 用于配置两种触发模式的状态图标，传 false 时可隐藏图标。':
+    'The header can compose any summary content; trigger.indicator configures the status icon in both trigger modes, and false hides it.',
   'Header 右侧的辅助操作。':
     'Auxiliary operations on the right side of Header.',
   'Header 与图标': 'Header and Icon',
@@ -3745,42 +3750,38 @@ const ActionCell = () => {
     'Heliannuuthus UI helps products remain clear, trustworthy, and easy to read across pages through consistent heading hierarchy, body rhythm, and supporting information.',
   'hover 模式也会在触发器获得键盘焦点时打开，不能只依赖鼠标操作。':
     'Hover mode also turns on when the trigger receives keyboard focus and cannot rely solely on mouse operations.',
-  'import {\n  Alert,\n  AlertAction,\n  AlertDescription,\n  AlertTitle,\n} from \'@heliannuuthus/ui\'\n\n{visible && <Alert variant="warning">\n  <TriangleAlert />\n  <AlertTitle>回滚镜像即将过期</AlertTitle>\n  <AlertDescription>建议在发布前重新构建。</AlertDescription>\n  <AlertAction><Button onClick={() => setVisible(false)}>关闭</Button></AlertAction>\n</Alert>}':
-    'import {\n  Alert,\n  AlertAction,\n  AlertDescription,\n  AlertTitle,\n} from \'@heliannuuthus/ui\'\n\n{visible && <Alert variant="warning">\n  <TriangleAlert />\n  <AlertTitle>The rollback image will expire soon</AlertTitle>\n  <AlertDescription>Recommended to rebuild before publishing. </AlertDescription>\n  <AlertAction><Button onClick={() => setVisible(false)}>Close</Button></AlertAction>\n</Alert>}',
+  'import { Alert } from \'@heliannuuthus/ui\'\n\n{visible && <Alert\n  variant="warning"\n  icon={<TriangleAlert />}\n  title="回滚镜像即将过期"\n  description="建议在发布前重新构建。"\n  action={<Button onClick={() => setVisible(false)}>关闭</Button>}\n/>}':
+    'import { Alert } from \'@heliannuuthus/ui\'\n\n{visible && <Alert\n  variant="warning"\n  icon={<TriangleAlert />}\n  title="The rollback image will expire soon"\n  description="Recommended to rebuild before publishing."\n  action={<Button onClick={() => setVisible(false)}>Close</Button>}\n/>}',
   "import { Table } from '@heliannuuthus/ui'\n\nconst columns: Table.Column<Release>[] = [\n  {\n    header: '发布信息',\n    columns: [\n      { accessor: 'version', header: '版本', sortable: true },\n      { accessor: 'environment', header: '环境' },\n    ],\n  },\n  {\n    header: '执行情况',\n    columns: [\n      { accessor: 'owner', header: '负责人' },\n      { accessor: 'status', header: '状态' },\n    ],\n  },\n  {\n    header: '操作',\n    columns: [\n      {\n        key: 'detail',\n        header: '记录',\n        align: 'center',\n        render: (_, row) => <Button>{row.version} 详情</Button>,\n      },\n    ],\n  },\n]\n\n<Table columns={columns} data={releaseRecords} />":
     "import { Table } from '@heliannuuthus/ui'\n\nconst columns: Table.Column<Release>[] = [\n  {\n    header: 'Publish information',\n    columns: [\n      { accessor: 'version', header: 'version', sortable: true },\n      { accessor: 'environment', header: 'environment' },\n    ],\n  },\n  {\n    header: 'Execution status',\n    columns: [\n      { accessor: 'owner', header: 'person in charge' },\n      { accessor: 'status', header: 'status' },\n    ],\n  },\n  {\n    header: 'operation',\n    columns: [\n      {\n        key: 'detail',\n        header: 'record',\n        align: 'center',\n        render: (_, row) => <Button>{row.version} details</Button>,\n      },\n    ],\n  },\n]\n\n<Table columns={columns} data={releaseRecords} />",
-  "import { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { Stack } from '@heliannuuthus/ui'\nimport { MoreHorizontal } from 'lucide-react'\n\nconst columns: Table.Column<Release>[] = [\n  {\n    accessor: 'version',\n    header: '版本',\n    sortable: true,\n  },\n  {\n    key: 'actions',\n    align: 'center',\n    fixed: 'end',\n    header: '操作',\n    width: 144,\n    render: (_, row) => (\n      <Stack align=\"center\" aria-label={row.version + ' 操作'} gap={4} justify=\"center\" orientation=\"horizontal\" role=\"group\">\n        <Button variant=\"ghost\">查看</Button>\n        <DropdownMenu\n          align=\"end\"\n          trigger={\n            <Button\n              aria-label={row.version + ' 更多操作'}\n              size=\"icon-sm\"\n              variant=\"ghost\"\n            >\n              <MoreHorizontal />\n            </Button>\n          }\n          items={[\n            { label: '下载日志' },\n            { label: '归档记录' },\n            { type: 'separator' },\n            { label: '删除记录', destructive: true },\n          ]}\n        />\n      </Stack>\n    ),\n  },\n]\n\n<Table\n  columns={columns}\n  data={releaseRecords}\n  search={{ columnKeys: ['version'], placeholder: '筛选版本…' }}\n  footer={(rows) => `当前页 ${rows.length} 条发布记录`}\n  rowKey=\"version\"\n  pagination={{ pageSize: 3 }}\n  classNames={{ table: 'min-w-[820px]' }}\n/>":
-    "import { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { Stack } from '@heliannuuthus/ui'\nimport { MoreHorizontal } from 'lucide-react'\n\nconst columns: Table.Column<Release>[] = [\n  {\n    accessor: 'version',\n    header: 'version',\n    sortable: true,\n  },\n  {\n    key: 'actions',\n    align: 'center',\n    fixed: 'end',\n    header: 'operation',\n    width: 144,\n    render: (_, row) => (\n      <Stack align=\"center\" aria-label={row.version + 'Actions'} gap={4} justify=\"center\" orientation=\"horizontal\" role=\"group\">\n        <Button variant=\"ghost\">View</Button>\n        <DropdownMenu\n          align=\"end\"\n          trigger={\n            <Button\n              aria-label={row.version + 'More operations'}\n              size=\"icon-sm\"\n              variant=\"ghost\"\n            >\n              <MoreHorizontal />\n            </Button>\n          }\n          items={[\n            { label: 'Download log' },\n            { label: 'Archive record' },\n            { type: 'separator' },\n            { label: 'Delete record', destructive: true },\n          ]}\n        />\n      </Stack>\n    ),\n  },\n]\n\n<Table\n  columns={columns}\n  data={releaseRecords}\n  search={{ columnKeys: ['version'], placeholder: 'Filter versions…' }}\n  footer={(rows) => `Current page ${rows.length} published records`}\n  rowKey=\"version\"\n  pagination={{ pageSize: 3 }}\n  classNames={{ table: 'min-w-[820px]' }}\n/>",
+  "import { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { Stack } from '@heliannuuthus/ui'\nimport { MoreHorizontal } from 'lucide-react'\n\nconst columns: Table.Column<Release>[] = [\n  {\n    accessor: 'version',\n    header: '版本',\n    sortable: true,\n  },\n  {\n    key: 'actions',\n    align: 'center',\n    fixed: 'end',\n    header: '操作',\n    width: 144,\n    render: (_, row) => (\n      <Stack align=\"center\" aria-label={row.version + ' 操作'} gap={4} justify=\"center\" orientation=\"horizontal\" role=\"group\">\n        <Button variant=\"ghost\">查看</Button>\n        <DropdownMenu\n          align=\"end\"\n          trigger={\n            <Button\n              aria-label={row.version + ' 更多操作'}\n              size=\"icon-sm\"\n              variant=\"ghost\"\n            >\n              <MoreHorizontal />\n            </Button>\n          }\n          items={[\n            { label: '下载日志' },\n            { label: '归档记录' },\n            { type: 'separator' },\n            { label: '删除记录', destructive: true },\n          ]}\n        />\n      </Stack>\n    ),\n  },\n]\n\n<Table\n  columns={columns}\n  data={releaseRecords}\n  search={{ columns: ['version'], placeholder: '筛选版本…' }}\n  footer={(rows) => `当前页 ${rows.length} 条发布记录`}\n  rowKey=\"version\"\n  pagination={{ limit: { value: 3 } }}\n  classes={{ table: 'min-w-[820px]' }}\n/>":
+    "import { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { Stack } from '@heliannuuthus/ui'\nimport { MoreHorizontal } from 'lucide-react'\n\nconst columns: Table.Column<Release>[] = [\n  {\n    accessor: 'version',\n    header: 'version',\n    sortable: true,\n  },\n  {\n    key: 'actions',\n    align: 'center',\n    fixed: 'end',\n    header: 'operation',\n    width: 144,\n    render: (_, row) => (\n      <Stack align=\"center\" aria-label={row.version + 'Actions'} gap={4} justify=\"center\" orientation=\"horizontal\" role=\"group\">\n        <Button variant=\"ghost\">View</Button>\n        <DropdownMenu\n          align=\"end\"\n          trigger={\n            <Button\n              aria-label={row.version + 'More operations'}\n              size=\"icon-sm\"\n              variant=\"ghost\"\n            >\n              <MoreHorizontal />\n            </Button>\n          }\n          items={[\n            { label: 'Download log' },\n            { label: 'Archive record' },\n            { type: 'separator' },\n            { label: 'Delete record', destructive: true },\n          ]}\n        />\n      </Stack>\n    ),\n  },\n]\n\n<Table\n  columns={columns}\n  data={releaseRecords}\n  search={{ columns: ['version'], placeholder: 'Filter versions…' }}\n  footer={(rows) => `Current page ${rows.length} published records`}\n  rowKey=\"version\"\n  pagination={{ limit: { value: 3 } }}\n  classes={{ table: 'min-w-[820px]' }}\n/>",
   "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight', 'rollback']}\n  multiple\n  items={[\n    {\n      value: 'preflight',\n      title: '预检结果',\n      content: '42 项检查均已通过。',\n    },\n    {\n      value: 'rollback',\n      title: '回滚方案',\n      content: '异常时切回上一版本。',\n    },\n  ]}\n/>":
     "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight', 'rollback']}\n  multiple\n  items={[\n    {\n      value: 'preflight',\n      title: 'Preflight results',\n      content: '42 checks passed. ',\n    },\n    {\n      value: 'rollback',\n      title: 'Rollback plan',\n      content: 'Switch back to the previous version in case of exception. ',\n    },\n  ]}\n/>",
   "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight']}\n  items={[\n    { value: 'preflight', title: '预检结果', content: '42 项检查均已通过。' },\n    { value: 'rollback', title: '回滚方案', content: '异常时切回上一版本。' },\n  ]}\n/>":
     "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  defaultValue={['preflight']}\n  items={[\n    { value: 'preflight', title: 'Preflight results', content: 'All 42 checks passed. ' },\n    { value: 'rollback', title: 'Rollback plan', content: 'Switch back to the previous version in case of exception. ' },\n  ]}\n/>",
-  "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  indicatorPosition=\"start\"\n  indicator={<Plus />}\n  expandedIndicator={<Minus />}\n  items={[\n    { value: 'deployment', title: '部署策略', content: '先灰度 10%，观察后全量发布。' },\n  ]}\n/>":
-    "import { Accordion } from '@heliannuuthus/ui'\n\n<Accordion\n  indicatorPosition=\"start\"\n  indicator={<Plus />}\n  expandedIndicator={<Minus />}\n  items={[\n    { value: 'deployment', title: 'Deployment Strategy', content: 'First grayscale 10%, observe and then release in full. ' },\n  ]}\n/>",
-  "import { Accordion } from '@heliannuuthus/ui'\nimport { Minus, Plus } from 'lucide-react'\n\n<Accordion\n  defaultValue={['deployment']}\n  indicator={<Plus />}\n  expandedIndicator={<Minus />}\n  indicatorPosition=\"start\"\n  items={[\n    {\n      value: 'deployment',\n      title: '部署策略',\n      content: '先灰度 10%，观察后全量发布。',\n    },\n  ]}\n/>":
-    "import { Accordion } from '@heliannuuthus/ui'\nimport { Minus, Plus } from 'lucide-react'\n\n<Accordion\n  defaultValue={['deployment']}\n  indicator={<Plus />}\n  expandedIndicator={<Minus />}\n  indicatorPosition=\"start\"\n  items={[\n    {\n      value: 'deployment',\n      title: 'Deployment Strategy',\n      content: 'First grayscale 10%, observe and then publish in full. ',\n    },\n  ]}\n/>",
   'import { Alert } from \'@heliannuuthus/ui\'\n\n<Alert\n  variant="warning"\n  icon={<TriangleAlert />}\n  title="回滚镜像即将过期"\n  description="建议在发布前重新构建。"\n  action={<Button onClick={close}>关闭</Button>}\n/>':
     'import { Alert } from \'@heliannuuthus/ui\'\n\n<Alert\n  variant="warning"\n  icon={<TriangleAlert />}\n  title="The rollback image will expire soon"\n  description="Recommended to rebuild before publishing."\n  action={<Button onClick={close}>Close</Button>}\n/>',
-  'import { AlertDialog } from \'@heliannuuthus/ui\'\n\n<AlertDialog\n  trigger={<Button variant="destructive">删除预览环境</Button>}\n  title="删除 preview-142？"\n  description="此操作无法撤销。"\n  cancelText="保留环境"\n  confirmText="确认删除"\n  confirmVariant="destructive"\n/>':
-    'import { AlertDialog } from \'@heliannuuthus/ui\'\n\n<AlertDialog\n  trigger={<Button variant="destructive">Delete preview environment</Button>}\n  title="Delete preview-142?"\n  description="This action cannot be undone."\n  cancelText="Keep environment"\n  confirmText="Confirm deletion"\n  confirmVariant="destructive"\n/>',
-  'import { AlertDialog, Button } from \'@heliannuuthus/ui\'\n\n<AlertDialog\n  trigger={<Button variant="destructive">删除预览环境</Button>}\n  title="删除 preview-142？"\n  description="此操作无法撤销。"\n  cancelText="保留环境"\n  confirmText="确认删除"\n  confirmVariant="destructive"\n  onConfirm={removePreview}\n/>':
-    'import { AlertDialog, Button } from \'@heliannuuthus/ui\'\n\n<AlertDialog\n  trigger={<Button variant="destructive">Delete preview environment</Button>}\n  title="Delete preview-142?"\n  description="This action cannot be undone."\n  cancelText="Keep environment"\n  confirmText="Confirm deletion"\n  confirmVariant="destructive"\n  onConfirm={removePreview}\n/>',
+  'import { AlertDialog } from \'@heliannuuthus/ui\'\n\n<AlertDialog\n  trigger={<Button variant="destructive">删除预览环境</Button>}\n  title="删除 preview-142？"\n  description="此操作无法撤销。"\n  cancel={{ label: "保留环境" }}\n  confirm={{ label: "确认删除", variant: "destructive" }}\n/>':
+    'import { AlertDialog } from \'@heliannuuthus/ui\'\n\n<AlertDialog\n  trigger={<Button variant="destructive">Delete preview environment</Button>}\n  title="Delete preview-142?"\n  description="This action cannot be undone."\n  cancel={{ label: "Keep environment" }}\n  confirm={{ label: "Confirm deletion", variant: "destructive" }}\n/>',
+  'import { AlertDialog, Button } from \'@heliannuuthus/ui\'\n\n<AlertDialog\n  trigger={<Button variant="destructive">删除预览环境</Button>}\n  title="删除 preview-142？"\n  description="此操作无法撤销。"\n  cancel={{ label: "保留环境" }}\n  confirm={{ label: "确认删除", variant: "destructive", onClick: removePreview }}\n/>':
+    'import { AlertDialog, Button } from \'@heliannuuthus/ui\'\n\n<AlertDialog\n  trigger={<Button variant="destructive">Delete preview environment</Button>}\n  title="Delete preview-142?"\n  description="This action cannot be undone."\n  cancel={{ label: "Keep environment" }}\n  confirm={{ label: "Confirm deletion", variant: "destructive", onClick: removePreview }}\n/>',
   'import { ArrowRight } from \'lucide-react\'\n\nexport const ButtonLink = () => {\n  return (\n    <>\n      <Button href="/components/card" variant="outline">\n        查看 Card 文档\n        <ArrowRight data-icon="inline-end" />\n      </Button>\n      <Button disabled href="/components/card" variant="outline">\n        暂不可用\n      </Button>\n    </>\n  )\n}':
     'import { ArrowRight } from \'lucide-react\'\n\nexport const ButtonLink = () => {\n  return (\n    <>\n      <Button href="/components/card" variant="outline">\n        View Card documentation\n        <ArrowRight data-icon="inline-end" />\n      </Button>\n      <Button disabled href="/components/card" variant="outline">\n        Not available yet\n      </Button>\n    </>\n  )\n}',
-  'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · 正在校验"\n  media={<FileArchive />}\n  state="processing"\n  orientation="horizontal"\n/>':
-    'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · Verifying"\n  media={<FileArchive />}\n  state="processing"\n  orientation="horizontal"\n/>',
-  'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · 正在校验"\n  media={<FileArchive />}\n  state="processing"\n  orientation="vertical"\n/>':
-    'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · Verifying"\n  media={<FileArchive />}\n  state="processing"\n  orientation="vertical"\n/>',
-  'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · 正在校验"\n  media={<FileArchive />}\n  state="processing"\n/>':
-    'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · Verifying"\n  media={<FileArchive />}\n  state="processing"\n/>',
-  'import { Avatar } from \'@heliannuuthus/ui\'\n\n<Avatar alt="林默" fallback="林" shape="circle" size="lg" />\n<Avatar alt="周一" fallback="周" shape="square" size="lg" />':
-    'import { Avatar } from \'@heliannuuthus/ui\'\n\n<Avatar alt="Lin Mo" fallback="Lin" shape="circle" size="lg" />\n<Avatar alt="Monday" fallback="Week" shape="square" size="lg" />',
+  'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · 正在校验"\n  media={{ content: <FileArchive /> }}\n  state="processing"\n  orientation="horizontal"\n/>':
+    'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · Verifying"\n  media={{ content: <FileArchive /> }}\n  state="processing"\n  orientation="horizontal"\n/>',
+  'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · 正在校验"\n  media={{ content: <FileArchive /> }}\n  state="processing"\n  orientation="vertical"\n/>':
+    'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · Verifying"\n  media={{ content: <FileArchive /> }}\n  state="processing"\n  orientation="vertical"\n/>',
+  'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · 正在校验"\n  media={{ content: <FileArchive /> }}\n  state="processing"\n/>':
+    'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  title="web-console.tgz"\n  description="8.4 MB · Verifying"\n  media={{ content: <FileArchive /> }}\n  state="processing"\n/>',
+  'import { Avatar } from \'@heliannuuthus/ui\'\n\n<Avatar alt="林默" fallback={{ children: "林" }} shape="circle" size="lg" />\n<Avatar alt="周一" fallback={{ children: "周" }} shape="square" size="lg" />':
+    'import { Avatar } from \'@heliannuuthus/ui\'\n\n<Avatar alt="Lin Mo" fallback={{ children: "Lin" }} shape="circle" size="lg" />\n<Avatar alt="Monday" fallback={{ children: "Week" }} shape="square" size="lg" />',
   "import { Breadcrumb } from '@heliannuuthus/ui'\n\nconst items = [\n  { label: '首页', href: '/' },\n  { label: '组件', href: '/components' },\n  { label: '导航', href: '/components/navigation-menu' },\n  { label: 'Breadcrumb' },\n]\n\nexport const PageBreadcrumb = () => {\n  return <Breadcrumb items={items} icon />\n}":
     "import { Breadcrumb } from '@heliannuuthus/ui'\n\nconst items = [\n  { label: 'Home', href: '/' },\n  { label: 'component', href: '/components' },\n  { label: 'Navigation', href: '/components/navigation-menu' },\n  { label: 'Breadcrumb' },\n]\n\nexport const PageBreadcrumb = () => {\n  return <Breadcrumb items={items} icon />\n}",
-  'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    variant="default"\n    content="已经补充完成，可以重新评审。"\n    reactions="✓ 2"\n  />\n  <Bubble align="start" variant="elevated" content="收到，我现在检查。" />\n</Bubble.Group>':
-    'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    variant="default"\n    content="The supplement has been completed and can be reviewed again."\n    reactions="✓ 2"\n  />\n  <Bubble align="start" variant="elevated" content="Received, I\'ll check now." />\n</Bubble.Group>',
-  'import { Bubble } from \'@heliannuuthus/ui\'\nimport { Separator } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    content="已经补充完成，可以重新评审。"\n    reactions="✓ 2"\n    variant="default"\n  />\n  <Separator />\n  <Bubble\n    align="end"\n    content="已经补充完成，可以重新评审。"\n    variant="elevated"\n  />\n</Bubble.Group>':
-    'import { Bubble } from \'@heliannuuthus/ui\'\nimport { Separator } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    content="The supplement has been completed and can be reviewed again."\n    reactions="✓ 2"\n    variant="default"\n  />\n  <Separator />\n  <Bubble\n    align="end"\n    content="The supplement has been completed and can be reviewed again."\n    variant="elevated"\n  />\n</Bubble.Group>',
+  'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    variant="default"\n    content={{ children: "已经补充完成，可以重新评审。" }}\n    reactions={{ children: "✓ 2" }}\n  />\n  <Bubble align="start" variant="elevated" content={{ children: "收到，我现在检查。" }} />\n</Bubble.Group>':
+    'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    variant="default"\n    content={{ children: "The supplement has been completed and can be reviewed again." }}\n    reactions={{ children: "✓ 2" }}\n  />\n  <Bubble align="start" variant="elevated" content={{ children: "Received, I\'ll check now." }} />\n</Bubble.Group>',
+  'import { Bubble } from \'@heliannuuthus/ui\'\nimport { Separator } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    content={{ children: "已经补充完成，可以重新评审。" }}\n    reactions={{ children: "✓ 2" }}\n    variant="default"\n  />\n  <Separator />\n  <Bubble\n    align="end"\n    content={{ children: "已经补充完成，可以重新评审。" }}\n    variant="elevated"\n  />\n</Bubble.Group>':
+    'import { Bubble } from \'@heliannuuthus/ui\'\nimport { Separator } from \'@heliannuuthus/ui\'\n\n<Bubble.Group>\n  <Bubble\n    align="end"\n    content={{ children: "The supplement has been completed and can be reviewed again." }}\n    reactions={{ children: "✓ 2" }}\n    variant="default"\n  />\n  <Separator />\n  <Bubble\n    align="end"\n    content={{ children: "The supplement has been completed and can be reviewed again." }}\n    variant="elevated"\n  />\n</Bubble.Group>',
   'import { Button } from \'@heliannuuthus/ui\'\n\nexport const ButtonDemo = () => {\n  return (\n    <div className="flex gap-3">\n      <Button>开始使用</Button>\n      <Button variant="outline">查看文档</Button>\n    </div>\n  )\n}':
     'import { Button } from \'@heliannuuthus/ui\'\n\nexport const ButtonDemo = () => {\n  return (\n    <div className="flex gap-3">\n      <Button>Get started</Button>\n      <Button variant="outline">View documentation</Button>\n    </div>\n  )\n}',
   'import { Button } from \'@heliannuuthus/ui\'\n\nexport const GroupedButtons = () => {\n  return (\n    <Button.Group aria-label="分页操作">\n      <Button variant="outline">上一项</Button>\n      <Button>下一项</Button>\n    </Button.Group>\n  )\n}':
@@ -3789,18 +3790,18 @@ const ActionCell = () => {
     "import { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\n\n<DropdownMenu\n  size=\"lg\"\n  align=\"end\"\n  trigger={<Button>Export</Button>}\n  items={[\n    {\n      label: 'Export as',\n      children: [\n        { label: 'PDF document', onSelect: exportPdf },\n        { label: 'PNG picture', onSelect: exportPng },\n        { label: 'CSV table', onSelect: exportCsv },\n      ],\n    },\n    { type: 'separator' },\n    { label: 'Download original file', onSelect: downloadOriginal },\n  ]}\n/>",
   "import { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { FilePlus2, Trash2 } from 'lucide-react'\n\n<DropdownMenu\n  trigger={<Button variant=\"outline\">文件操作</Button>}\n  items={[\n    { type: 'label', label: '文件操作' },\n    { label: '新建文件', icon: <FilePlus2 />, shortcut: '⌘N' },\n    { label: '创建副本', disabled: true },\n    { type: 'separator' },\n    { label: '移至废纸篓', icon: <Trash2 />, destructive: true },\n  ]}\n/>":
     "import { Button } from '@heliannuuthus/ui'\nimport { DropdownMenu } from '@heliannuuthus/ui'\nimport { FilePlus2, Trash2 } from 'lucide-react'\n\n<DropdownMenu\n  trigger={<Button variant=\"outline\">File operation</Button>}\n  items={[\n    { type: 'label', label: 'File operation' },\n    { label: 'New File', icon: <FilePlus2 />, shortcut: '⌘N' },\n    { label: 'Create a copy', disabled: true },\n    { type: 'separator' },\n    { label: 'Move to Trash', icon: <Trash2 />, destructive: true },\n  ]}\n/>",
-  'import { Button, Dialog } from \'@heliannuuthus/ui\'\n\n<Dialog\n  trigger={<Button>安排发布</Button>}\n  title="安排生产环境发布"\n  description="选择版本和发布时间。"\n  cancelText="取消"\n  confirmText="保存"\n  onConfirm={scheduleRelease}\n>\n  <ReleaseFields />\n</Dialog>':
-    'import { Button, Dialog } from \'@heliannuuthus/ui\'\n\n<Dialog\n  trigger={<Button>Schedule publishing</Button>}\n  title="Scheduling production environment release"\n  description="Select version and release date."\n  cancelText="Cancel"\n  confirmText="Save"\n  onConfirm={scheduleRelease}\n>\n  <ReleaseFields />\n</Dialog>',
+  'import { Button, Dialog } from \'@heliannuuthus/ui\'\n\n<Dialog\n  trigger={<Button>安排发布</Button>}\n  title="安排生产环境发布"\n  description="选择版本和发布时间。"\n  cancel={{ label: "取消" }}\n  confirm={{ label: "保存", onClick: scheduleRelease }}\n>\n  <ReleaseFields />\n</Dialog>':
+    'import { Button, Dialog } from \'@heliannuuthus/ui\'\n\n<Dialog\n  trigger={<Button>Schedule publishing</Button>}\n  title="Scheduling production environment release"\n  description="Select version and release date."\n  cancel={{ label: "Cancel" }}\n  confirm={{ label: "Save", onClick: scheduleRelease }}\n>\n  <ReleaseFields />\n</Dialog>',
   'import { Button, Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>从右侧打开</Button>}\n  title="今晚的发布窗口"\n  description="22:00–23:00"\n>\n  <ReleaseWindow />\n</Drawer>':
     'import { Button, Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>Open from the right</Button>}\n  title="Tonight\'s release window"\n  description="22:00–23:00"\n>\n  <ReleaseWindow />\n</Drawer>',
   'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button variant="outline">3 位负责人</Button>}\n  title="发布负责人"\n  description="发布和回滚时会通知这些成员。"\n  content={<OwnerList />}\n  side="bottom"\n/>':
     'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button variant="outline">3 persons in charge</Button>}\n  title="Release Manager"\n  description="These members will be notified when publishing and rolling back."\n  content={<OwnerList />}\n  side="bottom"\n/>',
-  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="上方靠左提示"\n  openDelay={100}\n  placement="topLeft"\n>\n  <Button>上方靠左</Button>\n</Tooltip>':
-    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Top-left tooltip"\n  openDelay={100}\n  placement="topLeft"\n>\n  <Button>Top left</Button>\n</Tooltip>',
+  'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="上方靠左提示"\n  delay={{ open: 100 }}\n  placement="topLeft"\n>\n  <Button>上方靠左</Button>\n</Tooltip>':
+    'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Top-left tooltip"\n  delay={{ open: 100 }}\n  placement="topLeft"\n>\n  <Button>Top left</Button>\n</Tooltip>',
   'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="默认箭头"\n  placement="topLeft"\n>\n  <Button>显示箭头</Button>\n</Tooltip>':
     'import { Button, Tooltip } from \'@heliannuuthus/ui\'\n\n<Tooltip\n  content="Default arrow"\n  placement="topLeft"\n>\n  <Button>Show arrow</Button>\n</Tooltip>',
-  "import { Button, Tooltip } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nconst [container, setContainer] = useState<HTMLDivElement | null>(null)\nconst [open, setOpen] = useState(false)\n\n<div ref={setContainer}>\n  <Tooltip\n    closeDelay={150}\n    container={container}\n    content=\"受控提示\"\n    onOpenChange={setOpen}\n    open={open}\n    openDelay={250}\n  >\n    <Button>悬停或聚焦</Button>\n  </Tooltip>\n  <Button onClick={() => setOpen((value) => !value)}>\n    {open ? '关闭提示' : '打开提示'}\n  </Button>\n</div>":
-    "import { Button, Tooltip } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nconst [container, setContainer] = useState<HTMLDivElement | null>(null)\nconst [open, setOpen] = useState(false)\n\n<div ref={setContainer}>\n  <Tooltip\n    closeDelay={150}\n    container={container}\n    content=\"Controlled tooltip\"\n    onOpenChange={setOpen}\n    open={open}\n    openDelay={250}\n  >\n    <Button>Hover or focus</Button>\n  </Tooltip>\n  <Button onClick={() => setOpen((value) => !value)}>\n    {open ? 'Close tooltip' : 'Open tooltip'}\n  </Button>\n</div>",
+  "import { Button, Tooltip } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nconst [container, setContainer] = useState<HTMLDivElement | null>(null)\nconst [open, setOpen] = useState(false)\n\n<div ref={setContainer}>\n  <Tooltip\n    delay={{ open: 250, close: 150 }}\n    container={container}\n    content=\"受控提示\"\n    onOpenChange={setOpen}\n    open={open}\n  >\n    <Button>悬停或聚焦</Button>\n  </Tooltip>\n  <Button onClick={() => setOpen((value) => !value)}>\n    {open ? '关闭提示' : '打开提示'}\n  </Button>\n</div>":
+    "import { Button, Tooltip } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nconst [container, setContainer] = useState<HTMLDivElement | null>(null)\nconst [open, setOpen] = useState(false)\n\n<div ref={setContainer}>\n  <Tooltip\n    delay={{ open: 250, close: 150 }}\n    container={container}\n    content=\"Controlled tooltip\"\n    onOpenChange={setOpen}\n    open={open}\n  >\n    <Button>Hover or focus</Button>\n  </Tooltip>\n  <Button onClick={() => setOpen((value) => !value)}>\n    {open ? 'Close tooltip' : 'Open tooltip'}\n  </Button>\n</div>",
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: '读取', value: 'read' },\n    { label: '编辑', value: 'write' },\n    { label: '管理', value: 'admin' },\n  ]}\n/>":
     "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  defaultValue={['read']}\n  onChange={setPermissions}\n  options={[\n    { label: 'read', value: 'read' },\n    { label: 'edit', value: 'write' },\n    { label: 'admin', value: 'admin' },\n  ]}\n/>",
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox.Group\n  name=\"permission\"\n  value={selected}\n  onChange={setSelected}\n  options={[\n    { label: '查看项目', value: 'read' },\n    { label: '参与评论', value: 'comment' },\n    { label: '管理项目', value: 'manage' },\n  ]}\n/>":
@@ -3811,24 +3812,24 @@ const ActionCell = () => {
     "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox>Receive product updates</Checkbox>",
   "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox>未选择</Checkbox>\n<Checkbox defaultChecked>已选择</Checkbox>\n<Checkbox indeterminate>部分选择</Checkbox>\n<Checkbox disabled>不可用</Checkbox>":
     "import { Checkbox } from '@heliannuuthus/ui'\n\n<Checkbox>Not selected</Checkbox>\n<Checkbox defaultChecked>Selected</Checkbox>\n<Checkbox indeterminate>Partial selection</Checkbox>\n<Checkbox disabled>Not available</Checkbox>",
-  "import { Collapsible } from '@heliannuuthus/ui'\n\n<Collapsible\n  defaultOpen\n  header={<BuildSummary />}\n  icon={<ChevronRight />}\n  content={<BuildOutput />}\n  footer={<BuildActions />}\n/>\n\n<Collapsible\n  trigger=\"配置\"\n  triggerProps={{ variant: 'outline' }}\n  header={<PolicySummary />}\n  content={<PolicySettings />}\n/>":
-    "import { Collapsible } from '@heliannuuthus/ui'\n\n<Collapsible\n  defaultOpen\n  header={<BuildSummary />}\n  icon={<ChevronRight />}\n  content={<BuildOutput />}\n  footer={<BuildActions />}\n/>\n\n<Collapsible\n  trigger=\"configuration\"\n  triggerProps={{ variant: 'outline' }}\n  header={<PolicySummary />}\n  content={<PolicySettings />}\n/>",
+  "import { Collapsible } from '@heliannuuthus/ui'\n\n<Collapsible\n  defaultOpen\n  header={<BuildSummary />}\n  trigger={{ indicator: <ChevronRight /> }}\n  content={<BuildOutput />}\n  footer={<BuildActions />}\n/>\n\n<Collapsible\n  trigger={{ children: \"配置\", variant: 'outline' }}\n  header={<PolicySummary />}\n  content={<PolicySettings />}\n/>":
+    "import { Collapsible } from '@heliannuuthus/ui'\n\n<Collapsible\n  defaultOpen\n  header={<BuildSummary />}\n  trigger={{ indicator: <ChevronRight /> }}\n  content={<BuildOutput />}\n  footer={<BuildActions />}\n/>\n\n<Collapsible\n  trigger={{ children: \"configuration\", variant: 'outline' }}\n  header={<PolicySummary />}\n  content={<PolicySettings />}\n/>",
   "import { Collapsible } from '@heliannuuthus/ui'\n\n<Collapsible\n  defaultOpen\n  header={<strong>本次发布包含 6 项变更</strong>}\n  content={<p>优化筛选器响应速度，并修复轮播首尾切换动效。</p>}\n/>":
     "import { Collapsible } from '@heliannuuthus/ui'\n\n<Collapsible\n  defaultOpen\n  header={<strong>This release contains 6 changes</strong>}\n  content={<p>Optimize the filter response speed, and fix the animation of the first and last switching of the carousel. </p>}\n/>",
-  "import { Collapsible } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\n{/* 整个 Header 触发 */}\n<Collapsible\n  header={<BuildSummary />}\n  content={<BuildOutput />}\n/>\n\n{/* 独立按钮触发 */}\n<Collapsible\n  header={<PolicySummary />}\n  trigger=\"配置\"\n  indicator={<ChevronRight />}\n  triggerProps={{ size: 'sm', variant: 'outline' }}\n  content={<PolicySettings />}\n/>":
-    "import { Collapsible } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\n{/* The entire Header is triggered */}\n<Collapsible\n  header={<BuildSummary />}\n  content={<BuildOutput />}\n/>\n\n{/* Independent button trigger */}\n<Collapsible\n  header={<PolicySummary />}\n  trigger=\"configuration\"\n  indicator={<ChevronRight />}\n  triggerProps={{ size: 'sm', variant: 'outline' }}\n  content={<PolicySettings />}\n/>",
+  "import { Collapsible } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\n{/* 整个 Header 触发 */}\n<Collapsible\n  header={<BuildSummary />}\n  content={<BuildOutput />}\n/>\n\n{/* 独立按钮触发 */}\n<Collapsible\n  header={<PolicySummary />}\n  trigger={{ children: \"配置\", indicator: <ChevronRight />, size: 'sm', variant: 'outline' }}\n  content={<PolicySettings />}\n/>":
+    "import { Collapsible } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\n{/* The entire Header is triggered */}\n<Collapsible\n  header={<BuildSummary />}\n  content={<BuildOutput />}\n/>\n\n{/* Independent button trigger */}\n<Collapsible\n  header={<PolicySummary />}\n  trigger={{ children: \"configuration\", indicator: <ChevronRight />, size: 'sm', variant: 'outline' }}\n  content={<PolicySettings />}\n/>",
   "import { Command } from '@heliannuuthus/ui'\n\n<Command\n  groups={[\n    {\n      heading: '常用命令',\n      options: [\n        { label: '新建文件', shortcut: '⌘N', value: 'new-file' },\n        { label: '打开设置', shortcut: '⌘,', value: 'settings' },\n      ],\n    },\n  ]}\n/>":
     "import { Command } from '@heliannuuthus/ui'\n\n<Command\n  groups={[\n    {\n      heading: 'Common commands',\n      options: [\n        { label: 'New File', shortcut: '⌘N', value: 'new-file' },\n        { label: 'Open settings', shortcut: '⌘,', value: 'settings' },\n      ],\n    },\n  ]}\n/>",
   "import { Button, ContextMenu } from '@heliannuuthus/ui'\n\n<ContextMenu\n  trigger={<Button variant=\"outline\">在这里单击右键</Button>}\n  items={[\n    { label: '复制链接' },\n    { type: 'separator' },\n    { label: '删除项目', destructive: true },\n  ]}\n/>":
     "import { Button, ContextMenu } from '@heliannuuthus/ui'\n\n<ContextMenu\n  trigger={<Button variant=\"outline\">right click here</Button>}\n  items={[\n    { label: 'Copy link' },\n    { type: 'separator' },\n    { label: 'Delete item', destructive: true },\n  ]}\n/>",
-  "import { Counter } from '@heliannuuthus/ui'\n\n<Counter\n  value={count}\n  places={[1000, 100, 10, 1]}\n  fontSize={60}\n  fontWeight={600}\n  suffix={<small>次</small>}\n  valueText={`${count} 次构建`}\n/>":
-    "import { Counter } from '@heliannuuthus/ui'\n\n<Counter\n  value={count}\n  places={[1000, 100, 10, 1]}\n  fontSize={60}\n  fontWeight={600}\n  suffix={<small>times</small>}\n  valueText={`${count} builds`}\n/>",
-  'import { Button, Dialog } from \'@heliannuuthus/ui\'\nimport { CircleX } from \'lucide-react\'\n\n<Dialog\n  trigger={<Button>安排发布</Button>}\n  title="安排生产环境发布"\n  description="选择版本和发布时间。"\n  cancelText="取消"\n  confirmText="确认安排"\n>\n  <ReleaseForm />\n</Dialog>':
-    'import { Button, Dialog } from \'@heliannuuthus/ui\'\nimport { CircleX } from \'lucide-react\'\n\n<Dialog\n  trigger={<Button>Schedule publishing</Button>}\n  title="Scheduling production environment release"\n  description="Select version and release date."\n  cancelText="Cancel"\n  confirmText="Confirm arrangement"\n>\n  <ReleaseForm />\n</Dialog>',
+  "import { Counter } from '@heliannuuthus/ui'\n\n<Counter\n  value={count}\n  places={[1000, 100, 10, 1]}\n  size={60}\n  weight={600}\n  suffix={<small>次</small>}\n  valueText={`${count} 次构建`}\n/>":
+    "import { Counter } from '@heliannuuthus/ui'\n\n<Counter\n  value={count}\n  places={[1000, 100, 10, 1]}\n  size={60}\n  weight={600}\n  suffix={<small>times</small>}\n  valueText={`${count} builds`}\n/>",
+  'import { Button, Dialog } from \'@heliannuuthus/ui\'\nimport { CircleX } from \'lucide-react\'\n\n<Dialog\n  trigger={<Button>安排发布</Button>}\n  title="安排生产环境发布"\n  description="选择版本和发布时间。"\n  cancel={{ label: "取消" }}\n  confirm={{ label: "确认安排" }}\n>\n  <ReleaseForm />\n</Dialog>':
+    'import { Button, Dialog } from \'@heliannuuthus/ui\'\nimport { CircleX } from \'lucide-react\'\n\n<Dialog\n  trigger={<Button>Schedule publishing</Button>}\n  title="Scheduling production environment release"\n  description="Select version and release date."\n  cancel={{ label: "Cancel" }}\n  confirm={{ label: "Confirm arrangement" }}\n>\n  <ReleaseForm />\n</Dialog>',
   'import { Download, Mail, Plus } from \'lucide-react\'\n\nexport const ButtonWithIcon = () => {\n  return (\n    <>\n      <Button><Plus data-icon="inline-start" />新建项目</Button>\n      <Button variant="outline"><Download data-icon="inline-start" />导出</Button>\n      <Button size="icon" aria-label="发送邮件"><Mail /></Button>\n    </>\n  )\n}':
     'import { Download, Mail, Plus } from \'lucide-react\'\n\nexport const ButtonWithIcon = () => {\n  return (\n    <>\n      <Button><Plus data-icon="inline-start" />New project</Button>\n      <Button variant="outline"><Download data-icon="inline-start" />Export</Button>\n      <Button size="icon" aria-label="Send Mail"><Mail /></Button>\n    </>\n  )\n}',
-  'import { Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>从右侧打开</Button>}\n  title="今晚的发布窗口"\n  description="22:00–23:00"\n  closeText="关闭"\n>\n  <ReleaseList />\n</Drawer>':
-    'import { Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>Open from the right</Button>}\n  title="Tonight\'s release window"\n  description="22:00–23:00"\n  closeText="Close"\n>\n  <ReleaseList />\n</Drawer>',
+  'import { Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>从右侧打开</Button>}\n  title="今晚的发布窗口"\n  description="22:00–23:00"\n  close={{ label: "关闭" }}\n>\n  <ReleaseList />\n</Drawer>':
+    'import { Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="adaptive"\n  side="right"\n  trigger={<Button>Open from the right</Button>}\n  title="Tonight\'s release window"\n  description="22:00–23:00"\n  close={{ label: "Close" }}\n>\n  <ReleaseList />\n</Drawer>',
   'import { Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="panel"\n  container={containerRef}\n  side="left"\n  trigger={<Button>从左侧打开</Button>}\n  title="局部筛选"\n>\n  <Filters />\n</Drawer>':
     'import { Drawer } from \'@heliannuuthus/ui\'\n\n<Drawer\n  behavior="panel"\n  container={containerRef}\n  side="left"\n  trigger={<Button>Open from left</Button>}\n  title="Partial filtering"\n>\n  <Filters />\n</Drawer>',
   'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<Cloud />}\n  title="还没有生产发布"\n  description="完成预检后，可以安排第一次生产发布。"\n  actions={<Button>安排发布</Button>}\n/>':
@@ -3837,20 +3838,18 @@ const ActionCell = () => {
     'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<Cloud />}\n  title="No production release yet"\n  description="After completing preflight, you can schedule your first production release from here."\n  actions={<Button>Schedule publishing</Button>}\n/>',
   'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<ShieldCheck />}\n  title="等待安全审计"\n  description="审计通过前暂无可发布版本。"\n  actions={<AuditSummary />}\n/>':
     'import { Empty } from \'@heliannuuthus/ui\'\n\n<Empty\n  icon={<ShieldCheck />}\n  title="Waiting for security audit"\n  description="There is no release version until the audit is passed."\n  actions={<AuditSummary />}\n/>',
-  "import { Fragment, useState } from 'react'\nimport { Button, Table } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Button\n                aria-expanded={expanded}\n                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}\n                size=\"icon-xs\"\n                variant=\"ghost\"\n                onClick={() => setExpandedId(expanded ? null : row.id)}\n              >\n                <ChevronRight className={expanded ? 'rotate-90' : ''} />\n              </Button>\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.Row>\n              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>\n            </Table.Row>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>":
-    "import { Fragment, useState } from 'react'\nimport { Button, Table } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Button\n                aria-expanded={expanded}\n                aria-label={`${expanded ? 'Collapse' : 'Expand'} ${row.id}`}\n                size=\"icon-xs\"\n                variant=\"ghost\"\n                onClick={() => setExpandedId(expanded ? null : row.id)}\n              >\n                <ChevronRight className={expanded ? 'rotate-90' : ''} />\n              </Button>\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.Row>\n              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>\n            </Table.Row>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table>",
-  'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaType="icon"\n  title="许澄提交了发布说明"\n  description="补充数据库迁移影响与回滚入口。"\n  actions={<Button>查看</Button>}\n/>':
-    'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={<GitCommit />}\n  mediaType="icon"\n  title="Xu Cheng submitted release notes"\n  description="Supplementary database migration impact and rollback entry."\n  actions={<Button>View</Button>}\n/>',
-  'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<MessageCircle />}\n  mediaType="icon"\n  title="林默回复了检查项"\n  description="确认索引变更不会锁表。"\n  actions={<Button>查看</Button>}\n/>':
-    'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<MessageCircle />}\n  mediaType="icon"\n  title="Lin Mo replied to the check item"\n  description="Confirm that index changes will not lock the table."\n  actions={<Button>View</Button>}\n/>',
+  'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={{ content: <GitCommit />, type: "icon" }}\n  title="许澄提交了发布说明"\n  description="补充数据库迁移影响与回滚入口。"\n  actions={<Button>查看</Button>}\n/>':
+    'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  media={{ content: <GitCommit />, type: "icon" }}\n  title="Xu Cheng submitted release notes"\n  description="Supplementary database migration impact and rollback entry."\n  actions={<Button>View</Button>}\n/>',
+  'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={{ content: <MessageCircle />, type: "icon" }}\n  title="林默回复了检查项"\n  description="确认索引变更不会锁表。"\n  actions={<Button>查看</Button>}\n/>':
+    'import { Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={{ content: <MessageCircle />, type: "icon" }}\n  title="Lin Mo replied to the check item"\n  description="Confirm that index changes will not lock the table."\n  actions={<Button>View</Button>}\n/>',
   "import { Fragment, useState } from 'react'\nimport { Button, Table } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table.Primitive>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Button\n                aria-expanded={expanded}\n                aria-label={`${expanded ? '收起' : '展开'} ${row.id}`}\n                size=\"icon-xs\"\n                variant=\"ghost\"\n                onClick={() => setExpandedId(expanded ? null : row.id)}\n              >\n                <ChevronRight className={expanded ? 'rotate-90' : ''} />\n              </Button>\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.Row>\n              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>\n            </Table.Row>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table.Primitive>":
     "import { Fragment, useState } from 'react'\nimport { Button, Table } from '@heliannuuthus/ui'\nimport { ChevronRight } from 'lucide-react'\n\nconst [expandedId, setExpandedId] = useState<string | null>(null)\n\n<Table.Primitive>\n  <Table.Body>\n    {rows.map((row) => {\n      const expanded = row.id === expandedId\n      return (\n        <Fragment key={row.id}>\n          <Table.Row>\n            <Table.Cell>\n              <Button\n                aria-expanded={expanded}\n                aria-label={`${expanded ? 'Collapse' : 'Expand'} ${row.id}`}\n                size=\"icon-xs\"\n                variant=\"ghost\"\n                onClick={() => setExpandedId(expanded ? null : row.id)}\n              >\n                <ChevronRight className={expanded ? 'rotate-90' : ''} />\n              </Button>\n            </Table.Cell>\n            <Table.Cell>{row.name}</Table.Cell>\n          </Table.Row>\n          {expanded && (\n            <Table.Row>\n              <Table.Cell colSpan={2}>{row.detail}</Table.Cell>\n            </Table.Row>\n          )}\n        </Fragment>\n      )\n    })}\n  </Table.Body>\n</Table.Primitive>",
-  "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Content>工作区内容</Layout.Content>\n  <Layout.Sidebar width={280}>详情面板</Layout.Sidebar>\n</Layout>":
-    "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Content>Workspace Content</Layout.Content>\n  <Layout.Sidebar width={280}>Details panel</Layout.Sidebar>\n</Layout>",
+  "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Content>工作区内容</Layout.Content>\n  <Layout.Sidebar width={{ expanded: 280 }}>详情面板</Layout.Sidebar>\n</Layout>":
+    "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Content>Workspace Content</Layout.Content>\n  <Layout.Sidebar width={{ expanded: 280 }}>Details panel</Layout.Sidebar>\n</Layout>",
   "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Header>项目导航</Layout.Header>\n  <Layout.Content>页面内容</Layout.Content>\n  <Layout.Footer>页脚信息</Layout.Footer>\n</Layout>":
     "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Header>Project Navigation</Layout.Header>\n  <Layout.Content>Page content</Layout.Content>\n  <Layout.Footer>Footer information</Layout.Footer>\n</Layout>",
-  "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar width={240}>项目导航</Layout.Sidebar>\n  <Layout.Content>工作区内容</Layout.Content>\n</Layout>":
-    "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar width={240}>Project Navigation</Layout.Sidebar>\n  <Layout.Content>Workspace Content</Layout.Content>\n</Layout>",
+  "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar width={{ expanded: 240 }}>项目导航</Layout.Sidebar>\n  <Layout.Content>工作区内容</Layout.Content>\n</Layout>":
+    "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar width={{ expanded: 240 }}>Project Navigation</Layout.Sidebar>\n  <Layout.Content>Workspace Content</Layout.Content>\n</Layout>",
   'import { Marker } from \'@heliannuuthus/ui\'\n\n<Marker\n  variant="separator"\n  icon={<CircleDot />}\n  content="生产发布开始 · 21:46"\n/>':
     'import { Marker } from \'@heliannuuthus/ui\'\n\n<Marker\n  variant="separator"\n  icon={<CircleDot />}\n  content="Production release starts · 21:46"\n/>',
   "import { Menubar } from '@heliannuuthus/ui'\n\n<Menubar\n  menus={[\n    {\n      label: '文件',\n      items: [\n        { type: 'label', label: '文档' },\n        { label: '新建文档', shortcut: '⌘N', onSelect: createDocument },\n        { label: '保存', shortcut: '⌘S', onSelect: saveDocument },\n        { type: 'separator' },\n        { label: '移至废纸篓', destructive: true, onSelect: removeDocument },\n      ],\n    },\n    {\n      label: '编辑',\n      items: [\n        { label: '撤销', shortcut: '⌘Z', onSelect: undo },\n        { label: '重做', shortcut: '⇧⌘Z', disabled: true },\n      ],\n    },\n  ]}\n/>":
@@ -3865,14 +3864,14 @@ const ActionCell = () => {
     "import { NavigationMenu } from '@heliannuuthus/ui'\n\n<NavigationMenu\n  items={[\n    {\n      label: 'product',\n      value: 'product',\n      content: ({ Link }) => (\n        <>\n          <Link href=\"/components\">Component library</Link>\n          <Link href=\"/tokens\">Design Tokens</Link>\n        </>\n      ),\n    },\n    { active: true, href: '/components', label: 'components' },\n  ]}\n/>",
   'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button>3 位负责人</Button>}\n  title="发布负责人"\n  description="发布和回滚时会通知这些成员。"\n  content={<OwnerList />}\n/>':
     'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  trigger={<Button>3 persons in charge</Button>}\n  title="Release Manager"\n  description="These members will be notified when publishing and rolling back."\n  content={<OwnerList />}\n/>',
-  'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  triggerMode="hover"\n  trigger={<Button variant="link">@linmo</Button>}\n  content="负责人资料"\n  delay={300}\n  closeDelay={150}\n  side="bottom"\n/>':
-    'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  triggerMode="hover"\n  trigger={<Button variant="link">@linmo</Button>}\n  content="Responsible person information"\n  delay={300}\n  closeDelay={150}\n  side="bottom"\n/>',
-  'import { Progress } from \'@heliannuuthus/ui\'\n\n<Progress\n  effect="sparkle"\n  label="生产环境"\n  showValue\n  value={68}\n/>':
-    'import { Progress } from \'@heliannuuthus/ui\'\n\n<Progress\n  effect="sparkle"\n  label="production environment"\n  showValue\n  value={68}\n/>',
-  'import { Progress } from \'@heliannuuthus/ui\'\n\n<Progress effect="sparkle" value={68} label="生产环境" showValue />':
-    'import { Progress } from \'@heliannuuthus/ui\'\n\n<Progress effect="sparkle" value={68} label="Production environment" showValue />',
-  'import { Progress } from \'@heliannuuthus/ui\'\n\n<Progress label="文档覆盖率" showValue value={68} />':
-    'import { Progress } from \'@heliannuuthus/ui\'\n\n<Progress label="Document coverage" showValue value={68} />',
+  'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  mode="hover"\n  trigger={<Button variant="link">@linmo</Button>}\n  content="负责人资料"\n  delay={{ open: 300, close: 150 }}\n  side="bottom"\n/>':
+    'import { Button, Popover } from \'@heliannuuthus/ui\'\n\n<Popover\n  mode="hover"\n  trigger={<Button variant="link">@linmo</Button>}\n  content="Responsible person information"\n  delay={{ open: 300, close: 150 }}\n  side="bottom"\n/>',
+  'import { Progress } from \'@heliannuuthus/ui\'\n\n<Progress\n  effect="sparkle"\n  label="生产环境"\n  display\n  value={68}\n/>':
+    'import { Progress } from \'@heliannuuthus/ui\'\n\n<Progress\n  effect="sparkle"\n  label="production environment"\n  display\n  value={68}\n/>',
+  'import { Progress } from \'@heliannuuthus/ui\'\n\n<Progress effect="sparkle" value={68} label="生产环境" display />':
+    'import { Progress } from \'@heliannuuthus/ui\'\n\n<Progress effect="sparkle" value={68} label="Production environment" display />',
+  'import { Progress } from \'@heliannuuthus/ui\'\n\n<Progress label="文档覆盖率" display value={68} />':
+    'import { Progress } from \'@heliannuuthus/ui\'\n\n<Progress label="Document coverage" display value={68} />',
   "import { Radio } from '@heliannuuthus/ui'\n\n<Radio.Group\n  value={delivery}\n  onChange={setDelivery}\n  options={[\n    { label: '邮件通知', value: 'email' },\n    { label: '站内通知', value: 'inbox' },\n    { label: '不通知', value: 'none' },\n  ]}\n/>":
     "import { Radio } from '@heliannuuthus/ui'\n\n<Radio.Group\n  value={delivery}\n  onChange={setDelivery}\n  options={[\n    { label: 'email notification', value: 'email' },\n    { label: 'in-site notification', value: 'inbox' },\n    { label: 'No notification', value: 'none' },\n  ]}\n/>",
   "import { Radio } from '@heliannuuthus/ui'\n\n<Radio.Group\n  value={delivery}\n  onChange={setDelivery}\n  options={[\n    { label: '邮件通知', value: 'email' },\n    { label: '站内通知', value: 'inbox' },\n  ]}\n/>":
@@ -3883,8 +3882,8 @@ const ActionCell = () => {
     "import { Resizable } from '@heliannuuthus/ui'\nimport { GripHorizontal } from 'lucide-react'\n\nexport const EditorWithTerminal = () => {\n  return (\n    <Resizable\n      className=\"h-96\"\n      orientation=\"vertical\"\n      separator={<GripHorizontal aria-hidden />}\n      items={[\n        {\n          key: 'editor',\n          panel: <section>Editor</section>,\n          size: ['64', '38'],\n        },\n        {\n          key: 'terminal',\n          panel: <section>Terminal</section>,\n          size: ['36', '20'],\n        },\n      ]}\n    />\n  )\n}",
   "import { Resizable } from '@heliannuuthus/ui'\nimport { GripVertical } from 'lucide-react'\n\nexport const Workspace = () => {\n  return (\n    <Resizable\n      orientation=\"horizontal\"\n      separator={<GripVertical aria-hidden />}\n      items={[\n        { key: 'files', panel: '文件列表', size: ['34', '24'] },\n        { key: 'preview', panel: '内容预览', size: ['66', '40'] },\n      ]}\n    />\n  )\n}":
     "import { Resizable } from '@heliannuuthus/ui'\nimport { GripVertical } from 'lucide-react'\n\nexport const Workspace = () => {\n  return (\n    <Resizable\n      orientation=\"horizontal\"\n      separator={<GripVertical aria-hidden />}\n      items={[\n        { key: 'files', panel: 'file list', size: ['34', '24'] },\n        { key: 'preview', panel: 'content preview', size: ['66', '40'] },\n      ]}\n    />\n  )\n}",
-  'import { Select } from \'@heliannuuthus/ui\'\n\n<Select\n  value={value}\n  onChange={setValue}\n  placeholder="搜索成员…"\n  showClear\n  emptyText="没有找到成员"\n  options={members.map((member) => ({ label: member, value: member }))}\n/>':
-    'import { Select } from \'@heliannuuthus/ui\'\n\n<Select\n  value={value}\n  onChange={setValue}\n  placeholder="Search for members…"\n  showClear\n  emptyText="Member not found"\n  options={members.map((member) => ({ label: member, value: member }))}\n/>',
+  'import { Select } from \'@heliannuuthus/ui\'\n\n<Select\n  value={value}\n  onChange={setValue}\n  placeholder="搜索成员…"\n  clearable\n  empty="没有找到成员"\n  options={members.map((member) => ({ label: member, value: member }))}\n/>':
+    'import { Select } from \'@heliannuuthus/ui\'\n\n<Select\n  value={value}\n  onChange={setValue}\n  placeholder="Search for members…"\n  clearable\n  empty="Member not found"\n  options={members.map((member) => ({ label: member, value: member }))}\n/>',
   'import { Select } from \'@heliannuuthus/ui\'\n\n<Select\n  value={value}\n  onChange={setValue}\n  placeholder="选择工作区"\n  options={groups.map((group) => ({\n    label: group.label,\n    options: group.items.map((item) => ({\n      label: item.label,\n      value: item,\n      disabled: item.disabled,\n    })),\n  }))}\n/>':
     'import { Select } from \'@heliannuuthus/ui\'\n\n<Select\n  value={value}\n  onChange={setValue}\n  placeholder="Select workspace"\n  options={groups.map((group) => ({\n    label: group.label,\n    options: group.items.map((item) => ({\n      label: item.label,\n      value: item,\n      disabled: item.disabled,\n    })),\n  }))}\n/>',
   'import { Separator } from \'@heliannuuthus/ui\'\n\n<div className="flex items-stretch gap-4">\n  <div>状态</div>\n  <Separator orientation="vertical" />\n  <div>负责人</div>\n</div>':
@@ -3893,10 +3892,10 @@ const ActionCell = () => {
     "import { Separator } from '@heliannuuthus/ui'\n\n<section>Content above</section>\n<Separator />\n<section>Content below</section>",
   'import { Slider } from \'@heliannuuthus/ui\'\n\n<Slider aria-label="音量" defaultValue={64} min={0} max={100} />':
     'import { Slider } from \'@heliannuuthus/ui\'\n\n<Slider aria-label="Volume" defaultValue={64} min={0} max={100} />',
-  'import { Slider } from \'@heliannuuthus/ui\'\nimport { Volume1, Volume2 } from \'lucide-react\'\n\n<Slider\n  aria-label="播放器音量"\n  startIcon={<Volume1 />}\n  endIcon={<Volume2 />}\n  startLabel="静音"\n  endLabel="最大"\n  value={volume}\n  onChange={setVolume}\n  min={0}\n  max={100}\n  step={2}\n/>':
-    'import { Slider } from \'@heliannuuthus/ui\'\nimport { Volume1, Volume2 } from \'lucide-react\'\n\n<Slider\n  aria-label="Player volume"\n  startIcon={<Volume1 />}\n  endIcon={<Volume2 />}\n  startLabel="Mute"\n  endLabel="Max"\n  value={volume}\n  onChange={setVolume}\n  min={0}\n  max={100}\n  step={2}\n/>',
-  "import { Sonner, toast } from '@heliannuuthus/ui'\n\ntoast.promise(publish(), {\n  loading: '正在发布到生产环境…',\n  success: 'v0.12.0 已发布',\n  error: '发布失败，请检查构建日志',\n})\n\n<Sonner position=\"bottom-right\" richColors />":
-    "import { Sonner, toast } from '@heliannuuthus/ui'\n\ntoast.promise(publish(), {\n  loading: 'Publishing to production environment...',\n  success: 'v0.12.0 released',\n  error: 'Publishing failed, please check the build log',\n})\n\n<Sonner position=\"bottom-right\" richColors />",
+  'import { Slider } from \'@heliannuuthus/ui\'\nimport { Volume1, Volume2 } from \'lucide-react\'\n\n<Slider\n  aria-label="播放器音量"\n  start={{ icon: <Volume1 />, label: "静音" }}\n  end={{ icon: <Volume2 />, label: "最大" }}\n  value={volume}\n  onChange={setVolume}\n  min={0}\n  max={100}\n  step={2}\n/>':
+    'import { Slider } from \'@heliannuuthus/ui\'\nimport { Volume1, Volume2 } from \'lucide-react\'\n\n<Slider\n  aria-label="Player volume"\n  start={{ icon: <Volume1 />, label: "Mute" }}\n  end={{ icon: <Volume2 />, label: "Max" }}\n  value={volume}\n  onChange={setVolume}\n  min={0}\n  max={100}\n  step={2}\n/>',
+  "import { Sonner, toast } from '@heliannuuthus/ui'\n\ntoast.promise(publish(), {\n  loading: '正在发布到生产环境…',\n  success: 'v0.12.0 已发布',\n  error: '发布失败，请检查构建日志',\n})\n\n<Sonner position=\"bottom-right\" rich />":
+    "import { Sonner, toast } from '@heliannuuthus/ui'\n\ntoast.promise(publish(), {\n  loading: 'Publishing to production environment...',\n  success: 'v0.12.0 released',\n  error: 'Publishing failed, please check the build log',\n})\n\n<Sonner position=\"bottom-right\" rich />",
   "import { Spinner } from '@heliannuuthus/ui'\n\n<div><Spinner />正在加载组件……</div>":
     "import { Spinner } from '@heliannuuthus/ui'\n\n<div><Spinner />Loading components...</div>",
   'import { Spinner } from \'@heliannuuthus/ui\'\n\n<section aria-busy="true" aria-label="正在同步环境状态">\n  <div>\n    <span>预览环境</span>\n    <Spinner aria-label="预览环境同步中" size="sm" />\n  </div>\n</section>':
@@ -3941,8 +3940,8 @@ const ActionCell = () => {
     "import { useState } from 'react'\nimport { Menubar } from '@heliannuuthus/ui'\n\nexport const ViewMenubar = () => {\n  const [sidebar, setSidebar] = useState(true)\n  const [theme, setTheme] = useState('system')\n\n  return (\n    <Menubar\n      menus={[\n        {\n          label: 'view',\n          items: [\n            {\n              type: 'checkbox',\n              label: 'Show sidebar',\n              checked: sidebar,\n              onChange: setSidebar,\n            },\n            { type: 'separator' },\n            {\n              type: 'radio',\n              value: theme,\n              onChange: setTheme,\n              items: [\n                { label: 'Follow the system', value: 'system' },\n                { label: 'light', value: 'light' },\n                { label: 'dark', value: 'dark' },\n              ],\n            },\n          ],\n        },\n      ]}\n    />\n  )\n}",
   "import { useState } from 'react'\nimport { Resizable } from '@heliannuuthus/ui'\nimport { GripVertical } from 'lucide-react'\n\nexport const ConstrainedWorkspace = () => {\n  const [navigationSize, setNavigationSize] = useState(24)\n\n  return (\n    <Resizable\n      className=\"h-80\"\n      separator={({ index }) => <span>{index + 1}</span>}\n      items={[\n        {\n          key: 'navigation',\n          panel: <aside>导航 · {navigationSize}%</aside>,\n          size: ['24', '18', '34'],\n          collapsible: true,\n          collapsedSize: 0,\n          separator: <GripVertical aria-hidden />,\n          onResize: (size) =>\n            setNavigationSize(Math.round(size.asPercentage)),\n        },\n        {\n          key: 'canvas',\n          panel: <main>画布</main>,\n          size: ['52', '36'],\n        },\n        {\n          key: 'inspector',\n          panel: <aside>属性</aside>,\n          size: ['24', '18', '34'],\n          collapsible: true,\n          collapsedSize: 0,\n        },\n      ]}\n    />\n  )\n}":
     "import { useState } from 'react'\nimport { Resizable } from '@heliannuuthus/ui'\nimport { GripVertical } from 'lucide-react'\n\nexport const ConstrainedWorkspace = () => {\n  const [navigationSize, setNavigationSize] = useState(24)\n\n  return (\n    <Resizable\n      className=\"h-80\"\n      separator={({ index }) => <span>{index + 1}</span>}\n      items={[\n        {\n          key: 'navigation',\n          panel: <aside>Navigation · {navigationSize}%</aside>,\n          size: ['24', '18', '34'],\n          collapsible: true,\n          collapsedSize: 0,\n          separator: <GripVertical aria-hidden />,\n          onResize: (size) =>\n            setNavigationSize(Math.round(size.asPercentage)),\n        },\n        {\n          key: 'canvas',\n          panel: <main>canvas</main>,\n          size: ['52', '36'],\n        },\n        {\n          key: 'inspector',\n          panel: <aside>Properties</aside>,\n          size: ['24', '18', '34'],\n          collapsible: true,\n          collapsedSize: 0,\n        },\n      ]}\n    />\n  )\n}",
-  "import { useState } from 'react'\nimport { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { Pagination } from '@heliannuuthus/ui'\n\nconst [page, setPage] = useState(1)\nconst visibleRows = rows.slice((page - 1) * 10, page * 10)\n\n<>\n  <Table.Primitive>\n    {/* render visibleRows，并在末列提供查看、审批等操作 Button */}\n  </Table.Primitive>\n  <Pagination\n    current={page}\n    pageCount={Math.ceil(rows.length / 10)}\n    onChange={setPage}\n  />\n</>":
-    "import { useState } from 'react'\nimport { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { Pagination } from '@heliannuuthus/ui'\n\nconst [page, setPage] = useState(1)\nconst visibleRows = rows.slice((page - 1) * 10, page * 10)\n\n<>\n  <Table.Primitive>\n    {/* render visibleRows, and provide viewing, approval and other operations Button in the last column */}\n  </Table.Primitive>\n  <Pagination\n    current={page}\n    pageCount={Math.ceil(rows.length / 10)}\n    onChange={setPage}\n  />\n</>",
+  "import { useState } from 'react'\nimport { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { Pagination } from '@heliannuuthus/ui'\n\nconst [page, setPage] = useState(1)\nconst visibleRows = rows.slice((page - 1) * 10, page * 10)\n\n<>\n  <Table.Primitive>\n    {/* render visibleRows，并在末列提供查看、审批等操作 Button */}\n  </Table.Primitive>\n  <Pagination\n    page={page}\n    pages={Math.ceil(rows.length / 10)}\n    onChange={setPage}\n  />\n</>":
+    "import { useState } from 'react'\nimport { Table } from '@heliannuuthus/ui'\nimport { Button } from '@heliannuuthus/ui'\nimport { Pagination } from '@heliannuuthus/ui'\n\nconst [page, setPage] = useState(1)\nconst visibleRows = rows.slice((page - 1) * 10, page * 10)\n\n<>\n  <Table.Primitive>\n    {/* render visibleRows, and provide viewing, approval and other operations Button in the last column */}\n  </Table.Primitive>\n  <Pagination\n    page={page}\n    pages={Math.ceil(rows.length / 10)}\n    onChange={setPage}\n  />\n</>",
   "import { useState } from 'react'\nimport { Toggle } from '@heliannuuthus/ui'\n\nexport const ControlledToggle = () => {\n  const [value, setValue] = useState(true)\n\n  return (\n    <Toggle value={value} onChange={setValue} aria-label=\"切换粗体\">\n      <Bold />\n      粗体\n    </Toggle>\n  )\n}":
     "import { useState } from 'react'\nimport { Toggle } from '@heliannuuthus/ui'\n\nexport const ControlledToggle = () => {\n  const [value, setValue] = useState(true)\n\n  return (\n    <Toggle value={value} onChange={setValue} aria-label=\"toggle bold\">\n      <Bold />\n      Bold\n    </Toggle>\n  )\n}",
   'items 中的导航和内容仍需使用各自正确的语义结构。':
@@ -4114,8 +4113,8 @@ const ActionCell = () => {
   'placeholder 只描述搜索输入框尚未输入内容时的预期查询，不负责空结果反馈。':
     'placeholder describes the expected query before anything is entered; it does not provide empty-result feedback.',
   空结果内容: 'Empty result content',
-  'emptyText 仅在过滤后没有匹配命令时显示，可以是纯文本，也可以是包含图标、标题和建议的 ReactNode。':
-    'emptyText appears only when filtering finds no matching command and can be plain text or a ReactNode with an icon, title, and suggestion.',
+  'empty 仅在过滤后没有匹配命令时显示，可以是纯文本，也可以是包含图标、标题和建议的 ReactNode。':
+    'empty appears only when filtering finds no matching command and can be plain text or a ReactNode with an icon, title, and suggestion.',
   命令弹窗: 'Command dialog',
   'dialog 是 Command 对通用 Dialog 的组合入口，用来把同一份命令列表放入模态层；它负责触发器、标题、说明和开关状态，groups 仍负责命令内容。':
     'dialog composes Command with the shared Dialog to place the same command list in a modal layer; it owns the trigger, title, description, and open state while groups still define the commands.',
@@ -4175,10 +4174,10 @@ const ActionCell = () => {
     'Keyboard users can enter a search term, move with the arrow keys, and run a command with Enter.',
   '禁用命令需要使用 disabled，不要仅通过颜色表达不可用状态。':
     'Use disabled for unavailable commands instead of communicating the state with color alone.',
-  'placeholder 描述可搜索内容，emptyText 说明搜索无结果，两者不要混用。':
-    'placeholder describes what can be searched, while emptyText explains that no results were found; do not mix their roles.',
-  'value 管理当前命令选择；搜索关键词应通过 inputProps 管理。':
-    'value manages the current command selection; manage the search term through inputProps.',
+  'input.placeholder 描述可搜索内容，empty 说明搜索无结果，两者不要混用。':
+    'input.placeholder describes what can be searched, while empty explains that no results were found; do not mix their roles.',
+  'value 管理当前命令选择；搜索关键词应通过 input 管理。':
+    'value manages the current command selection; manage the search term through input.',
   'shortcut 只负责展示提示，应用仍需自行注册对应的全局快捷键。':
     'shortcut only displays a hint; the application must still register the corresponding global keyboard shortcut.',
   'items 同时体现分组标题、图标、快捷键、禁用项、分隔线和危险操作；选择后结果会显示在触发区域下方。':
@@ -4399,8 +4398,8 @@ const ActionCell = () => {
   'title、description 与 media 分别承载文件名称、辅助信息和类型图标。':
     'Use title, description, and media for the file name, supporting information, and file-type icon.',
   媒体内容类型: 'Media content type',
-  'mediaType 明确声明 media 是图标还是图片，让缩略图获得正确的尺寸、裁切与状态样式。':
-    'mediaType declares whether media is an icon or an image so thumbnails receive the correct size, crop, and state styling.',
+  'media.type 明确声明 media 是图标还是图片，让缩略图获得正确的尺寸、裁切与状态样式。':
+    'media.type declares whether media is an icon or an image so thumbnails receive the correct size, crop, and state styling.',
   媒体类型: 'Media type',
   图标: 'Icon',
   处理状态: 'Processing states',
@@ -4436,14 +4435,14 @@ const ActionCell = () => {
   '下载 web-console.tgz': 'Download web-console.tgz',
   单击附件打开预览: 'Click the attachment to open a preview',
   '预览 release-notes.md': 'Preview release-notes.md',
-  'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  media={<FileArchive />}\n  mediaType="icon"\n  title="web-console.tgz"\n/>\n\n<Attachment\n  media={<img alt="附件缩略图" src="/cover.jpg" />}\n  mediaType="image"\n  title="cover.jpg"\n/>':
-    'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  media={<FileArchive />}\n  mediaType="icon"\n  title="web-console.tgz"\n/>\n\n<Attachment\n  media={<img alt="Attachment thumbnail" src="/cover.jpg" />}\n  mediaType="image"\n  title="cover.jpg"\n/>',
+  'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  media={{ content: <FileArchive />, type: "icon" }}\n  title="web-console.tgz"\n/>\n\n<Attachment\n  media={{ content: <img alt="附件缩略图" src="/cover.jpg" />, type: "image" }}\n  title="cover.jpg"\n/>':
+    'import { Attachment } from \'@heliannuuthus/ui\'\n\n<Attachment\n  media={{ content: <FileArchive />, type: "icon" }}\n  title="web-console.tgz"\n/>\n\n<Attachment\n  media={{ content: <img alt="Attachment thumbnail" src="/cover.jpg" />, type: "image" }}\n  title="cover.jpg"\n/>',
   '<Attachment\n  actions={<Button aria-label="下载附件"><Download /></Button>}\n  title="web-console.tgz"\n/>':
     '<Attachment\n  actions={<Button aria-label="Download attachment"><Download /></Button>}\n  title="web-console.tgz"\n/>',
   '<Attachment\n  title="release-notes.md"\n  trigger={<a aria-label="预览 release-notes.md" href="/files/release-notes.md" />}\n/>':
     '<Attachment\n  title="release-notes.md"\n  trigger={<a aria-label="Preview release-notes.md" href="/files/release-notes.md" />}\n/>',
-  '<Avatar size="sm" alt="林默" fallback="林" />\n<Avatar size="default" alt="林默" fallback="林" />\n<Avatar size="lg" alt="林默" fallback="林" />':
-    '<Avatar size="sm" alt="Lin Mo" fallback="L" />\n<Avatar size="default" alt="Lin Mo" fallback="L" />\n<Avatar size="lg" alt="Lin Mo" fallback="L" />',
+  '<Avatar size="sm" alt="林默" fallback={{ children: "林" }} />\n<Avatar size="default" alt="林默" fallback={{ children: "林" }} />\n<Avatar size="lg" alt="林默" fallback={{ children: "林" }} />':
+    '<Avatar size="sm" alt="Lin Mo" fallback={{ children: "L" }} />\n<Avatar size="default" alt="Lin Mo" fallback={{ children: "L" }} />\n<Avatar size="lg" alt="Lin Mo" fallback={{ children: "L" }} />',
   头像形状: 'Avatar shapes',
   'shape 在圆形和圆角方形之间切换，每种形状作为独立 case 展示。':
     'shape switches between circle and rounded-square avatars, with each shape shown as an independent case.',
@@ -4457,19 +4456,19 @@ const ActionCell = () => {
   透明: 'Ghost',
   危险: 'Destructive',
   气泡预览: 'Bubble preview',
-  'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble\n  align="end"\n  content="已经补充完成，可以重新评审。"\n  reactions="✓ 2"\n  variant="elevated"\n/>':
-    'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble\n  align="end"\n  content="The update is complete and ready for another review."\n  reactions="✓ 2"\n  variant="elevated"\n/>',
+  'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble\n  align="end"\n  content={{ children: "已经补充完成，可以重新评审。" }}\n  reactions={{ children: "✓ 2" }}\n  variant="elevated"\n/>':
+    'import { Bubble } from \'@heliannuuthus/ui\'\n\n<Bubble\n  align="end"\n  content={{ children: "The update is complete and ready for another review." }}\n  reactions={{ children: "✓ 2" }}\n  variant="elevated"\n/>',
   图片与回退内容: 'Image and fallback content',
-  'src 提供头像图片；加载失败时显示 fallback，并通过 imageProps 与 fallbackProps 配置加载回调和延迟。':
-    'src provides the avatar image; fallback is shown when loading fails, while imageProps and fallbackProps configure loading callbacks and delay.',
+  'src 提供头像图片；加载失败时显示 fallback，并通过 image 与 fallback 配置加载回调和延迟。':
+    'src provides the avatar image; fallback is shown when loading fails, while image and fallback configure loading callbacks and delay.',
   图片状态: 'Image status',
   图片可用: 'Image available',
   显示回退: 'Show fallback',
-  '<Avatar\n  alt="林默"\n  src="/avatars/lin.png"\n  fallback="林"\n  fallbackProps={{ delay: 200 }}\n  imageProps={{ onLoadingStatusChange: setStatus }}\n/>':
-    '<Avatar\n  alt="Lin Mo"\n  src="/avatars/lin.png"\n  fallback="L"\n  fallbackProps={{ delay: 200 }}\n  imageProps={{ onLoadingStatusChange: setStatus }}\n/>',
+  '<Avatar\n  alt="林默"\n  src="/avatars/lin.png"\n  fallback={{ children: "林", delay: 200 }}\n  image={{ onStatusChange: setStatus }}\n/>':
+    '<Avatar\n  alt="Lin Mo"\n  src="/avatars/lin.png"\n  fallback={{ children: "L", delay: 200 }}\n  image={{ onStatusChange: setStatus }}\n/>',
   自定义剩余数量: 'Custom overflow count',
-  'renderCount 接收未展示数量并替换默认 +N，同时继承分组的 shape 与 size。':
-    'renderCount receives the hidden count and replaces the default +N while inheriting the group shape and size.',
+  'overflow 接收未展示数量并替换默认 +N，同时继承分组的 shape 与 size。':
+    'overflow receives the hidden count and replaces the default +N while inheriting the group shape and size.',
   剩余数量: 'Overflow count',
   自定义: 'Custom',
   '显式传入 title 说明当前为空的对象；默认图标仅提供辅助视觉，不替代状态文案。':
@@ -4507,8 +4506,8 @@ const ActionCell = () => {
   列表项尺寸: 'Item sizes',
   'size 分别提供默认、小和超小三档内容密度。':
     'size provides default, small, and extra-small content densities.',
-  'mediaType 明确区分普通内容、图标和图片，避免调用方依赖节点形态推断样式。':
-    'mediaType explicitly distinguishes plain content, icons, and images so callers do not rely on node-shape inference.',
+  'media.type 明确区分普通内容、图标和图片，避免调用方依赖节点形态推断样式。':
+    'media.type explicitly distinguishes plain content, icons, and images so callers do not rely on node-shape inference.',
   普通内容: 'Plain content',
   内容槽位: 'Content slots',
   'header、content、actions 与 footer 各自占据独立语义区域，不再把多个结构字段塞进同一行说明。':
@@ -4524,8 +4523,8 @@ const ActionCell = () => {
   默认分隔线: 'Default divider',
   自定义内容: 'Custom content',
   链接与槽位样式: 'Link and slot styles',
-  'href 让整个 Marker 使用原生链接语义，classNames 分别扩展 icon 与 content 槽位。':
-    'href gives the entire Marker native link semantics, while classNames extends the icon and content slots independently.',
+  'href 让整个 Marker 使用原生链接语义，classes 分别扩展 icon 与 content 槽位。':
+    'href gives the entire Marker native link semantics, while classes extends the icon and content slots independently.',
   消息对齐: 'Message alignment',
   'align 只控制单个气泡位于消息流的起始侧或末端，不隐含发送者身份。':
     'align only places a bubble at the start or end of the message flow and does not imply sender identity.',
@@ -4533,8 +4532,8 @@ const ActionCell = () => {
   起始侧: 'Start side',
   末端: 'End side',
   回应位置: 'Reaction position',
-  'reactionsProps 的 side 与 align 分别控制回应位于气泡上下侧和左右边缘。':
-    'The side and align fields in reactionsProps place reactions on the top or bottom and at either horizontal edge.',
+  'reactions 的 side 与 align 分别控制回应位于气泡上下侧和左右边缘。':
+    'The side and align fields in reactions place reactions on the top or bottom and at either horizontal edge.',
   顶部起始侧: 'Top start',
   顶部末端: 'Top end',
   底部起始侧: 'Bottom start',
@@ -4582,14 +4581,14 @@ const ActionCell = () => {
   进入生产阶段: 'Entering production',
   查看完整发布记录: 'View the complete release history',
   轨道与项目样式: 'Track and item styles',
-  'classNames 按 content 与 item 语义槽位扩展轮播轨道和项目样式。':
-    'classNames extends the carousel track and items through the content and item semantic slots.',
+  'classes 按 content 与 item 语义槽位扩展轮播轨道和项目样式。':
+    'classes extends the carousel track and items through the content and item semantic slots.',
   自定义列表项渲染: 'Custom item rendering',
-  'renderItem 接收当前 ItemGroupEntry 和索引，用于改写整项渲染，而不是修改 Item 的基础属性。':
-    'renderItem receives the current ItemGroupEntry and index to replace whole-item rendering without changing the base Item contract.',
+  'render 接收当前 ItemGroupEntry 和索引，用于改写整项渲染，而不是修改 Item 的基础属性。':
+    'render receives the current ItemGroupEntry and index to replace whole-item rendering without changing the base Item contract.',
   内容节点属性: 'Content node properties',
-  'contentProps 向内部内容节点传递标准 HTML、ARIA、data 属性、事件和 className。':
-    'contentProps passes standard HTML, ARIA, data attributes, events, and className to the inner content node.',
+  'content 向内部内容节点传递标准 HTML、ARIA、data 属性、事件和 className。':
+    'content passes standard HTML, ARIA, data attributes, events, and className to the inner content node.',
   '内容节点可以接收语义、事件和样式扩展。':
     'The content node can receive semantic, event, and style extensions.',
   自定义轨道与项目宽度: 'Custom track and item width',
@@ -4655,28 +4654,28 @@ const ActionCell = () => {
   定位到归档说明: 'Jump to archived notes',
   '用 Item.Group 组织同类动态，并通过分隔线维持连续列表的阅读节奏。':
     'Use Item.Group to organize related activity and separators to maintain the reading rhythm of a continuous list.',
-  "import { Tag, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: <MessageCircle />,\n      mediaType: 'icon',\n      title: '林默回复了检查项',\n      description: '确认索引变更不会锁表。',\n      actions: <Tag>2 分钟前</Tag>,\n    },\n  ]}\n/>":
-    "import { Tag, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: <MessageCircle />,\n      mediaType: 'icon',\n      title: 'Lin Mo replied to the review item',\n      description: 'Confirmed that the index change will not lock the table.',\n      actions: <Tag>2 minutes ago</Tag>,\n    },\n  ]}\n/>",
+  "import { Tag, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: { content: <MessageCircle />, type: 'icon' },\n      title: '林默回复了检查项',\n      description: '确认索引变更不会锁表。',\n      actions: <Tag>2 分钟前</Tag>,\n    },\n  ]}\n/>":
+    "import { Tag, Item } from '@heliannuuthus/ui'\n\n<Item.Group\n  separator\n  items={[\n    {\n      media: { content: <MessageCircle />, type: 'icon' },\n      title: 'Lin Mo replied to the review item',\n      description: 'Confirmed that the index change will not lock the table.',\n      actions: <Tag>2 minutes ago</Tag>,\n    },\n  ]}\n/>",
   成员目录: 'Member directory',
   '头像、身份说明和成员状态保持同一行对齐，描边外观明确每个成员的点击区域。':
     'Keep avatars, role descriptions, and member status aligned on one row; the outlined appearance makes each member’s hit area explicit.',
-  'import { Avatar, Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<Avatar alt="林默" fallback="林" />}\n  title="林默"\n  description="平台工程 · 发布管理员"\n  actions={<Tag type="success">在线</Tag>}\n/>':
-    'import { Avatar, Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={<Avatar alt="Lin Mo" fallback="L" />}\n  title="Lin Mo"\n  description="Platform engineering · Release administrator"\n  actions={<Tag type="success">Online</Tag>}\n/>',
+  'import { Avatar, Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={{ content: <Avatar alt="林默" fallback={{ children: "林" }} /> }}\n  title="林默"\n  description="平台工程 · 发布管理员"\n  actions={<Tag type="success">在线</Tag>}\n/>':
+    'import { Avatar, Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="outline"\n  media={{ content: <Avatar alt="Lin Mo" fallback={{ children: "L" }} /> }}\n  title="Lin Mo"\n  description="Platform engineering · Release administrator"\n  actions={<Tag type="success">Online</Tag>}\n/>',
   '把开关放入 actions，让标题解释设置、描述说明影响范围，整行本身不重复承担点击行为。':
     'Place the switch in actions so the title names the setting and the description explains its scope; the row itself does not duplicate the click behavior.',
-  'import { Item, Switch } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="muted"\n  media={<Cloud />}\n  mediaType="icon"\n  title="自动部署预览环境"\n  description="合并到 main 后自动更新预览环境。"\n  actions={<Switch aria-label="自动部署预览环境" />}\n/>':
-    'import { Item, Switch } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="muted"\n  media={<Cloud />}\n  mediaType="icon"\n  title="Automatically deploy preview environment"\n  description="Update the preview environment after merging into main."\n  actions={<Switch aria-label="Automatically deploy preview environment" />}\n/>',
+  'import { Item, Switch } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="muted"\n  media={{ content: <Cloud />, type: "icon" }}\n  title="自动部署预览环境"\n  description="合并到 main 后自动更新预览环境。"\n  actions={<Switch aria-label="自动部署预览环境" />}\n/>':
+    'import { Item, Switch } from \'@heliannuuthus/ui\'\n\n<Item\n  variant="muted"\n  media={{ content: <Cloud />, type: "icon" }}\n  title="Automatically deploy preview environment"\n  description="Update the preview environment after merging into main."\n  actions={<Switch aria-label="Automatically deploy preview environment" />}\n/>',
   资源入口: 'Resource entry',
   '使用 href 把整个资源项变成原生链接；header 和 footer 承载辅助元数据。':
     'Use href to make the entire resource item a native link; header and footer carry supporting metadata.',
-  'import { Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Tag>发布说明</Tag>}\n  media={<FileText />}\n  mediaType="icon"\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>许澄维护 · 8 分钟前更新</span>}\n/>':
-    'import { Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Tag>Release notes</Tag>}\n  media={<FileText />}\n  mediaType="icon"\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>Maintained by Xu Cheng · Updated 8 minutes ago</span>}\n/>',
+  'import { Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Tag>发布说明</Tag>}\n  media={{ content: <FileText />, type: "icon" }}\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>许澄维护 · 8 分钟前更新</span>}\n/>':
+    'import { Tag, Item } from \'@heliannuuthus/ui\'\n\n<Item\n  href="/release-notes/v0.12.0"\n  variant="outline"\n  header={<Tag>Release notes</Tag>}\n  media={{ content: <FileText />, type: "icon" }}\n  title="v0.12.0-release-notes.md"\n  description="Markdown · 18 KB"\n  footer={<span>Maintained by Xu Cheng · Updated 8 minutes ago</span>}\n/>',
   '展示成员、动态、文件、设置等具有一致骨架的行级内容。':
     'Display row-level content with a consistent structure, such as members, activity, files, and settings.',
   '需要组合媒体、主次文字、尾部操作或跨行元数据时使用。':
     'Use when composing media, primary and secondary text, trailing actions, or full-row metadata.',
-  'Item.Group 默认提供列表与列表项语义；使用 renderItem 时需要保留等价语义。':
-    'Item.Group provides list and list-item semantics by default; preserve equivalent semantics when using renderItem.',
+  'Item.Group 默认提供列表与列表项语义；使用 render 时需要保留等价语义。':
+    'Item.Group provides list and list-item semantics by default; preserve equivalent semantics when using render.',
   '整行需要跳转时传入 href；行内已有按钮或开关时不要再把整行设为链接。':
     'Pass href when the whole row navigates; do not also make the row a link when it already contains a button or switch.',
   '不要只为比较 variant 创建脱离业务上下文的重复列表。':
@@ -4711,8 +4710,8 @@ const ActionCell = () => {
   '选择当前页 ': 'Select the current page of ',
   选择当前页: 'Select current page',
   ' 条发布记录': ' release records',
-  'sorting、pagination 和 rowSelection 都可以由业务受控；每次交互都会返回公开状态，不暴露底层表格实例。':
-    'Applications can control sorting, pagination, and rowSelection; every interaction returns public state without exposing the underlying table instance.',
+  'sorting、pagination 和 selection 都可以由业务受控；每次交互都会返回公开状态，不暴露底层表格实例。':
+    'Applications can control sorting, pagination, and selection; every interaction returns public state without exposing the underlying table instance.',
   加载与外部状态组合: 'Loading and external state composition',
   'Table 只内置布尔 loading；定制空结果和请求错误分别组合 Empty 与 Alert。':
     'Table only provides boolean loading; compose Empty and Alert for custom empty results and request errors.',
@@ -4766,8 +4765,8 @@ const ActionCell = () => {
     'Use data and Table.Column for typical data lists with search, sorting, pagination, selection, expansion, and virtualization.',
   '数据已经完成加工，或结构无法由列模型表达时，使用 Table.Primitive 作为根并组合 Table.Header、Table.Body、Table.Row 与 Table.Cell。':
     'When data is already processed or the structure cannot be expressed by columns, use Table.Primitive as the root and compose Table.Header, Table.Body, Table.Row, and Table.Cell.',
-  '悬停、聚焦或点击右侧属性行，查看 className 与 Table.ClassNames 各字段对应的真实数据表区域。':
-    'Hover, focus, or click a property row to see the actual region mapped to className and each Table.ClassNames field.',
+  '悬停、聚焦或点击右侧属性行，查看 className 与 Table.Classes 各字段对应的真实数据表区域。':
+    'Hover, focus, or click a property row to see the actual region mapped to className and each Table.Classes field.',
   当前排序: 'Current sorting',
   '当前排序：': 'Current sorting: ',
   '· 已选择': '· selected',
@@ -4936,16 +4935,16 @@ const ActionCell = () => {
   锚点通知: 'Anchored notifications',
   '传入 children 后，通知会定位到对象的 inline-end 顶角；offset 可微调逻辑方向位置。':
     'With children, the notification is positioned at the inline-end top corner; offset fine-tunes its logical position.',
-  'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge indicator={5} indicatorLabel="5 条未读消息">\n  <Button aria-label="查看消息" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge dir="rtl" indicator={12} offset={[3, -2]}>\n  <Button variant="outline">收件箱</Button>\n</Badge>':
-    'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge indicator={5} indicatorLabel="5 unread messages">\n  <Button aria-label="View messages" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge dir="rtl" indicator={12} offset={[3, -2]}>\n  <Button variant="outline">Inbox</Button>\n</Badge>',
+  'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge indicator={5} label="5 条未读消息">\n  <Button aria-label="查看消息" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge dir="rtl" indicator={12} offset={[3, -2]}>\n  <Button variant="outline">收件箱</Button>\n</Badge>':
+    'import { Badge, Button } from \'@heliannuuthus/ui\'\nimport { Mail } from \'lucide-react\'\n\n<Badge indicator={5} label="5 unread messages">\n  <Button aria-label="View messages" size="icon" variant="outline">\n    <Mail />\n  </Button>\n</Badge>\n\n<Badge dir="rtl" indicator={12} offset={[3, -2]}>\n  <Button variant="outline">Inbox</Button>\n</Badge>',
   状态红点: 'Status dot',
-  'indicator 为 true 时只显示红点；因为没有可见内容，必须提供 indicatorLabel。':
-    'When indicator is true, only a dot is displayed. Because it has no visible content, indicatorLabel is required.',
-  'import { Badge, Button } from \'@heliannuuthus/ui\'\n\n<Badge indicator indicatorLabel="有新的系统通知">\n  <Button variant="outline">系统通知</Button>\n</Badge>':
-    'import { Badge, Button } from \'@heliannuuthus/ui\'\n\n<Badge indicator indicatorLabel="New system notification">\n  <Button variant="outline">System notifications</Button>\n</Badge>',
+  'indicator 为 true 时只显示红点；因为没有可见内容，必须提供 label。':
+    'When indicator is true, only a dot is displayed. Because it has no visible content, label is required.',
+  'import { Badge, Button } from \'@heliannuuthus/ui\'\n\n<Badge indicator label="有新的系统通知">\n  <Button variant="outline">系统通知</Button>\n</Badge>':
+    'import { Badge, Button } from \'@heliannuuthus/ui\'\n\n<Badge indicator label="New system notification">\n  <Button variant="outline">System notifications</Button>\n</Badge>',
   样式扩展: 'Style extensions',
-  '根节点使用 className 与 style，通知标记使用对应的 classNames 和 styles 插槽。':
-    'Use className and style for the root, and the matching classNames and styles slot for the indicator.',
+  '根节点使用 className 与 style，通知标记使用对应的 classes 和 styles 插槽。':
+    'Use className and style for the root, and the matching classes and styles slot for the indicator.',
   '设置通知内容；true 显示红点，节点显示内容，false、null 或 undefined 隐藏。':
     'Sets notification content: true displays a dot, a node displays content, and false, null, or undefined hides it.',
   '设置数字通知的显示上限，超出时追加加号。':
@@ -4960,10 +4959,10 @@ const ActionCell = () => {
     'Extends the indicator semantic slot styles.',
   '扩展 indicator 语义插槽行内样式。':
     'Extends the indicator semantic slot inline styles.',
-  '红点没有可见文字，必须通过 indicatorLabel 说明通知含义。':
-    'A dot has no visible text, so indicatorLabel must describe the notification.',
-  '数字已有可见文本；含义不明确时仍应补充 indicatorLabel。':
-    'Counts have visible text; add indicatorLabel when their meaning is still unclear.',
+  '红点没有可见文字，必须通过 label 说明通知含义。':
+    'A dot has no visible text, so label must describe the notification.',
+  '数字已有可见文本；含义不明确时仍应补充 label。':
+    'Counts have visible text; add label when their meaning is still unclear.',
   'Badge 支持标准 span、ARIA、data 属性和事件，并转发 span ref。':
     'Badge supports standard span, ARIA, and data attributes and events, and forwards a span ref.',
   'Badge 只表示通知；状态、分类和简短属性应使用 Tag。':
@@ -4974,8 +4973,8 @@ const ActionCell = () => {
   'badge 插槽可放置 Tag 状态标签或 Badge 通知标记，并始终锚定在头像右下角。':
     'The badge slot accepts Tag status labels or Badge notification indicators and keeps them anchored to the avatar corner.',
   '8 条未读消息': '8 unread messages',
-  'import { Avatar, Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="陈序"\n  badge={<Badge indicator={8} indicatorLabel="8 条未读消息" />}\n  fallback="陈"\n  size="lg"\n/>':
-    'import { Avatar, Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="Chen Xu"\n  badge={<Badge indicator={8} indicatorLabel="8 unread messages" />}\n  fallback="Chen"\n  size="lg"\n/>',
+  'import { Avatar, Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="陈序"\n  badge={<Badge indicator={8} label="8 条未读消息" />}\n  fallback={{ children: "陈" }}\n  size="lg"\n/>':
+    'import { Avatar, Badge } from \'@heliannuuthus/ui\'\n\n<Avatar\n  alt="Chen Xu"\n  badge={<Badge indicator={8} label="8 unread messages" />}\n  fallback={{ children: "Chen" }}\n  size="lg"\n/>',
   '在头像右下角放置在线点、认证图标或 Tag 等状态节点。':
     'Places an online dot, verification icon, Tag, or other status node at the avatar bottom corner.',
   自定义过滤: 'Custom filter',
@@ -4984,8 +4983,8 @@ const ActionCell = () => {
   收起侧边栏: 'Collapse sidebar',
   展开侧边栏: 'Expand sidebar',
   响应式折叠: 'Responsive collapse',
-  'Sidebar 在 lg 以下自动折叠，也可以通过内置触发器手动切换；collapsedWidth 决定折叠后保留的宽度。':
-    'The Sidebar collapses automatically below lg and can also be toggled manually with its built-in trigger; collapsedWidth controls the remaining width.',
+  'Sidebar 在 lg 以下自动折叠，也可以通过内置触发器手动切换；width.collapsed 决定折叠后保留的宽度。':
+    'The Sidebar collapses automatically below lg and can also be toggled manually with its built-in trigger; width.collapsed controls the remaining width.',
   '低于指定视口断点时自动折叠；使用与 Tailwind 默认断点一致的 token。':
     'Collapse automatically below the selected viewport breakpoint using tokens aligned with the default Tailwind breakpoints.',
   '受控的折叠状态。': 'The controlled collapsed state.',
@@ -5003,10 +5002,10 @@ const ActionCell = () => {
     'Declare whether the sidebar sits on the logical start or end side so the built-in trigger uses the matching position and icon.',
   '设置内置折叠触发器在展开和折叠状态下的可访问名称。':
     'Set the accessible names of the built-in collapse trigger in its expanded and collapsed states.',
-  '文字导航在窄屏下通常不适合压成图标栏；将 collapsedWidth 设置为 0，并组合 Drawer 提供完整导航。':
-    'Text navigation usually should not be compressed into an icon rail on narrow screens; set collapsedWidth to 0 and compose Drawer for complete navigation.',
-  "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar\n    breakpoint=\"lg\"\n    collapsible\n    collapsedWidth={64}\n    labels={{\n      collapse: '收起侧边栏',\n      expand: '展开侧边栏',\n    }}\n  >\n    Navigation\n  </Layout.Sidebar>\n  <Layout.Content>Content</Layout.Content>\n</Layout>":
-    "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar\n    breakpoint=\"lg\"\n    collapsible\n    collapsedWidth={64}\n    labels={{\n      collapse: 'Collapse sidebar',\n      expand: 'Expand sidebar',\n    }}\n  >\n    Navigation\n  </Layout.Sidebar>\n  <Layout.Content>Content</Layout.Content>\n</Layout>",
+  '文字导航在窄屏下通常不适合压成图标栏；将 width.collapsed 设置为 0，并组合 Drawer 提供完整导航。':
+    'Text navigation usually should not be compressed into an icon rail on narrow screens; set width.collapsed to 0 and compose Drawer for complete navigation.',
+  "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar\n    breakpoint=\"lg\"\n    collapsible\n    width={{ collapsed: 64 }}\n    labels={{\n      collapse: '收起侧边栏',\n      expand: '展开侧边栏',\n    }}\n  >\n    Navigation\n  </Layout.Sidebar>\n  <Layout.Content>Content</Layout.Content>\n</Layout>":
+    "import { Layout } from '@heliannuuthus/ui'\n\n<Layout>\n  <Layout.Sidebar\n    breakpoint=\"lg\"\n    collapsible\n    width={{ collapsed: 64 }}\n    labels={{\n      collapse: 'Collapse sidebar',\n      expand: 'Expand sidebar',\n    }}\n  >\n    Navigation\n  </Layout.Sidebar>\n  <Layout.Content>Content</Layout.Content>\n</Layout>",
   尚未执行操作: 'No action yet',
   表单已提交: 'Form submitted',
   草稿已预览: 'Draft previewed',
@@ -5122,8 +5121,8 @@ export const WorkspaceCard = () => {
     'The card title; required whenever header is provided.',
   'header.action 和 footer 中的图标按钮需要提供可访问名称。':
     'Icon buttons in header.action and footer need accessible names.',
-  "import { Layout } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nexport const ResponsiveLayout = () => {\n  const [status, setStatus] = useState('')\n\n  return (\n    <Layout>\n      <Layout.Sidebar\n        breakpoint=\"lg\"\n        collapsible\n        collapsedWidth={64}\n        defaultCollapsed={false}\n        side=\"start\"\n        labels={{\n          collapse: '收起侧边栏',\n          expand: '展开侧边栏',\n        }}\n        onBreakpointChange={(below) => setStatus(below ? '窄屏' : '宽屏')}\n        onChange={(collapsed, reason) =>\n          setStatus(\n            (collapsed ? '已收起' : '已展开') + '：' + reason\n          )\n        }\n      >\n        Navigation\n      </Layout.Sidebar>\n      <Layout.Content>{status}</Layout.Content>\n    </Layout>\n  )\n}":
-    "import { Layout } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nexport const ResponsiveLayout = () => {\n  const [status, setStatus] = useState('')\n\n  return (\n    <Layout>\n      <Layout.Sidebar\n        breakpoint=\"lg\"\n        collapsible\n        collapsedWidth={64}\n        defaultCollapsed={false}\n        side=\"start\"\n        labels={{\n          collapse: 'Collapse sidebar',\n          expand: 'Expand sidebar',\n        }}\n        onBreakpointChange={(below) => setStatus(below ? 'Narrow' : 'Wide')}\n        onChange={(collapsed, reason) =>\n          setStatus(\n            (collapsed ? 'Collapsed' : 'Expanded') + ': ' + reason\n          )\n        }\n      >\n        Navigation\n      </Layout.Sidebar>\n      <Layout.Content>{status}</Layout.Content>\n    </Layout>\n  )\n}",
+  "import { Layout } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nexport const ResponsiveLayout = () => {\n  const [status, setStatus] = useState('')\n\n  return (\n    <Layout>\n      <Layout.Sidebar\n        breakpoint=\"lg\"\n        collapsible\n        width={{ collapsed: 64 }}\n        defaultCollapsed={false}\n        side=\"start\"\n        labels={{\n          collapse: '收起侧边栏',\n          expand: '展开侧边栏',\n        }}\n        onBreakpointChange={(below) => setStatus(below ? '窄屏' : '宽屏')}\n        onChange={(collapsed, reason) =>\n          setStatus(\n            (collapsed ? '已收起' : '已展开') + '：' + reason\n          )\n        }\n      >\n        Navigation\n      </Layout.Sidebar>\n      <Layout.Content>{status}</Layout.Content>\n    </Layout>\n  )\n}":
+    "import { Layout } from '@heliannuuthus/ui'\nimport { useState } from 'react'\n\nexport const ResponsiveLayout = () => {\n  const [status, setStatus] = useState('')\n\n  return (\n    <Layout>\n      <Layout.Sidebar\n        breakpoint=\"lg\"\n        collapsible\n        width={{ collapsed: 64 }}\n        defaultCollapsed={false}\n        side=\"start\"\n        labels={{\n          collapse: 'Collapse sidebar',\n          expand: 'Expand sidebar',\n        }}\n        onBreakpointChange={(below) => setStatus(below ? 'Narrow' : 'Wide')}\n        onChange={(collapsed, reason) =>\n          setStatus(\n            (collapsed ? 'Collapsed' : 'Expanded') + ': ' + reason\n          )\n        }\n      >\n        Navigation\n      </Layout.Sidebar>\n      <Layout.Content>{status}</Layout.Content>\n    </Layout>\n  )\n}",
   '触发操作或事件的基础控件；设置 href 时切换为使用相同视觉样式的原生链接。':
     'A foundational control for triggering actions or events; setting href switches it to a native link with the same visual styles.',
   文字按钮: 'Text button',
@@ -5236,10 +5235,10 @@ import { ScrollArea } from '@heliannuuthus/ui'
   <div role="list" aria-label="协作消息">
     {messages.map((message) => (
       <div className="flex gap-2" role="listitem">
-        <Avatar alt={message.author} fallback={message.avatar} />
+        <Avatar alt={message.author} fallback={{ children: message.avatar }} />
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <span>{message.author} · {message.time}</span>
-          <Bubble content={message.content} variant="elevated" />
+          <Bubble content={{ children: message.content }} variant="elevated" />
         </div>
       </div>
     ))}
@@ -5255,10 +5254,10 @@ import { ScrollArea } from '@heliannuuthus/ui'
   <div role="list" aria-label="Collaboration messages">
     {messages.map((message) => (
       <div className="flex gap-2" role="listitem">
-        <Avatar alt={message.author} fallback={message.avatar} />
+        <Avatar alt={message.author} fallback={{ children: message.avatar }} />
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <span>{message.author} · {message.time}</span>
-          <Bubble content={message.content} variant="elevated" />
+          <Bubble content={{ children: message.content }} variant="elevated" />
         </div>
       </div>
     ))}
@@ -5266,8 +5265,8 @@ import { ScrollArea } from '@heliannuuthus/ui'
 </ScrollArea>`,
   默认名称: 'Default labels',
   本地化名称: 'Localized labels',
-  'header 可以组合任意摘要内容；indicator 在两种触发模式下统一控制状态图标，传 false 时隐藏。':
-    'The header can compose any summary content; indicator controls the status icon in both trigger modes, and false hides it.',
+  'header 可以组合任意摘要内容；trigger.indicator 在两种触发模式下统一控制状态图标，传 false 时隐藏。':
+    'The header can compose any summary content; trigger.indicator controls the status icon in both trigger modes, and false hides it.',
   默认摘要: 'Default summary',
   自定义摘要: 'Custom summary',
   隐藏摘要: 'Hidden summary',
@@ -5276,9 +5275,9 @@ import { ScrollArea } from '@heliannuuthus/ui'
     'Sets the status icon for either the Header or a separate trigger; true uses the default icon, false hides it, and a custom node replaces it.',
   '控制右上角关闭操作；true 使用默认图标，false 隐藏，也可传入自定义节点。':
     'Controls the top-right close action; true uses the default icon, false hides it, and a custom node replaces it.',
-  '通过 indicator 替换默认图标，Header 内容保持不变。':
-    'Replace the default icon through indicator without changing the Header content.',
-  '传入 indicator=false，保留触发能力但不显示指示图标。':
-    'Pass indicator=false to keep the trigger behavior without showing an indicator.',
+  '通过 trigger.indicator 替换默认图标，Header 内容保持不变。':
+    'Replace the default icon through trigger.indicator without changing the Header content.',
+  '传入 trigger.indicator=false，保留触发能力但不显示指示图标。':
+    'Pass trigger.indicator=false to keep the trigger behavior without showing an trigger.indicator.',
   '· 共': '· Total',
 };

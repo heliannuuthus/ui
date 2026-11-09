@@ -8,8 +8,8 @@ const cases = [
     component: Case01,
     title: { en: 'Basic usage', zh: '基础用法' },
     description: {
-      en: 'Use label, value, and showValue to simultaneously describe the progress object, completion percentage, and remaining range.',
-      zh: '用 label、value 和 showValue 同时说明进度对象、完成比例和剩余范围。',
+      en: 'Use label, value, and display to simultaneously describe the progress object, completion percentage, and remaining range.',
+      zh: '用 label、value 和 display 同时说明进度对象、完成比例和剩余范围。',
     },
   },
   {

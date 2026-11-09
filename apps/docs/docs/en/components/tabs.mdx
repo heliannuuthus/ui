@@ -116,8 +116,8 @@ import { ApiTable } from '@docs/rspress/api-table';
       defaultValue: 'Built-in English copywriting',
       description:
         'Localize the names of the start and end scroll buttons that appear automatically when overflowing horizontally.',
-      name: 'scrollLabels',
-      type: 'Partial<TabsScrollLabels>',
+      name: 'labels',
+      type: 'Partial<TabsLabels>',
     },
     {
       component: 'Tabs',
@@ -156,7 +156,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: 'boolean',
     },
     {
-      component: 'TabsScrollLabels',
+      component: 'TabsLabels',
       defaultValue: "'Scroll tabs backward'",
       description:
         'Accessible name of the button that scrolls toward the start of the list.',
@@ -164,7 +164,7 @@ import { ApiTable } from '@docs/rspress/api-table';
       type: 'string',
     },
     {
-      component: 'TabsScrollLabels',
+      component: 'TabsLabels',
       defaultValue: "'Scroll tabs forward'",
       description:
         'Accessible name of the button that scrolls toward the end of the list.',
@@ -175,14 +175,14 @@ import { ApiTable } from '@docs/rspress/api-table';
       component: 'Tabs',
       defaultValue: null,
       description: 'Extend the className of the corresponding semantic slot.',
-      name: 'classNames',
-      type: 'TabsClassNames',
+      name: 'classes',
+      type: 'TabsClasses',
     },
     {
       component: 'Tabs',
       defaultValue: null,
       description:
-        'Set inline styles using the same semantic slots as classNames.',
+        'Set inline styles using the same semantic slots as classes.',
       name: 'styles',
       type: 'TabsStyles',
     },

@@ -57,7 +57,7 @@ const itemMediaVariants: (props?: ItemMediaVariantOptions) => string = cva(
   }
 );
 
-type ItemClassNames = {
+type ItemClasses = {
   actions?: string;
   content?: string;
   description?: string;
@@ -68,18 +68,22 @@ type ItemClassNames = {
 };
 
 type ItemStyles = {
-  [Slot in keyof ItemClassNames]?: React.CSSProperties;
+  [Slot in keyof ItemClasses]?: React.CSSProperties;
+};
+
+type ItemMediaConfig = {
+  content: React.ReactNode;
+  type?: NonNullable<VariantProps<typeof itemMediaVariants>['variant']>;
 };
 
 type ItemSharedProps = VariantProps<typeof itemVariants> & {
   actions?: React.ReactNode;
-  classNames?: ItemClassNames;
+  classes?: ItemClasses;
   content?: React.ReactNode;
   description?: React.ReactNode;
   footer?: React.ReactNode;
   header?: React.ReactNode;
-  media?: React.ReactNode;
-  mediaType?: NonNullable<VariantProps<typeof itemMediaVariants>['variant']>;
+  media?: ItemMediaConfig;
   styles?: ItemStyles;
   title?: React.ReactNode;
 };
@@ -110,20 +114,19 @@ type ItemGroupEntry = ItemProps & {
 
 type ItemGroupProps = Omit<React.ComponentProps<'div'>, 'children'> & {
   items: readonly ItemGroupEntry[];
-  renderItem?: (item: ItemGroupEntry, index: number) => React.ReactNode;
+  render?: (item: ItemGroupEntry, index: number) => React.ReactNode;
   separator?: boolean | React.ReactNode;
 };
 
 const Item = ({
   actions,
   className,
-  classNames,
+  classes,
   content,
   description,
   footer,
   header,
   media,
-  mediaType = 'default',
   size: sizeProp,
   styles,
   title,
@@ -141,7 +144,7 @@ const Item = ({
         <div
           className={cn(
             'flex basis-full items-center justify-between gap-2',
-            classNames?.header
+            classes?.header
           )}
           data-slot="item-header"
           style={styles?.header}
@@ -153,22 +156,22 @@ const Item = ({
         <div
           className={cn(
             itemMediaVariants({
-              className: classNames?.media,
-              variant: mediaType,
+              className: classes?.media,
+              variant: media.type ?? 'default',
             })
           )}
           data-slot="item-media"
-          data-variant={mediaType}
+          data-variant={media.type ?? 'default'}
           style={styles?.media}
         >
-          {media}
+          {media.content}
         </div>
       ) : null}
       {hasContent ? (
         <div
           className={cn(
             'flex flex-1 flex-col gap-1 group-data-[size=xs]/item:gap-0.5 [&+[data-slot=item-content]]:flex-none',
-            classNames?.content
+            classes?.content
           )}
           data-slot="item-content"
           style={styles?.content}
@@ -177,7 +180,7 @@ const Item = ({
             <div
               className={cn(
                 'line-clamp-1 flex w-fit items-center gap-2 text-sm leading-snug font-medium underline-offset-4',
-                classNames?.title
+                classes?.title
               )}
               data-slot="item-title"
               style={styles?.title}
@@ -189,7 +192,7 @@ const Item = ({
             <p
               className={cn(
                 'line-clamp-2 text-left text-sm font-normal text-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
-                classNames?.description
+                classes?.description
               )}
               data-slot="item-description"
               style={styles?.description}
@@ -202,7 +205,7 @@ const Item = ({
       ) : null}
       {actions != null ? (
         <div
-          className={cn('flex items-center gap-2', classNames?.actions)}
+          className={cn('flex items-center gap-2', classes?.actions)}
           data-slot="item-actions"
           style={styles?.actions}
         >
@@ -213,7 +216,7 @@ const Item = ({
         <div
           className={cn(
             'flex basis-full items-center justify-between gap-2',
-            classNames?.footer
+            classes?.footer
           )}
           data-slot="item-footer"
           style={styles?.footer}
@@ -248,7 +251,7 @@ const Item = ({
 const Group = ({
   className,
   items,
-  renderItem,
+  render,
   separator = false,
   ...props
 }: ItemGroupProps) => {
@@ -277,8 +280,8 @@ const Group = ({
                 separator
               )
             ) : null}
-            {renderItem ? (
-              renderItem(item, index)
+            {render ? (
+              render(item, index)
             ) : (
               <Item role="listitem" {...itemProps} />
             )}
@@ -296,11 +299,12 @@ const ItemCompound = Object.assign(Item, {
 export {
   ItemCompound as Item,
   type ItemDivProps,
-  type ItemClassNames,
+  type ItemClasses,
   type ItemGroupEntry,
   type ItemGroupProps,
   type ItemLinkProps,
   type ItemProps,
+  type ItemMediaConfig,
   type ItemProviderDefaults,
   type ItemStyles,
 };

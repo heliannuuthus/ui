@@ -14,24 +14,46 @@ import {
   ChevronDownIcon,
 } from 'lucide-react';
 
+type CalendarClasses = Omit<
+  NonNullable<React.ComponentProps<typeof DayPicker>['classNames']>,
+  'root'
+>;
+
+type CalendarOptions<Props> = Props extends unknown
+  ? Omit<
+      Props,
+      'classNames' | 'numberOfMonths' | 'timeZone' | 'showOutsideDays'
+    > & {
+      classes?: CalendarClasses;
+      months?: number;
+      zone?: string;
+      outside?: boolean;
+      buttonVariant?: React.ComponentProps<typeof Button>['variant'];
+    }
+  : never;
+
+type CalendarProps = CalendarOptions<React.ComponentProps<typeof DayPicker>>;
+
 const Calendar = ({
   className,
-  classNames,
-  showOutsideDays = true,
+  classes,
+  months,
+  zone,
+  outside = true,
   captionLayout = 'label',
   buttonVariant = 'ghost',
   locale,
   formatters,
   components,
   ...props
-}: React.ComponentProps<typeof DayPicker> & {
-  buttonVariant?: React.ComponentProps<typeof Button>['variant'];
-}) => {
+}: CalendarProps) => {
   const defaultClassNames = getDefaultClassNames();
 
   return (
     <DayPicker
-      showOutsideDays={showOutsideDays}
+      showOutsideDays={outside}
+      numberOfMonths={months}
+      timeZone={zone}
       className={cn(
         'group/calendar bg-background p-3 [--cell-radius:var(--radius-4xl)] [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
@@ -133,7 +155,7 @@ const Calendar = ({
           defaultClassNames.disabled
         ),
         hidden: cn('invisible', defaultClassNames.hidden),
-        ...classNames,
+        ...classes,
       }}
       components={{
         Root: ({ className, rootRef, ...props }) => {
@@ -227,4 +249,8 @@ const CalendarCompound = Object.assign(Calendar, {
   DayButton: CalendarDayButton,
 });
 
-export { CalendarCompound as Calendar };
+export {
+  CalendarCompound as Calendar,
+  type CalendarClasses,
+  type CalendarProps,
+};

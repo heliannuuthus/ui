@@ -31,12 +31,16 @@ const attachmentVariants: (props?: AttachmentVariantOptions) => string = cva(
   }
 );
 
+type AttachmentMediaConfig = {
+  content: React.ReactNode;
+  type?: 'icon' | 'image';
+};
+
 type AttachmentProps = Omit<React.ComponentProps<'div'>, 'children' | 'title'> &
   VariantProps<typeof attachmentVariants> & {
     actions?: React.ReactNode;
     description?: React.ReactNode;
-    media?: React.ReactNode;
-    mediaType?: 'icon' | 'image';
+    media?: AttachmentMediaConfig;
     state?: 'idle' | 'uploading' | 'processing' | 'error' | 'done';
     title: React.ReactNode;
     trigger?: React.ReactElement;
@@ -49,7 +53,6 @@ const Attachment = ({
   className,
   description,
   media,
-  mediaType = 'icon',
   title,
   trigger,
   state = 'done',
@@ -70,7 +73,9 @@ const Attachment = ({
       {...props}
     >
       {media != null ? (
-        <AttachmentMedia variant={mediaType}>{media}</AttachmentMedia>
+        <AttachmentMedia variant={media.type ?? 'icon'}>
+          {media.content}
+        </AttachmentMedia>
       ) : null}
       <AttachmentContent>
         <AttachmentTitle>{title}</AttachmentTitle>
@@ -245,6 +250,7 @@ export {
   AttachmentCompound as Attachment,
   type AttachmentGroupItem,
   type AttachmentGroupProps,
+  type AttachmentMediaConfig,
   type AttachmentProps,
   type AttachmentProviderDefaults,
 };

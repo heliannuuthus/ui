@@ -25,7 +25,7 @@ const createExample = (copy: Copy) => {
             <Layout.Sidebar
               aria-label={copy.uncontrolled}
               collapsible
-              collapsedWidth={56}
+              width={{ collapsed: 56 }}
               defaultCollapsed
               labels={{ collapse: copy.collapse, expand: copy.expand }}
               onChange={setUncontrolledCollapsed}
@@ -47,7 +47,7 @@ const createExample = (copy: Copy) => {
               aria-label={copy.controlled}
               collapsed={controlledCollapsed}
               collapsible
-              collapsedWidth={56}
+              width={{ collapsed: 56 }}
               labels={{ collapse: copy.collapse, expand: copy.expand }}
               onChange={setControlledCollapsed}
             >

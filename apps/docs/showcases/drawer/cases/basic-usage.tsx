@@ -12,7 +12,7 @@ const createExample = (locale: 'en' | 'zh') => {
     return (
       <Drawer
         behavior="adaptive"
-        closeText={copy('关闭')}
+        close={{ label: copy('关闭') }}
         description={copy('22:00–23:00')}
         footer={<Button>{copy('进入发布中心')}</Button>}
         side="right"

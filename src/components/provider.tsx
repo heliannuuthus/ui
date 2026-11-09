@@ -62,8 +62,10 @@ type ProviderThemeColors = Partial<{
 }>;
 
 type ProviderTheme = {
-  colors?: ProviderThemeColors;
-  darkColors?: ProviderThemeColors;
+  colors?: {
+    base?: ProviderThemeColors;
+    dark?: ProviderThemeColors;
+  };
   radius?: string;
 };
 
@@ -153,8 +155,10 @@ const mergeTheme = (
   parent: ProviderTheme | undefined,
   theme: ProviderTheme | undefined
 ): ProviderTheme => ({
-  colors: { ...parent?.colors, ...theme?.colors },
-  darkColors: { ...parent?.darkColors, ...theme?.darkColors },
+  colors: {
+    base: { ...parent?.colors?.base, ...theme?.colors?.base },
+    dark: { ...parent?.colors?.dark, ...theme?.colors?.dark },
+  },
   radius: theme?.radius ?? parent?.radius,
 });
 
@@ -175,6 +179,16 @@ const mergeComponents = (
       (merged[name] as ScrollAreaDefaults).scrollbar = {
         ...parentScrollbar,
         ...scrollbar,
+      };
+    }
+
+    if (name === 'Tooltip') {
+      type TooltipDefaults = NonNullable<ProviderComponents['Tooltip']>;
+      const parentDelay = (parentDefaults as TooltipDefaults).delay;
+      const delay = (defaults as TooltipDefaults).delay;
+      (merged[name] as TooltipDefaults).delay = {
+        ...parentDelay,
+        ...delay,
       };
     }
 
@@ -237,8 +251,8 @@ const getThemeStyle = (
   appearance: ResolvedProviderAppearance
 ): React.CSSProperties => {
   const colors = {
-    ...theme.colors,
-    ...(appearance === 'dark' ? theme.darkColors : undefined),
+    ...theme.colors?.base,
+    ...(appearance === 'dark' ? theme.colors?.dark : undefined),
   };
   const variables = Object.entries(colors).reduce<Record<string, string>>(
     (style, [name, value]) => {
@@ -314,8 +328,8 @@ const Provider = ({
     <ProviderContext.Provider value={contextValue}>
       <BaseDirectionProvider direction={resolvedDirection}>
         <TooltipPrimitive.Provider
-          closeDelay={tooltipDefaults?.closeDelay ?? 100}
-          delay={tooltipDefaults?.openDelay ?? 100}
+          closeDelay={tooltipDefaults?.delay?.close ?? 100}
+          delay={tooltipDefaults?.delay?.open ?? 100}
           timeout={400}
         >
           <div

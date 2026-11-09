@@ -29,16 +29,16 @@ const cases = [
     component: Case03,
     title: { en: 'Pagination dots', zh: '分页点' },
     description: {
-      en: 'Pagination shows dots by default; set it to false to hide them, or pass renderDot to customize each dot.',
-      zh: '默认显示分页点；pagination 设为 false 可隐藏，传入 renderDot 可自定义点位内容。',
+      en: 'Pagination shows dots by default; set it to false to hide them, or pass dot to customize each dot.',
+      zh: '默认显示分页点；pagination 设为 false 可隐藏，传入 dot 可自定义点位内容。',
     },
   },
   {
     component: Case04,
     title: { en: 'Track and item styles', zh: '轨道与项目样式' },
     description: {
-      en: 'classNames extends the carousel track and items through the content and item semantic slots.',
-      zh: 'classNames 按 content 与 item 语义槽位扩展轮播轨道和项目样式。',
+      en: 'classes extends the carousel track and items through the content and item semantic slots.',
+      zh: 'classes 按 content 与 item 语义槽位扩展轮播轨道和项目样式。',
     },
   },
   {

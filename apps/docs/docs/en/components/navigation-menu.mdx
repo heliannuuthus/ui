@@ -90,18 +90,23 @@ import { ApiTable } from '@docs/rspress/api-table';
     {
       component: 'Navigation Menu',
       defaultValue: null,
-      description:
-        'Set the delay for opening and closing the rich navigation panel.',
+      description: "Configure navigation-panel delays in milliseconds.",
       name: 'delay',
-      type: 'number',
+      type: "NavigationMenuDelay",
     },
     {
-      component: 'Navigation Menu',
+      component: 'NavigationMenu.delay',
       defaultValue: null,
-      description:
-        'Set the delay for opening and closing the rich navigation panel.',
-      name: 'closeDelay',
-      type: 'number',
+      description: "Delay before opening in milliseconds; omitted values use primitive defaults.",
+      name: 'open',
+      type: "number",
+    },
+    {
+      component: 'NavigationMenu.delay',
+      defaultValue: null,
+      description: "Delay before closing in milliseconds; omitted values use primitive defaults.",
+      name: 'close',
+      type: "number",
     },
     {
       component: 'Navigation Menu',
