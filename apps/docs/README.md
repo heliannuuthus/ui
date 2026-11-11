@@ -82,14 +82,17 @@ slug and index.
 
 ## Content alignment
 
-Handbook pages, the component catalog, and component references share a left
-edge inside the main content pane. `--docs-content-gutter` on `.docs-main`
-controls their responsive horizontal spacing. Keep prose width limits without
-automatic horizontal margins, so switching pages does not move the title away
-from the sidebar. Component demos retain their own internal alignment.
+Handbook, component catalog, and component reference containers are centered
+within the available main content pane. Prose keeps its `56rem` width limit,
+getting started uses `64rem`, and the catalog and component showcases use
+`92rem`. Titles, introductions, and prose remain left-aligned; component demos
+retain their own alignment.
 
-Sources: `theme/theme.css:359`, `src/pages/pages.css:57`, and
-`src/pages/pages.css:1612`.
+`--docs-content-gutter` controls responsive horizontal padding. At narrow
+widths, navigation moves into a drawer and the content grid uses a single
+column so an empty sidebar track cannot shift the centered container.
+
+Sources: `theme/theme.css`, `src/pages/pages.css`, and `showcases/case.css`.
 
 ## 顶部导航
 
