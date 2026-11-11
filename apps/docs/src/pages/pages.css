@@ -55,7 +55,7 @@
 }
 
 .components-intro {
-  padding: 2.5rem clamp(1.25rem, 5vw, 4.5rem) 1.5rem;
+  padding: 2.5rem var(--docs-content-gutter) 1.5rem;
 }
 
 .components-intro h1 {
@@ -70,7 +70,7 @@
 }
 
 .components-browser {
-  padding: 0 clamp(1.25rem, 5vw, 4.5rem) clamp(5rem, 9vw, 8rem);
+  padding: 0 var(--docs-content-gutter) clamp(5rem, 9vw, 8rem);
 }
 
 .components-search-row {
@@ -1613,7 +1613,7 @@
   width: min(100%, 64rem);
   box-sizing: border-box;
   margin: 0;
-  padding: 1.5rem 2.5rem 5rem;
+  padding: 1.5rem var(--docs-content-gutter) 5rem;
 }
 
 .guide-visually-hidden-title {
@@ -1967,7 +1967,7 @@
   }
 
   .docs-guide-page {
-    padding: 1rem 1rem 4rem;
+    padding: 1rem var(--docs-content-gutter) 4rem;
   }
 
   .home-proof > div:nth-child(odd) {

@@ -80,6 +80,17 @@ in their owning case file and keep both locale pages synchronized. Do not add a
 central preview registry or a compatibility component that looks up examples by
 slug and index.
 
+## Content alignment
+
+Handbook pages, the component catalog, and component references share a left
+edge inside the main content pane. `--docs-content-gutter` on `.docs-main`
+controls their responsive horizontal spacing. Keep prose width limits without
+automatic horizontal margins, so switching pages does not move the title away
+from the sidebar. Component demos retain their own internal alignment.
+
+Sources: `theme/theme.css:359`, `src/pages/pages.css:57`, and
+`src/pages/pages.css:1612`.
+
 ## 顶部导航
 
 顶部导航在离开页面顶部后随下滑收起，随上滑恢复；累计 8px 的方向位移用于过滤轻微滚动抖动。回到顶部、键盘焦点进入导航、展开外观菜单或移动导航时保持显示。
