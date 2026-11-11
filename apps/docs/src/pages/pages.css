@@ -54,6 +54,11 @@
   margin-top: 0.75rem;
 }
 
+.docs-components-page {
+  width: min(100%, 92rem);
+  margin-inline: auto;
+}
+
 .components-intro {
   padding: 2.5rem var(--docs-content-gutter) 1.5rem;
 }
@@ -1612,7 +1617,7 @@
 .docs-guide-page {
   width: min(100%, 64rem);
   box-sizing: border-box;
-  margin: 0;
+  margin: 0 auto;
   padding: 1.5rem var(--docs-content-gutter) 5rem;
 }
 
