@@ -12,7 +12,7 @@ const ZhExample = (() => {
         <Typography.Text as="p">
           一致的标题层级和正文节奏，让内容清晰、可信且易于阅读。
         </Typography.Text>
-        <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
+        <Typography.Blockquote>
           一致的界面，来自每一次一致的内容决策。
         </Typography.Blockquote>
         <Typography.Text as="p">
@@ -43,7 +43,7 @@ const EnExample = (() => {
           Consistent heading hierarchy and body rhythm make content clear and
           readable.
         </Typography.Text>
-        <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
+        <Typography.Blockquote>
           A consistent interface comes from consistent content decisions.
         </Typography.Blockquote>
         <Typography.Text as="p">

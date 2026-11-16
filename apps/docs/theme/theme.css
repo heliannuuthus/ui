@@ -375,7 +375,6 @@ body {
 
 .docs-article[data-page-type='home'],
 .docs-article[data-page-type='guide'],
-.docs-article[data-page-type='design'],
 .docs-article[data-page-type='catalog'] {
   width: 100%;
   max-width: none;

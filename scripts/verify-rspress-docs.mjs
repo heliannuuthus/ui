@@ -114,7 +114,6 @@ for (const [name, declaration] of Object.entries(apiTypeDefinitions)) {
 for (const locale of ['zh', 'en']) {
   for (const relativePath of [
     'index.mdx',
-    'design.mdx',
     'docs/getting-started.mdx',
     'components/index.mdx',
   ]) {

@@ -7,7 +7,6 @@ const zh = {
     navigation: {
       home: '首页',
       gettingStarted: '快速开始',
-      design: '设计理念',
       components: '组件库',
       main: '主导航',
       open: '打开导航',
@@ -113,10 +112,6 @@ const zh = {
       baseComponents: '个基础组件',
       accessibilityFirst: '可访问性优先',
       openSource: '源码完全可控',
-      philosophyTitle: '一套组件，供所有产品使用',
-      philosophyDescription:
-        '组件库维护基础行为和样式，业务项目维护自己的数据、路由和文案。',
-      philosophyAction: '了解设计理念',
       componentsTitle: '从基础控件到完整交互',
       clarity: '清晰',
       clarityDescription: '先排清信息、状态和操作，再考虑装饰。',
@@ -159,11 +154,6 @@ const zh = {
       configurationBoundaryDescription:
         'Provider 只管理跨组件的视觉默认值，不管理文案、事件、业务状态或数据行为。组件显式传入的属性始终优先于全局默认值。',
     },
-    design: {
-      title: '设计理念',
-      description:
-        'Heliannuuthus UI 的目标，是为维护者自己的产品积累一套可持续复用的界面能力，覆盖底层 UI 组件，以及上层可复用的 UI 套件。',
-    },
   },
 } as const;
 
@@ -180,7 +170,6 @@ const en = {
     navigation: {
       home: 'Home',
       gettingStarted: 'Getting started',
-      design: 'Design',
       components: 'Components',
       main: 'Main navigation',
       open: 'Open navigation',
@@ -288,10 +277,6 @@ const en = {
       baseComponents: 'base components',
       accessibilityFirst: 'Accessibility first',
       openSource: 'Fully controlled source',
-      philosophyTitle: 'One component set for every product',
-      philosophyDescription:
-        'The library owns base behavior and styles. Applications own data, routing, and product copy.',
-      philosophyAction: 'Explore the design principles',
       componentsTitle: 'From primitives to complete interactions',
       clarity: 'Clear',
       clarityDescription:
@@ -338,11 +323,6 @@ const en = {
       configurationBoundary: 'Configuration boundary',
       configurationBoundaryDescription:
         'Provider manages cross-component visual defaults only. It does not manage copy, events, business state, or data behavior. Explicit component props always override global defaults.',
-    },
-    design: {
-      title: 'Design principles',
-      description:
-        'Heliannuuthus UI aims to build a lasting foundation of reusable interface capabilities for the maintainer’s own products, spanning base UI components and higher-level UI kits.',
     },
   },
 } as const satisfies LocaleShape<typeof zh>;
