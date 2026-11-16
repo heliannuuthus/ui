@@ -162,17 +162,7 @@ const zh = {
     design: {
       title: '设计理念',
       description:
-        '这里记录组件的取舍标准，以及业务项目使用组件时应遵守的边界。',
-      clarity: '清晰胜过表现',
-      clarityDescription: '颜色、间距和动效用于区分结构、状态和操作优先级。',
-      convention: '约定创造效率',
-      conventionDescription: '相同的状态和操作采用相同的名称、位置与反馈。',
-      composition: '组合保持边界',
-      compositionDescription:
-        '公共组件负责通用能力，业务层负责数据、权限、路由和流程。',
-      details: '细节建立信任',
-      detailsDescription:
-        '每个组件都要覆盖键盘、窄屏、加载、空、错误和禁用状态。',
+        'Heliannuuthus UI 是面向维护者自有项目的 React 组件库，用于统一基础组件、视觉规范与交互行为。',
     },
   },
 } as const;
@@ -352,19 +342,7 @@ const en = {
     design: {
       title: 'Design principles',
       description:
-        'These rules define component tradeoffs and the boundary between the library and product applications.',
-      clarity: 'Clarity over spectacle',
-      clarityDescription:
-        'Use color, spacing, and motion to distinguish structure, state, and action priority.',
-      convention: 'Conventions create efficiency',
-      conventionDescription:
-        'Use the same names, placement, and feedback for equivalent states and actions.',
-      composition: 'Composition preserves boundaries',
-      compositionDescription:
-        'Shared components own generic behavior; products own data, permissions, routing, and workflows.',
-      details: 'Details build trust',
-      detailsDescription:
-        'Every component must cover keyboard use, narrow layouts, loading, empty, error, and disabled states.',
+        'Heliannuuthus UI is a React component library for the maintainer’s own projects, with shared primitives, visual conventions, and interaction behavior.',
     },
   },
 } as const satisfies LocaleShape<typeof zh>;

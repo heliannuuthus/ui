@@ -1632,28 +1632,6 @@
   white-space: nowrap;
 }
 
-.design-boundary-card ul {
-  display: grid;
-  gap: 0.8rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.design-boundary-card li {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.65rem;
-}
-
-.design-boundary-card li svg {
-  width: 1rem;
-  height: 1rem;
-  margin-top: 0.15rem;
-  flex: none;
-  color: var(--success);
-}
-
 .guide-steps {
   width: 100%;
   margin: 0 auto;
@@ -1721,224 +1699,43 @@
 }
 
 .docs-design-page {
-  width: min(100%, 80rem);
+  width: min(100%, 56rem);
   box-sizing: border-box;
   margin-inline: auto;
-  padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1rem, 4vw, 3rem) 5rem;
+  padding: 2.5rem var(--docs-content-gutter) 5rem;
+  line-height: 1.75;
 }
 
-.design-hero {
-  display: grid;
-  gap: 1rem;
-  max-width: 54rem;
-  padding: clamp(2rem, 6vw, 4.5rem) 0 clamp(2.5rem, 6vw, 4rem);
+.docs-design-page h1 {
+  margin: 0 0 1.25rem;
+  font-size: 2rem;
+  line-height: 1.25;
+  letter-spacing: 0;
 }
 
-.design-hero .docs-page-eyebrow {
-  margin-bottom: 0 !important;
-}
-
-.design-hero h1 {
-  max-width: 20em;
-  margin: 0;
-  overflow-wrap: anywhere;
-  font-size: clamp(2.25rem, 3.6vw, 3.25rem);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-}
-
-.design-manifesto {
-  max-width: 38ch;
-  margin: 0.5rem 0 0 !important;
-  font-family: var(--docs-font-sans);
-  font-size: clamp(1.25rem, 2vw, 1.6rem) !important;
-  line-height: 1.45 !important;
-  letter-spacing: -0.02em;
-}
-
-.design-introduction {
-  max-width: 65ch;
-  margin: 0.25rem 0 0 !important;
-  line-height: 1.75 !important;
-}
-
-.docs-design-page .docs-page-section {
-  padding: clamp(2.5rem, 6vw, 4.5rem) 0;
-}
-
-.docs-design-page .docs-section-heading {
-  margin-bottom: 2.25rem;
-}
-
-.design-boundary-map {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 3.5rem minmax(0, 1fr);
-  align-items: stretch;
-}
-
-.design-boundary-card {
-  --card-spacing: clamp(1.25rem, 3vw, 2rem);
-  min-height: 21rem;
-  border-radius: 1rem;
-  box-shadow: none;
-}
-
-.design-boundary-card > [data-slot='card-content'] {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.design-boundary-card > [data-slot='card-content'] > svg {
-  width: 2rem;
-  height: 2rem;
-  color: var(--primary);
-}
-
-.design-boundary-card h3 {
-  margin: 0.75rem 0 0;
-  font-size: 1.5rem;
-}
-
-.design-boundary-card p {
-  margin: 0 !important;
-}
-
-.design-boundary-card [data-slot='separator'] {
-  margin-top: auto;
-}
-
-.design-boundary-divider {
-  display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 0.7rem;
-  color: var(--muted-foreground);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-}
-
-.design-boundary-divider svg {
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
-.design-principles {
-  border-top: 1px solid var(--page-rule);
-}
-
-.design-principle {
-  display: grid;
-  grid-template-columns: minmax(16rem, 0.85fr) minmax(0, 1.15fr);
-  gap: clamp(2rem, 6vw, 5rem);
-  padding: 2.25rem 0;
-  border-bottom: 1px solid var(--page-rule);
-  scroll-margin-top: 6rem;
-}
-
-.design-principle-heading {
-  min-width: 0;
-}
-
-.design-principle h3 {
-  margin: 0;
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
-  line-height: 1.15;
-  letter-spacing: -0.035em;
-}
-
-.design-principle-heading p {
-  max-width: 36rem;
-  margin: 0.75rem 0 0 !important;
-  line-height: 1.65 !important;
-}
-
-.design-principle-guidance {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 0;
-  border: 1px solid var(--page-rule);
-  border-radius: 0.75rem;
-}
-
-.design-principle-guidance > div {
-  padding: 1.25rem;
-}
-
-.design-principle-guidance > div + div {
-  border-inline-start: 1px solid var(--page-rule);
-}
-
-.design-principle-guidance dt {
-  margin-bottom: 0.6rem;
-  color: var(--primary);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.design-principle-guidance dd {
-  margin: 0;
-  color: var(--muted-foreground);
-  line-height: 1.65;
-}
-
-.design-checklist {
-  display: grid;
-  grid-template-columns: minmax(16rem, 0.7fr) minmax(0, 1.3fr);
-  gap: clamp(2rem, 7vw, 6rem);
-  padding: clamp(2.5rem, 6vw, 4.5rem) 0;
-  border-top: 1px solid var(--page-rule);
-}
-
-.design-checklist h2 {
-  margin: 0;
-  font-size: clamp(1.75rem, 2.6vw, 2.25rem);
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-}
-
-.design-checklist ul {
-  margin: 0;
+.docs-design-page h2 {
+  margin: 2rem 0 0.75rem;
   padding: 0;
-  border-top: 1px solid var(--page-rule);
-  list-style: none;
+  border: 0;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  letter-spacing: 0;
 }
 
-.design-checklist li {
-  min-height: 4.75rem;
-  display: grid;
-  grid-template-columns: 1.25rem minmax(0, 1fr);
-  align-items: center;
-  gap: 1rem;
-  border-bottom: 1px solid var(--page-rule);
+.docs-design-page p {
+  margin: 0 0 1rem;
 }
 
-.design-checklist li > svg {
-  width: 1.05rem;
-  height: 1.05rem;
-  color: var(--primary);
-}
-
-.design-closing {
+.design-references {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  padding: 2rem 0 0;
-  border-top: 1px solid var(--page-rule);
-}
-
-.design-closing > p {
-  max-width: 34rem;
-  margin: 0 !important;
-  line-height: 1.5 !important;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 2rem;
 }
 
 @media (max-width: 980px) {
-  .home-hero-inner,
-  .design-checklist {
+  .home-hero-inner {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -1986,34 +1783,6 @@
 
   .home-hero {
     min-height: 0;
-  }
-
-  .design-principle {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
-  }
-
-  .design-principle-guidance {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .design-principle-guidance > div + div {
-    border-top: 1px solid var(--page-rule);
-    border-inline-start: 0;
-  }
-
-  .design-boundary-map {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
-  }
-
-  .design-boundary-divider {
-    min-height: 3rem;
-  }
-
-  .design-closing {
-    align-items: flex-start;
-    flex-direction: column;
   }
 
   .components-search-row {

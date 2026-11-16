@@ -1,307 +1,151 @@
-import { Card, Separator, Stack, Typography } from '@heliannuuthus/ui';
-import {
-  ArrowRight,
-  Box,
-  CheckCircle2,
-  CircleDashed,
-  Layers3,
-} from 'lucide-react';
+import { Typography } from '@heliannuuthus/ui';
 import { resources } from '../i18n/resources';
 import { InternalButtonLink } from '../../theme/internal-link';
 import { localPath, useDocsPageLocale } from './page-locale';
-import { PageEyebrow } from './shared';
 
 const pageCopy = {
   zh: {
-    kicker: '组件设计规则',
-    manifesto: '相同的界面问题使用相同的组件和交互约定。',
     introduction:
-      '这份规则用于设计、实现和评审公共组件。遇到新需求时，先确认它是否属于共享能力，再检查 API、状态和文档是否完整。',
-    principlesTitle: '设计和评审时看这四件事',
-    principlesDescription:
-      '每条规则都对应一个常见的决策。不需要全凭审美判断，先看结构、约定、边界和真实使用状态。',
-    principleGuidance: [
+      '组件根据实际项目需求持续演进。设计与实现保持统一，类型、文档和示例同时作为开发与 AI 编程的使用依据。',
+    sections: [
       {
-        doLabel: '应当',
-        doText: '用标题层级、间距和语义状态说明关系。',
-        avoidLabel: '避免',
-        avoidText: '不要靠颜色、阴影或动效掩盖结构不清。',
+        id: 'scope',
+        title: '项目范围',
+        paragraphs: [
+          '组件库优先满足维护者自有项目的需求，组件能力和视觉取舍由实际使用场景决定。对外提供相同的组件与文档。',
+          '领域无关的交互、展示和无障碍能力在组件库中维护；业务数据、权限、路由和流程由各项目负责。',
+        ],
       },
       {
-        doLabel: '应当',
-        doText: '相同操作保持同名、同位置和同一类反馈。',
-        avoidLabel: '避免',
-        avoidText: '没有明确收益时，不增加新变体或另一套命名。',
+        id: 'visual',
+        title: '视觉规范',
+        paragraphs: [
+          '颜色、排版、间距、圆角和状态反馈保持一致，形成自有项目间稳定的视觉语言。视觉调整应落实到可复用的配置与样式中。',
+          '颜色和圆角通过语义 Token 与 Provider 配置，常用尺寸通过组件默认值统一。字体、布局和内容密度由应用样式控制，组件提供明确的样式扩展点。',
+        ],
       },
       {
-        doLabel: '应当',
-        doText: '组件处理通用行为、样式、类型和无障碍。',
-        avoidLabel: '避免',
-        avoidText: '不把业务数据、权限、路由或流程下沉到公共包。',
+        id: 'contracts',
+        title: '组件契约',
+        paragraphs: [
+          '相同能力采用一致的属性、事件和状态命名。受控与非受控模式、事件参数、ref 和样式扩展边界应有明确的类型定义。',
+          '组件需要覆盖键盘操作、无障碍、长文本和窄容器，以及适用的加载、空、错误和禁用状态。行为与类型契约保持一致。',
+        ],
       },
       {
-        doLabel: '应当',
-        doText: '同时检查键盘、窄屏、长文本和各类数据状态。',
-        avoidLabel: '避免',
-        avoidText: '不只用一个正常案例证明组件已经完成。',
+        id: 'ai-usage',
+        title: 'AI 使用',
+        paragraphs: [
+          'AI 编程工具通过组件文档、TypeScript 类型和真实示例了解现有能力。开发时应基于项目安装的版本复用组件，并遵循已有的主题与交互约定。',
+          '组件 API 或行为发生变化时，同步更新类型、文档和示例，使 AI 与人工开发使用相同的依据。',
+        ],
+      },
+      {
+        id: 'evolution',
+        title: '演进原则',
+        paragraphs: [
+          '新增能力应有实际需求支撑。通用能力的扩展和缺陷修复回到组件库统一维护，避免在各项目中形成重复实现。',
+          '组件通过真实页面持续验证。调整视觉或 API 时，检查已有使用场景与兼容性，保留必要的设计取舍和迁移说明。',
+        ],
       },
     ],
-    boundaryTitle: '组件库与业务项目分别负责什么',
-    boundaryDescription: '先判断能力是否领域无关，再决定它应该放在哪一层。',
-    sharedTitle: '公共 UI 层',
-    sharedDescription: '维护领域无关的行为、样式和无障碍基础。',
-    sharedItems: [
-      '交互与键盘行为',
-      '语义 Token',
-      '状态与尺寸',
-      '类型、事件与 ref',
-    ],
-    productTitle: '产品业务层',
-    productDescription: '维护具体产品的数据、权限、路由和流程。',
-    productItems: ['业务文案与数据', '权限和路由', '领域状态', '流程编排'],
-    checklistTitle: '合并公共组件前逐项检查',
-    checklistItems: [
-      '键盘和屏幕阅读器可用',
-      '加载、空、错误、禁用状态明确',
-      '长内容和窄容器不破坏布局',
-      '受控与非受控边界清楚',
-      'API 能向后兼容地生长',
-    ],
-    closing: '规则必须同时落实在实现、测试和文档中。',
-    action: '查看组件目录',
+    references: '相关文档',
+    components: '组件目录',
+    configuration: '全局配置',
   },
   en: {
-    kicker: 'Component design rules',
-    manifesto:
-      'Use the same components and interaction conventions for the same interface problems.',
     introduction:
-      'Use these rules when designing, implementing, and reviewing shared components. For each new request, first decide whether it is a shared capability, then verify its API, states, and documentation.',
-    principlesTitle: 'Review four things before approving a component',
-    principlesDescription:
-      'Each rule answers a recurring decision. Start with structure, conventions, ownership, and real usage states instead of relying on taste alone.',
-    principleGuidance: [
+      'Components evolve with actual project needs. Design and implementation stay aligned, while types, documentation, and examples provide references for both manual and AI-assisted development.',
+    sections: [
       {
-        doLabel: 'Do',
-        doText:
-          'Use heading hierarchy, spacing, and semantic states to explain relationships.',
-        avoidLabel: 'Avoid',
-        avoidText:
-          'Do not use color, shadow, or motion to hide unclear structure.',
+        id: 'scope',
+        title: 'Project scope',
+        paragraphs: [
+          'The library prioritizes the maintainer’s own projects. Component capabilities and visual decisions follow actual usage. The same components and documentation are available to other users.',
+          'Domain-neutral interactions, presentation, and accessibility belong in the library. Product data, permissions, routing, and workflows remain in each application.',
+        ],
       },
       {
-        doLabel: 'Do',
-        doText:
-          'Keep the same name, position, and feedback for the same action.',
-        avoidLabel: 'Avoid',
-        avoidText:
-          'Do not add another variant or term without a concrete benefit.',
+        id: 'visual',
+        title: 'Visual conventions',
+        paragraphs: [
+          'Colors, typography, spacing, radius, and state feedback form a consistent visual language across the maintainer’s projects. Visual refinements should be expressed through reusable configuration and styles.',
+          'Configure colors and radius through semantic tokens and Provider. Set common sizes through component defaults. Application styles control typography, layout, and density, with explicit component styling extension points.',
+        ],
       },
       {
-        doLabel: 'Do',
-        doText:
-          'Keep reusable behavior, styles, types, and accessibility in the library.',
-        avoidLabel: 'Avoid',
-        avoidText:
-          'Do not move product data, permissions, routing, or flows into the shared package.',
+        id: 'contracts',
+        title: 'Component contracts',
+        paragraphs: [
+          'Equivalent capabilities use consistent prop, event, and state names. Types define controlled and uncontrolled modes, event arguments, refs, and styling boundaries.',
+          'Components cover keyboard use, accessibility, long text, and narrow containers, along with applicable loading, empty, error, and disabled states. Behavior must match the type contract.',
+        ],
       },
       {
-        doLabel: 'Do',
-        doText:
-          'Check keyboard use, narrow screens, long text, and every data state.',
-        avoidLabel: 'Avoid',
-        avoidText:
-          'Do not call a component complete after testing only its happy path.',
+        id: 'ai-usage',
+        title: 'AI usage',
+        paragraphs: [
+          'AI coding tools use component documentation, TypeScript types, and real examples to understand existing capabilities. Development should reuse components from the installed version and follow existing theme and interaction conventions.',
+          'Update types, documentation, and examples whenever component APIs or behavior change, so AI-assisted and manual development share the same references.',
+        ],
+      },
+      {
+        id: 'evolution',
+        title: 'Evolution',
+        paragraphs: [
+          'New capabilities need a concrete use case. Maintain reusable extensions and fixes in the library to avoid duplicate implementations across projects.',
+          'Verify components continuously in real pages. Check existing usage and compatibility when changing visuals or APIs, and record relevant tradeoffs and migration guidance.',
+        ],
       },
     ],
-    boundaryTitle: 'What belongs to the library and to product applications',
-    boundaryDescription:
-      'Decide whether a capability is domain-neutral before choosing its layer.',
-    sharedTitle: 'Shared UI layer',
-    sharedDescription:
-      'Maintains domain-neutral behavior, styles, and accessibility.',
-    sharedItems: [
-      'Interaction and keyboard behavior',
-      'Semantic tokens',
-      'States and sizes',
-      'Types, events, and refs',
-    ],
-    productTitle: 'Product layer',
-    productDescription:
-      'Maintains product data, permissions, routing, and flows.',
-    productItems: [
-      'Product copy and data',
-      'Permissions and routing',
-      'Domain state',
-      'Workflow orchestration',
-    ],
-    checklistTitle: 'Check each item before merging a shared component',
-    checklistItems: [
-      'Keyboard and screen-reader access works',
-      'Loading, empty, error, and disabled states are explicit',
-      'Long content and narrow containers remain sound',
-      'Controlled and uncontrolled boundaries are clear',
-      'The API can evolve compatibly',
-    ],
-    closing: 'Apply these rules in implementation, tests, and documentation.',
-    action: 'Open the component catalog',
+    references: 'Related documentation',
+    components: 'Component catalog',
+    configuration: 'Global configuration',
   },
 } as const;
 
 export const DesignPage = () => {
   const locale = useDocsPageLocale();
-  const common = resources[locale].common;
-  const design = common.design;
+  const design = resources[locale].common.design;
   const copy = pageCopy[locale];
-  const principles = [
-    [design.clarity, design.clarityDescription],
-    [design.convention, design.conventionDescription],
-    [design.composition, design.compositionDescription],
-    [design.details, design.detailsDescription],
-  ] as const;
 
   return (
-    <div className="docs-marketing-page docs-design-page">
-      <header className="design-hero">
-        <PageEyebrow>{design.title}</PageEyebrow>
-        <Typography.Title>{copy.kicker}</Typography.Title>
-        <Typography.Text as="p" className="design-manifesto" size="xl">
-          {copy.manifesto}
-        </Typography.Text>
-        <Typography.Text as="p" className="design-introduction" tone="muted">
-          {copy.introduction}
-        </Typography.Text>
+    <div className="docs-design-page">
+      <header>
+        <Typography.Title>{design.title}</Typography.Title>
+        <Typography.Text as="p">{design.description}</Typography.Text>
+        <Typography.Text as="p">{copy.introduction}</Typography.Text>
       </header>
 
-      <section
-        className="docs-page-section design-boundary"
-        aria-labelledby="boundary-title"
-      >
-        <div className="docs-section-heading">
-          <Typography.Title id="boundary-title" level={2}>
-            {copy.boundaryTitle}
+      {copy.sections.map((section) => (
+        <section aria-labelledby={section.id} key={section.id}>
+          <Typography.Title id={section.id} level={2}>
+            {section.title}
           </Typography.Title>
-          <Typography.Text as="p" size="lg" tone="muted">
-            {copy.boundaryDescription}
-          </Typography.Text>
-        </div>
-        <div className="design-boundary-map">
-          <Card className="design-boundary-card" variant="outline">
-            <Box aria-hidden="true" />
-            <Typography.Title level={3}>{copy.sharedTitle}</Typography.Title>
-            <Typography.Text as="p" tone="muted">
-              {copy.sharedDescription}
+          {section.paragraphs.map((paragraph) => (
+            <Typography.Text as="p" key={paragraph}>
+              {paragraph}
             </Typography.Text>
-            <Separator />
-            <ul>
-              {copy.sharedItems.map((item) => (
-                <li key={item}>
-                  <CheckCircle2 aria-hidden="true" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </Card>
-          <div className="design-boundary-divider" aria-hidden="true">
-            <span>API</span>
-            <CircleDashed />
-          </div>
-          <Card className="design-boundary-card" variant="outline">
-            <Layers3 aria-hidden="true" />
-            <Typography.Title level={3}>{copy.productTitle}</Typography.Title>
-            <Typography.Text as="p" tone="muted">
-              {copy.productDescription}
-            </Typography.Text>
-            <Separator />
-            <ul>
-              {copy.productItems.map((item) => (
-                <li key={item}>
-                  <CheckCircle2 aria-hidden="true" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </Card>
-        </div>
-      </section>
-
-      <section
-        className="docs-page-section design-principles-section"
-        aria-labelledby="principles-title"
-      >
-        <div className="docs-section-heading">
-          <Typography.Title id="principles-title" level={2}>
-            {copy.principlesTitle}
-          </Typography.Title>
-          <Typography.Text as="p" tone="muted">
-            {copy.principlesDescription}
-          </Typography.Text>
-        </div>
-        <div className="design-principles">
-          {principles.map(([title, description], index) => {
-            const guidance = copy.principleGuidance[index];
-
-            return (
-              <article
-                className="design-principle"
-                id={`principle-${index + 1}`}
-                key={title}
-              >
-                <div className="design-principle-heading">
-                  <Typography.Title level={3}>{title}</Typography.Title>
-                  <Typography.Text as="p" tone="muted">
-                    {description}
-                  </Typography.Text>
-                </div>
-                <dl className="design-principle-guidance">
-                  <div>
-                    <dt>{guidance.doLabel}</dt>
-                    <dd>{guidance.doText}</dd>
-                  </div>
-                  <div>
-                    <dt>{guidance.avoidLabel}</dt>
-                    <dd>{guidance.avoidText}</dd>
-                  </div>
-                </dl>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="design-checklist" aria-labelledby="checklist-title">
-        <div>
-          <Typography.Title id="checklist-title" level={2}>
-            {copy.checklistTitle}
-          </Typography.Title>
-        </div>
-        <ul>
-          {copy.checklistItems.map((item) => (
-            <li key={item}>
-              <CheckCircle2 aria-hidden="true" />
-              <Typography.Text as="span">{item}</Typography.Text>
-            </li>
           ))}
-        </ul>
-      </section>
+        </section>
+      ))}
 
-      <section className="design-closing">
-        <Typography.Text as="p" size="lg" weight="semibold">
-          {copy.closing}
-        </Typography.Text>
-        <Stack align="center" gap={12} orientation="horizontal" wrap>
-          <InternalButtonLink href={localPath(locale, '/components')} size="lg">
-            {copy.action}
-            <ArrowRight aria-hidden="true" data-icon="inline-end" />
-          </InternalButtonLink>
-          <InternalButtonLink
-            href={localPath(locale, '/docs/getting-started')}
-            size="lg"
-            variant="outline"
-          >
-            {common.navigation.gettingStarted}
-          </InternalButtonLink>
-        </Stack>
-      </section>
+      <nav aria-label={copy.references} className="design-references">
+        <InternalButtonLink
+          href={localPath(locale, '/components')}
+          size="sm"
+          variant="link"
+        >
+          {copy.components}
+        </InternalButtonLink>
+        <InternalButtonLink
+          href={localPath(locale, '/docs/provider')}
+          size="sm"
+          variant="link"
+        >
+          {copy.configuration}
+        </InternalButtonLink>
+      </nav>
     </div>
   );
 };
