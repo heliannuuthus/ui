@@ -1,52 +1,66 @@
-import { Typography } from '@heliannuuthus/ui';
+import { Table, Typography } from '@heliannuuthus/ui';
 import { resources } from '../i18n/resources';
 import { InternalButtonLink } from '../../theme/internal-link';
 import { localPath, useDocsPageLocale } from './page-locale';
 
 const pageCopy = {
   zh: {
-    introduction:
-      '组件根据实际项目需求持续演进。设计与实现保持统一，类型、文档和示例同时作为开发与 AI 编程的使用依据。',
     sections: [
       {
-        id: 'scope',
-        title: '项目范围',
+        id: 'purpose',
+        title: '为什么维护这套库',
         paragraphs: [
-          '组件库优先满足维护者自有项目的需求，组件能力和视觉取舍由实际使用场景决定。对外提供相同的组件与文档。',
-          '领域无关的交互、展示和无障碍能力在组件库中维护；业务数据、权限、路由和流程由各项目负责。',
+          '不同项目里的界面需求，经常有相同的基础：表单如何组织、列表如何筛选、编辑操作如何展开，以及加载、空和错误状态如何呈现。只复用单个控件，仍然需要在每个项目里重新组合这些结构、处理相近的交互细节。',
+          '维护这套库，是希望把这些已经解决过的问题持续沉淀下来。基础交互、常用界面结构和视觉规范放在同一处维护，后续项目能够从已有成果继续开发；一次改进也能回到公共实现，逐步形成适合自身产品的界面风格。',
         ],
       },
       {
-        id: 'visual',
-        title: '视觉规范',
+        id: 'layers',
+        title: '底层组件与上层套件',
         paragraphs: [
-          '颜色、排版、间距、圆角和状态反馈保持一致，形成自有项目间稳定的视觉语言。视觉调整应落实到可复用的配置与样式中。',
-          '颜色和圆角通过语义 Token 与 Provider 配置，常用尺寸通过组件默认值统一。字体、布局和内容密度由应用样式控制，组件提供明确的样式扩展点。',
+          '底层组件复用独立的交互与展示能力，上层套件复用经过打磨的界面组织方式。两层使用相同的视觉规范与组件契约，让控件级的改进能够自然传递到组合后的界面。',
         ],
       },
       {
-        id: 'contracts',
-        title: '组件契约',
+        id: 'suite-scope',
+        title: '套件需要沉淀什么',
         paragraphs: [
-          '相同能力采用一致的属性、事件和状态命名。受控与非受控模式、事件参数、ref 和样式扩展边界应有明确的类型定义。',
-          '组件需要覆盖键盘操作、无障碍、长文本和窄容器，以及适用的加载、空、错误和禁用状态。行为与类型契约保持一致。',
+          '以列表界面为例，筛选条件、结果展示、分页、加载和空状态之间存在稳定的组合关系。套件需要沉淀这类结构、局部交互与状态呈现规则，并提供数据输入、操作事件和内容定制入口。',
+          '套件保留领域无关的界面模式，具体的数据请求、权限判断、路由跳转和业务流程由应用接入。这样，同一种界面结构可以用于不同项目，同时保持各自的业务语义。',
+          '上层套件从实际项目中反复出现的组合逐步提炼。是否值得抽取，取决于结构和交互是否稳定、能否明确描述复用边界，以及下一次使用时能减少哪些重复工作。',
         ],
       },
       {
         id: 'ai-usage',
-        title: 'AI 使用',
+        title: '让 AI 复用已有的界面能力',
         paragraphs: [
-          'AI 编程工具通过组件文档、TypeScript 类型和真实示例了解现有能力。开发时应基于项目安装的版本复用组件，并遵循已有的主题与交互约定。',
-          '组件 API 或行为发生变化时，同步更新类型、文档和示例，使 AI 与人工开发使用相同的依据。',
+          'AI 编程工具也是这套库的使用者。底层组件为它提供明确的控件能力，上层套件则提供更完整的界面结构，使页面开发能够优先从现有组合开始，再围绕具体需求调整。',
+          '因此，文档既需要说明组件的属性、事件和状态，也需要说明套件的适用场景、组合关系和扩展边界。类型定义与真实示例共同提供依据，让 AI 在已有设计上继续实现，并保留统一的视觉与交互约定。',
         ],
       },
       {
         id: 'evolution',
-        title: '演进原则',
+        title: '在自己的项目中持续验证',
         paragraphs: [
-          '新增能力应有实际需求支撑。通用能力的扩展和缺陷修复回到组件库统一维护，避免在各项目中形成重复实现。',
-          '组件通过真实页面持续验证。调整视觉或 API 时，检查已有使用场景与兼容性，保留必要的设计取舍和迁移说明。',
+          '这套库优先服务维护者自己的产品，能力来自实际需求，风格来自持续的使用与调整。基础组件和上层套件都需要回到真实页面，检查键盘、无障碍、长文本、窄屏以及适用的加载、空、错误和禁用状态。',
+          '通用改进回到组件库统一维护，业务差异通过组合与扩展表达。组件、套件、类型、文档和示例随实现一起演进，使后续项目能够复用此前积累的经验。',
         ],
+      },
+    ],
+    layerLabel: '层级',
+    responsibilityLabel: '建设内容与复用范围',
+    layers: [
+      {
+        name: '底层 UI 组件',
+        responsibility:
+          '提供独立、可组合的控件能力，统一类型接口、基础交互、状态、无障碍和样式扩展。',
+        examples: '例如 Button、Input、Select、Dialog、Table。',
+      },
+      {
+        name: '上层 UI 套件',
+        responsibility:
+          '将基础组件组合为可复用的界面模式，沉淀布局、组件配合、局部交互与完整状态。',
+        examples: '逐步提炼筛选与列表、表单区块、列表工具栏、编辑面板等组合。',
       },
     ],
     references: '相关文档',
@@ -54,48 +68,63 @@ const pageCopy = {
     configuration: '全局配置',
   },
   en: {
-    introduction:
-      'Components evolve with actual project needs. Design and implementation stay aligned, while types, documentation, and examples provide references for both manual and AI-assisted development.',
     sections: [
       {
-        id: 'scope',
-        title: 'Project scope',
+        id: 'purpose',
+        title: 'Why maintain this library',
         paragraphs: [
-          'The library prioritizes the maintainer’s own projects. Component capabilities and visual decisions follow actual usage. The same components and documentation are available to other users.',
-          'Domain-neutral interactions, presentation, and accessibility belong in the library. Product data, permissions, routing, and workflows remain in each application.',
+          'Interfaces across projects often share the same foundations: how forms are organized, how lists are filtered, how editing is presented, and how loading, empty, and error states appear. Reusing individual controls still leaves each project assembling these structures and implementing similar interaction details.',
+          'The purpose of this library is to retain those solved problems. Shared interactions, recurring interface structures, and visual conventions are maintained together, so later projects can build on previous work. Improvements return to the shared implementation and gradually establish a visual language suited to the maintainer’s products.',
         ],
       },
       {
-        id: 'visual',
-        title: 'Visual conventions',
+        id: 'layers',
+        title: 'UI components and reusable UI kits',
         paragraphs: [
-          'Colors, typography, spacing, radius, and state feedback form a consistent visual language across the maintainer’s projects. Visual refinements should be expressed through reusable configuration and styles.',
-          'Configure colors and radius through semantic tokens and Provider. Set common sizes through component defaults. Application styles control typography, layout, and density, with explicit component styling extension points.',
+          'Base components reuse individual interactions and presentation capabilities. Higher-level UI kits reuse refined ways of organizing interfaces. Both layers share visual conventions and component contracts, allowing improvements to primitives to carry through to the composed interface.',
         ],
       },
       {
-        id: 'contracts',
-        title: 'Component contracts',
+        id: 'suite-scope',
+        title: 'What belongs in a UI kit',
         paragraphs: [
-          'Equivalent capabilities use consistent prop, event, and state names. Types define controlled and uncontrolled modes, event arguments, refs, and styling boundaries.',
-          'Components cover keyboard use, accessibility, long text, and narrow containers, along with applicable loading, empty, error, and disabled states. Behavior must match the type contract.',
+          'A list interface, for example, has recurring relationships between filters, results, pagination, and loading or empty states. A kit should capture that structure, local interactions, and state presentation, with inputs for data, operation events, and content customization.',
+          'Kits retain domain-neutral interface patterns. Applications supply data fetching, permission checks, navigation, and business workflows. The same interface structure can then serve different projects while preserving each product’s business meaning.',
+          'Higher-level kits are gradually extracted from compositions that recur in actual projects. Extraction depends on stable structure and behavior, a clear reuse boundary, and identifiable work that can be avoided the next time the pattern is needed.',
         ],
       },
       {
         id: 'ai-usage',
-        title: 'AI usage',
+        title: 'Help AI reuse existing interface capabilities',
         paragraphs: [
-          'AI coding tools use component documentation, TypeScript types, and real examples to understand existing capabilities. Development should reuse components from the installed version and follow existing theme and interaction conventions.',
-          'Update types, documentation, and examples whenever component APIs or behavior change, so AI-assisted and manual development share the same references.',
+          'AI coding tools are also consumers of this library. Base components give them explicit control-level capabilities. Higher-level kits provide more complete interface structures, allowing page development to start from existing compositions and adapt them to the task.',
+          'Documentation therefore needs to cover component props, events, and states as well as kit use cases, composition, and extension boundaries. Type definitions and real examples provide references for AI to build on existing design decisions while preserving consistent visuals and interactions.',
         ],
       },
       {
         id: 'evolution',
-        title: 'Evolution',
+        title: 'Validate continuously in the maintainer’s projects',
         paragraphs: [
-          'New capabilities need a concrete use case. Maintain reusable extensions and fixes in the library to avoid duplicate implementations across projects.',
-          'Verify components continuously in real pages. Check existing usage and compatibility when changing visuals or APIs, and record relevant tradeoffs and migration guidance.',
+          'The library prioritizes the maintainer’s own products. Capabilities come from actual needs, and its style develops through use and refinement. Both components and kits need verification in real pages for keyboard use, accessibility, long text, narrow layouts, and applicable loading, empty, error, and disabled states.',
+          'Maintain reusable improvements in the library and express business differences through composition and extension. Components, kits, types, documentation, and examples evolve with the implementation so later projects can reuse the experience already gained.',
         ],
+      },
+    ],
+    layerLabel: 'Layer',
+    responsibilityLabel: 'Scope and reusable capabilities',
+    layers: [
+      {
+        name: 'Base UI components',
+        responsibility:
+          'Independent, composable controls with consistent type contracts, interactions, states, accessibility, and styling extensions.',
+        examples: 'For example, Button, Input, Select, Dialog, and Table.',
+      },
+      {
+        name: 'Higher-level UI kits',
+        responsibility:
+          'Reusable interface patterns composed from primitives, capturing layout, component coordination, local interactions, and complete states.',
+        examples:
+          'Gradually extract patterns such as filtered lists, form sections, list toolbars, and editing panels.',
       },
     ],
     references: 'Related documentation',
@@ -113,8 +142,9 @@ export const DesignPage = () => {
     <div className="docs-design-page">
       <header>
         <Typography.Title>{design.title}</Typography.Title>
-        <Typography.Text as="p">{design.description}</Typography.Text>
-        <Typography.Text as="p">{copy.introduction}</Typography.Text>
+        <Typography.Text as="p" className="design-purpose">
+          {design.description}
+        </Typography.Text>
       </header>
 
       {copy.sections.map((section) => (
@@ -127,6 +157,50 @@ export const DesignPage = () => {
               {paragraph}
             </Typography.Text>
           ))}
+          {section.id === 'layers' ? (
+            <Table.Primitive
+              aria-labelledby={section.id}
+              classes={{ table: 'design-layer-table' }}
+            >
+              <colgroup>
+                <col className="design-layer-name" />
+                <col />
+              </colgroup>
+              <Table.Header>
+                <Table.Row>
+                  <Table.Head className="design-layer-cell" scope="col">
+                    {copy.layerLabel}
+                  </Table.Head>
+                  <Table.Head className="design-layer-cell" scope="col">
+                    {copy.responsibilityLabel}
+                  </Table.Head>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {copy.layers.map((layer) => (
+                  <Table.Row key={layer.name}>
+                    <Table.Head className="design-layer-cell" scope="row">
+                      <Typography.Text weight="semibold">
+                        {layer.name}
+                      </Typography.Text>
+                    </Table.Head>
+                    <Table.Cell className="design-layer-cell">
+                      <Typography.Text as="p">
+                        {layer.responsibility}
+                      </Typography.Text>
+                      <Typography.Text
+                        as="p"
+                        className="design-layer-example"
+                        tone="muted"
+                      >
+                        {layer.examples}
+                      </Typography.Text>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Primitive>
+          ) : null}
         </section>
       ))}
 

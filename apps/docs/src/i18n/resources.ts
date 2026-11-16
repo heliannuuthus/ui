@@ -162,7 +162,7 @@ const zh = {
     design: {
       title: '设计理念',
       description:
-        'Heliannuuthus UI 是面向维护者自有项目的 React 组件库，用于统一基础组件、视觉规范与交互行为。',
+        'Heliannuuthus UI 的目标，是为维护者自己的产品积累一套可持续复用的界面能力，覆盖底层 UI 组件，以及上层可复用的 UI 套件。',
     },
   },
 } as const;
@@ -342,7 +342,7 @@ const en = {
     design: {
       title: 'Design principles',
       description:
-        'Heliannuuthus UI is a React component library for the maintainer’s own projects, with shared primitives, visual conventions, and interaction behavior.',
+        'Heliannuuthus UI aims to build a lasting foundation of reusable interface capabilities for the maintainer’s own products, spanning base UI components and higher-level UI kits.',
     },
   },
 } as const satisfies LocaleShape<typeof zh>;

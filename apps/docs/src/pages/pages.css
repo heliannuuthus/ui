@@ -1726,6 +1726,40 @@
   margin: 0 0 1rem;
 }
 
+.docs-design-page .design-purpose {
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.design-layer-table {
+  table-layout: fixed;
+  font-size: 0.9375rem;
+}
+
+.design-layer-name {
+  width: 28%;
+}
+
+.design-layer-cell {
+  padding: 1rem 0.75rem;
+  vertical-align: top;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.65;
+}
+
+.docs-design-page .design-layer-cell p {
+  margin-bottom: 0.5rem;
+}
+
+.docs-design-page .design-layer-cell p:last-child {
+  margin-bottom: 0;
+}
+
+.design-layer-example {
+  font-size: 0.8125rem;
+}
+
 .design-references {
   display: flex;
   align-items: center;
