@@ -75,11 +75,6 @@ const mainLinks = (locale: Locale) => [
     label: locale === 'zh' ? '研发手册' : 'Handbook',
   },
   {
-    href: `/${locale}/design`,
-    sectionPath: `/${locale}/design`,
-    label: locale === 'zh' ? '设计理念' : 'Design',
-  },
-  {
     href: `/${locale}/components`,
     sectionPath: `/${locale}/components`,
     label: locale === 'zh' ? '组件' : 'Components',

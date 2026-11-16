@@ -4,7 +4,7 @@ import { Typography } from '@heliannuuthus/ui';
 const ZhExample = (() => {
   return () => (
     <>
-      <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
+      <Typography.Blockquote>
         语义先于视觉，视觉服务于内容层级。
       </Typography.Blockquote>
       <Typography.Text as="p">
@@ -17,7 +17,7 @@ const ZhExample = (() => {
 const EnExample = (() => {
   return () => (
     <>
-      <Typography.Blockquote cite="https://ui.heliannuuthus.com/design">
+      <Typography.Blockquote>
         Semantics come before visuals, and visuals serve the content hierarchy.
       </Typography.Blockquote>
       <Typography.Text as="p">

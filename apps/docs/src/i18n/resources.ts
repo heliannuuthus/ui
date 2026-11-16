@@ -7,7 +7,6 @@ const zh = {
     navigation: {
       home: '首页',
       gettingStarted: '快速开始',
-      design: '设计理念',
       components: '组件库',
       main: '主导航',
       open: '打开导航',
@@ -113,10 +112,6 @@ const zh = {
       baseComponents: '个基础组件',
       accessibilityFirst: '可访问性优先',
       openSource: '源码完全可控',
-      philosophyTitle: '一套组件，供所有产品使用',
-      philosophyDescription:
-        '组件库维护基础行为和样式，业务项目维护自己的数据、路由和文案。',
-      philosophyAction: '了解设计理念',
       componentsTitle: '从基础控件到完整交互',
       clarity: '清晰',
       clarityDescription: '先排清信息、状态和操作，再考虑装饰。',
@@ -159,21 +154,6 @@ const zh = {
       configurationBoundaryDescription:
         'Provider 只管理跨组件的视觉默认值，不管理文案、事件、业务状态或数据行为。组件显式传入的属性始终优先于全局默认值。',
     },
-    design: {
-      title: '设计理念',
-      description:
-        '这里记录组件的取舍标准，以及业务项目使用组件时应遵守的边界。',
-      clarity: '清晰胜过表现',
-      clarityDescription: '颜色、间距和动效用于区分结构、状态和操作优先级。',
-      convention: '约定创造效率',
-      conventionDescription: '相同的状态和操作采用相同的名称、位置与反馈。',
-      composition: '组合保持边界',
-      compositionDescription:
-        '公共组件负责通用能力，业务层负责数据、权限、路由和流程。',
-      details: '细节建立信任',
-      detailsDescription:
-        '每个组件都要覆盖键盘、窄屏、加载、空、错误和禁用状态。',
-    },
   },
 } as const;
 
@@ -190,7 +170,6 @@ const en = {
     navigation: {
       home: 'Home',
       gettingStarted: 'Getting started',
-      design: 'Design',
       components: 'Components',
       main: 'Main navigation',
       open: 'Open navigation',
@@ -298,10 +277,6 @@ const en = {
       baseComponents: 'base components',
       accessibilityFirst: 'Accessibility first',
       openSource: 'Fully controlled source',
-      philosophyTitle: 'One component set for every product',
-      philosophyDescription:
-        'The library owns base behavior and styles. Applications own data, routing, and product copy.',
-      philosophyAction: 'Explore the design principles',
       componentsTitle: 'From primitives to complete interactions',
       clarity: 'Clear',
       clarityDescription:
@@ -348,23 +323,6 @@ const en = {
       configurationBoundary: 'Configuration boundary',
       configurationBoundaryDescription:
         'Provider manages cross-component visual defaults only. It does not manage copy, events, business state, or data behavior. Explicit component props always override global defaults.',
-    },
-    design: {
-      title: 'Design principles',
-      description:
-        'These rules define component tradeoffs and the boundary between the library and product applications.',
-      clarity: 'Clarity over spectacle',
-      clarityDescription:
-        'Use color, spacing, and motion to distinguish structure, state, and action priority.',
-      convention: 'Conventions create efficiency',
-      conventionDescription:
-        'Use the same names, placement, and feedback for equivalent states and actions.',
-      composition: 'Composition preserves boundaries',
-      compositionDescription:
-        'Shared components own generic behavior; products own data, permissions, routing, and workflows.',
-      details: 'Details build trust',
-      detailsDescription:
-        'Every component must cover keyboard use, narrow layouts, loading, empty, error, and disabled states.',
     },
   },
 } as const satisfies LocaleShape<typeof zh>;

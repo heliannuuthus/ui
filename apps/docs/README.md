@@ -92,6 +92,9 @@ retain their own alignment.
 widths, navigation moves into a drawer and the content grid uses a single
 column so an empty sidebar track cannot shift the centered container.
 
+Sidebar navigation rows have a `2.75rem` minimum height and `0.625rem` vertical
+padding; their width, font size, and horizontal padding stay unchanged.
+
 Sources: `theme/theme.css`, `src/pages/pages.css`, and `showcases/case.css`.
 
 ## 顶部导航
