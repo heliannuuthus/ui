@@ -290,10 +290,10 @@ body {
   display: flex;
   width: 100%;
   height: auto;
-  min-height: 2.25rem;
+  min-height: 2.75rem;
   align-items: center;
   justify-content: flex-start;
-  padding: 0.5rem 0.625rem;
+  padding: 0.625rem;
   border-radius: calc(var(--radius) - 3px);
   color: var(--muted-foreground);
   font-size: 0.875rem;
