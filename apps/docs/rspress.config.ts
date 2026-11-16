@@ -70,7 +70,10 @@ const handbookSidebar = (locale: 'zh' | 'en') =>
     text: section.labels[locale],
     items: section.items.map((item) => ({
       text: item.labels[locale],
-      link: `/${locale}/docs/${item.slug}`,
+      link:
+        item.slug === 'getting-started'
+          ? `/${locale}/docs/getting-started`
+          : `/${locale}/#${item.slug}`,
     })),
   }));
 

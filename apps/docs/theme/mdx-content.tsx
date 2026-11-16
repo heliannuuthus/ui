@@ -6,7 +6,13 @@ import {
   type ButtonLinkProps,
 } from '@heliannuuthus/ui';
 import { MDXProvider } from '@mdx-js/react';
-import type { ComponentProps, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  type ComponentProps,
+  type ReactNode,
+} from 'react';
+import { handbookPageSlugs } from '../src/handbook-navigation';
 import { CodeBlock } from './code-block';
 import { InternalButtonLink } from './internal-link';
 import {
@@ -17,21 +23,58 @@ import {
   DocsTabs,
 } from './mdx-directives';
 
-const heading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
-  const Heading = ({ children, className, ...props }: ComponentProps<'h1'>) => (
-    <Typography.Title
-      className={cn('docs-mdx-heading', className)}
-      level={level}
-      {...props}
-    >
-      {children}
-    </Typography.Title>
+type ChapterSlug = Exclude<
+  (typeof handbookPageSlugs)[number],
+  'getting-started'
+>;
+const ChapterContext = createContext<ChapterSlug | null>(null);
+const chapterSlugs: ReadonlySet<string> = new Set(
+  handbookPageSlugs.filter((slug) => slug !== 'getting-started')
+);
+
+const chapterHref = (href: string, chapter: ChapterSlug) => {
+  if (href.startsWith('#')) return `#${chapter}-${href.slice(1)}`;
+  const match = href.match(
+    /^\/(zh|en)\/docs\/([^/.#?]+)(?:\.html)?(?:#(.+))?$/
   );
+  if (!match || !chapterSlugs.has(match[2])) return href;
+  return `/${match[1]}/#${match[2]}${match[3] ? `-${match[3]}` : ''}`;
+};
+
+const heading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
+  const Heading = ({
+    children,
+    className,
+    id,
+    ...props
+  }: ComponentProps<'h1'>) => {
+    const chapter = useContext(ChapterContext);
+    const resolvedLevel = chapter
+      ? (Math.min(level + 2, 6) as typeof level)
+      : level;
+    const resolvedId = chapter
+      ? level === 1
+        ? `${chapter}-title`
+        : id && `${chapter}-${id}`
+      : id;
+
+    return (
+      <Typography.Title
+        {...props}
+        className={cn('docs-mdx-heading', className)}
+        id={resolvedId}
+        level={resolvedLevel}
+      >
+        {children}
+      </Typography.Title>
+    );
+  };
   Heading.displayName = `DocsHeading${level}`;
   return Heading;
 };
 
-const link = ({ className, href, ref, ...props }: ComponentProps<'a'>) => {
+const DocsLink = ({ className, href, ref, ...props }: ComponentProps<'a'>) => {
+  const chapter = useContext(ChapterContext);
   void ref;
   if (className?.split(' ').includes('rp-header-anchor')) return null;
   if (href == null) {
@@ -42,7 +85,7 @@ const link = ({ className, href, ref, ...props }: ComponentProps<'a'>) => {
     <InternalButtonLink
       {...(props as Omit<ButtonLinkProps, 'className' | 'href'>)}
       className={cn('docs-mdx-link', className)}
-      href={href}
+      href={chapter ? chapterHref(href, chapter) : href}
       size="sm"
       variant="link"
     />
@@ -61,7 +104,7 @@ const components = {
   DocsHint,
   DocsTab,
   DocsTabs,
-  a: link,
+  a: DocsLink,
   blockquote: ({ className, ...props }: ComponentProps<'blockquote'>) => (
     <Typography.Blockquote
       className={cn('docs-mdx-blockquote', className)}
@@ -138,4 +181,20 @@ const components = {
 
 export const DocsMdxProvider = ({ children }: { children: ReactNode }) => (
   <MDXProvider components={components}>{children}</MDXProvider>
+);
+
+export const DocsMdxChapter = ({
+  children,
+  id,
+}: {
+  children: ReactNode;
+  id: ChapterSlug;
+}) => (
+  <section
+    aria-labelledby={`${id}-title`}
+    className="home-handbook-chapter"
+    id={id}
+  >
+    <ChapterContext.Provider value={id}>{children}</ChapterContext.Provider>
+  </section>
 );

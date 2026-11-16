@@ -97,6 +97,33 @@ padding; their width, font size, and horizontal padding stay unchanged.
 
 Sources: `theme/theme.css`, `src/pages/pages.css`, and `showcases/case.css`.
 
+## Guide navigation
+
+The header contains the brand and utility actions. The independent Get started
+guide remains accessible from the home page. The home page embeds the other
+eight handbook chapters from their existing localized MDX sources, beneath
+the introduction and live preview.
+The introduction, interactive preview, and project baseline fill the first
+viewport on desktop. Scrolling enters the continuous guide section with
+proximity snapping at that boundary; long chapters scroll normally. Reduced
+motion disables snapping. Short or narrow viewports allow the introduction to
+grow so its content remains reachable.
+
+The guide section has a sticky right-hand table of contents built from the
+rendered chapter titles and section headings. The two levels use readable
+`14px` links and a straight active marker. The panel has its own bounded scroll
+area and keeps the current entry visible without scrolling the document.
+Below `980px`, it becomes a sticky, collapsible contents menu. The handbook
+sidebar links to the same home-page sections; standalone chapter routes remain
+available for direct references.
+
+`theme/table-of-contents.tsx` shares the contents rendering with regular
+documentation pages; `theme/use-active-toc.ts` tracks the reading position.
+
+`DocsMdxChapter` namespaces heading IDs and adjusts heading levels inside the
+home-page guide section. Links between embedded chapters stay within the home
+page. Component references remain accessible through search and their routes.
+
 ## 顶部导航
 
 顶部导航在离开页面顶部后随下滑收起，随上滑恢复；累计 8px 的方向位移用于过滤轻微滚动抖动。回到顶部、键盘焦点进入导航、展开外观菜单或移动导航时保持显示。
