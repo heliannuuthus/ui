@@ -112,15 +112,6 @@ const zh = {
       baseComponents: '个基础组件',
       accessibilityFirst: '可访问性优先',
       openSource: '源码完全可控',
-      componentsTitle: '从基础控件到完整交互',
-      clarity: '清晰',
-      clarityDescription: '先排清信息、状态和操作，再考虑装饰。',
-      consistency: '一致',
-      consistencyDescription: '同类操作使用同一套名称、状态和反馈。',
-      composable: '可组合',
-      composableDescription: '基础能力保持独立，由业务页面按需要组合。',
-      evolvable: '可生长',
-      evolvableDescription: '公共 API 保持兼容，并为常见场景提供扩展点。',
     },
     gettingStarted: {
       title: '快速开始',
@@ -277,19 +268,6 @@ const en = {
       baseComponents: 'base components',
       accessibilityFirst: 'Accessibility first',
       openSource: 'Fully controlled source',
-      componentsTitle: 'From primitives to complete interactions',
-      clarity: 'Clear',
-      clarityDescription:
-        'Arrange information, state, and actions before adding decoration.',
-      consistency: 'Consistent',
-      consistencyDescription:
-        'Use the same names, states, and feedback for the same operations.',
-      composable: 'Composable',
-      composableDescription:
-        'Keep base capabilities independent and compose them in product pages.',
-      evolvable: 'Evolvable',
-      evolvableDescription:
-        'Keep public APIs compatible and provide extension points for common cases.',
     },
     gettingStarted: {
       title: 'Getting started',

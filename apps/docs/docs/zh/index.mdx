@@ -1,10 +1,28 @@
 ---
 title: Heliannuuthus UI
-description: 面向 Heliannuuthus 产品的可访问 React 公共基础组件。
+description: Heliannuuthus UI 组件预览，以及按需导入、样式、主题与交互实践指南。
 lang: zh-Hans
 pageType: home
 ---
 
 import { HomePage } from '@docs/pages/home';
+import { DocsMdxChapter } from '../../theme/mdx-content';
+import ImportsAndBundling from './docs/imports-and-bundling.mdx';
+import CssAndTokens from './docs/css-and-tokens.mdx';
+import TypographyAndFonts from './docs/typography-and-fonts.mdx';
+import Provider from './docs/provider.mdx';
+import DarkMode from './docs/dark-mode.mdx';
+import InteractionTips from './docs/interaction-tips.mdx';
+import FormArchitecture from './docs/form-architecture.mdx';
+import ChoosingATable from './docs/choosing-a-table.mdx';
 
-<HomePage />
+<HomePage>
+  <DocsMdxChapter id="imports-and-bundling"><ImportsAndBundling /></DocsMdxChapter>
+  <DocsMdxChapter id="css-and-tokens"><CssAndTokens /></DocsMdxChapter>
+  <DocsMdxChapter id="typography-and-fonts"><TypographyAndFonts /></DocsMdxChapter>
+  <DocsMdxChapter id="provider"><Provider /></DocsMdxChapter>
+  <DocsMdxChapter id="dark-mode"><DarkMode /></DocsMdxChapter>
+  <DocsMdxChapter id="interaction-tips"><InteractionTips /></DocsMdxChapter>
+  <DocsMdxChapter id="form-architecture"><FormArchitecture /></DocsMdxChapter>
+  <DocsMdxChapter id="choosing-a-table"><ChoosingATable /></DocsMdxChapter>
+</HomePage>

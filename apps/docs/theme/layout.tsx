@@ -23,7 +23,6 @@ import {
   Sun,
   X,
 } from 'lucide-react';
-import { motion, useReducedMotion } from 'motion/react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   componentGroups,
@@ -35,15 +34,10 @@ import { DocsMdxProvider } from './mdx-content';
 import { InternalButtonLink } from './internal-link';
 import { Search } from './search';
 import { isThemePreference, useThemeState } from './theme-state';
+import { TableOfContents } from './table-of-contents';
+import { useActiveToc } from './use-active-toc';
 
 type Locale = 'en' | 'zh';
-
-type NavigationIndicatorGeometry = {
-  height: number;
-  width: number;
-  x: number;
-  y: number;
-};
 
 const groupNames = {
   actions: { en: 'Actions and menus', zh: '操作与菜单' },
@@ -62,40 +56,17 @@ const routeLocale = (pathname: string): Locale =>
 
 const normalizePath = (pathname: string) => pathname.replace(/\/$/, '');
 
-const isActivePath = (pathname: string, href: string) => {
-  const current = normalizePath(pathname);
-  const target = normalizePath(href);
-  return current === target || current.startsWith(`${target}/`);
-};
-
-const mainLinks = (locale: Locale) => [
-  {
-    href: `/${locale}/docs/getting-started`,
-    sectionPath: `/${locale}/docs`,
-    label: locale === 'zh' ? '研发手册' : 'Handbook',
-  },
-  {
-    href: `/${locale}/components`,
-    sectionPath: `/${locale}/components`,
-    label: locale === 'zh' ? '组件' : 'Components',
-  },
-];
-
 export const Layout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { frontmatter } = useFrontmatter();
   const { page } = usePageData();
+  const activeTocId = useActiveToc(page.toc);
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [headerHidden, setHeaderHidden] = useState(false);
   const [appearanceMenuOpen, setAppearanceMenuOpen] = useState(false);
-  const [navigationIndicator, setNavigationIndicator] =
-    useState<NavigationIndicatorGeometry | null>(null);
   const [theme, setTheme, resolvedTheme] = useThemeState();
   const headerRef = useRef<HTMLElement>(null);
-  const brandSlotRef = useRef<HTMLDivElement>(null);
-  const primaryNavigationRef = useRef<HTMLElement>(null);
-  const reduceMotion = useReducedMotion();
 
   // This layout replaces DocContent, which owns hash scrolling in the default
   // theme. scrollIntoView honors each target's scroll-margin-top.
@@ -113,10 +84,6 @@ export const Layout = () => {
   const componentPage = location.pathname.startsWith(`/${locale}/components`);
   const handbookPage = location.pathname.startsWith(`/${locale}/docs`);
   const sidebarPage = componentPage || handbookPage;
-  const navigationLinks = mainLinks(locale);
-  const activeNavigationPath = navigationLinks.find((link) =>
-    isActivePath(location.pathname, link.sectionPath)
-  )?.href;
   const pageType =
     typeof frontmatter.pageType === 'string' ? frontmatter.pageType : 'article';
 
@@ -187,53 +154,6 @@ export const Layout = () => {
     };
   }, [location.pathname]);
 
-  useEffect(() => {
-    const header = headerRef.current;
-    const brand = brandSlotRef.current;
-    const primaryNavigation = primaryNavigationRef.current;
-
-    if (!header || !brand || !primaryNavigation) return;
-
-    const updateIndicator = () => {
-      const homePath = `/${locale}`;
-      const currentPath = normalizePath(location.pathname);
-      const target =
-        currentPath === homePath
-          ? brand
-          : primaryNavigation.querySelector<HTMLElement>(
-              '[aria-current="page"]'
-            );
-
-      if (!target) {
-        setNavigationIndicator(null);
-        return;
-      }
-
-      const headerRect = header.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-
-      setNavigationIndicator({
-        height: targetRect.height,
-        width: targetRect.width,
-        x: targetRect.left - headerRect.left,
-        y: targetRect.top - headerRect.top,
-      });
-    };
-
-    updateIndicator();
-
-    const resizeObserver = new ResizeObserver(updateIndicator);
-    resizeObserver.observe(header);
-    resizeObserver.observe(brand);
-    resizeObserver.observe(primaryNavigation);
-    window.addEventListener('resize', updateIndicator);
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener('resize', updateIndicator);
-    };
-  }, [locale, location.pathname]);
-
   if (frontmatter.pageType === 'blank') {
     return (
       <Provider appearance={theme}>
@@ -278,19 +198,6 @@ export const Layout = () => {
           onFocusCapture={() => setHeaderHidden(false)}
           ref={headerRef}
         >
-          {navigationIndicator ? (
-            <motion.span
-              animate={navigationIndicator}
-              aria-hidden="true"
-              className="docs-navigation-indicator"
-              initial={false}
-              transition={
-                reduceMotion
-                  ? { duration: 0 }
-                  : { bounce: 0, duration: 0.34, type: 'spring' }
-              }
-            />
-          ) : null}
           {sidebarPage ? (
             <Button
               aria-label={
@@ -315,7 +222,7 @@ export const Layout = () => {
             </Button>
           ) : null}
 
-          <div className="docs-brand-slot" ref={brandSlotRef}>
+          <div className="docs-brand-slot">
             <InternalButtonLink
               aria-current={
                 normalizePath(location.pathname) === `/${locale}`
@@ -333,30 +240,6 @@ export const Layout = () => {
               </Typography.Text>
             </InternalButtonLink>
           </div>
-
-          <nav
-            aria-label={locale === 'zh' ? '主要导航' : 'Main navigation'}
-            className="docs-primary-nav"
-            ref={primaryNavigationRef}
-          >
-            <div className="docs-primary-nav-list">
-              {navigationLinks.map((link) => (
-                <InternalButtonLink
-                  aria-current={
-                    activeNavigationPath === link.href ? 'page' : undefined
-                  }
-                  className="docs-primary-nav-link"
-                  href={link.href}
-                  key={link.href}
-                  onClick={() => setNavigationOpen(false)}
-                  size="sm"
-                  variant="ghost"
-                >
-                  {link.label}
-                </InternalButtonLink>
-              ))}
-            </div>
-          </nav>
 
           <div className="docs-header-actions">
             <Search />
@@ -474,8 +357,8 @@ export const Layout = () => {
                         ? '组件导航'
                         : 'Component navigation'
                       : locale === 'zh'
-                        ? '研发手册导航'
-                        : 'Engineering handbook navigation'
+                        ? '文档章节导航'
+                        : 'Guide navigation'
                   }
                 >
                   {componentPage ? (
@@ -535,12 +418,16 @@ export const Layout = () => {
                         </Typography.Title>
                         <ul>
                           {section.items.map((item) => {
-                            const href = `/${locale}/docs/${item.slug}`;
+                            const href =
+                              item.slug === 'getting-started'
+                                ? `/${locale}/docs/getting-started`
+                                : `/${locale}/#${item.slug}`;
                             return (
                               <li key={item.slug}>
                                 <InternalButtonLink
                                   aria-current={
-                                    normalizePath(location.pathname) === href
+                                    normalizePath(location.pathname) ===
+                                    `/${locale}/docs/${item.slug}`
                                       ? 'page'
                                       : undefined
                                   }
@@ -604,35 +491,11 @@ export const Layout = () => {
               side="end"
               width={{ expanded: 'var(--docs-toc-width)' }}
             >
-              <ScrollArea
-                className="docs-toc-scroll"
-                orientation="vertical"
-                scrollbar={{ size: 'sm', visibility: 'auto' }}
-              >
-                <div className="docs-toc-content">
-                  <Typography.Text as="p" size="sm" weight="semibold">
-                    {locale === 'zh' ? '本页内容' : 'On this page'}
-                  </Typography.Text>
-                  <nav
-                    aria-label={
-                      locale === 'zh' ? '本页目录' : 'Table of contents'
-                    }
-                  >
-                    {page.toc.map((item) => (
-                      <Button
-                        block
-                        data-depth={item.depth}
-                        href={`#${item.id}`}
-                        key={item.id}
-                        size="xs"
-                        variant="link"
-                      >
-                        {item.text}
-                      </Button>
-                    ))}
-                  </nav>
-                </div>
-              </ScrollArea>
+              <TableOfContents
+                activeId={activeTocId}
+                items={page.toc}
+                locale={locale}
+              />
             </UiLayout.Sidebar>
           ) : null}
         </UiLayout>
