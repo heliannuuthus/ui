@@ -74,6 +74,9 @@ export const Search = () => {
               : 'Search and open Heliannuuthus UI component documentation',
           onOpenChange: setOpen,
           open,
+          styles: {
+            content: { maxWidth: 'min(48rem, calc(100vw - 2rem))' },
+          },
           title: locale === 'zh' ? '搜索组件' : 'Search components',
         }}
         empty={

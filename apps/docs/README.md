@@ -103,6 +103,10 @@ The header contains the brand and utility actions. The independent Get started
 guide remains accessible from the home page. The home page embeds the other
 eight handbook chapters from their existing localized MDX sources, beneath
 the introduction and live preview.
+
+The component search dialog has a `48rem` maximum width and keeps `1rem` side
+gutters on narrow viewports.
+
 The introduction, interactive preview, and project baseline fill the first
 viewport on desktop. Scrolling enters the continuous guide section with
 proximity snapping at that boundary; long chapters scroll normally. Reduced
