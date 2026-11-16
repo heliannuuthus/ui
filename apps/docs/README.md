@@ -82,15 +82,20 @@ slug and index.
 
 ## Content alignment
 
-Handbook, component catalog, and component reference containers are centered
-within the available main content pane. Prose keeps its `56rem` width limit,
-getting started uses `64rem`, and the catalog and component showcases use
-`92rem`. Titles, introductions, and prose remain left-aligned; component demos
-retain their own alignment.
+Handbook navigation uses a fixed `16rem` sidebar and a `13rem` page outline.
+The three-column handbook frame is centered and capped at `87.5rem`, keeping
+navigation close to the article even on ultrawide screens. The article's
+`58.5rem` border-box limit includes `3rem` gutters, leaving up to `52.5rem`
+(`840px`) for prose. Titles, introductions, and prose remain left-aligned.
+
+Component catalog and showcase frames can grow to `120rem`; their content
+containers retain the `92rem` limit. Getting started retains its `64rem`
+container. At `1400px` and below the page outline is hidden and navigation
+uses `15rem`; at `860px` and below navigation moves into a drawer.
 
 `--docs-content-gutter` controls responsive horizontal padding. At narrow
-widths, navigation moves into a drawer and the content grid uses a single
-column so an empty sidebar track cannot shift the centered container.
+widths the content grid uses a single column so an empty sidebar track cannot
+shift the content container.
 
 Sources: `theme/theme.css`, `src/pages/pages.css`, and `showcases/case.css`.
 

@@ -238,14 +238,25 @@ body {
 }
 
 .docs-body-layout {
-  --docs-sidebar-width: clamp(22rem, 25vw, 30rem);
-  --docs-toc-width: clamp(18rem, 18vw, 22rem);
+  --docs-sidebar-width: 16rem;
+  --docs-toc-width: 13rem;
   min-height: calc(100vh - 4rem);
   display: grid;
   grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr) var(
       --docs-toc-width
     );
   align-items: start;
+}
+
+.docs-body-layout:has(.docs-sidebar) {
+  width: 100%;
+  max-width: 87.5rem;
+  margin-inline: auto;
+}
+
+.docs-body-layout:has(.component-showcase-flow),
+.docs-body-layout:has(.docs-components-page) {
+  max-width: 120rem;
 }
 
 .docs-body-layout:not(:has(.docs-sidebar)) {
@@ -267,7 +278,7 @@ body {
   height: calc(100vh - var(--docs-header-offset));
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--border);
+  border-right: 1px solid color-mix(in oklab, var(--border) 40%, transparent);
   background: var(--background);
   transition:
     top 180ms ease,
@@ -282,7 +293,7 @@ body {
 .docs-sidebar nav {
   display: grid;
   gap: 1.25rem;
-  padding: 1.5rem clamp(1rem, 1.4vw, 1.5rem) 4rem;
+  padding: 1.75rem 1rem 4rem;
 }
 
 .docs-sidebar-overview,
@@ -290,13 +301,13 @@ body {
   display: flex;
   width: 100%;
   height: auto;
-  min-height: 2rem;
+  min-height: 2.25rem;
   align-items: center;
   justify-content: flex-start;
-  padding: 0.375rem 0.625rem;
+  padding: 0.5rem 0.75rem;
   border-radius: calc(var(--radius) - 3px);
   color: var(--muted-foreground);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   line-height: 1.25rem;
   text-align: left;
   text-decoration: none;
@@ -318,9 +329,9 @@ body {
 
 .docs-sidebar-group h2 {
   margin: 0;
-  padding: 0 0.625rem;
+  padding: 0 0.75rem;
   border: 0;
-  color: var(--foreground);
+  color: var(--muted-foreground);
   font-size: 0.75rem;
   font-weight: 680;
   line-height: 1rem;
@@ -357,13 +368,13 @@ body {
 }
 
 .docs-main {
-  --docs-content-gutter: 2.5rem;
+  --docs-content-gutter: 3rem;
   min-width: 0;
 }
 
 .docs-article {
   width: 100%;
-  max-width: 56rem;
+  max-width: 58.5rem;
   box-sizing: border-box;
   min-height: calc(100vh - 4rem);
   margin: 0 auto;
@@ -536,6 +547,7 @@ body {
   height: calc(100dvh - var(--docs-header-offset));
   max-height: calc(100vh - var(--docs-header-offset));
   max-height: calc(100dvh - var(--docs-header-offset));
+  border-inline-start: 0;
   overflow: hidden;
   transition:
     top 180ms ease,
@@ -570,6 +582,8 @@ body {
 
 .docs-toc a {
   display: block;
+  height: auto;
+  min-height: 2rem;
   padding: 0.325rem 0.75rem;
   color: var(--muted-foreground);
   font-size: 0.75rem;
@@ -1055,7 +1069,7 @@ body {
 
 @media (max-width: 1400px) {
   .docs-body-layout {
-    --docs-sidebar-width: clamp(19rem, 25vw, 22rem);
+    --docs-sidebar-width: 15rem;
     grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr);
   }
 
